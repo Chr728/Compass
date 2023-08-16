@@ -1,7 +1,4 @@
 <p align="center">
-  <a href="https://github.com/janong24/Compass">
-    <img src="https://o.remove.bg/downloads/872fc9cc-24d3-470d-943e-3b82ad535966/18526019-a4b1-4bee-964d-d7488b8922e2-removebg-preview.png" alt="CompassLogo" width="120" height="120">
-   </a>
    <h1 align="center">Compass</h3>
 </p> 
 <p align="center">
