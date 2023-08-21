@@ -17,6 +17,7 @@ jobs:
       - run: npm ci && cd functions && npm ci && cd ../ && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
+          entryPoint: compass
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_COMPASS_A026E }}'
           channelId: live
