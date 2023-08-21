@@ -18,7 +18,7 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           entryPoint: compass
-          firebaseToolsVersion: v12.4.8
+          firebaseToolsVersion: v12.4.7
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_COMPASS_A026E }}'
           channelId: live
