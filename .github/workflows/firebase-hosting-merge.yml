@@ -14,7 +14,7 @@ jobs:
         working-directory: compass
     steps:
       - uses: actions/checkout@v3
-      - run: npm ci && cd functions && npm ci && cd ../ && npm run build
+      - run: npm ci && npm run build && cd functions && npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           entryPoint: compass
