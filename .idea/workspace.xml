@@ -5,9 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bc5f3517-4c08-471c-88a9-60710e1158b7" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/firebase-hosting-merge.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/firebase-hosting-merge.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/compass/functions/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/compass/functions/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/compass/functions/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/compass/functions/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,7 +45,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1692641185428</updated>
-      <workItem from="1692641186430" duration="6339000" />
+      <workItem from="1692641186430" duration="7679000" />
     </task>
     <servers />
   </component>
