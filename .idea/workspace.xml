@@ -4,20 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bc5f3517-4c08-471c-88a9-60710e1158b7" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.github/workflows/firebase-hosting-merge.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.github/workflows/firebase-hosting-pull-request.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/compass/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/compass/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/compass/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/compass/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/compass/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/compass/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/compass/src/app/favicon.ico" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/compass/src/app/globals.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/compass/src/app/layout.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/compass/src/app/page.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/compass/tailwind.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/compass/tailwind.config.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/compass/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/compass/tsconfig.json" afterDir="false" />
-    </list>
+    <list default="true" id="bc5f3517-4c08-471c-88a9-60710e1158b7" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -55,7 +42,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1692641185428</updated>
-      <workItem from="1692641186430" duration="4951000" />
+      <workItem from="1692641186430" duration="5310000" />
     </task>
     <servers />
   </component>
