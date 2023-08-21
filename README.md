@@ -2,7 +2,7 @@
    <h1 align="center">Compass</h3>
 </p> 
 <p align="center">
-    Your Personal Health Record App !
+    Your Personal Health Record App!
 </p>
 
 ![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)
@@ -16,22 +16,22 @@
 ![cypress](https://img.shields.io/badge/-cypress-%23E5E5E5?style=for-the-badge&logo=cypress&logoColor=058a5e)
 ## Description 
 
-Compass is a personal health record app that allows healthcare practioners and medical institutions to share health data for their patients. The application follows the Canadian Personal Information
+Compass is a personal health record app that allows healthcare practitioners and medical institutions to share health data for their patients. The application follows the Canadian Personal Information
 Protection and Electronic Documents Act [PIPEDA](https://www.priv.gc.ca/en/privacy-topics/privacy-laws-in-canada/the-personal-information-protection-and-electronic-documents-act-pipeda/).
 
 ## Contributors 
-| Name  | Student ID |
-|---|---|
-|Christina Darstbanian   | 40097340  | 
-|Imran Ahmed   | 40172931 | 
-| Xavier Morgan-Tracy  | 40129775  | 
-| Jiayi Chen   | 40110997|  
-| Divleen Kaur Ahluwalia  |  40116121|   
-| Jan Mikhail Alexei Ong  | 40154849  |  
-| Julien Phan  |  40133814 |   
-|  Adir Ben-David | 40190551|   
-| Jonathan Abitbol  | 40190550  |   
-| Reuven Ostrofsky  | 40188881   | 
+| Name  | Student ID | GitHub|
+|---|---|---|
+|Christina Darstbanian   | 40097340  | [Chr728](https://github.com/Chr728) |
+|Imran Ahmed   | 40172931 |  [imran1289-ah](https://github.com/imran1289-ah) |
+| Xavier Morgan-Tracy  | 40129775  |  [XavierKMT](https://github.com/XavierKMT) |
+| Jiayi Chen   | 40110997|   [](https://github.com/AliZ786) |
+| Divleen Kaur Ahluwalia  |  40116121|   [Divleen12](https://github.com/Divleen12) | 
+| Jan Mikhail Alexei Ong  | 40154849  |   [janong24](https://github.com/janong24) |
+| Julien Phan  |  40133814 |    [MrMelon1232](https://github.com/MrMelon1232) |
+|  Adir Ben-David | 40190551|    [beezzyy](https://github.com/beezzyy) |
+| Jonathan Abitbol  | 40190550  |    [yoniabitbol](https://github.com/yoniabitbol) |
+| Reuven Ostrofsky  | 40188881   |  [Reuven1203](https://github.com/Reuven1203) |
 
 
 ## Tech Stack
