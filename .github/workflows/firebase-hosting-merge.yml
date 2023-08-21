@@ -11,8 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: cd compass && npm ci && cd functions && npm ci && cd ../ && npm run build && cd compass
+      - run: npm ci && cd functions && npm ci && cd ../ && npm run build
+        working-directory: ./compass
       - uses: FirebaseExtended/action-hosting-deploy@v0
+        working-directory: ./compass
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_COMPASS_A026E }}'
