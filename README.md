@@ -25,7 +25,7 @@ Protection and Electronic Documents Act [PIPEDA](https://www.priv.gc.ca/en/priva
 |Christina Darstbanian   | 40097340  | [Chr728](https://github.com/Chr728) |
 |Imran Ahmed   | 40172931 |  [imran1289-ah](https://github.com/imran1289-ah) |
 | Xavier Morgan-Tracy  | 40129775  |  [XavierKMT](https://github.com/XavierKMT) |
-| Jiayi Chen   | 40110997|   [](https://github.com/AliZ786) |
+| Jiayi Chen   | 40110997|   [JIAYI615](https://github.com/JIAYI615) |
 | Divleen Kaur Ahluwalia  |  40116121|   [Divleen12](https://github.com/Divleen12) | 
 | Jan Mikhail Alexei Ong  | 40154849  |   [janong24](https://github.com/janong24) |
 | Julien Phan  |  40133814 |    [MrMelon1232](https://github.com/MrMelon1232) |
