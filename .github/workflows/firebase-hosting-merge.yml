@@ -19,7 +19,6 @@ jobs:
         with:
           entryPoint: compass
           firebaseToolsVersion: v12.4.7
-          args: deploy --only functions,hosting
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_COMPASS_A026E }}'
           channelId: live
