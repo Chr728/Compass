@@ -18,11 +18,10 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Create Temporary Credentials File
-        run: echo '{${{ secrets.FIREBASE_SERVICE_ACCOUNT_COMPASS_A026E }}}' > /tmp/firebase-credentials.json
+        run: echo "$secrets.FIREBASE_SERVICE_ACCOUNT" > /tmp/firebase-credentials.json
 
-      - name: Display Temporary Credentials File
+      - name: Cat Temporary Credentials File
         run: cat /tmp/firebase-credentials.json
-        if: success()
 
       - name: Build Functions
         run: cd functions && npm ci && npm run build
