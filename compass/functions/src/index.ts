@@ -19,13 +19,11 @@ export const helloWorld = onRequest((request, response) => {
   response.send("Hello from Firebase!");
 });
 
-//Firestore function to make each newly created document's email lowercase when created
-
 export const makeEmailLowercase = functions.firestore
-    .document("Users/{userId}")
-    .onCreate((snap, context) => {
-        const data = snap.data();
-        const email = data.email.toLowerCase();
-        return snap.ref.set({email}, {merge: true});
-    });
+  .document("Users/{userId}")
+  .onCreate((snap, context) => {
+    const data = snap.data();
+    const email = data.email.toLowerCase();
+    return snap.ref.set({email}, {merge: true});
+  });
 

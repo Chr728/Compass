@@ -13,4 +13,4 @@ serviceAccountKey.json
 ```
 coverage
 
-.env
+*.env
