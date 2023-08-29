@@ -11,6 +11,10 @@ jobs:
       - name: Build Functions
         run: cd functions && npm ci && npm run build
 
+      - name: Test Functions
+        run: cd functions && npm run test
+        if: success()
+
       - name: Build Client
         run: npm ci && npm run build
         if: success()
