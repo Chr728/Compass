@@ -7,3 +7,10 @@ typings/
 
 # Node.js dependency directory
 node_modules/
+
+# Firebase Service Account Key File
+serviceAccountKey.json
+```
+coverage
+
+*.env
