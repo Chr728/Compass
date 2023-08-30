@@ -17,7 +17,7 @@ describe('Test Firestore Functions', () => {
             {email: 'TEST@GMAIL.COM'}, 'Users/TEST');
         await wrapped(snap);
         const data = (await snap.ref.get()).data();
-        expect(data.email).toBe('test@gmail.com');
+        expect(data.email).toBe('teSt@gmail.com');
         await snap.ref.delete();
 })
 });
