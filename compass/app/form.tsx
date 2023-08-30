@@ -1,15 +1,17 @@
 import React, {useState} from 'react';
-import {useAuth} from '@/app/contexts/AuthContext';
+import {useContext} from 'react';
+import AuthContext from '@/app/contexts/AuthContext';
 
 const Form = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const {login} = useAuth()
+    const useAuth = useContext(AuthContext)
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-           await login(email, password)
+            useAuth?.login(email, password)
             console.log('Login successful');
             // Handle any necessary navigation or state changes upon successful login
         } catch (error) {
@@ -58,6 +60,8 @@ const Form = () => {
                     </button>
                 </div>
             </form>
+            <button onClick={useAuth?.logout}>Logout</button>
+            {useAuth?.user ? <p>User is logged in </p> : <p>User is logged out</p>}
         </main>
     );
 };
