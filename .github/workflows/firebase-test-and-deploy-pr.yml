@@ -3,9 +3,9 @@ name: Deploy to Firebase Hosting on merge
 
 env:
   CI: ''
-  FIREBASE_DATABASE_URL: '${{ secrets.FIREBASE_DATABASE_URL }}'
-  FIREBASE_STORAGE_BUCKET: '${{ secrets.FIREBASE_STORAGE_BUCKET }}'
-  FIREBASE_PROJECT_ID: '${{ secrets.FIREBASE_PROJECT_ID }}'
+  FIREBASE_DATABASE_URL: 'https://compass-a026e.firebaseio.com'
+  FIREBASE_STORAGE_BUCKET: 'compass-a026e.appspot.com'
+  FIREBASE_PROJECT_ID: 'compass-a026e'
   FIREBASE_SERVICE_ACCOUNT_KEY_PATH: '/tmp/firebase-credentials.json'
 
 jobs:
