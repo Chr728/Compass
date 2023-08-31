@@ -36,7 +36,7 @@ export default function Login() {
         <form className="rounded-3xl bg-white flex flex-col m-auto w-full md:max-w-[800px] md:h-[600px] p-8">
                 <div className="mb-6">
                     <p className="text-[34px] text-darkgrey font-sans font-bold">Sign In</p>
-                    <p className="text-darkgrey text-[16px] font-sans leading-[22px]">Don't have an account yet?</p>
+                    <p className="text-darkgrey text-[16px] font-sans leading-[22px]">Don&apos;t have an account yet?</p>
                     <p className="text-blue font-sans text-[16px] leading-[22px]"><Link href='/register'>Sign Up now</Link></p> 
                 </div>
 
