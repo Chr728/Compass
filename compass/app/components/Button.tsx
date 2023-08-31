@@ -10,6 +10,6 @@ type ButtonProps = {
 
 export default function Button({type, text, style, onClick} : ButtonProps) {
   return (
-    <button className="bg-blue text-[16px] font-sans font-medium rounded-md h-[56px] shadow-[0px_4px_8px_0px_rgba(44,39,56,0.08),0px_2px_4px_0px_rgba(44,39,56,0.08)]" type={type} style={style}>{text}</button>
+    <button className="bg-blue text-[16px] text-white font-sans font-medium rounded-md h-[56px] shadow-[0px_4px_8px_0px_rgba(44,39,56,0.08),0px_2px_4px_0px_rgba(44,39,56,0.08)]" type={type} style={style}>{text}</button>
   )
 }
