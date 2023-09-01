@@ -1,9 +1,11 @@
 'use client';
 import Link from 'next/link';
-import Image from 'next/image'
-
+import Image from 'next/image';
+ 
 // Logging out the user
 export default function Logout() {
+  
+ 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
         
@@ -11,7 +13,7 @@ export default function Logout() {
                 <div className="md:mt-auto mt-2 w-full">
                   
                 <div  style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <Image
+                <Image className ="smallImage"
             src="/compass-removebg.png" 
             alt="Logo"
             width={350}
@@ -19,12 +21,9 @@ export default function Logout() {
             style={{
             width: 'auto',
             height: 'auto',
-            '@media (max-width: 768px)': {
-            width: '150px',
-            height: '150px'
-      }
-    }}
+            }}
     />
+
         </div>
                 <div className="mb-6">
                     <p className="text-[24px] text-darkgrey font-IBM Plex Sans font-bold text-center">Successfully logged out</p>
