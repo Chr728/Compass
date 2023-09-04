@@ -1,40 +1,34 @@
 'use client';
 import Link from 'next/link';
-import Image from 'next/image';
- 
+import Button from '../components/Button';
+
 // Logging out the user
 export default function Logout() {
-  
- 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
-        
-        <div className="rounded-3xl bg-white flex flex-col m-auto w-full md:max-w-[800px] md:h-[600px] p-8 ">
-                <div className="md:mt-auto mt-2 w-full">
-                  
-                <div  style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <Image className ="smallImage"
-            src="/compass-removebg.png" 
+      <div className="rounded-3xl bg-white flex flex-col m-auto w-full md:max-w-[800px] md:h-[600px] p-2 ">
+        <div className="mt-4 w-full text-center" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <img
+            src="/compass-removebg.png"
             alt="Logo"
+            className="smallImage"
             width={350}
-            height={200}
-            style={{
-            width: 'auto',
-            height: 'auto',
-            }}
-    />
-
+            height={250}
+          />
         </div>
-                <div className="mb-6">
-                    <p className="text-[24px] text-darkgrey font-IBM Plex Sans font-bold text-center">Successfully logged out</p>
-                </div>
-                {/* Adding the link to go back to main home page after logging out */}
-                    <Link href='/'> 
-                       <button  className=" bg-blue text-[16px] text-white font-sans font-medium rounded-md h-[56px]  
-                       shadow-[0px_4px_8px_0px_rgba(44,39,56,0.08),0px_2px_4px_0px_rgba(44,39,56,0.08)]"style={{ width: '100%'  }}>Back to Home</button>
-                    </Link>
-                </div>    
+        <div className="mb-6 mt-1">
+          <p className="text-[24px] text-darkgrey font-IBM Plex Sans font-bold text-center">
+            Successfully logged out
+          </p>
         </div>
+        {/* Adding the link to go back to the main home page after logging out */}
+        <div className="flex justify-center items-center mt-4 mb-8">
+          
+          <Link href="/">
+            <Button type="submit" text="Back to Home" style={{ width: '180px' }} />
+          </Link>
+        </div>
+      </div>
     </div>
-  )
+  );
 }
