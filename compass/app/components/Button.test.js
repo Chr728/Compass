@@ -12,12 +12,12 @@ describe('Button', () => {
     expect(buttonElement).toBeInTheDocument();
   });
 
-  //mocks a button click and tests whether the onClick function is called
-  // test('calls the onClick function when clicked', () => {
-  //   const handleClick = jest.fn();
-  //   render(<Button type="button" text="Click me!" onClick={handleClick} />);
-  //   const buttonElement = screen.getByText('Click me!');
-  //   fireEvent.click(buttonElement);
-  //   expect(handleClick).toHaveBeenCalledTimes(1);
-  // });
+  // mocks a button click and tests whether the onClick function is called
+  test('calls the onClick function when clicked', () => {
+    const handleClick = jest.fn();
+    render(<Button type="submit" text="Click me!" onClick={handleClick} />);
+    const buttonElement = screen.getByText('Click me!');
+    fireEvent.click(buttonElement);
+    expect(handleClick).toHaveBeenCalledTimes(1);
+  });
 });
