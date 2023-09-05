@@ -26,3 +26,10 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+@media (max-width: 768px) {
+  .small-image {
+    width: 150px;
+    height: 150px;
+  }
+}
