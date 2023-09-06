@@ -8,7 +8,7 @@ import Link from "next/link";
 export default function Setting() {
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
-      <div className="flex items-center ml-6 m-[10px]">
+      <div className="flex items-center ml-6 m-[10px] 2xl:hidden">
         <Link href="">
           <Image
             src="/icons/LeftArrow.svg"
@@ -106,6 +106,9 @@ export default function Setting() {
           ></RedButton>
         </div>
       </div>
+      <br></br>
+      <br></br>
+      <br></br>
     </div>
   );
 }
