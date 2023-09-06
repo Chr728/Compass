@@ -42,7 +42,7 @@ const Navbar = () => {
           <span className="home-text"><a href="#" className="hover:text-blue-200">
               Settings</a></span>
           </li>
-          <li className="hidden md:inline-block md:mt-28  lg:mt-32 md:ml-10 lg:text-2xl md:mb-4 lg:mb-4">
+          <li className="hidden md:inline-block md:mt-24  lg:mt-32 md:ml-10 lg:text-2xl md:mb-4 lg:mb-4">
             <a href="#" className="hover:text-blue-200">
             <MdLogout className="inline-block md:text-2xl text-lg lg:text-3xl" /> {MdLogout}
               Logout</a>
