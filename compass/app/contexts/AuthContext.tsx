@@ -18,7 +18,7 @@ interface AuthContextProps {
   login: (email: string, password: string) => void;
 }
 
-const AuthContext = createContext<AuthContextProps | undefined>(undefined);
+const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 
 export const useAuth = () => {
   const context = useContext(AuthContext);

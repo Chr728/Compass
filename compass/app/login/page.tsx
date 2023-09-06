@@ -20,7 +20,8 @@ export default function Login() {
     onSubmit: async (values) => {
       try {
         await login(values.email, values.password);
-        router.push('/home');
+
+        router.push('/');
       } catch (error) {
         console.error('Login failed:', error);
       }
