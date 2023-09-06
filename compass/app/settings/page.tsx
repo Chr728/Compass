@@ -1,11 +1,22 @@
+"use client";
 import React from "react";
 import ProfileIcon from "../../public/icons/Mask.svg";
 import Image from "next/image";
 import RedButton from "../components/RedButton";
 import Button from "../components/Button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Setting() {
+  const router = useRouter();
+
+  const handleSignOut = () => {
+    //Handle Firebase logout
+
+    //Navigate to logout page
+    router.push("/logout");
+  };
+
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
       <div className="flex items-center ml-6 m-[10px] 2xl:hidden">
@@ -98,11 +109,12 @@ export default function Setting() {
         </Link>
         <div className="text-center mt-[160px] ">
           <RedButton
-            type="submit"
+            type="button"
             text="Sign Out"
             style={{
               width: "50%",
             }}
+            onClick={handleSignOut}
           ></RedButton>
         </div>
       </div>
