@@ -1,8 +1,8 @@
 ---
-name: Story
-about: As user X, I want to do Y, so I can accomplish Z
-title: "[EpicNumber].[StoryNumber]StoryName"
-labels: task, user story
+name: Epic
+about: As user X, I want to do Y, so I can accomplish Z.
+title: "[EpicNumber].EpicName"
+labels: epic
 assignees: ''
 
 ---
@@ -14,6 +14,4 @@ assignees: ''
 **MoSCoW:** [must-have, should-have, could-have, won't-have]
 
 **Acceptance Criteria:**
-[Given the story name, the system should do this thing]
-
-**Child of:** [EpicNumber]
+[Given the epic name, the system should do this thing]
