@@ -1,12 +1,12 @@
 'use client';
 
 import { AuthProvider } from './contexts/AuthContext';
-import Form from './form';
+import Login from './login/page';
 
 export default function Home() {
   return (
     <AuthProvider>
-      <Form />
+      <Login />
     </AuthProvider>
   );
 }

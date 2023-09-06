@@ -1,20 +1,21 @@
-import React, {createContext, FC, ReactNode, useContext, useEffect, useState} from 'react';
-import {auth} from '@/app/config/firebase';
+import React, {
+  createContext,
+  FC,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import { auth } from '@/app/config/firebase';
 import {
-  UserCredential,
   signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signOut, onAuthStateChanged,
-  User
+  onAuthStateChanged,
+  User,
 } from 'firebase/auth';
-
-
 
 interface AuthContextProps {
   user: User | null;
-  signup: (email: string, password: string) => void;
   login: (email: string, password: string) => void;
-  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -34,39 +35,24 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const signup = (email: string, password: string) => {
-    createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
-      console.log('signed up')
-      // Signed in
-      const user = userCredential.user;
-      // ...
-    })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log(errorCode, errorMessage)
-          // ..
-        });;
-  };
-
   const login = (email: string, password: string) => {
-    signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
-      // Signed in
-      const user = userCredential.user;
-      // ...
-    })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-        });;
-  };
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
 
-  const logout = () => {
-    return signOut(auth);
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.error(errorCode, errorMessage);
+      });
   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user: User | null) => { // Specify the type here
+    const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
+      // Specify the type here
       setUser(user);
       setLoading(false);
     });
@@ -76,12 +62,14 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
   const value: AuthContextProps = {
     user,
-    signup,
     login,
-    logout,
   };
 
-  return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {!loading && children}
+    </AuthContext.Provider>
+  );
 };
 
-export default AuthContext
+export default AuthContext;
