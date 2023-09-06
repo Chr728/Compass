@@ -1,6 +1,7 @@
 import React from "react";
 import ProfileIcon from "../../public/icons/Mask.svg";
 import Image from "next/image";
+import RedButton from "../components/RedButton";
 
 export default function Setting() {
   return (
@@ -19,7 +20,7 @@ export default function Setting() {
             alt="Profile icon"
             width={24}
             height={24}
-            className="mr-2"
+            className="mr-3"
           />
           <span className="text-2xl not-italic font-bold font-IBM Plex Sans text-darkgrey">
             Your Profile
@@ -32,7 +33,7 @@ export default function Setting() {
             alt="Profile icon"
             width={24}
             height={24}
-            className="mr-2"
+            className="mr-3"
           />
           <span className="text-2xl not-italic font-bold font-IBM Plex Sans text-darkgrey">
             Change your password
@@ -40,6 +41,47 @@ export default function Setting() {
         </div>
         <br></br>
         <hr className="h-px w-336 text-darkgrey"></hr>
+        <br></br>
+        <span className="text-base not-italic font-normal font-IBM Plex Sans text-grey">
+          How you use Compass
+        </span>
+        <br></br>
+        <div className="flex items-center">
+          <Image
+            src="/icons/NotificationBell.svg"
+            alt="Profile icon"
+            width={24}
+            height={24}
+            className="mr-3"
+          />
+          <span className="text-2xl not-italic font-bold font-IBM Plex Sans text-darkgrey">
+            Push notifications
+          </span>
+        </div>
+        <br></br>
+        <hr className="h-px w-336 text-darkgrey"></hr>
+        <br></br>
+        <div className="flex items-center">
+          <Image
+            src="/icons/AboutIcon.svg"
+            alt="Profile icon"
+            width={24}
+            height={24}
+            className="mr-3"
+          />
+          <span className="text-2xl not-italic font-bold font-IBM Plex Sans text-darkgrey">
+            About Compass
+          </span>
+        </div>
+        <div className="text-center mt-[160px] ">
+          <RedButton
+            type="submit"
+            text="Sign Out"
+            style={{
+              width: "50%",
+            }}
+          ></RedButton>
+        </div>
       </div>
     </div>
   );
