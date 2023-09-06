@@ -6,9 +6,18 @@ import RedButton from "../components/RedButton";
 export default function Setting() {
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
-      <span className="text-[24px] text-darkgrey font-IBM Plex Sans font-bol ml-6">
-        Settings
-      </span>
+      <div className="flex items-center ml-6 m-[10px]">
+        <Image
+          src="/icons/LeftArrow.svg"
+          alt="LeftArrow icon"
+          width={12}
+          height={12}
+          className="mr-4"
+        />
+        <span className="text-[color:var(--Dark-Grey,#2C2738)] text-2xl not-italic font-bold leading-[normal] font-family: IBM Plex Sans ; ">
+          Settings
+        </span>
+      </div>
       <div className="rounded-3xl bg-white flex flex-col m-auto w-full md:max-w-[800px] md:h-[600px] p-8">
         <span className="text-base not-italic font-normal font-IBM Plex Sans text-grey">
           Your account
