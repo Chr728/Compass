@@ -92,7 +92,7 @@ export default function Register() {
 
             if(!values.phone){
                 errors.phone="Phone Number Required";
-            } else if(!/[0-9]{10}/i.test(values.phone)){
+            } else if(!/^[0-9]{10}$/i.test(values.phone)){
                 errors.phone="Please enter a 10 digit number"
             }
               
@@ -150,25 +150,13 @@ export default function Register() {
             </span>
         <form className="rounded-3xl bg-white flex flex-col m-auto w-full md:max-w-[800px] md:min-h-[600px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]" onSubmit={formik.handleSubmit}>
 
-        <div className="flex mx-auto space-x-2">
-                { count==0 ? <div className="rounded-[50%] bg-lightgrey h-[10px] w-[10px]" id="firstDot"></div> 
-                    : 
-                 <div className="rounded-[50%] bg-slateblue h-[10px] w-[10px]" id="firstDot" onClick={() => {setCount(0)}}></div>
-                 }
-
-                 { count==1 ? <div className="rounded-[50%] bg-lightgrey h-[10px] w-[10px]" id="secondDot"></div> 
-                    : 
-                 <div className="rounded-[50%] bg-slateblue h-[10px] w-[10px]" id="secondDot" onClick={() => {setCount(1)}}></div>
-                 }
-
-                { count==2 ? <div className="rounded-[50%] bg-lightgrey h-[10px] w-[10px]" id="thirdDot"></div> 
-                    : 
-                 <div className="rounded-[50%] bg-slateblue h-[10px] w-[10px]" id="thirdDot" onClick={() => {setCount(2)}}></div>
-                }
-        </div>
-
         {count===0 &&
                 <>
+                    <div className="flex mx-auto space-x-2">
+                        <div className="rounded-[50%] bg-lightgrey h-[10px] w-[10px]" id="firstDot"></div> 
+                        <div className="rounded-[50%] bg-slateblue h-[10px] w-[10px]" id="secondDot"></div>
+                        <div className="rounded-[50%] bg-slateblue h-[10px] w-[10px]" id="thirdDot" ></div>
+                    </div>
                     <div className="mt-3">
                         <label htmlFor='email' className="font-sans font-medium text-grey text-[16px]">Email Address</label>
                         <br/>
@@ -235,6 +223,11 @@ export default function Register() {
 
         {count===1 &&
                 <>
+                    <div className="flex mx-auto space-x-2">
+                        <div className="rounded-[50%] bg-slateblue h-[10px] w-[10px]" id="firstDot"></div> 
+                        <div className="rounded-[50%] bg-lightgrey h-[10px] w-[10px]" id="secondDot"></div>
+                        <div className="rounded-[50%] bg-slateblue h-[10px] w-[10px]" id="thirdDot" ></div>
+                    </div>
                     
                     <div className="mt-3">
                         <label htmlFor='street' className="font-sans font-medium text-grey text-[16px]">Street Address</label>
@@ -271,6 +264,11 @@ export default function Register() {
 
         {count===2 &&
                 <>
+                    <div className="flex mx-auto space-x-2">
+                        <div className="rounded-[50%] bg-slateblue h-[10px] w-[10px]" id="firstDot"></div> 
+                        <div className="rounded-[50%] bg-slateblue h-[10px] w-[10px]" id="secondDot"></div>
+                        <div className="rounded-[50%] bg-lightgrey h-[10px] w-[10px]" id="thirdDot" ></div>
+                    </div>
                     <div className="mt-3">
                         <label htmlFor='healthCard' className="font-sans font-medium text-grey text-[16px]">Health Insurance Card Number</label>
                         <br/>
@@ -314,9 +312,26 @@ export default function Register() {
                 </>
                }  
 
-                { (count == 0 || count == 1) && <div className="md:mt-auto mt-6 mx-auto"><Button type="button" text="Next" style={{ width: '180px' }} onClick={handleNext}/></div>}
-                {   count ==2 && 
+                { (count == 0) && 
                     <div className="md:mt-auto mt-6 mx-auto">
+                        <Button type="button" text="Next" style={{ width: '180px' }} onClick={handleNext} 
+                        disabled={(formik.errors.email || formik.errors.password || formik.errors.confPassword || formik.errors.fname 
+                        || formik.errors.lname || !formik.touched.email || !formik.touched.password || !formik.touched.confPassword 
+                        || !formik.touched.fname || !formik.touched.lname) ? true: false}/>
+                    </div>}
+                
+                { count ==1  && 
+                    <div className="md:mt-auto mt-6 mx-auto flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
+                        <Button type="button" text="Previous" style={{ width: '180px' }} onClick={()=> setCount(0)} />
+                        <Button type="button" text="Next" style={{ width: '180px' }} onClick={handleNext} 
+                        disabled={ (formik.errors.street || formik.errors.city || formik.errors.province || formik.errors.postalCode
+                            || formik.errors.phone || !formik.touched.street || !formik.touched.city || !formik.touched.province
+                            || !formik.touched.postalCode || !formik.touched.phone) ? true: false}/>
+                    </div>}
+                
+                { count == 2 && 
+                    <div className="md:mt-auto mt-6 mx-auto flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
+                        <Button type="button" text="Previous" style={{ width: '180px' }} onClick={()=> setCount(1)}/>
                         { (formik.errors.email || formik.errors.password || formik.errors.confPassword || formik.errors.fname || 
                                 formik.errors.lname || formik.errors.street || formik.errors.city ||
                                 formik.errors.province || formik.errors.postalCode || formik.errors.healthCard || formik.errors.phone
