@@ -1,5 +1,4 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/navigation";
 import Settings from "../settings/page";
 import "@testing-library/jest-dom";
@@ -39,10 +38,10 @@ describe("Settings Page", () => {
     expect(AboutCompass).toBeInTheDocument();
 
     expect(LogoutButton).toBeInTheDocument();
-    userEvent.click(LogoutButton);
+    fireEvent.click(LogoutButton);
   });
 
-  test("Check if button navigates to logout page", async () => {
+  test("Check if button navigates to logout page", () => {
     render(<Settings></Settings>);
     const LogoutButton = screen.getByRole("button");
     fireEvent.click(LogoutButton);
