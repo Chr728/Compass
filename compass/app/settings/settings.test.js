@@ -1,17 +1,20 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/navigation";
 import Settings from "../settings/page";
 import "@testing-library/jest-dom";
 
-//Mock useRouter
+//Mock useRouter from next/navigation
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
 }));
 
-//Setitng useRouter mock before executing tests
+//Mock push from next Router
+const mockRouterPush = jest.fn();
+
+//Setitng useRouter mock behaviour before executing tests
 beforeAll(() => {
-  useRouter.mockReturnValue({ query: {} });
+  useRouter.mockReturnValue({ query: {}, push: mockRouterPush });
 });
 
 describe("Settings Page", () => {
@@ -37,5 +40,12 @@ describe("Settings Page", () => {
 
     expect(LogoutButton).toBeInTheDocument();
     userEvent.click(LogoutButton);
+  });
+
+  test("Check if button navigates to logout page", async () => {
+    render(<Settings></Settings>);
+    const LogoutButton = screen.getByRole("button");
+    fireEvent.click(LogoutButton);
+    expect(mockRouterPush).toHaveBeenCalledWith("/logout");
   });
 });
