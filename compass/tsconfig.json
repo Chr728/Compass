@@ -35,7 +35,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "app/components/Button.test.js"
-
   ],
   "exclude": [
     "node_modules"
