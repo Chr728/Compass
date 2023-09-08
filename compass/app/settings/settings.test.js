@@ -20,7 +20,7 @@ describe("Settings Page", () => {
   //Test to check if page is rendered correctly with proper text and button
   test("Renders correct content and button", () => {
     render(<Settings></Settings>);
-    const SettingsHeader = screen.getByText(/Settings/i);
+    const SettingsHeader = screen.getAllByText(/Settings/i)[0];
     const YourAccountHeader = screen.getByText(/Your account/i);
     const YourProfile = screen.getByText(/Your Profile/i);
     const ChangeYourPassword = screen.getByText(/Change your password/i);

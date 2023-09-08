@@ -8,7 +8,7 @@ type InputProps = {
 
 export default function Header({ headerText }: InputProps) {
   return (
-    <div className="flex items-center ml-6 m-[10px] 2xl:hidden">
+    <div className="flex items-center ml-6 m-[10px] xl:hidden">
       <Image
         src="/icons/LeftArrow.svg"
         alt="LeftArrow icon"

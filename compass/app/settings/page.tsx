@@ -7,6 +7,7 @@ import Button from "../components/Button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Header from "../components/Header";
+import Menu from "../components/Menu";
 
 export default function Setting() {
   const router = useRouter();
@@ -111,6 +112,9 @@ export default function Setting() {
       <br></br>
       <br></br>
       <br></br>
+      <div className="md:hidden">
+        <Menu></Menu>
+      </div>
     </div>
   );
 }
