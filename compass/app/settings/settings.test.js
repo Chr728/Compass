@@ -11,9 +11,16 @@ jest.mock("next/navigation", () => ({
 //Mock push from next Router
 const mockRouterPush = jest.fn();
 
+//Mock back from next Router
+const mockRouterBack = jest.fn();
+
 //Setitng useRouter mock behaviour before executing tests
 beforeAll(() => {
-  useRouter.mockReturnValue({ query: {}, push: mockRouterPush });
+  useRouter.mockReturnValue({
+    query: {},
+    push: mockRouterPush,
+    back: mockRouterBack,
+  });
 });
 
 describe("Settings Page", () => {
@@ -27,7 +34,8 @@ describe("Settings Page", () => {
     const HowToUse = screen.getByText(/How you use Compass/i);
     const PushNotifications = screen.getByText(/Push notifications/i);
     const AboutCompass = screen.getByText(/About Compass/i);
-    const LogoutButton = screen.getByRole("button");
+    const BackButton = screen.getAllByRole("button")[0];
+    const LogoutButton = screen.getAllByRole("button")[1];
 
     expect(SettingsHeader).toBeInTheDocument();
     expect(YourAccountHeader).toBeInTheDocument();
@@ -37,13 +45,17 @@ describe("Settings Page", () => {
     expect(PushNotifications).toBeInTheDocument();
     expect(AboutCompass).toBeInTheDocument();
 
+    expect(BackButton).toBeInTheDocument();
+    fireEvent.click(BackButton);
+    expect(mockRouterBack).toHaveBeenCalledTimes(1);
+
     expect(LogoutButton).toBeInTheDocument();
     fireEvent.click(LogoutButton);
   });
 
   test("Check if button navigates to logout page", () => {
     render(<Settings></Settings>);
-    const LogoutButton = screen.getByRole("button");
+    const LogoutButton = screen.getAllByRole("button")[1];
     fireEvent.click(LogoutButton);
     expect(mockRouterPush).toHaveBeenCalledWith("/logout");
   });

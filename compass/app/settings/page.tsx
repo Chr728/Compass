@@ -21,9 +21,9 @@ export default function Setting() {
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
-      <Link href="">
+      <button onClick={() => router.back()}>
         <Header headerText="Settings"></Header>
-      </Link>
+      </button>
       <div className="rounded-3xl bg-white flex flex-col m-auto w-full md:max-w-[800px] md:h-[600px] p-8">
         <span className="text-base not-italic font-normal font-IBM Plex Sans text-grey">
           Your account
