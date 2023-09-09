@@ -9,13 +9,13 @@
   --background-end-rgb: 255, 255, 255;
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
   }
-}
+} */
 
 body {
   color: rgb(var(--foreground-rgb));
@@ -32,4 +32,28 @@ body {
     width: 150px;
     height: 150px;
   }
+
 }
+
+@media only screen and (max-width: 767px) {
+  .home-text {
+    display: block;
+  }
+}
+
+select {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  background-image: url('/icons/downArrow.svg');
+  background-repeat: no-repeat;
+  background-position: 98% 50%;
+}
+
+input[type="date"]::-webkit-datetime-edit-text,
+input[type="date"]::-webkit-datetime-edit-month-field,
+input[type="date"]::-webkit-datetime-edit-day-field,
+input[type="date"]::-webkit-datetime-edit-year-field  {
+    color: #0880AE;
+}
+
