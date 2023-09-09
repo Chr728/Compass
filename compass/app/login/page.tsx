@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth, AuthProvider } from '../contexts/AuthContext';
 
 export default function Login() {
   const router = useRouter();
@@ -21,7 +21,7 @@ export default function Login() {
       try {
         await login(values.email, values.password);
 
-        router.push('/');
+        router.push('/tpage');
       } catch (error) {
         console.error('Login failed:', error);
       }
