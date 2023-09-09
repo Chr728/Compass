@@ -84,6 +84,10 @@ export default function Setting() {
         <br></br>
         <hr className="h-px w-336 text-darkgrey"></hr>
         <br></br>
+        <span className="text-base not-italic font-normal font-IBM Plex Sans text-grey">
+          More Info
+        </span>
+        <br></br>
         <Link href="">
           <div className="flex items-center">
             <Image
@@ -98,7 +102,7 @@ export default function Setting() {
             </span>
           </div>
         </Link>
-        <div className="text-center mt-[160px] ">
+        <div className="text-center mt-[100px] ">
           <RedButton
             type="button"
             text="Sign Out"
