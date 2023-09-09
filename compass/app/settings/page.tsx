@@ -25,12 +25,12 @@ export default function Setting() {
         <Header headerText="Settings"></Header>
       </button>
       <div className="rounded-3xl bg-white flex flex-col m-auto w-full md:max-w-[800px] md:h-[600px] p-8">
-        <span className="text-base not-italic font-normal font-IBM Plex Sans text-grey">
+        <span className="text-base not-italic font-normal font-IBM Plex Sans text-grey m-2">
           Your account
         </span>
-        <br></br>
+
         <Link href="">
-          <div className="flex items-center">
+          <div className="flex items-center m-2">
             <Image
               src="/icons/Mask.svg"
               alt="Profile icon"
@@ -45,9 +45,8 @@ export default function Setting() {
           </div>
         </Link>
 
-        <br></br>
         <Link href="">
-          <div className="flex items-center">
+          <div className="flex items-center m-2">
             <Image
               src="/icons/vpn_key.svg"
               alt="Profile icon"
@@ -60,15 +59,15 @@ export default function Setting() {
             </span>
           </div>
         </Link>
-        <br></br>
-        <hr className="h-px w-336 text-darkgrey"></hr>
-        <br></br>
-        <span className="text-base not-italic font-normal font-IBM Plex Sans text-grey">
+
+        <hr className="h-px w-336 text-darkgrey m-2"></hr>
+
+        <span className="text-base not-italic font-normal font-IBM Plex Sans text-grey m-2">
           How you use Compass
         </span>
-        <br></br>
+
         <Link href="">
-          <div className="flex items-center">
+          <div className="flex items-center m-2">
             <Image
               src="/icons/NotificationBell.svg"
               alt="Profile icon"
@@ -76,20 +75,20 @@ export default function Setting() {
               height={24}
               className="mr-3"
             />
-            <span className="text-2xl not-italic font-bold font-IBM Plex Sans text-darkgrey">
+            <span className="text-2xl not-italic font-bold font-IBM Plex Sans text-darkgrey m-2">
               Push notifications
             </span>
           </div>
         </Link>
-        <br></br>
-        <hr className="h-px w-336 text-darkgrey"></hr>
-        <br></br>
-        <span className="text-base not-italic font-normal font-IBM Plex Sans text-grey">
+
+        <hr className="h-px w-336 text-darkgrey m-2"></hr>
+
+        <span className="text-base not-italic font-normal font-IBM Plex Sans text-grey m-2">
           More Info
         </span>
-        <br></br>
+
         <Link href="">
-          <div className="flex items-center">
+          <div className="flex items-center m-2">
             <Image
               src="/icons/AboutIcon.svg"
               alt="Profile icon"
@@ -113,10 +112,11 @@ export default function Setting() {
           ></RedButton>
         </div>
       </div>
-      <br></br>
-      <br></br>
-      <br></br>
+
       <div className="md:hidden">
+        <br></br>
+        <br></br>
+        <br></br>
         <Menu></Menu>
       </div>
     </div>
