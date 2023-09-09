@@ -34,6 +34,7 @@ describe("Settings Page", () => {
     const HowToUse = screen.getByText(/How you use Compass/i);
     const PushNotifications = screen.getByText(/Push notifications/i);
     const AboutCompass = screen.getByText(/About Compass/i);
+    const MoreInfo = screen.getByText(/More Info/i);
     const BackButton = screen.getAllByRole("button")[0];
     const LogoutButton = screen.getAllByRole("button")[1];
 
@@ -44,6 +45,7 @@ describe("Settings Page", () => {
     expect(HowToUse).toBeInTheDocument();
     expect(PushNotifications).toBeInTheDocument();
     expect(AboutCompass).toBeInTheDocument();
+    expect(MoreInfo).toBeInTheDocument();
 
     expect(BackButton).toBeInTheDocument();
     fireEvent.click(BackButton);
