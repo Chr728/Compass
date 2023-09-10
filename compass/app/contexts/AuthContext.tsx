@@ -1,3 +1,5 @@
+'use client';
+
 import React, {
   createContext,
   FC,
@@ -10,12 +12,15 @@ import { auth } from '@/app/config/firebase';
 import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
+  signOut,
   User,
 } from 'firebase/auth';
+import { useRouter } from 'next/navigation';
 
 interface AuthContextProps {
   user: User | null;
   login: (email: string, password: string) => void;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
@@ -34,6 +39,7 @@ interface AuthProviderProps {
 export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   const login = (email: string, password: string) => {
     signInWithEmailAndPassword(auth, email, password)
@@ -50,6 +56,18 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       });
   };
 
+  const logout = async () => {
+    try {
+      await signOut(auth);
+      // Sign-out successful.
+      router.push('/logout');
+      console.log('Sign-out successful.');
+    } catch (error) {
+      // Handle errors gracefully
+      console.error('Error signing out:', error);
+    }
+  };
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
       // Specify the type here
@@ -63,6 +81,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const value: AuthContextProps = {
     user,
     login,
+    logout,
   };
 
   return (
