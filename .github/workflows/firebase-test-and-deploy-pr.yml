@@ -52,10 +52,6 @@ jobs:
         run: rm /tmp/firebase-credentials.json
         if: success()
 
-      - name: Delete .env File
-        run: rm .env
-        if: always()
-
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           entryPoint: compass
@@ -66,3 +62,7 @@ jobs:
           projectId: compass-a026e
         env:
           FIREBASE_CLI_EXPERIMENTS: webframeworks
+
+      - name: Delete .env File
+        run: rm .env
+        if: always()
