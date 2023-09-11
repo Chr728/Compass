@@ -1,4 +1,4 @@
-import {onRequest} from "firebase-functions/v2/https";
+// import {onRequest} from "firebase-functions/v2/https";
 // import * as logger from "firebase-functions/logger";
 import {setGlobalOptions} from "firebase-functions/v2";
 import * as admin from "firebase-admin";
@@ -13,10 +13,6 @@ admin.initializeApp();
 
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
-
-export const helloWorld = onRequest((request, response) => {
-  response.send("Hello from Firebase!");
-});
 
 export const makeEmailLowercase = functions.firestore
   .document("Users/{userId}")
