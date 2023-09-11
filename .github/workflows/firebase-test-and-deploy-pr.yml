@@ -33,6 +33,9 @@ jobs:
       - name: Create Temporary Credentials File
         run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > /tmp/firebase-credentials.json
 
+      - name: Load .env File Contents
+        run: echo "${{ secrets.ENV_FILE }}" > .env
+
       - name: Build Functions
         run: cd functions && npm ci && npm run build
         if: success()
@@ -49,6 +52,9 @@ jobs:
         run: rm /tmp/firebase-credentials.json
         if: success()
 
+      - name: Delete .env File
+        run: rm .env
+        if: always()
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
