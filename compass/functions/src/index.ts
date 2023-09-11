@@ -1,5 +1,5 @@
 import {onRequest} from "firebase-functions/v2/https";
-import * as logger from "firebase-functions/logger";
+// import * as logger from "firebase-functions/logger";
 import {setGlobalOptions} from "firebase-functions/v2";
 import * as admin from "firebase-admin";
 import * as functions from "firebase-functions";
@@ -15,7 +15,6 @@ admin.initializeApp();
 // https://firebase.google.com/docs/functions/typescript
 
 export const helloWorld = onRequest((request, response) => {
-  logger.info("Hello logs!", {structuredData: true});
   response.send("Hello from Firebase!");
 });
 
