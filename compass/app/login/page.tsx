@@ -95,7 +95,7 @@ export default function Login() {
                     
                 </div>
 
-                <p className="text-blue font-sans text-[16px] leading-[22px] mb-4 mt-6"><Link href='/reset'>Forgot Password?</Link></p>
+                <p className="text-blue font-sans text-[16px] leading-[22px] mb-4 mt-6"><Link href="">Forgot Password?</Link></p>
 
         </form>
     </div>
