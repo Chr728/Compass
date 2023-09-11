@@ -33,8 +33,7 @@ const Navbar = () => {
           </li>
 
           <li className="md:mt-2 md:ml-10 lg:text-2xl">
-            <MdOutlineHome className="inline-block md:text-2xl text-lg lg:text-3xl mr-2" />{' '}
-            {MdOutlineHome}
+            <MdOutlineHome className="inline-block md:text-2xl text-lg lg:text-3xl mr-2" />
             <span className="home-text">
               {' '}
               <a href="#" className="hover:text-blue-200">
@@ -45,7 +44,6 @@ const Navbar = () => {
 
           <li className="md:mt-12 md:ml-10 lg:text-2xl">
             <MdOutlineDataExploration className="inline-block md:text-2xl text-lg lg:text-3xl mr-3" />
-            {MdOutlineDataExploration}
             <span className="home-text">
               <a href="#" className="hover:text-blue-200">
                 MyData
@@ -53,8 +51,7 @@ const Navbar = () => {
             </span>
           </li>
           <li className="md:mt-12 md:ml-10 lg:text-2xl">
-            <MdEditNote className="inline-block md:text-2xl text-lg lg:text-3xl mr-2" />{' '}
-            {MdEditNote}
+            <MdEditNote className="inline-block md:text-2xl text-lg lg:text-3xl mr-2" />
             <span className="home-text">
               <a href="#" className="hover:text-blue-200">
                 Journals
@@ -62,8 +59,8 @@ const Navbar = () => {
             </span>
           </li>
           <li className="md:mt-12 md:ml-10 lg:text-2xl">
-            <MdOutlineMessage className="inline-block md:text-2xl text-lg lg:text-3xl mr-2" />{' '}
-            {MdOutlineMessage}
+            <MdOutlineMessage className="inline-block md:text-2xl text-lg lg:text-3xl mr-2" />
+
             <span className="home-text">
               {' '}
               <a href="#" className="hover:text-blue-200">
@@ -72,8 +69,7 @@ const Navbar = () => {
             </span>
           </li>
           <li className="md:mt-12 md:ml-10 lg:text-2xl">
-            <MdOutlineSettings className="inline-block md:text-2xl text-lg lg:text-3xl mr-2" />{' '}
-            {MdOutlineSettings}
+            <MdOutlineSettings className="inline-block md:text-2xl text-lg lg:text-3xl mr-2" />
             <span className="home-text">
               <a href="#" className="hover:text-blue-200">
                 Settings
@@ -81,11 +77,10 @@ const Navbar = () => {
             </span>
           </li>
           <li className="hidden md:inline-block md:mt-24  lg:mt-32 md:ml-10 lg:text-2xl md:mb-4 lg:mb-4">
-            <button onClick={logout} className="hover:text-blue-200">
-              <MdLogout className="inline-block md:text-2xl text-lg lg:text-3xl" />{' '}
-              {MdLogout}
+            <a href="#" className="hover:text-blue-200">
+              <MdLogout className="inline-block md:text-2xl text-lg lg:text-3xl" />
               Logout
-            </button>
+            </a>
           </li>
         </ul>
       </div>
