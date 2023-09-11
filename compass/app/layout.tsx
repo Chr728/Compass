@@ -1,7 +1,7 @@
 'use client';
 
 import { AuthProvider } from './contexts/AuthContext';
-import {useRouter} from 'next/navigation';
+import {useRouter, usePathname} from 'next/navigation';
 import {useAuth} from './contexts/AuthContext';
 
 import './globals.css';
@@ -13,7 +13,8 @@ export default function RootLayout({
 }) {
     const router = useRouter();
     const {user} = useAuth();
-    if(!user) {
+    const pathname = usePathname();
+    if(!user && pathname !== '/register' && pathname !== '/login') {
         router.push('/login');
     }
   return (
