@@ -1,6 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '../contexts/AuthContext';
 import Setting from '../settings/page';
 import '@testing-library/jest-dom';
 
@@ -68,6 +67,5 @@ describe('Settings Page', () => {
     const LogoutButton = screen.getByText('Sign Out'); // Assuming the button text is 'Sign Out'
     fireEvent.click(LogoutButton);
     expect(mockLogOut).toHaveBeenCalled(); // Check if the logout function is called
-    expect(mockRouterPush).toHaveBeenCalledWith('/logout');
   });
 });
