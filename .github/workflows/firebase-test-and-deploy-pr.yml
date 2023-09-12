@@ -50,7 +50,7 @@ jobs:
 
       - name: Clean Up Temporary Credentials File
         run: rm /tmp/firebase-credentials.json
-        if: success()
+        if: always()
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
