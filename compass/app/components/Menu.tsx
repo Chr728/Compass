@@ -6,7 +6,7 @@ import {CSSProperties} from 'react'
 
 const Navbar = () => {
   return (
-    <nav className="bg-blue-500  fixed bottom-0 left-0 w-full md:w-72 lg:w-80 md:left-0 md:h-full md:flex md:flex-col md:rounded-3xl md:bg-white md:justify-start md:items-start">
+    <nav className="bg-blue-500  fixed bottom-0 left-0 w-full md:w-72 lg:w-80 md:left-0 md:h-full md:flex md:flex-col md:rounded-3xl bg-white md:justify-start md:items-start">
       <div className="text-black text-[14px] md:text-[16px]  md:font-sans  text-center p-6">
         <ul className="flex justify-around md:flex-col md:justify-start md:items-start">  
         <li className="md:ml-0 md:mb-4 md:mt-2 flex items-center">
