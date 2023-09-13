@@ -7,6 +7,7 @@ const testEnv = require('firebase-functions-test')({
     projectId: process.env.FIREBASE_PROJECT_ID,
 }, process.env.FIREBASE_SERVICE_ACCOUNT_KEY_PATH);
 
+
 describe('Test Firestore Functions', () => {
     afterAll(() => {
         testEnv.cleanup();

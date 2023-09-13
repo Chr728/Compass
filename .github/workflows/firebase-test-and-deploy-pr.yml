@@ -33,6 +33,9 @@ jobs:
       - name: Create Temporary Credentials File
         run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > /tmp/firebase-credentials.json
 
+      - name: Load .env File Contents
+        run: echo "${{ secrets.ENV_FILE }}" > .env
+
       - name: Build Functions
         run: cd functions && npm ci && npm run build
         if: success()
@@ -47,8 +50,7 @@ jobs:
 
       - name: Clean Up Temporary Credentials File
         run: rm /tmp/firebase-credentials.json
-        if: success()
-
+        if: always()
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
@@ -60,3 +62,7 @@ jobs:
           projectId: compass-a026e
         env:
           FIREBASE_CLI_EXPERIMENTS: webframeworks
+
+      - name: Delete .env File
+        run: rm .env
+        if: always()
