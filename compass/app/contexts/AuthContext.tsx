@@ -46,6 +46,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
+        router.push('/tpage');
 
         // ...
       })
