@@ -68,12 +68,6 @@ export default function Login() {
           <p className="text-blue font-sans text-[16px] leading-[22px]">
             <Link href="/register">Sign Up now</Link>
           </p>
-          {
-            error && 
-            <p className="text-center text-[16px] text-red font-sans">
-              {error}
-            </p>
-          }
         </div>
 
         <div>
@@ -151,6 +145,12 @@ export default function Login() {
         <p className="text-blue font-sans text-[16px] leading-[22px] mb-4 mt-6">
           <Link href="/reset">Forgot Password?</Link>
         </p>
+        {
+            error && 
+            <p className="md:text-center text-[16px] text-red font-sans">
+              {error}
+            </p>
+          }
       </form>
     </div>
   );
