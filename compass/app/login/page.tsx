@@ -20,8 +20,6 @@ export default function Login() {
     onSubmit: async (values) => {
       try {
         await login(values.email, values.password);
-
-        router.push('/tpage');
       } catch (error) {
         console.error('Login failed:', error);
       }
