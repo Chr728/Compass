@@ -1,21 +1,9 @@
-import {fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
-import {useRouter} from 'next/navigation';
 import '@testing-library/jest-dom';
 import Login from "../login/page";
-import { useFormik } from 'formik';
 import { useAuth, AuthProvider } from '../contexts/AuthContext';
 
-
-const mockRouter= jest.fn();
-
-jest.mock("next/navigation", () => ({
-    useRouter: () => {
-        return {
-            push: mockRouter
-        }
-    }
-}));
 
 jest.mock('../contexts/AuthContext', () => {
     return {
@@ -23,20 +11,21 @@ jest.mock('../contexts/AuthContext', () => {
     }
 })
 
-beforeEach(() => {
-    useAuth.mockImplementation(() => 
-    { 
-        return {
-            user: { email: 'd@d.com'},
-            login: jest.fn()
-        }
-    })
-})
+
 
 describe("Login Page error messages", () => {
+    beforeEach(() => {
+        useAuth.mockImplementation(() => 
+        { 
+            return {
+                user: { email: 'd@d.com'},
+                login: jest.fn()
+            }
+        })
+    })
+
     test("render all the content to the screen", () => {
         render(<Login/>);
-    
         const signInHeader = screen.getAllByText(/Sign In/i)[0];
         const noAccountHeader = screen.getByText(/Don't have an account yet?/i);
         const signUpHeader = screen.getByText(/sign up now/i);
@@ -85,7 +74,6 @@ describe("Login Page error messages", () => {
     test("renders error message on incorrect email and no password", async () => {
         render( <Login/>);
         const emailInput = screen.getByRole("textbox", { name: /email/i});
-        const passwordInput = screen.getByLabelText("Password");
         await userEvent.type(emailInput, "georgia");
         const button = screen.getByRole('button');
         await userEvent.click(button);
@@ -126,22 +114,63 @@ describe("Login Page error messages", () => {
 
     })
 
-    test("onSubmit sends correct values", async () => {
-        render( <Login/>);
-        const emailInput = screen.getByRole("textbox", { name: /email/i});
-        const passwordInput = screen.getByLabelText("Password");
-        await userEvent.type(emailInput, "georgia@georgia.com");
-        await userEvent.type(passwordInput, "password");
-        const button = screen.getByRole('button');
-        await userEvent.click(button);
-        expect(mockRouter).toHaveBeenCalledWith('/tpage');
-    })
-
     test("link redirects to register page", async () => {
         render(<Login/>);
         const linkElement = screen.getAllByRole("link")[0];
-        await userEvent.click(linkElement);
         expect(linkElement).toHaveAttribute("href", "/register");
     })
 })
 
+
+describe("Invalid login credentails", () => {
+    beforeEach(() => {
+        useAuth.mockImplementation(() => 
+        { 
+            return {
+                user: null,
+                login: jest.fn(),
+                error: "Invalid Credentials. Please try again."
+            }
+        })
+    })
+
+    test('logging in with invalid credentials', async () => {
+        render( <Login/>);
+        const emailInput = screen.getByRole("textbox", { name: /email/i});
+        const passwordInput = screen.getByLabelText("Password");
+        const button = screen.getByRole('button');
+        await userEvent.type(emailInput, "georgia@georgia.com");
+        await userEvent.type(passwordInput, "georgia");
+        await userEvent.click(button);
+        const error = await screen.findByText(/invalid credentials. please try again./i);
+        expect(error).toBeInTheDocument();
+    })
+
+})
+
+
+describe("Valid login credentials", () => {
+    beforeEach(() => {
+        useAuth.mockImplementation(() => 
+        { 
+            return {
+                user: {},
+                login: jest.fn(),
+                error: null
+            }
+        })
+    })
+
+    test('logging in with valid credentials', async () => {
+        render( <Login/>);
+        const emailInput = screen.getByRole("textbox", { name: /email/i});
+        const passwordInput = screen.getByLabelText("Password");
+        const button = screen.getByRole('button');
+        await userEvent.type(emailInput, "georgia@georgia.com");
+        await userEvent.type(passwordInput, "georgia");
+        await userEvent.click(button);
+        const error = await screen.queryByText(/invalid credentials. please try again./i);
+        expect(error).not.toBeInTheDocument();
+    })
+
+})
