@@ -5,12 +5,10 @@ import Button from '../components/Button';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useFormik } from 'formik';
-import { useRouter } from 'next/navigation';
 import { useAuth, AuthProvider } from '../contexts/AuthContext';
 
 export default function Login() {
-  const router = useRouter();
-  const { user, login } = useAuth();
+  const { user, login, error } = useAuth();
 
   const formik = useFormik({
     initialValues: {
@@ -70,6 +68,12 @@ export default function Login() {
           <p className="text-blue font-sans text-[16px] leading-[22px]">
             <Link href="/register">Sign Up now</Link>
           </p>
+          {
+            error && 
+            <p className="text-center text-[16px] text-red font-sans">
+              {error}
+            </p>
+          }
         </div>
 
         <div>
