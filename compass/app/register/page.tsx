@@ -114,7 +114,7 @@ export default function Register() {
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
-      <span className="flex items-baseline font-bold md:font-normal text-darkgrey text-[24px] mx-4 xl:hidden">
+      <span className="flex items-baseline font-bold md:font-normal text-darkgrey text-[24px] mx-4 mt-4 xl:hidden">
         <Link href="">
           <Image
             src="/icons/LeftArrow.svg"
@@ -288,26 +288,6 @@ export default function Register() {
               )}
             </div>
             
-          </>
-        )}
-
-        {count === 1 && (
-          <>
-            <div className="flex mx-auto space-x-2 mb-4">
-              <div
-                className="rounded-[50%] bg-slateblue h-[10px] w-[10px]"
-                id="firstDot"
-              ></div>
-              <div
-                className="rounded-[50%] bg-lightgrey h-[10px] w-[10px]"
-                id="secondDot"
-              ></div>
-              <div
-                className="rounded-[50%] bg-slateblue h-[10px] w-[10px]"
-                id="thirdDot"
-              ></div>
-            </div>
-
             <div className="mt-3">
               <label
                 htmlFor="lname"
@@ -331,6 +311,26 @@ export default function Register() {
                   {formik.errors.lname}
                 </p>
               )}
+            </div>
+
+          </>
+        )}
+
+        {count === 1 && (
+          <>
+            <div className="flex mx-auto space-x-2 mb-4">
+              <div
+                className="rounded-[50%] bg-slateblue h-[10px] w-[10px]"
+                id="firstDot"
+              ></div>
+              <div
+                className="rounded-[50%] bg-lightgrey h-[10px] w-[10px]"
+                id="secondDot"
+              ></div>
+              <div
+                className="rounded-[50%] bg-slateblue h-[10px] w-[10px]"
+                id="thirdDot"
+              ></div>
             </div>
 
             <div className="mt-3">
@@ -387,26 +387,7 @@ export default function Register() {
                 onBlur={formik.handleBlur}
               />
             </div>
-            
-          </>
-        )}
 
-        {count === 2 && (
-          <>
-            <div className="flex mx-auto space-x-2 mb-4">
-              <div
-                className="rounded-[50%] bg-slateblue h-[10px] w-[10px]"
-                id="firstDot"
-              ></div>
-              <div
-                className="rounded-[50%] bg-slateblue h-[10px] w-[10px]"
-                id="secondDot"
-              ></div>
-              <div
-                className="rounded-[50%] bg-lightgrey h-[10px] w-[10px]"
-                id="thirdDot"
-              ></div>
-            </div>
             <div className="mt-3">
                 <label
                   htmlFor="postalCode"
@@ -430,6 +411,7 @@ export default function Register() {
                   </p>
                 )}
               </div>
+
               <div className="mt-3">
                 <label
                   htmlFor="phone"
@@ -454,6 +436,27 @@ export default function Register() {
                   </p>
                 )}
               </div>
+            
+          </>
+        )}
+
+        {count === 2 && (
+          <>
+            <div className="flex mx-auto space-x-2 mb-4">
+              <div
+                className="rounded-[50%] bg-slateblue h-[10px] w-[10px]"
+                id="firstDot"
+              ></div>
+              <div
+                className="rounded-[50%] bg-slateblue h-[10px] w-[10px]"
+                id="secondDot"
+              ></div>
+              <div
+                className="rounded-[50%] bg-lightgrey h-[10px] w-[10px]"
+                id="thirdDot"
+              ></div>
+            </div>
+            
               <div className="mt-3">
                 <label
                   htmlFor="birthdate"
@@ -495,7 +498,7 @@ export default function Register() {
                   onBlur={formik.handleBlur}
                   className="p-2 w-full h-[52px] border border-solid border-lightgrey rounded-md text-grey focus:outline-blue shadow-[0_4px_8px_0_rgba(44,39,56,0.04)]"
                 >
-                  <option value="">Choose here</option>
+                  <option value="">Choose one</option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
                   <option value="other">Other</option>
@@ -534,34 +537,37 @@ export default function Register() {
         )}
 
         {count == 1 && (
-          <div className="md:mt-auto mt-6 mx-auto flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
-            <Button
-              type="button"
-              text="Previous"
-              style={{ width: '180px' }}
-              onClick={() => setCount(0)}
-            />
-            <Button
-              type="button"
-              text="Next"
-              style={{ width: '180px' }}
-              onClick={handleNext}
-              disabled={
-                formik.errors.lname ||
-                !formik.touched.lname
-                  ? true
-                  : false
-              }
-            />
+          <div className="md:mt-auto mt-6 mx-auto flex flex-col md:flex-row space-y-2 md:space-y-0 ">
+            <div className="space-x-4">
+              <Button
+                type="button"
+                text="Previous"
+                style={{ width: '140px' }}
+                onClick={() => setCount(0)}
+              />
+              <Button
+                type="button"
+                text="Next"
+                style={{ width: '140px' }}
+                onClick={handleNext}
+                disabled={
+                  formik.errors.lname ||
+                  !formik.touched.lname
+                    ? true
+                    : false
+                }
+              />
+            </div>
           </div>
         )}
         
         {count == 2 && (
           <div className="md:mt-auto mt-6 mx-auto flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
+            <div className="space-x-4">
             <Button
               type="button"
               text="Previous"
-              style={{ width: '180px' }}
+              style={{ width: '140px' }}
               onClick={() => setCount(1)}
             />
             {formik.errors.email ||
@@ -576,11 +582,12 @@ export default function Register() {
               <Button
                 type="submit"
                 text="Finish"
-                style={{ width: '180px', cursor: 'not-allowed' }}
+                style={{ width: '140px', cursor: 'not-allowed' }}
               />
             ) : (
               <Button type="submit" text="Finish" style={{ width: '180px' }} />
             )}
+            </div>
           </div>
         )}
       </form>
