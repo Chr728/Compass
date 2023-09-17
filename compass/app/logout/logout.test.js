@@ -4,13 +4,6 @@ import '@testing-library/jest-dom';
 import Login from "../login/page";
 import { useAuth, AuthProvider } from '../contexts/AuthContext';
 
-
-// jest.mock('../contexts/AuthContext', () => {
-//     return {
-//         useAuth: jest.fn()
-//     }
-// })
-
 describe("Returning back to home main page", () => {
     beforeEach(() => {
     test("link redirects to main page", async () => {
