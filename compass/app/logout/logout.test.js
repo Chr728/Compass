@@ -4,7 +4,8 @@ import '@testing-library/jest-dom';
 import Logout from "../logout/page";
 
 describe("Returning back to home main page", () => {
-   // checks and tests whether the logo image is displayed correctly
+   
+    // checks and tests whether the logo image is displayed correctly
     test("Logo displayed correctly", async () => {
         render(<Logout/>);
         const logoImage = screen.getByAltText("Logo");
