@@ -17,19 +17,17 @@ export default function Register() {
       confPassword: '',
       fname: '',
       lname: '',
-      street: '',
+      street:'',
       city: '',
       province: '',
       postalCode: '',
-      healthCard: '',
       phone: '',
       birthdate: '',
-      expiration: '',
-      doctor: '',
       sex: '',
     },
     onSubmit: (values) => {
       router.push('/');
+      console.log(values);
     },
     validate: (values) => {
       let errors: {
@@ -38,15 +36,12 @@ export default function Register() {
         confPassword?: string;
         fname?: string;
         lname?: string;
-        expiration?: string;
-        doctor?: string;
-        healthCard?: string;
         phone?: string;
+        street?:string;
+        city?:string;
+        province?:string;
         postalCode?: string;
-        city?: string;
-        province?: string;
         birthdate?: string;
-        street?: string;
         sex?: string;
       } = {};
 
@@ -72,48 +67,24 @@ export default function Register() {
       if (!values.lname) {
         errors.lname = 'Last Name Required';
       }
-      if (!values.street) {
-        errors.street = 'Street Required';
+      if(values.postalCode) {
+        if (!/[A-Z][0-9][A-Z] ?[0-9][A-Z][0-9]$/i.test(values.postalCode)) {
+          errors.postalCode = 'Invalid Postal Code';
+        }
       }
-      if (!values.city) {
-        errors.city = 'City Required';
-      }
-      if (!values.province) {
-        errors.province = 'Province Required';
-      }
-      if (!values.postalCode) {
-        errors.postalCode = 'Postal Code Required';
-      } else if (
-        !/[A-Z][0-9][A-Z] ?[0-9][A-Z][0-9]$/i.test(values.postalCode)
-      ) {
-        errors.postalCode = 'Invalid Postal Code';
-      }
-      if (!values.healthCard) {
-        errors.healthCard = 'Health Insurance Card Number Required';
-      } else if (!/[A-Z]{4}[0-9]{8}$/i.test(values.healthCard)) {
-        errors.healthCard = 'Invalid Health Insurance Card Number';
-      }
-
-      if (!values.phone) {
-        errors.phone = 'Phone Number Required';
-      } else if (!/^[0-9]{10}$/i.test(values.phone)) {
-        errors.phone = 'Please enter a 10 digit number';
-      }
-
+      if(!values.phone){
+        errors.phone='Phone Number Required';
+        } else if (!/^[0-9]{10}$/i.test(values.phone)) {
+          errors.phone = 'Please enter a 10 digit number';
+        }
+      
       if (!values.birthdate) {
         errors.birthdate = 'Birthdate Required';
-      }
-
-      if (!values.expiration) {
-        errors.expiration = 'Expiration Date Required';
-      }
-      if (!values.doctor) {
-        errors.doctor = 'Name of Practitioner Required';
       }
       if (!values.sex) {
         errors.sex = 'Sex Required';
       }
-
+     
       return errors;
     },
   });
@@ -143,7 +114,7 @@ export default function Register() {
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
-      <span className="flex items-baseline font-bold md:font-normal text-darkgrey text-[24px] mx-4 xl:hidden">
+      <span className="flex items-baseline font-bold md:font-normal text-darkgrey text-[24px] mx-4 mt-4 xl:hidden">
         <Link href="">
           <Image
             src="/icons/LeftArrow.svg"
@@ -157,12 +128,12 @@ export default function Register() {
         Registration
       </span>
       <form
-        className="rounded-3xl bg-white flex flex-col m-auto w-full md:max-w-[800px] md:min-h-[600px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
+        className="rounded-3xl bg-white flex flex-col m-auto w-full md:max-w-[800px] md:min-h-[550px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
         onSubmit={formik.handleSubmit}
       >
         {count === 0 && (
           <>
-            <div className="flex mx-auto space-x-2">
+            <div className="flex mx-auto space-x-2 mb-4">
               <div
                 className="rounded-[50%] bg-lightgrey h-[10px] w-[10px]"
                 id="firstDot"
@@ -183,6 +154,7 @@ export default function Register() {
               >
                 Email Address
               </label>
+              <span className="text-red text-[20px]"> *</span>
               <br />
               <Input
                 name="email"
@@ -206,6 +178,7 @@ export default function Register() {
               >
                 Password
               </label>
+              <span className="text-red text-[20px]"> *</span>
               <br />
               <Input
                 name="password"
@@ -251,6 +224,7 @@ export default function Register() {
               >
                 Confirm Password
               </label>
+              <span className="text-red text-[20px]"> *</span>
               <br />
               <Input
                 name="confPassword"
@@ -289,13 +263,14 @@ export default function Register() {
               </p>
             )}
 
-            <div className="mt-3">
+            <div className="mt-3 mb-3">
               <label
                 htmlFor="fname"
                 className="font-sans font-medium text-grey text-[16px]"
               >
                 First Name
               </label>
+              <span className="text-red text-[20px]"> *</span>
               <br />
               <Input
                 name="fname"
@@ -312,13 +287,15 @@ export default function Register() {
                 </p>
               )}
             </div>
-            <div className="mt-3 mb-3">
+            
+            <div className="mt-3">
               <label
                 htmlFor="lname"
                 className="font-sans font-medium text-grey text-[16px]"
               >
                 Last Name
               </label>
+              <span className="text-red text-[20px]"> *</span>
               <br />
               <Input
                 name="lname"
@@ -335,12 +312,13 @@ export default function Register() {
                 </p>
               )}
             </div>
+
           </>
         )}
 
         {count === 1 && (
           <>
-            <div className="flex mx-auto space-x-2">
+            <div className="flex mx-auto space-x-2 mb-4">
               <div
                 className="rounded-[50%] bg-slateblue h-[10px] w-[10px]"
                 id="firstDot"
@@ -372,11 +350,6 @@ export default function Register() {
                 value={formik.values.street}
                 onBlur={formik.handleBlur}
               />
-              {formik.touched.street && formik.errors.street && (
-                <p className="text-[16px] text-red font-sans">
-                  {formik.errors.street}
-                </p>
-              )}
             </div>
             <div className="mt-3">
               <label
@@ -395,13 +368,8 @@ export default function Register() {
                 value={formik.values.city}
                 onBlur={formik.handleBlur}
               />
-              {formik.touched.city && formik.errors.city && (
-                <p className="text-[16px] text-red font-sans">
-                  {formik.errors.city}
-                </p>
-              )}
             </div>
-            <div className="mt-3">
+            <div className="mt-3 mb-3">
               <label
                 htmlFor="province"
                 className="font-sans font-medium text-grey text-[16px]"
@@ -418,64 +386,63 @@ export default function Register() {
                 value={formik.values.province}
                 onBlur={formik.handleBlur}
               />
-              {formik.touched.province && formik.errors.province && (
-                <p className="text-[16px] text-red font-sans">
-                  {formik.errors.province}
-                </p>
-              )}
             </div>
+
             <div className="mt-3">
-              <label
-                htmlFor="postalCode"
-                className="font-sans font-medium text-grey text-[16px]"
-              >
-                Postal Code
-              </label>
-              <br />
-              <Input
-                name="postalCode"
-                id="postalCode"
-                type="text"
-                style={{ width: '100%' }}
-                onChange={formik.handleChange}
-                value={formik.values.postalCode}
-                onBlur={formik.handleBlur}
-              />
-              {formik.touched.postalCode && formik.errors.postalCode && (
-                <p className="text-[16px] text-red font-sans">
-                  {formik.errors.postalCode}
-                </p>
-              )}
-            </div>
-            <div className="mt-3 mb-3">
-              <label
-                htmlFor="phone"
-                className="font-sans font-medium text-grey text-[16px]"
-              >
-                Phone Number
-              </label>
-              <br />
-              <Input
-                name="phone"
-                id="phone"
-                type="text"
-                style={{ width: '100%' }}
-                onChange={formik.handleChange}
-                value={formik.values.phone}
-                onBlur={formik.handleBlur}
-              />
-              {formik.touched.phone && formik.errors.phone && (
-                <p className="text-[16px] text-red font-sans">
-                  {formik.errors.phone}
-                </p>
-              )}
-            </div>
+                <label
+                  htmlFor="postalCode"
+                  className="font-sans font-medium text-grey text-[16px]"
+                >
+                  Postal Code
+                </label>
+                <br />
+                <Input
+                  name="postalCode"
+                  id="postalCode"
+                  type="text"
+                  style={{ width: '100%' }}
+                  onChange={formik.handleChange}
+                  value={formik.values.postalCode}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.touched.postalCode && formik.errors.postalCode && (
+                  <p className="text-[16px] text-red font-sans">
+                    {formik.errors.postalCode}
+                  </p>
+                )}
+              </div>
+
+              <div className="mt-3">
+                <label
+                  htmlFor="phone"
+                  className="font-sans font-medium text-grey text-[16px]"
+                >
+                  Phone Number
+                </label>
+                <span className="text-red text-[20px]"> *</span>
+                <br />
+                <Input
+                  name="phone"
+                  id="phone"
+                  type="text"
+                  style={{ width: '100%' }}
+                  onChange={formik.handleChange}
+                  value={formik.values.phone}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.touched.phone && formik.errors.phone && (
+                  <p className="text-[16px] text-red font-sans">
+                    {formik.errors.phone}
+                  </p>
+                )}
+              </div>
+            
           </>
         )}
 
         {count === 2 && (
           <>
-            <div className="flex mx-auto space-x-2">
+            <div className="flex mx-auto space-x-2 mb-4">
               <div
                 className="rounded-[50%] bg-slateblue h-[10px] w-[10px]"
                 id="firstDot"
@@ -489,128 +456,60 @@ export default function Register() {
                 id="thirdDot"
               ></div>
             </div>
-            <div className="mt-3">
-              <label
-                htmlFor="healthCard"
-                className="font-sans font-medium text-grey text-[16px]"
-              >
-                Health Insurance Card Number
-              </label>
-              <br />
-              <Input
-                name="healthCard"
-                id="healthCard"
-                type="text"
-                style={{ width: '100%' }}
-                onChange={formik.handleChange}
-                value={formik.values.healthCard}
-                onBlur={formik.handleBlur}
-              />
-              {formik.touched.healthCard && formik.errors.healthCard && (
-                <p className="text-[16px] text-red font-sans">
-                  {formik.errors.healthCard}
-                </p>
-              )}
-            </div>
-            <div className="mt-3">
-              <label
-                htmlFor="expiration"
-                className="font-sans font-medium text-grey text-[16px]"
-              >
-                Health Insurance Card Expiration Date
-              </label>
-              <br />
-              <Input
-                name="expiration"
-                id="expiration"
-                type="date"
-                style={{ width: '100%' }}
-                onChange={formik.handleChange}
-                value={formik.values.expiration}
-                onBlur={formik.handleBlur}
-              />
-              {formik.touched.expiration && formik.errors.expiration && (
-                <p className="text-[16px] text-red font-sans">
-                  {formik.errors.expiration}
-                </p>
-              )}
-            </div>
-
-            <div className="mt-3">
-              <label
-                htmlFor="birthdate"
-                className="font-sans font-medium text-grey text-[16px]"
-              >
-                Birthdate
-              </label>
-              <br />
-              <Input
-                name="birthdate"
-                id="birthdate"
-                type="date"
-                style={{ width: '100%' }}
-                onChange={formik.handleChange}
-                value={formik.values.birthdate}
-                onBlur={formik.handleBlur}
-              />
-              {formik.touched.birthdate && formik.errors.birthdate && (
-                <p className="text-[16px] text-red font-sans">
-                  {formik.errors.birthdate}
-                </p>
-              )}
-            </div>
-            <div className="mt-3 relative">
-              <label
-                htmlFor="sex"
-                className="font-sans font-medium text-grey text-[16px]"
-              >
-                Sex
-              </label>
-              <br />
-              <select
-                name="sex"
-                id="sex"
-                onChange={formik.handleChange}
-                value={formik.values.sex}
-                onBlur={formik.handleBlur}
-                className="p-2 w-full h-[52px] border border-solid border-lightgrey rounded-md text-grey focus:outline-blue shadow-[0_4px_8px_0_rgba(44,39,56,0.04)]"
-              >
-                <option value="">Choose here</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
+            
+              <div className="mt-3">
+                <label
+                  htmlFor="birthdate"
+                  className="font-sans font-medium text-grey text-[16px]"
+                >
+                  Birthdate
+                </label>
+                <span className="text-red text-[20px]"> *</span>
+                <br />
+                <Input
+                  name="birthdate"
+                  id="birthdate"
+                  type="date"
+                  style={{ width: '100%' }}
+                  onChange={formik.handleChange}
+                  value={formik.values.birthdate}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.touched.birthdate && formik.errors.birthdate && (
+                  <p className="text-[16px] text-red font-sans">
+                    {formik.errors.birthdate}
+                  </p>
+                )}
+              </div>
+              <div className="mt-3 mb-3 relative">
+                <label
+                  htmlFor="sex"
+                  className="font-sans font-medium text-grey text-[16px]"
+                >
+                  Sex
+                </label>
+                <span className="text-red text-[20px]"> *</span>
+                <br />
+                <select
+                  name="sex"
+                  id="sex"
+                  onChange={formik.handleChange}
+                  value={formik.values.sex}
+                  onBlur={formik.handleBlur}
+                  className="p-2 w-full h-[52px] border border-solid border-lightgrey rounded-md text-grey focus:outline-blue shadow-[0_4px_8px_0_rgba(44,39,56,0.04)]"
+                >
+                  <option value="">Choose one</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
 
             {formik.touched.sex && formik.errors.sex && (
               <p className="text-[16px] text-red font-sans">
                 {formik.errors.sex}
               </p>
             )}
-
-            <div className="mt-3 mb-3">
-              <label
-                htmlFor="doctor"
-                className="font-sans font-medium text-grey text-[16px]"
-              >
-                General Practitioner
-              </label>
-              <br />
-              <Input
-                name="doctor"
-                id="doctor"
-                type="text"
-                style={{ width: '100%' }}
-                onChange={formik.handleChange}
-                value={formik.values.doctor}
-                onBlur={formik.handleBlur}
-              />
-              {formik.touched.doctor && formik.errors.doctor && (
-                <p className="text-[16px] text-red font-sans">
-                  {formik.errors.doctor}
-                </p>
-              )}
-            </div>
           </>
         )}
 
@@ -626,12 +525,10 @@ export default function Register() {
                 formik.errors.password ||
                 formik.errors.confPassword ||
                 formik.errors.fname ||
-                formik.errors.lname ||
                 !formik.touched.email ||
                 !formik.touched.password ||
                 !formik.touched.confPassword ||
-                !formik.touched.fname ||
-                !formik.touched.lname
+                !formik.touched.fname
                   ? true
                   : false
               }
@@ -640,42 +537,37 @@ export default function Register() {
         )}
 
         {count == 1 && (
-          <div className="md:mt-auto mt-6 mx-auto flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
-            <Button
-              type="button"
-              text="Previous"
-              style={{ width: '180px' }}
-              onClick={() => setCount(0)}
-            />
-            <Button
-              type="button"
-              text="Next"
-              style={{ width: '180px' }}
-              onClick={handleNext}
-              disabled={
-                formik.errors.street ||
-                formik.errors.city ||
-                formik.errors.province ||
-                formik.errors.postalCode ||
-                formik.errors.phone ||
-                !formik.touched.street ||
-                !formik.touched.city ||
-                !formik.touched.province ||
-                !formik.touched.postalCode ||
-                !formik.touched.phone
-                  ? true
-                  : false
-              }
-            />
+          <div className="md:mt-auto mt-6 mx-auto flex flex-col md:flex-row space-y-2 md:space-y-0 ">
+            <div className="space-x-4">
+              <Button
+                type="button"
+                text="Previous"
+                style={{ width: '140px' }}
+                onClick={() => setCount(0)}
+              />
+              <Button
+                type="button"
+                text="Next"
+                style={{ width: '140px' }}
+                onClick={handleNext}
+                disabled={
+                  formik.errors.lname ||
+                  !formik.touched.lname
+                    ? true
+                    : false
+                }
+              />
+            </div>
           </div>
         )}
-
+        
         {count == 2 && (
           <div className="md:mt-auto mt-6 mx-auto flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
+            <div className="space-x-4">
             <Button
               type="button"
               text="Previous"
-              style={{ width: '180px' }}
+              style={{ width: '140px' }}
               onClick={() => setCount(1)}
             />
             {formik.errors.email ||
@@ -683,24 +575,19 @@ export default function Register() {
             formik.errors.confPassword ||
             formik.errors.fname ||
             formik.errors.lname ||
-            formik.errors.street ||
-            formik.errors.city ||
-            formik.errors.province ||
             formik.errors.postalCode ||
-            formik.errors.healthCard ||
             formik.errors.phone ||
             formik.errors.birthdate ||
-            formik.errors.expiration ||
-            formik.errors.doctor ||
             formik.errors.sex ? (
               <Button
                 type="submit"
                 text="Finish"
-                style={{ width: '180px', cursor: 'not-allowed' }}
+                style={{ width: '140px', cursor: 'not-allowed' }}
               />
             ) : (
               <Button type="submit" text="Finish" style={{ width: '180px' }} />
             )}
+            </div>
           </div>
         )}
       </form>
