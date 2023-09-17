@@ -11,6 +11,7 @@ describe("Returning back to home main page", () => {
         expect(logoImage).toBeVisible();
     })
 
+    
     test("logout Message displayed", async () => {
         render(<Logout/>);
         const message = screen.getByText(/Successfully logged out/i);
