@@ -55,7 +55,6 @@ export default function Profile() {
             <Button type="submit" text="Edit Profile" style={{ width: '180px', alignContent:'center' }} />
             </Link> 
         </div>    
-
     </span>
     <div className={`xl:max-w-[1280px] w-full`}>
       <Menu />
