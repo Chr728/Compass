@@ -13,8 +13,7 @@ export default function Profile() {
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col justify-center">
-      <span className="rounded-2xl   mr-28 bg-white flex flex-col m-auto w-full md:max-w-[800px] md:min-h-[600px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]">
-      
+      <span className="rounded-2xl  mt-8 mb-8 mr-28 bg-white flex flex-col m-auto w-full md:max-w-[800px] md:min-h-[600px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]">
       <div className="mt-3 relative"> 
     <div>
         <p className="text-lg ml-0 font-sans text-black  font-bold text-[16px]" style={{ display: 'inline' }}>First Name : </p>
@@ -48,7 +47,15 @@ export default function Profile() {
         <p className="text-md ml-2"  style={{ display: 'inline' }}>Marc</p>
         <br></br>
    </div>
-    </div>        
+            
+    </div>
+
+    <div className="flex justify-center mt-6">
+    <Link href="#"  className="mt-6">
+            <Button type="submit" text="Edit Profile" style={{ width: '180px', alignContent:'center' }} />
+            </Link> 
+        </div>    
+
     </span>
     <div className={`xl:max-w-[1280px] w-full`}>
       <Menu />
