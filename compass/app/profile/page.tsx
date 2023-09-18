@@ -20,31 +20,31 @@ export default function Profile() {
         <p className="text-md ml-2"  style={{ display: 'inline' }}>Marc</p>
         <br></br>
         <p className="text-lg ml-0 font-sans text-black  font-bold text-[16px]" style={{ display: 'inline' }}>Last Name : </p>
-        <p className="text-md ml-2"  style={{ display: 'inline' }}>Marc</p>
+        <p className="text-md ml-2"  style={{ display: 'inline' }}>placeholder</p>
         <br></br>
         <p className="text-lg ml-0 font-sans text-black  font-bold text-[16px]" style={{ display: 'inline' }}>Email : </p>
-        <p className="text-md ml-2"  style={{ display: 'inline' }}>Marc</p>
+        <p className="text-md ml-2"  style={{ display: 'inline' }}>placeholder</p>
         <br></br>
         <p className="text-lg ml-0 font-sans text-black  font-bold text-[16px]" style={{ display: 'inline' }}>Street Address : </p>
-        <p className="text-md ml-2"  style={{ display: 'inline' }}>Marc</p>
+        <p className="text-md ml-2"  style={{ display: 'inline' }}>placeholder</p>
         <br></br>
         <p className="text-lg ml-0 font-sans text-black  font-bold text-[16px]" style={{ display: 'inline' }}>City: </p>
-        <p className="text-md ml-2"  style={{ display: 'inline' }}>Marc</p>
+        <p className="text-md ml-2"  style={{ display: 'inline' }}>placeholder</p>
         <br></br>
         <p className="text-lg ml-0 font-sans text-black  font-bold text-[16px]" style={{ display: 'inline' }}>Province: </p>
-        <p className="text-md ml-2"  style={{ display: 'inline' }}>Marc</p>
+        <p className="text-md ml-2"  style={{ display: 'inline' }}>placeholder</p>
         <br></br>
         <p className="text-lg ml-0 font-sans text-black  font-bold text-[16px]" style={{ display: 'inline' }}>Postal Code : </p>
-        <p className="text-md ml-2"  style={{ display: 'inline' }}>Marc</p>
+        <p className="text-md ml-2"  style={{ display: 'inline' }}>placeholder</p>
         <br></br>
         <p className="text-lg ml-0 font-sans text-black  font-bold text-[16px]" style={{ display: 'inline' }}>Phone number : </p>
-        <p className="text-md ml-2"  style={{ display: 'inline' }}>Marc</p>
+        <p className="text-md ml-2"  style={{ display: 'inline' }}>placeholder</p>
         <br></br>
         <p className="text-lg ml-0 font-sans text-black  font-bold text-[16px]" style={{ display: 'inline' }}>Birth Date : </p>
-        <p className="text-md ml-2"  style={{ display: 'inline' }}>Marc</p>
+        <p className="text-md ml-2"  style={{ display: 'inline' }}>placeholder</p>
         <br></br>
         <p className="text-lg ml-0 font-sans text-black  font-bold text-[16px]" style={{ display: 'inline' }}>Sex : </p>
-        <p className="text-md ml-2"  style={{ display: 'inline' }}>Marc</p>
+        <p className="text-md ml-2"  style={{ display: 'inline' }}>placeholder</p>
         <br></br>
    </div>
             
