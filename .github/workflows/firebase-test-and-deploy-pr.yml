@@ -45,7 +45,7 @@ jobs:
         if: success()
 
       - name: Test Only Client Side
-        run: npm test -- --testPathPattern=app
+        run: npm test  -- --testPathPattern=app --coverage
         if: success()
 
       - name: Test Functions
