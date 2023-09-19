@@ -1,0 +1,103 @@
+"use client";
+import Input from "../components/Input";
+import Button from "../components/Button";
+import Link from "next/link";
+import { useFormik } from "formik";
+
+export default function ForgotPassword() {
+  // Backend part to be added
+
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    onSubmit: async (values) => {
+      try {
+        // Add function to pull data from backend
+      } catch (error) {
+        console.error("Login failed:", error);
+      }
+    },
+    validate: (values) => {
+      let errors: {
+        email?: string;
+      } = {};
+      if (!values.email) {
+        errors.email = "Email is required";
+      } else if (
+        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
+      ) {
+        errors.email = "Invalid email format";
+      } else if (values.email === null) errors.email = "No email entered";
+      // TO BE ADDED
+      //   else if (
+      //     // If email does not exist in the database
+      //   ) {
+      //     errors.email = 'No account found with this email';
+      //   }
+      return errors;
+    },
+  });
+
+  return (
+    <div className="bg-eggshell min-h-screen flex flex-col">
+      <form
+        className="rounded-3xl bg-white flex flex-col m-auto w-full md:max-w-[800px] md:h-[450px] p-8"
+        // onSubmit={}
+      >
+        <div className="mb-6">
+          <p className="text-[34px] text-darkgrey font-sans font-bold">
+            Reset Password
+          </p>
+          <p className="text-darkgrey text-[16px] font-sans leading-[22px]">
+            Enter your email for a password reset link.
+          </p>
+          <p className="text-blue font-sans text-[16px] leading-[22px]">
+            <Link href="/FindEmail"> Forgot Email ?</Link>
+          </p>
+        </div>
+
+        <div>
+          <label htmlFor="email" className="text-grey font-medium">
+            Email
+          </label>
+          <br />
+          <Input
+            name="email"
+            id="email"
+            type="text"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            style={{ width: "100%" }}
+          />
+        </div>
+        {formik.touched.email && formik.errors.email ? (
+          <p className="text-[16px] text-red font-sans">
+            {formik.errors.email}
+          </p>
+        ) : null}
+        <div className="md:mt-auto mt-6 w-full">
+          {formik.errors.email ? (
+            <Button
+              type="submit"
+              text="Send Reset Link"
+              style={{ width: "100%", cursor: "not-allowed" }}
+            />
+          ) : (
+            <Button
+              type="submit"
+              text="Send Reset Link"
+              style={{ width: "100%" }}
+            />
+          )}
+        </div>
+
+        <p className="text-blue font-sans text-[16px] leading-[22px] mb-4 mt-6">
+          <Link href="/login">Back to Sign in</Link>
+        </p>
+      </form>
+    </div>
+  );
+}

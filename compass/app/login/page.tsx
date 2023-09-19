@@ -1,25 +1,25 @@
-'use client';
-import { useState } from 'react';
-import Input from '../components/Input';
-import Button from '../components/Button';
-import Link from 'next/link';
-import Image from 'next/image';
-import { useFormik } from 'formik';
-import { useAuth, AuthProvider } from '../contexts/AuthContext';
+"use client";
+import { useState } from "react";
+import Input from "../components/Input";
+import Button from "../components/Button";
+import Link from "next/link";
+import Image from "next/image";
+import { useFormik } from "formik";
+import { useAuth, AuthProvider } from "../contexts/AuthContext";
 
 export default function Login() {
   const { user, login, error } = useAuth();
 
   const formik = useFormik({
     initialValues: {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
     },
     onSubmit: async (values) => {
       try {
         await login(values.email, values.password);
       } catch (error) {
-        console.error('Login failed:', error);
+        console.error("Login failed:", error);
       }
     },
     validate: (values) => {
@@ -28,15 +28,15 @@ export default function Login() {
         password?: string;
       } = {};
       if (!values.email) {
-        errors.email = 'Email is required';
+        errors.email = "Email is required";
       } else if (
         !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
       ) {
-        errors.email = 'Invalid email format';
+        errors.email = "Invalid email format";
       }
 
       if (!values.password) {
-        errors.password = 'Password is required';
+        errors.password = "Password is required";
       }
 
       return errors;
@@ -82,7 +82,7 @@ export default function Login() {
             value={formik.values.email}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            style={{ width: '100%' }}
+            style={{ width: "100%" }}
           />
         </div>
         {formik.touched.email && formik.errors.email ? (
@@ -99,11 +99,11 @@ export default function Login() {
           <Input
             name="password"
             id="password"
-            type={visible ? 'text' : 'password'}
+            type={visible ? "text" : "password"}
             value={formik.values.password}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            style={{ width: '100%' }}
+            style={{ width: "100%" }}
           />
           <div className="absolute right-2 bottom-3" onClick={handleVisibility}>
             {visible ? (
@@ -119,7 +119,7 @@ export default function Login() {
                 alt="Eye icon"
                 width={24}
                 height={24}
-                style={{ width: 'auto', height: 'auto' }}
+                style={{ width: "auto", height: "auto" }}
               />
             )}
           </div>
@@ -131,27 +131,25 @@ export default function Login() {
         ) : null}
 
         <div className="md:mt-auto mt-6 w-full">
-        {
-            error && 
+          {error && (
             <p className="md:text-center text-[16px] text-red font-sans mb-2">
               {error}
             </p>
-          }
+          )}
           {formik.errors.password || formik.errors.email ? (
             <Button
               type="submit"
               text="Sign In"
-              style={{ width: '100%', cursor: 'not-allowed' }}
+              style={{ width: "100%", cursor: "not-allowed" }}
             />
           ) : (
-            <Button type="submit" text="Sign In" style={{ width: '100%' }} />
+            <Button type="submit" text="Sign In" style={{ width: "100%" }} />
           )}
         </div>
 
         <p className="text-blue font-sans text-[16px] leading-[22px] mb-4 mt-6">
-          <Link href="/reset">Forgot Password?</Link>
+          <Link href="/forgotpassword">Forgot Password?</Link>
         </p>
-       
       </form>
     </div>
   );
