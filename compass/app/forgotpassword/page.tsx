@@ -29,7 +29,7 @@ export default function ForgotPassword() {
         !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
       ) {
         errors.email = "Invalid email format";
-      } else if (values.email === null) errors.email = "No email entered";
+      }
       // TO BE ADDED
       //   else if (
       //     // If email does not exist in the database
@@ -44,7 +44,7 @@ export default function ForgotPassword() {
     <div className="bg-eggshell min-h-screen flex flex-col">
       <form
         className="rounded-3xl bg-white flex flex-col m-auto w-full md:max-w-[800px] md:h-[450px] p-8"
-        // onSubmit={}
+        onSubmit={formik.handleSubmit}
       >
         <div className="mb-6">
           <p className="text-[34px] text-darkgrey font-sans font-bold">
