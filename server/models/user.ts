@@ -45,6 +45,9 @@ module.exports = (sequelize: any, DataTypes: any) => {
       User.hasMany(models.ActivityJournal);
       User.hasMany(models.MoodJournal);
       User.hasMany(models.WeightJournal);
+      User.hasMany(models.Appointment, 
+        { foreignKey: 'email',
+        sourceKey: 'email' })
     }
   }
   User.init(
@@ -88,7 +91,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         allowNull: false,
       },
       birthDate: {
-        type: DataTypes.STRING,
+        type: DataTypes.DATE,
         allowNull: false,
       },
       sex: {
