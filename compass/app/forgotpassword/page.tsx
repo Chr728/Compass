@@ -3,6 +3,7 @@ import Input from "../components/Input";
 import Button from "../components/Button";
 import Link from "next/link";
 import { useFormik } from "formik";
+import { useState } from "react";
 
 export default function ForgotPassword() {
   // Backend part to be added
@@ -40,8 +41,22 @@ export default function ForgotPassword() {
     },
   });
 
+  const [loggedIn, setLoggedIn] = useState<boolean>(false);
+
+  const handleVisibility = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ): void => {
+    e.preventDefault();
+    setLoggedIn((previous) => !previous);
+  };
+
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
+      {loggedIn ? (
+        <p className="text-[34px] text-darkgrey font-sans font-bold">
+          Reset Password
+        </p>
+      ) : null}
       <form
         className="rounded-3xl bg-white flex flex-col m-auto w-full md:max-w-[800px] md:h-[450px] p-8"
         onSubmit={formik.handleSubmit}
@@ -53,9 +68,11 @@ export default function ForgotPassword() {
           <p className="text-darkgrey text-[16px] font-sans leading-[22px]">
             Enter your email for a password reset link.
           </p>
-          <p className="text-blue font-sans text-[16px] leading-[22px]">
-            <Link href="/FindEmail"> Forgot Email ?</Link>
-          </p>
+          {loggedIn ? (
+            <p className="text-blue font-sans text-[16px] leading-[22px]">
+              <Link href="/FindEmail"> Forgot Email ?</Link>
+            </p>
+          ) : null}
         </div>
 
         <div>
@@ -94,9 +111,11 @@ export default function ForgotPassword() {
           )}
         </div>
 
-        <p className="text-blue font-sans text-[16px] leading-[22px] mb-4 mt-6">
-          <Link href="/login">Back to Sign in</Link>
-        </p>
+        {loggedIn ? (
+          <p className="text-blue font-sans text-[16px] leading-[22px] mb-4 mt-6">
+            <Link href="/login">Back to Sign in</Link>
+          </p>
+        ) : null}
       </form>
     </div>
   );
