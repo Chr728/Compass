@@ -6,10 +6,10 @@ interface FoodIntakeAttributes {
   id: number;
   email: string;
   date: Date;
-  time: number;
-  foodname: string;
-  mealtype: string;
-  servingnumber: number;
+  time: Date;
+  foodName: string;
+  mealType: string;
+  servingNumber: number;
   notes: string;
 }
 
@@ -23,13 +23,17 @@ module.exports = (sequelize: any, DataTypes: any) => {
     id!: number;
     email!: string;
     date!: Date;
-    time!: number;
-    foodname!: string;
-    mealtype!: string;
-    servingnumber!: number;
+    time!: Date;
+    foodName!: string;
+    mealType!: string;
+    servingNumber!: number;
     notes!: string;
     static associate(models: any) {
       // define association here
+      FoodIntakeJournal.belongsTo(models.User,{
+        foreignKey: "email",
+        targetKey: 'email',}
+      )
     }
   }
   FoodIntakeJournal.init(
@@ -43,30 +47,29 @@ module.exports = (sequelize: any, DataTypes: any) => {
       email: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
       },
       date: {
         type: DataTypes.DATE,
         allowNull: false,
       },
       time: {
-        type: "TIMESTAMP",
+        type: DataTypes.TIME,
         allowNull: false,
       },
-      foodname: {
+      foodName: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      mealtype: {
+      mealType: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      servingnumber: {
+      servingNumber: {
         type: DataTypes.FLOAT,
         allowNull: false,
       },
       notes: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
       },
     },

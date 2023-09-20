@@ -6,7 +6,7 @@ interface ActivityJournalAttributes {
   id: number;
   email: string;
   date: Date;
-  time: number;
+  time: Date;
   activity: string;
   duration: number;
   notes: string;
@@ -28,6 +28,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
     notes!: string;
     static associate(models: any) {
       // define association here
+      ActivityJournal.belongsTo(models.User,{
+        foreignKey: "email",
+        targetKey: 'email',}
+      )
     }
   }
   ActivityJournal.init(
@@ -41,14 +45,13 @@ module.exports = (sequelize: any, DataTypes: any) => {
       email: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
       },
       date: {
         type: DataTypes.DATE,
         allowNull: false,
       },
       time: {
-        type: "TIMESTAMP",
+        type: DataTypes.TIME,
         allowNull: false,
       },
       activity: {
@@ -60,7 +63,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         allowNull: false,
       },
       notes: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
       },
     },

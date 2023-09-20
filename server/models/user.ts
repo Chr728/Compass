@@ -39,12 +39,30 @@ module.exports = (sequelize: any, DataTypes: any) => {
 
     static associate(models: any) {
       // define association here
-      User.hasMany(models.GlucoseMeasurement);
-      User.hasMany(models.InsulinDosage);
-      User.hasMany(models.FoodIntakeJournal);
-      User.hasMany(models.ActivityJournal);
-      User.hasMany(models.MoodJournal);
-      User.hasMany(models.WeightJournal);
+      User.hasMany(models.GlucoseMeasurement, 
+        { foreignKey: 'email',
+        sourceKey: 'email' });
+        
+      User.hasMany(models.InsulinDosage, 
+        { foreignKey: 'email',
+        sourceKey: 'email' });
+
+      User.hasMany(models.FoodIntakeJournal, 
+        { foreignKey: 'email',
+        sourceKey: 'email' });
+
+      User.hasMany(models.ActivityJournal, 
+        { foreignKey: 'email',
+        sourceKey: 'email' });
+
+      User.hasMany(models.MoodJournal, 
+        { foreignKey: 'email',
+        sourceKey: 'email' });
+
+      User.hasMany(models.WeightJournal, 
+        { foreignKey: 'email',
+        sourceKey: 'email' });
+
       User.hasMany(models.Appointment, 
         { foreignKey: 'email',
         sourceKey: 'email' })

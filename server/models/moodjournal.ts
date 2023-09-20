@@ -5,9 +5,9 @@ import { IntegerDataType, Model } from "sequelize";
 interface MoodJournalAttributes {
   id: number;
   email: string;
-  howareyou: string;
-  stresssignals: string;
-  date: number;
+  howAreYou: string;
+  stressSignals: string;
+  date: Date;
   notes: string;
 }
 
@@ -20,11 +20,15 @@ module.exports = (sequelize: any, DataTypes: any) => {
      */
     id!: number;
     email!: string;
-    howareyou!: string;
-    stresssignals!: string;
-    date!: number;
+    howAreYou!: string;
+    stressSignals!: string;
+    date!: Date;
     notes!: string;
     static associate(models: any) {
+      MoodJournal.belongsTo(models.User,{
+        foreignKey: "email",
+        targetKey: 'email',}
+      )
       // define association here
     }
   }
@@ -39,13 +43,12 @@ module.exports = (sequelize: any, DataTypes: any) => {
       email: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
       },
-      howareyou: {
+      howAreYou: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      stresssignals: {
+      stressSignals: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -54,7 +57,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         allowNull: false,
       },
       notes: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
       },
     },

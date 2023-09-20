@@ -6,8 +6,8 @@ interface GlucoseMeasurementAttributes {
   id: number;
   email: string;
   date: Date;
-  mealtime: string;
-  bloodglucose: number;
+  mealTime: string;
+  bloodGlucose: number;
   unit: string;
   notes: string;
 }
@@ -23,10 +23,14 @@ module.exports = (sequelize: any, DataTypes: any) => {
     email!: string;
     date!: Date;
     mealtime!: string;
-    bloodglucose!: number;
+    bloodGlucose!: number;
     unit!: string;
     notes!: string;
     static associate(models: any) {
+        GlucoseMeasurement.belongsTo(models.User,{
+        foreignKey: "email",
+        targetKey: 'email',}
+      )
       // define association here
     }
   }
@@ -41,17 +45,16 @@ module.exports = (sequelize: any, DataTypes: any) => {
       email: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
       },
       date: {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      mealtime: {
+      mealTime: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      bloodglucose: {
+      bloodGlucose: {
         type: DataTypes.FLOAT,
         allowNull: false,
       },
@@ -60,7 +63,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         allowNull: false,
       },
       notes: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
       },
     },

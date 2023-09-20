@@ -6,7 +6,7 @@ interface WeightJournalAttributes {
   id: number;
   email: string;
   date: Date;
-  time: number;
+  time: Date;
   weight: number;
   unit: string;
   notes: string;
@@ -22,11 +22,15 @@ module.exports = (sequelize: any, DataTypes: any) => {
     id!: number;
     email!: string;
     date!: Date;
-    time!: number;
+    time!: Date;
     weight!: number;
     unit!: string;
     notes!: string;
     static associate(models: any) {
+      WeightJournal.belongsTo(models.User,{
+        foreignKey: "email",
+        targetKey: 'email',}
+      )
       // define association here
     }
   }
@@ -41,14 +45,13 @@ module.exports = (sequelize: any, DataTypes: any) => {
       email: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
       },
       date: {
         type: DataTypes.DATE,
         allowNull: false,
       },
       time: {
-        type: "TIMESTAMP",
+        type: DataTypes.TIME,
         allowNull: false,
       },
       weight: {
@@ -60,7 +63,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         allowNull: false,
       },
       notes: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
       },
     },
