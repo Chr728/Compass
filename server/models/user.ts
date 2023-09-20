@@ -42,7 +42,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       User.hasMany(models.GlucoseMeasurement, 
         { foreignKey: 'email',
         sourceKey: 'email' });
-        
+
       User.hasMany(models.InsulinDosage, 
         { foreignKey: 'email',
         sourceKey: 'email' });
@@ -64,6 +64,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
         sourceKey: 'email' });
 
       User.hasMany(models.Appointment, 
+        { foreignKey: 'email',
+        sourceKey: 'email' })
+
+      User.hasMany(models.Medication, 
         { foreignKey: 'email',
         sourceKey: 'email' })
     }
