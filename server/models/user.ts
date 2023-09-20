@@ -1,8 +1,6 @@
-'use strict';
+"use strict";
 
-import {
-  Model
-} from 'sequelize';
+import { Model } from "sequelize";
 
 type UserAttributes = {
   id: number;
@@ -21,16 +19,14 @@ type UserAttributes = {
 };
 
 module.exports = (sequelize: any, DataTypes: any) => {
-
-  class User extends Model<UserAttributes> 
-  implements UserAttributes{
+  class User extends Model<UserAttributes> implements UserAttributes {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     id!: number;
-    email!: string ;
+    email!: string;
     firstName!: string;
     lastName!: string;
     streetAddress!: string;
@@ -40,63 +36,71 @@ module.exports = (sequelize: any, DataTypes: any) => {
     phoneNumber!: string;
     birthDate!: Date;
     sex!: string;
-    
+
     static associate(models: any) {
       // define association here
+      User.hasMany(models.GlucoseMeasurement);
+      User.hasMany(models.InsulinDosage);
+      User.hasMany(models.FoodIntakeJournal);
+      User.hasMany(models.ActivityJournal);
+      User.hasMany(models.MoodJournal);
+      User.hasMany(models.WeightJournal);
     }
   }
-  User.init({
-    id: {
-      type:DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
+  User.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+      },
+      firstName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      lastName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      streetAddress: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      city: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      province: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      postalCode: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      phoneNumber: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      birthDate: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      sex: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true
-    },
-    firstName: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    lastName: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    streetAddress: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    city: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    province: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    postalCode: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    phoneNumber: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    birthDate: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    sex: {
-      type: DataTypes.STRING,
-      allowNull: false
+    {
+      sequelize,
+      modelName: "User",
+      timestamps: false,
     }
-  }, {
-    sequelize,
-    modelName: 'User',
-    timestamps: false
-  });
+  );
   return User;
 };
-
