@@ -57,7 +57,7 @@ Compass is a Wellness app for people who are aged 40 and above. The users are ab
 * Push Notifications for Reminders
 * Speed dial to family, caregivers and emergency
 * Physical assistance and translation services
-* AI Symtopm Checker
+* AI Symptom Checker
 
 ## License 
 The application is under the GNU Affero General Public v3.0 License. See [LICENSE](https://github.com/janong24/Compass/blob/main/LICENSE) for more details

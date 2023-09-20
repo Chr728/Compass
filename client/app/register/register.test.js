@@ -23,7 +23,7 @@ describe("All elements displayed on appropriate pages", () => {
         const passwordInput = screen.getByLabelText("Password");
         const confirmPasswordInput = screen.getByLabelText("Confirm Password");
         const firstName = screen.getByLabelText("First Name");
-        const lastName = screen.queryByLabelText("Last Name");
+        const lastName = screen.getByLabelText("Last Name");
         const street = screen.queryByLabelText("Street Address");
         const city = screen.queryByLabelText("City");
         const province = screen.queryByLabelText("Province");
@@ -36,8 +36,8 @@ describe("All elements displayed on appropriate pages", () => {
         expect(passwordInput).toBeInTheDocument();
         expect(confirmPasswordInput).toBeInTheDocument();
         expect(firstName).toBeInTheDocument();
+        expect(lastName).toBeInTheDocument();
 
-        expect(lastName).not.toBeInTheDocument();
         expect(street).not.toBeInTheDocument();
         expect(city).not.toBeInTheDocument();
         expect(province).not.toBeInTheDocument();
@@ -54,14 +54,16 @@ describe("All elements displayed on appropriate pages", () => {
         const passwordInput = screen.queryByLabelText("Password");
         const confirmPasswordInput = screen.queryByLabelText("Confirm Password");
         const firstName = screen.queryByLabelText("First Name");
+        const lastName = screen.queryByLabelText("Last Name");
 
         await userEvent.type(emailInput, "georgia@georgia.com");
         await userEvent.type(passwordInput, "password");
         await userEvent.type(confirmPasswordInput, "password");
         await userEvent.type(firstName, "Georgia");
+        await userEvent.type(lastName, "Georgia");
         await userEvent.click(firstNextButton);
 
-        const lastName = screen.getByLabelText("Last Name");
+        
         const street = screen.getByLabelText("Street Address");
         const city = screen.getByLabelText("City");
         const province = screen.getByLabelText("Province");
@@ -70,13 +72,14 @@ describe("All elements displayed on appropriate pages", () => {
         const birthdate = screen.queryByLabelText("Birthdate");
         const sex = screen.queryByLabelText("Sex");
 
-        expect(lastName).toBeInTheDocument();
+        
         expect(street).toBeInTheDocument();
         expect(city).toBeInTheDocument();
         expect(province).toBeInTheDocument();
+        expect(postalCode).toBeInTheDocument();
+        expect(phone).toBeInTheDocument();
 
-        expect(postalCode).not.toBeInTheDocument();
-        expect(phone).not.toBeInTheDocument();
+        expect(lastName).not.toBeInTheDocument();
         expect(birthdate).not.toBeInTheDocument();
         expect(sex).not.toBeInTheDocument();
     })
@@ -88,28 +91,29 @@ describe("All elements displayed on appropriate pages", () => {
         const passwordInput = screen.queryByLabelText("Password");
         const confirmPasswordInput = screen.queryByLabelText("Confirm Password");
         const firstName = screen.queryByLabelText("First Name");
+        const lastName = screen.queryByLabelText("Last Name");
 
         await userEvent.type(emailInput, "georgia@georgia.com");
         await userEvent.type(passwordInput, "password");
         await userEvent.type(confirmPasswordInput, "password");
         await userEvent.type(firstName, "Georgia");
+        await userEvent.type(lastName, "Georgia");
         await userEvent.click(firstNextButton);
 
-        const lastName = screen.queryByLabelText("Last Name");
+        
         const street = screen.queryByLabelText("Street Address");
         const city = screen.queryByLabelText("City");
         const province = screen.queryByLabelText("Province");
+        const postalCode = screen.queryByLabelText("Postal Code");
+        const phone = screen.queryByLabelText("Phone Number");
         const secondNextButton = screen.getAllByRole("button")[1];
-        await userEvent.type(lastName, "Georgia");
+        await userEvent.type(phone, "1231231234");
         await userEvent.click(secondNextButton);
 
-        const postalCode = screen.getByLabelText("Postal Code");
-        const phone = screen.getByLabelText("Phone Number");
+       
         const birthdate = screen.getByLabelText("Birthdate");
         const sex = screen.getByLabelText("Sex");
 
-        expect(postalCode).toBeInTheDocument();
-        expect(phone).toBeInTheDocument();
         expect(birthdate).toBeInTheDocument();
         expect(sex).toBeInTheDocument();
 
@@ -121,6 +125,8 @@ describe("All elements displayed on appropriate pages", () => {
         expect(street).not.toBeInTheDocument();
         expect(city).not.toBeInTheDocument();
         expect(province).not.toBeInTheDocument();
+        expect(postalCode).not.toBeInTheDocument();
+        expect(phone).not.toBeInTheDocument();
 
     })
 })
@@ -143,10 +149,12 @@ describe("Error validation", () => {
         const passwordInput = screen.getByLabelText("Password");
         const confirmPasswordInput = screen.getByLabelText("Confirm Password");
         const firstName = screen.getByLabelText("First Name");
+        const lastName = screen.getByLabelText("Last Name");
         await userEvent.type(emailInput, "georgia@georgia.com");
         await userEvent.type(passwordInput, "password");
         await userEvent.type(confirmPasswordInput, "password");
         await userEvent.type(firstName, "Georgia");
+        await userEvent.type(lastName, "Georgia");
         await userEvent.click(nextButton);
         expect(nextButton.getAttribute("disabled")).toBeNull();
     })
@@ -158,10 +166,12 @@ describe("Error validation", () => {
         const passwordInput = screen.getByLabelText("Password");
         const confirmPasswordInput = screen.getByLabelText("Confirm Password");
         const firstName = screen.getByLabelText("First Name");
+        const lastName = screen.getByLabelText("Last Name");
         await userEvent.type(emailInput, "georgia@georgia.com");
         await userEvent.type(passwordInput, "password");
         await userEvent.type(confirmPasswordInput, "password");
         await userEvent.type(firstName, "Georgia");
+        await userEvent.type(lastName, "Georgia");
         await userEvent.click(firstNextButton);
         const secondNextButton = screen.getAllByRole('button')[1];
         expect(secondNextButton).toBeDisabled();
@@ -174,14 +184,16 @@ describe("Error validation", () => {
         const passwordInput = screen.getByLabelText("Password");
         const confirmPasswordInput = screen.getByLabelText("Confirm Password");
         const firstName = screen.getByLabelText("First Name");
+        const lastName = screen.getByLabelText("Last Name");
         await userEvent.type(emailInput, "georgia@georgia.com");
         await userEvent.type(passwordInput, "password");
         await userEvent.type(confirmPasswordInput, "password");
         await userEvent.type(firstName, "Georgia");
+        await userEvent.type(lastName, "Georgia");
         await userEvent.click(firstNextButton);
         const secondNextButton = screen.getAllByRole('button')[1];
-        const lastName = screen.getByLabelText("Last Name");
-        await userEvent.type(lastName, "Georgia");
+        const phone = screen.queryByLabelText("Phone Number");
+        await userEvent.type(phone, "1231231234");
         await userEvent.click(secondNextButton);
         const submitButton = screen.getAllByRole("button")[1];
         await userEvent.click(submitButton);
@@ -194,11 +206,13 @@ describe("Error validation", () => {
         const passwordInput = screen.getByLabelText("Password");
         const confirmPasswordInput = screen.getByLabelText("Confirm Password");
         const firstName = screen.getByLabelText("First Name");
+        const lastName = screen.getByLabelText("Last Name");
         const firstNextButton = screen.getAllByRole('button')[0];
         await userEvent.type(emailInput, "georgia@georgia.com");
         await userEvent.type(passwordInput, "password");
         await userEvent.type(confirmPasswordInput, "password");
         await userEvent.type(firstName, "Georgia");
+        await userEvent.type(lastName, "Georgia");
         await userEvent.click(firstNextButton);
         const previousButton = screen.getAllByRole('button')[0];
         await userEvent.click(previousButton);
@@ -207,6 +221,7 @@ describe("Error validation", () => {
         const password = screen.getByLabelText("Password");
         const confirmpassword = screen.getByLabelText("Confirm Password");
         const firstname = screen.getByLabelText("First Name");
+        const lastname = screen.getByLabelText("Last Name");
         expect(email).toBeInTheDocument();
         expect(email).toHaveValue("georgia@georgia.com");
         expect(password).toBeInTheDocument();
@@ -215,6 +230,8 @@ describe("Error validation", () => {
         expect(confirmpassword).toHaveValue("password");
         expect(firstname).toBeInTheDocument();
         expect(firstname).toHaveValue("Georgia");
+        expect(lastname).toBeInTheDocument();
+        expect(lastname).toHaveValue("Georgia");
     })
 
     test("Previous button on the third page works correctly", async() => {
@@ -223,21 +240,24 @@ describe("Error validation", () => {
         const passwordInput = screen.getByLabelText("Password");
         const confirmPasswordInput = screen.getByLabelText("Confirm Password");
         const firstName = screen.getByLabelText("First Name");
+        const lastName = screen.getByLabelText("Last Name");
         const firstNextButton = screen.getAllByRole('button')[0];
         await userEvent.type(emailInput, "georgia@georgia.com");
         await userEvent.type(passwordInput, "password");
         await userEvent.type(confirmPasswordInput, "password");
         await userEvent.type(firstName, "Georgia");
-        await userEvent.click(firstNextButton);
-        const lastName = screen.getByLabelText("Last Name");
         await userEvent.type(lastName, "Georgia");
+        await userEvent.click(firstNextButton);
+
         const secondNextButton = screen.getAllByRole('button')[1];
+        const phone = screen.getByLabelText("Phone Number");
+        await userEvent.type(phone, "1231231234");
         await userEvent.click(secondNextButton);
         const previousButton = screen.getAllByRole('button')[0];
         await userEvent.click(previousButton);
-        const lastname = screen.getByLabelText("Last Name");
-        expect(lastname).toBeInTheDocument();
-        expect(lastname).toHaveValue("Georgia");
+        const phonenumber = screen.getByLabelText("Phone Number");
+        expect(phonenumber).toBeInTheDocument();
+        expect(phonenumber).toHaveValue("1231231234");
     })
 
     test("Email error message", async () => {
@@ -286,17 +306,6 @@ describe("Error validation", () => {
 
     test("Last name empty error message", async() => {
         render(<Register/>);
-        const emailInput = screen.getByLabelText("Email Address");
-        const passwordInput = screen.getByLabelText("Password");
-        const confirmPasswordInput = screen.getByLabelText("Confirm Password");
-        const firstName = screen.getByLabelText("First Name");
-        const nextButton = screen.getAllByRole('button')[0];
-        await userEvent.type(emailInput, "georgia@georgia.com");
-        await userEvent.type(passwordInput, "password");
-        await userEvent.type(confirmPasswordInput, "password");
-        await userEvent.type(firstName, "Georgia");
-        await userEvent.click(nextButton);
-
         const lastName = screen.getByLabelText("Last Name");
         fireEvent.blur(lastName);
         const error = await screen.findByText("Last Name Required");
@@ -309,19 +318,17 @@ describe("Error validation", () => {
         const passwordInput = screen.getByLabelText("Password");
         const confirmPasswordInput = screen.getByLabelText("Confirm Password");
         const firstName = screen.getByLabelText("First Name");
+        const lastName = screen.getByLabelText("Last Name");
         const firstNextButton = screen.getAllByRole('button')[0];
         await userEvent.type(emailInput, "georgia@georgia.com");
         await userEvent.type(passwordInput, "password");
         await userEvent.type(confirmPasswordInput, "password");
         await userEvent.type(firstName, "Georgia");
+        await userEvent.type(lastName, "Georgia");
         await userEvent.click(firstNextButton);
 
-        const lastName = screen.getByLabelText("Last Name");
-        await userEvent.type(lastName, "Georgia");
-        const secondNextButton = screen.getAllByRole('button')[1];
-        await userEvent.click(secondNextButton);
         const phone = screen.getByLabelText("Phone Number");
-        fireEvent.blur(phone);
+        fireEvent.blur(phone);    
         const error = await screen.findByText("Phone Number Required");
         expect(error).toBeInTheDocument();
     })
@@ -332,17 +339,15 @@ describe("Error validation", () => {
         const passwordInput = screen.getByLabelText("Password");
         const confirmPasswordInput = screen.getByLabelText("Confirm Password");
         const firstName = screen.getByLabelText("First Name");
+        const lastName = screen.getByLabelText("Last Name");
         const firstNextButton = screen.getAllByRole('button')[0];
         await userEvent.type(emailInput, "georgia@georgia.com");
         await userEvent.type(passwordInput, "password");
         await userEvent.type(confirmPasswordInput, "password");
         await userEvent.type(firstName, "Georgia");
+        await userEvent.type(lastName, "Georgia");
         await userEvent.click(firstNextButton);
 
-        const lastName = screen.getByLabelText("Last Name");
-        await userEvent.type(lastName, "Georgia");
-        const secondNextButton = screen.getAllByRole('button')[1];
-        await userEvent.click(secondNextButton);
         const phone = screen.getByLabelText("Phone Number");
         await userEvent.type(phone, "123123");
         fireEvent.blur(phone);
@@ -356,16 +361,18 @@ describe("Error validation", () => {
         const passwordInput = screen.getByLabelText("Password");
         const confirmPasswordInput = screen.getByLabelText("Confirm Password");
         const firstName = screen.getByLabelText("First Name");
+        const lastName = screen.getByLabelText("Last Name");
         const firstNextButton = screen.getAllByRole('button')[0];
         await userEvent.type(emailInput, "georgia@georgia.com");
         await userEvent.type(passwordInput, "password");
         await userEvent.type(confirmPasswordInput, "password");
         await userEvent.type(firstName, "Georgia");
+        await userEvent.type(lastName, "Georgia");
         await userEvent.click(firstNextButton);
 
-        const lastName = screen.getByLabelText("Last Name");
-        await userEvent.type(lastName, "Georgia");
         const secondNextButton = screen.getAllByRole('button')[1];
+        const phone = screen.getByLabelText("Phone Number");
+        await userEvent.type(phone, "1231231234");
         await userEvent.click(secondNextButton);
         const birthdate = screen.getByLabelText("Birthdate");
         fireEvent.blur(birthdate);
@@ -379,16 +386,18 @@ describe("Error validation", () => {
         const passwordInput = screen.getByLabelText("Password");
         const confirmPasswordInput = screen.getByLabelText("Confirm Password");
         const firstName = screen.getByLabelText("First Name");
+        const lastName = screen.getByLabelText("Last Name");
         const firstNextButton = screen.getAllByRole('button')[0];
         await userEvent.type(emailInput, "georgia@georgia.com");
         await userEvent.type(passwordInput, "password");
         await userEvent.type(confirmPasswordInput, "password");
         await userEvent.type(firstName, "Georgia");
+        await userEvent.type(lastName, "Georgia");
         await userEvent.click(firstNextButton);
 
-        const lastName = screen.getByLabelText("Last Name");
-        await userEvent.type(lastName, "Georgia");
         const secondNextButton = screen.getAllByRole('button')[1];
+        const phone = screen.getByLabelText("Phone Number");
+        await userEvent.type(phone, "1231231234");
         await userEvent.click(secondNextButton);
         const sex = screen.getByLabelText("Sex");
         fireEvent.blur(sex);

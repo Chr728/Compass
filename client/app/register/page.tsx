@@ -288,7 +288,7 @@ export default function Register() {
               )}
             </div>
             
-            <div className="mt-3">
+            <div className="mt-3 mb-3">
               <label
                 htmlFor="lname"
                 className="font-sans font-medium text-grey text-[16px]"
@@ -412,7 +412,7 @@ export default function Register() {
                 )}
               </div>
 
-              <div className="mt-3">
+              <div className="mt-3 mb-3">
                 <label
                   htmlFor="phone"
                   className="font-sans font-medium text-grey text-[16px]"
@@ -525,10 +525,12 @@ export default function Register() {
                 formik.errors.password ||
                 formik.errors.confPassword ||
                 formik.errors.fname ||
+                formik.errors.lname ||
                 !formik.touched.email ||
                 !formik.touched.password ||
                 !formik.touched.confPassword ||
-                !formik.touched.fname
+                !formik.touched.fname ||
+                !formik.touched.lname
                   ? true
                   : false
               }
@@ -551,8 +553,8 @@ export default function Register() {
                 style={{ width: '140px' }}
                 onClick={handleNext}
                 disabled={
-                  formik.errors.lname ||
-                  !formik.touched.lname
+                  formik.errors.phone ||
+                  !formik.touched.phone
                     ? true
                     : false
                 }
