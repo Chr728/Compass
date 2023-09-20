@@ -65,9 +65,13 @@ module.exports = (sequelize: any, DataTypes: any) => {
 
       User.hasMany(models.Appointment, 
         { foreignKey: 'email',
-        sourceKey: 'email' })
+        sourceKey: 'email' });
 
       User.hasMany(models.Medication, 
+        { foreignKey: 'email',
+        sourceKey: 'email' });
+
+      User.hasMany(models.SpeedDial, 
         { foreignKey: 'email',
         sourceKey: 'email' })
     }
