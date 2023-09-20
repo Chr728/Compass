@@ -1,0 +1,102 @@
+'use strict';
+
+import {
+  Model
+} from 'sequelize';
+
+type UserAttributes = {
+  id: number;
+  email: string;
+  firstName: string;
+  lastName: string;
+  streetAddress: string;
+  city: string;
+  province: string;
+  postalCode: string;
+  phoneNumber: string;
+  birthDate: Date;
+  sex: string;
+
+  // other attributes...
+};
+
+module.exports = (sequelize: any, DataTypes: any) => {
+
+  class User extends Model<UserAttributes> 
+  implements UserAttributes{
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    id!: number;
+    email!: string ;
+    firstName!: string;
+    lastName!: string;
+    streetAddress!: string;
+    city!: string;
+    province!: string;
+    postalCode!: string;
+    phoneNumber!: string;
+    birthDate!: Date;
+    sex!: string;
+    
+    static associate(models: any) {
+      // define association here
+    }
+  }
+  User.init({
+    id: {
+      type:DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
+    },
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    streetAddress: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    city: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    province: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    postalCode: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    phoneNumber: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    birthDate: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    sex: {
+      type: DataTypes.STRING,
+      allowNull: false
+    }
+  }, {
+    sequelize,
+    modelName: 'User',
+    timestamps: false
+  });
+  return User;
+};
+
