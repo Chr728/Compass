@@ -2,7 +2,7 @@
    <h1 align="center">Compass</h3>
 </p> 
 <p align="center">
-    Your Personal Health Record App!
+    A Wellness app for people of age 40+
 </p>
 
 ![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)
@@ -15,8 +15,7 @@
 ![cypress](https://img.shields.io/badge/-cypress-%23E5E5E5?style=for-the-badge&logo=cypress&logoColor=058a5e)
 ## Description 
 
-Compass is a personal health record app that allows healthcare practitioners and medical institutions to share health data for their patients. The application follows the Canadian Personal Information
-Protection and Electronic Documents Act [PIPEDA](https://www.priv.gc.ca/en/privacy-topics/privacy-laws-in-canada/the-personal-information-protection-and-electronic-documents-act-pipeda/).
+Compass is a Wellness app for people who are aged 40 and above. The users are able to monitor their daily health habits and improve their overall health through the various features the app provides.
 
 ## Contributors 
 | Name  | Student ID | GitHub|
@@ -47,17 +46,18 @@ Protection and Electronic Documents Act [PIPEDA](https://www.priv.gc.ca/en/priva
 **DevOps and Testing**
 * Docker
 * Jest
-* Supertest
+* Firebase Test SDK
 * Cypress
 
 ## Core Features
 * Registration, Authentication and Security
-* Data Retrieval and Displaying
-* Personal Data Tracking
-* Symptom checker using AI
-* Push Notifications
-* Private messaging with doctors
+* View and Add Appointments
+* View and Add Medications
+* Personal Diabetes, Food intake, Activity, Weight and Mood Journals
+* Push Notifications for Reminders
+* Speed dial to family, caregivers and emergency
 * Physical assistance and translation services
+* AI Symptom Checker
 
 ## License 
 The application is under the GNU Affero General Public v3.0 License. See [LICENSE](https://github.com/janong24/Compass/blob/main/LICENSE) for more details

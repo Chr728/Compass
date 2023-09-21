@@ -5,12 +5,10 @@ import Button from '../components/Button';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useFormik } from 'formik';
-import { useRouter } from 'next/navigation';
 import { useAuth, AuthProvider } from '../contexts/AuthContext';
 
 export default function Login() {
-  const router = useRouter();
-  const { user, login } = useAuth();
+  const { user, login, error } = useAuth();
 
   const formik = useFormik({
     initialValues: {
@@ -20,8 +18,6 @@ export default function Login() {
     onSubmit: async (values) => {
       try {
         await login(values.email, values.password);
-
-        router.push('/tpage');
       } catch (error) {
         console.error('Login failed:', error);
       }
@@ -135,6 +131,12 @@ export default function Login() {
         ) : null}
 
         <div className="md:mt-auto mt-6 w-full">
+        {
+            error && 
+            <p className="md:text-center text-[16px] text-red font-sans mb-2">
+              {error}
+            </p>
+          }
           {formik.errors.password || formik.errors.email ? (
             <Button
               type="submit"
@@ -149,6 +151,7 @@ export default function Login() {
         <p className="text-blue font-sans text-[16px] leading-[22px] mb-4 mt-6">
           <Link href="/reset">Forgot Password?</Link>
         </p>
+       
       </form>
     </div>
   );

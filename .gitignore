@@ -1,3 +1,4 @@
 .idea
 compass/.env
 compass/serviceAccountKey.json
+*.env

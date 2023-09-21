@@ -21,6 +21,7 @@ interface AuthContextProps {
   user: User | null;
   login: (email: string, password: string) => void;
   logout: () => Promise<void>;
+  error: string | null;
 }
 
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
@@ -39,6 +40,7 @@ interface AuthProviderProps {
 export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   const login = (email: string, password: string) => {
@@ -46,10 +48,13 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
+        setError(null);
+        router.push('/tpage');
 
         // ...
       })
       .catch((error) => {
+        setError("Invalid User Credentials. Please try again.");
         const errorCode = error.code;
         const errorMessage = error.message;
         console.error(errorCode, errorMessage);
@@ -73,6 +78,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       // Specify the type here
       setUser(user);
       setLoading(false);
+      setError(null);
     });
 
     return unsubscribe;
@@ -82,6 +88,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     user,
     login,
     logout,
+    error
   };
 
   return (
