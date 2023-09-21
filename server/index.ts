@@ -15,14 +15,17 @@ app.get("/", (req, res) => {
 });
 
 
-if(process.env.TEST === 'true'){
-  
-}else{
+
 //Connection to postgreSQL
-db.sequelize.sync().then(() => {
-  app.listen(process.env.SERVER_DEV_PORT, () => {
+if(process.env.NODE_ENV !== 'test'){
+  db.sequelize.sync().then(()=>{
+    console.log("database synchronized")
+  });
+  
+}
+  
+app.listen(process.env.SERVER_DEV_PORT, () => {
     console.log(`Server listening on port ${process.env.SERVER_DEV_PORT || 8000}`);
   });
-});
-}
+
 export default app;
