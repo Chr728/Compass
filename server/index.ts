@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
 
 //Connection to postgreSQL
 db.sequelize.sync().then(() => {
-  app.listen(3000, () => {
+  app.listen(process.env.SERVER_DEV_PORT, () => {
     console.log(
       `Server listening on port ${process.env.SERVER_DEV_PORT || 8000}`
     );
