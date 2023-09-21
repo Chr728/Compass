@@ -18,10 +18,14 @@ app.get('/', (req, res) => {
 });
 
 //Connection to postgreSQL
-db.sequelize.sync().then(() => {
-  app.listen(process.env.SERVER_DEV_PORT, () => {
-    Logger.info(
-      `Server listening on port ${process.env.SERVER_DEV_PORT || 8000}`
-    );
+if(process.env.NODE_ENV !== 'test'){
+  db.sequelize.sync().then(()=>{
+    console.log("DB Synchronized.")
   });
-});
+}
+  
+app.listen(process.env.SERVER_DEV_PORT, () => {
+    console.log(`Server listening on port ${process.env.SERVER_DEV_PORT || 8000}`);
+  });
+
+export default app;
