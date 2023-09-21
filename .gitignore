@@ -1,3 +1,8 @@
 .idea
+client/.env
+client/.next
+client/functions/node_modules
+client/node_modules
+client/serviceAccountKey.json
+client/functions/serviceAccountKey.json
 *.env
-compass/serviceAccountKey.json

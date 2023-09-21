@@ -1,7 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import db from './models';
-require('dotenv').config({ path: './../.env' });
+require('dotenv').config({
+  path: './../.env',
+});
 
 const app = express();
 app.use(express.json());
@@ -14,7 +16,9 @@ app.get('/', (req, res) => {
 
 //Connection to postgreSQL
 db.sequelize.sync().then(() => {
-  app.listen(process.env.PORT, () => {
-    console.log(`Server listening on port ${process.env.PORT || 3000}`);
+  app.listen(3000, () => {
+    console.log(
+      `Server listening on port ${process.env.SERVER_DEV_PORT || 8000}`
+    );
   });
 });
