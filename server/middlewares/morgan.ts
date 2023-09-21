@@ -3,7 +3,7 @@ import { Logger, RequestLogger } from './logger';
 
 // Morgan stream for logging HTTP requests
 const stream: StreamOptions = {
-  write: (message) => {
+  write: (message: any) => {
     const data = JSON.parse(message);
     Logger.http('request', data);
     RequestLogger.http('request', data);
@@ -12,7 +12,7 @@ const stream: StreamOptions = {
 
 // Morgan middleware for logging HTTP requests
 const Morgan = morgan(
-  (tokens, req, res) =>
+  (tokens: any, req: any, res: any) =>
     JSON.stringify({
       method: tokens.method(req, res),
       url: tokens.url(req, res),

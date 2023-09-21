@@ -1,6 +1,7 @@
-import express from 'express';
-import cors from 'cors';
-import db from './models';
+import express from "express";
+import cors from "cors";
+import db from "./models";
+import userRoutes from "./routes/userRoutes";
 import Morgan from './middlewares/morgan';
 import { Logger } from './middlewares/logger';
 require('dotenv').config({
@@ -13,19 +14,21 @@ app.use(express.json());
 app.use(cors());
 app.use(Morgan);
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
+app.use("/api/users", userRoutes);
+
+app.get("/", (req, res) => {
+  res.send("Hello World!");
 });
 
 //Connection to postgreSQL
 if(process.env.NODE_ENV !== 'test'){
   db.sequelize.sync().then(()=>{
-    console.log("DB Synchronized.")
+    Logger.info("DB Synchronized.")
   });
 }
-  
+
 app.listen(process.env.SERVER_DEV_PORT, () => {
-    console.log(`Server listening on port ${process.env.SERVER_DEV_PORT || 8000}`);
+  Logger.info(`Server listening on port ${process.env.SERVER_DEV_PORT || 8000}`);
   });
 
 export default app;
