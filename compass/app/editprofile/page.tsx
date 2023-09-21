@@ -212,6 +212,6 @@ export default function EditProfile() {
             </div>
               
         </form>
-        </div>
+        </div>      
     )
 }
