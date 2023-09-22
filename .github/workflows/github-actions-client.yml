@@ -1,0 +1,11 @@
+name: Client Tests
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: cd client && npm install
+      - name: Run Client Tests
+        run: cd client && npm run test
