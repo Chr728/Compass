@@ -4,6 +4,7 @@ import { Model } from "sequelize";
 
 type UserAttributes = {
   id: number;
+  uid : string;
   email: string;
   firstName: string;
   lastName: string;
@@ -26,6 +27,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
      * The `models/index` file will call this method automatically.
      */
     id!: number;
+    uid!: string;
     email!: string;
     firstName!: string;
     lastName!: string;
@@ -82,6 +84,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
+      },
+      uid : {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
       },
       email: {
         type: DataTypes.STRING,
