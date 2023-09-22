@@ -22,8 +22,8 @@ app.get("/", (req, res) => {
 
 //Connection to postgreSQL
 if(process.env.NODE_ENV !== 'test'){
-  db.sequelize.sync().then(()=>{
-    Logger.info("DB Synchronized.")
+  db.sequelize.sync({ alter: true }).then(()=>{
+    Logger.info("Database Synchronized")
   });
 }
 

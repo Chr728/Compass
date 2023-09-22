@@ -43,8 +43,10 @@ export const getUser = async (req: Request, res: Response) => {
 };
 
 export const createUser = async (req: Request, res: Response) => {
+  console.log(req.body)
   try {
     const {
+      uid,
       email,
       firstName,
       lastName,
@@ -58,6 +60,7 @@ export const createUser = async (req: Request, res: Response) => {
     } = req.body;
 
     const createdUser = await db.User.create({
+      uid,
       email,
       firstName,
       lastName,
