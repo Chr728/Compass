@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import '@testing-library/jest-dom';
 import Menu from '../components/Menu';
 
 describe("Menu component", () => {
@@ -8,14 +9,12 @@ describe("Menu component", () => {
     });
 
     test("link redirects to main page", async () => {
-        render(<Menu/>);
-        const linkElement = screen.getByRole("link");
+        const linkElement = screen.getAllByRole("link")[0];
         expect(linkElement).toHaveAttribute("href", "/");
     })
 
-    test("link redirects to main page", async () => {
-        render(<Menu/>);
-        const linkElement = screen.getByRole("link");
+    test("link redirects to settings page", async () => {
+        const linkElement = screen.getAllByRole("link")[4];
         expect(linkElement).toHaveAttribute("href", "/settings");
     })
 });
