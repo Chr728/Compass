@@ -43,7 +43,6 @@ export const getUser = async (req: Request, res: Response) => {
 };
 
 export const createUser = async (req: Request, res: Response) => {
-  console.log(req.body)
   try {
     const {
       uid,
