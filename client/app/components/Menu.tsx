@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   MdOutlineHome,
-  MdOutlineDataExploration,
+  MdOutlineAddBox,
   MdEditNote,
   MdOutlineMessage,
   MdOutlineSettings,
@@ -43,10 +43,10 @@ const Navbar = () => {
           </li>
 
           <li className="md:mt-12 md:ml-10 lg:text-2xl">
-            <MdOutlineDataExploration className="inline-block md:text-2xl text-lg lg:text-3xl mr-3" />
+            <MdOutlineAddBox className="inline-block md:text-2xl text-lg lg:text-3xl mr-3" />
             <span className="home-text">
               <a href="#" className="hover:text-blue-200">
-                MyData
+                Health
               </a>
             </span>
           </li>
