@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { useRouter } from "next/navigation";
-import Notification from "../notifications/page";
+import Notification from "./page";
 import "@testing-library/jest-dom";
 
 //Mock useRouter from next/navigation
@@ -44,5 +44,25 @@ describe("Notification Settings Page", () => {
 
     expect(Save).toBeInTheDocument();
     fireEvent.click(Save);
+  });
+
+  test("Check if switch button works", () => {
+    render(<Notification></Notification>);
+    const toggleButtonActvity = screen.getByLabelText("ActvitySwitch");
+    const toggleButtonMedication = screen.getByLabelText("MedicationSwitch");
+    const toggleButtonAppointment = screen.getByLabelText("AppointmentSwitch");
+    const toggleButtonFoodIntake = screen.getByLabelText("FoodIntakeSwitch");
+    expect(toggleButtonActvity).toBeChecked();
+    expect(toggleButtonMedication).toBeChecked();
+    expect(toggleButtonAppointment).toBeChecked();
+    expect(toggleButtonFoodIntake).toBeChecked();
+    fireEvent.click(toggleButtonActvity);
+    fireEvent.click(toggleButtonMedication);
+    fireEvent.click(toggleButtonAppointment);
+    fireEvent.click(toggleButtonFoodIntake);
+    expect(toggleButtonActvity).not.toBeChecked();
+    expect(toggleButtonMedication).not.toBeChecked();
+    expect(toggleButtonAppointment).not.toBeChecked();
+    expect(toggleButtonFoodIntake).not.toBeChecked();
   });
 });
