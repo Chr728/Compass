@@ -7,5 +7,5 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install Dependencies
         run: cd server && npm install
-      - name: Run the client tests
+      - name: Run Server Tests
         run: cd server && npm run test
