@@ -8,10 +8,11 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import createUser from '@/app/http/createUser';
 import {createUserWithEmailAndPassword} from '@firebase/auth';
-import {auth} from '@/app/config/firebase';
+import {useAuth} from '@/app/contexts/AuthContext';
 
 export default function Register() {
   const router = useRouter();
+  const {signUp} = useAuth();
 
   const formik = useFormik({
     initialValues: {
@@ -29,35 +30,12 @@ export default function Register() {
       sex: '',
     },
     onSubmit: (values) => {
+        try{
+            signUp(values);
+        }catch (error){
+            console.log(error)
+        }
 
-        createUserWithEmailAndPassword(auth, values.email, values.password).then((userCredential) => {
-            // Signed in
-            const user = userCredential.user;
-            const data = {
-                email: values.email,
-                password: values.password,
-                firstName: values.fname,
-                lastName: values.lname,
-                streetAddress: values.street,
-                city: values.city,
-                province: values.province,
-                postalCode: values.postalCode,
-                phoneNumber: values.phone,
-                birthDate: values.birthdate,
-                sex: values.sex,
-            }
-            createUser(data).then((res) => {
-              router.push('/');
-            }).catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                console.log(errorCode, errorMessage);
-            })
-        }).catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log(errorCode, errorMessage);
-        })
     },
     validate: (values) => {
       let errors: {

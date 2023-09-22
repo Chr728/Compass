@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { Logger } from '../middlewares/logger';
 import db from '../models';
+import { userValidator } from '../utils/databaseValidators';
 
 export const getUsers = async (req: Request, res: Response) => {
   try {
@@ -58,7 +59,7 @@ export const createUser = async (req: Request, res: Response) => {
       birthDate,
       sex,
     } = req.body;
-    
+    userValidator(req.body)
     const createdUser = await db.User.create({
       uid,
       email,
