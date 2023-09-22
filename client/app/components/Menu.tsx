@@ -36,7 +36,7 @@ const Navbar = () => {
             <MdOutlineHome className="inline-block md:text-2xl text-lg lg:text-3xl mr-2" />
             <span className="home-text">
               {' '}
-              <a href="#" className="hover:text-blue-200">
+              <a href="/" className="hover:text-blue-200" id="home">
                 Home
               </a>
             </span>
@@ -71,7 +71,7 @@ const Navbar = () => {
           <li className="md:mt-12 md:ml-10 lg:text-2xl">
             <MdOutlineSettings className="inline-block md:text-2xl text-lg lg:text-3xl mr-2" />
             <span className="home-text">
-              <a href="#" className="hover:text-blue-200">
+              <a href="/settings" className="hover:text-blue-200" id="settings">
                 Settings
               </a>
             </span>
