@@ -25,10 +25,13 @@ if(process.env.NODE_ENV !== 'test'){
   db.sequelize.sync({ alter: true }).then(()=>{
     Logger.info("Database Synchronized")
   });
-}
-
-app.listen(process.env.SERVER_DEV_PORT, () => {
+ 
+  app.listen(process.env.SERVER_DEV_PORT, () => {
   Logger.info(`Server listening on port ${process.env.SERVER_DEV_PORT || 8000}`);
   });
+ 
+}
+
+
 
 export default app;
