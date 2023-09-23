@@ -21,11 +21,11 @@ const Navbar = () => {
             />
           </li>
 
-          <div className="grid grid-cols-5 gap-6 place-items-center">
+          <div className="grid grid-cols-5 gap-6 place-items-center ml-1">
           
           <div>
           <li>
-            <MdOutlineHome className="inline-block  text-lg" />
+            <MdOutlineHome className="inline-block text-lg" />
             <span className="home-text">
               {' '}
               <a href="/" className="hover:text-blue-200">
