@@ -7,5 +7,10 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install Dependencies
         run: cd client && npm install
+      - name: Load .env File Contents
+        run: echo "${{ secrets.ENV_FILE }}" > .env
       - name: Run Client Tests
         run: cd client && npm run test
+      - name: Delete .env File
+        run: rm .env
+        if: always()
