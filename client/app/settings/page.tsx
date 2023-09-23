@@ -24,7 +24,7 @@ export default function Setting() {
           Your account
         </span>
 
-        <Link href="">
+        <Link href="/profile">
           <div className="flex items-center m-2">
             <Image
               src="/icons/Mask.svg"
