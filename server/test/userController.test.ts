@@ -1,9 +1,22 @@
-import request from "supertest" ;
-import app from "./../index";
-import db from "./../models/index"
+import request from 'supertest';
+import app from './../index';
+import db from './../models/index';
 
-let server:any;
+let server: any;
 const port = process.env.SERVER_DEV_PORT;
+
+const user = {
+  email: 'test@gmail.com',
+  firstName: 'John',
+  lastName: 'Doe',
+  streetAddress: '1234 Street',
+  city: 'Montreal',
+  province: 'Quebec',
+  postalCode: 'H4M 2M9',
+  phoneNumber: '5147894561',
+  birthDate: '1990-12-31T00:00:00.000Z',
+  sex: 'male',
+};
 
 function startServer() {
   server = app.listen(port, () => {
@@ -20,45 +33,65 @@ function stopServer() {
 }
 
 beforeAll(() => {
-    startServer(); // Start the server before running tests
+  startServer(); // Start the server before running tests
+});
+
+afterAll(() => {
+  stopServer(); // Stop the server after all tests are done
+});
+
+describe('should test the getUsers Controller', () => {
+  it('show get all users', async () => {
+    jest.spyOn(db.User, 'findAll').mockResolvedValueOnce(user);
+    const res = await request(app).get('/api/users/');
+    expect(db.User.findAll).toBeCalledTimes(1);
+    expect(res.status).toBe(200);
+    expect(res.body.data).toStrictEqual(user);
   });
-  
-  afterAll(() => {
-    stopServer(); // Stop the server after all tests are done
+
+  it('should return an error for a non-existent user', async () => {
+    jest
+      .spyOn(db.User, 'findAll')
+      .mockRejectedValue(new Error('connection error'));
+    const res = await request(app).get('/api/users/');
+    expect(db.User.findAll).toBeCalledTimes(2);
+    expect(res.status).toBe(400);
+  });
+});
+
+describe('should test the getUser Controller', () => {
+  it('show get user', async () => {
+    jest.spyOn(db.User, 'findByPk').mockResolvedValueOnce(user);
+    const res = await request(app).get('/api/users/1');
+    expect(db.User.findByPk).toBeCalledTimes(1);
+    expect(res.status).toBe(200);
+    expect(res.body.data).toStrictEqual(user);
   });
 
-describe("should test the getUsers Controller",() =>{
+  it('should return an error for a non-existent user', async () => {
+    jest
+      .spyOn(db.User, 'findByPk')
+      .mockRejectedValue(new Error('connection error'));
+    const res = await request(app).get('/api/users/1');
+    expect(db.User.findByPk).toBeCalledTimes(2);
+    expect(res.status).toBe(400);
+  });
+});
 
-    it("show get all users",async()=>{
+//test for createUser
+describe('should test the createUser Controller', () => {
+  it('show create user', async () => {
+    jest.spyOn(db.User, 'create').mockResolvedValueOnce(user);
+    const res = await request(app).post('/api/users/').send(user);
+    expect(db.User.create).toBeCalledTimes(1);
+    expect(res.status).toBe(200);
+    expect(res.body.data).toStrictEqual(user);
+  });
 
-        const user = {
-             
-            "city": "city", 
-            "birthDate": "2022-09-13",
-            "email": "123@gmail.com", 
-            "firstName": "Jane", 
-            "id": 1, 
-            "lastName": "Doe", 
-            "phoneNumber": "1234567890", 
-            "postalCode": "H3C 0H8", 
-            "province": "string", 
-            "sex": "sex", 
-            "streetAddress": "streetAddress", 
-            "uid": "firebase"}
-        jest.spyOn(db.User, 'findAll').mockResolvedValueOnce(user);
-        const res = await request(app).get('/api/users/');
-        expect(db.User.findAll).toBeCalledTimes(1)
-        expect(res.status).toBe(200);
-        expect(res.body.data).toStrictEqual(user);
-    })
-
-    it("should give error", async()=>{
-
-        jest.spyOn(db.User, 'findAll').mockRejectedValue(new Error('connection error'));
-        const res = await request(app).get('/api/users/');
-        expect(db.User.findAll).toBeCalledTimes(2);
-        expect(res.status).toBe(400);
-
-    })
-
-})
+  it('should return an error for a non-existent user', async () => {
+    jest.spyOn(db.User, 'create').mockRejectedValueOnce(new Error('error'));
+    const res = await request(app).post('/api/users/').send(user);
+    expect(db.User.create).toBeCalledTimes(2);
+    expect(res.status).toBe(400);
+  });
+});
