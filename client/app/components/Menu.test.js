@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import '@testing-library/jest-dom';
 import Menu from '../components/Menu';
 
-describe("Menu component", () => {
+describe("Menu components", () => {
     // Render the Menu component before each test.
     beforeEach(() => {
         render(<Menu />);
