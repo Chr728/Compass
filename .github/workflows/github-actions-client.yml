@@ -9,6 +9,8 @@ jobs:
         run: cd client && npm install
       - name: Load .env File Contents
         run: echo "${{ secrets.ENV_FILE }}" > .env
+      - name: View Secret Content
+        run: echo "Secret Content: ${{ secrets.ENV_FILE }}"
       - name: Run Client Tests
         run: cd client && npm run test
       - name: Delete .env File
