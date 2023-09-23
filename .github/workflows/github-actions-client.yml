@@ -12,5 +12,5 @@ jobs:
       - name: Run Client Tests
         run: cd client && npm run test
       - name: Delete .env File
-        run: rm .env
+        run: rm client/.env
         if: always()
