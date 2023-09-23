@@ -44,7 +44,7 @@ export default function Setting() {
           <div className="flex items-center m-2">
             <Image
               src="/icons/vpn_key.svg"
-              alt="Profile icon"
+              alt="Password icon"
               width={24}
               height={24}
               className="mr-3"
@@ -65,7 +65,7 @@ export default function Setting() {
           <div className="flex items-center m-2">
             <Image
               src="/icons/NotificationBell.svg"
-              alt="Profile icon"
+              alt="Notifications icon"
               width={24}
               height={24}
               className="mr-3"
@@ -86,7 +86,7 @@ export default function Setting() {
           <div className="flex items-center m-2">
             <Image
               src="/icons/AboutIcon.svg"
-              alt="Profile icon"
+              alt="About icon"
               width={24}
               height={24}
               className="mr-3"
