@@ -39,7 +39,7 @@ const Navbar = () => {
             <MdOutlineHome className="inline-block md:text-2xl text-lg lg:text-3xl" />
             <span className="home-text">
               {' '}
-              <a href="/" className="hover:text-blue-200" id="home">
+              <a href="/" className="hover:text-blue-200">
                 Home
               </a>
             </span>
