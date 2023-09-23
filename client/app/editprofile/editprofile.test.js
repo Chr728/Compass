@@ -27,19 +27,19 @@ describe("Error Messages", () => {
 
     test("Postal Code error message", async () => {
         render(<EditProfile/>);
-        const postalCode = screen.getByLabelText("Postal Code");
+        const postalCode = await screen.findByLabelText("Postal Code");
         await userEvent.type(postalCode, "H8SSSS");
         fireEvent.blur(postalCode);
-        const error = screen.getByText("Invalid Postal Code");
+        const error = await screen.findByText("Invalid Postal Code");
         expect(error).toBeInTheDocument();
     })
 
     test("Phone Number error message", async () => {
         render(<EditProfile/>);
-        const phone = screen.getByLabelText("Phone Number");
+        const phone = await screen.findByLabelText("Phone Number");
         await userEvent.type(phone, "123123");
         fireEvent.blur(phone);
-        const error = screen.getByText("Please enter a 10 digit number");
+        const error = await screen.findByText("Please enter a 10 digit number");
         expect(error).toBeInTheDocument();
     })
 

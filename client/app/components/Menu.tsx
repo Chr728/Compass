@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   MdOutlineHome,
-  MdOutlineDataExploration,
+  MdOutlineAddBox,
   MdEditNote,
   MdOutlineMessage,
   MdOutlineSettings,
@@ -14,7 +14,7 @@ const Navbar = () => {
 
   return (
     <nav className="bg-blue-500  fixed bottom-0 left-0 w-full md:w-72 lg:w-80 md:left-0 md:h-full md:flex md:flex-col md:rounded-3xl bg-white md:justify-start md:items-start">
-      <div className="text-black text-[14px] md:text-[16px]  md:font-sans  text-center p-6">
+      <div className="text-black text-[14px] md:text-[16px]  md:font-sans  text-center px-8 py-6">
         <ul className="flex justify-around md:flex-col md:justify-start md:items-start">
           <li className="md:ml-0 md:mb-4 md:mt-2 flex items-center">
             <img
@@ -32,34 +32,45 @@ const Navbar = () => {
             </div>
           </li>
 
+          <div className="grid grid-cols-5 gap-6 place-items-center">
+          
+          <div>
           <li className="md:mt-2 md:ml-10 lg:text-2xl">
-            <MdOutlineHome className="inline-block md:text-2xl text-lg lg:text-3xl mr-2" />
+            <MdOutlineHome className="inline-block md:text-2xl text-lg lg:text-3xl" />
             <span className="home-text">
               {' '}
-              <a href="#" className="hover:text-blue-200">
+              <a href="/" className="hover:text-blue-200">
                 Home
               </a>
             </span>
           </li>
+          </div>
 
+          <div>
           <li className="md:mt-12 md:ml-10 lg:text-2xl">
-            <MdOutlineDataExploration className="inline-block md:text-2xl text-lg lg:text-3xl mr-3" />
+            <MdOutlineAddBox className="inline-block md:text-2xl text-lg lg:text-3xl" />
             <span className="home-text">
               <a href="#" className="hover:text-blue-200">
-                MyData
+                Health
               </a>
             </span>
           </li>
+          </div>
+
+          <div>
           <li className="md:mt-12 md:ml-10 lg:text-2xl">
-            <MdEditNote className="inline-block md:text-2xl text-lg lg:text-3xl mr-2" />
+            <MdEditNote className="inline-block md:text-2xl text-lg lg:text-3xl" />
             <span className="home-text">
               <a href="#" className="hover:text-blue-200">
                 Journals
               </a>
             </span>
           </li>
+          </div>
+
+          <div>
           <li className="md:mt-12 md:ml-10 lg:text-2xl">
-            <MdOutlineMessage className="inline-block md:text-2xl text-lg lg:text-3xl mr-2" />
+            <MdOutlineMessage className="inline-block md:text-2xl text-lg lg:text-3xl" />
 
             <span className="home-text">
               {' '}
@@ -68,14 +79,21 @@ const Navbar = () => {
               </a>
             </span>
           </li>
+          </div>
+
+          <div>
           <li className="md:mt-12 md:ml-10 lg:text-2xl">
-            <MdOutlineSettings className="inline-block md:text-2xl text-lg lg:text-3xl mr-2" />
+            <MdOutlineSettings className="inline-block md:text-2xl text-lg lg:text-3xl" />
             <span className="home-text">
-              <a href="#" className="hover:text-blue-200">
+              <a href="/settings" className="hover:text-blue-200" id="settings">
                 Settings
               </a>
             </span>
           </li>
+          </div>
+
+          </div>
+
           <li className="hidden md:inline-block md:mt-24  lg:mt-32 md:ml-10 lg:text-2xl md:mb-4 lg:mb-4">
             <button onClick={logout} className="hover:text-blue-200">
               <MdLogout className="inline-block md:text-2xl text-lg lg:text-3xl" />{' '}

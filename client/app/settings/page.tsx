@@ -1,14 +1,14 @@
-'use client';
-import React from 'react';
-import ProfileIcon from '../../public/icons/Mask.svg';
-import Image from 'next/image';
-import RedButton from '../components/RedButton';
-import Button from '../components/Button';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import Header from '../components/Header';
-import Menu from '../components/Menu';
-import { useAuth } from '../contexts/AuthContext';
+"use client";
+import React from "react";
+import ProfileIcon from "../../public/icons/Mask.svg";
+import Image from "next/image";
+import RedButton from "../components/RedButton";
+import Button from "../components/Button";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import Header from "../components/Header";
+import Menu from "../components/Menu";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Setting() {
   const router = useRouter();
@@ -61,7 +61,7 @@ export default function Setting() {
           How you use Compass
         </span>
 
-        <Link href="">
+        <Link href="/notifications">
           <div className="flex items-center m-2">
             <Image
               src="/icons/NotificationBell.svg"
@@ -101,7 +101,7 @@ export default function Setting() {
             type="button"
             text="Sign Out"
             style={{
-              width: '50%',
+              width: "50%",
             }}
             onClick={logout}
           ></RedButton>
