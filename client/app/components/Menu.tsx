@@ -5,8 +5,8 @@ import {
   MdEditNote,
   MdOutlineMessage,
   MdOutlineSettings,
-  MdLogout,
 } from 'react-icons/md';
+import Link from 'next/link';
 
 const Navbar = () => {
   return (
@@ -39,9 +39,9 @@ const Navbar = () => {
           <li>
             <MdOutlineAddBox className="inline-block  text-lg" />
             <span className="home-text">
-              <a href="#" className="hover:text-blue-200">
+              <Link href="#" className="hover:text-blue-200">
                 Health
-              </a>
+              </Link>
             </span>
           </li>
           </div>
@@ -50,9 +50,9 @@ const Navbar = () => {
           <li >
             <MdEditNote className="inline-block  text-lg " />
             <span className="home-text">
-              <a href="#" className="hover:text-blue-200">
+              <Link href="#" className="hover:text-blue-200">
                 Journals
-              </a>
+              </Link>
             </span>
           </li>
           </div>
@@ -63,9 +63,9 @@ const Navbar = () => {
 
             <span className="home-text">
               {' '}
-              <a href="#" className="hover:text-blue-200">
+              <Link href="#" className="hover:text-blue-200">
                 Contact
-              </a>
+              </Link>
             </span>
           </li>
           </div>
@@ -74,9 +74,9 @@ const Navbar = () => {
           <li>
             <MdOutlineSettings className="inline-block  text-lg lg:text-3xl" />
             <span className="home-text">
-              <a href="/settings" className="hover:text-blue-200" id="settings">
+              <Link href="/settings" className="hover:text-blue-200" id="settings">
                 Settings
-              </a>
+              </Link>
             </span>
           </li>
           </div>
