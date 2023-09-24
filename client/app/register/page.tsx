@@ -5,12 +5,10 @@ import Image from 'next/image';
 import Button from '../components/Button';
 import Input from '../components/Input';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import {useAuth} from '@/app/contexts/AuthContext';
 
 export default function Register() {
-  const router = useRouter();
-  const {signUp} = useAuth();
+  const {error, signUp} = useAuth();
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -59,6 +57,8 @@ export default function Register() {
       }
       if (!values.password) {
         errors.password = 'Password Required';
+      } else if (values.password.length < 6){
+        errors.password = 'Password must be at least 6 characters long';
       }
       if (!values.confPassword) {
         errors.confPassword = 'Confirmation of Password Required';
@@ -578,7 +578,14 @@ export default function Register() {
         
         {count == 2 && (
           <div className="md:mt-auto mt-6 mx-auto flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
-            <div className="space-x-4">
+
+            { error && 
+                <p className="md:text-center text-[16px] text-red font-sans mb-2">
+                  {error}
+                </p>
+            }
+
+            <div className="space-x-2">
             <Button
               type="button"
               text="Previous"
@@ -600,7 +607,7 @@ export default function Register() {
                 style={{ width: '140px', cursor: 'not-allowed' }}
               />
             ) : (
-              <Button type="submit" text="Finish" style={{ width: '180px' }} />
+              <Button type="submit" text="Finish" style={{ width: '140px' }} />
             )}
             </div>
           </div>
