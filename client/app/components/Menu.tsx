@@ -5,13 +5,13 @@ import {
   MdEditNote,
   MdOutlineMessage,
   MdOutlineSettings,
-  MdLogout,
 } from 'react-icons/md';
+import Link from 'next/link';
 
 const Navbar = () => {
   return (
     <nav className="bg-eggshell fixed bottom-0 left-0 w-full md:w-72 lg:w-80 md:left-0 md:h-full md:flex md:flex-col md:rounded-3xl md:justify-start md:items-start">
-      <div className="text-black text-[14px] md:text-[16px]  md:font-sans  text-center px-8 py-6">
+      <div className="text-darkgrey text-[14px] md:text-[16px]  md:font-sans  text-center px-8 py-6">
         <ul className="flex justify-around md:flex-col md:justify-start md:items-start">
           <li className="md:ml-0 md:mb-4 md:mt-2 flex items-center">
             <img
@@ -28,9 +28,9 @@ const Navbar = () => {
             <MdOutlineHome className="inline-block text-lg" />
             <span className="home-text">
               {' '}
-              <a href="/" className="hover:text-blue-200">
+              <Link href="/" className="hover:text-blue-200">
                 Home
-              </a>
+              </Link>
             </span>
           </li>
           </div>
@@ -39,9 +39,9 @@ const Navbar = () => {
           <li>
             <MdOutlineAddBox className="inline-block  text-lg" />
             <span className="home-text">
-              <a href="#" className="hover:text-blue-200">
+              <Link href="#" className="hover:text-blue-200">
                 Health
-              </a>
+              </Link>
             </span>
           </li>
           </div>
@@ -50,9 +50,9 @@ const Navbar = () => {
           <li >
             <MdEditNote className="inline-block  text-lg " />
             <span className="home-text">
-              <a href="#" className="hover:text-blue-200">
+              <Link href="#" className="hover:text-blue-200">
                 Journals
-              </a>
+              </Link>
             </span>
           </li>
           </div>
@@ -63,9 +63,9 @@ const Navbar = () => {
 
             <span className="home-text">
               {' '}
-              <a href="#" className="hover:text-blue-200">
+              <Link href="#" className="hover:text-blue-200">
                 Contact
-              </a>
+              </Link>
             </span>
           </li>
           </div>
@@ -74,9 +74,9 @@ const Navbar = () => {
           <li>
             <MdOutlineSettings className="inline-block  text-lg lg:text-3xl" />
             <span className="home-text">
-              <a href="/settings" className="hover:text-blue-200" id="settings">
+              <Link href="/settings" className="hover:text-blue-200" id="settings">
                 Settings
-              </a>
+              </Link>
             </span>
           </li>
           </div>
