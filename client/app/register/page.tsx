@@ -6,14 +6,11 @@ import Button from '../components/Button';
 import Input from '../components/Input';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import createUser from '@/app/http/createUser';
-import {createUserWithEmailAndPassword} from '@firebase/auth';
 import {useAuth} from '@/app/contexts/AuthContext';
 
 export default function Register() {
   const router = useRouter();
   const {signUp} = useAuth();
-
   const formik = useFormik({
     initialValues: {
       email: '',

@@ -24,7 +24,7 @@ interface AuthContextProps {
   login: (email: string, password: string) => void;
   logout: () => Promise<void>;
   error: string | null;
-  signUp: (data) => void;
+  signUp: (data:any) => void;
 }
 
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
@@ -76,7 +76,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const signUp = (values) => {
+  const signUp = (values:any) => {
     createUserWithEmailAndPassword(auth, values.email, values.password).then((userCredential) => {
       // Signed in
       const user = userCredential.user;
