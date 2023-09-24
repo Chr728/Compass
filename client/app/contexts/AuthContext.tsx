@@ -80,6 +80,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     createUserWithEmailAndPassword(auth, values.email, values.password).then((userCredential) => {
       // Signed in
       const user = userCredential.user;
+      setError(null);
       const data = {
         uid:user.uid,
         email: values.email,
@@ -102,6 +103,11 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         console.log(errorCode, errorMessage);
       })
     }).catch((error) => {
+      if (error.code === 'auth/email-already-in-use') {
+        setError('Email address is already in use.');
+      } else {
+        setError(error.message);
+      }
       const errorCode = error.code;
       const errorMessage = error.message;
       console.log(errorCode, errorMessage);
