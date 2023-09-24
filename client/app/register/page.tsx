@@ -63,9 +63,17 @@ export default function Register() {
       }
       if (!values.fname) {
         errors.fname = 'First Name Required';
+      } else if (
+        !/^(?! )[A-Za-z\s]+(?<! )$/i.test(values.fname)
+      ){
+        errors.fname = 'Names cannot contain numbers and must not begin or end with a space.';
       }
       if (!values.lname) {
         errors.lname = 'Last Name Required';
+      } else if(
+        !/^(?! )[A-Za-z\s]+(?<! )$/i.test(values.lname)
+      ){
+        errors.lname = 'Names cannot contain numbers and must not begin or end with a space.';
       }
       if(values.postalCode) {
         if (!/[A-Z][0-9][A-Z] ?[0-9][A-Z][0-9]$/i.test(values.postalCode)) {

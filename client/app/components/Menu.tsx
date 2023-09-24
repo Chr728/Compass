@@ -7,11 +7,8 @@ import {
   MdOutlineSettings,
   MdLogout,
 } from 'react-icons/md';
-import { useAuth } from '@/app/contexts/AuthContext';
 
 const Navbar = () => {
-  const { logout } = useAuth();
-
   return (
     <nav className="bg-eggshell fixed bottom-0 left-0 w-full md:w-72 lg:w-80 md:left-0 md:h-full md:flex md:flex-col md:rounded-3xl md:justify-start md:items-start">
       <div className="text-black text-[14px] md:text-[16px]  md:font-sans  text-center px-8 py-6">
@@ -20,23 +17,15 @@ const Navbar = () => {
             <img
               src="/icons/compass-removebg.png"
               alt="Compass"
-              className="float-left hidden md:inline-block md:w-24 md:h-24 md:text-2xl text-lg lg:text-3xl mr-2"
+              className="float-left hidden  text-lg  mr-2"
             />
-            <div>
-              <p className="hidden md:inline-block md:text-lg md:ml-0 lg:text-xl">
-                Christina D.
-              </p>
-              <p className="hidden md:inline-block md:text-xs md:ml-0">
-                christina@gmail.com
-              </p>
-            </div>
           </li>
 
-          <div className="grid grid-cols-5 gap-6 place-items-center">
+          <div className="grid grid-cols-5 gap-6 place-items-center ml-1">
           
           <div>
-          <li className="md:mt-2 md:ml-10 lg:text-2xl">
-            <MdOutlineHome className="inline-block md:text-2xl text-lg lg:text-3xl" />
+          <li>
+            <MdOutlineHome className="inline-block text-lg" />
             <span className="home-text">
               {' '}
               <a href="/" className="hover:text-blue-200">
@@ -47,8 +36,8 @@ const Navbar = () => {
           </div>
 
           <div>
-          <li className="md:mt-12 md:ml-10 lg:text-2xl">
-            <MdOutlineAddBox className="inline-block md:text-2xl text-lg lg:text-3xl" />
+          <li>
+            <MdOutlineAddBox className="inline-block  text-lg" />
             <span className="home-text">
               <a href="#" className="hover:text-blue-200">
                 Health
@@ -58,8 +47,8 @@ const Navbar = () => {
           </div>
 
           <div>
-          <li className="md:mt-12 md:ml-10 lg:text-2xl">
-            <MdEditNote className="inline-block md:text-2xl text-lg lg:text-3xl" />
+          <li >
+            <MdEditNote className="inline-block  text-lg " />
             <span className="home-text">
               <a href="#" className="hover:text-blue-200">
                 Journals
@@ -69,8 +58,8 @@ const Navbar = () => {
           </div>
 
           <div>
-          <li className="md:mt-12 md:ml-10 lg:text-2xl">
-            <MdOutlineMessage className="inline-block md:text-2xl text-lg lg:text-3xl" />
+          <li >
+            <MdOutlineMessage className="inline-block  text-lg" />
 
             <span className="home-text">
               {' '}
@@ -82,8 +71,8 @@ const Navbar = () => {
           </div>
 
           <div>
-          <li className="md:mt-12 md:ml-10 lg:text-2xl">
-            <MdOutlineSettings className="inline-block md:text-2xl text-lg lg:text-3xl" />
+          <li>
+            <MdOutlineSettings className="inline-block  text-lg lg:text-3xl" />
             <span className="home-text">
               <a href="/settings" className="hover:text-blue-200" id="settings">
                 Settings
@@ -93,13 +82,6 @@ const Navbar = () => {
           </div>
 
           </div>
-
-          <li className="hidden md:inline-block md:mt-24  lg:mt-32 md:ml-10 lg:text-2xl md:mb-4 lg:mb-4">
-            <button onClick={logout} className="hover:text-blue-200">
-              <MdLogout className="inline-block md:text-2xl text-lg lg:text-3xl" />{' '}
-              Logout
-            </button>
-          </li>
         </ul>
       </div>
     </nav>
