@@ -12,7 +12,7 @@ import { useAuth } from "../contexts/AuthContext";
 
 export default function Setting() {
   const router = useRouter();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
