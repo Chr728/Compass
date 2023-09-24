@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  postgres_dev_compass:
+    container_name: pg_dev_container
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - pg_dev_data:/var/lib/postgresql/data
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+  server_dev_compass:
+    container_name: server_dev_container
+    image: server_dev_image
+    environment:
+      - SERVER_DEV_PORT=${SERVER_DEV_PORT}
+      - DB_HOST=postgres_dev_compass
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+    build:
+      context: ./server/
+      dockerfile: dev.Dockerfile
+      args:
+        - SERVER_DEV_PORT=${SERVER_DEV_PORT}
+    volumes:
+      - ./server/:/app/server:cached
+      - /app/server/node_modules/
+    ports:
+      - "${SERVER_DEV_PORT}:${SERVER_DEV_PORT}"
+    depends_on:
+      postgres_dev_compass:
+        condition: service_healthy
+  client_dev_compass:
+    container_name: client_dev_container
+    image: client_dev_image
+    environment:
+      - CLIENT_DEV_PORT=${CLIENT_DEV_PORT}
+    build:
+      context: ./client/
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./client/:/app/client:cached
+      - /app/client/node_modules/
+    ports:
+      - "${CLIENT_DEV_PORT}:${CLIENT_DEV_PORT}"
+    depends_on:
+      - server_dev_compass
+volumes:
+  pg_dev_data: {}

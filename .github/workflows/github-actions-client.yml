@@ -1,0 +1,16 @@
+name: Client Tests
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Load .env File Contents
+        run: echo "${{ secrets.ENV_FILE }}" > client/.env
+      - name: Install Dependencies
+        run: cd client && npm install
+      - name: Run Client Tests
+        run: cd client && npm run test
+      - name: Delete .env File
+        run: rm client/.env
+        if: always()

@@ -1,0 +1,11 @@
+name: Server Tests
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: cd server && npm install
+      - name: Run Server Tests
+        run: cd server && npm run test

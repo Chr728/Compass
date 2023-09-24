@@ -1,0 +1,49 @@
+{
+  "name": "compass",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "jest --coverage --runInBand  --forceExit",
+    "cypress": "cypress open"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.14.10",
+    "@types/node": "20.5.1",
+    "@types/react": "18.2.20",
+    "@types/react-dom": "18.2.7",
+    "autoprefixer": "10.4.15",
+    "dotenv": "^16.3.1",
+    "encoding": "^0.1.13",
+    "eslint": "8.47.0",
+    "eslint-config-next": "13.4.19",
+    "firebase": "^10.3.0",
+    "firebase-functions": "^4.4.1",
+    "formik": "^2.4.3",
+    "next": "13.4.12",
+    "postcss": "8.4.28",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-icons": "^4.10.1",
+    "swiper": "^10.3.0",
+    "tailwindcss": "3.3.3",
+    "typescript": "5.1.6"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.15",
+    "@babel/preset-env": "^7.22.15",
+    "@babel/preset-react": "^7.22.15",
+    "@testing-library/dom": "^9.3.1",
+    "@testing-library/jest-dom": "^6.1.2",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.4.3",
+    "cypress": "^13.1.0",
+    "jest": "^29.6.4",
+    "jest-environment-jsdom": "^29.6.4"
+  }
+}
