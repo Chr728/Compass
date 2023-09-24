@@ -9,12 +9,12 @@ const userValidator = (values : UserAttributes) => {
         throw new Error(`Invalid email: ${email}`);
     }
     //check if first name is valid
-    if(!firstName || typeof firstName !== 'string') {
+    if(!firstName || /\d/.test(firstName) || typeof firstName !== 'string') {
         Logger.error(`Invalid first name: ${firstName}`);
         throw new Error(`Invalid first name: ${firstName}`);
     }
     //check if last name is valid
-    if(!lastName || typeof lastName !== 'string') {
+    if(!lastName || /\d/.test(lastName) || typeof lastName !== 'string') {
         Logger.error(`Invalid last name: ${lastName}`);
         throw new Error(`Invalid last name: ${lastName}`);
     }
