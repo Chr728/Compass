@@ -2,7 +2,7 @@
 
 import { Model } from "sequelize";
 
-type UserAttributes = {
+export type UserAttributes = {
   id: number;
   uid: string;
   email: string;

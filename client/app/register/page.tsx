@@ -6,10 +6,11 @@ import Button from '../components/Button';
 import Input from '../components/Input';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import {useAuth} from '@/app/contexts/AuthContext';
 
 export default function Register() {
   const router = useRouter();
-
+  const {signUp} = useAuth();
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -26,8 +27,12 @@ export default function Register() {
       sex: '',
     },
     onSubmit: (values) => {
-      router.push('/');
-      console.log(values);
+        try{
+            signUp(values);
+        }catch (error){
+            console.log(error)
+        }
+
     },
     validate: (values) => {
       let errors: {
