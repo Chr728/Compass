@@ -304,11 +304,62 @@ describe("Error validation", () => {
         expect(error).toBeInTheDocument();
     })
 
+    test("First name cannot contain numbers", async() =>{
+        render(<Register/>);
+        const firstName = screen.getByLabelText("First Name");
+        await userEvent.type(firstName, "Georgia9");
+        fireEvent.blur(firstName);
+        const error = await screen.findByText("Names cannot contain numbers and must not begin or end with a space.");
+        expect(error).toBeInTheDocument();
+    })
+
+    test("First name cannot begin with a space", async() =>{
+        render(<Register/>);
+        const firstName = screen.getByLabelText("First Name");
+        await userEvent.type(firstName, " Georgia");
+        fireEvent.blur(firstName);
+        const error = await screen.findByText("Names cannot contain numbers and must not begin or end with a space.");
+        expect(error).toBeInTheDocument();
+    })
+    test("First name cannot end with a space", async() =>{
+        render(<Register/>);
+        const firstName = screen.getByLabelText("First Name");
+        await userEvent.type(firstName, "Georgia ");
+        fireEvent.blur(firstName);
+        const error = await screen.findByText("Names cannot contain numbers and must not begin or end with a space.");
+        expect(error).toBeInTheDocument();
+    })
+
     test("Last name empty error message", async() => {
         render(<Register/>);
         const lastName = screen.getByLabelText("Last Name");
         fireEvent.blur(lastName);
         const error = await screen.findByText("Last Name Required");
+        expect(error).toBeInTheDocument();
+    })
+
+    test("Last name cannot contain numbers", async() =>{
+        render(<Register/>);
+        const lastName = screen.getByLabelText("Last Name");
+        await userEvent.type(lastName, "Georgia9");
+        fireEvent.blur(lastName);
+        const error = await screen.findByText("Names cannot contain numbers and must not begin or end with a space.");
+        expect(error).toBeInTheDocument();
+    })
+    test("Last name cannot begin with a space", async() =>{
+        render(<Register/>);
+        const lastName = screen.getByLabelText("Last Name");
+        await userEvent.type(lastName, " Georgia");
+        fireEvent.blur(lastName);
+        const error = await screen.findByText("Names cannot contain numbers and must not begin or end with a space.");
+        expect(error).toBeInTheDocument();
+    })
+    test("Last name cannot end with a space", async() =>{
+        render(<Register/>);
+        const lastName = screen.getByLabelText("Last Name");
+        await userEvent.type(lastName, "Georgia ");
+        fireEvent.blur(lastName);
+        const error = await screen.findByText("Names cannot contain numbers and must not begin or end with a space.");
         expect(error).toBeInTheDocument();
     })
 

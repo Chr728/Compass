@@ -10,10 +10,10 @@ import Link from 'next/link';
 
 const Navbar = () => {
   return (
-    <nav className="bg-blue-500  fixed bottom-0 left-0 w-full  bg-white">
-      <div className="text-black text-[14px]   text-center px-8 py-6">
-        <ul className="flex justify-around">
-          <li className="flex items-center">
+    <nav className="bg-eggshell fixed bottom-0 left-0 w-full md:w-72 lg:w-80 md:left-0 md:h-full md:flex md:flex-col md:rounded-3xl md:justify-start md:items-start">
+      <div className="text-black text-[14px] md:text-[16px]  md:font-sans  text-center px-8 py-6">
+        <ul className="flex justify-around md:flex-col md:justify-start md:items-start">
+          <li className="md:ml-0 md:mb-4 md:mt-2 flex items-center">
             <img
               src="/icons/compass-removebg.png"
               alt="Compass"
