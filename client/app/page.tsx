@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from './contexts/AuthContext';
-import Login from './login/page';
+import Welcome from './welcome/page';
 
 export default function Home() {
   const router = useRouter();
@@ -15,5 +15,5 @@ export default function Home() {
     }
   }, [user, router]);
 
-  return <Login />;
+  return <Welcome />;
 }
