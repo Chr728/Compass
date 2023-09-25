@@ -1,12 +1,5 @@
-import { useState } from "react";
-
-jest.mock("react", () => ({
-  ...jest.requireActual("react"),
-  useState: jest.fn(),
-}));
-
-const useStateMock = useState;
-import { fireEvent, render, screen } from "@testing-library/react";
+import React from "react";
+import { fireEvent, render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import ForgotPassword from "../forgotpassword/page";
@@ -63,8 +56,17 @@ describe("Forgot password page messages", () => {
 // Test change password page
 describe("Change password page messages", () => {
   beforeEach(() => {
-    const setLoggedIn = jest.fn();
-    useStateMock.mockImplementation(() => [true, setLoggedIn]);
+    act(() => {
+      const setLoggedIn = jest.fn();
+      jest.spyOn(React, "useState").mockReturnValue([true, setLoggedIn]);
+    });
+  });
+
+  afterEach(() => {
+    // Restore the original implementation after the tests
+    act(() => {
+      jest.restoreAllMocks();
+    });
   });
 
   test("render all content to the screen", () => {
