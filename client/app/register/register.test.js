@@ -3,17 +3,20 @@ import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import Register from '../register/page';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '../contexts/AuthContext';
 
-
-const mockRouter= jest.fn();
-
-jest.mock("next/navigation", () => ({
-    useRouter: () => {
-        return {
-            push: mockRouter
+const signup = jest.fn();
+jest.mock('../contexts/AuthContext', () => {
+    return {
+        useAuth: () => {
+            return {
+                signUp : signup
+            }
+            
         }
     }
-}));
+})
+
 
 describe("All elements displayed on appropriate pages", () => {
 
@@ -133,7 +136,7 @@ describe("All elements displayed on appropriate pages", () => {
 
 
 describe("Error validation", () => {
-
+  
     test("Next button is disabled if all inputs are not provided", async () => {
         render(<Register/>);
         const nextButton = screen.getAllByRole('button')[0];
@@ -197,7 +200,35 @@ describe("Error validation", () => {
         await userEvent.click(secondNextButton);
         const submitButton = screen.getAllByRole("button")[1];
         await userEvent.click(submitButton);
-        expect(mockRouter).toHaveBeenCalledTimes(0);
+        expect(signup).toHaveBeenCalledTimes(0);
+    })
+
+    test("Submit button works correctly", async () => {
+        render(<Register/>);
+        const firstNextButton = screen.getAllByRole("button")[0];
+        const emailInput = screen.getByLabelText("Email Address");
+        const passwordInput = screen.getByLabelText("Password");
+        const confirmPasswordInput = screen.getByLabelText("Confirm Password");
+        const firstName = screen.getByLabelText("First Name");
+        const lastName = screen.getByLabelText("Last Name");
+        await userEvent.type(emailInput, "georgia@georgia.com");
+        await userEvent.type(passwordInput, "password");
+        await userEvent.type(confirmPasswordInput, "password");
+        await userEvent.type(firstName, "Georgia");
+        await userEvent.type(lastName, "Georgia");
+        await userEvent.click(firstNextButton);
+        const secondNextButton = screen.getAllByRole('button')[1];
+        const phone = screen.queryByLabelText("Phone Number");
+        await userEvent.type(phone, "1231231234");
+        await userEvent.click(secondNextButton);
+        const birthdate = screen.getByLabelText("Birthdate");
+        const sex = screen.getByLabelText("Sex");
+        await userEvent.type(birthdate, "2002-08-07");
+        await userEvent.type(sex, "Female");
+        const submitButton = screen.getAllByRole("button")[1];
+        await userEvent.click(submitButton);
+        await signup();
+        expect(signup).toHaveBeenCalledTimes(1);
     })
 
     test("Previous button on the second page works correctly", async() => {

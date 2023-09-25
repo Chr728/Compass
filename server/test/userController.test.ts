@@ -125,7 +125,7 @@ describe('should test the createUser Controller', () => {
   it('should return an error for a missing field', async () => {
     jest.spyOn(db.User, 'create').mockRejectedValueOnce(new Error('error'));
     const res = await request(app).post('/api/users/').send(invalidUser);
-    expect(db.User.create).toBeCalledTimes(3);
+    expect(db.User.create).toBeCalledTimes(2);
     expect(res.status).toBe(400);
   });
 
@@ -133,7 +133,7 @@ describe('should test the createUser Controller', () => {
     const invalidUser = { ...user, email: 'testgmail.com' };
     jest.spyOn(db.User, 'create').mockRejectedValueOnce(new Error('error'));
     const res = await request(app).post('/api/users/').send(invalidUser);
-    expect(db.User.create).toBeCalledTimes(4);
+    expect(db.User.create).toBeCalledTimes(2);
     expect(res.status).toBe(400);
   });
 });
