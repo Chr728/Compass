@@ -40,7 +40,7 @@ export default function Setting() {
           </div>
         </Link>
 
-        <Link href="">
+        <Link href="/forgotpassword">
           <div className="flex items-center m-2">
             <Image
               src="/icons/vpn_key.svg"

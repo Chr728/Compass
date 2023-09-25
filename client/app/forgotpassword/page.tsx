@@ -2,6 +2,7 @@
 import Input from "../components/Input";
 import Button from "../components/Button";
 import Link from "next/link";
+import Image from "next/image";
 import { useFormik } from "formik";
 import { useState } from "react";
 
@@ -53,26 +54,42 @@ export default function ForgotPassword() {
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
       {loggedIn ? (
-        <p className="text-[34px] text-darkgrey font-sans font-bold">
-          Reset Password
-        </p>
+        <span className="flex items-baseline font-bold md:font-sans text-darkgrey text-[24px] mx-4 mt-4">
+          <Link href="/settings">
+            <Image
+              src="/icons/LeftArrow.svg"
+              alt="LeftArrow icon"
+              width={10}
+              height={10}
+              className="mr-4"
+              style={{ width: "auto", height: "auto" }}
+            />
+          </Link>
+          Password Change
+        </span>
       ) : null}
       <form
-        className="rounded-3xl bg-white flex flex-col m-auto w-full md:max-w-[800px] md:h-[450px] p-8"
+        className="rounded-3xl bg-white flex flex-col m-auto w-full md:max-w-[800px] md:h-[400px] p-8"
         onSubmit={formik.handleSubmit}
       >
         <div className="mb-6">
-          <p className="text-[34px] text-darkgrey font-sans font-bold">
-            Reset Password
-          </p>
+          {loggedIn ? (
+            <p className="text-[34px] text-darkgrey font-sans font-bold">
+              Password Change
+            </p>
+          ) : (
+            <p className="text-[34px] text-darkgrey font-sans font-bold">
+              Reset Password
+            </p>
+          )}
           <p className="text-darkgrey text-[16px] font-sans leading-[22px]">
             Enter your email for a password reset link.
           </p>
-          {loggedIn ? (
+          {loggedIn ? null : (
             <p className="text-blue font-sans text-[16px] leading-[22px]">
               <Link href="/FindEmail"> Forgot Email ?</Link>
             </p>
-          ) : null}
+          )}
         </div>
 
         <div>
@@ -111,11 +128,11 @@ export default function ForgotPassword() {
           )}
         </div>
 
-        {loggedIn ? (
+        {loggedIn ? null : (
           <p className="text-blue font-sans text-[16px] leading-[22px] mb-4 mt-6">
             <Link href="/login">Back to Sign in</Link>
           </p>
-        ) : null}
+        )}
       </form>
     </div>
   );

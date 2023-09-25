@@ -1,11 +1,18 @@
+import { useState } from "react";
+
+jest.mock("react", () => ({
+  ...jest.requireActual("react"),
+  useState: jest.fn(),
+}));
+
+const useStateMock = useState;
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import ForgotPassword from "../forgotpassword/page";
 
+// Test forgot password page
 describe("Forgot password page messages", () => {
-  beforeEach(() => {});
-
   test("render all content to the screen", () => {
     render(<ForgotPassword />);
     const resetPassordHeader = screen.getAllByText(/Reset Password/i)[0];
@@ -50,5 +57,29 @@ describe("Forgot password page messages", () => {
     render(<ForgotPassword />);
     const linkElement = screen.getAllByRole("link")[1];
     expect(linkElement).toHaveAttribute("href", "/login");
+  });
+});
+
+// Test change password page
+describe("Change password page messages", () => {
+  beforeEach(() => {
+    const setLoggedIn = jest.fn();
+    useStateMock.mockImplementation(() => [true, setLoggedIn]);
+  });
+
+  test("render all content to the screen", () => {
+    render(<ForgotPassword />);
+    const resetPassordHeader = screen.getAllByText(/Password Change/i)[0];
+    const descriptionHeader = screen.getByText(
+      /Enter your email for a password reset link./i
+    );
+    const emailLabel = screen.findAllByText(/Email/i);
+    const buttonconst = screen.getByRole("button");
+  });
+
+  test("link redirects back to settings page", async () => {
+    render(<ForgotPassword />);
+    const linkElement = screen.getAllByRole("link")[0];
+    expect(linkElement).toHaveAttribute("href", "/settings");
   });
 });
