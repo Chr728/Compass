@@ -5,9 +5,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { useFormik } from "formik";
 import { useState } from "react";
+import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 
 export default function ForgotPassword() {
-  // Backend part to be added
+  const auth = getAuth();
 
   const formik = useFormik({
     initialValues: {
@@ -16,7 +17,10 @@ export default function ForgotPassword() {
     },
     onSubmit: async (values) => {
       try {
-        // Add function to pull data from backend
+        if(values.email) {
+          setLoggedIn(false);
+          sendPasswordResetEmail(auth, values.email);
+        }        
       } catch (error) {
         console.error("Login failed:", error);
       }
@@ -87,7 +91,7 @@ export default function ForgotPassword() {
           </p>
           {loggedIn ? null : (
             <p className="text-blue font-sans text-[16px] leading-[22px]">
-              <Link href="/FindEmail"> Forgot Email ?</Link>
+              <Link href="/FindEmail"> Forgot Your Email ?</Link>
             </p>
           )}
         </div>
