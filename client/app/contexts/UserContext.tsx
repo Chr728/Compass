@@ -1,5 +1,6 @@
 import {createContext, useContext, FC, ReactNode, useState, useEffect} from 'react';
 import getUser from '@/app/http/getUser';
+import updateUser from '@/app/http/updateUser';
 import { useAuth } from './AuthContext';
 
 type UserAttributes = {
@@ -17,9 +18,21 @@ type UserAttributes = {
     sex: string;
 };
 
+type EditableUserAttributes = {
+    firstName?: string;
+    lastName?: string;
+    streetAddress?: string;
+    city?: string;
+    province?: string;
+    postalCode?: string;
+    phoneNumber?: string;
+    birthDate?: Date;
+    sex?: string;
+}
+
 interface UserContextProps {
    userInfo: UserAttributes | null
-   updateUser: (userData: UserAttributes) => Promise<any>;
+    updateCurrentUser: (userData: EditableUserAttributes) => void;
 }
 
 const UserContext = createContext<UserContextProps | undefined>(undefined);
@@ -54,23 +67,18 @@ export const UserProvider:FC<UserProviderProps> = ({ children }) => {
         }
        fetchUserData()
     }, [user]);
-    const updateUser : (userData: UserAttributes) => Promise<UserAttributes> = async (userData: UserAttributes) => {
-        try {
-            if (uid) {
-                const updatedUserData = await updateUser(userData);
-                setUserInfo(updatedUserData);
-                return updatedUserData;
-            } else {
-                throw new Error('User is not authenticated');
-            }
-        } catch (error) {
-            console.error('Error updating user data:', error);
-            throw error;
+    const updateCurrentUser = (userData: EditableUserAttributes) => {
+        if(uid) {
+            updateUser(userData).then((response) => {
+                console.log('User updated successfully:', response);
+            }).catch((error) => {
+                console.error('Error updating user:', error);
+            })
         }
-    };
+    }
     const value: UserContextProps = {
        userInfo,
-       updateUser,
+       updateCurrentUser,
     };
 
     return <UserContext.Provider value={value}>{!loading && children}</UserContext.Provider>;

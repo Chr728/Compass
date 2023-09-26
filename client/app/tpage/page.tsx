@@ -5,8 +5,6 @@ import Menu from '../components/Menu';
 import {useUser} from '@/app/contexts/UserContext';
 
 export default function MainMenu() {
-    const {userInfo} = useUser();
-    console.log('userInfo', userInfo)
 return (
    
     <div className="bg-eggshell min-h-screen flex flex-col">
