@@ -79,13 +79,17 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
   const signUp = (values:createUserAttributes) => {
     createUserWithEmailAndPassword(auth, values.email, values.password).then((userCredential) => {
+      setLoading(true)
       // Signed in
       const user = userCredential.user;
       setError(null);
       const data = values;
       data.uid = user.uid;
       createUser(data).then((res) => {
-        router.push('/');
+        if(res !== null) {
+            setLoading(false)
+          router.push('/');
+        }
       }).catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;

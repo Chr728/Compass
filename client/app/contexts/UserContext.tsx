@@ -58,14 +58,22 @@ export const UserProvider:FC<UserProviderProps> = ({ children }) => {
         const fetchUserData = () => {
             if (uid) {
                 getUser(uid).then((userData) => {
+                    setLoading(true)
                     setUserInfo(userData.data);
                     setLoading(false);
                 }).catch((error) => {
                     console.error('Error fetching user data:', error);
                 });
+            }else{
+                setUserInfo(null);
+                setLoading(false);
             }
         }
-       fetchUserData()
+        if(user){
+            fetchUserData()
+        }else{
+            setLoading(false)
+        }
     }, [uid]);
     const updateCurrentUser = (userData: EditableUserAttributes) => {
         if(uid) {
@@ -81,5 +89,5 @@ export const UserProvider:FC<UserProviderProps> = ({ children }) => {
        updateCurrentUser,
     };
 
-    return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
+    return <UserContext.Provider value={value}>{!loading && children}</UserContext.Provider>;
 };

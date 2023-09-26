@@ -7,7 +7,7 @@ export const getUser = async (id: string) => {
     });
 
     if (!response.ok) {
-        throw new Error('Something went wrong');
+        throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
     const userData = await response.json();
