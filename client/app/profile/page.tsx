@@ -9,9 +9,11 @@ import Button from '../components/Button';
 import Menu from "../components/Menu";
 
 
+
 export default function Profile() {
   const router = useRouter();
   const { user } = useAuth();
+  const fetch = require('node-fetch');
   const [profile, setProfile] = useState({
     values: {
       email: "",
@@ -37,7 +39,7 @@ export default function Profile() {
           "Content-Type": "application/json",
         },
       })
-        .then(async (response) => {
+        .then(async (response: { json: () => any; }) => {
           // Update the profile state with the fetched user data
           const userData = await response.json();
           setProfile({
@@ -54,9 +56,8 @@ export default function Profile() {
               sex: userData.data.sex || "",
             },
           });
-          console.log(userData);
         })
-        .catch((error) => {
+        .catch((error: any) => {
           console.error("Error fetching user data:", error);
         });
     }
