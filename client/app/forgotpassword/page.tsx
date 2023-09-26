@@ -9,6 +9,9 @@ import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 
 export default function ForgotPassword() {
   const auth = getAuth();
+  let errors: {
+    email?: string;
+  } = {};
 
   const formik = useFormik({
     initialValues: {
@@ -18,17 +21,22 @@ export default function ForgotPassword() {
     onSubmit: async (values) => {
       try {
         if(values.email) {
-          setLoggedIn(false);
-          sendPasswordResetEmail(auth, values.email);
+          sendPasswordResetEmail(auth, values.email)
+            .catch((error) => {
+              console.log("here3");
+              console.log(error.code);
+              console.log(error.message);
+              if(error.code == "auth/user-not-found") {
+                errors.email = "This email is not on record";
+              }
+            });
+            setLoggedIn(false);
         }        
       } catch (error) {
         console.error("Login failed:", error);
       }
     },
     validate: (values) => {
-      let errors: {
-        email?: string;
-      } = {};
       if (!values.email) {
         errors.email = "Email is required";
       } else if (
