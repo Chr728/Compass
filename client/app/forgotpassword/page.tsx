@@ -5,10 +5,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { useFormik } from "formik";
 import { useState } from "react";
-import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+import { auth } from "../config/firebase"
+import { sendPasswordResetEmail } from "firebase/auth";
 
 export default function ForgotPassword() {
-  const auth = getAuth();
   let errors: {
     email?: string;
   } = {};
@@ -98,7 +98,7 @@ export default function ForgotPassword() {
           </p>
           {loggedIn ? null : (
             <p className="text-blue font-sans text-[16px] leading-[22px]">
-              <Link href="/FindEmail"> Forgot Your Email ?</Link>
+              <Link href="/FindEmail"> Forgot Email ?</Link>
             </p>
           )}
         </div>
