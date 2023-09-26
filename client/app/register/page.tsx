@@ -26,7 +26,20 @@ export default function Register() {
     },
     onSubmit: (values) => {
         try{
-            signUp(values);
+            const data = {
+                email: values.email,
+                password: values.password,
+                firstName: values.fname,
+                lastName: values.lname,
+                streetAddress: values.street,
+                city: values.city,
+                province: values.province,
+                postalCode: values.postalCode,
+                phoneNumber: values.phone,
+                birthDate: values.birthdate,
+                sex: values.sex,
+            }
+            signUp(data);
         }catch (error){
             console.log(error)
         }

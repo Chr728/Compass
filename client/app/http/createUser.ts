@@ -1,5 +1,6 @@
+import {createUserAttributes} from '@/app/lib/Models/User';
 
-export const createUser = async (body:any
+export const createUser = async (body:createUserAttributes
 ) => {
     await fetch("http://localhost:8000/api/users", {
         method: 'POST',
@@ -11,7 +12,7 @@ export const createUser = async (body:any
         if (response.ok) {
             return response.json();
         } else {
-            throw new Error('Something went wrong');
+            throw new Error('Error creating user');
         }
     })}
 
