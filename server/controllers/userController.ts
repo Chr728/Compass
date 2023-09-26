@@ -96,7 +96,7 @@ export const updateUser = async (req: Request, res: Response) => {
     const userId = req.params.id;
     const updatedUser = await db.User.update(updatedUserData, {
       where: {
-        id: userId,
+        uid: userId,
       },
       returning: true,
     });
