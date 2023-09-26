@@ -66,7 +66,7 @@ export const UserProvider:FC<UserProviderProps> = ({ children }) => {
             }
         }
        fetchUserData()
-    }, [user]);
+    }, [uid]);
     const updateCurrentUser = (userData: EditableUserAttributes) => {
         if(uid) {
             updateUser(userData).then((response) => {
@@ -81,5 +81,5 @@ export const UserProvider:FC<UserProviderProps> = ({ children }) => {
        updateCurrentUser,
     };
 
-    return <UserContext.Provider value={value}>{!loading && children}</UserContext.Provider>;
+    return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };

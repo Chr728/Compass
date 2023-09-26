@@ -12,10 +12,13 @@ export default function Profile() {
   const router = useRouter();
   const { user } = useAuth();
   const { userInfo } = useUser();
-  console.log('userInfo',userInfo)
-  const [profile, setProfile] = useState(
-   userInfo
+
+  const [profile, setProfile] = useState<any>(null
   );
+
+    useEffect(() => {
+            setProfile(userInfo)
+    }, [userInfo]);
 
 
   return (

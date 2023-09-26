@@ -18,14 +18,13 @@ import {
 } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import createUser from '@/app/http/createUser';
-import {createUserAttributes} from '@/app/lib/Models/User';
 
 interface AuthContextProps {
   user: User | null;
   login: (email: string, password: string) => void;
   logout: () => Promise<void>;
   error: string | null;
-  signUp: (data:createUserAttributes) => void;
+  signUp: (data:any) => void;
 }
 
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
@@ -77,15 +76,31 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const signUp = (values:createUserAttributes) => {
+  const signUp = (values:any) => {
     createUserWithEmailAndPassword(auth, values.email, values.password).then((userCredential) => {
       // Signed in
       const user = userCredential.user;
       setError(null);
-      const data = values;
-      data.uid = user.uid;
+      setLoading(true);
+      const data = {
+        uid:user.uid,
+        email: values.email,
+        firstName: values.fname,
+        lastName: values.lname,
+        streetAddress: values.street,
+        city: values.city,
+        province: values.province,
+        postalCode: values.postalCode,
+        phoneNumber: values.phone,
+        birthDate: values.birthdate,
+        sex: values.sex,
+      }
+
       createUser(data).then((res) => {
-        router.push('/');
+        if (res) {
+          router.push('/');
+          setLoading(false);
+        }
       }).catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
