@@ -5,9 +5,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { useFormik } from "formik";
 import { useState } from "react";
+import { auth } from "../config/firebase"
+import { sendPasswordResetEmail } from "firebase/auth";
 
 export default function ForgotPassword() {
-  // Backend part to be added
+  let errors: {
+    email?: string;
+  } = {};
 
   const formik = useFormik({
     initialValues: {
@@ -16,15 +20,22 @@ export default function ForgotPassword() {
     },
     onSubmit: async (values) => {
       try {
-        // Add function to pull data from backend
+        if(values.email) {
+          sendPasswordResetEmail(auth, values.email)
+            .catch((error) => {
+              console.log(error.code);
+              console.log(error.message);
+              if(error.code == "auth/user-not-found") {
+                errors.email = "This email is not on record";
+              }
+            });
+            setLoggedIn(false);
+        }        
       } catch (error) {
         console.error("Login failed:", error);
       }
     },
     validate: (values) => {
-      let errors: {
-        email?: string;
-      } = {};
       if (!values.email) {
         errors.email = "Email is required";
       } else if (
