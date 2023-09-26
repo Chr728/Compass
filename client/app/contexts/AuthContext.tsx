@@ -49,20 +49,20 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
   const login = (email: string, password: string) => {
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        setError(null);
-        router.push('/tpage');
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          setError(null);
+          router.push('/tpage');
 
-        // ...
-      })
-      .catch((error) => {
-        setError("Invalid User Credentials. Please try again.");
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.error(errorCode, errorMessage);
-      });
+          // ...
+        })
+        .catch((error) => {
+          setError("Invalid User Credentials. Please try again.");
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.error(errorCode, errorMessage);
+        });
   };
 
   const logout = async () => {
@@ -79,13 +79,17 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
   const signUp = (values:createUserAttributes) => {
     createUserWithEmailAndPassword(auth, values.email, values.password).then((userCredential) => {
+      setLoading(true)
       // Signed in
       const user = userCredential.user;
       setError(null);
       const data = values;
       data.uid = user.uid;
       createUser(data).then((res) => {
-        router.push('/');
+        if(res !== null) {
+            setLoading(false)
+          router.push('/');
+        }
       }).catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
@@ -123,9 +127,9 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={value}>
-      {!loading && children}
-    </AuthContext.Provider>
+      <AuthContext.Provider value={value}>
+        {!loading && children}
+      </AuthContext.Provider>
   );
 };
 

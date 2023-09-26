@@ -2,6 +2,7 @@
 import {useState} from 'react'
 import Link from 'next/link';
 import Menu from '../components/Menu';
+import {useUser} from '@/app/contexts/UserContext';
 
 export default function MainMenu() {
 return (

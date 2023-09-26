@@ -1,6 +1,7 @@
 'use client';
 
 import { AuthProvider } from './contexts/AuthContext';
+import {UserProvider} from '@/app/contexts/UserContext';
 
 import './globals.css';
 
@@ -13,7 +14,11 @@ export default function RootLayout({
     <html lang="en">
       <head />
       <body>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+            <UserProvider>
+                {children}
+            </UserProvider>
+        </AuthProvider>
       </body>
     </html>
   );
