@@ -14,6 +14,6 @@ export async function getUserProfile(userId: string) {
     const userData = await response.json();
     return userData.data;
   } catch (error) {
-    throw error;
+    throw new Error('Error fetching user profile');
   }
 }
