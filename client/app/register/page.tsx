@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useFormik } from 'formik';
 import Image from 'next/image';
 import Button from '../components/Button';
@@ -103,6 +103,50 @@ export default function Register() {
   });
 
   const [count, setCount] = useState(0);
+  
+  useEffect(() => {
+    if(count==0){
+      const email = document.getElementById("email") as HTMLInputElement;
+      const fname = document.getElementById("fname") as HTMLInputElement;
+      const lname = document.getElementById("lname") as HTMLInputElement;
+      const password = document.getElementById("password") as HTMLInputElement;
+      const confPassword = document.getElementById("confPassword") as HTMLInputElement;
+      if(email.value.length!=0){
+        formik.touched.email=true;
+      }
+      if(password.value.length!=0){
+        formik.touched.password=true;
+      }
+      if(confPassword.value.length!=0){
+        formik.touched.confPassword=true;
+      }
+      if(fname.value.length!=0){
+        formik.touched.fname=true;
+      }
+      if(lname.value.length!=0){
+        formik.touched.lname=true;
+      }
+    }
+   
+    if(count==1){
+      const phone = document.getElementById("phone") as HTMLInputElement;
+      if(phone.value.length!=0){
+        formik.touched.phone=true;
+      }
+    }
+
+    if(count==2){
+      const birthdate = document.getElementById("birthdate") as HTMLInputElement;
+      if(birthdate.value.length!=0){
+        formik.touched.birthdate=true;
+      }
+      const sex = document.getElementById("sex") as HTMLInputElement;
+      if(sex.value.length!=0){
+        formik.touched.sex=true;
+      }
+    }
+  }, [formik.values]);
+ 
   const [passwordVisibility, setPasswordVisibility] = useState<boolean>(false);
   const [confirmPasswordVisibility, setConfirmPasswordVisibility] =
     useState<boolean>(false);
@@ -128,7 +172,7 @@ export default function Register() {
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
       <span className="flex items-baseline font-bold md:font-normal text-darkgrey text-[24px] mx-4 mt-4 xl:hidden">
-        <Link href="">
+        <Link href="/">
           <Image
             src="/icons/LeftArrow.svg"
             alt="LeftArrow icon"

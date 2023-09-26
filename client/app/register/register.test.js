@@ -2,8 +2,6 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import Register from '../register/page';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '../contexts/AuthContext';
 
 const signup = jest.fn();
 jest.mock('../contexts/AuthContext', () => {
@@ -16,7 +14,6 @@ jest.mock('../contexts/AuthContext', () => {
         }
     }
 })
-
 
 describe("All elements displayed on appropriate pages", () => {
 
