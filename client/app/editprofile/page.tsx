@@ -4,8 +4,10 @@ import Button from '../components/Button';
 import Input from '../components/Input';
 import Link from 'next/link';
 import { useFormik } from 'formik';
+import { useRouter } from 'next/navigation';
 
 export default function EditProfile() {
+    const router = useRouter();
     const formik = useFormik({
         initialValues: {
             fname: '',
@@ -21,10 +23,22 @@ export default function EditProfile() {
           },
           validate: (values) => {
             let errors: {
+                fname?:string;
+                lname?:string;
                 phone?: string;
                 postalCode?: string;
               } = {};
 
+            if(values.fname){
+              if(!/^[^0-9 ][^\d]*[^0-9 ]$/i.test(values.fname)){
+                errors.fname="Names cannot contain numbers and must not begin or end with a space."
+              }
+            }
+            if(values.lname){
+              if(!/^[^0-9 ][^\d]*[^0-9 ]$/i.test(values.lname)){
+                errors.lname="Names cannot contain numbers and must not begin or end with a space."
+              }
+            }
             if(values.postalCode) {
                 if (!/[A-Z][0-9][A-Z] ?[0-9][A-Z][0-9]$/i.test(values.postalCode)) {
                   errors.postalCode = 'Invalid Postal Code';
@@ -77,6 +91,11 @@ export default function EditProfile() {
                 value={formik.values.fname}
                 onBlur={formik.handleBlur}
               />
+               {formik.touched.fname && formik.errors.fname && (
+                  <p className="text-[16px] text-red font-sans">
+                    {formik.errors.fname}
+                  </p>
+                )}
             </div>
 
             <div className="mt-3">
@@ -96,6 +115,11 @@ export default function EditProfile() {
                 value={formik.values.lname}
                 onBlur={formik.handleBlur}
               />
+              {formik.touched.lname && formik.errors.lname && (
+                  <p className="text-[16px] text-red font-sans">
+                    {formik.errors.lname}
+                  </p>
+                )}
             </div>
 
             <div className="mt-3">
@@ -203,12 +227,19 @@ export default function EditProfile() {
                 )}
               </div>
 
-            <div className="mx-auto">
-                <Button
+            <div className="mx-auto space-x-2">
+              <Button
+                type="button"
+                text="Cancel"
+                style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)' }}
+                onClick={ () => router.push("/profile")}
+              />
+
+              <Button
                 type="submit"
                 text="Submit"
-                style={{ width: '180px' }}
-                />
+                style={{ width: '140px' }}
+              />
             </div>
               
         </form>
