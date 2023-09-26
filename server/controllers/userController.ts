@@ -21,7 +21,11 @@ export const getUsers = async (req: Request, res: Response) => {
 
 export const getUser = async (req: Request, res: Response) => {
   try {
-    const user = await db.User.findByPk(req.params.id);
+    const user = await db.User.findOne({
+      where : {
+        uid: req.params.id
+      }
+    });
 
     if (!user) {
       return res.status(404).json({
