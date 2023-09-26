@@ -42,6 +42,7 @@ services:
   client_dev_compass:
     container_name: client_dev_container
     image: client_dev_image
+    stdin_open: true
     environment:
       - CLIENT_DEV_PORT=${CLIENT_DEV_PORT}
     build:
