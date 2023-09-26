@@ -23,7 +23,6 @@ export default function ForgotPassword() {
         if(values.email) {
           sendPasswordResetEmail(auth, values.email)
             .catch((error) => {
-              console.log("here3");
               console.log(error.code);
               console.log(error.message);
               if(error.code == "auth/user-not-found") {
