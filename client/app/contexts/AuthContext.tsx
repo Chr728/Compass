@@ -18,13 +18,14 @@ import {
 } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import createUser from '@/app/http/createUser';
+import {createUserAttributes} from '@/app/lib/Models/User';
 
 interface AuthContextProps {
   user: User | null;
   login: (email: string, password: string) => void;
   logout: () => Promise<void>;
   error: string | null;
-  signUp: (data:any) => void;
+  signUp: (data:createUserAttributes) => void;
 }
 
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
@@ -76,25 +77,13 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const signUp = (values:any) => {
+  const signUp = (values:createUserAttributes) => {
     createUserWithEmailAndPassword(auth, values.email, values.password).then((userCredential) => {
       // Signed in
       const user = userCredential.user;
       setError(null);
-      const data = {
-        uid:user.uid,
-        email: values.email,
-        firstName: values.fname,
-        lastName: values.lname,
-        streetAddress: values.street,
-        city: values.city,
-        province: values.province,
-        postalCode: values.postalCode,
-        phoneNumber: values.phone,
-        birthDate: values.birthdate,
-        sex: values.sex,
-      }
-
+      const data = values;
+      data.uid = user.uid;
       createUser(data).then((res) => {
         router.push('/');
       }).catch((error) => {
