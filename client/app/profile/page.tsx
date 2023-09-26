@@ -7,13 +7,12 @@ import Header from "../components/Header";
 import Link from "next/link";
 import Button from '../components/Button';
 import Menu from "../components/Menu";
-
+import fetch from 'node-fetch';
 
 
 export default function Profile() {
   const router = useRouter();
   const { user } = useAuth();
-  const fetch = require('node-fetch');
   const [profile, setProfile] = useState({
     values: {
       email: "",
