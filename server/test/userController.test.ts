@@ -72,9 +72,9 @@ describe('should test the getUsers Controller', () => {
 
 describe('should test the getUser Controller', () => {
   it('show get user', async () => {
-    jest.spyOn(db.User, 'findByPk').mockResolvedValueOnce(user);
+    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(user);
     const res = await request(app).get('/api/users/1');
-    expect(db.User.findByPk).toBeCalledTimes(1);
+    expect(db.User.findOne).toBeCalledTimes(1);
     expect(res.status).toBe(200);
     expect(res.body.status).toBe('SUCCESS');
     expect(res.body.data).toStrictEqual(user);
@@ -82,10 +82,10 @@ describe('should test the getUser Controller', () => {
 
   it('should return an error for a non-existent user', async () => {
     jest
-      .spyOn(db.User, 'findByPk')
+      .spyOn(db.User, 'findOne')
       .mockRejectedValue(new Error('connection error'));
     const res = await request(app).get('/api/users/1');
-    expect(db.User.findByPk).toBeCalledTimes(2);
+    expect(db.User.findOne).toBeCalledTimes(2);
     expect(res.status).toBe(400);
   });
 });
@@ -93,11 +93,11 @@ describe('should test the getUser Controller', () => {
 it('should return a 404 response when the user is not found', async () => {
   const nonExistentUserId = 999;
 
-  jest.spyOn(db.User, 'findByPk').mockResolvedValueOnce(null);
+  jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(null);
   const res = await request(app).get(`/api/users/${nonExistentUserId}`);
 
   // Verify that findByPk was called with the correct user ID
-  expect(db.User.findByPk).toBeCalledTimes(3);
+  expect(db.User.findOne).toBeCalledTimes(3);
 
   // Verify the response
   expect(res.status).toBe(404);
