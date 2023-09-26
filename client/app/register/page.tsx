@@ -172,7 +172,7 @@ export default function Register() {
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
       <span className="flex items-baseline font-bold md:font-normal text-darkgrey text-[24px] mx-4 mt-4 xl:hidden">
-        <Link href="">
+        <Link href="/">
           <Image
             src="/icons/LeftArrow.svg"
             alt="LeftArrow icon"
