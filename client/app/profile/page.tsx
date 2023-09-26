@@ -70,7 +70,7 @@ export default function Profile() {
               className="text-md ml-2 text-darkgrey"
               style={{ display: 'inline' }}
             >
-              {profile.values.sex}
+              {profile.values.firstName}
             </p>
             <br></br>
             <p
@@ -135,7 +135,7 @@ export default function Profile() {
               className="text-md ml-2 text-darkgrey"
               style={{ display: 'inline' }}
             >
-              {profile.values.postalCode}
+              {profile.values.province}
             </p>
             <br></br>
             <p
