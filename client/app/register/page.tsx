@@ -69,14 +69,14 @@ export default function Register() {
       if (!values.fname) {
         errors.fname = 'First Name Required';
       } else if (
-        !/^[A-Za-z]+(?:\s[A-Za-z]+)*$/i.test(values.fname)
+        !/^[^0-9 ][^\d]*[^0-9 ]$/i.test(values.fname)
       ){
         errors.fname = 'Names cannot contain numbers and must not begin or end with a space.';
       }
       if (!values.lname) {
         errors.lname = 'Last Name Required';
       } else if(
-        !/^[A-Za-z]+(?:\s[A-Za-z]+)*$/i.test(values.lname)
+        !/^[^0-9 ][^\d]*[^0-9 ]$/i.test(values.lname)
       ){
         errors.lname = 'Names cannot contain numbers and must not begin or end with a space.';
       }
