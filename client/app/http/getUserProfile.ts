@@ -14,7 +14,6 @@ export async function getUserProfile(userId: string) {
     const userData = await response.json();
     return userData.data;
   } catch (error) {
-    console.error('Error fetching user data:', error);
     throw error;
   }
 }
