@@ -1,7 +1,8 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import EditProfile from '../editprofile/page';
+import updateUser from '../http/updateUser';
 
 const mockRouter= jest.fn();
 
@@ -12,6 +13,31 @@ jest.mock("next/navigation", () => ({
         }
     }
 }));
+const mockUpdateCurrentUser = jest.fn();
+jest.mock('../contexts/UserContext', () => {
+    const originalModule = jest.requireActual('../contexts/UserContext');
+    const mockUserInfo = {
+        firstName: 'John',
+        lastName: 'Doe',
+        streetAddress: '1234 Main St',
+        city: 'Mock City',
+        province: 'Mock Province',
+        postalCode: 'A1A 1A1',
+        phoneNumber: '123-456-7890',
+    };
+
+    return {
+        ...originalModule,
+        useUser: jest.fn(() => ({
+            updateCurrentUser: jest.fn(),  // Mock the updateCurrentUser function
+            userInfo: mockUserInfo
+        })),
+        // ...
+    }
+});
+
+
+
 
 describe("Error Messages", () => {
     test("All fields are visible to the user", () => {
