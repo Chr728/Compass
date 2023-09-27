@@ -1,15 +1,17 @@
 import {useAuth} from '@/app/contexts/AuthContext';
-
+import {auth} from '../config/firebase'
 export const updateUser = async (userData: any) => {
-    const {user} = useAuth();
-    const uid = user?.uid;
+    const currentUser = auth.currentUser;
+    if(!currentUser) throw new Error('No user is logged in');
+    const uid = currentUser.uid;
+    const token =  await currentUser.getIdToken();
     const url = `http://localhost:8000/api/users/${uid}`;
-
     try {
         const response = await fetch(url, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
+                 authorization: `Bearer ${token}`,
             },
             body: JSON.stringify(userData),
         });
