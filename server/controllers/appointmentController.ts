@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Logger } from "../middlewares/logger";
 import db from "../models";
+import { appointmentValidator } from "../utils/databaseValidators";
 
 export const getAppointments = async (req: Request, res: Response) => {
   try {
@@ -35,8 +36,7 @@ export const createAppointment = async (req: Request, res: Response) => {
   try {
     const email = req.params.email;
     const { appointmentWith, reason, date, time, notes } = req.body;
-    //Will add the appointmentValidator
-    //appointmentValidator(req.body)
+    appointmentValidator(req.body);
     const createdAppointment = await db.Appointment.create({
       email,
       appointmentWith,
