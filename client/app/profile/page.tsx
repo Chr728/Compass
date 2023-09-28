@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import {useUser} from '@/app/contexts/UserContext';
@@ -7,6 +8,7 @@ import Header from '../components/Header';
 import Link from 'next/link';
 import Button from '../components/Button';
 import Menu from '../components/Menu';
+import Custom403 from '../pages/403';
 
 export default function Profile() {
   const router = useRouter();
@@ -20,6 +22,14 @@ export default function Profile() {
             setProfile(userInfo)
     }, [userInfo]);
 
+    React.useEffect(() => {
+      if (!user) 
+        router.push("/login")
+    }, [user])
+  
+    if (!user) {
+      return <div><Custom403/></div>
+    }
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col justify-center">
