@@ -5,21 +5,34 @@ import Input from '../components/Input';
 import Link from 'next/link';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
+import {useUser} from '../contexts/UserContext';
 
 export default function EditProfile() {
     const router = useRouter();
+    const {updateCurrentUser, userInfo} = useUser();
+    const {firstName, lastName, streetAddress, city, province, postalCode, phoneNumber} = userInfo;
     const formik = useFormik({
         initialValues: {
-            fname: '',
-            lname: '',
-            street:'',
-            city: '',
-            province: '',
-            postalCode: '',
-            phone: '',
+            fname: firstName,
+            lname: lastName,
+            street: streetAddress,
+            city: city,
+            province: province,
+            postalCode: postalCode,
+            phone: phoneNumber,
           },
           onSubmit: (values) => {
-            console.log(values);
+            const data = {
+                firstName: values.fname,
+                lastName: values.lname,
+                streetAddress: values.street,
+                city: values.city,
+                province: values.province,
+                postalCode: values.postalCode,
+                phoneNumber: values.phone,
+            }
+            updateCurrentUser(data);
+            router.push("/profile");
           },
           validate: (values) => {
             let errors: {
