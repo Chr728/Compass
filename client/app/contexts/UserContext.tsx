@@ -92,6 +92,8 @@ export const UserProvider:FC<UserProviderProps> = ({ children }) => {
     const updateCurrentUser = (userData: EditableUserAttributes) => {
         if(uid) {
             updateUser(userData).then((response) => {
+                const {data} = response
+                setUserInfo(data[1]);
                 console.log('User updated successfully:', response);
             }).catch((error) => {
                 console.error('Error updating user:', error);
