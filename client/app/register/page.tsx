@@ -93,7 +93,18 @@ export default function Register() {
       ){
         errors.lname = 'Names cannot contain numbers and must not begin or end with a space.';
       }
-      if(values.postalCode) {
+        if (!values.street) {
+        errors.street = 'Street Address Required';
+        }
+        if (!values.city) {
+        errors.city = 'City Required';
+        }
+        if (!values.province) {
+        errors.province = 'Province Required';
+        }
+      if (!values.postalCode){
+        errors.postalCode = 'Postal Code Required';
+      } else if(values.postalCode) {
         if (!/[A-Z][0-9][A-Z] ?[0-9][A-Z][0-9]$/i.test(values.postalCode)) {
           errors.postalCode = 'Invalid Postal Code';
         }
@@ -103,8 +114,10 @@ export default function Register() {
         } else if (!/^[0-9]{10}$/i.test(values.phone)) {
           errors.phone = 'Please enter a 10 digit number';
         }
-      
-      if (!values.birthdate) {
+      if(!values.birthdate){
+        errors.birthdate='Birthdate Required';
+      }
+      else if (!values.birthdate) {
         errors.birthdate = 'Birthdate Required';
       }
       if (!values.sex) {
@@ -420,6 +433,11 @@ export default function Register() {
                 value={formik.values.street}
                 onBlur={formik.handleBlur}
               />
+              {formik.touched.street && formik.errors.street && (
+                  <p className="text-[16px] text-red font-sans">
+                    {formik.errors.street}
+                  </p>
+              )}
             </div>
             <div className="mt-3">
               <label
@@ -438,6 +456,11 @@ export default function Register() {
                 value={formik.values.city}
                 onBlur={formik.handleBlur}
               />
+              {formik.touched.city && formik.errors.city && (
+                  <p className="text-[16px] text-red font-sans">
+                    {formik.errors.city}
+                  </p>
+              )}
             </div>
             <div className="mt-3 mb-3">
               <label
@@ -456,6 +479,11 @@ export default function Register() {
                 value={formik.values.province}
                 onBlur={formik.handleBlur}
               />
+              {formik.touched.province && formik.errors.province && (
+                  <p className="text-[16px] text-red font-sans">
+                    {formik.errors.province}
+                  </p>
+              )}
             </div>
 
             <div className="mt-3">
@@ -574,7 +602,6 @@ export default function Register() {
                   <option value="other">Other</option>
                 </select>
               </div>
-
             {formik.touched.sex && formik.errors.sex && (
               <p className="text-[16px] text-red font-sans">
                 {formik.errors.sex}
@@ -623,7 +650,15 @@ export default function Register() {
                 style={{ width: '140px' }}
                 onClick={handleNext}
                 disabled={
+                    formik.errors.street ||
+                    formik.errors.city ||
+                    formik.errors.province ||
+                    formik.errors.postalCode ||
                   formik.errors.phone ||
+                    !formik.touched.street ||
+                    !formik.touched.city ||
+                    !formik.touched.province ||
+                    !formik.touched.postalCode ||
                   !formik.touched.phone
                     ? true
                     : false
@@ -654,6 +689,9 @@ export default function Register() {
             formik.errors.confPassword ||
             formik.errors.fname ||
             formik.errors.lname ||
+            formik.errors.street ||
+            formik.errors.city ||
+            formik.errors.province ||
             formik.errors.postalCode ||
             formik.errors.phone ||
             formik.errors.birthdate ||
