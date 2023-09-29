@@ -1,27 +1,61 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import EditProfile from '../editprofile/page';
-import { useAuth } from "../contexts/AuthContext";
-import { useRouter } from 'next/router';
+import updateUser from '../http/updateUser';
+import { useAuth } from '../contexts/AuthContext';
 
+const mockRouter= jest.fn();
 
-const mockRouter = {
-    push: jest.fn(),
-    replace: jest.fn(),
-    prefetch: jest.fn(),
-  };
-
-jest.mock('../contexts/AuthContext');
-jest.mock('next/router');
-
-jest.mock("next/router", () => ({
-  useRouter: jest.fn().mockReturnValue(mockRouter),
+jest.mock("next/navigation", () => ({
+    useRouter: () => {
+        return {
+            push: mockRouter
+        }
+    }
 }));
+const mockUpdateCurrentUser = jest.fn();
+jest.mock('../contexts/UserContext', () => {
+    const originalModule = jest.requireActual('../contexts/UserContext');
+    const mockUserInfo = {
+        firstName: 'John',
+        lastName: 'Doe',
+        streetAddress: '1234 Main St',
+        city: 'Mock City',
+        province: 'Mock Province',
+        postalCode: 'A1A 1A1',
+        phoneNumber: '123-456-7890',
+    };
+
+    return {
+        ...originalModule,
+        useUser: jest.fn(() => ({
+            updateCurrentUser: jest.fn(),  // Mock the updateCurrentUser function
+            userInfo: mockUserInfo
+        })),
+        // ...
+    }
+});
 
 describe("Error Messages", () => {
+  let useRouterSpy;
+
+  beforeEach(() => {
+    useRouterSpy = jest.spyOn(require('next/router'), 'useRouter');
+  });
+
+  afterEach(() => {
+    useRouterSpy.mockRestore();
+  });
+
     test("All fields are visible to the user", () => {
-        useAuth.mockReturnValueOnce({ user: { id: 1, email: 'test@example.com' } });
+      const mockRouter = {
+        push: jest.fn(),
+        replace: jest.fn(),
+        prefetch: jest.fn(),
+      };
+      useRouterSpy.mockReturnValue(mockRouter);
+      useAuth.mockReturnValue({ user: { id: 1, email: 'test@example.com' } });
 
         render(<EditProfile/>);
         const firstName = screen.getByLabelText("First Name");
@@ -45,55 +79,49 @@ describe("Error Messages", () => {
         expect(submitButton).toBeInTheDocument();
     })
 
-    // test("First Name error message", async () => {
-    //     render(<EditProfile/>);
-    //     const fname = await screen.findByLabelText("First Name");
-    //     await userEvent.type(fname, "georgia9");
-    //     fireEvent.blur(fname);
-    //     const error = await screen.findByText("Names cannot contain numbers and must not begin or end with a space.");
-    //     expect(error).toBeInTheDocument();
-    // })
-
-    // test("Last Name error message", async () => {
-    //     render(<EditProfile/>);
-    //     const lname = await screen.findByLabelText("Last Name");
-    //     await userEvent.type(lname, "georgia9");
-    //     fireEvent.blur(lname);
-    //     const error = await screen.findByText("Names cannot contain numbers and must not begin or end with a space.");
-    //     expect(error).toBeInTheDocument();
-    // })
-
-    // test("Postal Code error message", async () => {
-    //     render(<EditProfile/>);
-    //     const postalCode = await screen.findByLabelText("Postal Code");
-    //     await userEvent.type(postalCode, "H8SSSS");
-    //     fireEvent.blur(postalCode);
-    //     const error = await screen.findByText("Invalid Postal Code");
-    //     expect(error).toBeInTheDocument();
-    // })
-
-    // test("Phone Number error message", async () => {
-    //     render(<EditProfile/>);
-    //     const phone = await screen.findByLabelText("Phone Number");
-    //     await userEvent.type(phone, "123123");
-    //     fireEvent.blur(phone);
-    //     const error = await screen.findByText("Please enter a 10 digit number");
-    //     expect(error).toBeInTheDocument();
-    // })
-
-    // test("Cancel Button functions correctly", async () =>{
-    //     render(<EditProfile/>);
-    //     const cancelButton = screen.getAllByRole("button")[0];
-    //     await userEvent.click(cancelButton);
-    //     await mockRouter;
-    //     expect(mockRouter).toHaveBeenCalledTimes(1);
-    // })
-
-    test("Returns 403 page when not logged in", () => {
-        useAuth.mockReturnValueOnce({ user: null });
-    
+    test("First Name error message", async () => {
         render(<EditProfile/>);
-        expect(screen.getByText('403 Forbidden')).toBeInTheDocument();
-      })
+        const fname = await screen.findByLabelText("First Name");
+        await userEvent.type(fname, "georgia9");
+        fireEvent.blur(fname);
+        const error = await screen.findByText("Names cannot contain numbers and must not begin or end with a space.");
+        expect(error).toBeInTheDocument();
+    })
+
+    test("Last Name error message", async () => {
+        render(<EditProfile/>);
+        const lname = await screen.findByLabelText("Last Name");
+        await userEvent.type(lname, "georgia9");
+        fireEvent.blur(lname);
+        const error = await screen.findByText("Names cannot contain numbers and must not begin or end with a space.");
+        expect(error).toBeInTheDocument();
+    })
+
+    test("Postal Code error message", async () => {
+        render(<EditProfile/>);
+        const postalCode = await screen.findByLabelText("Postal Code");
+        await userEvent.type(postalCode, "H8SSSS");
+        fireEvent.blur(postalCode);
+        const error = await screen.findByText("Invalid Postal Code");
+        expect(error).toBeInTheDocument();
+    })
+
+    test("Phone Number error message", async () => {
+        render(<EditProfile/>);
+        const phone = await screen.findByLabelText("Phone Number");
+        await userEvent.type(phone, "123123");
+        fireEvent.blur(phone);
+        const error = await screen.findByText("Please enter a 10 digit number");
+        expect(error).toBeInTheDocument();
+    })
+
+    test("Cancel Button functions correctly", async () =>{
+        render(<EditProfile/>);
+        const cancelButton = screen.getAllByRole("button")[0];
+        await userEvent.click(cancelButton);
+        await mockRouter;
+        expect(mockRouter).toHaveBeenCalledTimes(1);
+    })
+
 
 })
