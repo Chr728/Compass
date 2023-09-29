@@ -40,7 +40,14 @@ export default function Setting() {
           </div>
         </Link>
 
-        <Link href="/forgotpassword">
+        <Link
+          href={{
+            pathname: "/forgotpassword",
+            query: {
+              loggedIn: true,
+            },
+          }}
+        >
           <div className="flex items-center m-2">
             <Image
               src="/icons/vpn_key.svg"
