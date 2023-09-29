@@ -99,6 +99,7 @@ export const updateUser = async (req: Request, res: Response) => {
         uid: userId,
       },
       returning: true,
+      plain: true,
     });
     res.status(200).json({
       status: `SUCCESS`,

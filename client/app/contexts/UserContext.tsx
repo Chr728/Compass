@@ -31,7 +31,7 @@ type EditableUserAttributes = {
 }
 
 interface UserContextProps {
-   userInfo: UserAttributes | null
+   userInfo: UserAttributes,
     updateCurrentUser: (userData: EditableUserAttributes) => void;
 }
 
@@ -49,9 +49,24 @@ interface UserProviderProps {
     children? :ReactNode;
 }
 
+const initialState: UserAttributes = {
+    id: 0,
+    uid: '',
+    email: '',
+    firstName: '',
+    lastName: '',
+    streetAddress: '',
+    city: '',
+    province: '',
+    postalCode: '',
+    phoneNumber: '',
+    birthDate: new Date(),
+    sex: '',
+}
+
 export const UserProvider:FC<UserProviderProps> = ({ children }) => {
     const { user } = useAuth(); // Get the user from AuthContext
-    const [userInfo, setUserInfo] = useState<UserAttributes | null>(null);
+    const [userInfo, setUserInfo] = useState<UserAttributes>(initialState);
     const uid = user ? user.uid : null; // Access the UID if the user is authenticated
     const [loading, setLoading] = useState(true);
     useEffect(() => {
@@ -65,7 +80,6 @@ export const UserProvider:FC<UserProviderProps> = ({ children }) => {
                     console.error('Error fetching user data:', error);
                 });
             }else{
-                setUserInfo(null);
                 setLoading(false);
             }
         }
@@ -78,6 +92,8 @@ export const UserProvider:FC<UserProviderProps> = ({ children }) => {
     const updateCurrentUser = (userData: EditableUserAttributes) => {
         if(uid) {
             updateUser(userData).then((response) => {
+                const {data} = response
+                setUserInfo(data[1]);
                 console.log('User updated successfully:', response);
             }).catch((error) => {
                 console.error('Error updating user:', error);

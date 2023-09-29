@@ -3,7 +3,6 @@ import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import EditProfile from '../editprofile/page';
 import updateUser from '../http/updateUser';
-import { useAuth } from '../contexts/AuthContext';
 
 const mockRouter= jest.fn();
 
@@ -37,26 +36,11 @@ jest.mock('../contexts/UserContext', () => {
     }
 });
 
+
+
+
 describe("Error Messages", () => {
-  let useRouterSpy;
-
-  beforeEach(() => {
-    useRouterSpy = jest.spyOn(require('next/router'), 'useRouter');
-  });
-
-  afterEach(() => {
-    useRouterSpy.mockRestore();
-  });
-
     test("All fields are visible to the user", () => {
-      const mockRouter = {
-        push: jest.fn(),
-        replace: jest.fn(),
-        prefetch: jest.fn(),
-      };
-      useRouterSpy.mockReturnValue(mockRouter);
-      useAuth.mockReturnValue({ user: { id: 1, email: 'test@example.com' } });
-
         render(<EditProfile/>);
         const firstName = screen.getByLabelText("First Name");
         const lastName = screen.getByLabelText("Last Name");
