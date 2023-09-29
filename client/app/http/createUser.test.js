@@ -30,31 +30,72 @@ describe('createUser', () => {
     });
   });
 
-  it('should throw an error if the request fails', async () => {
+  it('should throw an error if the server returns an error', async () => {
     const mockUser = { name: 'John Doe', email: 'johndoe@example.com' };
+    const mockResponse = { error: 'Server error' };
     const mockFetch = jest.fn().mockResolvedValue({
       ok: false,
-      status: 500,
+      json: () => Promise.resolve(mockResponse),
     });
     global.fetch.mockImplementation(mockFetch);
 
-    async function createUser(user) {
-      try {
-        const response = await fetch('http://localhost:8000/api/users', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(user),
-        });
-        const userData = await response.json();
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return userData.data;
-      } catch (error) {
-        throw new Error('Error creating user');
-      }
-    };
+    try {
+      await createUser(mockUser);
+    } catch (error) {
+      expect(error.message).toBe('Error creating user');
+    }
+    expect(mockFetch).toHaveBeenCalledWith('http://localhost:8000/api/users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(mockUser),
+    });
+  });
+
+  it('should throw an error if the server response is not JSON', async () => {
+    const mockUser = { name: 'John Doe', email: 'johndoe@example.com' };
+    const mockResponse = 'Invalid response';
+    const mockFetch = jest.fn().mockResolvedValue({
+      ok: true,
+      text: () => Promise.resolve(mockResponse),
+    });
+    global.fetch.mockImplementation(mockFetch);
+
+    try {
+      await createUser(mockUser);
+    } catch (error) {
+      expect(error.message).toBe('Error creating user');
+    }
+    expect(mockFetch).toHaveBeenCalledWith('http://localhost:8000/api/users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(mockUser),
+    });
+  });
+
+  it('should throw an error if the server response is missing data', async () => {
+    const mockUser = { name: 'John Doe', email: 'johndoe@example.com' };
+    const mockResponse = {};
+    const mockFetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve(mockResponse),
+    });
+    global.fetch.mockImplementation(mockFetch);
+
+    try {
+      await createUser(mockUser);
+    } catch (error) {
+      expect(error.message).toBe('Invalid response');
+    }
+    expect(mockFetch).toHaveBeenCalledWith('http://localhost:8000/api/users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(mockUser),
+    });
   });
 });

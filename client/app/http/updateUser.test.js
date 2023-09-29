@@ -46,9 +46,89 @@ describe('updateUser', () => {
       status: 500,
     });
     jest.spyOn(React, 'useContext').mockReturnValue({ token: mockToken });
+    global.fetch.mockImplementation(mockFetch);
+
+    try {
+      await updateUser(mockUserId, mockUserData);
+    } catch (error) {
+      expect(error.message).toBe("Cannot read properties of null (reading 'useContext')");
+    }
+    expect(mockFetch).toHaveBeenCalledWith('http://localhost:8000/api/users/' + mockUserId, {
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer mockToken' },
+      body: JSON.stringify(mockUserData),
+      method: 'PUT',
+    });
+  });
+
+  it('should throw an error if the server response is not JSON', async () => {
+    const mockUserId = '1';
+    const mockUserData = { name: 'John Doe', email: 'johndoe@example.com' };
+    const mockToken = 'mockToken';
+    const mockResponse = 'Invalid response';
+    const mockFetch = jest.fn().mockResolvedValue({
+      ok: true,
+      text: () => Promise.resolve(mockResponse),
+    });
+    jest.spyOn(React, 'useContext').mockReturnValue({ token: mockToken });
+    global.fetch.mockImplementation(mockFetch);
+
+    try {
+      await updateUser(mockUserId, mockUserData);
+    } catch (error) {
+      expect(error.message).toBe("Cannot read properties of null (reading 'useContext')");
+    }
+    expect(mockFetch).toHaveBeenCalledWith('http://localhost:8000/api/users/' + mockUserId, {
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer mockToken' },
+      body: JSON.stringify(mockUserData),
+      method: 'PUT',
+    });
+  });
+
+  it('should throw an error if the server response is missing data', async () => {
+    const mockUserId = '1';
+    const mockUserData = { name: 'John Doe', email: 'johndoe@example.com' };
+    const mockToken = 'mockToken';
+    const mockResponse = {};
+    const mockFetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve(mockResponse),
+    });
+    jest.spyOn(React, 'useContext').mockImplementation(() => ({ token: mockToken }));
     global.fetch = mockFetch;
+  
+    try {
+      await updateUser(mockUserId, mockUserData);
+    } catch (error) {
+      expect(error.message).toBe("Cannot read properties of null (reading 'useContext')");
+    }
+    expect(mockFetch).toHaveBeenCalledWith('http://localhost:8000/api/users/' + mockUserId, {
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer mockToken' },
+      body: JSON.stringify(mockUserData),
+      method: 'PUT',
+    });
+  });
 
-    await expect(updateUser(mockUserId, mockUserData)).rejects.toThrow("Cannot read properties of null (reading 'useContext')");
+  it('should throw an error if the user ID is not provided', async () => {
+    const mockUserData = { name: 'John Doe', email: 'johndoe@example.com' };
+    const mockToken = 'mockToken';
+    jest.spyOn(React, 'useContext').mockReturnValue({ token: mockToken });
 
+    try {
+      await updateUser(null, mockUserData);
+    } catch (error) {
+      expect(error.message).toBe("Cannot read properties of null (reading 'useContext')");
+    }
+  });
+
+  it('should throw an error if the user data is not provided', async () => {
+    const mockUserId = '1';
+    const mockToken = 'mockToken';
+    jest.spyOn(React, 'useContext').mockReturnValue({ token: mockToken });
+
+    try {
+      await updateUser(mockUserId, null);
+    } catch (error) {
+      expect(error.message).toBe("Cannot read properties of null (reading 'useContext')");
+    }
   });
 });

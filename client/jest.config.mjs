@@ -15,6 +15,7 @@ const config = {
   testPathIgnorePatterns: [
       "client/app/contexts",
       "client/.next",
+      ".next/"
       // "/node_modules/",
       // "/.next/",
     ],
@@ -33,6 +34,10 @@ const config = {
       '!**/firebase.{js,jsx,ts,tsx}',
       '!**/.next/types/app/layout.{js,jsx,ts,tsx}',
       '!**/.next/types/app/login/page.{js,jsx,ts,tsx}',
+      '!**/.next/types/app/editprofile/page.{js,jsx,ts,tsx}',
+      '!**/.next/types/app/profile/page.{js,jsx,ts,tsx}',
+      '!**/.next/types/app/register/page.{js,jsx,ts,tsx}',
+      '!**/.next/types/app/settings/page.{js,jsx,ts,tsx}',
       '!**/app/head.{js,jsx,ts,tsx}',
       '!**/app/layout.{js,jsx,ts,tsx}',
       '!**/app/page.{js,jsx,ts,tsx}',
