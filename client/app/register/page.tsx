@@ -423,6 +423,7 @@ export default function Register() {
               >
                 Street Address
               </label>
+              <span className="text-red text-[20px]"> *</span>
               <br />
               <Input
                 name="street"
@@ -446,6 +447,7 @@ export default function Register() {
               >
                 City
               </label>
+              <span className="text-red text-[20px]"> *</span>
               <br />
               <Input
                 name="city"
@@ -469,6 +471,7 @@ export default function Register() {
               >
                 Province
               </label>
+              <span className="text-red text-[20px]"> *</span>
               <br />
               <Input
                 name="province"
@@ -493,6 +496,7 @@ export default function Register() {
                 >
                   Postal Code
                 </label>
+                <span className="text-red text-[20px]"> *</span>
                 <br />
                 <Input
                   name="postalCode"
