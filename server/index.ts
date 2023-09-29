@@ -16,7 +16,7 @@ app.use(cors());
 app.use(Morgan);
 
 app.use('/api/users', userRoutes);
-app.use('/api/weight', weightJournalRoutes);
+app.use('/api/journals/weight', weightJournalRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
