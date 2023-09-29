@@ -72,6 +72,9 @@ describe("Settings Page", () => {
   test("link redirects to login page", async () => {
     render(<Setting />);
     const linkElement = screen.getAllByRole("link")[1];
-    expect(linkElement).toHaveAttribute("href", "/forgotpassword");
+    expect(linkElement).toHaveAttribute(
+      "href",
+      "/forgotpassword?loggedIn=true"
+    );
   });
 });

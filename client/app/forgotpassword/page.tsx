@@ -5,10 +5,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { useFormik } from "formik";
 import { useState } from "react";
-import { auth } from "../config/firebase"
+import { auth } from "../config/firebase";
 import { sendPasswordResetEmail } from "firebase/auth";
+import { useSearchParams } from "next/navigation";
 
 export default function ForgotPassword() {
+  const searchParams = useSearchParams();
+
   let errors: {
     email?: string;
   } = {};
@@ -20,17 +23,16 @@ export default function ForgotPassword() {
     },
     onSubmit: async (values) => {
       try {
-        if(values.email) {
-          sendPasswordResetEmail(auth, values.email)
-            .catch((error) => {
-              console.log(error.code);
-              console.log(error.message);
-              if(error.code == "auth/user-not-found") {
-                errors.email = "This email is not on record";
-              }
-            });
-            setLoggedIn(false);
-        }        
+        if (values.email) {
+          sendPasswordResetEmail(auth, values.email).catch((error) => {
+            console.log(error.code);
+            console.log(error.message);
+            if (error.code == "auth/user-not-found") {
+              errors.email = "This email is not on record";
+            }
+          });
+          setLoggedIn(false);
+        }
       } catch (error) {
         console.error("Login failed:", error);
       }
@@ -53,7 +55,9 @@ export default function ForgotPassword() {
     },
   });
 
-  const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const [loggedIn, setLoggedIn] = useState<boolean>(
+    searchParams.get("loggedIn") === "true"
+  );
 
   const handleVisibility = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -96,11 +100,6 @@ export default function ForgotPassword() {
           <p className="text-darkgrey text-[16px] font-sans leading-[22px]">
             Enter your email for a password reset link.
           </p>
-          {loggedIn ? null : (
-            <p className="text-blue font-sans text-[16px] leading-[22px]">
-              <Link href="/FindEmail"> Forgot Email ?</Link>
-            </p>
-          )}
         </div>
 
         <div>

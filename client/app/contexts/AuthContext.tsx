@@ -88,7 +88,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       createUser(data).then((res) => {
         if(res !== null) {
             setLoading(false)
-          router.push('/');
+          router.push('/tpage');
         }
       }).catch((error) => {
         const errorCode = error.code;

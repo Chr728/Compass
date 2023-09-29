@@ -4,6 +4,13 @@ import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import ForgotPassword from "../forgotpassword/page";
 
+// Mock useSearchParams directly in this test file
+jest.mock("next/navigation", () => ({
+  useSearchParams: () => ({
+    get: jest.fn(),
+  }),
+}));
+
 // Test forgot password page
 describe("Forgot password page messages", () => {
   test("render all content to the screen", () => {
@@ -12,7 +19,6 @@ describe("Forgot password page messages", () => {
     const descriptionHeader = screen.getByText(
       /Enter your email for a password reset link./i
     );
-    const forgetEmailLink = screen.getByText(/Forgot Email ?/i);
     const emailLabel = screen.findAllByText(/Email/i);
     const buttonconst = screen.getByRole("button");
     const backToLoginLink = screen.getByText(/Back to Sign in/i);
@@ -48,7 +54,7 @@ describe("Forgot password page messages", () => {
 
   test("link redirects to login page", async () => {
     render(<ForgotPassword />);
-    const linkElement = screen.getAllByRole("link")[1];
+    const linkElement = screen.getAllByRole("link")[0];
     expect(linkElement).toHaveAttribute("href", "/login");
   });
 });
@@ -57,8 +63,8 @@ describe("Forgot password page messages", () => {
 describe("Change password page messages", () => {
   beforeEach(() => {
     act(() => {
-      const setLoggedIn = jest.fn();
-      jest.spyOn(React, "useState").mockReturnValue([true, setLoggedIn]);
+      const setPage = jest.fn();
+      jest.spyOn(React, "useState").mockReturnValue([true, setPage]);
     });
   });
 

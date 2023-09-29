@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import {useUser} from '@/app/contexts/UserContext';
+import { useUser } from '@/app/contexts/UserContext';
 import { useRouter } from 'next/navigation';
 import Header from '../components/Header';
 import Link from 'next/link';
@@ -11,24 +11,30 @@ import Menu from '../components/Menu';
 export default function Profile() {
   const router = useRouter();
   const { user } = useAuth();
-  const { userInfo } = useUser();
+  const { userInfo} = useUser(); 
 
-  const [profile, setProfile] = useState<any>(null
-  );
-
-    useEffect(() => {
-            setProfile(userInfo)
-    }, [userInfo]);
-
+  const [profile, setProfile] = useState<any>(null);
+  
+  useEffect(() => {
+    if (userInfo) {
+      setProfile(userInfo);
+    } else  {
+      // Handle the error here by redirecting to the home page
+      alert('User  not found.');
+      router.push('/');
+    }
+  }, [userInfo, router]);
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col justify-center">
       <button onClick={() => router.back()}>
         <Header headerText="View Profile"></Header>
       </button>
-      {profile && <span
-          className="rounded-2xl  mt-6 mb-10 mr-28 bg-white flex flex-col m-auto w-full md:max-w-[800px] md:min-h-[600px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]">
-        <div className="mt-3 relative">
+      {profile && (
+        <span
+          className="rounded-2xl  mt-6 mb-10 mr-28 bg-white flex flex-col m-auto w-full md:max-w-[800px] md:min-h-[600px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
+        >
+          <div className="mt-3 relative">
           <div>
             <p
                 className="text-lg ml-0 font-sans text-darkgrey  font-bold text-[16px]"
@@ -176,7 +182,8 @@ export default function Profile() {
             />
           </Link>
         </div>
-      </span>}
+        </span>
+      )}
       <div className="mt-4">
         <div className={`xl:max-w-[1280px] w-full  menu-container`}>
           <Menu />
