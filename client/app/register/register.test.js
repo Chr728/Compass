@@ -107,6 +107,10 @@ describe("All elements displayed on appropriate pages", () => {
         const postalCode = screen.queryByLabelText("Postal Code");
         const phone = screen.queryByLabelText("Phone Number");
         const secondNextButton = screen.getAllByRole("button")[1];
+        await userEvent.type(street, "123 Street");
+        await userEvent.type(city, "City");
+        await userEvent.type(province, "Province");
+        await userEvent.type(postalCode, "A1A1A1");
         await userEvent.type(phone, "1231231234");
         await userEvent.click(secondNextButton);
 
@@ -215,7 +219,15 @@ describe("Error validation", () => {
         await userEvent.type(lastName, "Georgia");
         await userEvent.click(firstNextButton);
         const secondNextButton = screen.getAllByRole('button')[1];
-        const phone = screen.queryByLabelText("Phone Number");
+        const street = screen.getByLabelText("Street Address");
+        const city = screen.getByLabelText("City");
+        const province = screen.getByLabelText("Province");
+        const postalCode = screen.getByLabelText("Postal Code");
+        const phone = screen.getByLabelText("Phone Number");
+        await userEvent.type(street, "123 Street");
+        await userEvent.type(city, "City");
+        await userEvent.type(province, "Province");
+        await userEvent.type(postalCode, "A1A1A1");
         await userEvent.type(phone, "1231231234");
         await userEvent.click(secondNextButton);
         const birthdate = screen.getByLabelText("Birthdate");
@@ -278,7 +290,15 @@ describe("Error validation", () => {
         await userEvent.click(firstNextButton);
 
         const secondNextButton = screen.getAllByRole('button')[1];
+        const street = screen.getByLabelText("Street Address");
+        const city = screen.getByLabelText("City");
+        const province = screen.getByLabelText("Province");
+        const postalCode = screen.getByLabelText("Postal Code");
         const phone = screen.getByLabelText("Phone Number");
+        await userEvent.type(street, "123 Street");
+        await userEvent.type(city, "City");
+        await userEvent.type(province, "Province");
+        await userEvent.type(postalCode, "A1A1A1");
         await userEvent.type(phone, "1231231234");
         await userEvent.click(secondNextButton);
         const previousButton = screen.getAllByRole('button')[0];
@@ -450,7 +470,15 @@ describe("Error validation", () => {
         await userEvent.click(firstNextButton);
 
         const secondNextButton = screen.getAllByRole('button')[1];
+        const street = screen.getByLabelText("Street Address");
+        const city = screen.getByLabelText("City");
+        const province = screen.getByLabelText("Province");
+        const postalCode = screen.getByLabelText("Postal Code");
         const phone = screen.getByLabelText("Phone Number");
+        await userEvent.type(street, "123 Street");
+        await userEvent.type(city, "City");
+        await userEvent.type(province, "Province");
+        await userEvent.type(postalCode, "A1A1A1");
         await userEvent.type(phone, "1231231234");
         await userEvent.click(secondNextButton);
         const birthdate = screen.getByLabelText("Birthdate");
@@ -475,7 +503,15 @@ describe("Error validation", () => {
         await userEvent.click(firstNextButton);
 
         const secondNextButton = screen.getAllByRole('button')[1];
+        const street = screen.getByLabelText("Street Address");
+        const city = screen.getByLabelText("City");
+        const province = screen.getByLabelText("Province");
+        const postalCode = screen.getByLabelText("Postal Code");
         const phone = screen.getByLabelText("Phone Number");
+        await userEvent.type(street, "123 Street");
+        await userEvent.type(city, "City");
+        await userEvent.type(province, "Province");
+        await userEvent.type(postalCode, "A1A1A1");
         await userEvent.type(phone, "1231231234");
         await userEvent.click(secondNextButton);
         const sex = screen.getByLabelText("Sex");

@@ -5,52 +5,80 @@ import Input from '../components/Input';
 import Link from 'next/link';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
+import {useUser} from '../contexts/UserContext';
 
 export default function EditProfile() {
     const router = useRouter();
+    const {updateCurrentUser, userInfo} = useUser();
+    const {firstName, lastName, streetAddress, city, province, postalCode, phoneNumber} = userInfo;
     const formik = useFormik({
         initialValues: {
-            fname: '',
-            lname: '',
-            street:'',
-            city: '',
-            province: '',
-            postalCode: '',
-            phone: '',
+            fname: firstName,
+            lname: lastName,
+            street: streetAddress,
+            city: city,
+            province: province,
+            postalCode: postalCode,
+            phone: phoneNumber,
           },
           onSubmit: (values) => {
-            console.log(values);
+            const data = {
+                firstName: values.fname,
+                lastName: values.lname,
+                streetAddress: values.street,
+                city: values.city,
+                province: values.province,
+                postalCode: values.postalCode,
+                phoneNumber: values.phone,
+            }
+            updateCurrentUser(data);
+            router.push("/profile");
           },
           validate: (values) => {
             let errors: {
                 fname?:string;
                 lname?:string;
+                street?: string;
+                city?: string;
+                province?: string;
                 phone?: string;
                 postalCode?: string;
               } = {};
-
-            if(values.fname){
-              if(!/^[^0-9 ][^\d]*[^0-9 ]$/i.test(values.fname)){
-                errors.fname="Names cannot contain numbers and must not begin or end with a space."
+              if (!values.fname) {
+                  errors.fname = 'First Name Required';
+              } else if (
+                  !/^[^0-9 ][^\d]*[^0-9 ]$/i.test(values.fname)
+              ){
+                  errors.fname = 'Names cannot contain numbers and must not begin or end with a space.';
               }
-            }
-            if(values.lname){
-              if(!/^[^0-9 ][^\d]*[^0-9 ]$/i.test(values.lname)){
-                errors.lname="Names cannot contain numbers and must not begin or end with a space."
+              if (!values.lname) {
+                  errors.lname = 'Last Name Required';
+              } else if(
+                  !/^[^0-9 ][^\d]*[^0-9 ]$/i.test(values.lname)
+              ){
+                  errors.lname = 'Names cannot contain numbers and must not begin or end with a space.';
               }
-            }
-            if(values.postalCode) {
-                if (!/[A-Z][0-9][A-Z] ?[0-9][A-Z][0-9]$/i.test(values.postalCode)) {
-                  errors.postalCode = 'Invalid Postal Code';
-                }
+              if (!values.street) {
+                  errors.street = 'Street Address Required';
               }
-
-            if(values.phone){
-                if (!/^[0-9]{10}$/i.test(values.phone)) {
+              if (!values.city) {
+                  errors.city = 'City Required';
+              }
+              if (!values.province) {
+                  errors.province = 'Province Required';
+              }
+              if (!values.postalCode){
+                  errors.postalCode = 'Postal Code Required';
+              } else if(values.postalCode) {
+                  if (!/[A-Z][0-9][A-Z] ?[0-9][A-Z][0-9]$/i.test(values.postalCode)) {
+                      errors.postalCode = 'Invalid Postal Code';
+                  }
+              }
+              if(!values.phone){
+                  errors.phone='Phone Number Required';
+              } else if (!/^[0-9]{10}$/i.test(values.phone)) {
                   errors.phone = 'Please enter a 10 digit number';
-                }
-            }
-
+              }
             return errors;
         },
     });
@@ -139,6 +167,11 @@ export default function EditProfile() {
                 value={formik.values.street}
                 onBlur={formik.handleBlur}
               />
+                {formik.touched.street && formik.errors.street && (
+                    <p className="text-[16px] text-red font-sans">
+                        {formik.errors.street}
+                    </p>
+                )}
             </div>
 
             <div className="mt-3">
@@ -158,6 +191,11 @@ export default function EditProfile() {
                 value={formik.values.city}
                 onBlur={formik.handleBlur}
               />
+                {formik.touched.city && formik.errors.city && (
+                    <p className="text-[16px] text-red font-sans">
+                        {formik.errors.fname}
+                    </p>
+                )}
             </div>
 
             <div className="mt-3">
@@ -177,6 +215,11 @@ export default function EditProfile() {
                 value={formik.values.province}
                 onBlur={formik.handleBlur}
               />
+                {formik.touched.province && formik.errors.province && (
+                    <p className="text-[16px] text-red font-sans">
+                        {formik.errors.province}
+                    </p>
+                )}
             </div>
 
             <div className="mt-3">
@@ -238,6 +281,7 @@ export default function EditProfile() {
               <Button
                 type="submit"
                 text="Submit"
+                disabled={!(formik.isValid && formik.dirty)}
                 style={{ width: '140px' }}
               />
             </div>
