@@ -4,7 +4,7 @@ import { IntegerDataType, Model } from "sequelize";
 
 interface MoodJournalAttributes {
   id: number;
-  email: string;
+  uid: string;
   howAreYou: string;
   stressSignals: string;
   date: Date;
@@ -19,15 +19,15 @@ module.exports = (sequelize: any, DataTypes: any) => {
      * The `models/index` file will call this method automatically.
      */
     id!: number;
-    email!: string;
+    uid!: string;
     howAreYou!: string;
     stressSignals!: string;
     date!: Date;
     notes!: string;
     static associate(models: any) {
       MoodJournal.belongsTo(models.User,{
-        foreignKey: "email",
-        targetKey: 'email',}
+        foreignKey: "uid",
+        targetKey: 'uid',}
       )
       // define association here
     }
@@ -40,7 +40,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         autoIncrement: true,
         primaryKey: true,
       },
-      email: {
+      uid: {
         type: DataTypes.STRING,
         allowNull: false,
       },

@@ -5,7 +5,7 @@ const {
 
 type MedicationAttributes = {
   id: number;
-  email: string;
+  uid: string;
   medicationName: string;
   dateStarted: Date;
   time: Date;
@@ -29,7 +29,7 @@ module.exports = (sequelize:any, DataTypes:any) => {
      * The `models/index` file will call this method automatically.
      */
     id!: number;
-    email!: string;
+    uid!: string;
     medicationName!: string;
     dateStarted!: Date;
     time!: Date;
@@ -42,8 +42,8 @@ module.exports = (sequelize:any, DataTypes:any) => {
 
     static associate(models:any) {
       Medication.belongsTo(models.User,{
-        foreignKey: "email",
-        targetKey: 'email',}
+        foreignKey: "uid",
+        targetKey: 'uid',}
       )
       // define association here
     }
@@ -54,7 +54,7 @@ module.exports = (sequelize:any, DataTypes:any) => {
       autoIncrement: true,
       primaryKey: true
     },
-    email: {
+    uid: {
       type: DataTypes.STRING,
       allowNull: false
     },
