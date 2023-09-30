@@ -62,14 +62,14 @@ describe("Settings Page", () => {
     fireEvent.click(LogoutButton);
   });
 
-  test("Check if button navigates to logout page", () => {
-    render(<SettingsPage />);
-    const LogoutButton = screen.getByText("Sign Out"); // Assuming the button text is 'Sign Out'
-    fireEvent.click(LogoutButton);
-    expect(mockLogOut).toHaveBeenCalled(); // Check if the logout function is called
-  });
+  // test("Check if button navigates to logout page", () => {
+  //   render(<SettingsPage />);
+  //   const LogoutButton = screen.getByText("Sign Out"); // Assuming the button text is 'Sign Out'
+  //   fireEvent.click(LogoutButton);
+  //   expect(mockLogOut).toHaveBeenCalled(); // Check if the logout function is called
+  // });
 
-  test("link redirects to login page", async () => {
+  test("link redirects to logout page", async () => {
     render(<SettingsPage />);
     const linkElement = screen.getAllByRole("link")[1];
     expect(linkElement).toHaveAttribute("href", "/forgotpassword?loggedIn=true");

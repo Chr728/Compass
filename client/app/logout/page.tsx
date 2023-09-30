@@ -2,12 +2,24 @@
 import Link from 'next/link';
 import Button from '../components/Button';
 import { useAuth } from "../contexts/AuthContext";
+import { useEffect } from 'react';
 
 
 // Logging out the user
 export default function Logout() {
   const { logout, user } = useAuth();
-  logout();
+  
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    handleLogout();
+  }, []);
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
