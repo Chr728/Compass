@@ -4,11 +4,11 @@ import { IntegerDataType, Model } from "sequelize";
 
 interface NotificationPreferenceAttributes {
   id: number;
-  email: string;
-  activityreminders: boolean;
-  medicationreminders: boolean;
-  appointmentreminders: boolean;
-  foodintakereminders: boolean;
+  uid: string;
+  activityReminders: boolean;
+  medicationReminders: boolean;
+  appointmentReminders: boolean;
+  foodIntakeReminders: boolean;
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
@@ -19,16 +19,16 @@ module.exports = (sequelize: any, DataTypes: any) => {
      * The `models/index` file will call this method automatically.
      */
     id!: number;
-    email!: string;
-    activityreminders!: boolean;
-    medicationreminders!: boolean;
-    appointmentreminders!: boolean;
-    foodintakereminders!: boolean;
+    uid!: string;
+    activityReminders!: boolean;
+    medicationReminders!: boolean;
+    appointmentReminders!: boolean;
+    foodIntakeReminders!: boolean;
     static associate(models: any) {
       // define association here
       NotificationPreference.belongsTo(models.User, {
-        foreignKey: "email",
-        targetKey: "email",
+        foreignKey: "uid",
+        targetKey: "uid",
       });
     }
   }
@@ -40,26 +40,26 @@ module.exports = (sequelize: any, DataTypes: any) => {
         autoIncrement: true,
         primaryKey: true,
       },
-      email: {
+      uid: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      activityreminders: {
+      activityReminders: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: true,
       },
-      appointmentreminders: {
+      appointmentReminders: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: true,
       },
-      medicationreminders: {
+      medicationReminders: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: true,
       },
-      foodintakereminders: {
+      foodIntakeReminders: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: true,

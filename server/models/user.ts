@@ -42,53 +42,53 @@ module.exports = (sequelize: any, DataTypes: any) => {
     static associate(models: any) {
       // define association here
       User.hasMany(models.GlucoseMeasurement, {
-        foreignKey: "email",
-        sourceKey: "email",
+        foreignKey: "uid",
+        sourceKey: "uid",
       });
 
       User.hasMany(models.InsulinDosage, {
-        foreignKey: "email",
-        sourceKey: "email",
+        foreignKey: "uid",
+        sourceKey: "uid",
       });
 
       User.hasMany(models.FoodIntakeJournal, {
-        foreignKey: "email",
-        sourceKey: "email",
+        foreignKey: "uid",
+        sourceKey: "uid",
       });
 
       User.hasMany(models.ActivityJournal, {
-        foreignKey: "email",
-        sourceKey: "email",
+        foreignKey: "uid",
+        sourceKey: "uid",
       });
 
       User.hasMany(models.MoodJournal, {
-        foreignKey: "email",
-        sourceKey: "email",
+        foreignKey: "uid",
+        sourceKey: "uid",
       });
 
       User.hasMany(models.WeightJournal, {
-        foreignKey: "email",
-        sourceKey: "email",
+        foreignKey: "uid",
+        sourceKey: "uid",
       });
 
       User.hasMany(models.Appointment, {
-        foreignKey: "email",
-        sourceKey: "email",
+        foreignKey: "uid",
+        sourceKey: "uid",
       });
 
       User.hasMany(models.Medication, {
-        foreignKey: "email",
-        sourceKey: "email",
+        foreignKey: "uid",
+        sourceKey: "uid",
       });
 
       User.hasMany(models.SpeedDial, {
-        foreignKey: "email",
-        sourceKey: "email",
+        foreignKey: "uid",
+        sourceKey: "uid",
       });
 
       User.hasOne(models.NotificationPreference, {
-        foreignKey: "email",
-        sourceKey: "email",
+        foreignKey: "uid",
+        sourceKey: "uid",
       });
     }
   }
@@ -119,19 +119,19 @@ module.exports = (sequelize: any, DataTypes: any) => {
       },
       streetAddress: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       city: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       province: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       postalCode: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       phoneNumber: {
         type: DataTypes.STRING,

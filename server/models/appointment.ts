@@ -5,7 +5,7 @@ import {
 
 type AppointmentAttributes = {
   id: number;
-  email: string;
+  uid: string;
   appointmentWith: string;
   reason: string;
   date: Date;
@@ -26,7 +26,7 @@ module.exports = (sequelize:any, DataTypes:any) => {
      * The `models/index` file will call this method automatically.
      */
     id!: number;
-    email!: string;
+    uid!: string;
     appointmentWith!: string;
     reason!: string;
     date!: Date;
@@ -35,8 +35,8 @@ module.exports = (sequelize:any, DataTypes:any) => {
 
     static associate(models:any) {
       Appointment.belongsTo(models.User,{
-        foreignKey: "email",
-        targetKey: 'email',}
+        foreignKey: "uid",
+        targetKey: 'uid',}
       )
       // define association here
     }
@@ -48,7 +48,7 @@ module.exports = (sequelize:any, DataTypes:any) => {
       autoIncrement: true,
       primaryKey: true
     },
-    email: {
+    uid: {
       type: DataTypes.STRING,
       allowNull: false
     },
@@ -70,7 +70,7 @@ module.exports = (sequelize:any, DataTypes:any) => {
     },
     notes: {
       type: DataTypes.TEXT,
-      allowNull: false,
+      allowNull: true,
     }
   },{
     sequelize,
