@@ -2,9 +2,84 @@ import { Request, Response } from 'express';
 import { Logger } from '../middlewares/logger';
 import db from '../models';
 
-export const getWeightJournals = async (req: Request, res: Response) => {};
+export const getWeightJournals = async (req: Request, res: Response) => {
+  try {
+    const user = await db.User.findOne({
+      where: {
+        uid: req.params.id,
+      },
+    });
 
-export const getWeightJournal = async (req: Request, res: Response) => {};
+    if (!user) {
+      return res.status(404).json({
+        status: 'NOT_FOUND',
+        message: 'User not found',
+      });
+    }
+
+    const weightJournals = await db.WeightJournal.findAll({
+      where: {
+        uid: user.uid,
+      },
+    });
+
+    return res.status(200).json({
+      status: 'SUCCESS',
+      data: weightJournals,
+    });
+  } catch (error) {
+    Logger.error(`Error occurred while fetching weight journals: ${error}`);
+    return res.status(400).json({
+      status: 'ERROR',
+      message: `Error fetching weight journals: ${error}`,
+    });
+  }
+};
+
+export const getWeightJournal = async (req: Request, res: Response) => {
+  try {
+    const user = await db.User.findOne({
+      where: {
+        uid: req.params.id,
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        status: 'NOT_FOUND',
+        message: 'User not found',
+      });
+    }
+
+    const weightJournalId = req.params.weightJournalId;
+    const weightJournal = await db.WeightJournal.findOne({
+      where: {
+        id: weightJournalId,
+        uid: user.uid,
+      },
+    });
+
+    if (!weightJournal) {
+      return res.status(404).json({
+        status: 'NOT_FOUND',
+        message: 'Weight journal entry not found',
+      });
+    }
+
+    return res.status(200).json({
+      status: 'SUCCESS',
+      data: weightJournal,
+    });
+  } catch (error) {
+    Logger.error(
+      `Error occurred while fetching weight journal entry: ${error}`
+    );
+    return res.status(400).json({
+      status: 'ERROR',
+      message: `Error fetching weight journal entry: ${error}`,
+    });
+  }
+};
 
 export const createWeightJournal = async (req: Request, res: Response) => {
   try {

@@ -9,12 +9,11 @@ import {
 
 const router = Router();
 
-router.route('/').get(getWeightJournals);
-
-router.route('/:id').get(getWeightJournal).post(createWeightJournal);
+router.route('/:id').get(getWeightJournals).post(createWeightJournal);
 
 router
   .route('/:id/:weightJournalId')
+  .get(getWeightJournal)
   .put(updateWeightJournal)
   .delete(deleteWeightJournal);
 
