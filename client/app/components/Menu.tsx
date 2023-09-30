@@ -37,7 +37,7 @@ const Navbar = () => {
             <MdOutlineHome className="inline-block text-lg" />
             <span className="home-text">
               {' '}
-              <Link href="/" className="hover:text-blue-200">
+              <Link href="/tpage" className="hover:text-blue-200">
                 Home
               </Link>
             </span>
