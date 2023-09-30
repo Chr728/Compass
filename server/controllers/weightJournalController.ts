@@ -43,6 +43,102 @@ export const createWeightJournal = async (req: Request, res: Response) => {
   }
 };
 
-export const updateWeightJournal = async (req: Request, res: Response) => {};
+export const updateWeightJournal = async (req: Request, res: Response) => {
+  try {
+    const { date, time, weight, height, unit, notes } = req.body;
 
-export const deleteWeightJournal = async (req: Request, res: Response) => {};
+    const user = await db.User.findOne({
+      where: {
+        uid: req.params.id,
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        status: 'NOT_FOUND',
+        message: 'User not found',
+      });
+    }
+
+    const weightJournalId = req.params.weightJournalId;
+    const existingWeightJournal = await db.WeightJournal.findOne({
+      where: {
+        id: weightJournalId,
+        uid: user.uid,
+      },
+    });
+
+    if (!existingWeightJournal) {
+      return res.status(404).json({
+        status: 'NOT_FOUND',
+        message: 'Weight journal entry not found',
+      });
+    }
+
+    await existingWeightJournal.update({
+      date,
+      time,
+      weight,
+      height,
+      unit,
+      notes,
+    });
+
+    return res.status(200).json({
+      status: 'SUCCESS',
+      message: 'Weight journal entry updated successfully',
+      data: existingWeightJournal,
+    });
+  } catch (error) {
+    Logger.error(`Error occurred while updating weight entry: ${error}`);
+    return res.status(400).json({
+      status: 'ERROR',
+      message: `Error updating weight entry: ${error}`,
+    });
+  }
+};
+
+export const deleteWeightJournal = async (req: Request, res: Response) => {
+  try {
+    const user = await db.User.findOne({
+      where: {
+        uid: req.params.id,
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        status: 'NOT_FOUND',
+        message: 'User not found',
+      });
+    }
+
+    const weightJournalId = req.params.weightJournalId;
+    const existingWeightJournal = await db.WeightJournal.findOne({
+      where: {
+        id: weightJournalId,
+        uid: user.uid,
+      },
+    });
+
+    if (!existingWeightJournal) {
+      return res.status(404).json({
+        status: 'NOT_FOUND',
+        message: 'Weight journal entry not found',
+      });
+    }
+
+    await existingWeightJournal.destroy();
+
+    return res.status(200).json({
+      status: 'SUCCESS',
+      message: 'Weight journal entry deleted successfully',
+    });
+  } catch (error) {
+    Logger.error(`Error occurred while deleting weight entry: ${error}`);
+    return res.status(400).json({
+      status: 'ERROR',
+      message: `Error deleting weight entry: ${error}`,
+    });
+  }
+};

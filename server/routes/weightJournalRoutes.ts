@@ -11,10 +11,10 @@ const router = Router();
 
 router.route('/').get(getWeightJournals);
 
+router.route('/:id').get(getWeightJournal).post(createWeightJournal);
+
 router
-  .route('/:id')
-  .get(getWeightJournal)
-  .post(createWeightJournal)
+  .route('/:id/:weightJournalId')
   .put(updateWeightJournal)
   .delete(deleteWeightJournal);
 
