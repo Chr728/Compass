@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { useRouter } from "next/navigation";
-import Notification from "./page";
+import NotificationPage from "./notificationPage";
 import "@testing-library/jest-dom";
 
 //Mock useRouter from next/navigation
@@ -22,7 +22,7 @@ beforeAll(() => {
 describe("Notification Settings Page", () => {
   //Test to check if page is rendered correctly with proper text and button
   test("Renders correct content and button", () => {
-    render(<Notification></Notification>);
+    render(<NotificationPage />);
     const PushNotificationsHeader =
       screen.getAllByText(/Push Notifications/i)[0];
     const ActivityReminders = screen.getByText(/Activity Reminders/i);
@@ -47,7 +47,7 @@ describe("Notification Settings Page", () => {
   });
 
   test("Check if switch button works", () => {
-    render(<Notification></Notification>);
+    render(<NotificationPage />);
     const toggleButtonActvity = screen.getByLabelText("ActvitySwitch");
     const toggleButtonMedication = screen.getByLabelText("MedicationSwitch");
     const toggleButtonAppointment = screen.getByLabelText("AppointmentSwitch");

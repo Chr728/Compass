@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import '@testing-library/jest-dom';
-import Profile from '../profile/page';
+import ProfilePage from './profilePage';
 import { useRouter } from 'next/navigation';
 import {useUser} from '../contexts/UserContext';
 import {UserProvider} from '../contexts/UserContext';
@@ -64,7 +64,7 @@ jest.mock('../contexts/UserContext', () => {
                 sex: 'Male',
             },
         });
-        render(<Profile/>);
+        render(<ProfilePage/>);
         expect(screen.getByText("First Name :")).toBeInTheDocument();
         expect(screen.getByText("John")).toBeInTheDocument();
 
