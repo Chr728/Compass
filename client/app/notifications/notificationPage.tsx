@@ -57,7 +57,7 @@ export default function NotificationPage() {
             onChange={handleActivityRemindersChange}
             inputProps={{ "aria-label": "ActvitySwitch" }}
           />
-          <span className="text-gray-600 text-base not-italic font-medium font-IBM Plex Sans text-lg ">
+          <span className="text-darkgrey text-base not-italic font-medium font-IBM Plex Sans text-lg ">
             Activity Reminders
           </span>
         </div>
@@ -67,7 +67,7 @@ export default function NotificationPage() {
             onChange={handleMedicationRemindersChange}
             inputProps={{ "aria-label": "MedicationSwitch" }}
           />
-          <span className="text-gray-600 text-base not-italic font-medium font-IBM Plex Sans text-lg ">
+          <span className="text-darkgrey text-base not-italic font-medium font-IBM Plex Sans text-lg ">
             Medication Reminders
           </span>
         </div>
@@ -77,7 +77,7 @@ export default function NotificationPage() {
             onChange={handleAppointmentRemindersChange}
             inputProps={{ "aria-label": "AppointmentSwitch" }}
           />
-          <span className="text-gray-600 text-base not-italic font-medium font-IBM Plex Sans text-lg ">
+          <span className="text-darkgrey text-base not-italic font-medium font-IBM Plex Sans text-lg ">
             Appointment Reminders
           </span>
         </div>
@@ -87,7 +87,7 @@ export default function NotificationPage() {
             onChange={handleFoodIntakeRemindersChange}
             inputProps={{ "aria-label": "FoodIntakeSwitch" }}
           />
-          <span className="text-gray-600 text-base not-italic font-medium font-IBM Plex Sans text-lg ">
+          <span className="text-darkgrey text-base not-italic font-medium font-IBM Plex Sans text-lg ">
             Food Intake Reminders
           </span>
         </div>

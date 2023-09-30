@@ -103,16 +103,17 @@ export default function SettingsPage() {
             </span>
           </div>
         </Link>
-        <div className="text-center mt-[100px] ">
-          <RedButton
-            type="button"
-            text="Sign Out"
-            style={{
-              width: "50%",
-            }}
-            onClick={logout}
-          ></RedButton>
-        </div>
+        <Link href="/logout">
+          <div className="text-center mt-[100px] ">
+            <RedButton
+              type="button"
+              text="Sign Out"
+              style={{
+                width: "50%",
+              }}
+            ></RedButton>
+          </div>
+        </Link>
       </div>
 
       <div className="md:hidden">

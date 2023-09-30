@@ -7,7 +7,7 @@ import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
 import {useUser} from '../contexts/UserContext';
 
-export default function EditProfilePage() {
+export default function EditProfile() {
     const router = useRouter();
     const {updateCurrentUser, userInfo} = useUser();
     const {firstName, lastName, streetAddress, city, province, postalCode, phoneNumber} = userInfo;

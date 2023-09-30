@@ -1,9 +1,14 @@
 'use client';
 import Link from 'next/link';
 import Button from '../components/Button';
+import { useAuth } from "../contexts/AuthContext";
+
 
 // Logging out the user
 export default function Logout() {
+  const { logout, user } = useAuth();
+  logout();
+
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
       <div className="rounded-3xl bg-white flex flex-col m-auto w-full md:max-w-[800px] md:h-[600px] p-2 ">
