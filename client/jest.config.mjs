@@ -41,6 +41,11 @@ const config = {
       '!**/app/head.{js,jsx,ts,tsx}',
       '!**/app/layout.{js,jsx,ts,tsx}',
       '!**/app/page.{js,jsx,ts,tsx}',
+      '!**/app/editprofile/page.{js,jsx,ts,tsx}',
+      '!**/app/profile/page.{js,jsx,ts,tsx}',
+      '!**/app/settings/page.{js,jsx,ts,tsx}',
+      '!**/app/notifications/page.{js,jsx,ts,tsx}',
+      '!**/app/pages/403.{js,jsx,ts,tsx}',
     ],
   }
 

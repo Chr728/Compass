@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { useRouter } from "next/navigation";
-import Setting from "../settings/page";
+import SettingsPage from "./settingsPage";
 import "@testing-library/jest-dom";
 
 //Mock useRouter from next/navigation
@@ -33,7 +33,7 @@ beforeAll(() => {
 describe("Settings Page", () => {
   //Test to check if page is rendered correctly with proper text and button
   test("Renders correct content and button", () => {
-    render(<Setting></Setting>);
+    render(<SettingsPage />);
     const SettingsHeader = screen.getAllByText(/Settings/i)[0];
     const YourAccountHeader = screen.getByText(/Your account/i);
     const YourProfile = screen.getByText(/Your Profile/i);
@@ -63,15 +63,15 @@ describe("Settings Page", () => {
   });
 
   test("Check if button navigates to logout page", () => {
-    render(<Setting />);
+    render(<SettingsPage />);
     const LogoutButton = screen.getByText("Sign Out"); // Assuming the button text is 'Sign Out'
     fireEvent.click(LogoutButton);
     expect(mockLogOut).toHaveBeenCalled(); // Check if the logout function is called
   });
 
   test("link redirects to login page", async () => {
-    render(<Setting />);
+    render(<SettingsPage />);
     const linkElement = screen.getAllByRole("link")[1];
-    expect(linkElement).toHaveAttribute("href", "/forgotpassword");
+    expect(linkElement).toHaveAttribute("href", "/forgotpassword?loggedIn=true");
   });
 });

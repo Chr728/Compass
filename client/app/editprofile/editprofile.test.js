@@ -1,7 +1,7 @@
 import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import EditProfile from '../editprofile/page';
+import EditProfilePage from './editProfilePage';
 import updateUser from '../http/updateUser';
 
 const mockRouter= jest.fn();
@@ -41,7 +41,7 @@ jest.mock('../contexts/UserContext', () => {
 
 describe("Error Messages", () => {
     test("All fields are visible to the user", () => {
-        render(<EditProfile/>);
+        render(<EditProfilePage/>);
         const firstName = screen.getByLabelText("First Name");
         const lastName = screen.getByLabelText("Last Name");
         const street = screen.getByLabelText("Street Address");
@@ -64,7 +64,7 @@ describe("Error Messages", () => {
     })
 
     test("First Name error message", async () => {
-        render(<EditProfile/>);
+        render(<EditProfilePage/>);
         const fname = await screen.findByLabelText("First Name");
         await userEvent.type(fname, "georgia9");
         fireEvent.blur(fname);
@@ -73,7 +73,7 @@ describe("Error Messages", () => {
     })
 
     test("Last Name error message", async () => {
-        render(<EditProfile/>);
+        render(<EditProfilePage/>);
         const lname = await screen.findByLabelText("Last Name");
         await userEvent.type(lname, "georgia9");
         fireEvent.blur(lname);
@@ -82,7 +82,7 @@ describe("Error Messages", () => {
     })
 
     test("Postal Code error message", async () => {
-        render(<EditProfile/>);
+        render(<EditProfilePage/>);
         const postalCode = await screen.findByLabelText("Postal Code");
         await userEvent.type(postalCode, "H8SSSS");
         fireEvent.blur(postalCode);
@@ -91,7 +91,7 @@ describe("Error Messages", () => {
     })
 
     test("Phone Number error message", async () => {
-        render(<EditProfile/>);
+        render(<EditProfilePage/>);
         const phone = await screen.findByLabelText("Phone Number");
         await userEvent.type(phone, "123123");
         fireEvent.blur(phone);
@@ -100,7 +100,7 @@ describe("Error Messages", () => {
     })
 
     test("Cancel Button functions correctly", async () =>{
-        render(<EditProfile/>);
+        render(<EditProfilePage/>);
         const cancelButton = screen.getAllByRole("button")[0];
         await userEvent.click(cancelButton);
         await mockRouter;

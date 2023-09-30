@@ -10,7 +10,7 @@ describe("Menu components", () => {
 
     test("link redirects to main page", async () => {
         const linkElement = screen.getAllByRole("link")[0];
-        expect(linkElement).toHaveAttribute("href", "/");
+        expect(linkElement).toHaveAttribute("href", "/tpage");
     })
 
     test("link redirects to settings page", async () => {
