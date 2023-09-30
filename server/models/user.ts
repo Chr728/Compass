@@ -119,19 +119,19 @@ module.exports = (sequelize: any, DataTypes: any) => {
       },
       streetAddress: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       city: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       province: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       postalCode: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       phoneNumber: {
         type: DataTypes.STRING,

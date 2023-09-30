@@ -58,7 +58,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       },
       notes: {
         type: DataTypes.TEXT,
-        allowNull: false,
+        allowNull: true,
       },
     },
 
