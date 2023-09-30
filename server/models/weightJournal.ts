@@ -8,6 +8,7 @@ interface WeightJournalAttributes {
   date: Date;
   time: Date;
   weight: number;
+  height : number;
   unit: string;
   notes: string;
 }
@@ -24,6 +25,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     date!: Date;
     time!: Date;
     weight!: number;
+    height! : number;
     unit!: string;
     notes!: string;
     static associate(models: any) {
@@ -55,6 +57,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
         allowNull: false,
       },
       weight: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+      },
+      height: {
         type: DataTypes.FLOAT,
         allowNull: false,
       },

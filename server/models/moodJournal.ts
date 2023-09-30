@@ -49,7 +49,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         allowNull: false,
       },
       stressSignals: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
       },
       date: {
