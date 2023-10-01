@@ -68,16 +68,7 @@ const userValidator = (values: UserAttributes) => {
 };
 
 const appointmentValidator = (values: AppointmentAttributes) => {
-  const { email, appointmentWith, reason, date, time, notes } = values;
-  //Check if valid email
-  if (
-    !email ||
-    typeof email !== "string" ||
-    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-  ) {
-    Logger.error(`Invalid email: ${email}`);
-    throw new Error(`Invalid email: ${email}`);
-  }
+  const { appointmentWith, reason, date, time, notes } = values;
   //Check if valid appointment
   if (
     !appointmentWith ||
@@ -105,11 +96,6 @@ const appointmentValidator = (values: AppointmentAttributes) => {
   if (!date || date instanceof Date) {
     Logger.error(`Invalid Date: ${date}`);
     throw new Error(`Invalid Date : ${date}`);
-  }
-  //Check if valid notes
-  if (!notes || typeof notes != "string") {
-    Logger.error(`Invalid note: ${notes}`);
-    throw new Error(`Invalid note : ${notes}`);
   }
 };
 

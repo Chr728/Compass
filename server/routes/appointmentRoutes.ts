@@ -3,13 +3,17 @@ import {
   getAppointments,
   createAppointment,
   getAppointment,
-  deleteAppointment
+  deleteAppointment,
 } from "../controllers/appointmentController";
 
 const router = Router();
 
-router.route("/:email").get(getAppointments).post(createAppointment);
+router.route("/:id").get(getAppointments);
 
-router.route("/single/:id").get(getAppointment).delete(deleteAppointment);
+router
+  .route("/single/:id")
+  .get(getAppointment)
+  .delete(deleteAppointment)
+  .post(createAppointment);
 
 export default router;
