@@ -10,6 +10,6 @@ const router = Router();
 
 router.route("/:email").get(getAppointments).post(createAppointment);
 
-router.route("/:id").get(getAppointment).delete(deleteAppointment);
+router.route("/single/:id").get(getAppointment).delete(deleteAppointment);
 
 export default router;
