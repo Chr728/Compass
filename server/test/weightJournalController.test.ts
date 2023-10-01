@@ -138,4 +138,197 @@ describe('Weight Journal Controller Tests', () => {
     expect(res.body.status).toBe('SUCCESS');
     expect(res.body.data).toEqual(updatedWeightJournal);
   });
+
+  it('should delete a weight journal for a user', async () => {
+    jest
+      .spyOn(db.WeightJournal, 'findOne')
+      .mockResolvedValueOnce(weightJournal);
+    jest
+      .spyOn(db.WeightJournal, 'destroy')
+      .mockResolvedValueOnce([1, [weightJournal]]);
+
+    const res = await request(app).delete(
+      `/api/journals/weight/${user.uid}/${weightJournal.id}`
+    );
+
+    expect(db.User.findOne).toBeCalledTimes(1);
+    expect(db.WeightJournal.findOne).toBeCalledTimes(1);
+    expect(db.WeightJournal.destroy).toBeCalledTimes(1);
+    expect(res.status).toBe(200);
+    expect(res.body.status).toBe('SUCCESS');
+    expect(res.body.message).toBe('Weight journal entry deleted successfully');
+  });
+
+  it('should handle weight journal not found error', async () => {
+    jest.spyOn(db.WeightJournal, 'findOne').mockResolvedValueOnce(null);
+
+    const res = await request(app).get(
+      `/api/journals/weight/${user.uid}/${weightJournal.id}`
+    );
+
+    expect(db.User.findOne).toBeCalledTimes(1);
+    expect(db.WeightJournal.findOne).toBeCalledTimes(1);
+    expect(res.status).toBe(404);
+    expect(res.body.status).toBe('NOT_FOUND');
+    expect(res.body.message).toBe('Weight journal entry not found');
+  });
+
+  it('should handle weight journal not found error when updating', async () => {
+    jest.spyOn(db.WeightJournal, 'findOne').mockResolvedValueOnce(null);
+
+    const res = await request(app)
+      .put(`/api/journals/weight/${user.uid}/${weightJournal.id}`)
+      .send(updatedWeightJournal);
+
+    expect(db.User.findOne).toBeCalledTimes(1);
+    expect(db.WeightJournal.findOne).toBeCalledTimes(1);
+    expect(res.status).toBe(404);
+    expect(res.body.status).toBe('NOT_FOUND');
+    expect(res.body.message).toBe('Weight journal entry not found');
+  });
+
+  it('should handle weight journal not found error when deleting', async () => {
+    jest.spyOn(db.WeightJournal, 'findOne').mockResolvedValueOnce(null);
+
+    const res = await request(app).delete(
+      `/api/journals/weight/${user.uid}/${weightJournal.id}`
+    );
+
+    expect(db.User.findOne).toBeCalledTimes(1);
+    expect(db.WeightJournal.findOne).toBeCalledTimes(1);
+    expect(res.status).toBe(404);
+    expect(res.body.status).toBe('NOT_FOUND');
+    expect(res.body.message).toBe('Weight journal entry not found');
+  });
+
+  it('should handle error when getting weight journals', async () => {
+    jest.spyOn(db.WeightJournal, 'findAll').mockRejectedValueOnce('error');
+
+    const res = await request(app).get(`/api/journals/weight/${user.uid}`);
+
+    expect(db.User.findOne).toBeCalledTimes(1);
+    expect(db.WeightJournal.findAll).toBeCalledTimes(1);
+    expect(res.status).toBe(400);
+    expect(res.body.status).toBe('ERROR');
+    expect(res.body.message).toBe('Error fetching weight journals: error');
+  });
+
+  it('should handle error when getting weight journal', async () => {
+    jest.spyOn(db.WeightJournal, 'findOne').mockRejectedValueOnce('error');
+
+    const res = await request(app).get(
+      `/api/journals/weight/${user.uid}/${weightJournal.id}`
+    );
+
+    expect(db.User.findOne).toBeCalledTimes(1);
+    expect(db.WeightJournal.findOne).toBeCalledTimes(1);
+    expect(res.status).toBe(400);
+    expect(res.body.status).toBe('ERROR');
+    expect(res.body.message).toBe('Error fetching weight journal entry: error');
+  });
+
+  it('should handle error when creating weight journal', async () => {
+    jest.spyOn(db.WeightJournal, 'create').mockRejectedValueOnce('error');
+
+    const res = await request(app)
+      .post(`/api/journals/weight/${user.uid}`)
+      .send(weightJournal);
+
+    expect(db.User.findOne).toBeCalledTimes(1);
+    expect(db.WeightJournal.create).toBeCalledTimes(1);
+    expect(res.status).toBe(400);
+    expect(res.body.status).toBe('ERROR');
+    expect(res.body.message).toBe('Error creating weight entry: error');
+  });
+
+  it('should handle error when updating weight journal', async () => {
+    jest.spyOn(db.WeightJournal, 'findOne').mockRejectedValueOnce('error');
+
+    const res = await request(app)
+      .put(`/api/journals/weight/${user.uid}/${weightJournal.id}`)
+      .send(updatedWeightJournal);
+
+    expect(db.User.findOne).toBeCalledTimes(1);
+    expect(db.WeightJournal.findOne).toBeCalledTimes(1);
+    expect(res.status).toBe(400);
+    expect(res.body.status).toBe('ERROR');
+    expect(res.body.message).toBe('Error updating weight entry: error');
+  });
+
+  it('should handle error when deleting weight journal', async () => {
+    jest.spyOn(db.WeightJournal, 'findOne').mockRejectedValueOnce('error');
+
+    const res = await request(app).delete(
+      `/api/journals/weight/${user.uid}/${weightJournal.id}`
+    );
+
+    expect(db.User.findOne).toBeCalledTimes(1);
+    expect(db.WeightJournal.findOne).toBeCalledTimes(1);
+    expect(res.status).toBe(400);
+    expect(res.body.status).toBe('ERROR');
+    expect(res.body.message).toBe('Error deleting weight entry: error');
+  });
+  it('should handle user not found error during update', async () => {
+    // Mock User.findOne to return null, simulating a user not found
+    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(null);
+
+    const res = await request(app)
+      .put(`/api/journals/weight/${user.uid}/${weightJournal.id}`)
+      .send(updatedWeightJournal);
+
+    expect(db.User.findOne).toBeCalledTimes(1);
+    expect(res.status).toBe(404);
+    expect(res.body.status).toBe('NOT_FOUND');
+    expect(res.body.message).toBe('User not found');
+  });
+
+  it('should handle user not found error during delete', async () => {
+    // Mock User.findOne to return null, simulating a user not found
+    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(null);
+
+    const res = await request(app).delete(
+      `/api/journals/weight/${user.uid}/${weightJournal.id}`
+    );
+
+    expect(db.User.findOne).toBeCalledTimes(1);
+    expect(res.status).toBe(404);
+    expect(res.body.status).toBe('NOT_FOUND');
+    expect(res.body.message).toBe('User not found');
+  });
+
+  it('should handle user not found error during get one weight journal', async () => {
+    // Mock User.findOne to return null, simulating a user not found
+    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(null);
+
+    const res = await request(app).get(
+      `/api/journals/weight/${user.uid}/${weightJournal.id}`
+    );
+
+    expect(db.User.findOne).toBeCalledTimes(1);
+    expect(res.status).toBe(404);
+    expect(res.body.status).toBe('NOT_FOUND');
+    expect(res.body.message).toBe('User not found');
+  });
+
+  it('should handle user not found error for getallweightjournals', async () => {
+    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(null);
+
+    const res = await request(app).get(`/api/journals/weight/${user.uid}`);
+
+    expect(db.User.findOne).toBeCalledTimes(1);
+    expect(res.status).toBe(404);
+    expect(res.body.status).toBe('NOT_FOUND');
+    expect(res.body.message).toBe('User not found');
+  });
+
+  it('should handle user not found error for create', async () => {
+    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(null);
+
+    const res = await request(app).post(`/api/journals/weight/${user.uid}`);
+
+    expect(db.User.findOne).toBeCalledTimes(1);
+    expect(res.status).toBe(404);
+    expect(res.body.status).toBe('NOT_FOUND');
+    expect(res.body.message).toBe('User not found');
+  });
 });

@@ -205,6 +205,7 @@ export const deleteWeightJournal = async (req: Request, res: Response) => {
     }
 
     const weightJournalId = req.params.weightJournalId;
+
     const existingWeightJournal = await db.WeightJournal.findOne({
       where: {
         id: weightJournalId,
@@ -219,7 +220,12 @@ export const deleteWeightJournal = async (req: Request, res: Response) => {
       });
     }
 
-    await existingWeightJournal.destroy();
+    await db.WeightJournal.destroy({
+      where: {
+        id: weightJournalId,
+        uid: user.uid,
+      },
+    });
 
     return res.status(200).json({
       status: 'SUCCESS',
