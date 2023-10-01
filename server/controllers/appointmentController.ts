@@ -13,17 +13,10 @@ export const getAppointments = async (req: Request, res: Response) => {
       },
     });
 
-    if (!userAppointments) {
-      return res.status(404).json({
-        status: "ERROR",
-        message: `No appointment was found for this user.`,
-      });
-    } else {
-      res.status(200).json({
-        status: `SUCCESS`,
-        data: userAppointments,
-      });
-    }
+    res.status(200).json({
+      status: `SUCCESS`,
+      data: userAppointments,
+    });
   } catch (err) {
     Logger.error(`Error occurred while fetching appointment for user: ${err}`);
     res.status(400).json({
