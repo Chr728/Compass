@@ -59,6 +59,64 @@ export const createAppointment = async (req: Request, res: Response) => {
 };
 
 
-export const getAppointment = async (req: Request, res: Response) => {};
+export const getAppointment = async (req: Request, res: Response) => {
+  try{
+    const appointmentId = req.params.id;
+    const appointment = await db.Appointment.findOne({
+      where : {
+        id: appointmentId
+      }
+    });
 
-export const deleteAppointment = async (req: Request, res: Response) => {};
+    if (!appointment) {
+      return res.status(404).json({
+        status: 'ERROR',
+        message: `Appointment not found, invalid appointment id.`,
+      });
+    }
+
+    res.status(200).json({
+      status: `SUCCESS`,
+      data: appointment,
+    });
+
+  }catch (err) {
+    
+    Logger.error(`Error occurred while fetching appointment: ${err}`);
+    res.status(400).json({
+      status: `ERROR`,
+      message: `Error getting appointment : ${err}`,
+    });
+
+  }
+};
+
+export const deleteAppointment = async (req: Request, res: Response) => {
+  try{
+    const appointmentId = req.params.id;
+    const deletedAppointment = await db.Appointment.destroy({
+      where: {
+        id: appointmentId,
+      },
+    });
+
+    if (!deletedAppointment) {
+      return res.status(404).json({
+        status: 'ERROR',
+        message: 'Appointment not found, invalid appointment id',
+      });
+    }
+
+    res.status(200).json({
+      status: `SUCCESS`,
+      data: `Successfully deleted appointment.`,
+    });
+
+  }catch (err) {
+    Logger.error(`Error occurred while deleting appointment: ${err}`);
+    res.status(400).json({
+      status: 'ERROR',
+      message: `Error deleting appointment record: ${err}`,
+    });
+  }
+};
