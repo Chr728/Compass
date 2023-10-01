@@ -1,12 +1,12 @@
 import request from 'supertest';
-import app from './../index';
-import db from './../models/index';
+import app from '../index';
+import db from '../models';
 
 let server: any;
 const port = process.env.SERVER_DEV_PORT;
 
 const user = {
-  id: 1,
+  id: 10,
   uid: 'testuid',
   email: 'test@gmail.com',
   firstName: 'John',
@@ -22,7 +22,7 @@ const user = {
 
 const weightJournal = {
   id: 1,
-  uid: 1,
+  uid: 'testuid',
   date: '2023-09-30',
   time: '12:00:00',
   weight: 70,
@@ -54,16 +54,22 @@ function stopServer() {
   }
 }
 
-beforeAll(() => {
-  startServer(); // Start the server before running tests
-});
-
-afterAll(() => {
-  stopServer(); // Stop the server after all tests are done
-});
-
 describe('Weight Journal Controller Tests', () => {
-  jest.spyOn(db.User, 'findOne').mockResolvedValue(user);
+  beforeAll(() => {
+    startServer();
+  });
+
+  afterAll(() => {
+    stopServer();
+  });
+
+  beforeEach(() => {
+    jest.spyOn(db.User, 'findOne').mockResolvedValue(user);
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
 
   it('should get weight journals for a user', async () => {
     jest
@@ -79,7 +85,6 @@ describe('Weight Journal Controller Tests', () => {
     expect(res.body.data).toEqual([weightJournal]);
   });
 
-  //write a test for get journal
   it('should get a weight journal for a user', async () => {
     jest
       .spyOn(db.WeightJournal, 'findOne')
@@ -89,14 +94,13 @@ describe('Weight Journal Controller Tests', () => {
       `/api/journals/weight/${user.uid}/${weightJournal.id}`
     );
 
-    expect(db.User.findOne).toBeCalledTimes(2);
+    expect(db.User.findOne).toBeCalledTimes(1);
     expect(db.WeightJournal.findOne).toBeCalledTimes(1);
     expect(res.status).toBe(200);
     expect(res.body.status).toBe('SUCCESS');
     expect(res.body.data).toEqual(weightJournal);
   });
 
-  //test for create journal
   it('should create a weight journal for a user', async () => {
     jest.spyOn(db.WeightJournal, 'create').mockResolvedValueOnce(weightJournal);
 
@@ -104,10 +108,34 @@ describe('Weight Journal Controller Tests', () => {
       .post(`/api/journals/weight/${user.uid}`)
       .send(weightJournal);
 
-    expect(db.User.findOne).toBeCalledTimes(3);
+    expect(db.User.findOne).toBeCalledTimes(1);
     expect(db.WeightJournal.create).toBeCalledTimes(1);
     expect(res.status).toBe(201);
     expect(res.body.status).toBe('SUCCESS');
     expect(res.body.data).toEqual(weightJournal);
+  });
+
+  it('should update a weight journal for a user', async () => {
+    jest
+      .spyOn(db.WeightJournal, 'findOne')
+      .mockResolvedValueOnce(weightJournal);
+    jest
+      .spyOn(db.WeightJournal, 'update')
+      .mockResolvedValueOnce([1, [updatedWeightJournal]]);
+
+    jest
+      .spyOn(db.WeightJournal, 'findOne')
+      .mockResolvedValueOnce(updatedWeightJournal);
+
+    const res = await request(app)
+      .put(`/api/journals/weight/${user.uid}/${weightJournal.id}`)
+      .send(updatedWeightJournal);
+
+    expect(db.User.findOne).toBeCalledTimes(1);
+    expect(db.WeightJournal.findOne).toBeCalledTimes(2);
+    expect(db.WeightJournal.update).toBeCalledTimes(1);
+    expect(res.status).toBe(200);
+    expect(res.body.status).toBe('SUCCESS');
+    expect(res.body.data).toEqual(updatedWeightJournal);
   });
 });

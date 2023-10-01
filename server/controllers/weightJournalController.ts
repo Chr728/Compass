@@ -136,6 +136,7 @@ export const updateWeightJournal = async (req: Request, res: Response) => {
     }
 
     const weightJournalId = req.params.weightJournalId;
+
     const existingWeightJournal = await db.WeightJournal.findOne({
       where: {
         id: weightJournalId,
@@ -150,19 +151,34 @@ export const updateWeightJournal = async (req: Request, res: Response) => {
       });
     }
 
-    await existingWeightJournal.update({
-      date,
-      time,
-      weight,
-      height,
-      unit,
-      notes,
+    await db.WeightJournal.update(
+      {
+        date,
+        time,
+        weight,
+        height,
+        unit,
+        notes,
+      },
+      {
+        where: {
+          id: weightJournalId,
+          uid: user.uid,
+        },
+      }
+    );
+
+    const updatedWeightJournal = await db.WeightJournal.findOne({
+      where: {
+        id: weightJournalId,
+        uid: user.uid,
+      },
     });
 
     return res.status(200).json({
       status: 'SUCCESS',
       message: 'Weight journal entry updated successfully',
-      data: existingWeightJournal,
+      data: updatedWeightJournal,
     });
   } catch (error) {
     Logger.error(`Error occurred while updating weight entry: ${error}`);
