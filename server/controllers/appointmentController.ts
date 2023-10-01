@@ -57,3 +57,8 @@ export const createAppointment = async (req: Request, res: Response) => {
     });
   }
 };
+
+
+export const getAppointment = async (req: Request, res: Response) => {};
+
+export const deleteAppointment = async (req: Request, res: Response) => {};
