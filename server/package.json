@@ -4,7 +4,7 @@
   "main": "index.ts",
   "scripts": {
     "dev": "nodemon --exec ts-node index.ts",
-    "test": "jest --coverage --runInBand  --forceExit"
+    "test": "cross-env NODE_ENV=test jest --coverage --runInBand --forceExit"
   },
   "author": "Compass",
   "license": "GNU",
@@ -13,6 +13,7 @@
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.5",
     "@types/supertest": "^2.0.12",
+    "cross-env": "^7.0.3",
     "nodemon": "^3.0.1",
     "sequelize-cli": "^6.6.1",
     "ts-jest": "^29.1.1",
