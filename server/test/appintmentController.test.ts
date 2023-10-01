@@ -37,7 +37,7 @@ function stopServer() {
   });
 
   describe('should test the getAppointment Controller', () => {
-    it('show get all users', async () => {
+    it('should get one specific appointment', async () => {
       jest.spyOn(db.Appointment, 'findOne').mockResolvedValueOnce(appointment);
       const res = await request(app).get('/api/appointments/single/1')
       expect(db.Appointment.findOne).toBeCalledTimes(1);
@@ -45,5 +45,26 @@ function stopServer() {
       expect(res.body.status).toBe('SUCCESS');
       expect(res.body.data).toStrictEqual(appointment);
     });
+
+    it('should give error when the appointment id sent is wrong', async () => {
+        const nonExistentAppointmentId = 0;
+        jest.spyOn(db.Appointment, 'findOne').mockResolvedValueOnce(null);
+        const res = await request(app).get(`/api/appointments/single/${nonExistentAppointmentId}`)
+        expect(db.Appointment.findOne).toBeCalledTimes(2);
+        expect(res.status).toBe(404);
+        expect(res.body.status).toBe('ERROR');
+      });
+
+      it('should catch error ', async () => {
+        const nonExistentAppointmentId = 0;
+        jest.spyOn(db.Appointment, 'findOne').mockRejectedValue(new Error('query error'));
+        const res = await request(app).get('/api/appointments/single/1')
+        expect(db.Appointment.findOne).toBeCalledTimes(3);
+        expect(res.status).toBe(400);
+        expect(res.body.status).toBe('ERROR');
+      });
+
+
+
   });
 
