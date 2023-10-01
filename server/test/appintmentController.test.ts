@@ -60,12 +60,12 @@ afterAll(() => {
 
 describe("should test the getAppointment Controller", () => {
   it("should get one specific appointment", async () => {
-    jest.spyOn(db.Appointment, "findOne").mockResolvedValueOnce(appointment);
+    jest.spyOn(db.Appointment, "findOne").mockResolvedValueOnce(appointment[0]);
     const res = await request(app).get("/api/appointments/single/1");
     expect(db.Appointment.findOne).toBeCalledTimes(1);
     expect(res.status).toBe(200);
     expect(res.body.status).toBe("SUCCESS");
-    expect(res.body.data).toStrictEqual(appointment);
+    expect(res.body.data).toStrictEqual(appointment[0]);
   });
 
   it("should give error when the appointment id sent is wrong", async () => {
