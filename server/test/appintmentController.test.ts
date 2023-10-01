@@ -53,18 +53,44 @@ function stopServer() {
         expect(db.Appointment.findOne).toBeCalledTimes(2);
         expect(res.status).toBe(404);
         expect(res.body.status).toBe('ERROR');
+        expect(res.body.message).toBe('Appointment not found, invalid appointment id.');
       });
 
       it('should catch error ', async () => {
-        const nonExistentAppointmentId = 0;
         jest.spyOn(db.Appointment, 'findOne').mockRejectedValue(new Error('query error'));
         const res = await request(app).get('/api/appointments/single/1')
         expect(db.Appointment.findOne).toBeCalledTimes(3);
         expect(res.status).toBe(400);
         expect(res.body.status).toBe('ERROR');
       });
+    });
 
-
-
-  });
+    describe('should test the deleteAppointment Controller', () => {
+        it('should delete one specific appointment', async () => {
+          jest.spyOn(db.Appointment, 'destroy').mockResolvedValueOnce(appointment);
+          const res = await request(app).delete('/api/appointments/single/1')
+          expect(db.Appointment.destroy).toBeCalledTimes(1);
+          expect(res.status).toBe(200);
+          expect(res.body.status).toBe('SUCCESS');
+          expect(res.body.data).toBe('Successfully deleted appointment.');
+        });
+    
+        it('should give error when the appointment id sent is wrong', async () => {
+            const nonExistentAppointmentId = 0;
+            jest.spyOn(db.Appointment, 'destroy').mockResolvedValueOnce(null);
+            const res = await request(app).delete(`/api/appointments/single/${nonExistentAppointmentId}`)
+            expect(db.Appointment.destroy).toBeCalledTimes(2);
+            expect(res.status).toBe(404);
+            expect(res.body.status).toBe('ERROR');
+            expect(res.body.message).toBe('Appointment not found, invalid appointment id.');
+          });
+    
+          it('should catch error ', async () => {
+            jest.spyOn(db.Appointment, 'destroy').mockRejectedValue(new Error('query error'));
+            const res = await request(app).delete('/api/appointments/single/1')
+            expect(db.Appointment.destroy).toBeCalledTimes(3);
+            expect(res.status).toBe(400);
+            expect(res.body.status).toBe('ERROR');
+          });
+        });
 

@@ -103,7 +103,7 @@ export const deleteAppointment = async (req: Request, res: Response) => {
     if (!deletedAppointment) {
       return res.status(404).json({
         status: 'ERROR',
-        message: 'Appointment not found, invalid appointment id',
+        message: 'Appointment not found, invalid appointment id.',
       });
     }
 
