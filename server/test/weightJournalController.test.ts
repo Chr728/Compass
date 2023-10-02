@@ -76,7 +76,7 @@ describe('Weight Journal Controller Tests', () => {
       .spyOn(db.WeightJournal, 'findAll')
       .mockResolvedValueOnce([weightJournal]);
 
-    const res = await request(app).get(`/api/journals/weight/${user.uid}`);
+    const res = await request(app).get(`/api/journals/weight/user/${user.uid}`);
 
     expect(db.User.findOne).toBeCalledTimes(1);
     expect(db.WeightJournal.findAll).toBeCalledTimes(1);
@@ -91,10 +91,9 @@ describe('Weight Journal Controller Tests', () => {
       .mockResolvedValueOnce(weightJournal);
 
     const res = await request(app).get(
-      `/api/journals/weight/${user.uid}/${weightJournal.id}`
+      `/api/journals/weight/${weightJournal.id}`
     );
 
-    expect(db.User.findOne).toBeCalledTimes(1);
     expect(db.WeightJournal.findOne).toBeCalledTimes(1);
     expect(res.status).toBe(200);
     expect(res.body.status).toBe('SUCCESS');
@@ -105,7 +104,7 @@ describe('Weight Journal Controller Tests', () => {
     jest.spyOn(db.WeightJournal, 'create').mockResolvedValueOnce(weightJournal);
 
     const res = await request(app)
-      .post(`/api/journals/weight/${user.uid}`)
+      .post(`/api/journals/weight/user/${user.uid}`)
       .send(weightJournal);
 
     expect(db.User.findOne).toBeCalledTimes(1);
@@ -128,10 +127,9 @@ describe('Weight Journal Controller Tests', () => {
       .mockResolvedValueOnce(updatedWeightJournal);
 
     const res = await request(app)
-      .put(`/api/journals/weight/${user.uid}/${weightJournal.id}`)
+      .put(`/api/journals/weight/${weightJournal.id}`)
       .send(updatedWeightJournal);
 
-    expect(db.User.findOne).toBeCalledTimes(1);
     expect(db.WeightJournal.findOne).toBeCalledTimes(2);
     expect(db.WeightJournal.update).toBeCalledTimes(1);
     expect(res.status).toBe(200);
@@ -148,10 +146,9 @@ describe('Weight Journal Controller Tests', () => {
       .mockResolvedValueOnce([1, [weightJournal]]);
 
     const res = await request(app).delete(
-      `/api/journals/weight/${user.uid}/${weightJournal.id}`
+      `/api/journals/weight/${weightJournal.id}`
     );
 
-    expect(db.User.findOne).toBeCalledTimes(1);
     expect(db.WeightJournal.findOne).toBeCalledTimes(1);
     expect(db.WeightJournal.destroy).toBeCalledTimes(1);
     expect(res.status).toBe(200);
@@ -163,10 +160,9 @@ describe('Weight Journal Controller Tests', () => {
     jest.spyOn(db.WeightJournal, 'findOne').mockResolvedValueOnce(null);
 
     const res = await request(app).get(
-      `/api/journals/weight/${user.uid}/${weightJournal.id}`
+      `/api/journals/weight/${weightJournal.id}`
     );
 
-    expect(db.User.findOne).toBeCalledTimes(1);
     expect(db.WeightJournal.findOne).toBeCalledTimes(1);
     expect(res.status).toBe(404);
     expect(res.body.status).toBe('NOT_FOUND');
@@ -177,10 +173,9 @@ describe('Weight Journal Controller Tests', () => {
     jest.spyOn(db.WeightJournal, 'findOne').mockResolvedValueOnce(null);
 
     const res = await request(app)
-      .put(`/api/journals/weight/${user.uid}/${weightJournal.id}`)
+      .put(`/api/journals/weight/${weightJournal.id}`)
       .send(updatedWeightJournal);
 
-    expect(db.User.findOne).toBeCalledTimes(1);
     expect(db.WeightJournal.findOne).toBeCalledTimes(1);
     expect(res.status).toBe(404);
     expect(res.body.status).toBe('NOT_FOUND');
@@ -191,10 +186,9 @@ describe('Weight Journal Controller Tests', () => {
     jest.spyOn(db.WeightJournal, 'findOne').mockResolvedValueOnce(null);
 
     const res = await request(app).delete(
-      `/api/journals/weight/${user.uid}/${weightJournal.id}`
+      `/api/journals/weight/${weightJournal.id}`
     );
 
-    expect(db.User.findOne).toBeCalledTimes(1);
     expect(db.WeightJournal.findOne).toBeCalledTimes(1);
     expect(res.status).toBe(404);
     expect(res.body.status).toBe('NOT_FOUND');
@@ -204,7 +198,7 @@ describe('Weight Journal Controller Tests', () => {
   it('should handle error when getting weight journals', async () => {
     jest.spyOn(db.WeightJournal, 'findAll').mockRejectedValueOnce('error');
 
-    const res = await request(app).get(`/api/journals/weight/${user.uid}`);
+    const res = await request(app).get(`/api/journals/weight/user/${user.uid}`);
 
     expect(db.User.findOne).toBeCalledTimes(1);
     expect(db.WeightJournal.findAll).toBeCalledTimes(1);
@@ -217,10 +211,9 @@ describe('Weight Journal Controller Tests', () => {
     jest.spyOn(db.WeightJournal, 'findOne').mockRejectedValueOnce('error');
 
     const res = await request(app).get(
-      `/api/journals/weight/${user.uid}/${weightJournal.id}`
+      `/api/journals/weight/${weightJournal.id}`
     );
 
-    expect(db.User.findOne).toBeCalledTimes(1);
     expect(db.WeightJournal.findOne).toBeCalledTimes(1);
     expect(res.status).toBe(400);
     expect(res.body.status).toBe('ERROR');
@@ -231,7 +224,7 @@ describe('Weight Journal Controller Tests', () => {
     jest.spyOn(db.WeightJournal, 'create').mockRejectedValueOnce('error');
 
     const res = await request(app)
-      .post(`/api/journals/weight/${user.uid}`)
+      .post(`/api/journals/weight/user/${user.uid}`)
       .send(weightJournal);
 
     expect(db.User.findOne).toBeCalledTimes(1);
@@ -245,10 +238,9 @@ describe('Weight Journal Controller Tests', () => {
     jest.spyOn(db.WeightJournal, 'findOne').mockRejectedValueOnce('error');
 
     const res = await request(app)
-      .put(`/api/journals/weight/${user.uid}/${weightJournal.id}`)
+      .put(`/api/journals/weight/${weightJournal.id}`)
       .send(updatedWeightJournal);
 
-    expect(db.User.findOne).toBeCalledTimes(1);
     expect(db.WeightJournal.findOne).toBeCalledTimes(1);
     expect(res.status).toBe(400);
     expect(res.body.status).toBe('ERROR');
@@ -259,49 +251,20 @@ describe('Weight Journal Controller Tests', () => {
     jest.spyOn(db.WeightJournal, 'findOne').mockRejectedValueOnce('error');
 
     const res = await request(app).delete(
-      `/api/journals/weight/${user.uid}/${weightJournal.id}`
+      `/api/journals/weight/${weightJournal.id}`
     );
 
-    expect(db.User.findOne).toBeCalledTimes(1);
     expect(db.WeightJournal.findOne).toBeCalledTimes(1);
     expect(res.status).toBe(400);
     expect(res.body.status).toBe('ERROR');
     expect(res.body.message).toBe('Error deleting weight entry: error');
   });
-  it('should handle user not found error during update', async () => {
-    // Mock User.findOne to return null, simulating a user not found
+
+  it('should handle user not found error for create', async () => {
     jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(null);
 
-    const res = await request(app)
-      .put(`/api/journals/weight/${user.uid}/${weightJournal.id}`)
-      .send(updatedWeightJournal);
-
-    expect(db.User.findOne).toBeCalledTimes(1);
-    expect(res.status).toBe(404);
-    expect(res.body.status).toBe('NOT_FOUND');
-    expect(res.body.message).toBe('User not found');
-  });
-
-  it('should handle user not found error during delete', async () => {
-    // Mock User.findOne to return null, simulating a user not found
-    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(null);
-
-    const res = await request(app).delete(
-      `/api/journals/weight/${user.uid}/${weightJournal.id}`
-    );
-
-    expect(db.User.findOne).toBeCalledTimes(1);
-    expect(res.status).toBe(404);
-    expect(res.body.status).toBe('NOT_FOUND');
-    expect(res.body.message).toBe('User not found');
-  });
-
-  it('should handle user not found error during get one weight journal', async () => {
-    // Mock User.findOne to return null, simulating a user not found
-    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(null);
-
-    const res = await request(app).get(
-      `/api/journals/weight/${user.uid}/${weightJournal.id}`
+    const res = await request(app).post(
+      `/api/journals/weight/user/${user.uid}`
     );
 
     expect(db.User.findOne).toBeCalledTimes(1);
@@ -313,18 +276,7 @@ describe('Weight Journal Controller Tests', () => {
   it('should handle user not found error for getallweightjournals', async () => {
     jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(null);
 
-    const res = await request(app).get(`/api/journals/weight/${user.uid}`);
-
-    expect(db.User.findOne).toBeCalledTimes(1);
-    expect(res.status).toBe(404);
-    expect(res.body.status).toBe('NOT_FOUND');
-    expect(res.body.message).toBe('User not found');
-  });
-
-  it('should handle user not found error for create', async () => {
-    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(null);
-
-    const res = await request(app).post(`/api/journals/weight/${user.uid}`);
+    const res = await request(app).get(`/api/journals/weight/user/${user.uid}`);
 
     expect(db.User.findOne).toBeCalledTimes(1);
     expect(res.status).toBe(404);

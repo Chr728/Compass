@@ -38,24 +38,10 @@ export const getWeightJournals = async (req: Request, res: Response) => {
 
 export const getWeightJournal = async (req: Request, res: Response) => {
   try {
-    const user = await db.User.findOne({
-      where: {
-        uid: req.params.id,
-      },
-    });
-
-    if (!user) {
-      return res.status(404).json({
-        status: 'NOT_FOUND',
-        message: 'User not found',
-      });
-    }
-
     const weightJournalId = req.params.weightJournalId;
     const weightJournal = await db.WeightJournal.findOne({
       where: {
         id: weightJournalId,
-        uid: user.uid,
       },
     });
 
@@ -122,25 +108,11 @@ export const updateWeightJournal = async (req: Request, res: Response) => {
   try {
     const { date, time, weight, height, unit, notes } = req.body;
 
-    const user = await db.User.findOne({
-      where: {
-        uid: req.params.id,
-      },
-    });
-
-    if (!user) {
-      return res.status(404).json({
-        status: 'NOT_FOUND',
-        message: 'User not found',
-      });
-    }
-
     const weightJournalId = req.params.weightJournalId;
 
     const existingWeightJournal = await db.WeightJournal.findOne({
       where: {
         id: weightJournalId,
-        uid: user.uid,
       },
     });
 
@@ -163,7 +135,6 @@ export const updateWeightJournal = async (req: Request, res: Response) => {
       {
         where: {
           id: weightJournalId,
-          uid: user.uid,
         },
       }
     );
@@ -171,7 +142,6 @@ export const updateWeightJournal = async (req: Request, res: Response) => {
     const updatedWeightJournal = await db.WeightJournal.findOne({
       where: {
         id: weightJournalId,
-        uid: user.uid,
       },
     });
 
@@ -191,25 +161,11 @@ export const updateWeightJournal = async (req: Request, res: Response) => {
 
 export const deleteWeightJournal = async (req: Request, res: Response) => {
   try {
-    const user = await db.User.findOne({
-      where: {
-        uid: req.params.id,
-      },
-    });
-
-    if (!user) {
-      return res.status(404).json({
-        status: 'NOT_FOUND',
-        message: 'User not found',
-      });
-    }
-
     const weightJournalId = req.params.weightJournalId;
 
     const existingWeightJournal = await db.WeightJournal.findOne({
       where: {
         id: weightJournalId,
-        uid: user.uid,
       },
     });
 
@@ -223,7 +179,6 @@ export const deleteWeightJournal = async (req: Request, res: Response) => {
     await db.WeightJournal.destroy({
       where: {
         id: weightJournalId,
-        uid: user.uid,
       },
     });
 
