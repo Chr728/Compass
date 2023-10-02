@@ -1,4 +1,4 @@
-import getUser from './getUser';
+import getUser from '../getUser';
 
 describe('getUser', () => {
   beforeEach(() => {
@@ -21,12 +21,15 @@ describe('getUser', () => {
     const userData = await getUser(mockUser.id);
 
     expect(userData.data.id).toEqual(mockUser.id);
-    expect(mockFetch).toHaveBeenCalledWith('http://localhost:8000/api/users/' + mockUser.id, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      method: 'GET',
-    });
+    expect(mockFetch).toHaveBeenCalledWith(
+      'http://localhost:8000/api/users/' + mockUser.id,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: 'GET',
+      }
+    );
   });
 
   it('should throw an error if the request fails', async () => {
@@ -37,12 +40,17 @@ describe('getUser', () => {
     });
     global.fetch.mockImplementation(mockFetch);
 
-    await expect(getUser(mockUserId)).rejects.toThrow('HTTP error! Status: 500');
-    expect(mockFetch).toHaveBeenCalledWith('http://localhost:8000/api/users/' + mockUserId, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      method: 'GET',
-    });  
+    await expect(getUser(mockUserId)).rejects.toThrow(
+      'HTTP error! Status: 500'
+    );
+    expect(mockFetch).toHaveBeenCalledWith(
+      'http://localhost:8000/api/users/' + mockUserId,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: 'GET',
+      }
+    );
   });
 });
