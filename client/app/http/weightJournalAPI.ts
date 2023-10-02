@@ -2,7 +2,7 @@
 export async function getWeightJournals(userId: string): Promise<any> {
   try {
     const response = await fetch(
-      `http://localhost:8000/api/journals/weight/${userId}`
+      `http://localhost:8000/api/journals/weight/user/${userId}`
     );
     if (!response.ok) {
       throw new Error(
@@ -24,7 +24,7 @@ export async function getWeightJournal(
 ): Promise<any> {
   try {
     const response = await fetch(
-      `http://localhost:8000/api/journals/weight/${userId}/${weightJournalId}`
+      `http://localhost:8000/api/journals/weight/${weightJournalId}`
     );
     if (!response.ok) {
       throw new Error(
@@ -46,7 +46,7 @@ export async function createWeightJournal(
 ): Promise<any> {
   try {
     const response = await fetch(
-      `http://localhost:8000/api/journals/weight/${userId}`,
+      `http://localhost:8000/api/journals/weight/user/${userId}`,
       {
         method: 'POST',
         headers: {
@@ -76,7 +76,7 @@ export async function updateWeightJournal(
 ): Promise<any> {
   try {
     const response = await fetch(
-      `http://localhost:8000/api/journals/weight/${userId}/${weightJournalId}`,
+      `http://localhost:8000/api/journals/weight/${weightJournalId}`,
       {
         method: 'PUT',
         headers: {
@@ -105,7 +105,7 @@ export async function deleteWeightJournal(
 ): Promise<any> {
   try {
     const response = await fetch(
-      `http://localhost:8000/api/journals/weight/${userId}/${weightJournalId}`,
+      `http://localhost:8000/api/journals/weight/${weightJournalId}`,
       {
         method: 'DELETE',
       }
