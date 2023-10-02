@@ -5,7 +5,9 @@ export async function getWeightJournals(userId: string): Promise<any> {
       `http://localhost:8000/api/journals/weight/${userId}`
     );
     if (!response.ok) {
-      throw new Error(`HTTP Error! Status: ${response.status}`);
+      throw new Error(
+        `Failed to retrieve weight journals for user ${userId}. HTTP Status: ${response.status}`
+      );
     }
     const data = await response.json();
     return data;
@@ -25,7 +27,9 @@ export async function getWeightJournal(
       `http://localhost:8000/api/journals/weight/${userId}/${weightJournalId}`
     );
     if (!response.ok) {
-      throw new Error(`HTTP Error! Status: ${response.status}`);
+      throw new Error(
+        `Failed to retrieve weight journal entry ${weightJournalId} for user ${userId}. HTTP Status: ${response.status}`
+      );
     }
     const data = await response.json();
     return data;
@@ -52,7 +56,9 @@ export async function createWeightJournal(
       }
     );
     if (!response.ok) {
-      throw new Error(`HTTP Error! Status: ${response.status}`);
+      throw new Error(
+        `Failed to create weight journal entry for user ${userId}. HTTP Status: ${response.status}`
+      );
     }
     const data = await response.json();
     return data;
@@ -80,7 +86,9 @@ export async function updateWeightJournal(
       }
     );
     if (!response.ok) {
-      throw new Error(`HTTP Error! Status: ${response.status}`);
+      throw new Error(
+        `Failed to update weight journal entry ${weightJournalId} for user ${userId}. HTTP Status: ${response.status}`
+      );
     }
     const data = await response.json();
     return data;
@@ -103,7 +111,9 @@ export async function deleteWeightJournal(
       }
     );
     if (!response.ok) {
-      throw new Error(`HTTP Error! Status: ${response.status}`);
+      throw new Error(
+        `Failed to delete weight journal entry ${weightJournalId} for user ${userId}. HTTP Status: ${response.status}`
+      );
     }
     return { message: 'Weight journal entry deleted successfully' };
   } catch (error) {
