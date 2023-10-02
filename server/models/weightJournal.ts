@@ -27,7 +27,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     weight!: number;
     height!: number;
     unit!: string;
-    notes?: string;
+    notes!: string;
     static associate(models: any) {
       WeightJournal.belongsTo(models.User, {
         foreignKey: 'uid',
