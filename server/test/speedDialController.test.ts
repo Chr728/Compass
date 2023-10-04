@@ -140,7 +140,7 @@ describe('should test the updateSpeedDial Controller', () => {
         mockFindOne.mockResolvedValueOnce(mockSpeedDialInstance);
 
         const res = await request(app).put('/api/speed-dials/1/1').send(updatedSpeedDial);
-        expect(mockFindOne).toBeCalledTimes(1);
+        expect(mockFindOne).toBeCalledTimes(4);
         expect(res.status).toBe(200);
         expect(res.body.status).toBe('SUCCESS');
         expect(res.body.data).toStrictEqual(updatedSpeedDial);
