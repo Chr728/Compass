@@ -80,8 +80,8 @@ export const getSpeedDials = async (req: Request, res: Response) => {
 export const updateSpeedDial = async (req: Request, res: Response) => {
     const {uid,id} = req.params;
     const {contactName, contactNumber} = req.body;
-    speedDialValidator({contactName, contactNumber})
     try {
+        speedDialValidator({contactName, contactNumber})
         const speedDial = await db.SpeedDial.findOne({
             where: {
                 uid,

@@ -11,7 +11,7 @@ const speedDial = {
 }
 
 const invalidSpeedDial = {
-    contactName: 'John',
+    contactName: 1,
 }
 
 function startServer() {
@@ -109,7 +109,7 @@ describe('should test the createSpeedDial Controller', () => {
             .spyOn(db.SpeedDial, 'create')
             .mockRejectedValue(new Error('connection error'));
         const res = await request(app).post('/api/speed-dials/').send(invalidSpeedDial);
-        expect(db.SpeedDial.create).toBeCalledTimes(2);
+        expect(db.SpeedDial.create).toBeCalledTimes(1);
         expect(res.status).toBe(400);
     }
     );
@@ -120,20 +120,24 @@ describe('should test the updateSpeedDial Controller', () => {
     const updatedSpeedDial = {
         contactName: 'Bob',
         contactNumber: '5147894561',
-    }
+    };
 
-    // Mocking findOne
+    const invalidSpeedDial = {
+        contactName: 'Bob123', // Numbers in name make it invalid
+        contactNumber: '514789456',
+    };
+
     const mockFindOne = jest.spyOn(db.SpeedDial, 'findOne');
 
     afterEach(() => {
-        jest.clearAllMocks(); // Clears the mock call count after each test
+        jest.clearAllMocks();
     });
 
-    it('show update speed dial', async () => {
+    it('should update speed dial', async () => {
         const mockSpeedDialInstance = {
             update: jest.fn().mockImplementationOnce((data) => {
                 Object.assign(mockSpeedDialInstance, data);
-                return Promise.resolve([1]); // Sequelize usually returns the number of affected rows
+                return Promise.resolve([1]);
             })
         };
 
@@ -146,22 +150,27 @@ describe('should test the updateSpeedDial Controller', () => {
         expect(res.body.data).toStrictEqual(updatedSpeedDial);
     });
 
-
     it('should return an error for an invalid speed dial', async () => {
+        const res = await request(app).put('/api/speed-dials/1/1').send(invalidSpeedDial);
+        expect(mockFindOne).not.toBeCalled();
+        expect(res.status).toBe(400);
+    });
+
+    it('should return an error for a database connection error', async () => {
         mockFindOne.mockRejectedValueOnce(new Error('connection error'));
-        const res = await request(app).put('/api/speed-dials/123/1').send(invalidSpeedDial);
+        const res = await request(app).put('/api/speed-dials/123/1').send(updatedSpeedDial);
         expect(mockFindOne).toBeCalledTimes(1);
         expect(res.status).toBe(400);
     });
 
     it('should return an error for a non-existent speed dial', async () => {
         mockFindOne.mockResolvedValueOnce(null);
-        const res = await request(app).put('/api/speed-dials/123/1').send(invalidSpeedDial);
+        const res = await request(app).put('/api/speed-dials/123/1').send(updatedSpeedDial);
         expect(mockFindOne).toBeCalledTimes(1);
         expect(res.status).toBe(404);
-    }
-    );
+    });
 });
+
 
 describe('should test the deleteSpeedDial Controller', () => {
 
