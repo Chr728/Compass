@@ -4,10 +4,11 @@ import { IntegerDataType, Model } from "sequelize";
 
 interface WeightJournalAttributes {
   id: number;
-  email: string;
+  uid: string;
   date: Date;
   time: Date;
   weight: number;
+  height : number;
   unit: string;
   notes: string;
 }
@@ -20,16 +21,17 @@ module.exports = (sequelize: any, DataTypes: any) => {
      * The `models/index` file will call this method automatically.
      */
     id!: number;
-    email!: string;
+    uid!: string;
     date!: Date;
     time!: Date;
     weight!: number;
+    height! : number;
     unit!: string;
     notes!: string;
     static associate(models: any) {
       WeightJournal.belongsTo(models.User,{
-        foreignKey: "email",
-        targetKey: 'email',}
+        foreignKey: "uid",
+        targetKey: 'uid',}
       )
       // define association here
     }
@@ -42,7 +44,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         autoIncrement: true,
         primaryKey: true,
       },
-      email: {
+      uid: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -58,13 +60,17 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.FLOAT,
         allowNull: false,
       },
+      height: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+      },
       unit: {
         type: DataTypes.STRING,
         allowNull: false,
       },
       notes: {
         type: DataTypes.TEXT,
-        allowNull: false,
+        allowNull: true,
       },
     },
 
