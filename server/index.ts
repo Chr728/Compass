@@ -18,7 +18,7 @@ app.use(Morgan);
 
 app.use('/api/journals/weight', weightJournalRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/speeddials", speedDialRoutes);
+app.use("/api/speed-dials", speedDialRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');

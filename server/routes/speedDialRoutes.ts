@@ -3,8 +3,10 @@ import {Router} from 'express';
 const router = Router();
 
 router.route('/')
-    .get(getSpeedDials)
     .post(createSpeedDial);
+
+router.route('/:uid')
+    .get(getSpeedDials);
 
 router.route('/:uid/:id')
     .get(getSpeedDial)

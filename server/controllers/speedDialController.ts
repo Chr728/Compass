@@ -54,7 +54,7 @@ export const getSpeedDial = async (req: Request, res: Response) => {
     }
 }
 export const getSpeedDials = async (req: Request, res: Response) => {
-    const {uid} = req.body;
+    const {uid} = req.params;
     try {
         const speedDials = await db.SpeedDial.findAll({
             where: {
