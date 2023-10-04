@@ -128,7 +128,7 @@ export const deleteSpeedDial = async (req: Request, res: Response) => {
         await speedDial.destroy();
         res.status(204).json({
             status: `SUCCESS`,
-            data: null,
+            message: `Successfully deleted speed dial.`,
         });
     }
     catch (err) {

@@ -11,6 +11,7 @@ router.route('/:uid')
 router.route('/:uid/:id')
     .get(getSpeedDial)
     .put(updateSpeedDial)
+    .delete(deleteSpeedDial);
 
 
 
