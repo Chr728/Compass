@@ -4,7 +4,7 @@ import { IntegerDataType, Model } from "sequelize";
 
 interface FoodIntakeAttributes {
   id: number;
-  email: string;
+  uid: string;
   date: Date;
   time: Date;
   foodName: string;
@@ -21,7 +21,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
      * The `models/index` file will call this method automatically.
      */
     id!: number;
-    email!: string;
+    uid!: string;
     date!: Date;
     time!: Date;
     foodName!: string;
@@ -31,8 +31,8 @@ module.exports = (sequelize: any, DataTypes: any) => {
     static associate(models: any) {
       // define association here
       FoodIntakeJournal.belongsTo(models.User,{
-        foreignKey: "email",
-        targetKey: 'email',}
+        foreignKey: "uid",
+        targetKey: 'uid',}
       )
     }
   }
@@ -44,7 +44,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         autoIncrement: true,
         primaryKey: true,
       },
-      email: {
+      uid: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -70,7 +70,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       },
       notes: {
         type: DataTypes.TEXT,
-        allowNull: false,
+        allowNull: true,
       },
     },
 

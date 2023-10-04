@@ -4,7 +4,7 @@ import { IntegerDataType, Model } from "sequelize";
 
 interface GlucoseMeasurementAttributes {
   id: number;
-  email: string;
+  uid: string;
   date: Date;
   mealTime: string;
   bloodGlucose: number;
@@ -20,7 +20,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
      * The `models/index` file will call this method automatically.
      */
     id!: number;
-    email!: string;
+    uid!: string;
     date!: Date;
     mealtime!: string;
     bloodGlucose!: number;
@@ -28,8 +28,8 @@ module.exports = (sequelize: any, DataTypes: any) => {
     notes!: string;
     static associate(models: any) {
         GlucoseMeasurement.belongsTo(models.User,{
-        foreignKey: "email",
-        targetKey: 'email',}
+        foreignKey: "uid",
+        targetKey: 'uid',}
       )
       // define association here
     }
@@ -42,7 +42,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         autoIncrement: true,
         primaryKey: true,
       },
-      email: {
+      uid: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -64,7 +64,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       },
       notes: {
         type: DataTypes.TEXT,
-        allowNull: false,
+        allowNull: true,
       },
     },
 
