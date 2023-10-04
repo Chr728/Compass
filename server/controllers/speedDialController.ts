@@ -1,9 +1,11 @@
 import { Request, Response } from 'express';
 import { Logger } from '../middlewares/logger';
 import db from '../models';
+import { speedDialValidator } from '../utils/databaseValidators';
 export const createSpeedDial = async (req: Request, res: Response) => {
     try {
         const {uid,contactName, contactNumber} = req.body;
+        speedDialValidator({contactName, contactNumber});
         const speedDial = await db.SpeedDial.create({
             uid,
             contactName,
@@ -78,6 +80,7 @@ export const getSpeedDials = async (req: Request, res: Response) => {
 export const updateSpeedDial = async (req: Request, res: Response) => {
     const {uid,id} = req.params;
     const {contactName, contactNumber} = req.body;
+    speedDialValidator({contactName, contactNumber})
     try {
         const speedDial = await db.SpeedDial.findOne({
             where: {

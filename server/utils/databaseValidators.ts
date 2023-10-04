@@ -26,7 +26,7 @@ const userValidator = (values : UserAttributes) => {
     }
 }
 
-const speedDialValidator = (values : SpeedDialAttributes) => {
+const speedDialValidator = (values: { contactName: string; contactNumber: string }) => {
     const {contactName, contactNumber} = values;
     //check if contact name is valid
     if(!contactName || /\d/.test(contactName) || typeof contactName !== 'string') {
@@ -42,5 +42,6 @@ const speedDialValidator = (values : SpeedDialAttributes) => {
 }
 
 export {
-   userValidator
+   userValidator,
+  speedDialValidator
 }
