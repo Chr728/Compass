@@ -153,4 +153,54 @@ describe('should test the updateSpeedDial Controller', () => {
         expect(mockFindOne).toBeCalledTimes(1);
         expect(res.status).toBe(400);
     });
+
+    it('should return an error for a non-existent speed dial', async () => {
+        mockFindOne.mockResolvedValueOnce(null);
+        const res = await request(app).put('/api/speed-dials/123/1').send(invalidSpeedDial);
+        expect(mockFindOne).toBeCalledTimes(1);
+        expect(res.status).toBe(404);
+    }
+    );
 });
+
+describe('should test the deleteSpeedDial Controller', () => {
+
+    // Mocking findOne
+    const mockFindOne = jest.spyOn(db.SpeedDial, 'findOne');
+
+    afterEach(() => {
+        jest.clearAllMocks(); // Clears the mock call count after each test
+    });
+
+    it('show delete speed dial', async () => {
+        const mockSpeedDialInstance = {
+            destroy: jest.fn().mockImplementationOnce(() => {
+                return Promise.resolve([1]); // Sequelize usually returns the number of affected rows
+            })
+        };
+
+        mockFindOne.mockResolvedValueOnce(mockSpeedDialInstance);
+
+        const res = await request(app).delete('/api/speed-dials/1/1');
+        expect(mockFindOne).toBeCalledTimes(1);
+        expect(res.status).toBe(204);
+    });
+
+    it('should return an error for a non-existent speed dial', async () => {
+        mockFindOne.mockResolvedValueOnce(null);
+        const res = await request(app).delete('/api/speed-dials/123/1');
+        expect(mockFindOne).toBeCalledTimes(1);
+        expect(res.status).toBe(404);
+    }
+    );
+
+    it('should return an error for a connection error', async () => {
+        mockFindOne.mockRejectedValueOnce(new Error('connection error'));
+        const res = await request(app).delete('/api/speed-dials/123/1');
+        expect(mockFindOne).toBeCalledTimes(1);
+        expect(res.status).toBe(400);
+    }
+    );
+
+}
+);
