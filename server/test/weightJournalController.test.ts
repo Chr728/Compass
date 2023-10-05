@@ -70,7 +70,6 @@ describe('Weight Journal Controller Tests', () => {
   beforeAll(() => {
     startServer();
   });
-})
 
   afterAll(() => {
     stopServer();
@@ -310,4 +309,5 @@ describe('Weight Journal Controller Tests', () => {
     expect(res.status).toBe(404);
     expect(res.body.status).toBe('NOT_FOUND');
     expect(res.body.message).toBe('User not found');
+});
 });
