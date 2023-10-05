@@ -185,3 +185,32 @@ describe("Testing the create appointment controller", () => {
   });
 });
 
+describe("Testing the update appointment controller", () => {
+  it("test to update appointment", async () => {
+    jest.spyOn(db.Appointment, "update").mockResolvedValueOnce(updateAppointment);
+    jest.spyOn(db.Appointment, "findOne").mockResolvedValueOnce(updateAppointment);
+    const res = await request(app).post("/api/appointments/single/5");
+    expect(db.Appointment.update).toBeCalledTimes(1);
+    expect(db.Appointment.findOne).toBeCalledTimes(4);
+    expect(res.status).toBe(200);
+    expect(res.body.status).toBe("SUCCESS");
+    expect(res.body.data).toStrictEqual(updateAppointment);
+  });
+
+  it("should give error if wrong appointment id is sent", async () => {
+    jest.spyOn(db.Appointment, "update").mockResolvedValueOnce(null);
+    const res = await request(app).post("/api/appointments/single/5");
+    expect(db.Appointment.update).toBeCalledTimes(2);
+    expect(res.status).toBe(404);
+    expect(res.body.status).toBe("ERROR");
+    expect(res.body.message).toBe("Appointment not found, invalid appointment id.");
+  });
+
+  it("should catch error", async () => {
+    jest.spyOn(db.Appointment, "update").mockRejectedValue(new Error("query error"));
+    const res = await request(app).post("/api/appointments/single/5");
+    expect(db.Appointment.update).toBeCalledTimes(3);
+    expect(res.status).toBe(400);
+    expect(res.body.status).toBe("ERROR");
+  });
+});
