@@ -138,9 +138,7 @@ export async function updateActivityJournal(
 }
 
 // Function to make a DELETE request to delete a activity journal entry
-export async function deleteActivityJournal(
-    activityJournalId: string
-): Promise<any> {
+export async function deleteActivityJournal(activityJournalId: string): Promise<any> {
     try {
 
         const currentUser = auth.currentUser;
