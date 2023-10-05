@@ -1,8 +1,8 @@
-import { updateUser } from './updateUser';
+import { updateUser } from '../updateUser';
 import { useContext } from 'react';
 import React from 'react';
 
-jest.mock('../contexts/UserContext', () => ({
+jest.mock('../../contexts/UserContext', () => ({
   UserContext: {
     Consumer: ({ children }) => children({ token: 'mockToken' }),
   },
@@ -30,11 +30,17 @@ describe('updateUser', () => {
     const updatedUserData = await updateUser(mockUserId, mockUserData);
 
     expect(updatedUserData).toEqual(mockUserData);
-    expect(mockFetch).toHaveBeenCalledWith('http://localhost:8000/api/users/' + mockUserId, {
-      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer mockToken' },
-      body: JSON.stringify(mockUserData),
-      method: 'PUT',
-    });
+    expect(mockFetch).toHaveBeenCalledWith(
+      'http://localhost:8000/api/users/' + mockUserId,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer mockToken',
+        },
+        body: JSON.stringify(mockUserData),
+        method: 'PUT',
+      }
+    );
   });
 
   it.skip('should throw an error if the request fails', async () => {
@@ -51,13 +57,19 @@ describe('updateUser', () => {
     try {
       await updateUser(mockUserId, mockUserData);
     } catch (error) {
-      expect(error.message).toBe("No user is logged in");
+      expect(error.message).toBe('No user is logged in');
     }
-    expect(mockFetch).toHaveBeenCalledWith('http://localhost:8000/api/users/' + mockUserId, {
-      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer mockToken' },
-      body: JSON.stringify(mockUserData),
-      method: 'PUT',
-    });
+    expect(mockFetch).toHaveBeenCalledWith(
+      'http://localhost:8000/api/users/' + mockUserId,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer mockToken',
+        },
+        body: JSON.stringify(mockUserData),
+        method: 'PUT',
+      }
+    );
   });
 
   it.skip('should throw an error if the server response is not JSON', async () => {
@@ -75,13 +87,19 @@ describe('updateUser', () => {
     try {
       await updateUser(mockUserId, mockUserData);
     } catch (error) {
-      expect(error.message).toBe("No user is logged in");
+      expect(error.message).toBe('No user is logged in');
     }
-    expect(mockFetch).toHaveBeenCalledWith('http://localhost:8000/api/users/' + mockUserId, {
-      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer mockToken' },
-      body: JSON.stringify(mockUserData),
-      method: 'PUT',
-    });
+    expect(mockFetch).toHaveBeenCalledWith(
+      'http://localhost:8000/api/users/' + mockUserId,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer mockToken',
+        },
+        body: JSON.stringify(mockUserData),
+        method: 'PUT',
+      }
+    );
   });
 
   it.skip('should throw an error if the server response is missing data', async () => {
@@ -93,19 +111,27 @@ describe('updateUser', () => {
       ok: true,
       json: () => Promise.resolve(mockResponse),
     });
-    jest.spyOn(React, 'useContext').mockImplementation(() => ({ token: mockToken }));
+    jest
+      .spyOn(React, 'useContext')
+      .mockImplementation(() => ({ token: mockToken }));
     global.fetch = mockFetch;
-  
+
     try {
       await updateUser(mockUserId, mockUserData);
     } catch (error) {
-      expect(error.message).toBe("No user is logged in");
+      expect(error.message).toBe('No user is logged in');
     }
-    expect(mockFetch).toHaveBeenCalledWith('http://localhost:8000/api/users/' + mockUserId, {
-      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer mockToken' },
-      body: JSON.stringify(mockUserData),
-      method: 'PUT',
-    });
+    expect(mockFetch).toHaveBeenCalledWith(
+      'http://localhost:8000/api/users/' + mockUserId,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer mockToken',
+        },
+        body: JSON.stringify(mockUserData),
+        method: 'PUT',
+      }
+    );
   });
 
   it('should throw an error if the user ID is not provided', async () => {
@@ -116,7 +142,7 @@ describe('updateUser', () => {
     try {
       await updateUser(null, mockUserData);
     } catch (error) {
-      expect(error.message).toBe("No user is logged in");
+      expect(error.message).toBe('No user is logged in');
     }
   });
 
@@ -128,7 +154,7 @@ describe('updateUser', () => {
     try {
       await updateUser(mockUserId, null);
     } catch (error) {
-      expect(error.message).toBe("No user is logged in");
+      expect(error.message).toBe('No user is logged in');
     }
   });
 });

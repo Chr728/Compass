@@ -6,6 +6,8 @@ let server: any;
 const port = process.env.SERVER_DEV_PORT;
 
 const user = {
+  id: 1,
+  uid: 'testuid',
   email: 'test@gmail.com',
   firstName: 'John',
   lastName: 'Doe',
@@ -73,7 +75,7 @@ describe('should test the getUsers Controller', () => {
 describe('should test the getUser Controller', () => {
   it('show get user', async () => {
     jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(user);
-    const res = await request(app).get('/api/users/1');
+    const res = await request(app).get(`/api/users/${user.uid}`);
     expect(db.User.findOne).toBeCalledTimes(1);
     expect(res.status).toBe(200);
     expect(res.body.status).toBe('SUCCESS');
@@ -84,7 +86,7 @@ describe('should test the getUser Controller', () => {
     jest
       .spyOn(db.User, 'findOne')
       .mockRejectedValue(new Error('connection error'));
-    const res = await request(app).get('/api/users/1');
+    const res = await request(app).get(`/api/users/${user.uid}`);
     expect(db.User.findOne).toBeCalledTimes(2);
     expect(res.status).toBe(400);
   });
@@ -140,6 +142,8 @@ describe('should test the createUser Controller', () => {
 
 describe('should test the updateUser Controller', () => {
   const updatedUser = {
+    id: 1,
+    uid: 'testuid',
     email: 'test@gmail.com',
     firstName: 'Test',
     lastName: 'Test',
@@ -153,7 +157,9 @@ describe('should test the updateUser Controller', () => {
   };
   it('show update user', async () => {
     jest.spyOn(db.User, 'update').mockResolvedValueOnce(updatedUser);
-    const res = await request(app).put('/api/users/1').send(updatedUser);
+    const res = await request(app)
+      .put(`/api/users/${user.uid}`)
+      .send(updatedUser);
     expect(db.User.update).toBeCalledTimes(1);
     expect(res.status).toBe(200);
     expect(res.body.status).toBe('SUCCESS');
@@ -173,7 +179,7 @@ describe('should test the updateUser Controller', () => {
 describe('should test the deleteUser Controller', () => {
   it('show delete user', async () => {
     jest.spyOn(db.User, 'destroy').mockResolvedValueOnce(user);
-    const res = await request(app).delete('/api/users/1');
+    const res = await request(app).delete(`/api/users/${user.uid}`);
     expect(db.User.destroy).toBeCalledTimes(1);
     expect(res.status).toBe(200);
     expect(res.body.status).toBe('SUCCESS');
@@ -182,7 +188,7 @@ describe('should test the deleteUser Controller', () => {
 
   it('should return an error for a non-existent user', async () => {
     jest.spyOn(db.User, 'destroy').mockRejectedValueOnce(new Error('error'));
-    const res = await request(app).delete('/api/users/1');
+    const res = await request(app).delete(`/api/users/${user.uid}`);
     expect(db.User.destroy).toBeCalledTimes(2);
     expect(res.status).toBe(400);
   });

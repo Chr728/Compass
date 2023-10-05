@@ -1,6 +1,9 @@
 import { createLogger, format, transports } from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
 
+// Check if the application is running in a testing environment
+const isTesting = process.env.NODE_ENV === 'test';
+
 // Logger for general server logs
 export const Logger = createLogger({
   format: format.combine(
@@ -13,6 +16,7 @@ export const Logger = createLogger({
   transports: [
     new transports.Console({
       format: format.printf((log) => log.message),
+      silent: isTesting, // Silence console output during tests
     }),
     new DailyRotateFile({
       level: 'info',
@@ -22,6 +26,7 @@ export const Logger = createLogger({
       zippedArchive: true,
       maxSize: '10m',
       maxFiles: '7d',
+      silent: isTesting, // Don't write log files during tests
     }),
     new DailyRotateFile({
       level: 'error',
@@ -31,6 +36,7 @@ export const Logger = createLogger({
       zippedArchive: true,
       maxSize: '10m',
       maxFiles: '7d',
+      silent: isTesting, // Don't write log files during tests
     }),
   ],
 });
@@ -51,6 +57,7 @@ export const RequestLogger = createLogger({
         (log) =>
           `${log.method} - ${log.status} - ${log.url} - ${log.response_time}ms`
       ),
+      silent: isTesting, // Silence console output during tests
     }),
     new DailyRotateFile({
       level: 'http',
@@ -60,6 +67,7 @@ export const RequestLogger = createLogger({
       zippedArchive: true,
       maxSize: '10m',
       maxFiles: '7d',
+      silent: isTesting, // Don't write log files during tests
     }),
   ],
 });
