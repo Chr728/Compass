@@ -1,6 +1,6 @@
 import request from "supertest";
-import app from "./../index";
-import db from "./../models/index";
+import app from "../index";
+import db from "../models/index";
 
 let server: any;
 const port = process.env.SERVER_DEV_PORT;
@@ -158,7 +158,7 @@ describe("Testing the create appointment controller", () => {
       .spyOn(db.Appointment, "create")
       .mockResolvedValueOnce(createAppointment);
     const res = await request(app)
-      .post("/api/appointments/single/5")
+      .post("/api/appointments/5")
       .send(createAppointment);
     expect(db.Appointment.create).toHaveBeenCalledTimes(1);
     expect(res.status).toBe(201);
@@ -168,7 +168,7 @@ describe("Testing the create appointment controller", () => {
 
   it("test the error if request is not made properly", async () => {
     jest.spyOn(db.Appointment, "create").mockResolvedValueOnce("");
-    const res = await request(app).post("/api/appointments/single/0").send("");
+    const res = await request(app).post("/api/appointments/0").send("");
     expect(db.Appointment.create).toHaveBeenCalledTimes(1);
     expect(res.status).toBe(400);
     expect(res.body.status).toBe("ERROR");
