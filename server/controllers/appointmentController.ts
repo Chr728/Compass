@@ -112,5 +112,42 @@ export const deleteAppointment = async (req: Request, res: Response) => {
 };
 
 export const updateAppointments = async (req: Request, res: Response) => {
- 
+  try {
+    const appointmentId = req.params.id;
+    const { appointmentWith, reason, date, time, notes } = req.body;
+
+    const updatedAppointment =await db.Appointment.update(
+      { appointmentWith, reason, date, time, notes},
+      {
+        where: {
+          id: appointmentId,
+        },
+      }
+    );
+
+    if (!updatedAppointment) {
+      return res.status(404).json({
+        status: "ERROR",
+        message: "Appointment not found, invalid appointment id.",
+      });
+    }
+    
+    const latestAppointment = await db.Appointment.findOne({
+      where: {
+        id: appointmentId,
+      },
+    });
+
+    return res.status(200).json({
+      status: 'SUCCESS',
+      message: 'appointment was updated successfully',
+      data: latestAppointment,
+    });
+  } catch (error) {
+    Logger.error(`Error occurred while updating appointment: ${error}`);
+    return res.status(400).json({
+      status: 'ERROR',
+      message: `Error updating appointment: ${error}`,
+    });
+  }
 }
