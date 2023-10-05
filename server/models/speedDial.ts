@@ -3,7 +3,7 @@ import {
   Model
 } from 'sequelize';
 
-type SpeedDialAttributes = {
+export type SpeedDialAttributes = {
   id: number;
   uid: string;
   contactName: string;
