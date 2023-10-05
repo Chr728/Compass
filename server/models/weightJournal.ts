@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-import { IntegerDataType, Model } from "sequelize";
+import { IntegerDataType, Model } from 'sequelize';
 
 interface WeightJournalAttributes {
   id: number;
@@ -8,7 +8,7 @@ interface WeightJournalAttributes {
   date: Date;
   time: Date;
   weight: number;
-  height : number;
+  height: number;
   unit: string;
   notes: string;
 }
@@ -25,14 +25,14 @@ module.exports = (sequelize: any, DataTypes: any) => {
     date!: Date;
     time!: Date;
     weight!: number;
-    height! : number;
+    height!: number;
     unit!: string;
     notes!: string;
     static associate(models: any) {
-      WeightJournal.belongsTo(models.User,{
-        foreignKey: "uid",
-        targetKey: 'uid',}
-      )
+      WeightJournal.belongsTo(models.User, {
+        foreignKey: 'uid',
+        targetKey: 'uid',
+      });
       // define association here
     }
   }
@@ -76,7 +76,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
 
     {
       sequelize,
-      modelName: "WeightJournal",
+      modelName: 'WeightJournal',
       timestamps: false,
     }
   );

@@ -1,5 +1,6 @@
-import { Logger } from "../middlewares/logger";
-import { UserAttributes } from "../models/user";
+import {Logger} from '../middlewares/logger';
+import {UserAttributes} from '../models/user';
+import {SpeedDialAttributes} from '../models/speedDial';
 import { AppointmentAttributes } from "../models/appointment";
 
 const userValidator = (values : UserAttributes) => {
@@ -25,6 +26,7 @@ const userValidator = (values : UserAttributes) => {
         throw new Error(`Invalid phone number: ${phoneNumber}`);
     }
 }
+
 
 const appointmentValidator = (values: AppointmentAttributes) => {
   const { appointmentWith, reason, date, time, notes } = values;
@@ -58,4 +60,24 @@ const appointmentValidator = (values: AppointmentAttributes) => {
   }
 };
 
-export { userValidator, appointmentValidator };
+const speedDialValidator = (values: { contactName: string; contactNumber: string }) => {
+    const {contactName, contactNumber} = values;
+    //check if contact name is valid
+    if(!contactName || /\d/.test(contactName) || typeof contactName !== 'string') {
+        Logger.error(`Invalid contact name: ${contactName}`);
+        throw new Error(`Invalid contact name: ${contactName}`);
+    }
+    //check if contact number is valid
+    if(!contactNumber || typeof contactNumber !== 'string' || !/^[0-9]{10}$/.test(contactNumber)) {
+        Logger.error(`Invalid contact number: ${contactNumber}`);
+        throw new Error(`Invalid contact number: ${contactNumber}`);
+    }
+
+}
+
+export {
+   userValidator,
+  speedDialValidator,
+  appointmentValidator
+}
+
