@@ -1,13 +1,13 @@
 'use client';
 import Image from 'next/image';
-import Button from '../../components/Button';
-import Input from '../../components/Input';
+import Button from '../components/Button';
+import Input from '../components/Input';
 import Link from 'next/link';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { getWeightJournal} from '../../http/weightJournalAPI'; 
-import { useAuth } from '../../contexts/AuthContext';
-import { useUser } from '../../contexts/UserContext';
+import { getWeightJournal} from '../http/weightJournalAPI'; 
+import { useAuth } from '../contexts/AuthContext';
+import { useUser } from '../contexts/UserContext';
 import { useEffect, useState } from 'react';
 
 
@@ -28,8 +28,8 @@ export default function GetWeightJournal() {
     async function fetchWeightJournal() {
       try {
         const userId = user?.uid || '';
-        // const weightJournalId = weight?.weightJournalId; 
-        const weightJournalId = '1'; // Replace '1' with the correct weight journal entry ID
+        const weightJournalId = weight?.weightJournalId; 
+        // const weightJournalId = '1'; // Replace '1' with the correct weight journal entry ID
 
         const result = await getWeightJournal(userId, weightJournalId);
         console.log('Weight journal entry retrieved:', result);
