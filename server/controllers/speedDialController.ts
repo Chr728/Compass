@@ -4,7 +4,8 @@ import db from '../models';
 import { speedDialValidator } from '../utils/databaseValidators';
 export const createSpeedDial = async (req: Request, res: Response) => {
     try {
-        const {uid,contactName, contactNumber} = req.body;
+        const {uid} = req.params;
+        const {contactName, contactNumber} = req.body;
         speedDialValidator({contactName, contactNumber});
         const speedDial = await db.SpeedDial.create({
             uid,

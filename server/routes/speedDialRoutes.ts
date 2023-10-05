@@ -2,11 +2,9 @@ import {createSpeedDial,getSpeedDial,getSpeedDials,updateSpeedDial,deleteSpeedDi
 import {Router} from 'express';
 const router = Router();
 
-router.route('/')
-    .post(createSpeedDial);
 
 router.route('/:uid')
-    .get(getSpeedDials);
+    .get(getSpeedDials).post(createSpeedDial)
 
 router.route('/:uid/:id')
     .get(getSpeedDial)

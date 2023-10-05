@@ -96,7 +96,7 @@ describe('should test the getSpeedDial Controller', () => {
 describe('should test the createSpeedDial Controller', () => {
     it('show create speed dial', async () => {
         jest.spyOn(db.SpeedDial, 'create').mockResolvedValueOnce(speedDial);
-        const res = await request(app).post('/api/speed-dials/').send(speedDial);
+        const res = await request(app).post('/api/speed-dials/123').send(speedDial);
         expect(db.SpeedDial.create).toBeCalledTimes(1);
         expect(res.status).toBe(201);
         expect(res.body.status).toBe('SUCCESS');
@@ -108,7 +108,7 @@ describe('should test the createSpeedDial Controller', () => {
         jest
             .spyOn(db.SpeedDial, 'create')
             .mockRejectedValue(new Error('connection error'));
-        const res = await request(app).post('/api/speed-dials/').send(invalidSpeedDial);
+        const res = await request(app).post('/api/speed-dials/123').send(invalidSpeedDial);
         expect(db.SpeedDial.create).toBeCalledTimes(1);
         expect(res.status).toBe(400);
     }
