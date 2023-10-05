@@ -36,6 +36,16 @@ const createAppointment = {
   notes: "Call the doctor back 2 days later",
 };
 
+const updateAppointment = {
+  id: 5,
+  uid: "5",
+  appointmentWith: "New Docker",
+  reason: "Medications",
+  date: "2023-10-23T11:30:00.000Z",
+  time: "11:30:00",
+  notes: "Call the doctor back 2 days later",
+};
+
 function startServer() {
   server = app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
@@ -128,7 +138,7 @@ describe("should test the deleteAppointment Controller", () => {
   });
 });
 
-describe("Testing the get all apointments Controller", () => {
+describe("Testing the get all appointments Controller", () => {
   it("should get all appointment for a user", async () => {
     jest.spyOn(db.Appointment, "findAll").mockResolvedValueOnce(appointment);
     const res = await request(app).get("/api/appointments/appointUid");
@@ -158,7 +168,7 @@ describe("Testing the create appointment controller", () => {
       .spyOn(db.Appointment, "create")
       .mockResolvedValueOnce(createAppointment);
     const res = await request(app)
-      .post("/api/appointments/single/5")
+      .post("/api/appointments/5")
       .send(createAppointment);
     expect(db.Appointment.create).toHaveBeenCalledTimes(1);
     expect(res.status).toBe(201);
@@ -168,7 +178,7 @@ describe("Testing the create appointment controller", () => {
 
   it("test the error if request is not made properly", async () => {
     jest.spyOn(db.Appointment, "create").mockResolvedValueOnce("");
-    const res = await request(app).post("/api/appointments/single/0").send("");
+    const res = await request(app).post("/api/appointments/0").send("");
     expect(db.Appointment.create).toHaveBeenCalledTimes(1);
     expect(res.status).toBe(400);
     expect(res.body.status).toBe("ERROR");

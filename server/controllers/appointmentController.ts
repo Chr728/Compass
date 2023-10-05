@@ -110,3 +110,7 @@ export const deleteAppointment = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const updateAppointments = async (req: Request, res: Response) => {
+ 
+}
