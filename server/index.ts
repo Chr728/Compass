@@ -31,7 +31,6 @@ if(process.env.NODE_ENV !== 'test'){
   app.listen(process.env.SERVER_DEV_PORT, () => {
   Logger.info(`Server listening on port ${process.env.SERVER_DEV_PORT || 8000}`);
   });
-
 }
 
 
