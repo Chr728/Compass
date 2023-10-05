@@ -1,7 +1,7 @@
 import { auth } from '../config/firebase';
 
 // Function to make a GET request to retrieve all activity journals for a user
-export async function getActivityJournals(userId: string): Promise<any> {
+export async function getActivityJournals(): Promise<any> {
     try {
 
         const currentUser = auth.currentUser;
@@ -22,7 +22,7 @@ export async function getActivityJournals(userId: string): Promise<any> {
         );
         if (!response.ok) {
             throw new Error(
-                `Failed to retrieve activity journals for user ${userId}. HTTP Status: ${response.status}`
+                `Failed to retrieve activity journals for user`
             );
         }
         const data = await response.json();
@@ -34,10 +34,7 @@ export async function getActivityJournals(userId: string): Promise<any> {
 }
 
 // Function to make a GET request to retrieve a specific activity journal entry
-export async function getActivityJournal(
-    userId: string,
-    activityJournalId: string
-): Promise<any> {
+export async function getActivityJournal(activityJournalId: string): Promise<any> {
     try {
 
         const currentUser = auth.currentUser;
@@ -57,7 +54,7 @@ export async function getActivityJournal(
         );
         if (!response.ok) {
             throw new Error(
-                `Failed to retrieve activity journal entry ${activityJournalId} for user ${userId}. HTTP Status: ${response.status}`
+                `Failed to retrieve activity journal entry`
             );
         }
         const data = await response.json();
@@ -69,10 +66,7 @@ export async function getActivityJournal(
 }
 
 // Function to make a POST request to create a new activity journal entry
-export async function createActivityJournal(
-    userId: string,
-    activityJournalData: any
-): Promise<any> {
+export async function createActivityJournal(activityJournalData: any): Promise<any> {
     try {
 
         const currentUser = auth.currentUser;
@@ -95,7 +89,7 @@ export async function createActivityJournal(
         );
         if (!response.ok) {
             throw new Error(
-                `Failed to create activity journal entry for user ${userId}. HTTP Status: ${response.status}`
+                `Failed to create activity journal entry`
             );
         }
         const data = await response.json();
@@ -108,7 +102,6 @@ export async function createActivityJournal(
 
 // Function to make a PUT request to update an existing activity journal entry
 export async function updateActivityJournal(
-    userId: string,
     activityJournalId: string,
     updatedActivityJournalData: any
 ): Promise<any> {
@@ -133,7 +126,7 @@ export async function updateActivityJournal(
         );
         if (!response.ok) {
             throw new Error(
-                `Failed to update activity journal entry ${activityJournalId} for user ${userId}. HTTP Status: ${response.status}`
+                `Failed to update activity journal entry`
             );
         }
         const data = await response.json();
@@ -146,7 +139,6 @@ export async function updateActivityJournal(
 
 // Function to make a DELETE request to delete a activity journal entry
 export async function deleteActivityJournal(
-    userId: string,
     activityJournalId: string
 ): Promise<any> {
     try {
@@ -168,7 +160,7 @@ export async function deleteActivityJournal(
         );
         if (!response.ok) {
             throw new Error(
-                `Failed to delete activity journal entry ${activityJournalId} for user ${userId}. HTTP Status: ${response.status}`
+                `Failed to delete activity journal entry`
             );
         }
         return { message: 'Activity journal entry deleted successfully' };
