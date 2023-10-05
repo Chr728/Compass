@@ -1,5 +1,5 @@
-import {useAuth} from '@/app/contexts/AuthContext';
 import {auth} from '../config/firebase'
+
 export const updateUser = async (userData: any) => {
     const currentUser = auth.currentUser;
     if(!currentUser) throw new Error('No user is logged in');

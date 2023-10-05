@@ -59,12 +59,13 @@ interface UserProviderProps {
 export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const { user } = useAuth(); // Get the user from AuthContext
   const [userInfo, setUserInfo] = useState<UserAttributes | null>(null);
+  // can remove the following line as we check for user in req. maybe no more use for user const too.
   const uid = user ? user.uid : null; // Access the UID if the user is authenticated
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchUserData = () => {
       if (uid) {
-        getUser(uid)
+        getUser()
           .then((userData) => {
             setLoading(true);
             setUserInfo(userData.data);

@@ -1,8 +1,24 @@
+import { auth } from '../config/firebase';
+
 // Function to make a GET request to retrieve all weight journals for a user
 export async function getWeightJournals(userId: string): Promise<any> {
   try {
+
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      throw new Error('No user is currently signed in.');
+    }
+    const id = currentUser.uid;
+    const token = await currentUser.getIdToken();
+
     const response = await fetch(
-      `http://localhost:8000/api/journals/weight/user/${userId}`
+      `http://localhost:8000/api/journals/weight/user/${id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        }
+      }
     );
     if (!response.ok) {
       throw new Error(
@@ -23,8 +39,21 @@ export async function getWeightJournal(
   weightJournalId: string
 ): Promise<any> {
   try {
+
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      throw new Error('No user is currently signed in.');
+    }
+    const token = await currentUser.getIdToken();
+
     const response = await fetch(
-      `http://localhost:8000/api/journals/weight/${weightJournalId}`
+      `http://localhost:8000/api/journals/weight/${weightJournalId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        }
+        }
     );
     if (!response.ok) {
       throw new Error(
@@ -45,12 +74,21 @@ export async function createWeightJournal(
   weightJournalData: any
 ): Promise<any> {
   try {
+
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      throw new Error('No user is currently signed in.');
+    }
+    const id = currentUser.uid;
+    const token = await currentUser.getIdToken();
+
     const response = await fetch(
-      `http://localhost:8000/api/journals/weight/user/${userId}`,
+      `http://localhost:8000/api/journals/weight/user/${id}`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(weightJournalData),
       }
@@ -75,12 +113,20 @@ export async function updateWeightJournal(
   updatedWeightJournalData: any
 ): Promise<any> {
   try {
+
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      throw new Error('No user is currently signed in.');
+    }
+    const token = await currentUser.getIdToken();
+
     const response = await fetch(
       `http://localhost:8000/api/journals/weight/${weightJournalId}`,
       {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(updatedWeightJournalData),
       }
@@ -104,10 +150,20 @@ export async function deleteWeightJournal(
   weightJournalId: string
 ): Promise<any> {
   try {
+
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      throw new Error('No user is currently signed in.');
+    }
+    const token = await currentUser.getIdToken();
+
     const response = await fetch(
       `http://localhost:8000/api/journals/weight/${weightJournalId}`,
       {
         method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        }
       }
     );
     if (!response.ok) {
