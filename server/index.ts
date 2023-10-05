@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import db from "./models";
 import userRoutes from "./routes/userRoutes";
+import activityJournalRoutes from "./routes/activityJournalRoutes";
 import speedDialRoutes from "./routes/speedDialRoutes";
 import weightJournalRoutes from './routes/weightJournalRoutes';
 import Morgan from './middlewares/morgan';
@@ -18,6 +19,7 @@ app.use(Morgan);
 
 app.use('/api/journals/weight', weightJournalRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/journals/activity", activityJournalRoutes);
 app.use("/api/speed-dials", speedDialRoutes);
 
 app.get('/', (req, res) => {
