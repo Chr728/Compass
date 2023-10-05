@@ -1,7 +1,8 @@
-import express from 'express';
-import cors from 'cors';
-import db from './models';
-import userRoutes from './routes/userRoutes';
+import express from "express";
+import cors from "cors";
+import db from "./models";
+import userRoutes from "./routes/userRoutes";
+import speedDialRoutes from "./routes/speedDialRoutes";
 import weightJournalRoutes from './routes/weightJournalRoutes';
 import Morgan from './middlewares/morgan';
 import { Logger } from './middlewares/logger';
@@ -15,8 +16,9 @@ app.use(cors());
 app.use(express.json());
 app.use(Morgan);
 
-app.use('/api/users', userRoutes);
 app.use('/api/journals/weight', weightJournalRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/speed-dials", speedDialRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
