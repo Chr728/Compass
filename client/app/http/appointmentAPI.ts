@@ -1,5 +1,3 @@
-
-// Function to get all appointments of a user
 export interface Appointment {
     appointmentWith: string;
     reason:string;
@@ -10,6 +8,7 @@ export interface Appointment {
     uid:string;
 }
 
+// Function to get all appointments of a user
 export async function getAppointments(userId: string): Promise<any>{
     try {
         const response = await fetch(
@@ -28,6 +27,26 @@ export async function getAppointments(userId: string): Promise<any>{
       }
 }
 
+// Function to get a single appointment
+export async function getAppointment(appointmentId: string ): Promise<any>{
+  try {
+    const response = await fetch(
+      `http://localhost:8000/api/appointments/single/${appointmentId}`
+    );if (!response.ok) {
+      throw new Error(
+        `Failed to fetch the appointment data. HTTP Status: ${response.status}`
+      );
+    }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error fetching appointment data:', error);
+      throw error;
+      }
+
+}
+
+// Function to create a new appointment
 export async function createAppointment(userId: string, appointmentData: any): Promise<any> {
     try {
        
@@ -55,6 +74,7 @@ export async function createAppointment(userId: string, appointmentData: any): P
       }
 }
 
+// Function to delete an appointment
 export async function deleteAppointment(appointmentId: string): Promise<any>{
     try {
        
