@@ -18,7 +18,6 @@ export const createUser = async (body:any) => {
             body: JSON.stringify(body),
         });
 
-        console.log('fetch:', response);
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -28,9 +27,8 @@ export const createUser = async (body:any) => {
             throw new Error('Response data is missing.');
         }
         return userData.data;
-        
+
     } catch (error: any) {
-        console.error('Error creating user:', error);
         throw new Error(`Error creating user: ${error.message}`);
     }
 }

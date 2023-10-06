@@ -68,7 +68,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
         getUser()
           .then((userData) => {
             setLoading(true);
-            setUserInfo(userData.data);
+            setUserInfo(userData);
             setLoading(false);
           })
           .catch((error) => {
