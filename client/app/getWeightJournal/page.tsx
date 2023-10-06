@@ -29,11 +29,13 @@ export default function GetWeightJournal() {
       try {
         const userId = user?.uid || '';
         const weightJournalId = weight?.weightJournalId; 
+        console.log("weightJournalId", weightJournalId);
         // const weightJournalId = '1'; // Replace '1' with the correct weight journal entry ID
 
         const result = await getWeightJournal(userId, weightJournalId);
         console.log('Weight journal entry retrieved:', result);
         setweight(result.data);
+        console.log("hey", result.data);
       } catch (error) {
         console.error('Error retrieving weight journal entry:', error);
       }
@@ -66,6 +68,7 @@ export default function GetWeightJournal() {
         </Link>
         Weight Journal
       </span>
+     
         {weight && (
       <span
         className="rounded-3xl bg-white flex flex-col m-auto w-full md:max-w-[800px] md:min-h-[550px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]">
@@ -78,12 +81,22 @@ export default function GetWeightJournal() {
           </label>
           <br />
         </div>
-        <p
+        {weight.map((item: any) => (
+                <p key={item.weightJournalId}>
+                 {new Date(item.date).toISOString().split('T')[0]}
+                  {item.weight}
+                  {item.time}
+                  {item.height}
+                  {item.unit}
+                  {item.notes}
+                </p>
+                ))}
+        {/* <p
                 className="text-md ml-2 text-darkgrey"
                 style={{display: 'inline'}}
             >
               {weight.date}
-            </p>
+            </p> */}
             <br></br>
 
 

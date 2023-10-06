@@ -28,8 +28,9 @@ export default function GetWeightJournal() {
     async function fetchWeightJournals() {
       try {
         const userId = user?.uid || '';
+        const result = await getWeightJournals(userId);    
         const weightJournalId = weight?.weightJournalId; 
-        const result = await getWeightJournals(userId);
+
         console.log('All Weight journals entry retrieved:', result);
         setweight(result.data);
         console.log("hey", result.data);
@@ -79,28 +80,21 @@ export default function GetWeightJournal() {
                           </label>
                           <br />
                       </div>
-                <p>
-                    {weight.map((weight: ) => (
-                <p key={weight.weightJournalId}>
-                  {weight.date}
-                </p>
-                        ))}
-                    </p>
-                      <p
-                          className="text-md ml-2 text-darkgrey"
-                          style={{ display: 'inline' }}
-                      >
-                          {weight.date}
-                      </p>
-                      <br></br>
+                <p className="font-sans font-medium text-grey " >
+                    
+                {weight.map((item: any) => (
+                <p key={item.weightJournalId}>
+                 {new Date(item.date).toISOString().split('T')[0]}
+                  {item.weight}
+                  {item.time}
+                  {/* <Button type="button" text="INFO"style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)' }} onClick={() => router.push(`/getWeightJournal/${user?.uid}/${item?.id}`)} /> */}
+                  <Button type="button" text="INFO"style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)' }} onClick={() => router.push(`/getWeightJournal/${item?.id}`)} />
 
-                      <div className="mt-3">
-                          <Button
-                              type="button"
-                              text="INFO"
-                              style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)' }}
-                              onClick={() => router.push(`/getWeightJournal/${weight.weightJournalId}`)} />
-                      </div>
+                </p>
+                ))}
+                <br></br>
+                    </p>
+
                   </span>
               )}
           </div>
