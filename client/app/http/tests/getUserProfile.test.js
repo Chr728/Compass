@@ -1,4 +1,5 @@
 import { getUserProfile } from '../getUserProfile';
+import { auth } from '../../config/firebase';
 
 describe('getUserProfile', () => {
   beforeEach(() => {
@@ -11,6 +12,16 @@ describe('getUserProfile', () => {
 
   it('should get a user profile by ID', async () => {
     const mockUserId = '1';
+    const mockToken = 'mockToken';
+    const mockCurrentUser = {
+      uid: mockUserId,
+      getIdToken: jest.fn().mockResolvedValue(mockToken),
+    };
+
+    Object.defineProperty(auth, 'currentUser', {
+      get: jest.fn().mockReturnValue(mockCurrentUser),
+    });
+
     const mockUserProfile = {
       id: 1,
       name: 'John Doe',
@@ -24,14 +35,14 @@ describe('getUserProfile', () => {
     });
     global.fetch.mockImplementation(mockFetch);
 
-    const userProfileData = await getUserProfile(mockUserId);
-
-    expect(userProfileData).toEqual(mockUserProfile);
+    const userProfile = await getUserProfile();
+    expect(userProfile).toEqual(mockUserProfile);
     expect(mockFetch).toHaveBeenCalledWith(
-      'http://localhost:8000/api/users/' + mockUserId,
+      `http://localhost:8000/api/users/${mockUserId}`,
       {
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${mockToken}`,
         },
         method: 'GET',
       }
@@ -40,20 +51,30 @@ describe('getUserProfile', () => {
 
   it('should throw an error if the request fails', async () => {
     const mockUserId = '1';
-    const mockFetch = jest.fn().mockResolvedValue({
+    const mockToken = 'mockToken';
+    const mockCurrentUser = {
+      uid: mockUserId,
+      getIdToken: jest.fn().mockResolvedValue(mockToken),
+    };
+
+    Object.defineProperty(auth, 'currentUser', {
+      get: jest.fn().mockReturnValue(mockCurrentUser),
+    });
+
+    const mockResponse = {
       ok: false,
       status: 500,
-    });
+    };
+    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch.mockImplementation(mockFetch);
 
-    await expect(getUserProfile(mockUserId)).rejects.toThrow(
-      'Error fetching user profile'
-    );
+    await expect(getUserProfile()).rejects.toThrow('Error fetching user profile');
     expect(mockFetch).toHaveBeenCalledWith(
-      'http://localhost:8000/api/users/' + mockUserId,
+      `http://localhost:8000/api/users/${mockUserId}`,
       {
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${mockToken}`,
         },
         method: 'GET',
       }
