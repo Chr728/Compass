@@ -1,6 +1,7 @@
 import request from "supertest";
 import app from "../index";
 import db from "../models/index";
+import admin from 'firebase-admin';
 
 let server: any;
 const port = process.env.SERVER_DEV_PORT;
@@ -46,6 +47,20 @@ const updateAppointment = {
   notes: "Call the doctor back 2 days later",
 };
 
+const mockedDecodedToken = {
+  uid:"userUid",
+  aud:"",
+  auth_time: 0,
+  exp: 0,
+  firebase:{
+      identities: { [0]: "string" },
+      sign_in_provider: "string"
+  },
+  iat:0,
+  iss:"",
+  sub:"",
+};
+
 function startServer() {
   server = app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
@@ -68,10 +83,19 @@ afterAll(() => {
   stopServer(); // Stop the server after all tests are done
 });
 
+beforeEach(() => {
+  jest.spyOn(admin.auth(), 'verifyIdToken').mockResolvedValueOnce(mockedDecodedToken);
+});
+
+afterEach(() => {
+  jest.restoreAllMocks();
+});
+
+
 describe("should test the getAppointment Controller", () => {
   it("should get one specific appointment", async () => {
     jest.spyOn(db.Appointment, "findOne").mockResolvedValueOnce(appointment[0]);
-    const res = await request(app).get("/api/appointments/single/1");
+    const res = await request(app).get("/api/appointments/single/1").set({ Authorization: 'Bearer token'});
     expect(db.Appointment.findOne).toBeCalledTimes(1);
     expect(res.status).toBe(200);
     expect(res.body.status).toBe("SUCCESS");
@@ -83,8 +107,8 @@ describe("should test the getAppointment Controller", () => {
     jest.spyOn(db.Appointment, "findOne").mockResolvedValueOnce(null);
     const res = await request(app).get(
       `/api/appointments/single/${nonExistentAppointmentId}`
-    );
-    expect(db.Appointment.findOne).toBeCalledTimes(2);
+    ).set({ Authorization: 'Bearer token'});
+    expect(db.Appointment.findOne).toBeCalledTimes(1);
     expect(res.status).toBe(404);
     expect(res.body.status).toBe("ERROR");
     expect(res.body.message).toBe(
@@ -96,8 +120,8 @@ describe("should test the getAppointment Controller", () => {
     jest
       .spyOn(db.Appointment, "findOne")
       .mockRejectedValue(new Error("query error"));
-    const res = await request(app).get("/api/appointments/single/1");
-    expect(db.Appointment.findOne).toBeCalledTimes(3);
+    const res = await request(app).get("/api/appointments/single/1").set({ Authorization: 'Bearer token'});
+    expect(db.Appointment.findOne).toBeCalledTimes(1);
     expect(res.status).toBe(400);
     expect(res.body.status).toBe("ERROR");
   });
@@ -106,7 +130,7 @@ describe("should test the getAppointment Controller", () => {
 describe("should test the deleteAppointment Controller", () => {
   it("should delete one specific appointment", async () => {
     jest.spyOn(db.Appointment, "destroy").mockResolvedValueOnce(appointment);
-    const res = await request(app).delete("/api/appointments/single/1");
+    const res = await request(app).delete("/api/appointments/single/1").set({ Authorization: 'Bearer token'});
     expect(db.Appointment.destroy).toBeCalledTimes(1);
     expect(res.status).toBe(200);
     expect(res.body.status).toBe("SUCCESS");
@@ -118,8 +142,8 @@ describe("should test the deleteAppointment Controller", () => {
     jest.spyOn(db.Appointment, "destroy").mockResolvedValueOnce(null);
     const res = await request(app).delete(
       `/api/appointments/single/${nonExistentAppointmentId}`
-    );
-    expect(db.Appointment.destroy).toBeCalledTimes(2);
+    ).set({ Authorization: 'Bearer token'});
+    expect(db.Appointment.destroy).toBeCalledTimes(1);
     expect(res.status).toBe(404);
     expect(res.body.status).toBe("ERROR");
     expect(res.body.message).toBe(
@@ -131,8 +155,8 @@ describe("should test the deleteAppointment Controller", () => {
     jest
       .spyOn(db.Appointment, "destroy")
       .mockRejectedValue(new Error("query error"));
-    const res = await request(app).delete("/api/appointments/single/1");
-    expect(db.Appointment.destroy).toBeCalledTimes(3);
+    const res = await request(app).delete("/api/appointments/single/1").set({ Authorization: 'Bearer token'});
+    expect(db.Appointment.destroy).toBeCalledTimes(1);
     expect(res.status).toBe(400);
     expect(res.body.status).toBe("ERROR");
   });
@@ -141,7 +165,7 @@ describe("should test the deleteAppointment Controller", () => {
 describe("Testing the get all appointments Controller", () => {
   it("should get all appointment for a user", async () => {
     jest.spyOn(db.Appointment, "findAll").mockResolvedValueOnce(appointment);
-    const res = await request(app).get("/api/appointments/appointUid");
+    const res = await request(app).get("/api/appointments/appointUid").set({ Authorization: 'Bearer token'});
     expect(db.Appointment.findAll).toBeCalledTimes(1);
     expect(res.status).toBe(200);
     expect(res.body.status).toBe("SUCCESS");
@@ -152,8 +176,8 @@ describe("Testing the get all appointments Controller", () => {
     jest
       .spyOn(db.Appointment, "findAll")
       .mockRejectedValue(new Error("query Error"));
-    const res = await request(app).get("/api/appointments/0");
-    expect(db.Appointment.findAll).toBeCalledTimes(2);
+    const res = await request(app).get("/api/appointments/0").set({ Authorization: 'Bearer token'});
+    expect(db.Appointment.findAll).toBeCalledTimes(1);
     expect(res.status).toBe(400);
     expect(res.body.status).toBe("ERROR");
     expect(res.body.message).toBe(
@@ -169,7 +193,7 @@ describe("Testing the create appointment controller", () => {
       .mockResolvedValueOnce(createAppointment);
     const res = await request(app)
       .post("/api/appointments/5")
-      .send(createAppointment);
+      .send(createAppointment).set({ Authorization: 'Bearer token'});
     expect(db.Appointment.create).toHaveBeenCalledTimes(1);
     expect(res.status).toBe(201);
     expect(res.body.status).toBe("SUCCESS");
@@ -178,8 +202,8 @@ describe("Testing the create appointment controller", () => {
 
   it("test the error if request is not made properly", async () => {
     jest.spyOn(db.Appointment, "create").mockResolvedValueOnce("");
-    const res = await request(app).post("/api/appointments/0").send("");
-    expect(db.Appointment.create).toHaveBeenCalledTimes(1);
+    const res = await request(app).post("/api/appointments/0").send("").set({ Authorization: 'Bearer token'});
+    expect(db.Appointment.create).toHaveBeenCalledTimes(0);
     expect(res.status).toBe(400);
     expect(res.body.status).toBe("ERROR");
   });
@@ -193,9 +217,9 @@ describe("Testing the update appointment controller", () => {
     jest
       .spyOn(db.Appointment, "findOne")
       .mockResolvedValueOnce(updateAppointment);
-    const res = await request(app).put("/api/appointments/single/5");
+    const res = await request(app).put("/api/appointments/single/5").set({ Authorization: 'Bearer token'});
     expect(db.Appointment.update).toBeCalledTimes(1);
-    expect(db.Appointment.findOne).toBeCalledTimes(4);
+    expect(db.Appointment.findOne).toBeCalledTimes(1);
     expect(res.status).toBe(200);
     expect(res.body.status).toBe("SUCCESS");
     expect(res.body.data).toStrictEqual(updateAppointment);
@@ -203,8 +227,8 @@ describe("Testing the update appointment controller", () => {
 
   it("should give error if wrong appointment id is sent", async () => {
     jest.spyOn(db.Appointment, "update").mockResolvedValueOnce(null);
-    const res = await request(app).put("/api/appointments/single/5");
-    expect(db.Appointment.update).toBeCalledTimes(2);
+    const res = await request(app).put("/api/appointments/single/5").set({ Authorization: 'Bearer token'});
+    expect(db.Appointment.update).toBeCalledTimes(1);
     expect(res.status).toBe(404);
     expect(res.body.status).toBe("ERROR");
     expect(res.body.message).toBe(
@@ -216,8 +240,8 @@ describe("Testing the update appointment controller", () => {
     jest
       .spyOn(db.Appointment, "update")
       .mockRejectedValue(new Error("query error"));
-    const res = await request(app).put("/api/appointments/single/5");
-    expect(db.Appointment.update).toBeCalledTimes(3);
+    const res = await request(app).put("/api/appointments/single/5").set({ Authorization: 'Bearer token'});
+    expect(db.Appointment.update).toBeCalledTimes(1);
     expect(res.status).toBe(400);
     expect(res.body.status).toBe("ERROR");
   });
