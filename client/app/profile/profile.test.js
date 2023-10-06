@@ -30,10 +30,6 @@ jest.mock('../contexts/UserContext', () => {
                 email: 'mock@example.com',
                 firstName: 'John',
                 lastName: 'Doe',
-                streetAddress: '1234 Main St',
-                city: 'Mock City',
-                province: 'Mock Province',
-                postalCode: '12345',
                 phoneNumber: '123-456-7890',
                 birthDate: new Date(),
                 sex: 'Male',
@@ -55,10 +51,6 @@ jest.mock('../contexts/UserContext', () => {
                 email: 'mock@example.com',
                 firstName: 'John',
                 lastName: 'Doe',
-                streetAddress: '1234 Main St',
-                city: 'Mock City',
-                province: 'Mock Province',
-                postalCode: '12345',
                 phoneNumber: '123-456-7890',
                 birthDate: "1990-01-01",
                 sex: 'Male',
@@ -73,18 +65,6 @@ jest.mock('../contexts/UserContext', () => {
 
         expect(screen.getByText("Email :")).toBeInTheDocument();
         expect(screen.getByText("mock@example.com")).toBeInTheDocument();
-
-        expect(screen.getByText("Street Address :")).toBeInTheDocument();
-        expect(screen.getByText("1234 Main St")).toBeInTheDocument();
-
-        expect(screen.getByText("City:")).toBeInTheDocument();
-        expect(screen.getByText("Mock City")).toBeInTheDocument();
-
-        expect(screen.getByText("Province:")).toBeInTheDocument();
-        expect(screen.getByText("Mock Province")).toBeInTheDocument();
-
-        expect(screen.getByText("Postal Code :")).toBeInTheDocument();
-        expect(screen.getByText("12345")).toBeInTheDocument();
 
         expect(screen.getByText("Phone number :")).toBeInTheDocument();
         expect(screen.getByText("123-456-7890")).toBeInTheDocument();
