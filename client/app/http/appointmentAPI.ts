@@ -1,3 +1,4 @@
+import { auth } from '../config/firebase';
 export interface Appointment {
     appointmentWith: string;
     reason:string;
@@ -11,12 +12,24 @@ export interface Appointment {
 // Function to get all appointments of a user
 export async function getAppointments(userId: string): Promise<any>{
     try {
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+          throw new Error('No user is currently signed in.');
+        }
+        const token = await currentUser.getIdToken();
         const response = await fetch(
-            `http://localhost:8000/api/appointments/${userId}`
+            `http://localhost:8000/api/appointments/${userId}`, 
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
+            }
         );
         if (!response.ok) {
             throw new Error(
-              `Failed to retrieve weight journals for user ${userId}. HTTP Status: ${response.status}`
+              `Failed to retrieve appointment. HTTP Status: ${response.status}`
             );
           }
         const data = await response.json();
@@ -30,9 +43,22 @@ export async function getAppointments(userId: string): Promise<any>{
 // Function to get a single appointment
 export async function getAppointment(appointmentId: string ): Promise<any>{
   try {
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      throw new Error('No user is currently signed in.');
+    }
+    const token = await currentUser.getIdToken();
     const response = await fetch(
-      `http://localhost:8000/api/appointments/single/${appointmentId}`
-    );if (!response.ok) {
+      `http://localhost:8000/api/appointments/single/${appointmentId}`, 
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (!response.ok) {
       throw new Error(
         `Failed to fetch the appointment data. HTTP Status: ${response.status}`
       );
@@ -49,13 +75,19 @@ export async function getAppointment(appointmentId: string ): Promise<any>{
 // Function to create a new appointment
 export async function createAppointment(userId: string, appointmentData: any): Promise<any> {
     try {
-       
+      const currentUser = auth.currentUser;
+      if (!currentUser) {
+        throw new Error('No user is currently signed in.');
+      }
+      const id = currentUser.uid;
+      const token = await currentUser.getIdToken();
         const response = await fetch(
           `http://localhost:8000/api/appointments/${userId}`,
           {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
               
             },
             body: JSON.stringify(appointmentData),
@@ -77,11 +109,18 @@ export async function createAppointment(userId: string, appointmentData: any): P
 // Function to delete an appointment
 export async function deleteAppointment(appointmentId: string): Promise<any>{
     try {
-       
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+          throw new Error('No user is currently signed in.');
+        }
+        const token = await currentUser.getIdToken();
         const response = await fetch(
           `http://localhost:8000/api/appointments/single/${appointmentId}`,
           {
-            method: 'DELETE',
+              method: 'DELETE',
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
           }
         );
         if (!response.ok) {
