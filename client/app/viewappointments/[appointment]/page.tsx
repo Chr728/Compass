@@ -18,7 +18,7 @@ export default function Appointment( {params: { appointment } } : { params: { ap
            const appointmentData = await getAppointment(appointment);
            setData(appointmentData.data);
         } catch (error) {
-            console.log('Error fetching appointments');
+            console.log('Error fetching appointment');
         }
     }
     getSingleAppointment();
