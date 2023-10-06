@@ -5,7 +5,7 @@ import Input from '../components/Input';
 import Link from 'next/link';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { getWeightJournal, getWeightJournals} from '../http/weightJournalAPI'; 
+import { deleteWeightJournal, getWeightJournal, getWeightJournals} from '../http/weightJournalAPI'; 
 import { useAuth } from '../contexts/AuthContext';
 import { useUser } from '../contexts/UserContext';
 import { useEffect, useState } from 'react';
@@ -43,7 +43,11 @@ export default function GetWeightJournal() {
     fetchWeightJournals();
   }, [user]);
 
+    async function deleteWeightJournals(userId: string,weightJournalId: string){
+      const fff = await deleteWeightJournal(userId,weightJournalId);   
+      location.reload();
 
+    }
   return (
     
 
@@ -85,11 +89,13 @@ export default function GetWeightJournal() {
                     
                 {weight.map((item: any) => (
                 <p key={item.weightJournalId}>
+                  {item.id}
                  {new Date(item.date).toISOString().split('T')[0]}
                   {item.weight}
                   {item.time}
-                  {/* <Button type="button" text="INFO"style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)' }} onClick={() => router.push(`/getWeightJournal/${user?.uid}/${item?.id}`)} /> */}
-                  <Button type="button" text="INFO"style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)' }} onClick={() => router.push(`/getWeightJournal/${item?.id}`)} />
+                  {/* <Button type="button" text="INFO"style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)' }} onClick={() => router.push(`/getWeightJournal/${user?.uid}/${weight.item.weightJournalId}`)} /> */}
+                  <Button type="button" text="INFO"style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)' }} onClick={() => router.push(`/getWeightJournals/${item.id}`)} />
+                  <Button type="button" text="delete"style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)' }} onClick={() =>deleteWeightJournals(item.uid,item.id)} />
 
                 </p>
                 ))}

@@ -1,14 +1,15 @@
 'use client';
 import Image from 'next/image';
-import Button from '../components/Button';
-import Input from '../components/Input';
+import Button from '../../components/Button';
+import Input from '../../components/Input';
 import Link from 'next/link';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { getWeightJournal} from '../http/weightJournalAPI'; 
-import { useAuth } from '../contexts/AuthContext';
-import { useUser } from '../contexts/UserContext';
+import { getWeightJournal, getWeightJournals} from '../../http/weightJournalAPI'; 
+import { useAuth } from '../../contexts/AuthContext';
+import { useUser } from '../../contexts/UserContext';
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation'
 
 
 export default function GetWeightJournal() {
@@ -16,7 +17,9 @@ export default function GetWeightJournal() {
   const { user } = useAuth();
   const { userInfo } = useUser();
   const [weight, setweight] = useState<any>(null);
-  
+  const pathname = usePathname();
+  const id = pathname.split('/')[2];
+
   useEffect(() => {
     if (!userInfo) {
       alert('User not found.');
@@ -28,11 +31,15 @@ export default function GetWeightJournal() {
     async function fetchWeightJournal() {
       try {
         const userId = user?.uid || '';
-        const weightJournalId = weight?.weightJournalId; 
-        console.log("weightJournalId", weightJournalId);
+        const x = await getWeightJournals(userId);   
+        console.log("data is here ",x.data); 
+        console.log("id of data of x  is here ",id);
+        // const weightJournalId = weight?.weightJournalId; 
+        // console.log("weightJournalId", weightJournalId);
         // const weightJournalId = '1'; // Replace '1' with the correct weight journal entry ID
 
-        const result = await getWeightJournal(userId, weightJournalId);
+       
+        const result = await getWeightJournal(userId, id);
         console.log('Weight journal entry retrieved:', result);
         setweight(result.data);
         console.log("hey", result.data);
@@ -81,22 +88,15 @@ export default function GetWeightJournal() {
           </label>
           <br />
         </div>
-        {weight.map((item: any) => (
-                <p key={item.weightJournalId}>
-                 {new Date(item.date).toISOString().split('T')[0]}
-                  {item.weight}
-                  {item.time}
-                  {item.height}
-                  {item.unit}
-                  {item.notes}
-                </p>
-                ))}
-        {/* <p
+        <p
                 className="text-md ml-2 text-darkgrey"
                 style={{display: 'inline'}}
             >
               {weight.date}
-            </p> */}
+              {weight.height}
+              {weight.weight}
+              {weight.time}
+            </p>
             <br></br>
 
 
