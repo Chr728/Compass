@@ -1,25 +1,23 @@
-'use strict';
-import {
-  Model
-} from 'sequelize';
+"use strict";
+import { Model } from "sequelize";
 
-type AppointmentAttributes = {
+export type AppointmentAttributes = {
   id: number;
   uid: string;
   appointmentWith: string;
   reason: string;
   date: Date;
   time: Date;
-  notes: string
-  
+  notes: string;
 
   // other attributes...
 };
 
-module.exports = (sequelize:any, DataTypes:any) => {
-
-  class Appointment extends Model<AppointmentAttributes>
-  implements AppointmentAttributes {
+module.exports = (sequelize: any, DataTypes: any) => {
+  class Appointment
+    extends Model<AppointmentAttributes>
+    implements AppointmentAttributes
+  {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.

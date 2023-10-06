@@ -1,6 +1,7 @@
 import {Logger} from '../middlewares/logger';
 import {UserAttributes} from '../models/user';
 import {SpeedDialAttributes} from '../models/speedDial';
+import { AppointmentAttributes } from "../models/appointment";
 
 const userValidator = (values : UserAttributes) => {
     const {email, firstName, lastName, phoneNumber} = values;
@@ -26,6 +27,39 @@ const userValidator = (values : UserAttributes) => {
     }
 }
 
+
+const appointmentValidator = (values: AppointmentAttributes) => {
+  const { appointmentWith, reason, date, time, notes } = values;
+  //Check if valid appointment
+  if (
+    !appointmentWith ||
+    typeof appointmentWith !== "string" ||
+    /\d/.test(appointmentWith)
+  ) {
+    Logger.error(
+      `Invalid person to have appointment with': ${appointmentWith}`
+    );
+    throw new Error(
+      `Invalid person to have appointment with': ${appointmentWith}`
+    );
+  }
+  //Check if valid reason
+  if (!reason || typeof reason !== "string") {
+    Logger.error(`Invalid reason: ${reason}`);
+    throw new Error(`Invalid reason : ${reason}`);
+  }
+  //Check if valid time
+  if (!time || time instanceof Date) {
+    Logger.error(`Invalid Time: ${time}`);
+    throw new Error(`Invalid Time : ${time}`);
+  }
+  //Check if valid date
+  if (!date || date instanceof Date) {
+    Logger.error(`Invalid Date: ${date}`);
+    throw new Error(`Invalid Date : ${date}`);
+  }
+};
+
 const speedDialValidator = (values: { contactName: string; contactNumber: string }) => {
     const {contactName, contactNumber} = values;
     //check if contact name is valid
@@ -43,5 +77,7 @@ const speedDialValidator = (values: { contactName: string; contactNumber: string
 
 export {
    userValidator,
-  speedDialValidator
+  speedDialValidator,
+  appointmentValidator
 }
+
