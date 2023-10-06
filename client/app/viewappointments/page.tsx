@@ -52,6 +52,7 @@ export default function ViewAppointments() {
             const response = await deleteAppointment(appointmentID);
             const newData = data && data.filter(item => item.id!=appointmentID);
             setData(newData);
+            router.push('/viewappointments');
         } catch(error){
             console.log('Error deleting appointment');
         }
