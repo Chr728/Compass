@@ -1,9 +1,19 @@
-export async function getUserProfile(userId: string) {
+import { auth } from '../config/firebase';
+
+export async function getUserProfile() {
   try {
-    const response = await fetch(`http://localhost:8000/api/users/${userId}`, {
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      throw new Error('No user is currently signed in.');
+    }
+    const id = currentUser.uid;
+    const token = await currentUser.getIdToken();
+
+    const response = await fetch(`http://localhost:8000/api/users/${id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -13,7 +23,9 @@ export async function getUserProfile(userId: string) {
 
     const userData = await response.json();
     return userData.data;
-  } catch (error) {
+  } catch (error:any) {
     throw new Error('Error fetching user profile');
   }
 }
+
+export default getUserProfile;

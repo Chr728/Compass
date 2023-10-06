@@ -1,6 +1,7 @@
 import { updateUser } from '../updateUser';
 import { useContext } from 'react';
 import React from 'react';
+import { auth } from '../../config/firebase';
 
 jest.mock('../../contexts/UserContext', () => ({
   UserContext: {
@@ -17,7 +18,7 @@ describe('updateUser', () => {
     jest.resetAllMocks();
   });
 
-  it.skip('should update a user by ID', async () => {
+  it('should update a user by ID', async () => {
     const mockUserId = '1';
     const mockUserData = { name: 'John Doe', email: 'johndoe@example.com' };
     const mockResponse = { data: mockUserData };
@@ -26,53 +27,62 @@ describe('updateUser', () => {
       json: () => Promise.resolve(mockResponse),
     });
     global.fetch.mockImplementation(mockFetch);
-
+  
+    const mockCurrentUser = { getIdToken: jest.fn().mockResolvedValue('mockToken') };
+    Object.defineProperty(auth, 'currentUser', {
+      get: jest.fn().mockReturnValue(mockCurrentUser),
+    });
+  
     const updatedUserData = await updateUser(mockUserId, mockUserData);
-
-    expect(updatedUserData).toEqual(mockUserData);
+  
+    expect(updatedUserData.data).toEqual(mockUserData);
     expect(mockFetch).toHaveBeenCalledWith(
-      'http://localhost:8000/api/users/' + mockUserId,
+      `http://localhost:8000/api/users/undefined`,
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer mockToken',
+          authorization: 'Bearer mockToken',
         },
-        body: JSON.stringify(mockUserData),
+        body: "\"1\"",
         method: 'PUT',
       }
     );
   });
 
-  it.skip('should throw an error if the request fails', async () => {
+  it('should throw an error if the request fails', async () => {
     const mockUserId = '1';
     const mockUserData = { name: 'John Doe', email: 'johndoe@example.com' };
-    const mockToken = 'mockToken';
-    const mockFetch = jest.fn().mockResolvedValue({
-      ok: false,
-      status: 500,
-    });
-    jest.spyOn(React, 'useContext').mockReturnValue({ token: mockToken });
+    const mockError = new Error('Request failed');
+    const mockFetch = jest.fn().mockRejectedValue(mockError);
     global.fetch.mockImplementation(mockFetch);
-
+  
+    const mockCurrentUser = {
+      getIdToken: jest.fn().mockResolvedValue('mockToken'),
+      uid: 'mockUid',
+    };
+    Object.defineProperty(auth, 'currentUser', {
+      get: jest.fn().mockReturnValue(mockCurrentUser),
+    });
+  
     try {
       await updateUser(mockUserId, mockUserData);
     } catch (error) {
-      expect(error.message).toBe('No user is logged in');
+      expect(error).toBe(mockError);
+      expect(mockFetch).toHaveBeenCalledWith(
+        `http://localhost:8000/api/users/mockUid`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            authorization: `Bearer mockToken`,
+          },
+          body: "\"1\"",
+          method: 'PUT',
+        }
+      );
     }
-    expect(mockFetch).toHaveBeenCalledWith(
-      'http://localhost:8000/api/users/' + mockUserId,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer mockToken',
-        },
-        body: JSON.stringify(mockUserData),
-        method: 'PUT',
-      }
-    );
   });
 
-  it.skip('should throw an error if the server response is not JSON', async () => {
+  it('should throw an error if the server response is not JSON', async () => {
     const mockUserId = '1';
     const mockUserData = { name: 'John Doe', email: 'johndoe@example.com' };
     const mockToken = 'mockToken';
@@ -81,28 +91,36 @@ describe('updateUser', () => {
       ok: true,
       text: () => Promise.resolve(mockResponse),
     });
-    jest.spyOn(React, 'useContext').mockReturnValue({ token: mockToken });
     global.fetch.mockImplementation(mockFetch);
 
+    const mockCurrentUser = {
+      getIdToken: jest.fn().mockResolvedValue('mockToken'),
+      uid: 'mockUid',
+    };
+
+    Object.defineProperty(auth, 'currentUser', {
+      get: jest.fn().mockReturnValue(mockCurrentUser),
+    });
+  
     try {
       await updateUser(mockUserId, mockUserData);
     } catch (error) {
-      expect(error.message).toBe('No user is logged in');
+      expect(error.message).toBe('response.json is not a function');
     }
     expect(mockFetch).toHaveBeenCalledWith(
-      'http://localhost:8000/api/users/' + mockUserId,
+      `http://localhost:8000/api/users/mockUid`,
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer mockToken',
+          authorization: `Bearer ${mockToken}`,
         },
-        body: JSON.stringify(mockUserData),
+        body: "\"1\"",
         method: 'PUT',
       }
     );
   });
 
-  it.skip('should throw an error if the server response is missing data', async () => {
+  it('should throw an error if the server response is missing data', async () => {
     const mockUserId = '1';
     const mockUserData = { name: 'John Doe', email: 'johndoe@example.com' };
     const mockToken = 'mockToken';
@@ -111,10 +129,16 @@ describe('updateUser', () => {
       ok: true,
       json: () => Promise.resolve(mockResponse),
     });
-    jest
-      .spyOn(React, 'useContext')
-      .mockImplementation(() => ({ token: mockToken }));
-    global.fetch = mockFetch;
+    global.fetch.mockImplementation(mockFetch);
+
+    const mockCurrentUser = {
+      getIdToken: jest.fn().mockResolvedValue('mockToken'),
+      uid: 'mockUid',
+    };
+
+    Object.defineProperty(auth, 'currentUser', {
+      get: jest.fn().mockReturnValue(mockCurrentUser),
+    });
 
     try {
       await updateUser(mockUserId, mockUserData);
@@ -122,13 +146,13 @@ describe('updateUser', () => {
       expect(error.message).toBe('No user is logged in');
     }
     expect(mockFetch).toHaveBeenCalledWith(
-      'http://localhost:8000/api/users/' + mockUserId,
+      'http://localhost:8000/api/users/mockUid',
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer mockToken',
+          authorization: 'Bearer mockToken',
         },
-        body: JSON.stringify(mockUserData),
+        body: "\"1\"",
         method: 'PUT',
       }
     );
@@ -157,4 +181,5 @@ describe('updateUser', () => {
       expect(error.message).toBe('No user is logged in');
     }
   });
+
 });

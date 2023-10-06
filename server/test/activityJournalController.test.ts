@@ -1,6 +1,7 @@
 import request from 'supertest';
 import app from '../index';
 import db from '../models';
+import admin from 'firebase-admin';
 
 let server: any;
 const port = process.env.SERVER_DEV_PORT;
@@ -34,6 +35,21 @@ const updatedActivityJournal = {
     notes: 'Sample activity entry',
 };
 
+
+const mockedDecodedToken = {
+    uid:"userUid",
+    aud:"",
+    auth_time: 0,
+    exp: 0,
+    firebase:{
+        identities: { [0]: "string" },
+        sign_in_provider: "string"
+    },
+    iat:0,
+    iss:"",
+    sub:"",
+}
+
 function startServer() {
     server = app.listen(port, () => {
         console.log(`Server is running on port ${port}`);
@@ -58,6 +74,7 @@ describe('activity Journal Controller Tests', () => {
     });
 
     beforeEach(() => {
+        jest.spyOn(admin.auth(), 'verifyIdToken').mockResolvedValueOnce(mockedDecodedToken);
         jest.spyOn(db.User, 'findOne').mockResolvedValue(user);
     });
 
@@ -70,7 +87,8 @@ describe('activity Journal Controller Tests', () => {
             .spyOn(db.ActivityJournal, 'findAll')
             .mockResolvedValueOnce([activityJournal]);
 
-        const res = await request(app).get(`/api/journals/activity/user/${user.uid}`);
+        const res = await request(app).get(`/api/journals/activity/user/${user.uid}`)
+            .set({ Authorization: 'Bearer token'});
 
         expect(db.User.findOne).toBeCalledTimes(1);
         expect(db.ActivityJournal.findAll).toBeCalledTimes(1);
@@ -86,7 +104,8 @@ describe('activity Journal Controller Tests', () => {
 
         const res = await request(app).get(
             `/api/journals/activity/${activityJournal.id}`
-        );
+        )
+            .set({ Authorization: 'Bearer token'});
 
         expect(db.ActivityJournal.findOne).toBeCalledTimes(1);
         expect(res.status).toBe(200);
@@ -99,7 +118,8 @@ describe('activity Journal Controller Tests', () => {
 
         const res = await request(app)
             .post(`/api/journals/activity/user/${user.uid}`)
-            .send(activityJournal);
+            .send(activityJournal)
+            .set({ Authorization: 'Bearer token'});
 
         expect(db.User.findOne).toBeCalledTimes(1);
         expect(db.ActivityJournal.create).toBeCalledTimes(1);
@@ -122,7 +142,8 @@ describe('activity Journal Controller Tests', () => {
 
         const res = await request(app)
             .put(`/api/journals/activity/${activityJournal.id}`)
-            .send(updatedActivityJournal);
+            .send(updatedActivityJournal)
+            .set({ Authorization: 'Bearer token'});
 
         expect(db.ActivityJournal.findOne).toBeCalledTimes(2);
         expect(db.ActivityJournal.update).toBeCalledTimes(1);
@@ -141,7 +162,8 @@ describe('activity Journal Controller Tests', () => {
 
         const res = await request(app).delete(
             `/api/journals/activity/${activityJournal.id}`
-        );
+        )
+            .set({ Authorization: 'Bearer token'});
 
         expect(db.ActivityJournal.findOne).toBeCalledTimes(1);
         expect(res.status).toBe(200);
@@ -154,7 +176,8 @@ describe('activity Journal Controller Tests', () => {
 
         const res = await request(app).get(
             `/api/journals/activity/${activityJournal.id}`
-        );
+        )
+            .set({ Authorization: 'Bearer token'});
 
         expect(db.ActivityJournal.findOne).toBeCalledTimes(1);
         expect(res.status).toBe(404);
@@ -167,7 +190,8 @@ describe('activity Journal Controller Tests', () => {
 
         const res = await request(app)
             .put(`/api/journals/activity/${activityJournal.id}`)
-            .send(updatedActivityJournal);
+            .send(updatedActivityJournal)
+            .set({ Authorization: 'Bearer token'});
 
         expect(db.ActivityJournal.findOne).toBeCalledTimes(1);
         expect(res.status).toBe(404);
@@ -180,7 +204,8 @@ describe('activity Journal Controller Tests', () => {
 
         const res = await request(app).delete(
             `/api/journals/activity/${activityJournal.id}`
-        );
+        )
+            .set({ Authorization: 'Bearer token'});
 
         expect(db.ActivityJournal.findOne).toBeCalledTimes(1);
         expect(res.status).toBe(404);
@@ -191,7 +216,8 @@ describe('activity Journal Controller Tests', () => {
     it('should handle error when getting activity journals', async () => {
         jest.spyOn(db.ActivityJournal, 'findAll').mockRejectedValueOnce('error');
 
-        const res = await request(app).get(`/api/journals/activity/user/${user.uid}`);
+        const res = await request(app).get(`/api/journals/activity/user/${user.uid}`)
+            .set({ Authorization: 'Bearer token'});
 
         expect(db.User.findOne).toBeCalledTimes(1);
         expect(db.ActivityJournal.findAll).toBeCalledTimes(1);
@@ -205,7 +231,8 @@ describe('activity Journal Controller Tests', () => {
 
         const res = await request(app).get(
             `/api/journals/activity/${activityJournal.id}`
-        );
+        )
+            .set({ Authorization: 'Bearer token'});
 
         expect(db.ActivityJournal.findOne).toBeCalledTimes(1);
         expect(res.status).toBe(400);
@@ -218,7 +245,8 @@ describe('activity Journal Controller Tests', () => {
 
         const res = await request(app)
             .post(`/api/journals/activity/user/${user.uid}`)
-            .send(activityJournal);
+            .send(activityJournal)
+            .set({ Authorization: 'Bearer token'});
 
         expect(db.User.findOne).toBeCalledTimes(1);
         expect(db.ActivityJournal.create).toBeCalledTimes(1);
@@ -232,7 +260,8 @@ describe('activity Journal Controller Tests', () => {
 
         const res = await request(app)
             .put(`/api/journals/activity/${activityJournal.id}`)
-            .send(updatedActivityJournal);
+            .send(updatedActivityJournal)
+            .set({ Authorization: 'Bearer token'});
 
         expect(db.ActivityJournal.findOne).toBeCalledTimes(1);
         expect(res.status).toBe(400);
@@ -245,7 +274,8 @@ describe('activity Journal Controller Tests', () => {
 
         const res = await request(app).delete(
             `/api/journals/activity/${activityJournal.id}`
-        );
+        )
+            .set({ Authorization: 'Bearer token'});
 
         expect(db.ActivityJournal.findOne).toBeCalledTimes(1);
         expect(res.status).toBe(400);
@@ -258,7 +288,8 @@ describe('activity Journal Controller Tests', () => {
 
         const res = await request(app).post(
             `/api/journals/activity/user/${user.uid}`
-        );
+        )
+            .set({ Authorization: 'Bearer token'});
 
         expect(db.User.findOne).toBeCalledTimes(1);
         expect(res.status).toBe(404);
@@ -269,7 +300,8 @@ describe('activity Journal Controller Tests', () => {
     it('should handle user not found error for getAllActivityJournals', async () => {
         jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(null);
 
-        const res = await request(app).get(`/api/journals/activity/user/${user.uid}`);
+        const res = await request(app).get(`/api/journals/activity/user/${user.uid}`)
+            .set({ Authorization: 'Bearer token'});
 
         expect(db.User.findOne).toBeCalledTimes(1);
         expect(res.status).toBe(404);
