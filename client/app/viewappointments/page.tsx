@@ -14,7 +14,22 @@ import { deleteAppointment, getAppointments } from '../http/appointmentAPI';
 import { useEffect, useState } from 'react';
 import { Appointment } from '../http/appointmentAPI';
 
+export function formatDate(dateString: string) {
+    const options:  Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' };
+    const date = new Date(dateString);
+    return date.toLocaleDateString(undefined, options);
+  }
+  
+  export function formatMilitaryTime(timeString: string) {
+    const [hours, minutes] = timeString.split(':');
+    const formattedTime = `${parseInt(hours, 10)}h${minutes}`;
+    return formattedTime;
+  };
+
 export default function ViewAppointments() {
+    const rowStyles = {
+        cursor: 'pointer',
+      };
     const router = useRouter();
     const { user } = useAuth();
     const [data, setData] = useState<Appointment[] | null>(null);
@@ -42,8 +57,8 @@ export default function ViewAppointments() {
         }
     }
 
-    const handleAdd = () =>{
-        router.push('/viewappointments/addappointment');
+    const handleClick = (appointmentID: string) => {
+        router.push(`/viewappointments/${appointmentID}`);
     }
 
   return (
@@ -77,7 +92,7 @@ export default function ViewAppointments() {
                 <Button 
                 type="button" 
                 text="Add an item" 
-                onClick={handleAdd} 
+                onClick={ () => router.push('/viewappointments/addappointment')} 
                 style={{ 
                     width: '100px', 
                     height: '34px', 
@@ -88,7 +103,6 @@ export default function ViewAppointments() {
         </div>
         
         <div className='appointment h-[400px]'>
-        {/* <Paper sx={{ width: '100%',  }}> */}
             <TableContainer sx={{ maxHeight: 440,  }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
@@ -124,93 +138,36 @@ export default function ViewAppointments() {
                     </TableHead>
                     <TableBody>
                     {data && Array.isArray(data) && data.map((row, index) => (
-                            <TableRow
-                            key={index}
-                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                                <TableCell component="th" scope="row">
-                                    {row.date}
-                                        <span className="font-bold"> {row.time}</span>
-                                </TableCell>
-                                <TableCell >{row.appointmentWith}</TableCell>
-                                <TableCell>
-                                    <Image 
-                                        src="/icons/trash.svg"
-                                        alt="Trash icon"
-                                        width={10}
-                                        height={10}
-                                        className="mr-4 md:hidden"
-                                        style={{ width: 'auto', height: 'auto' }}
-                                        onClick={() => handleDelete(row.id)}
-                                        // style={{backgroundColor: 'var(--Red, #FF7171)', height:'40px', padding: '4px'}}
-                                    />
-                                </TableCell>
-                            </TableRow>
+                                <TableRow 
+                                    onClick={() => handleClick(row.id)} 
+                                    style={rowStyles}
+                                key={index}
+                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                >
+                                    <TableCell component="th" scope="row">
+                                         {formatDate(row.date)},
+                                            <span className="font-bold"> {formatMilitaryTime(row.time)}</span>
+                                    </TableCell>
+                                    <TableCell >{row.appointmentWith}</TableCell>
+                                    <TableCell>
+                                        <Image 
+                                            src="/icons/trash.svg"
+                                            alt="Trash icon"
+                                            width={10}
+                                            height={10}
+                                            className="mr-4 md:hidden"
+                                            style={{ width: 'auto', height: 'auto' }}
+                                            onClick={() => handleDelete(row.id)}
+                                            // style={{backgroundColor: 'var(--Red, #FF7171)', height:'40px', padding: '4px'}}
+                                        />
+                                    </TableCell>
+                                </TableRow>
                         ))}
                     </TableBody>
                 </Table>
             </TableContainer>
-        {/* </Paper> */}
         </div>
-        {/* <div className="flex flex-col w-full h-[40%] overflow-scroll">
-            <table className="w-full relative">
-                <thead>
-                    <tr className="sticky top-0 bg-white h-[39px]">
-                        <th className="pl-4">  
-                        <div className="text-grey font-bold flex">
-                            Date/Time
-                            <Image
-                                src="/icons/downArrow.svg"
-                                alt="Down Arrow icon"
-                                width={10}
-                                height={10}
-                                className="ml-2 text-grey"
-                                style={{ width: 'auto', height: 'auto' }}
-                            />
-                        </div>
-                        </th>
-                        <th className="pr-4">
-                        <div className="text-grey font-bold flex">
-                            Appointment
-                            <Image
-                                src="/icons/downArrow.svg"
-                                alt="Down Arrow icon"
-                                width={10}
-                                height={10}
-                                className="ml-2 text-grey"
-                                style={{ width: 'auto', height: 'auto' }}
-                            />
-                        </div>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    
-                
-                {
-                    data.map((item, index) => (
-                        <tr key={index} className={index%2==0 ? "bg-lightgrey": "bg-white"}>
-                        <td className="pl-4">
-                            <div className="customColor text-[14px] text-grey py-2">
-                               {item.date}
-                                <span className="font-bold"> {item.time}</span>
-                            </div>
-                        </td>
-                        <td className="pr-4"> 
-                            <div className="text-[14px] text-grey py-2">
-                                {item.doctor}
-                            </div>
-                        </td>
-                    </tr>
-                        )
-                    )
-                }
-                    
-                </tbody>
-            </table>
-        </div> */}
       </div>
-      
     </div>
   )
 }
