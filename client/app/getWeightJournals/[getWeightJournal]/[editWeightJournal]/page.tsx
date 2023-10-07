@@ -1,41 +1,65 @@
 'use client';
 import Image from 'next/image';
-import Button from '../components/Button';
-import Input from '../components/Input';
+import Button from '../../../components/Button';
+import Input from '../../../components/Input';
 import Link from 'next/link';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { createWeightJournal } from '../http/weightJournalAPI'; // Replace '../api/yourApiFile' with the correct path
-import { useAuth } from '../contexts/AuthContext';
-import { useUser } from '../contexts/UserContext';
+import { createWeightJournal, getWeightJournal, getWeightJournals, updateWeightJournal } from '../../../http/weightJournalAPI'; // Replace '../api/yourApiFile' with the correct path
+import { useAuth } from '../../../contexts/AuthContext';
+import { useUser } from '../../../contexts/UserContext';
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation'
+import Header from '@/app/components/Header';
 
 
-export default function CreateWeightJournal() {
+export default function EditWeightJournal() {
   const router = useRouter();
   const { user } = useAuth();
   const { userInfo } = useUser();
+  const pathname = usePathname();
+  const generatedWeightId = pathname.split('/')[3];
+  const [weight, setweight] = useState<any>(null);
 
-  useEffect(() => {
+  useEffect(() => {  
+
     if (!userInfo) {
       alert('User not found.');
     } 
   }, [userInfo, router]);
+  
+  useEffect(() => {
+    async function fetchWeightJournal() {
+      try {
+        const userId = user?.uid || '';
+        const x = await getWeightJournals(userId);   
+        // const weightJournalId = '1'; // Replace '1' with the correct weight journal entry ID
+        const result = await getWeightJournal(userId, generatedWeightId);
+        console.log(result.data);
+        console.log('Weight journal entry retrieved:', result);
+        setweight(result.data);
+      } catch (error) {
+        console.error('Error retrieving weight journal entry:', error);
+      }
+    }
 
+    fetchWeightJournal();
+  }, [user]);
   
   const formik = useFormik({
     initialValues: {
-      date: '', // Initialize the form fields with empty values
-      time: '',
-      weight: 0.0,
-      height: 0.0,
-      unit: '',
-      notes: '',
+      date: weight?.date, 
+      time: weight?.time,
+      weight: weight?.weight,
+      height: weight?.height,
+      unit: weight?.unit,
+      notes: weight?.notes,
     },
 
     onSubmit: async (values) => {
       try {
         const userId = user?.uid || '';
+        const x = await getWeightJournals(userId);   
 
         const data = {
           date: values.date,
@@ -45,37 +69,29 @@ export default function CreateWeightJournal() {
           unit: values.unit,
           notes: values.notes,
         };
-        const result = await createWeightJournal(userId, data); 
-        console.log('Weight journal entry created:', result);
-        router.push('/getWeightJournal');
+        const result = await updateWeightJournal(userId,generatedWeightId, data); 
+        console.log('Weight journal entry updated:', result);
+        router.push('/getWeightJournals');
       } catch (error) {
-        console.error('Error creating weight journal entry:', error);
+        console.error('Error updating weight journal entry:', error);
       }
     },
   });
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
-      <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-        <Link href="">
-          <Image
-            src="/icons/LeftArrow.svg"
-            alt="LeftArrow icon"
-            width={10}
-            height={10}
-            className="mr-4 md:hidden"
-            style={{ width: 'auto', height: 'auto' }}
-          />
-        </Link>
-        Update Weight Journal
-      </span>
+            <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
+              <button onClick={() => router.back()}>
+              <Header headerText="Edit the Weight Journal"></Header>
+              </button>
+              </span>
       <form
         className="rounded-3xl bg-white flex flex-col m-auto w-full md:max-w-[800px] md:min-h-[550px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
         onSubmit={formik.handleSubmit}
       >
         <div className="mt-3 mb-3">
           <label
-            htmlFor="date" // Correct the "for" attribute value
+            htmlFor="date" 
             className="font-sans font-medium text-grey text-[16px]"
           >
             Date
