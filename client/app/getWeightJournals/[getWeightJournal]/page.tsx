@@ -58,45 +58,104 @@ export default function GetWeightJournal() {
     <div className="bg-eggshell min-h-screen flex flex-col">
        <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
               <button onClick={() => router.back()}>
-              <Header headerText="The Weight Journal"></Header>
+              <Header headerText="View the Weight Journal"></Header>
               </button>
               </span>
      
         {weight && (
-      <span
-        className="rounded-3xl bg-white flex flex-col m-auto w-full md:max-w-[800px] md:min-h-[550px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]">
-        <div className="mt-3 mb-3">
-          <label
-            htmlFor="date" 
-            className="font-sans font-medium text-grey text-[16px]"
-          >
-            Date
-          </label>
-          <br />
-        </div>
-        <p
-                className="text-md ml-2 text-darkgrey"
-                style={{display: 'inline'}}
-            >
-              {weight.date}
-              {weight.height}
-              {weight.weight}
-              {weight.time}
-            </p>
-            <br></br>
-            
-            <p>
-            {/* {weight.map((item: any) => (
-                <p key={item.weightJournalId}>
-                  {item.id}
-                 {new Date(item.date).toISOString().split('T')[0]}
-                  {item.weight}
-                  {item.time} */}
-                  <Button type="button" text="EDIT"style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)' }} onClick={() => router.push(`/getWeightJournals/[getWeightJournal]/${weight.id}`)} />
-                </p>
-                {/* // ))} */}
-          
+     <span
+     className="rounded-2xl  mt-6 mb-10 mr-28 bg-white flex flex-col m-auto w-full md:max-w-[800px] md:min-h-[600px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
+   >
+     <div className="mt-3 relative">
+     <div>
+     <div className="flex items-center">
+  <p className="text-lg ml-0 font-sans text-darkgrey font-bold text-[16px]" style={{ display: 'inline' }}>
+    Date: 
+  </p>
+  <p className="text-md ml-2 text-darkgrey">
+    {new Date(weight.date).toISOString().split('T')[0]}
+  </p>
+</div>
 
+
+       <p
+           className="text-lg ml-0 font-sans text-darkgrey  font-bold text-[16px]"
+           style={{display: 'inline'}}
+       >
+         Time :{' '}
+       </p>
+       <p
+           className="text-md ml-2 text-darkgrey"
+           style={{display: 'inline'}}
+       >
+         {new Date(`1970-01-01T${weight.time}`).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+       </p>
+       <br></br>
+       <p
+           className="text-lg ml-0 font-sans text-darkgrey  font-bold text-[16px]"
+           style={{display: 'inline'}}
+       >
+         Weight :{' '}
+       </p>
+       <p
+           className="text-md ml-2 text-darkgrey"
+           style={{display: 'inline'}}
+       >
+         {weight.weight}
+       </p>
+       <br></br>
+       <p
+           className="text-lg ml-0 font-sans text-darkgrey  font-bold text-[16px]"
+           style={{display: 'inline'}}
+       >
+         Unit :{' '}
+       </p>
+       <p
+           className="text-md ml-2 text-darkgrey"
+           style={{display: 'inline'}}
+       >
+        {weight.unit}
+       </p>
+       <br></br>
+
+       <p
+           className="text-lg ml-0 font-sans text-darkgrey font-bold text-[16px]"
+           style={{display: 'inline'}}
+       >
+         Height :{' '}
+       </p>
+       <p
+           className="text-md ml-2 text-darkgrey"
+           style={{display: 'inline'}}
+       >
+         {weight.height}
+       </p>
+
+       <br></br>
+       <p
+           className="text-lg ml-0 font-sans text-darkgrey  font-bold text-[16px]"
+           style={{display: 'inline'}}
+       >
+         Notes :{' '}
+       </p>
+       <p
+           className="text-md ml-2 text-darkgrey"
+           style={{display: 'inline'}}
+       >
+         {weight.notes}
+       </p>
+       <br></br>
+     </div>
+   </div>
+            <div className='mt-10 mb-2'>
+                  <Button type="button" text="Edit Profile"style={{ width: '140px' }} onClick={() => router.push(`/getWeightJournals/[getWeightJournal]/${weight.id}`)} />
+                  <Button
+                  type="button"
+                  text="Cancel"
+                  style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)' }}
+                  onClick={() => router.push(`/getWeightJournals`)}
+                />
+                </div>
       </span>
 )}
     </div>

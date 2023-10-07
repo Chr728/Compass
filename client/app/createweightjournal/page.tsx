@@ -9,6 +9,7 @@ import { createWeightJournal } from '../http/weightJournalAPI'; // Replace '../a
 import { useAuth } from '../contexts/AuthContext';
 import { useUser } from '../contexts/UserContext';
 import { useEffect, useState } from 'react';
+import Header from '../components/Header';
 
 
 export default function CreateWeightJournal() {
@@ -110,19 +111,11 @@ if (!formik.values.unit) {
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
-      <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-        <Link href="">
-          <Image
-            src="/icons/LeftArrow.svg"
-            alt="LeftArrow icon"
-            width={10}
-            height={10}
-            className="mr-4 md:hidden"
-            style={{ width: 'auto', height: 'auto' }}
-          />
-        </Link>
-        Create Weight Journal
-      </span>
+       <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
+              <button onClick={() => router.back()}>
+              <Header headerText="Create Weight Journal"></Header>
+              </button>
+              </span>
       <form
       className="rounded-3xl bg-white flex flex-col m-auto w-full md:max-w-[800px] md:min-h-[550px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
       onSubmit={formik.handleSubmit}
@@ -134,6 +127,7 @@ if (!formik.values.unit) {
         >
           Date
         </label>
+        <span className="text-red text-[20px]"> *</span>
         <br />
         <Input 
     name="date"
@@ -156,6 +150,7 @@ if (!formik.values.unit) {
         >
           Time
         </label>
+        <span className="text-red text-[20px]"> *</span>
         <br />
         <Input
     name="time"
@@ -179,12 +174,13 @@ if (!formik.values.unit) {
     >
       Weight
     </label>
+    <span className="text-red text-[20px]"> *</span>
     <br />
     <Input
       name="weight"
       id="weight"
       type="number"
-      style={{ width: '75%' }}
+      style={{ width: '100%' }}
       onChange={formik.handleChange}
       value={formik.values.weight.toString()}
       onBlur={formik.handleBlur}
@@ -203,23 +199,27 @@ if (!formik.values.unit) {
     )}
   </div>
 
-  <div className="mt-3">
+  <div className="mt-3  ml-3"
+  style={{
+    width: '25%',
+  }}
+  >
     <label
       htmlFor="unit"
       className="font-sans font-medium text-grey text-[16px]"
     >
       Unit
     </label>
+    <span className="text-red text-[20px]"> *</span>
     <br />
     <select
       className="text-darkgrey"
       name="unit"
       id="unit"
       style={{
-        width: '50%',
+        width: '100%',
         border: '1px solid #DBE2EA', // Border style
         borderRadius: '5px',
-        marginLeft: '2px',
       }}
       onChange={formik.handleChange}
       onBlur={formik.handleBlur}
@@ -253,8 +253,9 @@ if (!formik.values.unit) {
           htmlFor="height"
           className="font-sans font-medium text-grey text-[16px]"
         >
-          Height
+          Height (in meters)
         </label>
+        <span className="text-red text-[20px]"> *</span>
         <br />
         <Input
           name="height"
@@ -275,15 +276,12 @@ if (!formik.values.unit) {
     ) || (
       // Check if the field is less than or equal to zero
       formik.values.height <= 0 && (
-        <p className="text-red text-[14px]">You can't enter a negative weight or a weight of zero.</p>
+        <p className="text-red text-[14px]">You can't enter a negative height or a height of zero.</p>
       )
     )
   )}
       
       </div>
-
-      
-
       <div className="mt-3">
                 <label
                   htmlFor="notes"
@@ -308,7 +306,7 @@ if (!formik.values.unit) {
           type="button"
           text="Cancel"
           style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)' }}
-          onClick={() => router.push("/profile")}
+          onClick={() => router.push("/getWeightJournals")}
         />
 
 <Button
@@ -327,6 +325,7 @@ if (!formik.values.unit) {
             !formik.values.height // Check if height is missing or empty
           }
           style={{ width: '140px' }}
+          onClick={() => router.push("/getWeightJournals")}
         />
       </div>
     </form>
