@@ -6,15 +6,9 @@ import { useEffect, useState} from 'react';
 import { Appointment, getAppointment } from '@/app/http/appointmentAPI';
 import { useRouter } from 'next/navigation';
 import { formatDate, formatMilitaryTime } from '@/app/helpers/utils/datetimeformat';
-// import { useAuth } from '@/app/contexts/AuthContext';
 
 
 export default function Appointment( {params: { appointment } } : { params: { appointment: string } }) {
-  // const { user } = useAuth();
-  // useEffect(() =>{
-  //   if (!user) 
-  //       router.push("/login")
-  //   }, [user]);
 
   const router = useRouter();
   const [data, setData] = useState<Appointment>();
