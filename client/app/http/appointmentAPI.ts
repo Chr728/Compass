@@ -35,7 +35,7 @@ export async function getAppointments(userId: string): Promise<any>{
         const data = await response.json();
         return data;
     } catch (error) {
-        console.error('Error fetching weight journals:', error);
+        console.error('Error fetching appointments:', error);
         throw error;
       }
 }
@@ -134,4 +134,36 @@ export async function deleteAppointment(appointmentId: string): Promise<any>{
         console.error('Error deleting appointment', error);
         throw error;
       }
+}
+
+// Function to update an existing appointment
+export async function updateAppointment(appointmentId: string, appointmentData: any): Promise<any> {
+  try {
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      throw new Error('No user is currently signed in.');
+    }
+    const token = await currentUser.getIdToken();
+    const response = await fetch(
+      `http://localhost:8000/api/appointments/single/${appointmentId}`,
+      {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        body: JSON.stringify(appointmentData),
+      }
+    );
+    if (!response.ok) {
+      throw new Error(
+        `Failed to update the appointment. HTTP Status: ${response.status}`
+      );
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error updating appointment', error);
+    throw error;
+  }
 }
