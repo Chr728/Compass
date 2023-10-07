@@ -47,7 +47,7 @@ export default function CreateWeightJournal() {
         };
         const result = await createWeightJournal(userId, data); 
         console.log('Weight journal entry created:', result);
-        router.push('/getWeightJournal');
+        router.push('/getWeightJournals');
       } catch (error) {
         console.error('Error creating weight journal entry:', error);
       }
@@ -75,7 +75,7 @@ export default function CreateWeightJournal() {
       >
         <div className="mt-3 mb-3">
           <label
-            htmlFor="date" // Correct the "for" attribute value
+            htmlFor="date"
             className="font-sans font-medium text-grey text-[16px]"
           >
             Date
@@ -121,12 +121,15 @@ export default function CreateWeightJournal() {
               <Input
                 name="weight"
                 id="weight"
-                type="text"
+                type="number"
                 style={{ width: '100%' }}
                 onChange={formik.handleChange}
                 value={formik.values.weight.toString()}
                 onBlur={formik.handleBlur}
               />
+               {formik.touched.weight && formik.values.weight === 0 && (
+          <p className="text-red text-[14px]">You can't enter a weight of zero.</p>
+        )}
             </div>
 
             <div className="mt-3">
@@ -140,13 +143,17 @@ export default function CreateWeightJournal() {
               <Input
                 name="height"
                 id="height"
-                type="text"
+                type="number"
                 style={{ width: '100%' }}
                 onChange={formik.handleChange}
                 value={formik.values.height.toString()}
                 onBlur={formik.handleBlur}
               />
+              {formik.touched.height && formik.values.height === 0 && (
+          <p className="text-red text-[14px]">You can't enter a height of zero.</p>
+        )}
             </div>
+
 
             <div className="mt-3">
               <label
@@ -196,15 +203,21 @@ export default function CreateWeightJournal() {
                 onClick={ () => router.push("/profile")}
               />
 
-              <Button
-                type="submit"
-                text="Submit"
-                disabled={!(formik.isValid && formik.dirty)}
-                style={{ width: '140px' }}
-              />
+      <Button
+          type="submit"
+          text="Submit"
+          disabled={!(formik.isValid && formik.dirty) || formik.values.weight === 0 || formik.values.height === 0}
+          style={{ width: '140px' }}
+        />
             </div>
 
       </form>
     </div>
   );
+
+
+
+
+
+
 }
