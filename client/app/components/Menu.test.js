@@ -17,4 +17,8 @@ describe("Menu components", () => {
         const linkElement = screen.getAllByRole("link")[4];
         expect(linkElement).toHaveAttribute("href", "/settings");
     })
+    test("link redirects to journals page", async () => {
+        const linkElement = screen.getAllByRole("link")[2];
+        expect(linkElement).toHaveAttribute("href", "/journals");
+    })
 });
