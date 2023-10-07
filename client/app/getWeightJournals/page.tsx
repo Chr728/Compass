@@ -13,6 +13,9 @@ import { MdDeleteForever, MdInfoOutline } from 'react-icons/md';
 import Header from '../components/Header';
 
 
+
+
+
 export default function GetWeightJournal() {
   const router = useRouter();
   const { user } = useAuth();

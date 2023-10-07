@@ -12,6 +12,21 @@ import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation'
 import Header from '@/app/components/Header';
 
+export function formatDateYearMonthDate(date: any) {
+  var d = new Date(date);
+  d.setUTCHours(0, 0, 0, 0);
+
+  var month = '' + (d.getUTCMonth() + 1),
+      day = '' + d.getUTCDate(),
+      year = d.getUTCFullYear();
+
+  if (month.length < 2) 
+      month = '0' + month;
+  if (day.length < 2) 
+      day = '0' + day;
+
+  return [year, month, day].join('-');
+}
 
 export default function EditWeightJournal() {
   const router = useRouter();
@@ -48,13 +63,16 @@ export default function EditWeightJournal() {
   
   const formik = useFormik({
     initialValues: {
-      date: weight?.date, 
-      time: weight?.time,
-      weight: weight?.weight,
-      height: weight?.height,
-      unit: weight?.unit,
-      notes: weight?.notes,
+      date: '', 
+      time:'', 
+      weight: 0.0 as any,
+      height: 0.0 as any,
+      unit:'', 
+      notes: '', 
     },
+
+
+    
 
     onSubmit: async (values) => {
       try {
@@ -77,6 +95,19 @@ export default function EditWeightJournal() {
       }
     },
   });
+
+
+  useEffect(() =>{
+    const  { setValues } = formik;
+    setValues({
+      date: formatDateYearMonthDate(weight?.date), 
+      time: weight?.time,
+      weight: weight?.weight,
+      height: weight?.height,
+      unit: weight?.unit,
+      notes: weight?.notes,
+    })
+  }, [weight])
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
@@ -137,10 +168,10 @@ export default function EditWeightJournal() {
               <Input
                 name="weight"
                 id="weight"
-                type="text"
+                type="number"
                 style={{ width: '100%' }}
                 onChange={formik.handleChange}
-                value={formik.values.weight.toString()}
+                value={formik.values.weight}
                 onBlur={formik.handleBlur}
               />
             </div>
@@ -156,10 +187,10 @@ export default function EditWeightJournal() {
               <Input
                 name="height"
                 id="height"
-                type="text"
+                type="number"
                 style={{ width: '100%' }}
                 onChange={formik.handleChange}
-                value={formik.values.height.toString()}
+                value={formik.values.height}
                 onBlur={formik.handleBlur}
               />
             </div>

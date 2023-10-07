@@ -171,36 +171,82 @@ if (!formik.values.unit) {
       )}      
       </div>
 
-      <div className="mt-3">
-        <label
-          htmlFor="weight"
-          className="font-sans font-medium text-grey text-[16px]"
-        >
-          Weight
-        </label>
-        <br />
-        <Input
-          name="weight"
-          id="weight"
-          type="number"
-          style={{ width: '100%' }}
-          onChange={formik.handleChange}
-          value={formik.values.weight.toString()}
-          onBlur={formik.handleBlur}
-        />
-         {/* Check if the field is touched */}
-  {formik.touched.weight && (
-    // Check if the field is empty
-    !formik.values.weight && (
-      <p className="text-red text-[14px]">This field can't be left empty or zero.</p>
-    ) || (
-      // Check if the field is less than or equal to zero
-      formik.values.weight <= 0 && (
-        <p className="text-red text-[14px]">You can't enter a negative weight or a weight of zero.</p>
+      <div className="flex">
+  <div className="mt-3">
+    <label
+      htmlFor="weight"
+      className="font-sans font-medium text-grey text-[16px]"
+    >
+      Weight
+    </label>
+    <br />
+    <Input
+      name="weight"
+      id="weight"
+      type="number"
+      style={{ width: '75%' }}
+      onChange={formik.handleChange}
+      value={formik.values.weight.toString()}
+      onBlur={formik.handleBlur}
+    />
+    {/* Check if the field is touched */}
+    {formik.touched.weight && (
+      // Check if the field is empty
+      !formik.values.weight && (
+        <p className="text-red text-[14px]">This field can't be left empty or zero.</p>
+      ) || (
+        // Check if the field is less than or equal to zero
+        formik.values.weight <= 0 && (
+          <p className="text-red text-[14px]">You can't enter a negative weight or a weight of zero.</p>
+        )
       )
-    )
-  )}
-      </div>
+    )}
+  </div>
+
+  <div className="mt-3">
+    <label
+      htmlFor="unit"
+      className="font-sans font-medium text-grey text-[16px]"
+    >
+      Unit
+    </label>
+    <br />
+    <select
+      className="text-darkgrey"
+      name="unit"
+      id="unit"
+      style={{
+        width: '50%',
+        border: '1px solid #DBE2EA', // Border style
+        borderRadius: '5px',
+        marginLeft: '2px',
+      }}
+      onChange={formik.handleChange}
+      onBlur={formik.handleBlur}
+      value={formik.values.unit}
+    >
+      <option
+        className="text-darkgrey"
+        value="kg"
+      >
+        kg
+      </option>
+      <option
+        className="text-darkgrey"
+        value="lb"
+      >
+        lb
+      </option>
+    </select>        
+
+    {unitError && <p className="text-red text-[14px]">This field can't be left empty.</p>}
+
+    {formik.touched.unit && !formik.values.unit && (
+      <p className="text-red text-[14px]">This field can't be left empty.</p>
+    )}
+  </div>
+</div>
+
 
       <div className="mt-3">
         <label
@@ -236,31 +282,7 @@ if (!formik.values.unit) {
       
       </div>
 
-      <div className="mt-3">
-        <label
-          htmlFor="unit"
-          className="font-sans font-medium text-grey text-[16px]"
-        >
-          Unit
-        </label>
-        <br />
-        <select
-          name="unit"
-          id="unit"
-          style={{ width: '100%' }}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          value={formik.values.unit}
-        >
-          <option value="kg">kg</option>
-          <option value="lb">lb</option>
-        </select>
-        {unitError && <p className="text-red text-[14px]">This field can't be left empty.</p>}
-
-        {formik.touched.unit && !formik.values.unit && (
-          <p className="text-red text-[14px]">This field can't be left empty.</p>
-        )}
-      </div>
+      
 
       <div className="mt-3">
                 <label
@@ -281,7 +303,7 @@ if (!formik.values.unit) {
                 />
               </div>
       
-      <div className="mx-auto space-x-2">
+      <div className="mt-5 mb-5 space-x-2">
         <Button
           type="button"
           text="Cancel"
