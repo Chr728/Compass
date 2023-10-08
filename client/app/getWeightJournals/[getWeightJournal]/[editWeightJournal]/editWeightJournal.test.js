@@ -1,7 +1,7 @@
 import {render, screen, act} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import updateWeightJournal from './page';
+import EditWeightJournal from './page';
 import {getWeightJournal, updateWeightJournal} from '../../../http/weightJournalAPI';
 
 const mockRouter = jest.fn();
@@ -36,9 +36,21 @@ jest.mock('../../../http/weightJournalAPI', () => {
 
 beforeEach(async () => {
     await act(async () => {
-        render(<updateWeightJournal params={{ weightJournalId: '1' }}/>);
+        render(<EditWeightJournal params={{ weightJournalId: '1' }}/>);
       });
 })
+
+jest.mock("../../../contexts/UserContext", () => {
+    return {
+      useUser: () =>{
+        return {
+            userInfo: {
+                uid: '1',
+            }
+        }
+      }
+    };
+  });
 
 test("Form submits correctly", async () =>{
     await getWeightJournal();
@@ -72,5 +84,5 @@ test("Cancel button works correctly", async () =>{
     const cancelButton = screen.getAllByRole('button')[0];
     await userEvent.click(cancelButton);
     await mockRouter;
-    expect(mockRouter).toHaveBeenCalledWith('/getWeightJournals');
+    expect(mockRouter).toHaveBeenCalledWith(`/getWeightJournals/${weight.id}`);
 })
