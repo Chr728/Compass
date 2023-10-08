@@ -5,17 +5,28 @@ import EditWeightJournal from './page';
 import {getWeightJournal, updateWeightJournal} from '../../../http/weightJournalAPI';
 
 const mockRouter = jest.fn();
-jest.mock("next/navigation", () => ({
-    useRouter: () => {
-        return {
-            push: mockRouter
-        }
-    }
-}));
+// jest.mock("next/navigation", () => ({
+//     useRouter: () => {
+//         return {
+//             push: mockRouter
+//         }
+//     }
+// }));
+jest.mock('next/navigation', () => ({
+    useRouter() {
+      return {
+        push: () => jest.fn(),
+        replace: () => jest.fn(),
+      };
+    },
+    usePathname() {
+      return '';
+    },
+  }));
 
 jest.mock('../../../http/weightJournalAPI', () => {
     return {
-        getAppointment: () => {
+        getWeighJournal: () => {
             return {
                     success: "SUCCESS",
                     data: 
@@ -53,13 +64,14 @@ jest.mock("../../../contexts/UserContext", () => {
   });
 
 test("Form submits correctly", async () =>{
-    await getWeightJournal();
+    await updateWeightJournal();
         const date = screen.getByLabelText("Date");
         const time  = screen.getByLabelText("Time");
         const weight = screen.getByLabelText("Weight");
         const height = screen.getByLabelText("Height (in meters)");
         const unit = screen.getByLabelText("Unit");
         const notes  = screen.getByLabelText("Notes");
+        const submitButton = screen.getAllByRole('button')[2];
 
         expect(date).toBeInTheDocument();
         expect(time).toBeInTheDocument();
@@ -74,15 +86,15 @@ test("Form submits correctly", async () =>{
 })
 
 test("Cancel button works correctly", async () =>{
-    await getWeightJournal();
+    await updateWeightJournal();
     const date = screen.getByLabelText("Date");
     const time  = screen.getByLabelText("Time");
     const weight = screen.getByLabelText("Weight");
     const height = screen.getByLabelText("Height (in meters)");
     const unit = screen.getByLabelText("Unit");
     const notes  = screen.getByLabelText("Notes");
-    const cancelButton = screen.getAllByRole('button')[0];
+    const cancelButton = screen.getAllByRole('button')[1];
     await userEvent.click(cancelButton);
     await mockRouter;
-    expect(mockRouter).toHaveBeenCalledWith(`/getWeightJournals/${weight.id}`);
+    expect(mockRouter).toHaveBeenCalledWith(`/getWeightJournals/1`);
 })

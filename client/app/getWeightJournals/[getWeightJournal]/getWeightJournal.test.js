@@ -2,27 +2,30 @@ import {render, screen, act} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import GetWeightJournal from './page';
-import {getWeightJournal} from '../../http/weightJournalAPI';
+import {getWeightJournal,getWeightJournals} from '../../http/weightJournalAPI';
 import { useRouter } from "next/navigation";
 import { useUser } from '../../contexts/UserContext';
 
 const mockRouter = jest.fn();
+
 jest.mock("next/navigation", () => ({
     useRouter: () => {
         return {
             push: mockRouter
         }
-    },
-    usePathname: jest.fn()
+    }
 }));
-    
-    //     return {
-    //         split: jest.fn()
-
-    //     }
-    // }
-
-
+jest.mock('next/navigation', () => ({
+    useRouter() {
+      return {
+        push: () => jest.fn(),
+        replace: () => jest.fn(),
+      };
+    },
+    usePathname() {
+      return '';
+    },
+  }));
 
 jest.mock('../../http/weightJournalAPI', () => {
     return {
@@ -59,25 +62,25 @@ jest.mock("../../contexts/UserContext", () => {
 
 beforeEach(async () => {
     await act(async () => {
-        render(<GetWeightJournal params={{ getWeightJournal: '1' }}/>);
+        render(<GetWeightJournal params={{ uid: '1',id:'1' }}/>);
       });
 })
 
 test("User data is displayed correctly", async () => {
     await getWeightJournal();
-    const date = screen.getByLabelText("Date");
-    const time  = screen.getByLabelText("Time");
-    const weight = screen.getByLabelText("Weight");
-    const height = screen.getByLabelText("Height");
-    const unit = screen.getByLabelText("Unit");
-    const notes  = screen.getByLabelText("Notes");
+    const date = await screen.findByText("Date:");
+    const time  = await screen.findByText("Time:");
+    const weight = await screen.findByText("Weight:");
+    const height = await screen.findByText("Height:");
+    const unit = await  screen.findByText("Unit:");
+    const notes  = await screen.findByText("Notes:");
 
-    const dateValue = await screen.findByText("Jan 1, 2014");
-    const timeValue = await screen.findByText("8h36");
-    const weightValue = await screen.findByText("186");
-    const unitValue = await screen.findByText("lb");
-    const heightValue = await screen.findByText("174");
-    const notesValue = await screen.findByText("notes");
+    const dateValue = await screen.findByText("2014-01-01");
+    const timeValue = await screen.getByText("08:36 AM");
+    const weightValue = await screen.getByText("186");
+    const unitValue = await screen.getByText("lb");
+    const heightValue = await screen.getByText("174");
+    const notesValue = await screen.getByText("notes");
 
     expect(date).toBeInTheDocument();
     expect(time).toBeInTheDocument();
@@ -94,16 +97,20 @@ test("User data is displayed correctly", async () => {
     expect(notesValue).toBeInTheDocument();
 })
 
+
+
+
+
 test("Cancel button functions correctly", async() => {
-    const cancelButton = screen.getAllByRole('button')[0];
+    const cancelButton = screen.getAllByRole('button')[1];
     await userEvent.click(cancelButton);
     await mockRouter;
     expect(mockRouter).toHaveBeenCalledWith('/getWeightJournals')
 })
 
 test("Update button functions correctly", async() => {
-    const updateButton = screen.getAllByRole('button')[1];
+    const updateButton = screen.getAllByRole('button')[2];
     await userEvent.click(updateButton);
     await mockRouter;
-    expect(mockRouter).toHaveBeenCalledWith('/getWeightJournal/1')
+    expect(mockRouter).toHaveBeenCalledWith('/getWeightJournals/1')
 })

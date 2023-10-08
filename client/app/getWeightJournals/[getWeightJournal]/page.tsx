@@ -82,7 +82,7 @@ export default function GetWeightJournal() {
            className="text-lg ml-0 font-sans text-darkgrey  font-bold text-[16px]"
            style={{display: 'inline'}}
        >
-         Time :{' '}
+         Time:
        </p>
        <p
            className="text-md ml-2 text-darkgrey"
@@ -95,7 +95,7 @@ export default function GetWeightJournal() {
            className="text-lg ml-0 font-sans text-darkgrey  font-bold text-[16px]"
            style={{display: 'inline'}}
        >
-         Weight :{' '}
+         Weight:
        </p>
        <p
            className="text-md ml-2 text-darkgrey"
@@ -108,7 +108,7 @@ export default function GetWeightJournal() {
            className="text-lg ml-0 font-sans text-darkgrey  font-bold text-[16px]"
            style={{display: 'inline'}}
        >
-         Unit :{' '}
+         Unit:
        </p>
        <p
            className="text-md ml-2 text-darkgrey"
@@ -122,7 +122,7 @@ export default function GetWeightJournal() {
            className="text-lg ml-0 font-sans text-darkgrey font-bold text-[16px]"
            style={{display: 'inline'}}
        >
-         Height :{' '}
+         Height:
        </p>
        <p
            className="text-md ml-2 text-darkgrey"
@@ -136,7 +136,7 @@ export default function GetWeightJournal() {
            className="text-lg ml-0 font-sans text-darkgrey  font-bold text-[16px]"
            style={{display: 'inline'}}
        >
-         Notes :{' '}
+         Notes:
        </p>
        <p
            className="text-md ml-2 text-darkgrey"
