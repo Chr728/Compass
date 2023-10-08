@@ -189,15 +189,15 @@ if (!formik.values.unit) {
     {formik.touched.weight && (
       // Check if the field is empty
       !formik.values.weight && 
-      // (
+      (
         <p className="text-red text-[14px]">This field can't be left empty or zero.</p>
-      // ) 
-      // || (
-      //   // Check if the field is less than or equal to zero
-      //   formik.values.weight <= 0 && (
-      //     <p className="text-red text-[14px]">You can't enter a negative weight or a weight of zero.</p>
-      //   )
-      // )
+      ) 
+      || (
+        // Check if the field is less than or equal to zero
+        formik.values.weight <= 0 && (
+          <p className="text-red text-[14px]">You can't enter a negative weight or a weight of zero.</p>
+        )
+      )
     )}
   </div>
 

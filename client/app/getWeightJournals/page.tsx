@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 import { MdDeleteForever, MdInfoOutline } from 'react-icons/md';
 import Header from '../components/Header';
 
-export default function GetWeightJournal() {
+export default function GetWeightJournals() {
   const router = useRouter();
   const { user } = useAuth();
   const { userInfo } = useUser();
@@ -44,8 +44,9 @@ export default function GetWeightJournal() {
     async function deleteWeightJournals(userId: string,weightJournalId: string){
       const deleteresult = await deleteWeightJournal(userId,weightJournalId);   
       location.reload();
-
     }
+
+
   return (    
       <div className="bg-eggshell min-h-screen flex flex-col">
               <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
@@ -59,20 +60,34 @@ export default function GetWeightJournal() {
               certain health conditions like heart disease.</p>
 
               {weight && (
-  <div className="rounded-3xl bg-white flex flex-col mt-4 mb-6 w-full md:max-w-[800px] md:min-h-[550px] p-4 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]">
-    <div className="flex justify-between items-center">
-      <div>
-        <Button type="button" text="Add an Entry" style={{ width: '120px', fontSize: '14px' }} onClick={() => router.push(`/createWeightJournal`)} />
-      </div>
-      {weight.length > 0 && weight[0].height && (
-        <p className="font-sans  text-darkgrey mr-10 font-bold  text-[14px]"> Your height: {weight[weight.length - 1].height}</p>
-      )}
-    </div>
-    <br></br>
-    {weight.length === 0 ? (
-      <p className="font-sans  text-darkgrey mr-10 font-bold  text-[14px]">No height available</p>
-    ) : (
-      <>
+            <div className="rounded-3xl bg-white flex flex-col mt-4 mb-6 w-full md:max-w-[800px] md:min-h-[550px] p-4 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]">
+              <div className="flex justify-between items-center">
+                <div>
+                  <Button type="button" text="Add an Entry" style={{ width: '120px', fontSize: '14px' }} onClick={() => router.push(`/createWeightJournal`)} />
+                </div>
+                <p className="font-sans  text-darkgrey ml-20 font-bold  text-[14px]">Your height:</p>
+                {weight.length > 0 && weight[0].height && (
+                  <p className="font-sans  text-darkgrey mr-8 font-bold  text-[14px]">{weight[weight.length - 1].height}</p>
+                )}
+              </div>
+              <br></br>
+          <div className="flex">
+            <div className="flex-2">
+              <div className="font-sans font-medium text-darkgrey text-[18px]">
+                Date/Time
+              </div>
+            </div>
+            <div className="flex-2">
+              <div className="font-sans font-medium text-darkgrey text-[18px] ml-20">
+                BMI
+              </div>
+            </div>
+            <div className="flex-2">
+              <div className="font-sans font-medium text-darkgrey text-[18px] ml-8">
+                Weight
+              </div>
+            </div>
+          </div>
         {weight.map((item: any, index: number) => (
           <div
             key={item.weightJournalId}
@@ -81,22 +96,6 @@ export default function GetWeightJournal() {
               backgroundColor: index % 2 === 0 ? 'white' : '#DBE2EA',
             }}
           >
-            {index === 0 && (
-              <>
-                <div className="font-sans font-medium text-darkgrey text-[18px]">
-                  Date/Time
-                </div>
-                <div className="font-sans font-medium text-darkgrey text-[18px] ml-16">
-                  BMI
-                </div>
-                <div className="font-sans font-medium text-darkgrey text-[18px]">
-                  Weight
-                </div>
-              </>
-            )}
-
-            {index !== 0 ? (
-              <>
                 <div className="flex-2">
                   <p className="font-sans font-medium text-darkgrey text-[14px]">
                     {`${new Date(item.date).toISOString().split('T')[0]} ${new Date(
@@ -114,12 +113,8 @@ export default function GetWeightJournal() {
                     {item.weight}
                   </p>
                 </div>
-              </>
-            ) : null}
 
             <div className="flex icons" style={{ marginLeft: '5px', marginRight: '5px' }}>
-              {index !== 0 && (
-                <>
                   <div className="icon">
                     <MdInfoOutline
                       style={{ color: 'var(--Black, #000000)', width: '25px', height: '30px' }}
@@ -132,14 +127,11 @@ export default function GetWeightJournal() {
                       onClick={() => deleteWeightJournals(item.uid, item.id)}
                     />
                   </div>
-                </>
-              )}
             </div>
             <br></br>
           </div>
         ))}
-      </>
-    )}
+
   </div>
 )}
 </div>
