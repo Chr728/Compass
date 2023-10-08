@@ -65,12 +65,12 @@ jest.mock('../http/weightJournalAPI', () => {
         await  getWeightJournals();
         render (<GetWeightJournals/>);
         const date = await screen.findByText('2014-01-01 08:36 AM');
-        // const weight = await screen.findByText('75.5');
-        // const height = await screen.findByText('Your height');
+        const weight = await screen.findByText('75.5');
+        const height = await screen.findByText('1.65');
 
         expect(date).toBeInTheDocument();
-        // expect(weight).toBeInTheDocument();
-        // expect(height).toBeInTheDocument();
+        expect(weight).toBeInTheDocument();
+        expect(height).toBeInTheDocument();
     })
 
    

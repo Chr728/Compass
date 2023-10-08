@@ -65,7 +65,7 @@ export default function GetWeightJournals() {
                 <div>
                   <Button type="button" text="Add an Entry" style={{ width: '120px', fontSize: '14px' }} onClick={() => router.push(`/createWeightJournal`)} />
                 </div>
-                <p className="font-sans  text-darkgrey ml-20 font-bold  text-[14px]">Your height:</p>
+                <p className="font-sans  text-darkgrey ml-16 font-bold  text-[14px]">Your height:</p>
                 {weight.length > 0 && weight[0].height && (
                   <p className="font-sans  text-darkgrey mr-8 font-bold  text-[14px]">{weight[weight.length - 1].height}</p>
                 )}
@@ -83,7 +83,7 @@ export default function GetWeightJournals() {
               </div>
             </div>
             <div className="flex-2">
-              <div className="font-sans font-medium text-darkgrey text-[18px] ml-8">
+              <div className="font-sans font-medium text-darkgrey text-[18px] ml-6">
                 Weight
               </div>
             </div>

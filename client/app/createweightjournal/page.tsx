@@ -56,58 +56,58 @@ export default function CreateWeightJournal() {
   });
 
 
-  const [dateError, setDateError] = useState(false);
-const [timeError, setTimeError] = useState(false);
-const [weightError, setWeightError] = useState(false);
-const [heightError, setHeightError] = useState(false);
-const [unitError, setUnitError] = useState(false);
+//   const [dateError, setDateError] = useState(false);
+// const [timeError, setTimeError] = useState(false);
+// const [weightError, setWeightError] = useState(false);
+// const [heightError, setHeightError] = useState(false);
+// const [unitError, setUnitError] = useState(false);
 
-const handleSubmit = (error: any) => {
-  error.preventDefault();
+// const handleSubmit = (error: any) => {
+//   error.preventDefault();
 
-  // Check if Date is empty
-  if (!formik.values.date) {
-    setDateError(true);
-  } else {
-    setDateError(false);
-  }
+//   // Check if Date is empty
+//   if (!formik.values.date) {
+//     setDateError(true);
+//   } else {
+//     setDateError(false);
+//   }
 
-  // Check if Time is empty
-  if (!formik.values.time) {
-    setTimeError(true);
-  } else {
-    setTimeError(false);
-  }
+//   // Check if Time is empty
+//   if (!formik.values.time) {
+//     setTimeError(true);
+//   } else {
+//     setTimeError(false);
+//   }
 
-  // Check if Date is empty
-  if (!formik.values.weight) {
-    setWeightError(true);
-  } else {
-    setWeightError(false);
-  }
+//   // Check if Date is empty
+//   if (!formik.values.weight) {
+//     setWeightError(true);
+//   } else {
+//     setWeightError(false);
+//   }
 
-  // Check if Time is empty
-  if (!formik.values.height) {
-    setHeightError(true);
-  } else {
-    setHeightError(false);
-  }
+//   // Check if Time is empty
+//   if (!formik.values.height) {
+//     setHeightError(true);
+//   } else {
+//     setHeightError(false);
+//   }
 
-// Check if Date is empty
-if (!formik.values.date) {
-  setDateError(true);
-} else {
-  setDateError(false);
-}
+// // Check if Date is empty
+// if (!formik.values.date) {
+//   setDateError(true);
+// } else {
+//   setDateError(false);
+// }
 
-// Check if Time is empty
-if (!formik.values.unit) {
-  setUnitError(true);
-} else {
-  setUnitError(false);
-}
+// // Check if Time is empty
+// if (!formik.values.unit) {
+//   setUnitError(true);
+// } else {
+//   setUnitError(false);
+// }
 
-};
+// };
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
@@ -240,9 +240,6 @@ if (!formik.values.unit) {
         lb
       </option>
     </select>        
-
-    {unitError && <p className="text-red text-[14px]">This field can't be left empty.</p>}
-
     {formik.touched.unit && !formik.values.unit && (
       <p className="text-red text-[14px]">This field can't be left empty.</p>
     )}
