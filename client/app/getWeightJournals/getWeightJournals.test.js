@@ -61,6 +61,14 @@ jest.mock('../http/weightJournalAPI', () => {
     }
 });
    
+
+test("Add an entry button  functions correctly", async() => {
+    const addButton = screen.getAllByRole('button')[1];
+    await userEvent.click(addButton);
+    await mockRouter;
+    expect(mockRouter).toHaveBeenCalledWith('/createWeightJournal')
+})
+
     test("Get Weight Journals list is displayed correctly", async () => {
         await  getWeightJournals();
         render (<GetWeightJournals/>);
