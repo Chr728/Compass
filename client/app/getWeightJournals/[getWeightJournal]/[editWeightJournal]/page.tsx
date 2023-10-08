@@ -47,9 +47,9 @@ export default function EditWeightJournal() {
     async function fetchWeightJournal() {
       try {
         const userId = user?.uid || '';
-        const x = await getWeightJournals(userId);   
+        const x = await getWeightJournals();   
         // const weightJournalId = '1'; // Replace '1' with the correct weight journal entry ID
-        const result = await getWeightJournal(userId, generatedWeightId);
+        const result = await getWeightJournal(generatedWeightId);
         console.log(result.data);
         console.log('Weight journal entry retrieved:', result);
         setweight(result.data);
@@ -74,7 +74,7 @@ export default function EditWeightJournal() {
     onSubmit: async (values) => {
       try {
         const userId = user?.uid || '';
-        const x = await getWeightJournals(userId);   
+        const x = await getWeightJournals();   
 
         const data = {
           date: values.date,
@@ -84,7 +84,7 @@ export default function EditWeightJournal() {
           unit: values.unit,
           notes: values.notes,
         };
-        const result = await updateWeightJournal(userId,generatedWeightId, data); 
+        const result = await updateWeightJournal(generatedWeightId, data); 
         console.log('Weight journal entry updated:', result);
         router.push(`/getWeightJournals/${weight.id}`)
       } catch (error) {

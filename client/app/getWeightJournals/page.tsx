@@ -29,7 +29,7 @@ export default function GetWeightJournals() {
     async function fetchWeightJournals() {
       try {
         const userId = user?.uid || '';
-        const result = await getWeightJournals(userId);    
+        const result = await getWeightJournals();    
         const weightJournalId = weight?.weightJournalId; 
         console.log('All Weight journals entry retrieved:', result);
         setweight(result.data);
@@ -42,7 +42,7 @@ export default function GetWeightJournals() {
 
 
     async function deleteWeightJournals(userId: string,weightJournalId: string){
-      const deleteresult = await deleteWeightJournal(userId,weightJournalId);   
+      const deleteresult = await deleteWeightJournal(weightJournalId);   
       location.reload();
     }
 

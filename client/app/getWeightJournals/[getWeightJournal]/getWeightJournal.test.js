@@ -62,7 +62,7 @@ jest.mock("../../contexts/UserContext", () => {
 
 beforeEach(async () => {
     await act(async () => {
-        render(<GetWeightJournal params={{ uid: '1',id:'1' }}/>);
+        render(<GetWeightJournal params={{ id:'1' }}/>);
       });
 })
 

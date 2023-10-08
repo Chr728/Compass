@@ -32,9 +32,9 @@ export default function GetWeightJournal() {
     async function fetchWeightJournal() {
       try {
         const userId = user?.uid || '';
-        const x = await getWeightJournals(userId);   
+        const x = await getWeightJournals();   
         // const weightJournalId = '1'; // Replace '1' with the correct weight journal entry ID
-        const result = await getWeightJournal(userId, generatedWeightId);
+        const result = await getWeightJournal(generatedWeightId);
         console.log('Weight journal entry retrieved:', result);
         setweight(result.data);
       } catch (error) {
