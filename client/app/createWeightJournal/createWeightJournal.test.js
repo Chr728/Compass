@@ -1,12 +1,12 @@
 import {fireEvent, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import CreateWeightJournal from '../createWeightJournal/page';
+import CreateWeightJournal from './page';
 
 const fakeUser = {
     uid: "1"
 }
-jest.mock('../../contexts/AuthContext', () => {
+jest.mock('../contexts/AuthContext', () => {
     return {
         useAuth: () => {
             return {
@@ -17,7 +17,7 @@ jest.mock('../../contexts/AuthContext', () => {
 });
 
 
-jest.mock('../../http/weightJournalAPI', () => {
+jest.mock('../http/weightJournalAPI', () => {
     return {
         createWeightJournal: jest.fn()
     }
@@ -33,14 +33,27 @@ jest.mock("next/navigation", () => ({
     }
 }));
 
-const { createWeightJournal} = require('../../http/weightJournalAPI');
+
+jest.mock("../contexts/UserContext", () => {
+    return {
+      useUser: () =>{
+        return {
+            userInfo: {
+                uid: '1',
+            }
+        }
+      }
+    };
+  });
+
+const { createWeightJournal} = require('../http/weightJournalAPI');
  
     test("All fields are displayed to the user", () => {
         render(<CreateWeightJournal/>);
         const date = screen.getByLabelText("Date");
         const time  = screen.getByLabelText("Time");
         const weight = screen.getByLabelText("Weight");
-        const height = screen.getByLabelText("Height");
+        const height = screen.getByLabelText("Height (in meters)");
         const unit = screen.getByLabelText("Unit");
         const notes  = screen.getByLabelText("Notes");
 
@@ -56,28 +69,34 @@ const { createWeightJournal} = require('../../http/weightJournalAPI');
         render(<CreateWeightJournal/>);
         const date = screen.getByLabelText("Date");
         fireEvent.blur(date);
-        const error = await screen.findByText("This field can't be left empty.");
-        expect(error).toBeInTheDocument();
-
         const time = screen.getByLabelText("Time");
         fireEvent.blur(time);
-        const error1 = await screen.findByText("This field can't be left empty.");
+       const weight = screen.getByLabelText("Weight");
+        fireEvent.blur(weight);
+        const unit = screen.getByLabelText("Unit");
+        fireEvent.blur(unit);
+        const height = screen.getByLabelText("Height (in meters)");
+        fireEvent.blur(height);
+
+
+        const error = await screen.findAllByText("This field can't be left empty.")[0];
+        expect(error).toBeInTheDocument();
+
+       
+        const error1 = await screen.findAllByText("This field can't be left empty.")[1];
         expect(error1).toBeInTheDocument();
 
-        const weight = screen.getByLabelText("Weight");
-        fireEvent.blur(weight);
-        const error2 = await screen.findByText("This field can't be left empty or zero.");
+        
+        const error2 = await screen.findAllByText("This field can't be left empty or zero.")[0];
         expect(error2).toBeInTheDocument();
 
 
-        const unit = screen.getByLabelText("Unit");
-        fireEvent.blur(unit);
-        const error3 = await screen.findByText("This field can't be left empty.");
+        
+        const error3 = await screen.findAllByText("This field can't be left empty.")[2];
         expect(error3).toBeInTheDocument();
 
-        const height = screen.getByLabelText("Height");
-        fireEvent.blur(height);
-        const error4 = await screen.findByText("This field can't be left empty or zero.");
+        
+        const error4 = await screen.findAllByText("This field can't be left empty or zero.")[1];
         expect(error4).toBeInTheDocument();
     })
 
@@ -89,7 +108,7 @@ const { createWeightJournal} = require('../../http/weightJournalAPI');
         const error = await screen.findByText("You can't enter a negative weight or a weight of zero.");
         expect(error).toBeInTheDocument();
 
-        const height = screen.getByLabelText("Height");
+        const height = screen.getByLabelText("Height (in meters)");
         await userEvent.type(height, "0");
         fireEvent.blur(weight);
         const error1 = await screen.findByText("You can't enter a negative height or a height of zero.");
@@ -106,7 +125,7 @@ const { createWeightJournal} = require('../../http/weightJournalAPI');
         const error = await screen.findByText("You can't enter a negative weight or a weight of zero.");
         expect(error).toBeInTheDocument();
 
-        const height = screen.getByLabelText("Height");
+        const height = screen.getByLabelText("Height (in meters)");
         await userEvent.type(height, "-4");
         fireEvent.blur(weight);
         const error1 = await screen.findByText("You can't enter a negative height or a height of zero.");
@@ -119,7 +138,7 @@ const { createWeightJournal} = require('../../http/weightJournalAPI');
         const date = screen.getByLabelText("Date");
         const time  = screen.getByLabelText("Time");
         const weight = screen.getByLabelText("Weight");
-        const height = screen.getByLabelText("Height");
+        const height = screen.getByLabelText("Height (in meters)");
         const unit = screen.getByLabelText("Unit");
         const notes  = screen.getByLabelText("Notes");
         const submitButton = screen.getAllByRole('button')[1];
@@ -132,11 +151,11 @@ const { createWeightJournal} = require('../../http/weightJournalAPI');
         await userEvent.type(notes, "abc");
 
         await userEvent.click(submitButton);
-        await createWeightJournal;
+        await createWeightJournal();
         await mockRouter;
 
         expect(createWeightJournal).toHaveBeenCalledTimes(1);
-        expect(mockRouter).toHaveBeenCalledWith('/createWeightJournal');
+        expect(mockRouter).toHaveBeenCalledWith('/getWeightJournals');
     })
 
     test("Cancel button redirects to getWeightJournals page", async () => {

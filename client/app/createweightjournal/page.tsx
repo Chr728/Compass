@@ -81,16 +81,16 @@ const handleSubmit = (error: any) => {
 
   // Check if Date is empty
   if (!formik.values.weight) {
-    setDateError(true);
+    setWeightError(true);
   } else {
-    setDateError(false);
+    setWeightError(false);
   }
 
   // Check if Time is empty
   if (!formik.values.height) {
-    setTimeError(true);
+    setHeightError(true);
   } else {
-    setTimeError(false);
+    setHeightError(false);
   }
 
 // Check if Date is empty
@@ -102,9 +102,9 @@ if (!formik.values.date) {
 
 // Check if Time is empty
 if (!formik.values.unit) {
-  setTimeError(true);
+  setUnitError(true);
 } else {
-  setTimeError(false);
+  setUnitError(false);
 }
 
 };
@@ -188,14 +188,16 @@ if (!formik.values.unit) {
     {/* Check if the field is touched */}
     {formik.touched.weight && (
       // Check if the field is empty
-      !formik.values.weight && (
+      !formik.values.weight && 
+      // (
         <p className="text-red text-[14px]">This field can't be left empty or zero.</p>
-      ) || (
-        // Check if the field is less than or equal to zero
-        formik.values.weight <= 0 && (
-          <p className="text-red text-[14px]">You can't enter a negative weight or a weight of zero.</p>
-        )
-      )
+      // ) 
+      // || (
+      //   // Check if the field is less than or equal to zero
+      //   formik.values.weight <= 0 && (
+      //     <p className="text-red text-[14px]">You can't enter a negative weight or a weight of zero.</p>
+      //   )
+      // )
     )}
   </div>
 

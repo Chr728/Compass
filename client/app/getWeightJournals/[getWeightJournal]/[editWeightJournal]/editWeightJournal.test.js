@@ -45,7 +45,7 @@ test("Form submits correctly", async () =>{
         const date = screen.getByLabelText("Date");
         const time  = screen.getByLabelText("Time");
         const weight = screen.getByLabelText("Weight");
-        const height = screen.getByLabelText("Height");
+        const height = screen.getByLabelText("Height (in meters)");
         const unit = screen.getByLabelText("Unit");
         const notes  = screen.getByLabelText("Notes");
 
@@ -66,7 +66,7 @@ test("Cancel button works correctly", async () =>{
     const date = screen.getByLabelText("Date");
     const time  = screen.getByLabelText("Time");
     const weight = screen.getByLabelText("Weight");
-    const height = screen.getByLabelText("Height");
+    const height = screen.getByLabelText("Height (in meters)");
     const unit = screen.getByLabelText("Unit");
     const notes  = screen.getByLabelText("Notes");
     const cancelButton = screen.getAllByRole('button')[0];
