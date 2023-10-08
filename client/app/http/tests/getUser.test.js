@@ -1,4 +1,6 @@
 import getUser from '../getUser';
+import { auth } from '../../config/firebase';
+
 
 describe('getUser', () => {
   beforeEach(() => {
@@ -10,46 +12,73 @@ describe('getUser', () => {
   });
 
   it('should get a user by ID', async () => {
-    const mockUser = { id: 1, name: 'John Doe', email: 'johndoe@example.com' };
-    const mockResponse = { data: mockUser };
-    const mockFetch = jest.fn().mockResolvedValue({
-      ok: true,
-      json: () => Promise.resolve(mockResponse),
+    const mockUserId = '123';
+    const mockToken = 'mockToken';
+    const mockCurrentUser = {
+      uid: mockUserId,
+      getIdToken: jest.fn().mockResolvedValue(mockToken),
+    };
+    
+    Object.defineProperty(auth, 'currentUser', {
+      get: jest.fn().mockReturnValue(mockCurrentUser),
     });
+
+    const mockUserData = {
+      id: mockUserId,
+      name: 'Mock User',
+      email: 'mockuser@example.com',
+    };
+    const mockResponse = {
+      ok: true,
+      json: jest.fn().mockResolvedValue({ data: mockUserData }),
+    };
+    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch.mockImplementation(mockFetch);
-
-    const userData = await getUser(mockUser.id);
-
-    expect(userData.data.id).toEqual(mockUser.id);
+  
+    const userData = await getUser();
+    expect(userData).toEqual(mockUserData);
     expect(mockFetch).toHaveBeenCalledWith(
-      'http://localhost:8000/api/users/' + mockUser.id,
+      `http://localhost:8000/api/users/${mockUserId}`,
       {
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${mockToken}`,
         },
-        method: 'GET',
       }
     );
   });
 
   it('should throw an error if the request fails', async () => {
-    const mockUserId = 1;
-    const mockFetch = jest.fn().mockResolvedValue({
+    const mockUserId = '123';
+    const mockToken = 'mockToken';
+    const mockCurrentUser = {
+      uid: mockUserId,
+      getIdToken: jest.fn().mockResolvedValue(mockToken),
+    };
+    const mockAuth = {
+      currentUser: mockCurrentUser,
+    };
+    Object.defineProperty(auth, 'currentUser', {
+      get: jest.fn().mockReturnValue(mockCurrentUser),
+    });
+          
+    const mockResponse = {
       ok: false,
       status: 500,
-    });
+    };
+    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch.mockImplementation(mockFetch);
-
-    await expect(getUser(mockUserId)).rejects.toThrow(
-      'HTTP error! Status: 500'
-    );
+  
+    await expect(getUser()).rejects.toThrow('Error fetching user profile');
     expect(mockFetch).toHaveBeenCalledWith(
-      'http://localhost:8000/api/users/' + mockUserId,
+      `http://localhost:8000/api/users/${mockUserId}`,
       {
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${mockToken}`,
         },
-        method: 'GET',
       }
     );
   });

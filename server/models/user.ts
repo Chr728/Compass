@@ -8,10 +8,6 @@ export type UserAttributes = {
   email: string;
   firstName: string;
   lastName: string;
-  streetAddress: string;
-  city: string;
-  province: string;
-  postalCode: string;
   phoneNumber: string;
   birthDate: Date;
   sex: string;
@@ -31,10 +27,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
     email!: string;
     firstName!: string;
     lastName!: string;
-    streetAddress!: string;
-    city!: string;
-    province!: string;
-    postalCode!: string;
     phoneNumber!: string;
     birthDate!: Date;
     sex!: string;
@@ -116,22 +108,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
       lastName: {
         type: DataTypes.STRING,
         allowNull: false,
-      },
-      streetAddress: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      city: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      province: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      postalCode: {
-        type: DataTypes.STRING,
-        allowNull: true,
       },
       phoneNumber: {
         type: DataTypes.STRING,

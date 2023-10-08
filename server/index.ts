@@ -1,10 +1,14 @@
-import express from 'express';
-import cors from 'cors';
-import db from './models';
-import userRoutes from './routes/userRoutes';
+import express from "express";
+import cors from "cors";
+import db from "./models";
+import userRoutes from "./routes/userRoutes";
+import activityJournalRoutes from "./routes/activityJournalRoutes";
+import speedDialRoutes from "./routes/speedDialRoutes";
 import weightJournalRoutes from './routes/weightJournalRoutes';
+import appointmentRoutes from "./routes/appointmentRoutes";
 import Morgan from './middlewares/morgan';
 import { Logger } from './middlewares/logger';
+import decodeToken from "./middlewares/decodeToken";
 require('dotenv').config({
   path: './../.env',
 });
@@ -14,9 +18,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(Morgan);
+app.use(decodeToken);
 
-app.use('/api/users', userRoutes);
 app.use('/api/journals/weight', weightJournalRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/appointments", appointmentRoutes);
+app.use("/api/journals/activity", activityJournalRoutes);
+app.use("/api/speed-dials", speedDialRoutes);
+
 
 app.get('/', (req, res) => {
   res.send('Hello World!');

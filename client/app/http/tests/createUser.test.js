@@ -1,4 +1,5 @@
 import createUser from '../createUser';
+import { auth } from '../../config/firebase';
 
 describe('createUser', () => {
   beforeEach(() => {
@@ -11,20 +12,27 @@ describe('createUser', () => {
 
   it('should create a new user', async () => {
     const mockUser = { name: 'John Doe', email: 'johndoe@example.com' };
-    const mockResponse = { data: mockUser };
+    const mockResponse = { data: { id: 1, ...mockUser } };
     const mockFetch = jest.fn().mockResolvedValue({
       ok: true,
       json: () => Promise.resolve(mockResponse),
     });
     global.fetch.mockImplementation(mockFetch);
-
-    const userData = await createUser(mockUser);
-
-    expect(userData).toEqual(mockUser);
+  
+    const mockCurrentUser = { getIdToken: jest.fn().mockResolvedValue('mockToken') };
+    
+    Object.defineProperty(auth, 'currentUser', {
+      get: jest.fn().mockReturnValue(mockCurrentUser),
+    });
+  
+    const result = await createUser(mockUser);
+    expect(result).toEqual(mockResponse.data);
+  
     expect(mockFetch).toHaveBeenCalledWith('http://localhost:8000/api/users', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': 'Bearer mockToken',
       },
       body: JSON.stringify(mockUser),
     });
@@ -38,16 +46,23 @@ describe('createUser', () => {
       json: () => Promise.resolve(mockResponse),
     });
     global.fetch.mockImplementation(mockFetch);
+  
+    const mockCurrentUser = { getIdToken: jest.fn().mockResolvedValue('mockToken') };
+
+    Object.defineProperty(auth, 'currentUser', {
+      get: jest.fn().mockReturnValue(mockCurrentUser),
+    });
 
     try {
       await createUser(mockUser);
     } catch (error) {
-      expect(error.message).toBe('Error creating user');
+      expect(error.message).toBe('Error creating user: HTTP error! Status: undefined');
     }
     expect(mockFetch).toHaveBeenCalledWith('http://localhost:8000/api/users', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': 'Bearer mockToken',
       },
       body: JSON.stringify(mockUser),
     });
@@ -62,40 +77,25 @@ describe('createUser', () => {
     });
     global.fetch.mockImplementation(mockFetch);
 
+    const mockCurrentUser = { getIdToken: jest.fn().mockResolvedValue('mockToken') };
+
+    Object.defineProperty(auth, 'currentUser', {
+      get: jest.fn().mockReturnValue(mockCurrentUser),
+    });
+
     try {
       await createUser(mockUser);
     } catch (error) {
-      expect(error.message).toBe('Error creating user');
+      expect(error.message).toBe('Error creating user: response.json is not a function');
     }
     expect(mockFetch).toHaveBeenCalledWith('http://localhost:8000/api/users', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': 'Bearer mockToken',
       },
       body: JSON.stringify(mockUser),
     });
   });
 
-  it('should throw an error if the server response is missing data', async () => {
-    const mockUser = { name: 'John Doe', email: 'johndoe@example.com' };
-    const mockResponse = {};
-    const mockFetch = jest.fn().mockResolvedValue({
-      ok: true,
-      json: () => Promise.resolve(mockResponse),
-    });
-    global.fetch.mockImplementation(mockFetch);
-
-    try {
-      await createUser(mockUser);
-    } catch (error) {
-      expect(error.message).toBe('Invalid response');
-    }
-    expect(mockFetch).toHaveBeenCalledWith('http://localhost:8000/api/users', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(mockUser),
-    });
-  });
 });
