@@ -158,12 +158,10 @@ export async function deleteWeightJournal(
         },
       }
     );
-    if (response.status === 204) {
+    if (response && response.status && !response.ok) {
+      throw new Error(`Failed to delete weight journal entry. HTTP Status: ${response.status}`);
+    } else if (response && response.status === 204) {
       return { message: 'Weight journal entry deleted successfully' };
-    } else if (!response.ok) {
-      throw new Error(
-        `Failed to delete weight journal entry ${weightJournalId} for user. HTTP Status: ${response.status}`
-      );
     }
     return { message: 'Weight journal entry deleted successfully' };
   } catch (error) {
