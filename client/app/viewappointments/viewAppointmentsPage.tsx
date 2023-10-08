@@ -70,6 +70,7 @@ export default function ViewAppointmentsPage() {
                 height={10}
                 className="mr-4 md:hidden"
                 style={{ width: 'auto', height: 'auto' }}
+                onClick={() => router.back()}
             />
             </Link>
             Appointments

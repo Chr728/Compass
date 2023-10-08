@@ -7,24 +7,36 @@ import { Appointment, getAppointment } from '@/app/http/appointmentAPI';
 import { useRouter } from 'next/navigation';
 import { formatDate, formatMilitaryTime } from '@/app/helpers/utils/datetimeformat';
 import Menu from '../../components/Menu';
+import { useAuth } from '@/app/contexts/AuthContext';
+import Custom403 from '@/app/pages/403';
 
 
 export default function Appointment( {params: { appointment } } : { params: { appointment: string } }) {
-
+  const { user } = useAuth();
   const router = useRouter();
   const [data, setData] = useState<Appointment>();
 
-  useEffect(() => {
-    async function getSingleAppointment() {
-        try {
-           const appointmentData = await getAppointment(appointment);
-           setData(appointmentData.data);
-        } catch (error) {
-            console.log('Error fetching appointment');
-        }
+  async function getSingleAppointment() {
+    try {
+       const appointmentData = await getAppointment(appointment);
+       setData(appointmentData.data);
+    } catch (error) {
+        console.log('Error fetching appointment');
     }
+}
+
+  useEffect(() => {
+    if (!user){
+      router.push("/login")
+    }
+    if (user) {
     getSingleAppointment();
-}, [appointment]);
+  }
+}, [user, appointment]);
+
+if (!user) {
+  return <div><Custom403/></div>
+}
 
   return (
     data && <div className="bg-eggshell min-h-screen flex flex-col appointment">

@@ -10,30 +10,35 @@ import { Appointment, updateAppointment, getAppointment } from '@/app/http/appoi
 import { formatDateYearMonthDate } from '@/app/helpers/utils/datetimeformat';
 import { useAuth } from "../../../contexts/AuthContext";
 import Menu from '../../../components/Menu';
+import Custom403 from '@/app/pages/403';
 
 
 export default function UpdateAppointment(  {params: { appointment } } : { params: { appointment: string }} ) { 
     const { user } = useAuth()
     const router = useRouter();
     const [data, setData] = useState<Appointment>();
+    async function updateSingleAppointment() {
+      try {
+         const appointmentData = await getAppointment(appointment);
+         setData(appointmentData.data);
+      } catch (error) {
+          console.log('Error fetching appointment');
+      }
+  }
 
 // Fetch the current data of the appointment that is to be updated
     useEffect(() => {
-        async function updateSingleAppointment() {
-        try {
-           const appointmentData = await getAppointment(appointment);
-           setData(appointmentData.data);
-        } catch (error) {
-            console.log('Error fetching appointment');
-        }
-    }
-    updateSingleAppointment();
-}, [appointment]);
+      if (!user){
+        router.push('/login')
+      }
+      if(user) {
+        updateSingleAppointment();
+      }
+}, [user, appointment]);
 
-useEffect(() =>{
-  if (!user) 
-      router.push("/login")
-  }, [user])
+  if (!user) {
+      return <div><Custom403/></div>
+  }
 
     const formik = useFormik({
         initialValues: {
