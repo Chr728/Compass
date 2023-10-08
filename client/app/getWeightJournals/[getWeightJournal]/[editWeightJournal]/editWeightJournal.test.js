@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import EditWeightJournal from './page';
 import {getWeightJournal, updateWeightJournal} from '../../../http/weightJournalAPI';
 
-const mockRouter = jest.fn();
+// const mockRouter = jest.fn();
 // jest.mock("next/navigation", () => ({
 //     useRouter: () => {
 //         return {
@@ -12,17 +12,33 @@ const mockRouter = jest.fn();
 //         }
 //     }
 // }));
-jest.mock('next/navigation', () => ({
+// jest.mock('next/navigation', () => ({
+//     useRouter() {
+//       return {
+//         push: () => jest.fn(),
+//         replace: () => jest.fn(),
+//       };
+//     },
+//     usePathname() {
+//       return '';
+//     },
+//   }));
+
+
+
+const mockRouter = {
+    push: jest.fn(), // Mock the push method
+  };
+  
+  jest.mock('next/navigation', () => ({
     useRouter() {
-      return {
-        push: () => jest.fn(),
-        replace: () => jest.fn(),
-      };
+      return mockRouter; // Return the mockRouter object
     },
     usePathname() {
       return '';
     },
   }));
+
 
 jest.mock('../../../http/weightJournalAPI', () => {
     return {
@@ -95,6 +111,6 @@ test("Cancel button works correctly", async () =>{
     const notes  = screen.getByLabelText("Notes");
     const cancelButton = screen.getAllByRole('button')[1];
     await userEvent.click(cancelButton);
-    await mockRouter;
-    expect(mockRouter).toHaveBeenCalledWith(`/getWeightJournals/1`);
+    await mockRouter.push;
+    expect(mockRouter.push).toHaveBeenCalledWith(`/getWeightJournals/1`);
 })
