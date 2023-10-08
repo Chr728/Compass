@@ -13,6 +13,19 @@ jest.mock("next/navigation", () => ({
     }
 }));
 
+const userData = {
+    uid: '1',
+} 
+jest.mock("../../contexts/AuthContext", () => {
+    return {
+      useAuth: () =>{
+        return {
+            user: userData
+        }
+      }
+    };
+  });
+
 jest.mock('../../http/appointmentAPI', () => {
     return {
         getAppointment: () => {
