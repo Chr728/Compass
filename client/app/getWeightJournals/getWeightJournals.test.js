@@ -1,7 +1,15 @@
-import {render, screen} from '@testing-library/react';
+import {render, screen,act} from '@testing-library/react';
 import '@testing-library/jest-dom';
-import GetWeightJournals from '../getWeightJournals/page';
+import GetWeightJournals from './page';
+import {getWeightJournals} from '../http/weightJournalAPI';
 import { useRouter } from "next/router";
+import { useUser } from '../contexts/UserContext';
+
+beforeEach(async () => {
+    await act(async () => {
+        render(<GetWeightJournals/>);
+      });
+})
 
 const mockRouter= jest.fn();
 jest.mock("next/navigation", () => ({
@@ -16,11 +24,13 @@ const userData = {
     uid: '1',
 }
 
-jest.mock("../contexts/AuthContext", () => {
+jest.mock("../contexts/UserContext", () => {
     return {
-      useAuth: () =>{
+      useUser: () =>{
         return {
-            user: userData
+            userInfo: {
+                uid: '1',
+            }
         }
       }
     };
@@ -50,9 +60,9 @@ jest.mock('../http/weightJournalAPI', () => {
 });
    
     test("Get Weight Journals list is displayed correctly", async () => {
-        render(<GetWeightJournals/>);
-        const date = await screen.findByText('Jan 1, 2014,');
-        const time = await screen.findByText('8h36');
+        await  getWeightJournals();
+        const date = await screen.findByText('2014-01-01');
+        const time = await screen.findByText('08:36 AM');
         const weight = await screen.findByNumber(75.5);
         const height = await screen.findByNumber(1.65);
 
@@ -62,3 +72,6 @@ jest.mock('../http/weightJournalAPI', () => {
         expect(height).toBeInTheDocument();
 
     })
+
+
+    
