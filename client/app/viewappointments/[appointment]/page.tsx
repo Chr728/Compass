@@ -6,6 +6,7 @@ import { useEffect, useState} from 'react';
 import { Appointment, getAppointment } from '@/app/http/appointmentAPI';
 import { useRouter } from 'next/navigation';
 import { formatDate, formatMilitaryTime } from '@/app/helpers/utils/datetimeformat';
+import Menu from '../../components/Menu';
 
 
 export default function Appointment( {params: { appointment } } : { params: { appointment: string } }) {
@@ -133,6 +134,8 @@ export default function Appointment( {params: { appointment } } : { params: { ap
             </div>
             
       </div>
+
+      <Menu/>
     </div>
   )
 }

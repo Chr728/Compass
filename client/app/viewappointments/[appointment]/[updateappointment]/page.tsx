@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { Appointment, updateAppointment, getAppointment } from '@/app/http/appointmentAPI';
 import { formatDateYearMonthDate } from '@/app/helpers/utils/datetimeformat';
 import { useAuth } from "../../../contexts/AuthContext";
+import Menu from '../../../components/Menu';
 
 
 export default function UpdateAppointment(  {params: { appointment } } : { params: { appointment: string }} ) { 
@@ -242,6 +243,7 @@ useEffect(() =>{
         </div>
     </form>
       
+      <Menu/>
     </div>
   )
 }

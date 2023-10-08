@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { createAppointment } from '@/app/http/appointmentAPI';
 import { useAuth } from '@/app/contexts/AuthContext';
 import { useEffect } from 'react';
+import Menu from '../../components/Menu';
 
 
 export default function AddAppointmentPage() { 
@@ -203,7 +204,7 @@ export default function AddAppointmentPage() {
               name="notes" 
               id="notes" 
               value={formik.values.notes} 
-              className="w-full border-2 text-grey" 
+              className="w-full border border-solid border-lightgrey text-grey rounded-md shadow-[0_4px_8px_0_rgba(44,39,56,0.04)]" 
               rows={4} 
               onChange={formik.handleChange} 
               onBlur={formik.handleBlur}
@@ -225,6 +226,8 @@ export default function AddAppointmentPage() {
             />
         </div>
     </form>
+
+    <Menu/>
       
   </div>
   )

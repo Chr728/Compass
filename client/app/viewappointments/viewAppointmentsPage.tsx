@@ -14,6 +14,7 @@ import { useEffect, useState } from 'react';
 import { Appointment } from '../http/appointmentAPI';
 import { formatDate, formatMilitaryTime } from '../helpers/utils/datetimeformat';
 import { useAuth } from '../contexts/AuthContext';
+import Menu from '../components/Menu';
 
 export default function ViewAppointmentsPage() {
     const { user } = useAuth();
@@ -162,6 +163,8 @@ export default function ViewAppointmentsPage() {
             </TableContainer>
         </div>
       </div>
+
+          <Menu />
     </div>
   )
 }

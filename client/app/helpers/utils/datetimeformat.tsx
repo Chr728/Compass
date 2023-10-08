@@ -1,7 +1,4 @@
-import { AnyKindOfDictionary } from "cypress/types/lodash";
-
 export function formatDate(dateString: string) {
-  console.log(dateString);
     const options:  Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' };
     const date = new Date(dateString);
     date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
