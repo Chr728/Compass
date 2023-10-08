@@ -42,7 +42,7 @@ const mockRouter = {
 
 jest.mock('../../../http/weightJournalAPI', () => {
     return {
-        getWeighJournal: () => {
+        getWeightJournal: () => {
             return {
                     success: "SUCCESS",
                     data: 
@@ -102,6 +102,7 @@ test("Form submits correctly", async () =>{
 })
 
 test("Cancel button works correctly", async () =>{
+    await getWeightJournal('1');
     await updateWeightJournal();
     const date = screen.getByLabelText("Date");
     const time  = screen.getByLabelText("Time");

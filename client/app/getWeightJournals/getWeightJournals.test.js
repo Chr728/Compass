@@ -70,8 +70,6 @@ test("Add an entry button  functions correctly", async() => {
 })
 
     test("Get Weight Journals list is displayed correctly", async () => {
-        await  getWeightJournals();
-        render (<GetWeightJournals/>);
         const date = await screen.findByText('2014-01-01 08:36 AM');
         const weight = await screen.findByText('75.5');
         const height = await screen.findByText('1.65');
@@ -84,3 +82,14 @@ test("Add an entry button  functions correctly", async() => {
    
 
     
+     // checks the texts
+     test("Message displayed", async () => {
+        const message = screen.getByText(/Managing your weight helps you stay healthy./i);
+        expect(message).toBeInTheDocument();
+    })
+
+
+     test("Message displayed", async () => {
+        const message = screen.getByText(/our BMI can tell you if you’re at risk for certain health conditions like heart disease./i);
+        expect(message).toBeInTheDocument();
+    })
