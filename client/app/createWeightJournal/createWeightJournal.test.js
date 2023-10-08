@@ -53,7 +53,7 @@ const { createWeightJournal} = require('../http/weightJournalAPI');
         const date = screen.getByLabelText("Date");
         const time  = screen.getByLabelText("Time");
         const weight = screen.getByLabelText("Weight");
-        const height = screen.getByLabelText("Height (in meters)");
+        const height = screen.getByLabelText("Height (in centimeters)");
         const unit = screen.getByLabelText("Unit");
         const notes  = screen.getByLabelText("Notes");
 
@@ -75,7 +75,7 @@ const { createWeightJournal} = require('../http/weightJournalAPI');
         fireEvent.blur(weight);
         const unit = screen.getByLabelText("Unit");
         fireEvent.blur(unit);
-        const height = screen.getByLabelText("Height (in meters)");
+        const height = screen.getByLabelText("Height (in centimeters)");
         fireEvent.blur(height);
 
 
@@ -108,7 +108,7 @@ const { createWeightJournal} = require('../http/weightJournalAPI');
         const error = await screen.findByText("You can't enter a negative weight or a weight of zero.");
         expect(error).toBeInTheDocument();
 
-        const height = screen.getByLabelText("Height (in meters)");
+        const height = screen.getByLabelText("Height (in centimeters)");
         await userEvent.type(height, "0");
         fireEvent.blur(weight);
         const error1 = await screen.findByText("You can't enter a negative height or a height of zero.");
@@ -125,7 +125,7 @@ const { createWeightJournal} = require('../http/weightJournalAPI');
         const error = await screen.findByText("You can't enter a negative weight or a weight of zero.");
         expect(error).toBeInTheDocument();
 
-        const height = screen.getByLabelText("Height (in meters)");
+        const height = screen.getByLabelText("Height (in centimeters)");
         await userEvent.type(height, "-4");
         fireEvent.blur(weight);
         const error1 = await screen.findByText("You can't enter a negative height or a height of zero.");
@@ -138,7 +138,7 @@ const { createWeightJournal} = require('../http/weightJournalAPI');
         const date = screen.getByLabelText("Date");
         const time  = screen.getByLabelText("Time");
         const weight = screen.getByLabelText("Weight");
-        const height = screen.getByLabelText("Height (in meters)");
+        const height = screen.getByLabelText("Height (in centimeters)");
         const unit = screen.getByLabelText("Unit");
         const notes  = screen.getByLabelText("Notes");
         const submitButton = screen.getAllByRole('button')[1];

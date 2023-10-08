@@ -301,7 +301,7 @@ style={{
         htmlFor="height"
         className="font-sans font-medium text-grey text-[16px]"
       >
-        Height (in meters)
+        Height (in centimeters)
       </label>
       <span className="text-red text-[20px]"> *</span>
       <br />
