@@ -148,7 +148,7 @@ export default function GetWeightJournal() {
      </div>
    </div>
             <div className='mt-10 mb-2'>
-                  <Button type="button" text="Edit Profile"style={{ width: '140px' }} onClick={() => router.push(`/getWeightJournals/[getWeightJournal]/${weight.id}`)} />
+                  <Button type="button" text="Edit"style={{ width: '140px' }} onClick={() => router.push(`/getWeightJournals/[getWeightJournal]/${weight.id}`)} />
                   <Button
                   type="button"
                   text="Cancel"
