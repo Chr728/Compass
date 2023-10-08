@@ -11,6 +11,7 @@ import { useUser } from '../contexts/UserContext';
 import { useEffect, useState } from 'react';
 import { MdDeleteForever, MdInfoOutline } from 'react-icons/md';
 import Header from '../components/Header';
+import Menu from '../components/Menu';
 
 export default function GetWeightJournals() {
   const router = useRouter();
@@ -134,6 +135,11 @@ export default function GetWeightJournals() {
 
   </div>
 )}
+<div className="mt-4">
+        <div className={`xl:max-w-[1280px] w-full  menu-container`}>
+          <Menu />
+        </div>
+      </div>
 </div>
   );
 }

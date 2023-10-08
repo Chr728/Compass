@@ -11,6 +11,7 @@ import { useUser } from '../../contexts/UserContext';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation'
 import Header from '@/app/components/Header';
+import Menu from '@/app/components/Menu';
 
 
 export default function GetWeightJournal() {
@@ -158,6 +159,11 @@ export default function GetWeightJournal() {
                 </div>
       </span>
 )}
+<div className="mt-4">
+        <div className={`xl:max-w-[1280px] w-full  menu-container`}>
+          <Menu />
+        </div>
+      </div>
     </div>
   );
 }
