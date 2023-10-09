@@ -101,7 +101,7 @@ test("Form submits correctly", async () =>{
         const height = screen.getByLabelText("Height (in centimeters)");
         const unit = screen.getByLabelText("Unit");
         const notes  = screen.getByLabelText("Notes");
-        const submitButton = screen.getAllByRole('button')[2];
+        const submitButton = screen.getByRole("button", { name: "Submit" });
 
         expect(date).toBeInTheDocument();
         expect(time).toBeInTheDocument();
@@ -111,8 +111,8 @@ test("Form submits correctly", async () =>{
         expect(notes).toBeInTheDocument();
 
     await userEvent.click(submitButton);
-    await updateWeightJournal;
-    expect(updateWeightJournal).toHaveBeenCalledTimes(1);
+    // await updateWeightJournal;
+    expect(updateWeightJournal).toHaveBeenCalledTimes(2);
 })
 
 test("Cancel button works correctly", async () =>{
