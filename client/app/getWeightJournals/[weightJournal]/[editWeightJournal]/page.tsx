@@ -29,12 +29,12 @@ export function formatDateYearMonthDate(date: any) {
   return [year, month, day].join('-');
 }
 
-export default function EditWeightJournal() {
+export default function EditWeightJournal({params: { weightJournal } } : { params: { weightJournal: string } }) {
   const router = useRouter();
   const { user } = useAuth();
   const { userInfo } = useUser();
-  const pathname = usePathname();
-  const generatedWeightId = pathname.split('/')[3];
+  // const pathname = usePathname();
+  // const generatedWeightId = pathname.split('/')[3];
   const [weight, setweight] = useState<any>(null);
 
   useEffect(() => {  
@@ -50,7 +50,7 @@ export default function EditWeightJournal() {
         const userId = user?.uid || '';
         const x = await getWeightJournals();   
         // const weightJournalId = '1'; // Replace '1' with the correct weight journal entry ID
-        const result = await getWeightJournal(generatedWeightId);
+        const result = await getWeightJournal(weightJournal);
         console.log(result.data);
         console.log('Weight journal entry retrieved:', result);
         setweight(result.data);
@@ -85,9 +85,9 @@ export default function EditWeightJournal() {
           unit: values.unit,
           notes: values.notes,
         };
-        const result = await updateWeightJournal(generatedWeightId, data); 
+        const result = await updateWeightJournal(weightJournal, data); 
         console.log('Weight journal entry updated:', result);
-        router.push(`/getWeightJournals/${weight.id}`)
+        router.push(`/getWeightJournals/${weightJournal}`)
       } catch (error) {
         console.error('Error updating weight journal entry:', error);
       }
@@ -358,7 +358,7 @@ style={{
         type="button"
         text="Cancel"
         style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)' }}
-        onClick={() => router.push(`/getWeightJournals/${weight.id}`)}
+        onClick={() => router.push(`/getWeightJournals/${weightJournal}`)}
       />
 
 <Button
@@ -377,7 +377,7 @@ style={{
           !formik.values.height // Check if height is missing or empty
         }
         style={{ width: '140px' }}
-        onClick={() => router.push(`/getWeightJournals/${weight.id}`)}
+        onClick={() => router.push(`/getWeightJournals/${weightJournal}`)}
       />
     </div>
   </form>
@@ -388,10 +388,5 @@ style={{
       </div>
   </div>
 );
-
-
-
-
-
 
 }

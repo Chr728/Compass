@@ -15,17 +15,17 @@ jest.mock("next/navigation", () => ({
         }
     }
 }));
-jest.mock('next/navigation', () => ({
-    useRouter() {
-      return {
-        push: () => jest.fn(),
-        replace: () => jest.fn(),
-      };
-    },
-    usePathname() {
-      return '';
-    },
-  }));
+// jest.mock('next/navigation', () => ({
+//     useRouter() {
+//       return {
+//         push: () => jest.fn(),
+//         replace: () => jest.fn(),
+//       };
+//     },
+//     // usePathname() {
+//     //   return '';
+//     // },
+//   }));
 
 jest.mock('../../http/weightJournalAPI', () => {
     return {
@@ -62,7 +62,7 @@ jest.mock("../../contexts/UserContext", () => {
 
 beforeEach(async () => {
     await act(async () => {
-        render(<GetWeightJournal params={{ id:'1' }}/>);
+        render(<GetWeightJournal params={{ weightJournal:'1' }}/>);
       });
 })
 
@@ -76,7 +76,7 @@ test("User data is displayed correctly", async () => {
     const notes  = await screen.findByText("Notes:");
 
     const dateValue = await screen.findByText("2014-01-01");
-    const timeValue = await screen.getByText("08:36 AM");
+    const timeValue = await screen.getByText("8h36");
     const weightValue = await screen.getByText("186");
     const unitValue = await screen.getByText("lb");
     const heightValue = await screen.getByText("174");
@@ -102,15 +102,15 @@ test("User data is displayed correctly", async () => {
 
 
 test("Cancel button functions correctly", async() => {
-    const cancelButton = screen.getAllByRole('button')[1];
+    const cancelButton = screen.getAllByRole('button')[2];
     await userEvent.click(cancelButton);
     await mockRouter;
     expect(mockRouter).toHaveBeenCalledWith('/getWeightJournals')
 })
 
 test("Update button functions correctly", async() => {
-    const updateButton = screen.getAllByRole('button')[2];
+    const updateButton = screen.getAllByRole('button')[1];
     await userEvent.click(updateButton);
     await mockRouter;
-    expect(mockRouter).toHaveBeenCalledWith('/getWeightJournals/[getWeightJournal]/1')
+    expect(mockRouter).toHaveBeenCalledWith('/getWeightJournals/1/1')
 })

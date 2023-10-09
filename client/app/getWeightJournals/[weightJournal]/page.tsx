@@ -12,15 +12,16 @@ import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation'
 import Header from '@/app/components/Header';
 import Menu from '@/app/components/Menu';
+import { formatMilitaryTime } from '@/app/helpers/utils/datetimeformat';
 
 
-export default function GetWeightJournal() {
+export default function GetWeightJournal({params: { weightJournal } } : { params: { weightJournal: string } }) {
   const router = useRouter();
   const { user } = useAuth();
   const { userInfo } = useUser();
   const [weight, setweight] = useState<any>(null);
-  const pathname = usePathname();
-  const generatedWeightId = pathname.split('/')[2];
+  // const pathname = usePathname();
+  // const generatedWeightId = pathname.split('/')[2];
 
   useEffect(() => {
     if (!userInfo) {
@@ -33,9 +34,9 @@ export default function GetWeightJournal() {
     async function fetchWeightJournal() {
       try {
         const userId = user?.uid || '';
-        const x = await getWeightJournals();   
+        // const x = await getWeightJournals();   
         // const weightJournalId = '1'; // Replace '1' with the correct weight journal entry ID
-        const result = await getWeightJournal(generatedWeightId);
+        const result = await getWeightJournal(weightJournal);
         console.log('Weight journal entry retrieved:', result);
         setweight(result.data);
       } catch (error) {
@@ -89,7 +90,8 @@ export default function GetWeightJournal() {
            className="text-md ml-2 text-darkgrey"
            style={{display: 'inline'}}
        >
-         {new Date(`1970-01-01T${weight.time}`).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+         {/* {new Date(`1970-01-01T${weight.time}`).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })} */}
+         {formatMilitaryTime(weight.time)}
        </p>
        <br></br>
        <p
@@ -149,7 +151,7 @@ export default function GetWeightJournal() {
      </div>
    </div>
             <div className='mt-10 mb-2'>
-                  <Button type="button" text="Edit"style={{ width: '140px' }} onClick={() => router.push(`/getWeightJournals/[getWeightJournal]/${weight.id}`)} />
+                  <Button type="button" text="Edit"style={{ width: '140px' }} onClick={() => router.push(`/getWeightJournals/${weightJournal}/${weightJournal}`)} />
                   <Button
                   type="button"
                   text="Cancel"
