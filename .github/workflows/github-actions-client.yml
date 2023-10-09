@@ -9,6 +9,8 @@ jobs:
         run: echo "${{ secrets.ENV_FILE }}" > client/.env
       - name: Install Dependencies
         run: cd client && npm install
+      - name: Jest Clear Cache
+        run: npm run jest --clearCache
       - name: Run Client Tests
         run: cd client && npm run test
       - name: Delete .env File
