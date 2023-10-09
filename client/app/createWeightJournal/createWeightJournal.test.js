@@ -1,7 +1,7 @@
 import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import CreateWeightJournal from './page';
+import CreateWeightJournal from './page.tsx';
 
 const fakeUser = {
     uid: "1"
