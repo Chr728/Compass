@@ -57,59 +57,6 @@ export default function CreateWeightJournal() {
   });
 
 
-//   const [dateError, setDateError] = useState(false);
-// const [timeError, setTimeError] = useState(false);
-// const [weightError, setWeightError] = useState(false);
-// const [heightError, setHeightError] = useState(false);
-// const [unitError, setUnitError] = useState(false);
-
-// const handleSubmit = (error: any) => {
-//   error.preventDefault();
-
-//   // Check if Date is empty
-//   if (!formik.values.date) {
-//     setDateError(true);
-//   } else {
-//     setDateError(false);
-//   }
-
-//   // Check if Time is empty
-//   if (!formik.values.time) {
-//     setTimeError(true);
-//   } else {
-//     setTimeError(false);
-//   }
-
-//   // Check if Date is empty
-//   if (!formik.values.weight) {
-//     setWeightError(true);
-//   } else {
-//     setWeightError(false);
-//   }
-
-//   // Check if Time is empty
-//   if (!formik.values.height) {
-//     setHeightError(true);
-//   } else {
-//     setHeightError(false);
-//   }
-
-// // Check if Date is empty
-// if (!formik.values.date) {
-//   setDateError(true);
-// } else {
-//   setDateError(false);
-// }
-
-// // Check if Time is empty
-// if (!formik.values.unit) {
-//   setUnitError(true);
-// } else {
-//   setUnitError(false);
-// }
-
-// };
-
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
        <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
@@ -336,5 +283,4 @@ export default function CreateWeightJournal() {
       </div>
     </div>
   );
-
 }
