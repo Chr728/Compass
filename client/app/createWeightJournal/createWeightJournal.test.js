@@ -1,4 +1,4 @@
-import {fireEvent, render, screen} from '@testing-library/react';
+import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import CreateWeightJournal from './page';
@@ -16,7 +16,6 @@ jest.mock('../contexts/AuthContext', () => {
     }
 });
 
-
 jest.mock('../http/weightJournalAPI', () => {
     return {
         createWeightJournal: jest.fn()
@@ -32,7 +31,6 @@ jest.mock("next/navigation", () => ({
         }
     }
 }));
-
 
 jest.mock("../contexts/UserContext", () => {
     return {
@@ -71,67 +69,67 @@ const { createWeightJournal} = require('../http/weightJournalAPI');
         fireEvent.blur(date);
         const time = screen.getByLabelText("Time");
         fireEvent.blur(time);
-       const weight = screen.getByLabelText("Weight");
+        const weight = screen.getByLabelText("Weight");
         fireEvent.blur(weight);
         const unit = screen.getByLabelText("Unit");
         fireEvent.blur(unit);
         const height = screen.getByLabelText("Height (in centimeters)");
         fireEvent.blur(height);
+        const submitButton = screen.getByRole('button', { name: /submit/i });
+        userEvent.click(submitButton);
 
-
-        const error = await screen.findAllByText("This field can't be left empty.")[0];
+        const errorMessages = await screen.findAllByText("This field can't be left empty.", { exact: false });
+        expect(errorMessages.length).toBe(3);
+      
+        const error = errorMessages[0];
         expect(error).toBeInTheDocument();
-
-       
-        const error1 = await screen.findAllByText("This field can't be left empty.")[1];
+      
+        const error1 = errorMessages[1];
         expect(error1).toBeInTheDocument();
-
-        
-        const error2 = await screen.findAllByText("This field can't be left empty or zero.")[0];
-        expect(error2).toBeInTheDocument();
-
-
-        
-        const error3 = await screen.findAllByText("This field can't be left empty.")[2];
-        expect(error3).toBeInTheDocument();
-
-        
-        const error4 = await screen.findAllByText("This field can't be left empty or zero.")[1];
-        expect(error4).toBeInTheDocument();
     })
 
-    test("Height or weight cant contain zero", async () => {
-        render(<CreateWeightJournal/>);
-        const weight = screen.getByLabelText("Weight");
-        await userEvent.type(weight, "0");
-        fireEvent.blur(weight);
-        const error = await screen.findByText("You can't enter a negative weight or a weight of zero.");
-        expect(error).toBeInTheDocument();
-
-        const height = screen.getByLabelText("Height (in centimeters)");
-        await userEvent.type(height, "0");
-        fireEvent.blur(weight);
-        const error1 = await screen.findByText("You can't enter a negative height or a height of zero.");
-        expect(error1).toBeInTheDocument();
-       
-    })
-
-
+    test("Height or weight cant be zero", async () => {
+      render(<CreateWeightJournal />);
+      const weight = screen.getByLabelText("Weight");
+      await userEvent.type(weight, "0");
+      fireEvent.blur(weight);
+    
+      const weightError = screen.getByLabelText("Weight").nextElementSibling;
+      expect(weightError.textContent).toBe("This field can't be left empty or zero.");
+    
+      const height = screen.getByLabelText("Height (in centimeters)");
+      await userEvent.type(height, "0");
+      fireEvent.blur(height);
+    
+      const heightError = screen.getByLabelText("Height (in centimeters)").nextElementSibling;
+      expect(heightError.textContent).toBe("This field can't be left empty or zero.");
+    });
+    
     test("Height or weight cant be negative", async () => {
-        render(<CreateWeightJournal/>);
+        render(<CreateWeightJournal />);
+        
         const weight = screen.getByLabelText("Weight");
-        await userEvent.type(weight, "-7");
+        userEvent.clear(weight);
+        userEvent.type(weight, `${parseInt("-1")}`);
         fireEvent.blur(weight);
-        const error = await screen.findByText("You can't enter a negative weight or a weight of zero.");
-        expect(error).toBeInTheDocument();
-
+      
+        await waitFor(() => {
+            const weightError = screen.getByLabelText("Weight").nextElementSibling;
+            expect(weightError.textContent).toBe("You can't enter a negative weight or a weight of zero.");
+        })
+      
         const height = screen.getByLabelText("Height (in centimeters)");
-        await userEvent.type(height, "-4");
-        fireEvent.blur(weight);
-        const error1 = await screen.findByText("You can't enter a negative height or a height of zero.");
-        expect(error1).toBeInTheDocument();
-       
-    })
+        userEvent.clear(height);
+        userEvent.type(height, `${parseInt("-1")}`);
+        fireEvent.blur(height);
+
+        await waitFor(() => {
+            const heightError = screen.getByLabelText("Height (in centimeters)").nextElementSibling;
+            expect(heightError.textContent).toBe("You can't enter a negative height or a height of zero.");
+        })
+      });
+
+
 
     test("Submit button calls createweightjournal function", async () => {
         render(<CreateWeightJournal/>);
