@@ -10,7 +10,7 @@ jobs:
       - name: Install Dependencies
         run: cd client && npm install
       - name: Jest Clear Cache
-        run: cd client && npm run jest --clearCache
+        run: cd client && jest --clearCache
       - name: Run Client Tests
         run: cd client && npm run test
       - name: Delete .env File
