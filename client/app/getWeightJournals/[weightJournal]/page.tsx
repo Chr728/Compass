@@ -9,7 +9,6 @@ import { getWeightJournal, getWeightJournals} from '../../http/weightJournalAPI'
 import { useAuth } from '../../contexts/AuthContext';
 import { useUser } from '../../contexts/UserContext';
 import { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation'
 import Header from '@/app/components/Header';
 import Menu from '@/app/components/Menu';
 import { formatMilitaryTime } from '@/app/helpers/utils/datetimeformat';
@@ -20,8 +19,6 @@ export default function GetWeightJournal({params: { weightJournal } } : { params
   const { user } = useAuth();
   const { userInfo } = useUser();
   const [weight, setweight] = useState<any>(null);
-  // const pathname = usePathname();
-  // const generatedWeightId = pathname.split('/')[2];
 
   useEffect(() => {
     if (!userInfo) {
@@ -34,8 +31,6 @@ export default function GetWeightJournal({params: { weightJournal } } : { params
     async function fetchWeightJournal() {
       try {
         const userId = user?.uid || '';
-        // const x = await getWeightJournals();   
-        // const weightJournalId = '1'; // Replace '1' with the correct weight journal entry ID
         const result = await getWeightJournal(weightJournal);
         console.log('Weight journal entry retrieved:', result);
         setweight(result.data);
@@ -49,14 +44,6 @@ export default function GetWeightJournal({params: { weightJournal } } : { params
 
 
   return (
-
-    // <p>Date: {weight.date}</p>
-    // <p>Time: {weight.time}</p>
-    // <p>Weight: {weight.weight}</p>
-    // <p>Height: {weight.height}</p>
-    // <p>Unit: {weight.unit}</p>
-    // <p>Notes: {weight.notes}</p>
-    
     <div className="bg-eggshell min-h-screen flex flex-col">
        <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
               <button onClick={() => router.back()}>
@@ -78,8 +65,6 @@ export default function GetWeightJournal({params: { weightJournal } } : { params
     {new Date(weight.date).toISOString().split('T')[0]}
   </p>
 </div>
-
-
        <p
            className="text-lg ml-0 font-sans text-darkgrey  font-bold text-[16px]"
            style={{display: 'inline'}}
@@ -150,15 +135,15 @@ export default function GetWeightJournal({params: { weightJournal } } : { params
        <br></br>
      </div>
    </div>
-            <div className='mt-10 mb-2'>
-                  <Button type="button" text="Edit"style={{ width: '140px' }} onClick={() => router.push(`/getWeightJournals/${weightJournal}/${weightJournal}`)} />
-                  <Button
-                  type="button"
-                  text="Cancel"
-                  style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)' }}
-                  onClick={() => router.push(`/getWeightJournals`)}
-                />
-                </div>
+    <div className='mt-10 mb-2'>
+    <Button type="button" text="Edit"style={{ width: '140px' }} onClick={() => router.push(`/getWeightJournals/${weightJournal}/${weightJournal}`)} />
+    <Button
+    type="button"
+    text="Cancel"
+    style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)' }}
+    onClick={() => router.push(`/getWeightJournals`)}
+    />
+    </div>
       </span>
 )}
 <div className="mt-8">

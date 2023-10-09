@@ -9,7 +9,6 @@ import { createWeightJournal, getWeightJournal, getWeightJournals, updateWeightJ
 import { useAuth } from '../../../contexts/AuthContext';
 import { useUser } from '../../../contexts/UserContext';
 import { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation'
 import Header from '@/app/components/Header';
 import Menu from '@/app/components/Menu';
 
@@ -33,8 +32,6 @@ export default function EditWeightJournal({params: { weightJournal } } : { param
   const router = useRouter();
   const { user } = useAuth();
   const { userInfo } = useUser();
-  // const pathname = usePathname();
-  // const generatedWeightId = pathname.split('/')[3];
   const [weight, setweight] = useState<any>(null);
 
   useEffect(() => {  
@@ -48,10 +45,7 @@ export default function EditWeightJournal({params: { weightJournal } } : { param
     async function fetchWeightJournal() {
       try {
         const userId = user?.uid || '';
-        const x = await getWeightJournals();   
-        // const weightJournalId = '1'; // Replace '1' with the correct weight journal entry ID
         const result = await getWeightJournal(weightJournal);
-        console.log(result.data);
         console.log('Weight journal entry retrieved:', result);
         setweight(result.data);
       } catch (error) {
@@ -75,8 +69,6 @@ export default function EditWeightJournal({params: { weightJournal } } : { param
     onSubmit: async (values) => {
       try {
         const userId = user?.uid || '';
-        const x = await getWeightJournals();   
-
         const data = {
           date: values.date,
           time: values.time,
@@ -106,60 +98,6 @@ export default function EditWeightJournal({params: { weightJournal } } : { param
       notes: weight?.notes,
     })
   }, [weight])
-
-  
-//   const [dateError, setDateError] = useState(false);
-// const [timeError, setTimeError] = useState(false);
-// const [weightError, setWeightError] = useState(false);
-// const [heightError, setHeightError] = useState(false);
-// const [unitError, setUnitError] = useState(false);
-
-// const handleSubmit = (error: any) => {
-//   error.preventDefault();
-
-//   // Check if Date is empty
-//   if (!formik.values.date) {
-//     setDateError(true);
-//   } else {
-//     setDateError(false);
-//   }
-
-//   // Check if Time is empty
-//   if (!formik.values.time) {
-//     setTimeError(true);
-//   } else {
-//     setTimeError(false);
-//   }
-
-//   // Check if Date is empty
-//   if (!formik.values.weight) {
-//     setDateError(true);
-//   } else {
-//     setDateError(false);
-//   }
-
-//   // Check if Time is empty
-//   if (!formik.values.height) {
-//     setTimeError(true);
-//   } else {
-//     setTimeError(false);
-//   }
-
-// // Check if Date is empty
-// if (!formik.values.date) {
-//   setDateError(true);
-// } else {
-//   setDateError(false);
-// }
-
-// // Check if Time is empty
-// if (!formik.values.unit) {
-//   setTimeError(true);
-// } else {
-//   setTimeError(false);
-// }
-
-// };
 
 
 

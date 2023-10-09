@@ -31,7 +31,6 @@ export default function GetWeightJournals() {
       try {
         const userId = user?.uid || '';
         const result = await getWeightJournals();    
-        const weightJournalId = weight?.weightJournalId; 
         console.log('All Weight journals entry retrieved:', result);
         setweight(result.data);
       } catch (error) {
