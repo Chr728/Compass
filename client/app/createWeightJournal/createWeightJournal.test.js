@@ -2,6 +2,8 @@ import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import CreateWeightJournal from './page';
+import {creatWeightJournal} from '../http/weightJournalAPI';
+
 
 const fakeUser = {
     uid: "1"
@@ -43,6 +45,8 @@ jest.mock("../contexts/UserContext", () => {
       }
     };
   });
+
+
 
 const { createWeightJournal} = require('../http/weightJournalAPI');
  
