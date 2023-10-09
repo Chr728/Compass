@@ -1,6 +1,7 @@
 import { auth } from '../../config/firebase';
 import { getActivityJournals } from '../activityJournalAPI';
 
+//test the getActivityJournals function
 describe('getActivityJournals', () => {
   beforeEach(() => {
     global.fetch = jest.fn();
@@ -29,7 +30,7 @@ describe('getActivityJournals', () => {
     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch = mockFetch;
     
-    const result = await getActivityJournals();
+    const result = await getActivityJournals(mockUserId);
 
     expect(mockFetch).toHaveBeenCalledWith(`http://localhost:8000/api/journals/activity/user/${mockUserId}`, {
       method: 'GET',
@@ -78,3 +79,11 @@ describe('getActivityJournals', () => {
     await expect(getActivityJournals()).rejects.toThrow('Failed to retrieve activity journals for user');
   });
 });
+
+//test the getActivityJournal function
+
+//test the createActivityJournal function
+
+//test the updateActivityJournal function
+
+//test the deleteActivityJournal function
