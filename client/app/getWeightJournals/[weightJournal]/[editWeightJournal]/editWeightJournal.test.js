@@ -26,32 +26,6 @@ jest.mock("../../../contexts/AuthContext", () => {
     }
   };
 });
-// jest.mock('next/navigation', () => ({
-//     useRouter() {
-//       return {
-//         push: () => jest.fn(),
-//         replace: () => jest.fn(),
-//       };
-//     },
-//     usePathname() {
-//       return '';
-//     },
-//   }));
-
-
-
-// const mockRouter = {
-//     push: jest.fn(), // Mock the push method
-//   };
-  
-//   jest.mock('next/navigation', () => ({
-//     useRouter() {
-//       return mockRouter; // Return the mockRouter object
-//     },
-//     usePathname() {
-//       return '';
-//     },
-//   }));
 
 
 jest.mock('../../../http/weightJournalAPI', () => {
@@ -94,7 +68,6 @@ jest.mock("../../../contexts/UserContext", () => {
   });
 
 test("Form submits correctly", async () =>{
-    await updateWeightJournal();
         const date = screen.getByLabelText("Date");
         const time  = screen.getByLabelText("Time");
         const weight = screen.getByLabelText("Weight");
