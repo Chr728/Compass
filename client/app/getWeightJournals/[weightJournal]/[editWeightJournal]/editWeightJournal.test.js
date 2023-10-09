@@ -4,14 +4,28 @@ import '@testing-library/jest-dom';
 import EditWeightJournal from './page';
 import {getWeightJournal, updateWeightJournal} from '../../../http/weightJournalAPI';
 
-// const mockRouter = jest.fn();
-// jest.mock("next/navigation", () => ({
-//     useRouter: () => {
-//         return {
-//             push: mockRouter
-//         }
-//     }
-// }));
+const mockRouter = jest.fn();
+jest.mock("next/navigation", () => ({
+    useRouter: () => {
+        return {
+            push: mockRouter
+        }
+    }
+}));
+
+
+const userData = {
+  uid: '1',
+} 
+jest.mock("../../../contexts/AuthContext", () => {
+  return {
+    useAuth: () =>{
+      return {
+          user: userData
+      }
+    }
+  };
+});
 // jest.mock('next/navigation', () => ({
 //     useRouter() {
 //       return {
@@ -26,18 +40,18 @@ import {getWeightJournal, updateWeightJournal} from '../../../http/weightJournal
 
 
 
-const mockRouter = {
-    push: jest.fn(), // Mock the push method
-  };
+// const mockRouter = {
+//     push: jest.fn(), // Mock the push method
+//   };
   
-  jest.mock('next/navigation', () => ({
-    useRouter() {
-      return mockRouter; // Return the mockRouter object
-    },
-    usePathname() {
-      return '';
-    },
-  }));
+//   jest.mock('next/navigation', () => ({
+//     useRouter() {
+//       return mockRouter; // Return the mockRouter object
+//     },
+//     usePathname() {
+//       return '';
+//     },
+//   }));
 
 
 jest.mock('../../../http/weightJournalAPI', () => {
@@ -63,7 +77,7 @@ jest.mock('../../../http/weightJournalAPI', () => {
 
 beforeEach(async () => {
     await act(async () => {
-        render(<EditWeightJournal params={{ weightJournalId: '1' }}/>);
+        render(<EditWeightJournal params={{ weightJournal:'1'}}/>);
       });
 })
 
@@ -102,7 +116,6 @@ test("Form submits correctly", async () =>{
 })
 
 test("Cancel button works correctly", async () =>{
-    await getWeightJournal('1');
     await updateWeightJournal();
     const date = screen.getByLabelText("Date");
     const time  = screen.getByLabelText("Time");
