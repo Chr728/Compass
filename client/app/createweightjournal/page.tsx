@@ -12,7 +12,6 @@ import { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Menu from '../components/Menu';
 
-
 export default function CreateWeightJournal() {
   const router = useRouter();
   const { user } = useAuth();
