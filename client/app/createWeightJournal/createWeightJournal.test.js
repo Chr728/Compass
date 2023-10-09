@@ -164,5 +164,4 @@ const { createWeightJournal} = require('../http/weightJournalAPI');
         await userEvent.click(cancelButton);
         await mockRouter;
         expect(mockRouter).toHaveBeenCalledWith('/getWeightJournals');
-
     })

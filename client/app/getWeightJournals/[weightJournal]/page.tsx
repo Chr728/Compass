@@ -161,7 +161,7 @@ export default function GetWeightJournal({params: { weightJournal } } : { params
                 </div>
       </span>
 )}
-<div className="mt-4">
+<div className="mt-8">
         <div className={`xl:max-w-[1280px] w-full  menu-container`}>
           <Menu />
         </div>

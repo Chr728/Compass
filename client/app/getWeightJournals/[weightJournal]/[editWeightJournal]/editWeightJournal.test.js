@@ -116,7 +116,7 @@ test("Form submits correctly", async () =>{
 })
 
 test("Cancel button works correctly", async () =>{
-    await updateWeightJournal();
+    await getWeightJournal();
     const date = screen.getByLabelText("Date");
     const time  = screen.getByLabelText("Time");
     const weight = screen.getByLabelText("Weight");
@@ -125,6 +125,6 @@ test("Cancel button works correctly", async () =>{
     const notes  = screen.getByLabelText("Notes");
     const cancelButton = screen.getAllByRole('button')[1];
     await userEvent.click(cancelButton);
-    await mockRouter.push;
-    expect(mockRouter.push).toHaveBeenCalledWith(`/getWeightJournals/1`);
+    await mockRouter;
+    expect(mockRouter).toHaveBeenCalledWith(`/getWeightJournals/1`);
 })

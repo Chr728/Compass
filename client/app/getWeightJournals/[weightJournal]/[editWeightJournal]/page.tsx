@@ -171,7 +171,7 @@ return (
               </button>
               </span>
     <form
-    className="rounded-3xl bg-white flex flex-col m-auto w-full md:max-w-[800px] md:min-h-[550px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
+    className="rounded-3xl bg-white flex flex-col mb-8 w-full md:max-w-[800px] md:min-h-[550px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
     onSubmit={formik.handleSubmit}
   >
     <div className="mt-3 mb-3">
@@ -381,7 +381,7 @@ style={{
       />
     </div>
   </form>
-  <div className="mt-4">
+  <div className="mt-8">
         <div className={`xl:max-w-[1280px] w-full  menu-container`}>
           <Menu />
         </div>

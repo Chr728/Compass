@@ -69,6 +69,9 @@ test("Add an entry button  functions correctly", async() => {
     expect(mockRouter).toHaveBeenCalledWith('/createWeightJournal')
 })
 
+
+
+
     test("Get Weight Journals list is displayed correctly", async () => {
         const date = await screen.findByText('2014-01-01 08:36 AM');
         const weight = await screen.findByText('75.5');
