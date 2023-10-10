@@ -6,10 +6,12 @@
 
 // module.exports = nextConfig;
 
-const withPWA = require("@ducanh2912/next-pwa").default({
+const withPWA = require("next-pwa")({
   dest: "public",
+  swSrc: "service-worker.js",
 });
 
 module.exports = withPWA({
   transpilePackages: ["gsap"],
+  reactStrictMode: true,
 });

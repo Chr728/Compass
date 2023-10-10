@@ -16,6 +16,7 @@ import {
   precacheAndRoute,
   cleanupOutdatedCaches,
 } from "workbox-precaching";
+import { CacheableResponsePlugin } from "workbox-cacheable-response";
 
 skipWaiting();
 clientsClaim();
@@ -26,7 +27,6 @@ const WB_MANIFEST = self.__WB_MANIFEST;
 // Precache fallback route and image
 WB_MANIFEST.push({
   url: "/~offline",
-  revision: "1234567890",
 });
 precacheAndRoute(WB_MANIFEST);
 
@@ -35,6 +35,20 @@ registerRoute(
   "/",
   new NetworkFirst({
     cacheName: "start-url",
+    plugins: [
+      new ExpirationPlugin({
+        maxEntries: 1,
+        maxAgeSeconds: 86400,
+        purgeOnQuotaError: !0,
+      }),
+    ],
+  }),
+  "GET"
+);
+registerRoute(
+  "/~offline",
+  new NetworkFirst({
+    cacheName: "offline-fallback",
     plugins: [
       new ExpirationPlugin({
         maxEntries: 1,
@@ -199,3 +213,19 @@ setCatchHandler(({ event }) => {
       return Response.error();
   }
 });
+
+registerRoute(
+  ({ request }) => request.destination === "document",
+  new CacheFirst({
+    cacheName: "pages",
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [200],
+      }),
+      new ExpirationPlugin({
+        maxEntries: 60,
+        maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
+      }),
+    ],
+  })
+);
