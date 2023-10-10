@@ -44,4 +44,16 @@ jest.mock("next/navigation", () => ({
   
   
     });
+
+    test("link redirects to activity journals page", async () => {  
+      render(<Journals />);
+      const linkElement = screen.getAllByRole("link")[0];
+      expect(linkElement).toHaveAttribute("href", "/getActivityJournals");
+    });
   });
+
+
+
+
+
+

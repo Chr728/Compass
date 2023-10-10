@@ -19,7 +19,7 @@ export default function Journal() {
      <p className="p-6 text-darkgrey">Use our health journals to help you keep track
         of your physical and mental health.</p>   
     
-<Link href="">
+<Link href="/getActivityJournals">
       <div className="rounded-3xl  mt-1 flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 " style={{backgroundColor: 'var(--Black, #2C2738)' }}>
         
         <div className="mb-6 mt-1" >
