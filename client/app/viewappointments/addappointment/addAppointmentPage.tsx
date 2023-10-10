@@ -73,6 +73,22 @@ export default function AddAppointmentPage() {
           
     }});
 
+    async function subscribe() {
+      let sw = await navigator.serviceWorker.ready;
+      let push = await sw.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: 'todo'
+      });
+      //console.log(JSON.stringify(push));
+    }
+
+    if ('serviceWorker' in navigator) {
+      addEventListener('load', async () => {
+        let sw = await navigator.serviceWorker.register('./sw.js');
+        console.log(sw);
+      });
+    }
+
   return (
     <div 
       className="bg-eggshell min-h-screen flex flex-col appointment">
