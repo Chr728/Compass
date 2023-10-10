@@ -98,7 +98,7 @@ export default function GetActivityJournals() {
                   </p>
                 </div>
                 <div className="flex-2">
-                  <p className="font-sans ml-6 font-medium text-darkgrey text-[14px]">
+                  <p className="font-sans ml-4 font-medium text-darkgrey text-[14px]">
                     {item.activity}
                   </p>
                 </div>
