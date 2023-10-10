@@ -16,10 +16,6 @@ type UserAttributes = {
   email: string;
   firstName: string;
   lastName: string;
-  streetAddress: string;
-  city: string;
-  province: string;
-  postalCode: string;
   phoneNumber: string;
   birthDate: Date;
   sex: string;
@@ -28,10 +24,6 @@ type UserAttributes = {
 type EditableUserAttributes = {
   firstName?: string;
   lastName?: string;
-  streetAddress?: string;
-  city?: string;
-  province?: string;
-  postalCode?: string;
   phoneNumber?: string;
   birthDate?: Date;
   sex?: string;
