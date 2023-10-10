@@ -51,3 +51,9 @@ jest.mock("next/navigation", () => ({
       expect(linkElement).toHaveAttribute("href", "/getActivityJournals");
     });
   });
+
+
+
+
+
+
