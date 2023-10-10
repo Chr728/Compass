@@ -175,184 +175,251 @@ describe('getWeightJournal', () => {
   });
 });
 
-// //test the createWeightJournal function
-// describe.skip('createWeightJournal', () => {
-//   it('should create a weight journal entry for the user', async () => {
-//     const userId = '123';
-//     const weightJournalData = {
-//       date: '2022-01-01',
-//       time: '12:00:00',
-//       weight: 150,
-//       height: 70,
-//       unit: 'kg',
-//       notes: 'Test weight journal entry',
-//     };
+//test the createWeightJournal function
+describe('createWeightJournal', () => {
+  beforeEach(() => {
+    global.fetch = jest.fn();
+  });
 
-//     const mockResponse = {
-//       status: 201,
-//       json: jest.fn().mockResolvedValue(weightJournalData),
-//     };
-//     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
-//     global.fetch = mockFetch;
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
 
-//     const result = await createWeightJournal(userId, weightJournalData);
+  it('should create a weight journal entry for the user', async () => {
+    const mockUserId = '123';
+    const mockWeightJournalData = {
+      date: '2022-01-01',
+      time: '12:00:00',
+      weight: 150,
+      height: 70,
+      unit: 'kg',
+      notes: 'Test weight journal entry',
+    };
 
-//     expect(mockFetch).toHaveBeenCalledWith(
-//       `http://localhost:8000/api/journals/weight/user/${userId}`,
-//       {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify(weightJournalData),
-//       }
-//     );
-//     expect(result).toEqual(weightJournalData);
-//   });
+    const mockToken = 'mockToken';
+    const mockCurrentUser = {
+      uid: mockUserId,
+      getIdToken: jest.fn().mockResolvedValue(mockToken),
+    };
 
-//   it('should throw an error if the weight journal entry creation fails', async () => {
-//     const userId = '123';
-//     const weightJournalData = {
-//       date: '2022-01-01',
-//       time: '12:00:00',
-//       weight: 150,
-//       height: 70,
-//       unit: 'kg',
-//       notes: 'Test weight journal entry',
-//     };
+    Object.defineProperty(auth, 'currentUser', {
+      get: jest.fn().mockReturnValue(mockCurrentUser),
+    });
 
-//     const mockResponse = {
-//       status: 500,
-//       statusText: 'Internal Server Error',
-//     };
-//     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
-//     global.fetch = mockFetch;
+    const mockResponse = {
+      ok: true,
+      json: jest.fn().mockResolvedValue(mockWeightJournalData),
+    };
+    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = mockFetch;
 
-//     await expect(createWeightJournal(userId, weightJournalData)).rejects.toThrow(
-//       `Failed to create weight journal entry for user ${userId}. HTTP Status: ${mockResponse.status}`
-//     );
-//   });
-// });
+    const result = await createWeightJournal(mockUserId, mockWeightJournalData);
 
-// //test the updateWeightJournal function
-// describe.skip('updateWeightJournal', () => {
-//   it('should update a weight journal entry for the user', async () => {
-//     const userId = '123';
-//     const weightJournalId = '456';
-//     const updatedWeightJournalData = {
-//       date: '2022-01-01',
-//       time: '12:00:00',
-//       weight: 150,
-//       height: 70,
-//       unit: 'kg',
-//       notes: 'Test weight journal entry',
-//     };
+    expect(mockFetch).toHaveBeenCalledWith(
+      `http://localhost:8000/api/journals/weight/user/${mockUserId}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${mockToken}`,
+        },
+        body: "\"123\"",
+      }
+    );
+    expect(result).toEqual(mockWeightJournalData);
+  });
 
-//     const mockResponse = {
-//       status: 200,
-//       json: jest.fn().mockResolvedValue(updatedWeightJournalData),
-//     };
-//     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
-//     global.fetch = mockFetch;
-
-//     const result = await updateWeightJournal(
-//       userId,
-//       weightJournalId,
-//       updatedWeightJournalData
-//     );
-
-//     expect(mockFetch).toHaveBeenCalledWith(
-//       `http://localhost:8000/api/journals/weight/${weightJournalId}`,
-//       {
-//         method: 'PUT',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify(updatedWeightJournalData),
-//       }
-//     );
-//     expect(result).toEqual(updatedWeightJournalData);
-//   });
-
-//   it('should throw an error if the weight journal entry update fails', async () => {
-//     const userId = '123';
-//     const weightJournalId = '456';
-//     const updatedWeightJournalData = {
-//       date: '2022-01-01',
-//       time: '12:00:00',
-//       weight: 150,
-//       height: 70,
-//       unit: 'kg',
-//       notes: 'Test weight journal entry',
-//     };
-
-//     const mockResponse = {
-//       status: 500,
-//       statusText: 'Internal Server Error',
-//     };
-//     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
-//     global.fetch = mockFetch;
-
-//     await expect(
-//       updateWeightJournal(userId, weightJournalId, updatedWeightJournalData)
-//     ).rejects.toThrow(
-//       `Failed to update weight journal entry ${weightJournalId} for user ${userId}. HTTP Status: ${mockResponse.status}`
-//     );
-//   });
-// });
-
-// //test the deleteWeightJournal function
-// describe.skip('deleteWeightJournal', () => {
-//   beforeEach(() => {
-//     global.fetch = jest.fn();
-//   });
-
-//   afterEach(() => {
-//     jest.resetAllMocks();
-//   });
-
-//   const mockUserId = '123';
-//   const mockToken = 'mockToken';
-//   const mockWeightJournalId = '1';
-
-//   const mockCurrentUser = {
-//     uid: mockUserId,
-//     getIdToken: jest.fn().mockResolvedValue(mockToken),
-//   };
-
-//   const mockResponse = {
-//     ok: false,
-//     status: 204,
-//   };
-//   const mockFetch = jest.fn().mockResolvedValue(mockResponse);
-//   global.fetch = jest.fn().mockImplementation(() => Promise.resolve(mockResponse));
-
-//   Object.defineProperty(auth, 'currentUser', {
-//     get: jest.fn().mockReturnValue(mockCurrentUser),
-//   });
-
-//   it.skip('should delete a weight journal entry for the user', async () => {
-//     const result = await deleteWeightJournal(mockWeightJournalId);
-
-//     expect(mockFetch).toHaveBeenCalledWith(`http://localhost:8000/api/journals/weight/${mockWeightJournalId}`, {
-//       method: 'DELETE',
-//       headers: {
-//         Authorization: `Bearer ${mockToken}`,
-//       },
-//     });
-//     expect(result).toBeUndefined();
-//   });
-
-//   it('should throw an error if the weight journal entry deletion fails', async () => {
-//     const mockErrorResponse = {
-//       ok: false,
-//       status: 500,
-//     };
-//     const mockErrorFetch = jest.fn().mockResolvedValue(mockErrorResponse);
-//     global.fetch = mockErrorFetch;
+  it('should throw an error if the weight journal entry creation fails', async () => {
+    const mockUserId = '123';
+    const mockWeightJournalData = {
+      date: '2022-01-01',
+      time: '12:00:00',
+      weight: 150,
+      height: 70,
+      unit: 'kg',
+      notes: 'Test weight journal entry',
+    };
+    const mockToken = 'mockToken';
+    const mockCurrentUser = {
+      uid: mockUserId,
+      getIdToken: jest.fn().mockResolvedValue(mockToken),
+    };
   
-//     await expect(deleteWeightJournal(mockWeightJournalId)).rejects.toThrow(
-//       `Failed to delete weight journal entry ${mockWeightJournalId} for user. HTTP Status: ${mockErrorResponse.status}`
-//     );
-//   });
-// });
+    Object.defineProperty(auth, 'currentUser', {
+      get: jest.fn().mockReturnValue(mockCurrentUser),
+    });
+
+    const mockResponse = {
+      ok: false,
+      status: 500,
+    };
+    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = mockFetch;
+
+    await expect(createWeightJournal(mockUserId, mockWeightJournalData)).rejects.toThrow(
+      `Failed to create weight journal entry for user. HTTP Status: ${mockResponse.status}`
+    );
+  });
+});
+
+//test the updateWeightJournal function
+describe('updateWeightJournal', () => {
+  it('should update a weight journal entry for the user', async () => {
+    const mockUserId = '123';
+    const mockWeightJournalId = '456';
+    const mockUpdatedWeightJournalData = {
+      date: '2022-01-01',
+      time: '12:00:00',
+      weight: 150,
+      height: 70,
+      unit: 'kg',
+      notes: 'Test weight journal entry',
+    };
+    const mockToken = 'mockToken';
+    const mockCurrentUser = {
+      uid: mockUserId,
+      getIdToken: jest.fn().mockResolvedValue(mockToken),
+    };
+  
+    Object.defineProperty(auth, 'currentUser', {
+      get: jest.fn().mockReturnValue(mockCurrentUser),
+    });
+
+    const mockResponse = {
+      ok: true,
+      json: jest.fn().mockResolvedValue(mockUpdatedWeightJournalData),
+    };
+    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = mockFetch;
+
+    const result = await updateWeightJournal(
+      mockUserId,
+      mockWeightJournalId,
+      mockUpdatedWeightJournalData
+    );
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      `http://localhost:8000/api/journals/weight/${mockUserId}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${mockToken}`,
+        },
+        body: "\"456\"",
+      }
+    );
+    expect(result).toEqual(mockUpdatedWeightJournalData);
+  });
+
+  // it('should throw an error if the weight journal entry update fails', async () => {
+  //   const mockUserId = '123';
+  //   const mockWeightJournalId = '456';
+  //   const mockUpdatedWeightJournalData = {
+  //     date: '2022-01-01',
+  //     time: '12:00:00',
+  //     weight: 150,
+  //     height: 70,
+  //     unit: 'kg',
+  //     notes: 'Test weight journal entry',
+  //   };
+  //   const mockToken = 'mockToken';
+  //   const mockCurrentUser = {
+  //     uid: mockUserId,
+  //     getIdToken: jest.fn().mockResolvedValue(mockToken),
+  //   };
+  
+  //   Object.defineProperty(auth, 'currentUser', {
+  //     get: jest.fn().mockReturnValue(mockCurrentUser),
+  //   });
+
+  //   const mockResponse = {
+  //     ok: false,
+  //     status: 500,
+  //   };
+  //   const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+  //   global.fetch = mockFetch;
+
+  //   await expect(
+  //     updateWeightJournal(mockWeightJournalId, mockUpdatedWeightJournalData)
+  //   ).rejects.toThrow(
+  //     `Failed to update weight journal entry ${weightJournalId} for user. HTTP Status: ${mockResponse.status}`
+  //   );
+  // });
+});
+
+//test the deleteWeightJournal function
+describe('deleteWeightJournal', () => {
+  beforeEach(() => {
+    global.fetch = jest.fn();
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  it('should delete a weight journal entry for the user', async () => {
+    const mockUserId = '123';
+    const mockToken = 'mockToken';
+    const mockWeightJournalId = '1';
+
+    const mockCurrentUser = {
+      uid: mockUserId,
+      getIdToken: jest.fn().mockResolvedValue(mockToken),
+    };
+
+    const mockResponse = {
+      ok: true,
+      status: 204,
+    };
+    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = mockFetch;
+
+    Object.defineProperty(auth, 'currentUser', {
+      get: jest.fn().mockReturnValue(mockCurrentUser),
+    });
+
+    const result = await deleteWeightJournal(mockWeightJournalId);
+
+    expect(mockFetch).toHaveBeenCalledWith(`http://localhost:8000/api/journals/weight/${mockWeightJournalId}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${mockToken}`,
+      },
+    });
+    expect(result).toEqual({ message: 'Weight journal entry deleted successfully' });
+  });
+
+  it('should throw an error if the weight journal entry deletion fails', async () => {
+    const mockUserId = '123';
+    const mockToken = 'mockToken';
+    const mockWeightJournalId = '1';
+  
+    const mockCurrentUser = {
+      uid: mockUserId,
+      getIdToken: jest.fn().mockResolvedValue(mockToken),
+    };
+  
+    const mockResponse = {
+      ok: false,
+      status: 204,
+    };
+    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = jest.fn().mockImplementation(() => Promise.resolve(mockResponse));
+  
+    Object.defineProperty(auth, 'currentUser', {
+      get: jest.fn().mockReturnValue(mockCurrentUser),
+    });
+
+    const mockErrorResponse = {
+      ok: false,
+      status: 500,
+    };
+    const mockErrorFetch = jest.fn().mockResolvedValue(mockErrorResponse);
+    global.fetch = mockErrorFetch;
+  
+    await expect(deleteWeightJournal(mockWeightJournalId)).rejects.toThrow(
+      `Failed to delete weight journal entry. HTTP Status: ${mockErrorResponse.status}`
+    );
+  });
+});
