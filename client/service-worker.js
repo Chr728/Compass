@@ -25,7 +25,7 @@ clientsClaim();
 const WB_MANIFEST = self.__WB_MANIFEST;
 // Precache fallback route and image
 WB_MANIFEST.push({
-  url: "/fallback",
+  url: "/~offline",
   revision: "1234567890",
 });
 precacheAndRoute(WB_MANIFEST);
@@ -181,7 +181,7 @@ setCatchHandler(({ event }) => {
   switch (event.request.destination) {
     case "document":
       // If using precached URLs:
-      return matchPrecache("/fallback");
+      return matchPrecache("/~offline");
       // return caches.match('/fallback')
       break;
     case "image":
@@ -199,19 +199,3 @@ setCatchHandler(({ event }) => {
       return Response.error();
   }
 });
-
-registerRoute(
-  ({ request }) => request.destination === "document",
-  new CacheFirst({
-    cacheName: "pages",
-    plugins: [
-      new CacheableResponsePlugin({
-        statuses: [200],
-      }),
-      new ExpirationPlugin({
-        maxEntries: 60,
-        maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
-      }),
-    ],
-  })
-);
