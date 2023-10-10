@@ -70,7 +70,7 @@ test("Form submits correctly", async () =>{
         const date = screen.getByLabelText("Date");
         const time  = screen.getByLabelText("Time");
         const activity = screen.getByLabelText("Activity");
-        const duration = screen.getByLabelText("Duration(in minutes)");
+        const duration = screen.getByLabelText("Duration (in minutes)");
         const notes  = screen.getByLabelText("Notes");
         const submitButton = screen.getAllByRole('button')[2];
 
@@ -90,7 +90,7 @@ test("Cancel button works correctly", async () =>{
     const date = screen.getByLabelText("Date");
     const time  = screen.getByLabelText("Time");
     const activity = screen.getByLabelText("Activity");
-    const duration = screen.getByLabelText("Duration(in minutes)");
+    const duration = screen.getByLabelText("Duration (in minutes)");
     const notes  = screen.getByLabelText("Notes");
     const cancelButton = screen.getAllByRole('button')[1];
     await userEvent.click(cancelButton);

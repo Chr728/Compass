@@ -189,7 +189,7 @@ return (
         htmlFor="duration"
         className="font-sans font-medium text-grey text-[16px]"
       >
-        Duration(in minutes)
+        Duration (in minutes)
       </label>
       <span className="text-red text-[20px]"> *</span>
       <br />
@@ -240,6 +240,7 @@ return (
               />
             </div>
     
+    <div className="items-center">
     <div className="mt-5 mb-5 space-x-2">
       <Button
         type="button"
@@ -264,6 +265,7 @@ return (
         style={{ width: '140px' }}
         onClick={() => router.push(`/getActivityJournals/${activityJournal}`)}
       />
+    </div>
     </div>
   </form>
   <div className="mt-8">

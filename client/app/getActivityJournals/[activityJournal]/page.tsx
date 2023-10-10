@@ -47,7 +47,7 @@ export default function GetActivityJournal({params: { activityJournal } } : { pa
     <div className="bg-eggshell min-h-screen flex flex-col">
        <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
               <button onClick={() => router.back()}>
-              <Header headerText="View the activity Journal"></Header>
+              <Header headerText="View the Activity Journal"></Header>
               </button>
               </span>
      
@@ -121,12 +121,12 @@ export default function GetActivityJournal({params: { activityJournal } } : { pa
        <br></br>
      </div>
    </div>
-    <div className='mt-10 mb-2'>
+    <div className='mt-10 mb-2 items-center'>
     <Button type="button" text="Edit"style={{ width: '140px' }} onClick={() => router.push(`/getActivityJournals/${activityJournal}/${activityJournal}`)} />
     <Button
     type="button"
     text="Cancel"
-    style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)' }}
+    style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)',marginLeft:'8px' }}
     onClick={() => router.push(`/getActivityJournals`)}
     />
     </div>

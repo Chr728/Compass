@@ -54,7 +54,7 @@ export default function GetActivityJournals() {
               <Header headerText="Activity Journals "></Header>
               </button>
               </span>
-              <p className="font-sans  text-darkgrey ml-5 font-bold  text-[14px]">Manage your daily activities to help you stay fit. People with active lifestyles are often happier and healthier. </p>
+              <p className="font-sans  text-darkgrey ml-5 p-5  text-[14px]">Manage your daily activities to help you stay fit. People with active lifestyles are often happier and healthier. </p>
               <br></br>
               
               {activity && (
@@ -67,18 +67,18 @@ export default function GetActivityJournals() {
               <br></br>
           <div className="flex">
             <div className="flex-2">
-              <div className="font-sans font-medium text-darkgrey text-[18px]">
+              <div className="font-sans  font-bold text-darkgrey text-[18px]">
                 Date<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
               </div>
             </div>
             <div className="flex-2">
-              <div className="font-sans font-medium text-darkgrey text-[18px] ml-14">
+              <div className="font-sans  font-bold  text-darkgrey text-[18px] ml-14">
                Activity<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
 
               </div>
             </div>
             <div className="flex-2">
-              <div className="font-sans font-medium text-darkgrey text-[18px] ml-4">
+              <div className="font-sans font-bold text-darkgrey text-[18px] ml-4">
               Duration<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
 
               </div>
@@ -87,7 +87,7 @@ export default function GetActivityJournals() {
         {activity.map((item: any, index: number) => (
           <div
             key={item.activityJournalId}
-            className={`flex justify-between items-center mt-3`}
+            className={`flex justify-between items-left mt-3`}
             style={{
               backgroundColor: index % 2 === 0 ? 'white' : '#DBE2EA',
             }}
@@ -98,12 +98,12 @@ export default function GetActivityJournals() {
                   </p>
                 </div>
                 <div className="flex-2">
-                  <p className="ml-4 font-sans font-medium text-darkgrey text-[14px]">
+                  <p className="font-sans ml-6 font-medium text-darkgrey text-[14px]">
                     {item.activity}
                   </p>
                 </div>
                 <div className="flex-2">
-                  <p className="ml-4 font-sans font-medium text-darkgrey text-[14px]">
+                  <p className="font-sans ml-8 font-medium text-darkgrey text-[14px]">
                     {item.duration}
                   </p>
                 </div>

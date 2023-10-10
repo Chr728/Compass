@@ -73,7 +73,7 @@ jest.mock("../contexts/UserContext", () => {
         fireEvent.blur(time);
         const activity = screen.getByLabelText("Activity");
         fireEvent.blur(activity);
-        const duration = screen.getByLabelText("Duration(in minutes)");
+        const duration = screen.getByLabelText("Duration (in minutes)");
         fireEvent.blur(duration);
         const submitButton = screen.getByRole('button', { name: /submit/i });
         userEvent.click(submitButton);
@@ -90,7 +90,7 @@ jest.mock("../contexts/UserContext", () => {
 
     test("Duration cant be zero", async () => {
       render(<CreateActivityJournal />);
-      const duration = screen.getByLabelText("Duration(in minutes)");
+      const duration = screen.getByLabelText("Duration (in minutes)");
       await userEvent.type(duration, "0");
       fireEvent.blur(duration);
     
