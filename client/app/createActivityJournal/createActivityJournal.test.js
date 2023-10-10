@@ -55,7 +55,7 @@ jest.mock("../contexts/UserContext", () => {
         const date = screen.getByLabelText("Date");
         const time  = screen.getByLabelText("Time");
         const activity = screen.getByLabelText("Activity");
-        const duration = screen.getByLabelText("Duration(in minutes)");
+        const duration = screen.getByLabelText("Duration (in minutes)");
         const notes  = screen.getByLabelText("Notes");
 
         expect(date).toBeInTheDocument();
@@ -94,20 +94,20 @@ jest.mock("../contexts/UserContext", () => {
       await userEvent.type(duration, "0");
       fireEvent.blur(duration);
     
-      const durationError = screen.getByLabelText("Duration(in minutes)").nextElementSibling;
+      const durationError = screen.getByLabelText("Duration (in minutes)").nextElementSibling;
       expect(durationError.textContent).toBe("This field can't be left empty or zero.");
     });
     
     test("duration cant be negative", async () => {
         render(<CreateActivityJournal />);
         
-        const duration = screen.getByLabelText("Duration(in minutes)");
+        const duration = screen.getByLabelText("Duration (in minutes)");
         userEvent.clear(duration);
         userEvent.type(duration, `${parseInt("-1")}`);
         fireEvent.blur(duration);
       
         await waitFor(() => {
-            const durationError = screen.getByLabelText("Duration(in minutes)").nextElementSibling;
+            const durationError = screen.getByLabelText("Duration (in minutes)").nextElementSibling;
             expect(durationError.textContent).toBe("You can't enter a negative duration or a duration of zero.");
         })
       });
@@ -119,7 +119,7 @@ jest.mock("../contexts/UserContext", () => {
         const date = screen.getByLabelText("Date");
         const time  = screen.getByLabelText("Time");
         const activity = screen.getByLabelText("Activity");
-        const duration = screen.getByLabelText("Duration(in minutes)");
+        const duration = screen.getByLabelText("Duration (in minutes)");
         const notes  = screen.getByLabelText("Notes");
         const submitButton = screen.getAllByRole('button')[1];
 
