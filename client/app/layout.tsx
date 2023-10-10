@@ -1,9 +1,14 @@
-'use client';
+import { AuthProvider } from "./contexts/AuthContext";
+import { UserProvider } from "@/app/contexts/UserContext";
+import type { Metadata } from "next";
+import "./globals.css";
 
-import { AuthProvider } from './contexts/AuthContext';
-import {UserProvider} from '@/app/contexts/UserContext';
-
-import './globals.css';
+export const metadata: Metadata = {
+  title: "Compass",
+  description: "Compass health app",
+  manifest: "/manifest.json",
+  themeColor: "#fff",
+};
 
 export default function RootLayout({
   children,
@@ -15,9 +20,7 @@ export default function RootLayout({
       <head />
       <body>
         <AuthProvider>
-            <UserProvider>
-                {children}
-            </UserProvider>
+          <UserProvider>{children}</UserProvider>
         </AuthProvider>
       </body>
     </html>

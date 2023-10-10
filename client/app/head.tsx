@@ -1,6 +1,6 @@
-import React from 'react'
+import React from "react";
 
-const head = () => {
+const Head = () => {
   return (
     <>
       <title>Compass</title>
@@ -9,8 +9,10 @@ const head = () => {
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta charSet="UTF-8" />
       <link rel="icon" href="" />
-      </>
-  )
-}
+      <link rel="manifest" href="/manifest.json" />
+      <meta name="theme-color" color="black"></meta>
+    </>
+  );
+};
 
-export default head
+export default Head;
