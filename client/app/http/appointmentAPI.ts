@@ -128,8 +128,9 @@ export async function deleteAppointment(appointmentId: string): Promise<any>{
             `Failed to delete the appointment. HTTP Status: ${response.status}`
           );
         }
-        const data = await response.json();
-        return data;
+        // const data = await response.json();
+        // return data;
+        return { message: 'Appointment entry deleted successfully' };
       } catch (error) {
         console.error('Error deleting appointment', error);
         throw error;

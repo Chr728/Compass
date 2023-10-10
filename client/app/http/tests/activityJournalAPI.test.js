@@ -259,6 +259,14 @@ describe('createActivityJournal', () => {
 
 //test the updateActivityJournal function
 describe('updateActivityJournal', () => {
+  beforeEach(() => {
+    global.fetch = jest.fn();
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
   it('should update an activity journal entry for the user', async () => {
     const mockUserId = '123';
     const mockActivityJournalId = '456';
@@ -306,39 +314,39 @@ describe('updateActivityJournal', () => {
     expect(result).toEqual(mockUpdatedActivityJournalData);
   });
 
-  // it('should throw an error if the activity journal entry update fails', async () => {
-  //   const mockUserId = '123';
-  //   const mockActivityJournalId = '456';
-  //   const mockUpdatedActivityJournalData = {
-  //     date: '2022-01-01',
-  //     time: '12:00:00',
-  //     activity: 'swimming',
-  //     duration: 70,
-  //     notes: 'Test activity journal entry',
-  //   };
-  //   const mockToken = 'mockToken';
-  //   const mockCurrentUser = {
-  //     uid: mockUserId,
-  //     getIdToken: jest.fn().mockResolvedValue(mockToken),
-  //   };
+  it('should throw an error if the activity journal entry update fails', async () => {
+    const mockUserId = '123';
+    const mockActivityJournalId = '456';
+    const mockUpdatedActivityJournalData = {
+      date: '2022-01-01',
+      time: '12:00:00',
+      activity: 'swimming',
+      duration: 70,
+      notes: 'Test activity journal entry',
+    };
+    const mockToken = 'mockToken';
+    const mockCurrentUser = {
+      uid: mockUserId,
+      getIdToken: jest.fn().mockResolvedValue(mockToken),
+    };
   
-  //   Object.defineProperty(auth, 'currentUser', {
-  //     get: jest.fn().mockReturnValue(mockCurrentUser),
-  //   });
+    Object.defineProperty(auth, 'currentUser', {
+      get: jest.fn().mockReturnValue(mockCurrentUser),
+    });
 
-  //   const mockResponse = {
-  //     ok: false,
-  //     status: 500,
-  //   };
-  //   const mockFetch = jest.fn().mockResolvedValue(mockResponse);
-  //   global.fetch = mockFetch;
+    const mockResponse = {
+      ok: false,
+      status: 500,
+    };
+    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = mockFetch;
 
-  //   await expect(
-  //     updateActivityJournal(mockActivityJournalId, mockUpdatedActivityJournalData)
-  //   ).rejects.toThrow(
-  //     `Failed to update activity journal entry ${activityJournalId} for user. HTTP Status: ${mockResponse.status}`
-  //   );
-  // });
+    await expect(
+      updateActivityJournal(mockActivityJournalId, mockUpdatedActivityJournalData)
+    ).rejects.toThrow(
+      `Failed to update activity journal entry`
+    );
+  });
 });
 
 //test the deleteActivityJournal function
