@@ -104,14 +104,9 @@ export default function GetWeightJournals() {
                   </p>
                 </div>
                 <div className="flex-2">
-                  {/* <p className="ml-4 font-sans font-medium text-darkgrey text-[14px]">
-                    {((item.weight / (item.height * item.height)) * 703).toFixed(2)}
-                  </p> */}
                   <p className="ml-4 font-sans font-medium text-darkgrey text-[14px]">
                     {(item.weight / ((item.height / 100) ** 2)).toFixed(2)} 
                         </p>
-
-
                 </div>
                 <div className="flex-2">
                   <p className="ml-4 font-sans font-medium text-darkgrey text-[14px]">
