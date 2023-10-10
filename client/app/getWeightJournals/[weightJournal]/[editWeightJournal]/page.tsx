@@ -11,22 +11,7 @@ import { useUser } from '../../../contexts/UserContext';
 import { useEffect, useState } from 'react';
 import Header from '@/app/components/Header';
 import Menu from '@/app/components/Menu';
-
-export function formatDateYearMonthDate(date: any) {
-  var d = new Date(date);
-  d.setUTCHours(0, 0, 0, 0);
-
-  var month = '' + (d.getUTCMonth() + 1),
-      day = '' + d.getUTCDate(),
-      year = d.getUTCFullYear();
-
-  if (month.length < 2) 
-      month = '0' + month;
-  if (day.length < 2) 
-      day = '0' + day;
-
-  return [year, month, day].join('-');
-}
+import { formatDateYearMonthDate } from '@/app/helpers/utils/datetimeformat';
 
 export default function EditWeightJournal({params: { weightJournal } } : { params: { weightJournal: string } }) {
   const router = useRouter();
@@ -212,6 +197,7 @@ style={{
       width: '100%',
       border: '1px solid #DBE2EA', // Border style
       borderRadius: '5px',
+      marginTop: '5px',
     }}
     onChange={formik.handleChange}
     onBlur={formik.handleBlur}
@@ -291,7 +277,7 @@ style={{
               />
             </div>
     
-    <div className="mt-5 mb-5 space-x-2">
+    <div className="mt-5 mb-5 space-x-2 items-center">
       <Button
         type="button"
         text="Cancel"

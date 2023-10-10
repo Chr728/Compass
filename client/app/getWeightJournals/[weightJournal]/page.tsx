@@ -135,12 +135,12 @@ export default function GetWeightJournal({params: { weightJournal } } : { params
        <br></br>
      </div>
    </div>
-    <div className='mt-10 mb-2'>
+    <div className='mt-10 mb-2 items-center'>
     <Button type="button" text="Edit"style={{ width: '140px' }} onClick={() => router.push(`/getWeightJournals/${weightJournal}/${weightJournal}`)} />
     <Button
     type="button"
     text="Cancel"
-    style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)' }}
+    style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)',marginLeft:'12px' }}
     onClick={() => router.push(`/getWeightJournals`)}
     />
     </div>
