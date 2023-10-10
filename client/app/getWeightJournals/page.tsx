@@ -54,16 +54,16 @@ export default function GetWeightJournals() {
               <Header headerText="Weight Journals "></Header>
               </button>
               </span>
-              <p className="font-sans  text-darkgrey ml-5 font-bold  text-[14px]">Managing your weight helps you stay healthy.</p>
+              <p className="font-sans  text-darkgrey ml-5   text-[14px]">Managing your weight helps you stay healthy.</p>
               <br></br>
-              <p className="font-sans  text-darkgrey ml-5 font-bold  text-[14px]">Your BMI can tell you if you’re at risk for
+              <p className="font-sans  text-darkgrey ml-5   text-[14px]">Your BMI can tell you if you’re at risk for
               certain health conditions like heart disease.</p>
 
               {weight && (
             <div className="rounded-3xl bg-white flex flex-col mt-4 mb-6 w-full md:max-w-[800px] md:min-h-[550px] p-4 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]">
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between items-start">
                 <div>
-                  <Button type="button" text="Add an Entry" style={{ width: '120px', fontSize: '14px' }} onClick={() => router.push(`/createWeightJournal`)} />
+                  <Button type="button" text="Add an Entry" style={{ width: '120px', fontSize: '14px',padding: '1px 10px'}} onClick={() => router.push(`/createWeightJournal`)} />
                 </div>
                 <p className="font-sans  text-darkgrey ml-16 font-bold  text-[14px]">Your height:</p>
                 {weight.length > 0 && weight[0].height && (
@@ -73,17 +73,17 @@ export default function GetWeightJournals() {
               <br></br>
           <div className="flex">
             <div className="flex-2">
-              <div className="font-sans font-medium text-darkgrey text-[18px]">
+              <div className="font-sans font-medium text-darkgrey font-bold text-[18px]">
                 Date/Time
               </div>
             </div>
             <div className="flex-2">
-              <div className="font-sans font-medium text-darkgrey text-[18px] ml-20">
+              <div className="font-sans font-medium text-darkgrey  font-bold text-[18px] ml-20">
                 BMI
               </div>
             </div>
             <div className="flex-2">
-              <div className="font-sans font-medium text-darkgrey text-[18px] ml-6">
+              <div className="font-sans font-medium text-darkgrey font-bold text-[18px] ml-6">
                 Weight
               </div>
             </div>
@@ -91,7 +91,7 @@ export default function GetWeightJournals() {
         {weight.map((item: any, index: number) => (
           <div
             key={item.weightJournalId}
-            className={`flex justify-between items-center mt-3`}
+            className={`flex justify-between items-start mt-3`}
             style={{
               backgroundColor: index % 2 === 0 ? 'white' : '#DBE2EA',
             }}

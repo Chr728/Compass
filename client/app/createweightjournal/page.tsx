@@ -169,6 +169,7 @@ export default function CreateWeightJournal() {
         width: '100%',
         border: '1px solid #DBE2EA', // Border style
         borderRadius: '5px',
+        marginTop: '5px',
       }}
       onChange={formik.handleChange}
       onBlur={formik.handleBlur}
@@ -246,7 +247,7 @@ export default function CreateWeightJournal() {
                   onBlur={formik.handleBlur}
                 />
               </div>
-      
+      <div className="items-center">
       <div className="mt-5 mb-5 space-x-2">
         <Button
           type="button"
@@ -254,6 +255,7 @@ export default function CreateWeightJournal() {
           style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)' }}
           onClick={() => router.push("/getWeightJournals")}
         />
+
 
 <Button
           type="submit"
@@ -270,9 +272,10 @@ export default function CreateWeightJournal() {
             !formik.values.weight || // Check if weight is missing or empty
             !formik.values.height // Check if height is missing or empty
           }
-          style={{ width: '140px' }}
+          style={{ width: '140px', textAlign: 'center' }}
           onClick={() => router.push("/getWeightJournals")}
         />
+        </div>
       </div>
     </form>
     <div className="mt-8">
