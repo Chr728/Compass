@@ -82,6 +82,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
       updateUser(userData)
         .then((response) => {
           console.log("User updated successfully:", response);
+          setUserInfo(response.data[1])
         })
         .catch((error) => {
           console.error("Error updating user:", error);
