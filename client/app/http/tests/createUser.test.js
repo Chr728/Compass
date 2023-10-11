@@ -28,7 +28,7 @@ describe('createUser', () => {
     const result = await createUser(mockUser);
     expect(result).toEqual(mockResponse.data);
   
-    expect(mockFetch).toHaveBeenCalledWith('http://localhost:8000/api/users', {
+    expect(mockFetch).toHaveBeenCalledWith(`${process.env.NEXT_PUBLIC_API_URL}/api/users`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ describe('createUser', () => {
     } catch (error) {
       expect(error.message).toBe('Error creating user: HTTP error! Status: undefined');
     }
-    expect(mockFetch).toHaveBeenCalledWith('http://localhost:8000/api/users', {
+    expect(mockFetch).toHaveBeenCalledWith(`${process.env.NEXT_PUBLIC_API_URL}/api/users`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -88,7 +88,7 @@ describe('createUser', () => {
     } catch (error) {
       expect(error.message).toBe('Error creating user: response.json is not a function');
     }
-    expect(mockFetch).toHaveBeenCalledWith('http://localhost:8000/api/users', {
+    expect(mockFetch).toHaveBeenCalledWith(`${process.env.NEXT_PUBLIC_API_URL}/api/users`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

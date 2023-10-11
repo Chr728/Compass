@@ -32,7 +32,7 @@ describe('getAppointments', () => {
     
     const result = await getAppointments(mockUserId);
 
-    expect(mockFetch).toHaveBeenCalledWith(`http://localhost:8000/api/appointments/${mockUserId}`, {
+    expect(mockFetch).toHaveBeenCalledWith(`${process.env.NEXT_PUBLIC_API_URL}/api/appointments/${mockUserId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -113,7 +113,7 @@ describe('getAppointment', () => {
 
     expect(mockResponse.json).toHaveBeenCalled();
     expect(mockFetch).toHaveBeenCalledWith(
-      `http://localhost:8000/api/appointments/single/${mockUser.id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/appointments/single/${mockUser.id}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -161,7 +161,7 @@ describe('getAppointment', () => {
       `Failed to fetch the appointment data. HTTP Status: 500`
     );
     expect(mockFetch).toHaveBeenCalledWith(
-      `http://localhost:8000/api/appointments/single/${mockUserId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/appointments/single/${mockUserId}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -212,7 +212,7 @@ describe('createAppointment', () => {
     const result = await createAppointment(mockUserId, mockAppointmentData);
 
     expect(mockFetch).toHaveBeenCalledWith(
-      `http://localhost:8000/api/appointments/${mockUserId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/appointments/${mockUserId}`,
       {
         method: 'POST',
         headers: {
@@ -301,7 +301,7 @@ describe('updateAppointment', () => {
     );
 
     expect(mockFetch).toHaveBeenCalledWith(
-      `http://localhost:8000/api/appointments/single/${mockUserId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/appointments/single/${mockUserId}`,
       {
         method: 'PUT',
         headers: {
@@ -382,7 +382,7 @@ describe('deleteAppointment', () => {
 
     const result = await deleteAppointment(mockAppointmentId);
 
-    expect(mockFetch).toHaveBeenCalledWith(`http://localhost:8000/api/appointments/single/${mockAppointmentId}`, {
+    expect(mockFetch).toHaveBeenCalledWith(`${process.env.NEXT_PUBLIC_API_URL}/api/appointments/single/${mockAppointmentId}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${mockToken}`,

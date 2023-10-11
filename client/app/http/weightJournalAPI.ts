@@ -11,7 +11,7 @@ export async function getWeightJournals(): Promise<any> {
     const token = await currentUser.getIdToken();
 
     const response = await fetch(
-      `http://localhost:8000/api/journals/weight/user/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/weight/user/${id}`,
       {
         method: 'GET',
         headers: {
@@ -44,7 +44,7 @@ export async function getWeightJournal(weightJournalId: string): Promise<any> {
     const token = await currentUser.getIdToken();
 
     const response = await fetch(
-      `http://localhost:8000/api/journals/weight/${weightJournalId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/weight/${weightJournalId}`,
       {
         method: 'GET',
         headers: {
@@ -79,7 +79,7 @@ export async function createWeightJournal(
     const token = await currentUser.getIdToken();
 
     const response = await fetch(
-      `http://localhost:8000/api/journals/weight/user/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/weight/user/${id}`,
       {
         method: 'POST',
         headers: {
@@ -115,7 +115,7 @@ export async function updateWeightJournal(
     const token = await currentUser.getIdToken();
 
     const response = await fetch(
-      `http://localhost:8000/api/journals/weight/${weightJournalId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/weight/${weightJournalId}`,
       {
         method: 'PUT',
         headers: {
@@ -150,7 +150,7 @@ export async function deleteWeightJournal(
     const token = await currentUser.getIdToken();
 
     const response = await fetch(
-      `http://localhost:8000/api/journals/weight/${weightJournalId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/weight/${weightJournalId}`,
       {
         method: 'DELETE',
         headers: {
