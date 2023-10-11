@@ -1,7 +1,7 @@
 import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import CreateActivityJournal from './page';
+import CreateActivityJournalPage from './createActivityJournalPage';
 import {createActivityJournal} from '../http/activityJournalAPI';
 
 
@@ -51,7 +51,7 @@ jest.mock("../contexts/UserContext", () => {
 // const { createActivityJournal} = require('../http/activityJournalAPI');
  
     test("All fields are displayed to the user", () => {
-        render(<CreateActivityJournal/>);
+        render(<CreateActivityJournalPage/>);
         const date = screen.getByLabelText("Date");
         const time  = screen.getByLabelText("Time");
         const activity = screen.getByLabelText("Activity");
@@ -66,7 +66,7 @@ jest.mock("../contexts/UserContext", () => {
     })
 
     test("Error displayed if any of the fields are empty", async () => {
-        render(<CreateActivityJournal/>);
+        render(<CreateActivityJournalPage/>);
         const date = screen.getByLabelText("Date");
         fireEvent.blur(date);
         const time = screen.getByLabelText("Time");
@@ -89,7 +89,7 @@ jest.mock("../contexts/UserContext", () => {
     })
 
     test("Duration cant be zero", async () => {
-      render(<CreateActivityJournal />);
+      render(<CreateActivityJournalPage />);
       const duration = screen.getByLabelText("Duration (in minutes)");
       await userEvent.type(duration, "0");
       fireEvent.blur(duration);
@@ -99,7 +99,7 @@ jest.mock("../contexts/UserContext", () => {
     });
     
     test("duration cant be negative", async () => {
-        render(<CreateActivityJournal />);
+        render(<CreateActivityJournalPage />);
         
         const duration = screen.getByLabelText("Duration (in minutes)");
         userEvent.clear(duration);
@@ -115,7 +115,7 @@ jest.mock("../contexts/UserContext", () => {
 
 
     test("Submit button calls createactivityjournal function", async () => {
-        render(<CreateActivityJournal/>);
+        render(<CreateActivityJournalPage/>);
         const date = screen.getByLabelText("Date");
         const time  = screen.getByLabelText("Time");
         const activity = screen.getByLabelText("Activity");
@@ -138,7 +138,7 @@ jest.mock("../contexts/UserContext", () => {
     })
 
     test("Cancel button redirects to getActivityJournals page", async () => {
-        render(<CreateActivityJournal/>);
+        render(<CreateActivityJournalPage/>);
         const cancelButton = screen.getAllByRole('button')[1];
         await userEvent.click(cancelButton);
         await mockRouter;

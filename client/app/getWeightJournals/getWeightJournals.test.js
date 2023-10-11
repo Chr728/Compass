@@ -1,6 +1,6 @@
 import {render, screen,act} from '@testing-library/react';
 import '@testing-library/jest-dom';
-import GetWeightJournals from './page';
+import GetWeightJournalsPage from './getWeightJournalsPage';
 import {getWeightJournals} from '../http/weightJournalAPI';
 import userEvent from '@testing-library/user-event';
 
@@ -9,7 +9,7 @@ import { useUser } from '../contexts/UserContext';
 
 beforeEach(async () => {
     await act(async () => {
-        render(<GetWeightJournals/>);
+        render(<GetWeightJournalsPage/>);
       });
 })
 

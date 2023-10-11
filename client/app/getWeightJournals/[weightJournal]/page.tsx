@@ -12,36 +12,38 @@ import { useEffect, useState } from 'react';
 import Header from '@/app/components/Header';
 import Menu from '@/app/components/Menu';
 import { formatMilitaryTime } from '@/app/helpers/utils/datetimeformat';
+import Custom403 from '@/app/pages/403';
 
 
 export default function GetWeightJournal({params: { weightJournal } } : { params: { weightJournal: string } }) {
-  const router = useRouter();
   const { user } = useAuth();
+  const router = useRouter();
   const { userInfo } = useUser();
   const [weight, setweight] = useState<any>(null);
-
-  useEffect(() => {
-    if (!userInfo) {
-      alert('User not found.');
-    } 
-  }, [userInfo, router]);
-
-
-  useEffect(() => {
-    async function fetchWeightJournal() {
-      try {
-        const userId = user?.uid || '';
-        const result = await getWeightJournal(weightJournal);
-        console.log('Weight journal entry retrieved:', result);
-        setweight(result.data);
-      } catch (error) {
-        console.error('Error retrieving weight journal entry:', error);
-      }
+  
+  async function fetchWeightJournal() {
+    try {
+      const userId = user?.uid || '';
+      const result = await getWeightJournal(weightJournal);
+      console.log('Weight journal entry retrieved:', result);
+      setweight(result.data);
+    } catch (error) {
+      console.error('Error retrieving weight journal entry:', error);
     }
 
-    fetchWeightJournal();
-  }, [user]);
+  useEffect(() => {
+    if (!user) {
+      router.push("/login")
+      alert('User not found.');
+    } 
+    if (user) {
+      fetchWeightJournal();
+    }
+  }, [user, weight]);
 
+  if (!user) {
+    return <div><Custom403/></div>
+  }
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
