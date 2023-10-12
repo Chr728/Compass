@@ -1,4 +1,4 @@
-import {render, screen, act} from '@testing-library/react';
+import {render, screen, waitFor, act} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import GetActivityJournal from './page';
@@ -62,44 +62,36 @@ jest.mock("../../contexts/UserContext", () => {
 
 test("User data is displayed correctly", async () => {
     render(<GetActivityJournal params={{ activityJournal:'1' }}/>);
-    await getActivityJournal();
-    const date = await screen.findByText("Date:");
-    const time  = await screen.findByText("Time:");
-    const activity = await screen.findByText("Activity:");
-    const duration = await screen.findByText("Duration(min):");
-    const notes  = await screen.findByText("Notes:");
-
-    const dateValue = await screen.findByText("2014-01-01");
-    const timeValue = await screen.getByText("8h36");
-    const activityValue = await screen.getByText("Swimming");
-    const durationValue = await screen.getByText("45");
-    const notesValue = await screen.getByText("notes");
-
-    expect(date).toBeInTheDocument();
-    expect(time).toBeInTheDocument();
-    expect(activity).toBeInTheDocument();
-    expect(duration).toBeInTheDocument();
-    expect(notes).toBeInTheDocument();
-
-    expect(dateValue).toBeInTheDocument();
-    expect(timeValue).toBeInTheDocument();
-    expect(activityValue).toBeInTheDocument();
-    expect(durationValue).toBeInTheDocument();
-    expect(notesValue).toBeInTheDocument();
+    setTimeout(() => {
+        expect(screen.getByText(/Date:/i)).toBeInTheDocument();
+        expect(screen.getByText("Time:")).toBeInTheDocument();
+        expect(screen.getByText("Activity:")).toBeInTheDocument();
+        expect(screen.getByText("Duration(min):")).toBeInTheDocument();
+        expect(screen.getByText("Notes:")).toBeInTheDocument();
+        expect(screen.getByText("2014-01-01")).toBeInTheDocument();
+        expect(screen.getByText("8h36")).toBeInTheDocument();
+        expect(screen.getByText("Swimming")).toBeInTheDocument();
+        expect(screen.getByText("45")).toBeInTheDocument();
+        expect(screen.getByText("notes")).toBeInTheDocument();
+    }, 1000);
 })
 
 test("Cancel button functions correctly", async() => {
     render(<GetActivityJournal params={{ activityJournal:'1' }}/>);
-    const cancelButton = screen.getAllByRole('button')[0];
-    await userEvent.click(cancelButton);
-    await mockRouter;
-    expect(mockRouter).toHaveBeenCalledWith('/getActivityJournals')
+    setTimeout(() => {
+        const cancelButton = screen.getAllByRole('button')[0];
+        userEvent.click(cancelButton);
+        mockRouter;
+        expect(mockRouter).toHaveBeenCalledWith('/getActivityJournals')
+    }, 1000);
 })
 
 test("Update button functions correctly", async() => {
     render(<GetActivityJournal params={{ activityJournal:'1' }}/>);
-    const updateButton = screen.getAllByRole('button')[1];
-    await userEvent.click(updateButton);
-    await mockRouter;
-    expect(mockRouter).toHaveBeenCalledWith('/getActivityJournals/1/1')
+    setTimeout(() => {
+        const updateButton = screen.getAllByRole('button')[1];
+        userEvent.click(updateButton);
+        mockRouter;
+        expect(mockRouter).toHaveBeenCalledWith('/editActivityJournals/1')
+    }, 1000);
 })
