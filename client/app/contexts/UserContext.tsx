@@ -17,10 +17,6 @@ type UserAttributes = {
   email: string;
   firstName: string;
   lastName: string;
-  streetAddress: string;
-  city: string;
-  province: string;
-  postalCode: string;
   phoneNumber: string;
   birthDate: Date;
   sex: string;
@@ -29,10 +25,6 @@ type UserAttributes = {
 type EditableUserAttributes = {
   firstName?: string;
   lastName?: string;
-  streetAddress?: string;
-  city?: string;
-  province?: string;
-  postalCode?: string;
   phoneNumber?: string;
   birthDate?: Date;
   sex?: string;
@@ -91,6 +83,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
       updateUser(userData)
         .then((response) => {
           console.log("User updated successfully:", response);
+          setUserInfo(response.data[1])
         })
         .catch((error) => {
           console.error("Error updating user:", error);
