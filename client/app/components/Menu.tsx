@@ -9,7 +9,6 @@ import {
 import Link from 'next/link';
 
 const Navbar = () => {
-  console.log('hello')
   return (
     <nav className="bg-eggshell fixed bottom-0 left-0 w-full md:w-72 lg:w-80 md:left-0 md:h-full md:flex md:flex-col md:rounded-3xl md:justify-start md:items-start">
       <style jsx>
