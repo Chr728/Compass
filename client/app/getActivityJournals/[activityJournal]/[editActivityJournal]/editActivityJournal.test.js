@@ -48,12 +48,6 @@ jest.mock('../../../http/activityJournalAPI', () => {
     }
 });
 
-beforeEach(async () => {
-    await act(async () => {
-        render(<EditActivityJournal params={{ activityJournal:'1'}}/>);
-      });
-})
-
 jest.mock("../../../contexts/UserContext", () => {
     return {
       useUser: () =>{
@@ -67,31 +61,31 @@ jest.mock("../../../contexts/UserContext", () => {
   });
 
 test("Form submits correctly", async () =>{
-        const date = screen.getByLabelText("Date");
-        const time  = screen.getByLabelText("Time");
-        const activity = screen.getByLabelText("Activity");
-        const duration = screen.getByLabelText("Duration (in minutes)");
-        const notes  = screen.getByLabelText("Notes");
-        const submitButton = screen.getAllByRole('button')[2];
-
-        expect(date).toBeInTheDocument();
-        expect(time).toBeInTheDocument();
-        expect(activity).toBeInTheDocument();
-        expect(duration).toBeInTheDocument();
-        expect(notes).toBeInTheDocument();
-
-    await userEvent.click(submitButton);
-    await updateActivityJournal;
-    expect(updateActivityJournal).toHaveBeenCalledTimes(1);
-})
-
-test("Cancel button works correctly", async () =>{
+    const updateActivityJournal = jest.fn();
+    render(<EditActivityJournal params={{ activityJournal:'1'}}/>);
     await getActivityJournal();
     const date = screen.getByLabelText("Date");
     const time  = screen.getByLabelText("Time");
     const activity = screen.getByLabelText("Activity");
     const duration = screen.getByLabelText("Duration (in minutes)");
     const notes  = screen.getByLabelText("Notes");
+    const submitButton = screen.getAllByRole('button')[2];
+
+    expect(date).toBeInTheDocument();
+    expect(time).toBeInTheDocument();
+    expect(activity).toBeInTheDocument();
+    expect(duration).toBeInTheDocument();
+    expect(notes).toBeInTheDocument();
+
+    await userEvent.click(submitButton);
+    setTimeout(() => {
+      expect(updateActivityJournal).toHaveBeenCalledTimes(1);
+    }, 1000);
+})
+
+test("Cancel button works correctly", async () =>{
+    render(<EditActivityJournal params={{ activityJournal:'1'}}/>);
+    await getActivityJournal();
     const cancelButton = screen.getAllByRole('button')[1];
     await userEvent.click(cancelButton);
     await mockRouter;

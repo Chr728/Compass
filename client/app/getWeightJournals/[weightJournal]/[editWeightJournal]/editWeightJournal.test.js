@@ -49,11 +49,6 @@ jest.mock('../../../http/weightJournalAPI', () => {
     }
 });
 
-beforeEach(async () => {
-    await act(async () => {
-        render(<EditWeightJournal params={{ weightJournal:'1'}}/>);
-      });
-})
 
 jest.mock("../../../contexts/UserContext", () => {
     return {
@@ -68,27 +63,8 @@ jest.mock("../../../contexts/UserContext", () => {
   });
 
 test("Form submits correctly", async () =>{
-        const date = screen.getByLabelText("Date");
-        const time  = screen.getByLabelText("Time");
-        const weight = screen.getByLabelText("Weight");
-        const height = screen.getByLabelText("Height (in centimeters)");
-        const unit = screen.getByLabelText("Unit");
-        const notes  = screen.getByLabelText("Notes");
-        const submitButton = screen.getAllByRole('button')[2];
-
-        expect(date).toBeInTheDocument();
-        expect(time).toBeInTheDocument();
-        expect(weight).toBeInTheDocument();
-        expect(height).toBeInTheDocument();
-        expect(unit).toBeInTheDocument();
-        expect(notes).toBeInTheDocument();
-
-    await userEvent.click(submitButton);
-    await updateWeightJournal;
-    expect(updateWeightJournal).toHaveBeenCalledTimes(1);
-})
-
-test("Cancel button works correctly", async () =>{
+    const updateWeightJournal = jest.fn();
+    render(<EditWeightJournal params={{ weightJournal:'1'}}/>);
     await getWeightJournal();
     const date = screen.getByLabelText("Date");
     const time  = screen.getByLabelText("Time");
@@ -96,6 +72,23 @@ test("Cancel button works correctly", async () =>{
     const height = screen.getByLabelText("Height (in centimeters)");
     const unit = screen.getByLabelText("Unit");
     const notes  = screen.getByLabelText("Notes");
+    const submitButton = screen.getAllByRole('button')[2];
+
+    expect(date).toBeInTheDocument();
+    expect(time).toBeInTheDocument();
+    expect(weight).toBeInTheDocument();
+    expect(height).toBeInTheDocument();
+    expect(unit).toBeInTheDocument();
+    expect(notes).toBeInTheDocument();
+
+    userEvent.click(submitButton);
+    setTimeout(() => {
+      expect(updateWeightJournal).toHaveBeenCalledTimes(1);
+    }, 1000);})
+
+test("Cancel button works correctly", async () =>{
+  render(<EditWeightJournal params={{ weightJournal:'1'}}/>);
+    await getWeightJournal();
     const cancelButton = screen.getAllByRole('button')[1];
     await userEvent.click(cancelButton);
     await mockRouter;

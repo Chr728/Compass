@@ -2,12 +2,10 @@ import {render, screen, act} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import GetActivityJournal from './page';
-import {getActivityJournal,getActivityJournals} from '../../http/activityJournalAPI';
-import { useRouter } from "next/navigation";
-import { useUser } from '../../contexts/UserContext';
+import {getActivityJournal} from '../../http/activityJournalAPI';
+import {useUser} from '../../contexts/UserContext';
 
 const mockRouter = jest.fn();
-
 jest.mock("next/navigation", () => ({
     useRouter: () => {
         return {
@@ -15,6 +13,20 @@ jest.mock("next/navigation", () => ({
         }
     }
 }));
+
+const userData = {
+    uid: '1',
+} 
+
+jest.mock("../../contexts/AuthContext", () => {
+    return {
+    useAuth: () =>{
+        return {
+            user: userData
+        }
+    }
+    };
+});
 
 jest.mock('../../http/activityJournalAPI', () => {
     return {
@@ -35,7 +47,6 @@ jest.mock('../../http/activityJournalAPI', () => {
     }
 });
 
-
 jest.mock("../../contexts/UserContext", () => {
     return {
       useUser: () =>{
@@ -48,13 +59,9 @@ jest.mock("../../contexts/UserContext", () => {
     };
   });
 
-beforeEach(async () => {
-    await act(async () => {
-        render(<GetActivityJournal params={{ activityJournal:'1' }}/>);
-      });
-})
 
 test("User data is displayed correctly", async () => {
+    render(<GetActivityJournal params={{ activityJournal:'1' }}/>);
     await getActivityJournal();
     const date = await screen.findByText("Date:");
     const time  = await screen.findByText("Time:");
@@ -81,18 +88,16 @@ test("User data is displayed correctly", async () => {
     expect(notesValue).toBeInTheDocument();
 })
 
-
-
-
-
 test("Cancel button functions correctly", async() => {
-    const cancelButton = screen.getAllByRole('button')[2];
+    render(<GetActivityJournal params={{ activityJournal:'1' }}/>);
+    const cancelButton = screen.getAllByRole('button')[0];
     await userEvent.click(cancelButton);
     await mockRouter;
     expect(mockRouter).toHaveBeenCalledWith('/getActivityJournals')
 })
 
 test("Update button functions correctly", async() => {
+    render(<GetActivityJournal params={{ activityJournal:'1' }}/>);
     const updateButton = screen.getAllByRole('button')[1];
     await userEvent.click(updateButton);
     await mockRouter;

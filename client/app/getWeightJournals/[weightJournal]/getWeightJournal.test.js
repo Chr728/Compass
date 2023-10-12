@@ -15,17 +15,6 @@ jest.mock("next/navigation", () => ({
         }
     }
 }));
-// jest.mock('next/navigation', () => ({
-//     useRouter() {
-//       return {
-//         push: () => jest.fn(),
-//         replace: () => jest.fn(),
-//       };
-//     },
-//     // usePathname() {
-//     //   return '';
-//     // },
-//   }));
 
 jest.mock('../../http/weightJournalAPI', () => {
     return {
@@ -60,13 +49,9 @@ jest.mock("../../contexts/UserContext", () => {
     };
   });
 
-beforeEach(async () => {
-    await act(async () => {
-        render(<GetWeightJournal params={{ weightJournal:'1' }}/>);
-      });
-})
 
 test("User data is displayed correctly", async () => {
+    render(<GetWeightJournal params={{ weightJournal:'1' }}/>);
     await getWeightJournal();
     const date = await screen.findByText("Date:");
     const time  = await screen.findByText("Time:");
@@ -97,11 +82,8 @@ test("User data is displayed correctly", async () => {
     expect(notesValue).toBeInTheDocument();
 })
 
-
-
-
-
 test("Cancel button functions correctly", async() => {
+    render(<GetWeightJournal params={{ weightJournal:'1' }}/>);
     const cancelButton = screen.getAllByRole('button')[2];
     await userEvent.click(cancelButton);
     await mockRouter;
@@ -109,6 +91,7 @@ test("Cancel button functions correctly", async() => {
 })
 
 test("Update button functions correctly", async() => {
+    render(<GetWeightJournal params={{ weightJournal:'1' }}/>);
     const updateButton = screen.getAllByRole('button')[1];
     await userEvent.click(updateButton);
     await mockRouter;
