@@ -31,7 +31,7 @@ return (
             Hello {user.displayName}, welcome to the Main Menu !
           </p>
         </div>
-      <Menu />
+      {/*<Menu />*/}
     </div>
   </div>
 </div>

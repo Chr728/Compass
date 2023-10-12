@@ -146,8 +146,6 @@ if (!user) {
             </div>
             
       </div>
-
-      <Menu/>
     </div>
   )
 }

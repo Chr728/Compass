@@ -247,8 +247,6 @@ export default function UpdateAppointment(  {params: { appointment } } : { param
             />
         </div>
     </form>
-      
-      <Menu/>
     </div>
   )
 }
