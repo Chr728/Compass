@@ -88,7 +88,7 @@ describe("Testing the create notificationPreference controller", () => {
       .spyOn(db.NotificationPreference, "create")
       .mockResolvedValueOnce(notificationPreference);
     const res = await request(app)
-      .post(`/api/notifications/user/${user.uid}`)
+      .post(`/api/notifications/${user.uid}`)
       .send(notificationPreference)
       .set({ Authorization: "Bearer token" });
     expect(db.NotificationPreference.create).toHaveBeenCalledTimes(1);
@@ -102,7 +102,7 @@ describe("Testing the create notificationPreference controller", () => {
       .spyOn(db.NotificationPreference, "create")
       .mockRejectedValue(new Error("query Error"));
     const res = await request(app)
-      .post(`/api/notifications/user/faketestuser`)
+      .post(`/api/notifications/faketestuser`)
       .set({ Authorization: "Bearer token" });
     expect(db.NotificationPreference.create).toBeCalledTimes(1);
     expect(res.status).toBe(400);

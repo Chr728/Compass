@@ -19,7 +19,6 @@ import {
 import { useRouter } from "next/navigation";
 import createUser from "@/app/http/createUser";
 import { createUserAttributes } from "@/app/lib/Models/User";
-import { createNotificationPreference } from "@/app/http/notificationPreferenceAPI";
 
 interface AuthContextProps {
   user: User | null;
@@ -90,21 +89,8 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         createUser(data)
           .then((res) => {
             if (res !== null) {
-              createNotificationPreference()
-                .then((res) => {
-                  if (res !== null) {
-                    console.log(
-                      "Successfully create notification preference for user!"
-                    );
-                    setLoading(false);
-                    router.push("/tpage");
-                  }
-                })
-                .catch((error) => {
-                  const errorCode = error.code;
-                  const errorMessage = error.message;
-                  console.log(errorCode, errorMessage);
-                });
+              setLoading(false);
+              router.push("/tpage");
             }
           })
           .catch((error) => {

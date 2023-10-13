@@ -9,21 +9,14 @@ import React, { useEffect } from "react";
 import {
   getNotificationPreference,
   updateNotificationPreference,
+  createNotificationPreference,
 } from "../http/notificationPreferenceAPI";
 import { useAuth } from "../contexts/AuthContext";
-import { useUser } from "../contexts/UserContext";
 
 // Logging out the user
 export default function NotificationPage() {
   const router = useRouter();
   const { user } = useAuth();
-  const { userInfo } = useUser();
-
-  React.useEffect(() => {
-    if (!userInfo) {
-      alert("User not found.");
-    }
-  }, [userInfo, router]);
 
   const [checkedActivityReminders, setActivityReminders] = React.useState(true);
   const [checkedMedicationReminders, setMedicationReminders] =
@@ -37,75 +30,27 @@ export default function NotificationPage() {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setActivityReminders(event.target.checked);
-    try {
-      const data = {
-        activityReminders: checkedActivityReminders,
-        medicationReminders: checkedMedicationReminders,
-        appointmentReminders: checkedAppointmentReminders,
-        foodIntakeReminders: checkedFoodIntakeReminders,
-      };
-      const result = await updateNotificationPreference(data);
-      console.log("Notification preference for user updated:", result);
-    } catch (error) {
-      console.error("Error updating notification preference for user:", error);
-    }
   };
 
   const handleMedicationRemindersChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setMedicationReminders(event.target.checked);
-    try {
-      const data = {
-        activityReminders: checkedActivityReminders,
-        medicationReminders: checkedMedicationReminders,
-        appointmentReminders: checkedAppointmentReminders,
-        foodIntakeReminders: checkedFoodIntakeReminders,
-      };
-      const result = await updateNotificationPreference(data);
-      console.log("Notification preference for user updated:", result);
-    } catch (error) {
-      console.error("Error updating notification preference for user:", error);
-    }
   };
 
   const handleAppointmentRemindersChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setAppointmentReminders(event.target.checked);
-    try {
-      const data = {
-        activityReminders: checkedActivityReminders,
-        medicationReminders: checkedMedicationReminders,
-        appointmentReminders: checkedAppointmentReminders,
-        foodIntakeReminders: checkedFoodIntakeReminders,
-      };
-      const result = await updateNotificationPreference(data);
-      console.log("Notification preference for user updated:", result);
-    } catch (error) {
-      console.error("Error updating notification preference for user:", error);
-    }
   };
 
   const handleFoodIntakeRemindersChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setFoodIntakeReminders(event.target.checked);
-    try {
-      const data = {
-        activityReminders: checkedActivityReminders,
-        medicationReminders: checkedMedicationReminders,
-        appointmentReminders: checkedAppointmentReminders,
-        foodIntakeReminders: checkedFoodIntakeReminders,
-      };
-      const result = await updateNotificationPreference(data);
-      console.log("Notification preference for user updated:", result);
-    } catch (error) {
-      console.error("Error updating notification preference for user:", error);
-    }
   };
 
-  // Retrieve notification preference information
+  // Retrieve notification preference information, if it doesnt exist, create it
   useEffect(() => {
     async function fetchNotificationPreference() {
       try {
@@ -113,25 +58,41 @@ export default function NotificationPage() {
         const result = await getNotificationPreference();
         console.log("Retrieved notification preference of user:", result);
         if (result && result.data) {
+          console.log(result.data.activityReminders);
           setActivityReminders(result.data.activityReminders);
           setMedicationReminders(result.data.medicationReminders);
           setAppointmentReminders(result.data.appointmentReminders);
           setFoodIntakeReminders(result.data.foodIntakeReminders);
           console.log("Notification preference information all set!");
-        } else {
-          console.log(
-            "No notification preference settings found for this user in the database."
-          );
         }
       } catch (error) {
-        console.error(
-          "Error retrieving notification preference of user:",
-          error
+        console.log("Error retrieving notification preference of user:", error);
+        console.log(
+          "No notification preference settings found for this user in the database. Creating an entry for the user."
         );
+        // Notification preference doesn't exist, create it
+        const createdResult = await createNotificationPreference(); // Assuming createNotificationPreference handles creation
+        console.log("Notification preference created:", createdResult);
+        location.reload();
       }
     }
     fetchNotificationPreference();
-  }, [user]);
+  }, []);
+
+  const onSubmit = async () => {
+    try {
+      const data = {
+        activityReminders: checkedActivityReminders,
+        medicationReminders: checkedMedicationReminders,
+        appointmentReminders: checkedAppointmentReminders,
+        foodIntakeReminders: checkedFoodIntakeReminders,
+      };
+      const result = await updateNotificationPreference(data);
+      console.log("Notification preference for user updated:", result);
+    } catch (error) {
+      console.error("Error updating notification preference for user:", error);
+    }
+  };
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
@@ -180,7 +141,12 @@ export default function NotificationPage() {
           </span>
         </div>
         <div className="text-center mt-[100px]">
-          <Button type="submit" text="Save" style={{ width: "50%" }} />
+          <Button
+            type="submit"
+            text="Save"
+            style={{ width: "50%" }}
+            onClick={onSubmit}
+          />
         </div>
         <div className="md:hidden">
           <Menu></Menu>

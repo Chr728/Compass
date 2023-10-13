@@ -8,19 +8,6 @@ export const createNotificationPreference = async (
   res: Response
 ) => {
   try {
-    const user = await db.User.findOne({
-      where: {
-        uid: req.params.id,
-      },
-    });
-
-    if (!user) {
-      Logger.error(`Error occurred while creating notification preference`);
-      return res.status(404).json({
-        status: "NOT_FOUND",
-        message: "User not found",
-      });
-    }
     const uid = req.params.uid;
     const [
       activityReminders,

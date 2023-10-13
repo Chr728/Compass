@@ -9,7 +9,6 @@ export async function createNotificationPreference(): Promise<any> {
     }
     const uid = currentUser.uid;
     const token = await currentUser.getIdToken();
-
     const dataToBeStringified = {
       uid: uid,
       activityReminders: true,
@@ -19,7 +18,7 @@ export async function createNotificationPreference(): Promise<any> {
     };
 
     const response = await fetch(
-      `http://localhost:8000/api/notifications/user/${uid}`,
+      `http://localhost:8000/api/notifications/${uid}`,
       {
         method: "POST",
         headers: {
