@@ -1,7 +1,7 @@
 import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import CreateWeightJournal from './page';
+import CreateWeightJournalPage from './createWeightJournalPage';
 import {creatWeightJournal} from '../http/weightJournalAPI';
 
 
@@ -51,7 +51,7 @@ jest.mock("../contexts/UserContext", () => {
 const { createWeightJournal} = require('../http/weightJournalAPI');
  
     test("All fields are displayed to the user", () => {
-        render(<CreateWeightJournal/>);
+        render(<CreateWeightJournalPage/>);
         const date = screen.getByLabelText("Date");
         const time  = screen.getByLabelText("Time");
         const weight = screen.getByLabelText("Weight");
@@ -68,7 +68,7 @@ const { createWeightJournal} = require('../http/weightJournalAPI');
     })
 
     test("Error displayed if any of the fields are empty", async () => {
-        render(<CreateWeightJournal/>);
+        render(<CreateWeightJournalPage/>);
         const date = screen.getByLabelText("Date");
         fireEvent.blur(date);
         const time = screen.getByLabelText("Time");
@@ -93,7 +93,7 @@ const { createWeightJournal} = require('../http/weightJournalAPI');
     })
 
     test("Height or weight cant be zero", async () => {
-      render(<CreateWeightJournal />);
+      render(<CreateWeightJournalPage />);
       const weight = screen.getByLabelText("Weight");
       await userEvent.type(weight, "0");
       fireEvent.blur(weight);
@@ -110,7 +110,7 @@ const { createWeightJournal} = require('../http/weightJournalAPI');
     });
     
     test("Height or weight cant be negative", async () => {
-        render(<CreateWeightJournal />);
+        render(<CreateWeightJournalPage />);
         
         const weight = screen.getByLabelText("Weight");
         userEvent.clear(weight);
@@ -136,7 +136,7 @@ const { createWeightJournal} = require('../http/weightJournalAPI');
 
 
     test("Submit button calls createweightjournal function", async () => {
-        render(<CreateWeightJournal/>);
+        render(<CreateWeightJournalPage/>);
         const date = screen.getByLabelText("Date");
         const time  = screen.getByLabelText("Time");
         const weight = screen.getByLabelText("Weight");
@@ -161,7 +161,7 @@ const { createWeightJournal} = require('../http/weightJournalAPI');
     })
 
     test("Cancel button redirects to getWeightJournals page", async () => {
-        render(<CreateWeightJournal/>);
+        render(<CreateWeightJournalPage/>);
         const cancelButton = screen.getAllByRole('button')[1];
         await userEvent.click(cancelButton);
         await mockRouter;

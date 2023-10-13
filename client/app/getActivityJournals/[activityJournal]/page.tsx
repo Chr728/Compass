@@ -12,36 +12,39 @@ import { useEffect, useState } from 'react';
 import Header from '@/app/components/Header';
 import Menu from '@/app/components/Menu';
 import { formatMilitaryTime } from '@/app/helpers/utils/datetimeformat';
+import Custom403 from '@/app/pages/403';
+
 
 
 export default function GetActivityJournal({params: { activityJournal } } : { params: { activityJournal: string } }) {
-  const router = useRouter();
   const { user } = useAuth();
+  const router = useRouter();
   const { userInfo } = useUser();
   const [activity, setactivity] = useState<any>(null);
 
-  useEffect(() => {
-    if (!userInfo) {
-      alert('User not found.');
-    } 
-  }, [userInfo, router]);
-
-
-  useEffect(() => {
-    async function fetchActivityJournal() {
-      try {
-        const userId = user?.uid || '';
-        const result = await getActivityJournal(activityJournal);
-        console.log('Activity journal entry retrieved:', result);
-        setactivity(result.data);
-      } catch (error) {
-        console.error('Error retrieving activity journal entry:', error);
-      }
+  async function fetchActivityJournal() {
+    try {
+      const userId = user?.uid || '';
+      const result = await getActivityJournal(activityJournal);
+      console.log('Activity journal entry retrieved:', result);
+      setactivity(result.data);
+    } catch (error) {
+      console.error('Error retrieving activity journal entry:', error);
     }
 
-    fetchActivityJournal();
-  }, [user]);
+  useEffect(() => {
+    if (!user) {
+      router.push("/login")
+      alert('User not found.');
+    } 
+    if (user) {
+      fetchActivityJournal();
+    }
+  }, [user, activity]);  
 
+  if (!user) {
+    return <div><Custom403/></div>
+  }
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
@@ -139,4 +142,5 @@ export default function GetActivityJournal({params: { activityJournal } } : { pa
       </div>
     </div>
   );
+}
 }

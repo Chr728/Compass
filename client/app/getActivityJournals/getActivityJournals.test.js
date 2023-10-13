@@ -1,6 +1,6 @@
 import {render, screen,act} from '@testing-library/react';
 import '@testing-library/jest-dom';
-import GetActivityJournals from './page';
+import GetActivityJournalsPage from './getActivityJournalsPage';
 import {getActivityJournals} from '../http/activityJournalAPI';
 import userEvent from '@testing-library/user-event';
 
@@ -9,7 +9,7 @@ import { useUser } from '../contexts/UserContext';
 
 beforeEach(async () => {
     await act(async () => {
-        render(<GetActivityJournals/>);
+        render(<GetActivityJournalsPage/>);
       });
 })
 
