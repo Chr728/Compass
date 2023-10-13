@@ -8,10 +8,10 @@ import {
 
 const router = Router();
 
-router.route("/:uid").post(createNotificationPreference);
+router.route("/user/:id").post(createNotificationPreference);
 
 router
-  .route("/notifications/:uid")
+  .route("/:uid")
   .get(getNotificationPreference)
   .delete(deleteNotificationPreference)
   .put(updateNotificationPreference);

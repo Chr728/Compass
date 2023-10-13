@@ -8,7 +8,20 @@ export const createNotificationPreference = async (
   res: Response
 ) => {
   try {
-    const userUID = req.params.uid;
+    const user = await db.User.findOne({
+      where: {
+        uid: req.params.id,
+      },
+    });
+
+    if (!user) {
+      Logger.error(`Error occurred while creating notification preference`);
+      return res.status(404).json({
+        status: "NOT_FOUND",
+        message: "User not found",
+      });
+    }
+    const uid = req.params.uid;
     const [
       activityReminders,
       medicationReminders,
@@ -17,7 +30,7 @@ export const createNotificationPreference = async (
     ] = [true, true, true, true];
     const createNotificationPreference = await db.NotificationPreference.create(
       {
-        userUID,
+        uid,
         activityReminders,
         medicationReminders,
         appointmentReminders,
@@ -35,7 +48,7 @@ export const createNotificationPreference = async (
     );
     res.status(400).json({
       status: `ERROR`,
-      message: `Error creating notification preference: ${err}`,
+      message: `Error creating notification preference : ${err}`,
     });
   }
 };
@@ -53,7 +66,7 @@ export const getNotificationPreference = async (
       },
     });
 
-    if (!uid) {
+    if (!notificationPreference) {
       return res.status(404).json({
         status: "ERROR",
         message: `Notification preference not found, invalid user id.`,
@@ -82,6 +95,13 @@ export const updateNotificationPreference = async (
 ) => {
   try {
     const uid = req.params.uid;
+    if (!uid) {
+      return res.status(400).json({
+        status: "ERROR",
+        message: `User id not provided or is invalid.`,
+      });
+    }
+
     const {
       activityReminders,
       medicationReminders,
@@ -103,6 +123,7 @@ export const updateNotificationPreference = async (
           },
         }
       );
+
     if (!updatedNotificationPreference) {
       return res.status(404).json({
         status: "ERROR",
@@ -117,18 +138,18 @@ export const updateNotificationPreference = async (
         },
       });
 
-    return res.status(200).json({
+    res.status(200).json({
       status: "SUCCESS",
-      message: "notification preference was updated successfully",
+      message: "Notification preference was updated successfully",
       data: latestNotificationPreference,
     });
-  } catch (error) {
+  } catch (err) {
     Logger.error(
-      `Error occurred while updating notification preference: ${error}`
+      `Error occurred while updating notification preference: ${err}`
     );
-    return res.status(400).json({
-      status: "ERROR",
-      message: `Error updating notification preference: ${error}`,
+    res.status(400).json({
+      status: `ERROR`,
+      message: `Error updating notification preference : ${err}`,
     });
   }
 };

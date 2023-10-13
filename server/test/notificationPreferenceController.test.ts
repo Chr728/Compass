@@ -88,7 +88,7 @@ describe("Testing the create notificationPreference controller", () => {
       .spyOn(db.NotificationPreference, "create")
       .mockResolvedValueOnce(notificationPreference);
     const res = await request(app)
-      .post(`/api/${user.uid}`)
+      .post(`/api/notifications/user/${user.uid}`)
       .send(notificationPreference)
       .set({ Authorization: "Bearer token" });
     expect(db.NotificationPreference.create).toHaveBeenCalledTimes(1);
@@ -97,15 +97,19 @@ describe("Testing the create notificationPreference controller", () => {
     expect(res.body.data).toStrictEqual(notificationPreference);
   });
 
-  it("test the error if request is not made properly", async () => {
-    jest.spyOn(db.NotificationPreference, "create").mockResolvedValueOnce("");
+  it("should catch error if something goes wrong", async () => {
+    jest
+      .spyOn(db.NotificationPreference, "create")
+      .mockRejectedValue(new Error("query Error"));
     const res = await request(app)
-      .post(`/api/notifications/${user.uid}`)
-      .send("")
+      .post(`/api/notifications/user/faketestuser`)
       .set({ Authorization: "Bearer token" });
-    expect(db.NotificationPreference.create).toHaveBeenCalledTimes(0);
+    expect(db.NotificationPreference.create).toBeCalledTimes(1);
     expect(res.status).toBe(400);
     expect(res.body.status).toBe("ERROR");
+    expect(res.body.message).toBe(
+      "Error creating notification preference : Error: query Error"
+    );
   });
 });
 
