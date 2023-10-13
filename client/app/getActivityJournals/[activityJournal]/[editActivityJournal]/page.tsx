@@ -11,6 +11,8 @@ import { useUser } from '../../../contexts/UserContext';
 import { useEffect, useState } from 'react';
 import Header from '@/app/components/Header';
 import Menu from '@/app/components/Menu';
+import Custom403 from '@/app/pages/403';
+
 
 export function formatDateYearMonthDate(date: any) {
   var d = new Date(date);
@@ -29,32 +31,35 @@ export function formatDateYearMonthDate(date: any) {
 }
 
 export default function EditActivityJournal({params: { activityJournal } } : { params: { activityJournal: string } }) {
-  const router = useRouter();
   const { user } = useAuth();
-  const { userInfo } = useUser();
+  const router = useRouter();
   const [activity, setactivity] = useState<any>(null);
+  const { userInfo } = useUser();
+
+  async function fetchActivityJournal() {
+    try {
+      const userId = user?.uid || '';
+      const result = await getActivityJournal(activityJournal);
+      console.log('activity journal entry retrieved:', result);
+      setactivity(result.data);
+    } catch (error) {
+      console.error('Error retrieving activity journal entry:', error);
+    }
+  }
 
   useEffect(() => {  
-
-    if (!userInfo) {
+    if (!user) {
+      router.push('/login')
       alert('User not found.');
-    } 
-  }, [userInfo, router]);
-  
-  useEffect(() => {
-    async function fetchActivityJournal() {
-      try {
-        const userId = user?.uid || '';
-        const result = await getActivityJournal(activityJournal);
-        console.log('activity journal entry retrieved:', result);
-        setactivity(result.data);
-      } catch (error) {
-        console.error('Error retrieving activity journal entry:', error);
-      }
     }
-
-    fetchActivityJournal();
-  }, [user]);
+    if (user) {
+      fetchActivityJournal();
+    }
+  }, [user, activity]);
+  
+  if (!user) {
+    return <div><Custom403/></div>
+  }
   
   const formik = useFormik({
     initialValues: {

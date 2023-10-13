@@ -12,34 +12,39 @@ import { useEffect, useState } from 'react';
 import Header from '@/app/components/Header';
 import Menu from '@/app/components/Menu';
 import { formatDateYearMonthDate } from '@/app/helpers/utils/datetimeformat';
+import Custom403 from '@/app/pages/403';
+
 
 export default function EditWeightJournal({params: { weightJournal } } : { params: { weightJournal: string } }) {
-  const router = useRouter();
   const { user } = useAuth();
-  const { userInfo } = useUser();
+  const router = useRouter();
   const [weight, setweight] = useState<any>(null);
-
+  const { userInfo } = useUser();
+  
+  async function fetchWeightJournal() {
+    try {
+      const userId = user?.uid || '';
+      const result = await getWeightJournal(weightJournal);
+      console.log('Weight journal entry retrieved:', result);
+      setweight(result.data);
+    } catch (error) {
+      console.error('Error retrieving weight journal entry:', error);
+    }
+  }
+  
   useEffect(() => {  
-
-    if (!userInfo) {
+    if (!user) {
+      router.push('/login')
       alert('User not found.');
     } 
-  }, [userInfo, router]);
-  
-  useEffect(() => {
-    async function fetchWeightJournal() {
-      try {
-        const userId = user?.uid || '';
-        const result = await getWeightJournal(weightJournal);
-        console.log('Weight journal entry retrieved:', result);
-        setweight(result.data);
-      } catch (error) {
-        console.error('Error retrieving weight journal entry:', error);
-      }
+    if (user) {
+      fetchWeightJournal();
     }
-
-    fetchWeightJournal();
-  }, [user]);
+  }, [user, weight]);
+  
+  if (!user) {
+    return <div><Custom403/></div>
+  }
   
   const formik = useFormik({
     initialValues: {

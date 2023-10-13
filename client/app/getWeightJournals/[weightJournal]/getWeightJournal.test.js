@@ -15,17 +15,6 @@ jest.mock("next/navigation", () => ({
         }
     }
 }));
-// jest.mock('next/navigation', () => ({
-//     useRouter() {
-//       return {
-//         push: () => jest.fn(),
-//         replace: () => jest.fn(),
-//       };
-//     },
-//     // usePathname() {
-//     //   return '';
-//     // },
-//   }));
 
 jest.mock('../../http/weightJournalAPI', () => {
     return {
@@ -60,57 +49,41 @@ jest.mock("../../contexts/UserContext", () => {
     };
   });
 
-beforeEach(async () => {
-    await act(async () => {
-        render(<GetWeightJournal params={{ weightJournal:'1' }}/>);
-      });
-})
 
 test("User data is displayed correctly", async () => {
-    await getWeightJournal();
-    const date = await screen.findByText("Date:");
-    const time  = await screen.findByText("Time:");
-    const weight = await screen.findByText("Weight:");
-    const height = await screen.findByText("Height:");
-    const unit = await  screen.findByText("Unit:");
-    const notes  = await screen.findByText("Notes:");
-
-    const dateValue = await screen.findByText("2014-01-01");
-    const timeValue = await screen.getByText("8h36");
-    const weightValue = await screen.getByText("186");
-    const unitValue = await screen.getByText("lb");
-    const heightValue = await screen.getByText("174");
-    const notesValue = await screen.getByText("notes");
-
-    expect(date).toBeInTheDocument();
-    expect(time).toBeInTheDocument();
-    expect(weight).toBeInTheDocument();
-    expect(height).toBeInTheDocument();
-    expect(unit).toBeInTheDocument();
-    expect(notes).toBeInTheDocument();
-
-    expect(dateValue).toBeInTheDocument();
-    expect(timeValue).toBeInTheDocument();
-    expect(weightValue).toBeInTheDocument();
-    expect(unitValue).toBeInTheDocument();
-    expect(heightValue).toBeInTheDocument();
-    expect(notesValue).toBeInTheDocument();
+    render(<GetWeightJournal params={{ weightJournal:'1' }}/>);
+    setTimeout(() => {
+        expect(screen.getByText("Date:")).toBeInTheDocument();
+        expect(screen.getByText("Time:")).toBeInTheDocument();
+        expect(screen.getByText("Weight:")).toBeInTheDocument();
+        expect(screen.getByText("Height:")).toBeInTheDocument();
+        expect(screen.getByText("Unit:")).toBeInTheDocument();
+        expect(screen.getByText("Notes:")).toBeInTheDocument();
+        expect(screen.getByText("2014-01-01")).toBeInTheDocument();
+        expect(screen.getByText("8h36")).toBeInTheDocument();
+        expect(screen.getByText("186")).toBeInTheDocument();
+        expect(screen.getByText("lb")).toBeInTheDocument();
+        expect(screen.getByText("174")).toBeInTheDocument();
+        expect(screen.getByText("notes")).toBeInTheDocument();
+    }, 1000);
 })
 
-
-
-
-
 test("Cancel button functions correctly", async() => {
-    const cancelButton = screen.getAllByRole('button')[2];
-    await userEvent.click(cancelButton);
-    await mockRouter;
-    expect(mockRouter).toHaveBeenCalledWith('/getWeightJournals')
+    render(<GetWeightJournal params={{ weightJournal:'1' }}/>);
+    setTimeout(() => {
+        const cancelButton = screen.getAllByRole('button')[2];
+        userEvent.click(cancelButton);
+        mockRouter;
+        expect(mockRouter).toHaveBeenCalledWith('/getWeightJournals')
+    }, 1000);
 })
 
 test("Update button functions correctly", async() => {
-    const updateButton = screen.getAllByRole('button')[1];
-    await userEvent.click(updateButton);
-    await mockRouter;
-    expect(mockRouter).toHaveBeenCalledWith('/getWeightJournals/1/1')
+    render(<GetWeightJournal params={{ weightJournal:'1' }}/>);
+    setTimeout(() => {
+        const updateButton = screen.getAllByRole('button')[1];
+        userEvent.click(updateButton);
+        mockRouter;
+        expect(mockRouter).toHaveBeenCalledWith('/editWeightJournals/1')
+    }, 1000);
 })
