@@ -36,6 +36,7 @@
     "sequelize": "^6.33.0",
     "sequelize-mock": "^0.10.2",
     "supertest": "^6.3.3",
+    "web-push": "^3.6.6",
     "winston": "^3.10.0",
     "winston-daily-rotate-file": "^4.7.1"
   }
