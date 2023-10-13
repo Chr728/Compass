@@ -1,19 +1,16 @@
-// const webPush = require('web-push');
+require("dotenv").config();
+const express = require("express");
+const webPush = require("web-push");
 
-// //VAPID keys
-// webPush.setVapidDetails(
-//   'todo', //email
-//   'todo', //public key
-//   'todo'//private key
-// );
+// Retrieve vapid keys from .env
+const vapidKeys = {
+  publicKey: process.env.VAPID_PUBLIC_KEY,
+  privateKey: process.env.VAPID_PRIVATE_KEY,
+};
 
-// // Send a push notification
-// webPush.sendNotification(subscription, JSON.stringify(payload))
-//   .then(() => {
-//     console.log('Push notification sent successfully');
-//   })
-//   .catch((error) => {
-//     console.error('Error sending push notification:', error);
-//   });
-
-const notification = document.querySelector("");
+// Set vapid keys
+webPush.setVapidDetails(
+  "mailto:test@gmail.com",
+  vapidKeys.publicKey,
+  vapidKeys.privateKey
+);
