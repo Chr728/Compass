@@ -3,15 +3,17 @@ import {
   createNotificationPreference,
   getNotificationPreference,
   updateNotificationPreference,
+  deleteNotificationPreference,
 } from "../controllers/notificationPreferenceController";
 
 const router = Router();
 
-router.route("/notifications").post(createNotificationPreference);
+router.route("/:uid").post(createNotificationPreference);
 
 router
   .route("/notifications/:uid")
   .get(getNotificationPreference)
+  .delete(deleteNotificationPreference)
   .put(updateNotificationPreference);
 
 export default router;

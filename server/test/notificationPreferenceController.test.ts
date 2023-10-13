@@ -6,27 +6,29 @@ import admin from "firebase-admin";
 let server: any;
 const port = process.env.SERVER_DEV_PORT;
 
+const user = {
+  id: 10,
+  uid: "testuid",
+  email: "test@gmail.com",
+  firstName: "John",
+  lastName: "Doe",
+  phoneNumber: "5147894561",
+  birthDate: "1990-12-31T00:00:00.000Z",
+  sex: "male",
+};
+
 const notificationPreference = {
   id: 1,
-  uid: "userUid",
+  uid: "testuid",
   activityReminders: true,
   medicationReminders: true,
   appointmentReminders: true,
   foodIntakeReminders: true,
 };
 
-const createNotificationPreference = {
+const updatedNotificationPreference = {
   id: 2,
-  uid: "userUid",
-  activityReminders: true,
-  medicationReminders: false,
-  appointmentReminders: true,
-  foodIntakeReminders: false,
-};
-
-const updateNotificationPreference = {
-  id: 1,
-  uid: "userUid",
+  uid: "testuid",
   activityReminders: false,
   medicationReminders: false,
   appointmentReminders: false,
@@ -61,31 +63,59 @@ function stopServer() {
   }
 }
 
-describe("Notification preference Controller tests", () => {
-  beforeAll(() => {
-    startServer();
-  });
+beforeAll(() => {
+  startServer();
+});
 
-  afterAll(() => {
-    stopServer();
-  });
+afterAll(() => {
+  stopServer();
+});
 
-  beforeEach(() => {
+beforeEach(() => {
+  jest
+    .spyOn(admin.auth(), "verifyIdToken")
+    .mockResolvedValueOnce(mockedDecodedToken);
+  jest.spyOn(db.User, "findOne").mockResolvedValue(user);
+});
+
+afterEach(() => {
+  jest.restoreAllMocks();
+});
+
+describe("Testing the create notificationPreference controller", () => {
+  it("test to create notificationPreference", async () => {
     jest
-      .spyOn(admin.auth(), "verifyIdToken")
-      .mockResolvedValueOnce(mockedDecodedToken);
+      .spyOn(db.NotificationPreference, "create")
+      .mockResolvedValueOnce(notificationPreference);
+    const res = await request(app)
+      .post(`/api/${user.uid}`)
+      .send(notificationPreference)
+      .set({ Authorization: "Bearer token" });
+    expect(db.NotificationPreference.create).toHaveBeenCalledTimes(1);
+    expect(res.status).toBe(201);
+    expect(res.body.status).toBe("SUCCESS");
+    expect(res.body.data).toStrictEqual(notificationPreference);
   });
 
-  afterEach(() => {
-    jest.restoreAllMocks();
+  it("test the error if request is not made properly", async () => {
+    jest.spyOn(db.NotificationPreference, "create").mockResolvedValueOnce("");
+    const res = await request(app)
+      .post(`/api/notifications/${user.uid}`)
+      .send("")
+      .set({ Authorization: "Bearer token" });
+    expect(db.NotificationPreference.create).toHaveBeenCalledTimes(0);
+    expect(res.status).toBe(400);
+    expect(res.body.status).toBe("ERROR");
   });
+});
 
+describe("Notification preference Controller tests", () => {
   it("should get notification preference for a user", async () => {
     jest
       .spyOn(db.NotificationPreference, "findOne")
       .mockResolvedValueOnce(notificationPreference);
     const res = await request(app)
-      .get("/api/notifications/userUid")
+      .get(`/api/notifications/${user.uid}`)
       .set({ Authorization: "Bearer token" });
     expect(db.NotificationPreference.findOne).toBeCalledTimes(1);
     expect(res.status).toBe(200);
@@ -114,7 +144,7 @@ describe("Notification preference Controller tests", () => {
       .spyOn(db.NotificationPreference, "findOne")
       .mockRejectedValue(new Error("query error"));
     const res = await request(app)
-      .get("/api/notifications/userUid")
+      .get(`/api/notifications/${user.uid}`)
       .set({ Authorization: "Bearer token" });
     expect(db.NotificationPreference.findOne).toBeCalledTimes(1);
     expect(res.status).toBe(400);
@@ -125,10 +155,10 @@ describe("Notification preference Controller tests", () => {
 describe("should test the deleteNotificationPreference Controller", () => {
   it("should delete one specific notification preference", async () => {
     jest
-      .spyOn(db.Notification, "destroy")
+      .spyOn(db.NotificationPreference, "destroy")
       .mockResolvedValueOnce(notificationPreference);
     const res = await request(app)
-      .delete("/api/notifications/userUid")
+      .delete(`/api/notifications/${user.uid}`)
       .set({ Authorization: "Bearer token" });
     expect(db.NotificationPreference.destroy).toBeCalledTimes(1);
     expect(res.status).toBe(200);
@@ -139,7 +169,7 @@ describe("should test the deleteNotificationPreference Controller", () => {
   it("should give error when the user id sent is wrong", async () => {
     const nonExistentUserId = "user";
     jest
-      .spyOn(db.notificationPreference, "destroy")
+      .spyOn(db.NotificationPreference, "destroy")
       .mockResolvedValueOnce(null);
     const res = await request(app)
       .delete(`/api/notifications/${nonExistentUserId}}`)
@@ -157,36 +187,9 @@ describe("should test the deleteNotificationPreference Controller", () => {
       .spyOn(db.NotificationPreference, "destroy")
       .mockRejectedValue(new Error("query error"));
     const res = await request(app)
-      .delete("/api/notifications/userUid")
+      .delete(`/api/notifications/${user.uid}`)
       .set({ Authorization: "Bearer token" });
     expect(db.NotificationPreference.destroy).toBeCalledTimes(1);
-    expect(res.status).toBe(400);
-    expect(res.body.status).toBe("ERROR");
-  });
-});
-
-describe("Testing the create notificationPreference controller", () => {
-  it("test to create notificationPreference", async () => {
-    jest
-      .spyOn(db.NotificationPreference, "create")
-      .mockResolvedValueOnce(createNotificationPreference);
-    const res = await request(app)
-      .post("/api/notifications/userUid")
-      .send(createNotificationPreference)
-      .set({ Authorization: "Bearer token" });
-    expect(db.NotificationPreference.create).toHaveBeenCalledTimes(1);
-    expect(res.status).toBe(201);
-    expect(res.body.status).toBe("SUCCESS");
-    expect(res.body.data).toStrictEqual(createNotificationPreference);
-  });
-
-  it("test the error if request is not made properly", async () => {
-    jest.spyOn(db.NotificationPreference, "create").mockResolvedValueOnce("");
-    const res = await request(app)
-      .post("/api/notifications/userUid")
-      .send("")
-      .set({ Authorization: "Bearer token" });
-    expect(db.NotificationPreference.create).toHaveBeenCalledTimes(0);
     expect(res.status).toBe(400);
     expect(res.body.status).toBe("ERROR");
   });
@@ -196,24 +199,24 @@ describe("Testing the update notificationPreference controller", () => {
   it("test to update notificationPreference", async () => {
     jest
       .spyOn(db.NotificationPreference, "update")
-      .mockResolvedValueOnce(updateNotificationPreference);
+      .mockResolvedValueOnce(updatedNotificationPreference);
     jest
       .spyOn(db.NotificationPreference, "findOne")
-      .mockResolvedValueOnce(updateNotificationPreference);
+      .mockResolvedValueOnce(updatedNotificationPreference);
     const res = await request(app)
-      .put("/api/notifications/userUid")
+      .put(`/api/notifications/${user.uid}`)
       .set({ Authorization: "Bearer token" });
     expect(db.NotificationPreference.update).toBeCalledTimes(1);
     expect(db.NotificationPreference.findOne).toBeCalledTimes(1);
     expect(res.status).toBe(200);
     expect(res.body.status).toBe("SUCCESS");
-    expect(res.body.data).toStrictEqual(updateNotificationPreference);
+    expect(res.body.data).toStrictEqual(updatedNotificationPreference);
   });
 
   it("should give error if wrong user id is sent", async () => {
     jest.spyOn(db.NotificationPreference, "update").mockResolvedValueOnce(null);
     const res = await request(app)
-      .put("/api/notifications/userUid")
+      .put(`/api/notifications/${user.uid}`)
       .set({ Authorization: "Bearer token" });
     expect(db.NotificationPreference.update).toBeCalledTimes(1);
     expect(res.status).toBe(404);
@@ -228,7 +231,7 @@ describe("Testing the update notificationPreference controller", () => {
       .spyOn(db.NotificationPreference, "update")
       .mockRejectedValue(new Error("query error"));
     const res = await request(app)
-      .put("/api/notifications/userUid")
+      .put(`/api/notifications/${user.uid}`)
       .set({ Authorization: "Bearer token" });
     expect(db.NotificationPreference.update).toBeCalledTimes(1);
     expect(res.status).toBe(400);

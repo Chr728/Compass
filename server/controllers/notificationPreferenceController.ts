@@ -46,14 +46,14 @@ export const getNotificationPreference = async (
   res: Response
 ) => {
   try {
-    const userID = req.params.uid;
+    const uid = req.params.uid;
     const notificationPreference = await db.NotificationPreference.findOne({
       where: {
-        uid: userID,
+        uid: uid,
       },
     });
 
-    if (!userID) {
+    if (!uid) {
       return res.status(404).json({
         status: "ERROR",
         message: `Notification preference not found, invalid user id.`,
@@ -81,7 +81,7 @@ export const updateNotificationPreference = async (
   res: Response
 ) => {
   try {
-    const userID = req.params.uid;
+    const uid = req.params.uid;
     const {
       activityReminders,
       medicationReminders,
@@ -99,7 +99,7 @@ export const updateNotificationPreference = async (
         },
         {
           where: {
-            uid: userID,
+            uid: uid,
           },
         }
       );
@@ -113,7 +113,7 @@ export const updateNotificationPreference = async (
     const latestNotificationPreference =
       await db.NotificationPreference.findOne({
         where: {
-          uid: userID,
+          uid: uid,
         },
       });
 
@@ -139,11 +139,11 @@ export const deleteNotificationPreference = async (
   res: Response
 ) => {
   try {
-    const userID = req.params.uid;
+    const uid = req.params.uid;
     const deleteNotificationPreference =
       await db.NotificationPreference.destroy({
         where: {
-          uid: userID,
+          uid: uid,
         },
       });
     if (!deleteNotificationPreference) {
