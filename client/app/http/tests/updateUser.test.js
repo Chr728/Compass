@@ -37,7 +37,7 @@ describe('updateUser', () => {
   
     expect(updatedUserData.data).toEqual(mockUserData);
     expect(mockFetch).toHaveBeenCalledWith(
-      `http://localhost:8000/api/users/undefined`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/users/undefined`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ describe('updateUser', () => {
     } catch (error) {
       expect(error).toBe(mockError);
       expect(mockFetch).toHaveBeenCalledWith(
-        `http://localhost:8000/api/users/mockUid`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/users/mockUid`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -108,7 +108,7 @@ describe('updateUser', () => {
       expect(error.message).toBe('response.json is not a function');
     }
     expect(mockFetch).toHaveBeenCalledWith(
-      `http://localhost:8000/api/users/mockUid`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/users/mockUid`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -146,7 +146,7 @@ describe('updateUser', () => {
       expect(error.message).toBe('No user is logged in');
     }
     expect(mockFetch).toHaveBeenCalledWith(
-      'http://localhost:8000/api/users/mockUid',
+      `${process.env.NEXT_PUBLIC_API_URL}/api/users/mockUid`,
       {
         headers: {
           'Content-Type': 'application/json',

@@ -38,7 +38,7 @@ describe('getUserProfile', () => {
     const userProfile = await getUserProfile();
     expect(userProfile).toEqual(mockUserProfile);
     expect(mockFetch).toHaveBeenCalledWith(
-      `http://localhost:8000/api/users/${mockUserId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/users/${mockUserId}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -70,7 +70,7 @@ describe('getUserProfile', () => {
 
     await expect(getUserProfile()).rejects.toThrow('Error fetching user profile');
     expect(mockFetch).toHaveBeenCalledWith(
-      `http://localhost:8000/api/users/${mockUserId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/users/${mockUserId}`,
       {
         headers: {
           'Content-Type': 'application/json',

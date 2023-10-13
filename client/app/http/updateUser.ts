@@ -5,7 +5,7 @@ export const updateUser = async (userData: any) => {
     if(!currentUser) throw new Error('No user is logged in');
     const uid = currentUser.uid;
     const token =  await currentUser.getIdToken();
-    const url = `http://localhost:8000/api/users/${uid}`;
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/api/users/${uid}`;
     try {
         const response = await fetch(url, {
             method: 'PUT',

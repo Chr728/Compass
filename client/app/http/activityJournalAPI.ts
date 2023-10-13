@@ -1,4 +1,4 @@
-import { auth } from '../config/firebase';
+import {auth} from '../config/firebase';
 
 // Function to make a GET request to retrieve all activity journals for a user
 export async function getActivityJournals(): Promise<any> {
@@ -12,7 +12,7 @@ export async function getActivityJournals(): Promise<any> {
         const token = await currentUser.getIdToken();
 
         const response = await fetch(
-            `http://localhost:8000/api/journals/activity/user/${id}`, {
+            `${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/user/${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ export async function getActivityJournal(activityJournalId: string): Promise<any
         const token = await currentUser.getIdToken();
 
         const response = await fetch(
-            `http://localhost:8000/api/journals/activity/${activityJournalId}`, {
+            `${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/${activityJournalId}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ export async function createActivityJournal(activityJournalData: any): Promise<a
         const token = await currentUser.getIdToken();
 
         const response = await fetch(
-            `http://localhost:8000/api/journals/activity/user/${id}`,
+            `${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/user/${id}`,
             {
                 method: 'POST',
                 headers: {
@@ -114,7 +114,7 @@ export async function updateActivityJournal(
         const token = await currentUser.getIdToken();
 
         const response = await fetch(
-            `http://localhost:8000/api/journals/activity/${activityJournalId}`,
+            `${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/${activityJournalId}`,
             {
                 method: 'PUT',
                 headers: {
@@ -148,7 +148,7 @@ export async function deleteActivityJournal(activityJournalId: string): Promise<
         const token = await currentUser.getIdToken();
 
         const response = await fetch(
-            `http://localhost:8000/api/journals/activity/${activityJournalId}`,
+            `${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/${activityJournalId}`,
             {
                 method: 'DELETE',
                 headers: {
@@ -161,7 +161,7 @@ export async function deleteActivityJournal(activityJournalId: string): Promise<
                 `Failed to delete activity journal entry`
             );
         }
-        return { message: 'Activity journal entry deleted successfully' };
+        return {message: 'Activity journal entry deleted successfully'};
     } catch (error) {
         console.error('Error deleting activity journal entry:', error);
         throw error;

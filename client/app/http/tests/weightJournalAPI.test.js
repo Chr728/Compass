@@ -33,7 +33,7 @@ describe('getWeightJournals', () => {
 
     const result = await getWeightJournals(mockUserId);
 
-    expect(mockFetch).toHaveBeenCalledWith(`http://localhost:8000/api/journals/weight/user/${mockUserId}`, {
+    expect(mockFetch).toHaveBeenCalledWith(`${process.env.NEXT_PUBLIC_API_URL}/api/journals/weight/user/${mockUserId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -117,7 +117,7 @@ describe('getWeightJournal', () => {
 
     expect(mockResponse.json).toHaveBeenCalled();
     expect(mockFetch).toHaveBeenCalledWith(
-      `http://localhost:8000/api/journals/weight/${mockUser.id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/weight/${mockUser.id}`,
       {
         method: 'GET',
         headers: {
@@ -164,7 +164,7 @@ describe('getWeightJournal', () => {
       'Failed to retrieve weight journal entry 1 for user. HTTP Status: 500'
     );
     expect(mockFetch).toHaveBeenCalledWith(
-      `http://localhost:8000/api/journals/weight/${mockUserId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/weight/${mockUserId}`,
       {
         method: 'GET',
         headers: {
@@ -216,7 +216,7 @@ describe('createWeightJournal', () => {
     const result = await createWeightJournal(mockUserId, mockWeightJournalData);
 
     expect(mockFetch).toHaveBeenCalledWith(
-      `http://localhost:8000/api/journals/weight/user/${mockUserId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/weight/user/${mockUserId}`,
       {
         method: 'POST',
         headers: {
@@ -307,7 +307,7 @@ describe('updateWeightJournal', () => {
     );
 
     expect(mockFetch).toHaveBeenCalledWith(
-      `http://localhost:8000/api/journals/weight/${mockUserId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/weight/${mockUserId}`,
       {
         method: 'PUT',
         headers: {
@@ -389,7 +389,7 @@ describe('deleteWeightJournal', () => {
 
     const result = await deleteWeightJournal(mockWeightJournalId);
 
-    expect(mockFetch).toHaveBeenCalledWith(`http://localhost:8000/api/journals/weight/${mockWeightJournalId}`, {
+    expect(mockFetch).toHaveBeenCalledWith(`${process.env.NEXT_PUBLIC_API_URL}/api/journals/weight/${mockWeightJournalId}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${mockToken}`,

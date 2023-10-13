@@ -32,7 +32,7 @@ describe('getActivityJournals', () => {
     
     const result = await getActivityJournals(mockUserId);
 
-    expect(mockFetch).toHaveBeenCalledWith(`http://localhost:8000/api/journals/activity/user/${mockUserId}`, {
+    expect(mockFetch).toHaveBeenCalledWith(`${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/user/${mockUserId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -113,7 +113,7 @@ describe('getActivityJournal', () => {
 
     expect(mockResponse.json).toHaveBeenCalled();
     expect(mockFetch).toHaveBeenCalledWith(
-      `http://localhost:8000/api/journals/activity/${mockUser.id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/${mockUser.id}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -161,7 +161,7 @@ describe('getActivityJournal', () => {
       'Failed to retrieve activity journal entry'
     );
     expect(mockFetch).toHaveBeenCalledWith(
-      `http://localhost:8000/api/journals/activity/${mockUserId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/${mockUserId}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -212,7 +212,7 @@ describe('createActivityJournal', () => {
     const result = await createActivityJournal(mockUserId, mockActivityJournalData);
 
     expect(mockFetch).toHaveBeenCalledWith(
-      `http://localhost:8000/api/journals/activity/user/${mockUserId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/user/${mockUserId}`,
       {
         method: 'POST',
         headers: {
@@ -301,7 +301,7 @@ describe('updateActivityJournal', () => {
     );
 
     expect(mockFetch).toHaveBeenCalledWith(
-      `http://localhost:8000/api/journals/activity/${mockUserId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/${mockUserId}`,
       {
         method: 'PUT',
         headers: {
@@ -382,7 +382,7 @@ describe('deleteActivityJournal', () => {
 
     const result = await deleteActivityJournal(mockActivityJournalId);
 
-    expect(mockFetch).toHaveBeenCalledWith(`http://localhost:8000/api/journals/activity/${mockActivityJournalId}`, {
+    expect(mockFetch).toHaveBeenCalledWith(`${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/${mockActivityJournalId}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${mockToken}`,
