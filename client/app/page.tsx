@@ -1,13 +1,11 @@
-'use client';
-
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from './contexts/AuthContext';
-import Welcome from './welcome/page';
-import Login from './login/page';
-import Settings from './settings/page';
-import Register from './register/page';
-
+"use client";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "./contexts/AuthContext";
+import Welcome from "./welcome/page";
+import Login from "./login/page";
+import Settings from "./settings/page";
+import Register from "./register/page";
 
 export default function Home() {
   const router = useRouter();
@@ -15,9 +13,9 @@ export default function Home() {
 
   useEffect(() => {
     if (user) {
-      router.push('/');
+      router.push("/");
     }
- },[user, router]);
+  }, [user, router]);
 
   return <Welcome />;
 }

@@ -1,0 +1,17 @@
+{
+  "name": "Compass",
+  "short_name": "Compass",
+  "display": "standalone",
+  "orientation": "portrait",
+  "purpose": "any maskable",
+  "theme_color": "#FFFFFF",
+  "background_color": "#FFFFFF",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/compass-removebg.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
