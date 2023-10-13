@@ -82,13 +82,6 @@ export const updateNotificationPreference = async (
 ) => {
   try {
     const uid = req.params.uid;
-    if (!uid) {
-      return res.status(400).json({
-        status: "ERROR",
-        message: `User id not provided or is invalid.`,
-      });
-    }
-
     const {
       activityReminders,
       medicationReminders,
