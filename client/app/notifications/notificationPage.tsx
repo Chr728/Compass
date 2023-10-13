@@ -5,13 +5,25 @@ import { useRouter } from "next/navigation";
 import Button from "../components/Button";
 import Menu from "../components/Menu";
 import Switch from "@mui/material/Switch";
-import React from "react";
+import React, { useEffect } from "react";
+import {
+  getNotificationPreference,
+  updateNotificationPreference,
+} from "../http/notificationPreferenceAPI";
+import { useAuth } from "../contexts/AuthContext";
+import { useUser } from "../contexts/UserContext";
 
 // Logging out the user
 export default function NotificationPage() {
   const router = useRouter();
+  const { user } = useAuth();
+  const { userInfo } = useUser();
 
-  const SaveNotification = () => {};
+  React.useEffect(() => {
+    if (!userInfo) {
+      alert("User not found.");
+    }
+  }, [userInfo, router]);
 
   const [checkedActivityReminders, setActivityReminders] = React.useState(true);
   const [checkedMedicationReminders, setMedicationReminders] =
@@ -21,29 +33,105 @@ export default function NotificationPage() {
   const [checkedFoodIntakeReminders, setFoodIntakeReminders] =
     React.useState(true);
 
-  const handleActivityRemindersChange = (
+  const handleActivityRemindersChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setActivityReminders(event.target.checked);
+    try {
+      const data = {
+        activityReminders: checkedActivityReminders,
+        medicationReminders: checkedMedicationReminders,
+        appointmentReminders: checkedAppointmentReminders,
+        foodIntakeReminders: checkedFoodIntakeReminders,
+      };
+      const result = await updateNotificationPreference(data);
+      console.log("Notification preference for user updated:", result);
+    } catch (error) {
+      console.error("Error updating notification preference for user:", error);
+    }
   };
 
-  const handleMedicationRemindersChange = (
+  const handleMedicationRemindersChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setMedicationReminders(event.target.checked);
+    try {
+      const data = {
+        activityReminders: checkedActivityReminders,
+        medicationReminders: checkedMedicationReminders,
+        appointmentReminders: checkedAppointmentReminders,
+        foodIntakeReminders: checkedFoodIntakeReminders,
+      };
+      const result = await updateNotificationPreference(data);
+      console.log("Notification preference for user updated:", result);
+    } catch (error) {
+      console.error("Error updating notification preference for user:", error);
+    }
   };
 
-  const handleAppointmentRemindersChange = (
+  const handleAppointmentRemindersChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setAppointmentReminders(event.target.checked);
+    try {
+      const data = {
+        activityReminders: checkedActivityReminders,
+        medicationReminders: checkedMedicationReminders,
+        appointmentReminders: checkedAppointmentReminders,
+        foodIntakeReminders: checkedFoodIntakeReminders,
+      };
+      const result = await updateNotificationPreference(data);
+      console.log("Notification preference for user updated:", result);
+    } catch (error) {
+      console.error("Error updating notification preference for user:", error);
+    }
   };
 
-  const handleFoodIntakeRemindersChange = (
+  const handleFoodIntakeRemindersChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setFoodIntakeReminders(event.target.checked);
+    try {
+      const data = {
+        activityReminders: checkedActivityReminders,
+        medicationReminders: checkedMedicationReminders,
+        appointmentReminders: checkedAppointmentReminders,
+        foodIntakeReminders: checkedFoodIntakeReminders,
+      };
+      const result = await updateNotificationPreference(data);
+      console.log("Notification preference for user updated:", result);
+    } catch (error) {
+      console.error("Error updating notification preference for user:", error);
+    }
   };
+
+  // Retrieve notification preference information
+  useEffect(() => {
+    async function fetchNotificationPreference() {
+      try {
+        const userId = user?.uid || "";
+        const result = await getNotificationPreference();
+        console.log("Retrieved notification preference of user:", result);
+        if (result && result.data) {
+          setActivityReminders(result.data.activityReminders);
+          setMedicationReminders(result.data.medicationReminders);
+          setAppointmentReminders(result.data.appointmentReminders);
+          setFoodIntakeReminders(result.data.foodIntakeReminders);
+          console.log("Notification preference information all set!");
+        } else {
+          console.log(
+            "No notification preference settings found for this user in the database."
+          );
+        }
+      } catch (error) {
+        console.error(
+          "Error retrieving notification preference of user:",
+          error
+        );
+      }
+    }
+    fetchNotificationPreference();
+  }, [user]);
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">

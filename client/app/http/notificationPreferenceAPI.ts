@@ -1,9 +1,7 @@
 import { auth } from "../config/firebase";
 
 // Function to create a notification preference of a user
-export async function createNotificationPreference(
-  notificationPreferenceData: any
-): Promise<any> {
+export async function createNotificationPreference(): Promise<any> {
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
@@ -12,15 +10,23 @@ export async function createNotificationPreference(
     const uid = currentUser.uid;
     const token = await currentUser.getIdToken();
 
+    const dataToBeStringified = {
+      uid: uid,
+      activityReminders: true,
+      medicationReminders: true,
+      appointmentReminders: true,
+      foodIntakeReminders: true,
+    };
+
     const response = await fetch(
-      `http://localhost:8000/api/notifications/${uid}`,
+      `http://localhost:8000/api/notifications/user/${uid}`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(notificationPreferenceData),
+        body: JSON.stringify(dataToBeStringified),
       }
     );
     if (!response.ok) {
@@ -71,7 +77,6 @@ export async function getNotificationPreference(): Promise<any> {
 
 // Function to update notification preference of a user
 export async function updateNotificationPreference(
-  userID: string,
   updatedNotificationPreference: any
 ): Promise<any> {
   try {
@@ -79,10 +84,11 @@ export async function updateNotificationPreference(
     if (!currentUser) {
       throw new Error("No user is currently signed in.");
     }
+    const uid = currentUser.uid;
     const token = await currentUser.getIdToken();
 
     const response = await fetch(
-      `http://localhost:8000/api/notifications/${userID}`,
+      `http://localhost:8000/api/notifications/${uid}`,
       {
         method: "PUT",
         headers: {
@@ -94,7 +100,7 @@ export async function updateNotificationPreference(
     );
     if (!response.ok) {
       throw new Error(
-        `Failed to update notification preference for user ${userID}. HTTP Status: ${response.status}`
+        `Failed to update notification preference for user ${uid}. HTTP Status: ${response.status}`
       );
     }
     const data = await response.json();
