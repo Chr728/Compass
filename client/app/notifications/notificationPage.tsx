@@ -5,18 +5,23 @@ import { useRouter } from "next/navigation";
 import Button from "../components/Button";
 import Menu from "../components/Menu";
 import Switch from "@mui/material/Switch";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   getNotificationPreference,
   updateNotificationPreference,
   createNotificationPreference,
 } from "../http/notificationPreferenceAPI";
 import { useAuth } from "../contexts/AuthContext";
+import { Alert } from "@mui/material";
 
 // Logging out the user
 export default function NotificationPage() {
   const router = useRouter();
   const { user } = useAuth();
+
+  // Alerts
+  const [successAlert, setSuccessAlert] = useState(false);
+  const [errorAlert, setErrorAlert] = useState(false);
 
   const [checkedActivityReminders, setActivityReminders] = React.useState(true);
   const [checkedMedicationReminders, setMedicationReminders] =
@@ -96,8 +101,11 @@ export default function NotificationPage() {
       };
       const result = await updateNotificationPreference(data);
       console.log("Notification preference for user updated:", result);
+      setSuccessAlert(true);
+      console.log("TADKAISAJOA", successAlert);
     } catch (error) {
       console.error("Error updating notification preference for user:", error);
+      setErrorAlert(true);
     }
   };
 
@@ -154,6 +162,33 @@ export default function NotificationPage() {
             style={{ width: "50%" }}
             onClick={onSubmit}
           />
+        </div>
+        <div style={{ marginTop: 70 }}>
+          {/* Success Alert */}
+          {successAlert && (
+            <Alert
+              onClose={() => {
+                setSuccessAlert(false);
+              }}
+              variant="outlined"
+              severity="success"
+            >
+              Preference saved!
+            </Alert>
+          )}
+
+          {/* Error Alert */}
+          {errorAlert && (
+            <Alert
+              onClose={() => {
+                setErrorAlert(false);
+              }}
+              variant="outlined"
+              severity="error"
+            >
+              Preference failed to save!
+            </Alert>
+          )}
         </div>
         <div className="md:hidden">
           <Menu></Menu>
