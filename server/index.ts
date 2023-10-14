@@ -5,6 +5,7 @@ import userRoutes from './routes/userRoutes';
 import activityJournalRoutes from './routes/activityJournalRoutes';
 import speedDialRoutes from './routes/speedDialRoutes';
 import weightJournalRoutes from './routes/weightJournalRoutes';
+import moodJournalRoutes from './routes/moodJournalRoutes';
 import appointmentRoutes from './routes/appointmentRoutes';
 import notificationRoutes from './routes/notificationPreferenceRoutes';
 import Morgan from './middlewares/morgan';
@@ -22,6 +23,7 @@ app.use(Morgan);
 app.use(decodeToken);
 
 app.use('/api/journals/weight', weightJournalRoutes);
+app.use('/api/journals/mood', moodJournalRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/journals/activity', activityJournalRoutes);
