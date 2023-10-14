@@ -1,31 +1,31 @@
-import { auth } from '../config/firebase';
+import {auth} from '../config/firebase';
 
 export async function getUserProfile() {
-  try {
-    const currentUser = auth.currentUser;
-    if (!currentUser) {
-      throw new Error('No user is currently signed in.');
+    try {
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+            throw new Error('No user is currently signed in.');
+        }
+        const id = currentUser.uid;
+        const token = await currentUser.getIdToken();
+
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const userData = await response.json();
+        return userData.data;
+    } catch (error: any) {
+        throw new Error('Error fetching user profile');
     }
-    const id = currentUser.uid;
-    const token = await currentUser.getIdToken();
-
-    const response = await fetch(`http://localhost:8000/api/users/${id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    const userData = await response.json();
-    return userData.data;
-  } catch (error:any) {
-    throw new Error('Error fetching user profile');
-  }
 }
 
 export default getUserProfile;

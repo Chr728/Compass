@@ -11,7 +11,7 @@ export async function getWeightJournals(): Promise<any> {
     const token = await currentUser.getIdToken();
 
     const response = await fetch(
-      `http://localhost:8000/api/journals/weight/user/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/weight/user/${id}`,
       {
         method: 'GET',
         headers: {
@@ -20,13 +20,14 @@ export async function getWeightJournals(): Promise<any> {
         },
       }
     );
-    if (!response.ok) {
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
       throw new Error(
         `Failed to retrieve weight journals for user. HTTP Status: ${response.status}`
       );
     }
-    const data = await response.json();
-    return data;
   } catch (error) {
     console.error('Error fetching weight journals:', error);
     throw error;
@@ -43,7 +44,7 @@ export async function getWeightJournal(weightJournalId: string): Promise<any> {
     const token = await currentUser.getIdToken();
 
     const response = await fetch(
-      `http://localhost:8000/api/journals/weight/${weightJournalId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/weight/${weightJournalId}`,
       {
         method: 'GET',
         headers: {
@@ -78,7 +79,7 @@ export async function createWeightJournal(
     const token = await currentUser.getIdToken();
 
     const response = await fetch(
-      `http://localhost:8000/api/journals/weight/user/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/weight/user/${id}`,
       {
         method: 'POST',
         headers: {
@@ -114,7 +115,7 @@ export async function updateWeightJournal(
     const token = await currentUser.getIdToken();
 
     const response = await fetch(
-      `http://localhost:8000/api/journals/weight/${weightJournalId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/weight/${weightJournalId}`,
       {
         method: 'PUT',
         headers: {
@@ -149,7 +150,7 @@ export async function deleteWeightJournal(
     const token = await currentUser.getIdToken();
 
     const response = await fetch(
-      `http://localhost:8000/api/journals/weight/${weightJournalId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/weight/${weightJournalId}`,
       {
         method: 'DELETE',
         headers: {
@@ -157,10 +158,10 @@ export async function deleteWeightJournal(
         },
       }
     );
-    if (!response.ok) {
-      throw new Error(
-        `Failed to delete weight journal entry ${weightJournalId} for user. HTTP Status: ${response.status}`
-      );
+    if (response && response.status && !response.ok) {
+      throw new Error(`Failed to delete weight journal entry. HTTP Status: ${response.status}`);
+    } else if (response && response.status === 204) {
+      return { message: 'Weight journal entry deleted successfully' };
     }
     return { message: 'Weight journal entry deleted successfully' };
   } catch (error) {

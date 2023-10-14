@@ -79,58 +79,6 @@ export default function Profile() {
                 className="text-lg ml-0 font-sans text-darkgrey  font-bold text-[16px]"
                 style={{display: 'inline'}}
             >
-              Street Address :{' '}
-            </p>
-            <p
-                className="text-md ml-2 text-darkgrey"
-                style={{display: 'inline'}}
-            >
-              {profile.streetAddress}
-            </p>
-            <br></br>
-            <p
-                className="text-lg ml-0 font-sans text-darkgrey  font-bold text-[16px]"
-                style={{display: 'inline'}}
-            >
-              City:{' '}
-            </p>
-            <p
-                className="text-md ml-2 text-darkgrey"
-                style={{display: 'inline'}}
-            >
-              {profile.city}
-            </p>
-            <br></br>
-            <p
-                className="text-lg ml-0 font-sans text-darkgrey font-bold text-[16px]"
-                style={{display: 'inline'}}
-            >
-              Province:{' '}
-            </p>
-            <p
-                className="text-md ml-2 text-darkgrey"
-                style={{display: 'inline'}}
-            >
-              {profile.province}
-            </p>
-            <br></br>
-            <p
-                className="text-lg ml-0 font-sans text-darkgrey  font-bold text-[16px]"
-                style={{display: 'inline'}}
-            >
-              Postal Code :{' '}
-            </p>
-            <p
-                className="text-md ml-2 text-darkgrey"
-                style={{display: 'inline'}}
-            >
-              {profile.postalCode}
-            </p>
-            <br></br>
-            <p
-                className="text-lg ml-0 font-sans text-darkgrey  font-bold text-[16px]"
-                style={{display: 'inline'}}
-            >
               Phone number :{' '}
             </p>
             <p

@@ -59,7 +59,7 @@ const Navbar = () => {
           <li >
             <MdEditNote className="inline-block  text-lg " />
             <span className="home-text">
-              <Link href="#" className="hover:text-blue-200">
+              <Link href="/journals" className="hover:text-blue-200">
                 Journals
               </Link>
             </span>

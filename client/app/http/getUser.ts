@@ -1,6 +1,7 @@
 import { auth } from '../config/firebase';
 
 export async function getUser() {
+    const url = process.env.NEXT_PUBLIC_API_URL
     try {
         const currentUser = auth.currentUser;
         if (!currentUser) {
@@ -9,7 +10,7 @@ export async function getUser() {
         const id = currentUser.uid;
         const token = await currentUser.getIdToken();
 
-        const response = await fetch(`http://localhost:8000/api/users/${id}`, {
+        const response = await fetch(`${url}/api/users/${id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

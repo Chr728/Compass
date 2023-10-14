@@ -18,7 +18,7 @@ export async function getAppointments(userId: string): Promise<any>{
         }
         const token = await currentUser.getIdToken();
         const response = await fetch(
-            `http://localhost:8000/api/appointments/${userId}`, 
+            `${process.env.NEXT_PUBLIC_API_URL}/api/appointments/${userId}`,
             {
               method: 'GET',
               headers: {
@@ -49,7 +49,7 @@ export async function getAppointment(appointmentId: string ): Promise<any>{
     }
     const token = await currentUser.getIdToken();
     const response = await fetch(
-      `http://localhost:8000/api/appointments/single/${appointmentId}`, 
+      `${process.env.NEXT_PUBLIC_API_URL}/api/appointments/single/${appointmentId}`,
       {
         method: 'GET',
         headers: {
@@ -82,7 +82,7 @@ export async function createAppointment(userId: string, appointmentData: any): P
       const id = currentUser.uid;
       const token = await currentUser.getIdToken();
         const response = await fetch(
-          `http://localhost:8000/api/appointments/${userId}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/appointments/${userId}`,
           {
             method: 'POST',
             headers: {
@@ -115,7 +115,7 @@ export async function deleteAppointment(appointmentId: string): Promise<any>{
         }
         const token = await currentUser.getIdToken();
         const response = await fetch(
-          `http://localhost:8000/api/appointments/single/${appointmentId}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/appointments/single/${appointmentId}`,
           {
               method: 'DELETE',
               headers: {
@@ -128,8 +128,9 @@ export async function deleteAppointment(appointmentId: string): Promise<any>{
             `Failed to delete the appointment. HTTP Status: ${response.status}`
           );
         }
-        const data = await response.json();
-        return data;
+        // const data = await response.json();
+        // return data;
+        return { message: 'Appointment entry deleted successfully' };
       } catch (error) {
         console.error('Error deleting appointment', error);
         throw error;
@@ -145,7 +146,7 @@ export async function updateAppointment(appointmentId: string, appointmentData: 
     }
     const token = await currentUser.getIdToken();
     const response = await fetch(
-      `http://localhost:8000/api/appointments/single/${appointmentId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/appointments/single/${appointmentId}`,
       {
           method: 'PUT',
           headers: {

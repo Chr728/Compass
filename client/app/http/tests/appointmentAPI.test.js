@@ -1,0 +1,426 @@
+import { auth } from '../../config/firebase';
+import { getAppointments, getAppointment, createAppointment, updateAppointment, deleteAppointment } from '../appointmentAPI';
+
+//test the getAppointments function
+describe('getAppointments', () => {
+  beforeEach(() => {
+    global.fetch = jest.fn();
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  it('should fetch appointments for the user', async () => {
+    const mockUserId = '123';
+    const mockToken = 'mockToken';
+    const mockCurrentUser = {
+      uid: mockUserId,
+      getIdToken: jest.fn().mockResolvedValue(mockToken),
+    };
+  
+    Object.defineProperty(auth, 'currentUser', {
+      get: jest.fn().mockReturnValue(mockCurrentUser),
+    });
+  
+    const mockResponse = {
+      ok: true,
+      json: jest.fn().mockResolvedValue({}),
+    };
+    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = mockFetch;
+    
+    const result = await getAppointments(mockUserId);
+
+    expect(mockFetch).toHaveBeenCalledWith(`${process.env.NEXT_PUBLIC_API_URL}/api/appointments/${mockUserId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${mockToken}`,
+      },
+    });
+    expect(mockResponse.json).toHaveBeenCalled();
+    expect(result).toEqual({});
+  });
+
+  it('should throw an error if the user is not signed in', async () => {
+    Object.defineProperty(auth, 'currentUser', {
+      get: jest.fn().mockReturnValue(null),
+    });
+  
+    const mockResponse = {
+      ok: true,
+      json: jest.fn().mockResolvedValue({}),
+    };
+    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = mockFetch;
+
+    await expect(getAppointments()).rejects.toThrow('No user is currently signed in.');
+  });
+
+  it('should throw an error if the fetch request fails', async () => {
+    const mockUserId = '123';
+    const mockToken = 'mockToken';
+    const mockCurrentUser = {
+      uid: mockUserId,
+      getIdToken: jest.fn().mockResolvedValue(mockToken),
+    };
+  
+    Object.defineProperty(auth, 'currentUser', {
+      get: jest.fn().mockReturnValue(mockCurrentUser),
+    });
+
+    const mockErrorResponse = {
+      ok: false,
+    };
+    const mockErrorFetch = jest.fn().mockResolvedValue(mockErrorResponse);
+    global.fetch = mockErrorFetch;
+
+    await expect(getAppointments()).rejects.toThrow('Failed to retrieve appointment. HTTP Status: undefined');
+  });
+});
+
+//test the getAppointment function
+describe('getAppointment', () => {
+  beforeEach(() => {
+    global.fetch = jest.fn();
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  it('should get a user by ID', async () => {
+    const mockUser = { id: 1, name: 'John Doe', email: 'johndoe@example.com' };
+    const mockToken = 'mockToken';
+    const mockCurrentUser = {
+      uid: mockUser.id,
+      getIdToken: jest.fn().mockResolvedValue(mockToken),
+    };
+
+    Object.defineProperty(auth, 'currentUser', {
+      get: jest.fn().mockReturnValue(mockCurrentUser),
+    });
+
+    const mockResponse = {
+      ok: true,
+      json: jest.fn().mockResolvedValue({}),
+    };
+    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = mockFetch;
+
+    const userData = await getAppointment(mockUser.id);
+
+    expect(mockResponse.json).toHaveBeenCalled();
+    expect(mockFetch).toHaveBeenCalledWith(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/appointments/single/${mockUser.id}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${mockToken}`,
+        },
+        method: 'GET',
+      }
+      );
+  });
+
+  it('should throw an error if the user is not signed in', async () => {
+    Object.defineProperty(auth, 'currentUser', {
+      get: jest.fn().mockReturnValue(null),
+    });
+  
+    const mockResponse = {
+      ok: true,
+      json: jest.fn().mockResolvedValue({}),
+    };
+    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = mockFetch;
+
+    await expect(getAppointment()).rejects.toThrow('No user is currently signed in.');
+  });
+
+  it('should throw an error if the request fails', async () => {
+    const mockUserId = 1;
+    const mockToken = 'mockToken';
+    const mockCurrentUser = {
+      uid: mockUserId,
+      getIdToken: jest.fn().mockResolvedValue(mockToken),
+    };
+  
+    Object.defineProperty(auth, 'currentUser', {
+      get: jest.fn().mockReturnValue(mockCurrentUser),
+    });
+
+    const mockFetch = jest.fn().mockResolvedValue({
+      ok: false,
+      status: 500,
+    });
+    global.fetch.mockImplementation(mockFetch);
+
+    await expect(getAppointment(mockUserId)).rejects.toThrow(
+      `Failed to fetch the appointment data. HTTP Status: 500`
+    );
+    expect(mockFetch).toHaveBeenCalledWith(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/appointments/single/${mockUserId}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${mockToken}`,
+        },
+        method: 'GET',
+      });
+  });
+});
+
+//test the createAppointment function
+describe('createAppointment', () => {
+  beforeEach(() => {
+    global.fetch = jest.fn();
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  it('should create an appointment entry for the user', async () => {
+    const mockUserId = '123';
+    const mockAppointmentData = {
+      date: '2022-01-01',
+      time: '12:00:00',
+      appointmentWith: 'test doctor',
+      reason: 'test reason',
+      notes: 'Test appointment entry',
+    };
+
+    const mockToken = 'mockToken';
+    const mockCurrentUser = {
+      uid: mockUserId,
+      getIdToken: jest.fn().mockResolvedValue(mockToken),
+    };
+
+    Object.defineProperty(auth, 'currentUser', {
+      get: jest.fn().mockReturnValue(mockCurrentUser),
+    });
+
+    const mockResponse = {
+      ok: true,
+      json: jest.fn().mockResolvedValue(mockAppointmentData),
+    };
+    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = mockFetch;
+
+    const result = await createAppointment(mockUserId, mockAppointmentData);
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/appointments/${mockUserId}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${mockToken}`,
+        },
+        body: JSON.stringify(mockAppointmentData),
+      }
+    );
+    expect(result).toEqual(mockAppointmentData);
+  });
+
+  it('should throw an error if the appointment  entry creation fails', async () => {
+    const mockUserId = '123';
+    const mockAppointmentData = {
+      date: '2022-01-01',
+      time: '12:00:00',
+      appointmentWith: 'test doctor',
+      reason: 'test reason',
+      notes: 'Test appointment entry',
+    };
+    const mockToken = 'mockToken';
+    const mockCurrentUser = {
+      uid: mockUserId,
+      getIdToken: jest.fn().mockResolvedValue(mockToken),
+    };
+  
+    Object.defineProperty(auth, 'currentUser', {
+      get: jest.fn().mockReturnValue(mockCurrentUser),
+    });
+
+    const mockResponse = {
+      ok: false,
+      status: 500,
+    };
+    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = mockFetch;
+
+    await expect(createAppointment(mockUserId, mockAppointmentData)).rejects.toThrow(
+      `Failed to create appointment for user ${mockUserId}. HTTP Status: ${mockResponse.status}`
+    );
+  });
+});
+
+//test the updateAppointment function
+describe('updateAppointment', () => {
+  beforeEach(() => {
+    global.fetch = jest.fn();
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  it('should update an appointment  entry for the user', async () => {
+    const mockUserId = '123';
+    const mockAppointmentId = '456';
+    const mockUpdatedAppointmentData = {
+      date: '2022-01-01',
+      time: '12:00:00',
+      appointmentWith: 'test doctor',
+      reason: 'test reason',
+      notes: 'Test appointment entry',
+    };
+    const mockToken = 'mockToken';
+    const mockCurrentUser = {
+      uid: mockUserId,
+      getIdToken: jest.fn().mockResolvedValue(mockToken),
+    };
+  
+    Object.defineProperty(auth, 'currentUser', {
+      get: jest.fn().mockReturnValue(mockCurrentUser),
+    });
+
+    const mockResponse = {
+      ok: true,
+      json: jest.fn().mockResolvedValue(mockUpdatedAppointmentData),
+    };
+    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = mockFetch;
+
+    const result = await updateAppointment(
+      mockUserId,
+      mockAppointmentId,
+      mockUpdatedAppointmentData
+    );
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/appointments/single/${mockUserId}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${mockToken}`,
+        },
+        body: "\"456\"",
+      }
+    );
+    expect(result).toEqual(mockUpdatedAppointmentData);
+  });
+
+  it('should throw an error if the appointment entry update fails', async () => {
+    const mockUserId = '123';
+    const mockAppointmentId = '456';
+    const mockUpdatedAppointmentData = {
+      date: '2022-01-01',
+      time: '12:00:00',
+      appointmentWith: 'test doctor',
+      reason: 'test reason',
+      notes: 'Test appointment entry',
+    };
+    const mockToken = 'mockToken';
+    const mockCurrentUser = {
+      uid: mockUserId,
+      getIdToken: jest.fn().mockResolvedValue(mockToken),
+    };
+  
+    Object.defineProperty(auth, 'currentUser', {
+      get: jest.fn().mockReturnValue(mockCurrentUser),
+    });
+
+    const mockResponse = {
+      ok: false,
+      status: 500,
+    };
+    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = mockFetch;
+
+    await expect(
+      updateAppointment(mockAppointmentId, mockUpdatedAppointmentData)
+    ).rejects.toThrow(
+      `Failed to update the appointment. HTTP Status: ${mockResponse.status}`
+    );
+  });
+});
+
+//test the deleteAppointment function
+describe('deleteAppointment', () => {
+  beforeEach(() => {
+    global.fetch = jest.fn();
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  it('should delete an appointment entry for the user', async () => {
+    const mockUserId = '123';
+    const mockToken = 'mockToken';
+    const mockAppointmentId = '1';
+
+    const mockCurrentUser = {
+      uid: mockUserId,
+      getIdToken: jest.fn().mockResolvedValue(mockToken),
+    };
+
+    const mockResponse = {
+      ok: true,
+      status: 204,
+    };
+    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = mockFetch;
+
+    Object.defineProperty(auth, 'currentUser', {
+      get: jest.fn().mockReturnValue(mockCurrentUser),
+    });
+
+    const result = await deleteAppointment(mockAppointmentId);
+
+    expect(mockFetch).toHaveBeenCalledWith(`${process.env.NEXT_PUBLIC_API_URL}/api/appointments/single/${mockAppointmentId}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${mockToken}`,
+      },
+    });
+    expect(result).toEqual({ message: 'Appointment entry deleted successfully' });
+  });
+
+  it('should throw an error if the appointment entry deletion fails', async () => {
+    const mockUserId = '123';
+    const mockToken = 'mockToken';
+    const mockAppointmentId = '1';
+  
+    const mockCurrentUser = {
+      uid: mockUserId,
+      getIdToken: jest.fn().mockResolvedValue(mockToken),
+    };
+  
+    const mockResponse = {
+      ok: false,
+      status: 204,
+    };
+    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = jest.fn().mockImplementation(() => Promise.resolve(mockResponse));
+  
+    Object.defineProperty(auth, 'currentUser', {
+      get: jest.fn().mockReturnValue(mockCurrentUser),
+    });
+
+    const mockErrorResponse = {
+      ok: false,
+      status: 500,
+    };
+    const mockErrorFetch = jest.fn().mockResolvedValue(mockErrorResponse);
+    global.fetch = mockErrorFetch;
+  
+    await expect(deleteAppointment(mockAppointmentId)).rejects.toThrow(
+      `Failed to delete the appointment. HTTP Status: ${mockErrorResponse.status}`
+    );
+  });
+});

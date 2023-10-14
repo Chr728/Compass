@@ -5,13 +5,23 @@ import { useRouter } from "next/navigation";
 import Button from "../components/Button";
 import Menu from "../components/Menu";
 import Switch from "@mui/material/Switch";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import {
+  getNotificationPreference,
+  updateNotificationPreference,
+  createNotificationPreference,
+} from "../http/notificationPreferenceAPI";
+import { useAuth } from "../contexts/AuthContext";
+import { Alert } from "@mui/material";
 
 // Logging out the user
 export default function NotificationPage() {
   const router = useRouter();
+  const { user } = useAuth();
 
-  const SaveNotification = () => {};
+  // Alerts
+  const [successAlert, setSuccessAlert] = useState(false);
+  const [errorAlert, setErrorAlert] = useState(false);
 
   const [checkedActivityReminders, setActivityReminders] = React.useState(true);
   const [checkedMedicationReminders, setMedicationReminders] =
@@ -21,28 +31,82 @@ export default function NotificationPage() {
   const [checkedFoodIntakeReminders, setFoodIntakeReminders] =
     React.useState(true);
 
-  const handleActivityRemindersChange = (
+  const handleActivityRemindersChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setActivityReminders(event.target.checked);
   };
 
-  const handleMedicationRemindersChange = (
+  const handleMedicationRemindersChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setMedicationReminders(event.target.checked);
   };
 
-  const handleAppointmentRemindersChange = (
+  const handleAppointmentRemindersChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setAppointmentReminders(event.target.checked);
   };
 
-  const handleFoodIntakeRemindersChange = (
+  const handleFoodIntakeRemindersChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setFoodIntakeReminders(event.target.checked);
+  };
+
+  // Retrieve notification preference information, if it doesnt exist, create it
+  useEffect(() => {
+    async function fetchNotificationPreference() {
+      try {
+        const userId = user?.uid || "";
+        const result = await getNotificationPreference();
+        console.log("Retrieved notification preference of user:", result);
+        if (result && result.data) {
+          console.log(result.data.activityReminders);
+          setActivityReminders(result.data.activityReminders);
+          setMedicationReminders(result.data.medicationReminders);
+          setAppointmentReminders(result.data.appointmentReminders);
+          setFoodIntakeReminders(result.data.foodIntakeReminders);
+          console.log("Notification preference information all set!");
+        }
+      } catch (error) {
+        console.log("Error retrieving notification preference of user:", error);
+        console.log(
+          "No notification preference settings found for this user in the database. Attempting to create an entry for the user."
+        );
+        // Notification preference doesn't exist, create it
+        try {
+          const createdResult = await createNotificationPreference(); // Assuming createNotificationPreference handles creation
+          console.log("Notification preference created:", createdResult);
+          location.reload();
+        } catch (error) {
+          console.error(
+            "Error creating notification preference of user:",
+            error
+          );
+        }
+      }
+    }
+    fetchNotificationPreference();
+  }, []);
+
+  const onSubmit = async () => {
+    try {
+      const data = {
+        activityReminders: checkedActivityReminders,
+        medicationReminders: checkedMedicationReminders,
+        appointmentReminders: checkedAppointmentReminders,
+        foodIntakeReminders: checkedFoodIntakeReminders,
+      };
+      const result = await updateNotificationPreference(data);
+      console.log("Notification preference for user updated:", result);
+      setSuccessAlert(true);
+      console.log("TADKAISAJOA", successAlert);
+    } catch (error) {
+      console.error("Error updating notification preference for user:", error);
+      setErrorAlert(true);
+    }
   };
 
   return (
@@ -92,7 +156,39 @@ export default function NotificationPage() {
           </span>
         </div>
         <div className="text-center mt-[100px]">
-          <Button type="submit" text="Save" style={{ width: "50%" }} />
+          <Button
+            type="submit"
+            text="Save"
+            style={{ width: "50%" }}
+            onClick={onSubmit}
+          />
+        </div>
+        <div style={{ marginTop: 70 }}>
+          {/* Success Alert */}
+          {successAlert && (
+            <Alert
+              onClose={() => {
+                setSuccessAlert(false);
+              }}
+              variant="outlined"
+              severity="success"
+            >
+              Preference saved!
+            </Alert>
+          )}
+
+          {/* Error Alert */}
+          {errorAlert && (
+            <Alert
+              onClose={() => {
+                setErrorAlert(false);
+              }}
+              variant="outlined"
+              severity="error"
+            >
+              Preference failed to save!
+            </Alert>
+          )}
         </div>
         <div className="md:hidden">
           <Menu></Menu>
