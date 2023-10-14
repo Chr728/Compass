@@ -10,7 +10,7 @@ export async function getMoodJournals(): Promise<any> {
     const token = await currentUser.getIdToken();
 
     const response = await fetch(
-      `http://localhost:8000/api/journals/mood/user/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/mood/user/${id}`,
       {
         method: 'GET',
         headers: {
@@ -38,7 +38,7 @@ export async function getMoodJournal(moodJournalId: string): Promise<any> {
     const token = await currentUser.getIdToken();
 
     const response = await fetch(
-      `http://localhost:8000/api/journals/mood/${moodJournalId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/mood/${moodJournalId}`,
       {
         method: 'GET',
         headers: {
@@ -67,7 +67,7 @@ export async function createMoodJournal(moodJournal: any): Promise<any> {
     const token = await currentUser.getIdToken();
 
     const response = await fetch(
-      `http://localhost:8000/api/journals/mood/user/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/mood/user/${id}`,
       {
         method: 'POST',
         headers: {
@@ -100,7 +100,7 @@ export async function updateMoodJournal(
     const token = await currentUser.getIdToken();
 
     const response = await fetch(
-      `http://localhost:8000/api/journals/mood/${moodJournalId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/mood/${moodJournalId}`,
       {
         method: 'PUT',
         headers: {
@@ -130,7 +130,7 @@ export async function deleteMoodJournal(moodJournalId: string): Promise<any> {
     const token = await currentUser.getIdToken();
 
     const response = await fetch(
-      `http://localhost:8000/api/journals/mood/${moodJournalId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/mood/${moodJournalId}`,
       {
         method: 'DELETE',
         headers: {
