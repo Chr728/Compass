@@ -28,7 +28,7 @@ app.use("/api/appointments", appointmentRoutes);
 app.use("/api/journals/activity", activityJournalRoutes);
 app.use("/api/speed-dials", speedDialRoutes);
 app.use("/api/notifications", notificationRoutes);
-app.use("/api/foodIntake", foodIntakeJournalRoutes);
+app.use("/api/journals/foodIntake", foodIntakeJournalRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
