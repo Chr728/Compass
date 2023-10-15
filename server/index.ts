@@ -7,6 +7,7 @@ import speedDialRoutes from "./routes/speedDialRoutes";
 import weightJournalRoutes from "./routes/weightJournalRoutes";
 import appointmentRoutes from "./routes/appointmentRoutes";
 import notificationRoutes from "./routes/notificationPreferenceRoutes";
+import foodIntakeJournalRoutes from './routes/foodIntakeJournalRoutes';
 import Morgan from "./middlewares/morgan";
 import { Logger } from "./middlewares/logger";
 import decodeToken from "./middlewares/decodeToken";
@@ -27,6 +28,7 @@ app.use("/api/appointments", appointmentRoutes);
 app.use("/api/journals/activity", activityJournalRoutes);
 app.use("/api/speed-dials", speedDialRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/foodIntake", foodIntakeJournalRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
