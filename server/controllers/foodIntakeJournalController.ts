@@ -96,7 +96,7 @@ export const getFoodIntakeJournal = async (req: Request,res: Response
                 message: 'Food intake journal not found, invalid journal id.',
               });
         }
-        
+
         return res.status(200).json({
             status: 'SUCCESS',
             data: foodIntakeJournal
@@ -115,6 +115,55 @@ export const updateFoodIntakeJournal = async (
     req: Request,
     res: Response
 ) => {
+    try {
+        const journalId = req.params.id;
+        const foodIntakeJournal = await db.FoodIntakeJournal.findOne({
+            where: {
+                id: journalId
+            }
+        });
+
+        if(!foodIntakeJournal) {
+            return res.status(404).json({
+                status: 'ERROR',
+                message: 'Food intake journal not found, invalid journal id.',
+            });
+        }
+
+        const { date, time, foodName, mealType, servingNumber, notes } = req.body;
+
+        await db.FoodIntakeJournal.update({
+            date,
+            time,
+            foodName,
+            mealType,
+            servingNumber,
+            notes
+        }, {
+            where: {
+                id: journalId
+            }
+        })
+
+        const updatedFoodIntakeJournal = await db.FoodIntakeJournal.findOne({
+            where: {
+                id: journalId
+            }
+        });
+
+        return res.status(200).json({
+            status: 'SUCCESS',
+            data: updatedFoodIntakeJournal
+        });
+
+    } catch (error) {
+        Logger.error(`Error occurred while updating food intake journals: ${error}`);
+        return res.status(400).json({
+            status: 'ERROR',
+            message: `Error updating food intake journals: ${error}`,
+        });
+    }
+
 };
 
 // Delete one food intake Journal of a user
@@ -122,4 +171,37 @@ export const deleteFoodIntakeJournal = async (
     req: Request,
     res: Response
 ) => {
+    try {
+        const journalId = req.params.id;
+        const foodIntakeJournal = await db.FoodIntakeJournal.findOne({
+            where: {
+                id: journalId
+            }
+        });
+
+        if (!foodIntakeJournal) {
+            return res.status(404).json({
+                status: 'NOT_FOUND',
+                message: 'Food journal entry not found',
+            });
+        }
+
+        await db.FoodIntakeJournal.destroy({
+            where: {
+                id: journalId
+            }
+        });
+
+        return res.status(200).json({
+            status: 'SUCCESS',
+            message: 'Food journal entry deleted successfully',
+        });
+
+    } catch (error) {
+        Logger.error(`Error occurred while deleting food intake journals: ${error}`);
+        return res.status(400).json({
+            status: 'ERROR',
+            message: `Error deleting food intake journals: ${error}`,
+        });
+    }
 };
