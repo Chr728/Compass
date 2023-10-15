@@ -228,7 +228,6 @@ const mockedDecodedToken = {
         .get('/api/journals/foodIntake/1')
         .send('')
         .set({ Authorization: 'Bearer token' });
-        // npm run test foodIntakeJournalController.test.ts
       expect(db.FoodIntakeJournal.findOne).toHaveBeenCalledTimes(1);
       expect(res.status).toBe(400);
       expect(res.body.status).toBe('ERROR');
