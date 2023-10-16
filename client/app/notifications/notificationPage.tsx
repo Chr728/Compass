@@ -190,9 +190,6 @@ export default function NotificationPage() {
             </Alert>
           )}
         </div>
-        <div className="md:hidden">
-          <Menu></Menu>
-        </div>
       </div>
     </div>
   );
