@@ -46,7 +46,6 @@ export default function AddMoodEntry() {
             notes: '',
           },
           onSubmit: async (values) => {
-              console.log("onsubmit called");
               const moodData = {
                 howAreYou: values.howAreYou,
                 stressSignals: values.stressSignals,
@@ -54,7 +53,7 @@ export default function AddMoodEntry() {
                 notes: values.notes
               }
               await createMoodJournal(moodData);
-              router.push('/tpage')
+              router.push('/moodjournal')
           },
 
           validate: async (values) => {
@@ -125,10 +124,10 @@ export default function AddMoodEntry() {
       <span 
         className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4">
       <Link 
-      href="">
+      href="/moodjournal">
         <Image
           src="/icons/LeftArrow.svg"
-          alt="LeftArrow icon"
+          alt="Left Arrow icon"
           width={10}
           height={10}
           className="mr-4"
@@ -200,7 +199,7 @@ export default function AddMoodEntry() {
                 onClick={ ( )=> moodClick("good")}>
                     <Image
                         src="/icons/smile.svg"
-                        alt="smile icon"
+                        alt="Smile icon"
                         width={10}
                         height={10}
                         className="ml-2 text-grey inline-block"
@@ -214,7 +213,7 @@ export default function AddMoodEntry() {
                 onClick={ ( )=> moodClick("sad")}>
                     <Image
                         src="/icons/sad.svg"
-                        alt="sad icon"
+                        alt="Sad icon"
                         width={10}
                         height={10}
                         className="ml-2 text-grey inline-block"
@@ -548,7 +547,7 @@ export default function AddMoodEntry() {
                     type="button"
                     text="Cancel"
                     style={{ width:"140px", backgroundColor: "var(--Red, #FF7171)" }}
-                    onClick={() => router.push("")}
+                    onClick={() => router.push("/moodjournal")}
                 />
                 <Button type="submit" text="Submit" style={{ width: "140px" }} />
         </div>
