@@ -1,32 +1,50 @@
+'use client';
+import Button from '@/app/components/Button';
+import { useAuth } from '@/app/contexts/AuthContext';
+import { formatDateYearMonthDate } from '@/app/helpers/utils/datetimeformat';
+import { getMoodJournal, updateMoodJournal } from '@/app/http/moodJournalAPI';
+import Custom403 from '@/app/pages/403';
+import { useFormik } from 'formik';
+import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import Menu from '../../components/Menu';
+import Input from '@/app/components/Input';
+import Image from 'next/image';
+import Link from 'next/link';
 
-'use client'
-import Button from "@/app/components/Button";
-import Input from "@/app/components/Input";
-import { useAuth } from "@/app/contexts/AuthContext";
-import Custom403 from "@/app/pages/403";
-import { useFormik } from "formik";
-import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
-import Menu from "../../components/Menu";
-import { createMoodJournal } from "@/app/http/moodJournalAPI";
-
-export default function AddMoodEntry() {
-    const router = useRouter();
+export default function UpdateMoodEntry(  {params: { updateEntryId } } : { params: { updateEntryId: string }}) {
     const { user } = useAuth();
+    const router = useRouter();
+    const [data, setData] = useState<any>();
     const [selectedMood, setSelectedMood] = useState<string>('');
+
+    async function updateMoodEntry() {
+        try {
+           const moodData = await getMoodJournal(updateEntryId);
+           const updatedStressSignals = JSON.parse(moodData.data.stressSignals);
+           const updatedMoodData = {
+            ...moodData.data,
+            stressSignals: updatedStressSignals, 
+           }
+           setData(updatedMoodData);
+        } catch (error) {
+            console.log('Error fetching appointment');
+        }
+    }
 
     useEffect(() => {
         if (!user){
           router.push("/login")
+        }
+
+        if(user){
+            updateMoodEntry();
         }
     }, [user]);
     
     if (!user) {
       return <div><Custom403/></div>
     }
-    
     const formik = useFormik({
         initialValues: {
             howAreYou:'',
@@ -53,7 +71,7 @@ export default function AddMoodEntry() {
                 date: values.date,
                 notes: values.notes
               }
-              await createMoodJournal(moodData);
+              await updateMoodJournal(updateEntryId, moodData);
               router.push('/tpage')
           },
 
@@ -114,14 +132,25 @@ export default function AddMoodEntry() {
         },
     });
 
+    useEffect(() =>{
+        const  { setValues } = formik;
+        setValues({
+            howAreYou: data?.howAreYou || '',
+            stressSignals: data?.stressSignals || '',
+            date: formatDateYearMonthDate(data?.date || '') || '',
+            notes: data?.notes || '',
+        });
+        setSelectedMood(data?.howAreYou);
+      }, [data])
+
     const moodClick = (mood: string): void => {
         formik.setFieldValue("howAreYou", mood);
-
+        setSelectedMood(mood);
     }
-
+console.log(selectedMood);
   return (
     <div 
-    className="bg-eggshell min-h-screen flex flex-col min-w-full">
+    className="bg-eggshell min-h-screen flex flex-col">
       <span 
         className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4">
       <Link 
@@ -135,7 +164,7 @@ export default function AddMoodEntry() {
           style={{ width: 'auto', height: 'auto' }}
         />
       </Link>
-      Add an Entry - Mood
+      Edit an Entry - Mood
     </span>
     <p 
             className="text-grey font-sans text-[16px] ml-4 mt-2">
@@ -163,19 +192,18 @@ export default function AddMoodEntry() {
                     </p>
                 )}
             </div>
-           
   
-        <div className="flex flex-col p-2 rounded-2xl w-full text-darkgrey bg-white shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]">
-            <div>
+        <div className="flex flex-col rounded-2xl w-full text-darkgrey bg-white shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]">
+            <div className="p-2">
                 <Image
                     src="/icons/downArrow.svg"
                     alt="Down Arrow icon"
                     width={10}
                     height={10}
                     className="ml-2 text-grey inline-block"
-                    style={{ width: 'auto', height: 'auto', marginLeft: '4px' }}
+                    style={{ width: 'auto', height: 'auto' }}
                 />
-                <p className="inline-block m-2">
+                <p className="inline-block pl-2">
                     How are you?
                 </p>
             </div>
@@ -547,7 +575,7 @@ export default function AddMoodEntry() {
                 <Button
                     type="button"
                     text="Cancel"
-                    style={{ width:"140px", backgroundColor: "var(--Red, #FF7171)" }}
+                    style={{ width: "140px", backgroundColor: "var(--Red, #FF7171)" }}
                     onClick={() => router.push("")}
                 />
                 <Button type="submit" text="Submit" style={{ width: "140px" }} />
@@ -565,4 +593,3 @@ export default function AddMoodEntry() {
   </div> 
   )
 }
-
