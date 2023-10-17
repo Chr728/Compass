@@ -1,18 +1,35 @@
+'use client'
 import React from 'react';
+import {usePathname} from 'next/navigation';
 import {
   MdOutlineHome,
   MdOutlineAddBox,
   MdEditNote,
   MdOutlineMessage,
   MdOutlineSettings,
+  MdHome,
+  MdAddBox,
+  MdNote,
+  MdMessage,
+  MdSettings,
 } from 'react-icons/md';
 import Link from 'next/link';
 
+
+const navs = [
+  { href: '/tpage', label: 'Home', iconActive: <MdHome/>, iconInactive: <MdOutlineHome/> },
+  { href: '/health', label: 'Health', iconActive: <MdAddBox  />, iconInactive: <MdOutlineAddBox  /> },
+  { href: '/journals', label: 'Journals', iconActive: <MdNote  />, iconInactive: <MdEditNote  /> },
+  { href: '/contact', label: 'Contact', iconActive: <MdMessage  />, iconInactive: <MdOutlineMessage  /> },
+  { href: '/settings', label: 'Settings', iconActive: <MdSettings  />, iconInactive: <MdOutlineSettings  /> },
+];
+
 const Navbar = () => {
+  const pathname = usePathname();
   return (
-    <nav className="bg-eggshell fixed bottom-0 left-0 w-full md:w-72 lg:w-80 md:left-0 md:h-full md:flex md:flex-col md:rounded-3xl md:justify-start md:items-start">
-      <style jsx>
-        {`
+      <nav className="border-t-[0.1px] border-grey bg-white fixed bottom-0 w-full md:w-72 lg:w-80 md:left-0 md:h-full md:flex md:flex-col md:rounded-3xl md:justify-center md:items-center pb-4">
+        <style jsx>
+          {`
           @media (min-width: 768px) {
             /* Hide the menu on medium (tablet) screens and above */
             .menu-hidden {
@@ -20,79 +37,33 @@ const Navbar = () => {
             }
           }
         `}
-      </style>
-      <div className="text-darkgrey text-[14px] md:text-[16px]  md:font-sans  text-center px-8 py-6">
-        <ul className="flex justify-around md:flex-col md:justify-start md:items-start">
-          <li className="md:ml-0 md:mb-4 md:mt-2 flex items-center">
-            <img
-              src="/icons/compass-removebg.png"
-              alt="Compass"
-              className="float-left hidden  text-lg  mr-2"
-            />
-          </li>
-
-          <div className="grid grid-cols-5 gap-6 place-items-center ml-1 menu-hidden">
-          <div>
-          <li>
-            <MdOutlineHome className="inline-block text-lg" />
-            <span className="home-text">
-              {' '}
-              <Link href="/tpage" className="hover:text-blue-200">
-                Home
-              </Link>
-            </span>
-          </li>
-          </div>
-
-          <div>
-          <li>
-            <MdOutlineAddBox className="inline-block  text-lg" />
-            <span className="home-text">
-              <Link href="#" className="hover:text-blue-200">
-                Health
-              </Link>
-            </span>
-          </li>
-          </div>
-
-          <div>
-          <li >
-            <MdEditNote className="inline-block  text-lg " />
-            <span className="home-text">
-              <Link href="/journals" className="hover:text-blue-200">
-                Journals
-              </Link>
-            </span>
-          </li>
-          </div>
-
-          <div>
-          <li >
-            <MdOutlineMessage className="inline-block  text-lg" />
-
-            <span className="home-text">
-              {' '}
-              <Link href="#" className="hover:text-blue-200">
-                Contact
-              </Link>
-            </span>
-          </li>
-          </div>
-
-          <div>
-          <li>
-            <MdOutlineSettings className="inline-block  text-lg lg:text-3xl" />
-            <span className="home-text">
-              <Link href="/settings" className="hover:text-blue-200" id="settings">
-                Settings
-              </Link>
-            </span>
-          </li>
-          </div>
-          </div>
-        </ul>
-      </div>
-    </nav>
+        </style>
+        <div className="text-darkgrey text-[14px] md:text-[16px]  md:font-sans  text-center py-3">
+          <ul className="flex justify-around md:flex-col md:justify-start md:items-start px-8">
+            <li className="md:ml-0 md:mb-4 md:mt-2 flex items-center">
+              <img
+                  src="/icons/compass-removebg.png"
+                  alt="Compass"
+                  className="float-left hidden  text-lg  mr-2"
+              />
+            </li>
+            <div className="flex justify-center  menu-hidden w-full space-x-3">
+              {navs.map((nav) => (
+                  <li key={nav.href} className={'w-full border-1 border-blue'}>
+                        <span className="home-text">
+                            <Link href={nav.href} className="hover:text-blue-200 flex flex-col items-center">
+                                <div className={'text-3xl'}>
+                                     {pathname === nav.href ? nav.iconActive : nav.iconInactive}
+                                </div>
+                                <span className={`text-sm font-light`}>{nav.label}</span>
+                            </Link>
+                        </span>
+                  </li>
+              ))}
+            </div>
+          </ul>
+        </div>
+      </nav>
   );
 };
 

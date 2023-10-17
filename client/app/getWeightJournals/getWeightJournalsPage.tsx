@@ -134,11 +134,6 @@ export default function GetWeightJournalsPage() {
 
   </div>
 )}
-<div className="mt-5 ">
-        <div className={`xl:max-w-[1280px] w-full  menu-container`}>
-          <Menu />
-        </div>
-      </div>
 </div>
   );
 }
