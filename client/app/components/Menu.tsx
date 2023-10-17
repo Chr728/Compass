@@ -27,7 +27,7 @@ const navs = [
 const Navbar = () => {
   const pathname = usePathname();
   return (
-      <nav className=" bg-white fixed bottom-0 w-full md:w-72 lg:w-80 md:left-0 md:h-full md:flex md:flex-col md:rounded-3xl md:justify-center md:items-center pb-4">
+      <nav className="border-t-[0.1px] border-grey bg-white fixed bottom-0 w-full md:w-72 lg:w-80 md:left-0 md:h-full md:flex md:flex-col md:rounded-3xl md:justify-center md:items-center pb-4">
         <style jsx>
           {`
           @media (min-width: 768px) {
