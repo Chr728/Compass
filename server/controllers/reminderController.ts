@@ -1,15 +1,20 @@
 import { Request, Response } from "express";
 import { Logger } from "../middlewares/logger";
 import db from "../models";
+import moment = require("moment-timezone");
 
 export const getUserReminders = async (req: Request, res: Response) => {
   try {
     const userUID = req.params.uid;
+    const currenttime = moment.tz("America/Toronto").format("HH:mm:00");
+    const currentdate = moment.tz("America/Toronto").format("YYYY-MM-DD");
 
     //Get appointment of users for preperaing reminder
     const userAppointments = await db.Appointment.findAll({
       where: {
         uid: userUID,
+        date: currentdate,
+        time: currenttime,
       },
     });
 
@@ -17,6 +22,8 @@ export const getUserReminders = async (req: Request, res: Response) => {
     const userActivityJournals = await db.ActivityJournal.findAll({
       where: {
         uid: userUID,
+        date: currentdate,
+        time: currenttime,
       },
     });
 
@@ -24,6 +31,8 @@ export const getUserReminders = async (req: Request, res: Response) => {
     const userFoodIntakeJournals = await db.FoodIntakeJournal.findAll({
       where: {
         uid: userUID,
+        date: currentdate,
+        time: currenttime,
       },
     });
 
@@ -31,6 +40,8 @@ export const getUserReminders = async (req: Request, res: Response) => {
     const userGlucoseMeasurement = await db.GlucoseMeasurement.findAll({
       where: {
         uid: userUID,
+        mealTime: currenttime,
+        date: currentdate,
       },
     });
 
@@ -38,6 +49,8 @@ export const getUserReminders = async (req: Request, res: Response) => {
     const userInsulinDosage = await db.InsulinDosage.findAll({
       where: {
         uid: userUID,
+        date: currentdate,
+        time: currenttime,
       },
     });
 
@@ -45,6 +58,7 @@ export const getUserReminders = async (req: Request, res: Response) => {
     const userMedication = await db.Medication.findAll({
       where: {
         uid: userUID,
+        time: currenttime,
       },
     });
 
