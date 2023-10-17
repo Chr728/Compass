@@ -9,6 +9,11 @@ export const metadata: Metadata = {
     description: "Compass health app",
     manifest: "/manifest.json",
     themeColor: "#fff",
+    viewport: {
+        initialScale: 1,
+        maximumScale: 1,
+        userScalable: false,
+    }
 };
 
 export default function RootLayout({
