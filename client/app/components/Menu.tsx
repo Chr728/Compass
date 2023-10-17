@@ -27,7 +27,7 @@ const navs = [
 const Navbar = () => {
   const pathname = usePathname();
   return (
-      <nav className="bg-white fixed bottom-0 left-0 w-full md:w-72 lg:w-80 md:left-0 md:h-full md:flex md:flex-col md:rounded-3xl md:justify-center md:items-center">
+      <nav className=" bg-white fixed bottom-0 w-full md:w-72 lg:w-80 md:left-0 md:h-full md:flex md:flex-col md:rounded-3xl md:justify-center md:items-center">
         <style jsx>
           {`
           @media (min-width: 768px) {
@@ -38,8 +38,8 @@ const Navbar = () => {
           }
         `}
         </style>
-        <div className="text-darkgrey text-[14px] md:text-[16px]  md:font-sans  text-center px-8 py-6">
-          <ul className="flex justify-around md:flex-col md:justify-start md:items-start">
+        <div className="text-darkgrey text-[14px] md:text-[16px]  md:font-sans  text-center py-3">
+          <ul className="flex justify-around md:flex-col md:justify-start md:items-start px-8">
             <li className="md:ml-0 md:mb-4 md:mt-2 flex items-center">
               <img
                   src="/icons/compass-removebg.png"
@@ -47,15 +47,15 @@ const Navbar = () => {
                   className="float-left hidden  text-lg  mr-2"
               />
             </li>
-            <div className="flex place-items-center menu-hidden space-x-5">
+            <div className="flex justify-center  menu-hidden w-full space-x-3">
               {navs.map((nav) => (
-                  <li key={nav.href}>
+                  <li key={nav.href} className={'w-full border-1 border-blue'}>
                         <span className="home-text">
                             <Link href={nav.href} className="hover:text-blue-200 flex flex-col items-center">
-                                <div className={'text-2xl'}>
+                                <div className={'text-3xl'}>
                                      {pathname === nav.href ? nav.iconActive : nav.iconInactive}
                                 </div>
-                                <span className={`text-lg`}>{nav.label}</span>
+                                <span className={`text-sm font-light`}>{nav.label}</span>
                             </Link>
                         </span>
                   </li>
