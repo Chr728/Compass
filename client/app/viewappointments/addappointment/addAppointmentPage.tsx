@@ -215,8 +215,6 @@ export default function AddAppointmentPage() {
           <Button type="submit" text="Submit" style={{ width: "140px" }} />
         </div>
       </form>
-
-      <Menu />
     </div>
   );
 }

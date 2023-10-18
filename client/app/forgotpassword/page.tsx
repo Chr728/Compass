@@ -19,7 +19,6 @@ export default function ForgotPassword() {
   const formik = useFormik({
     initialValues: {
       email: "",
-      password: "",
     },
     onSubmit: async (values) => {
       try {
