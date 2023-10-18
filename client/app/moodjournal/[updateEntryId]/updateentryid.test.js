@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-// import UpdateMoodEntry from './page';
+
 
 
 const mockRouter = jest.fn();
@@ -13,40 +13,8 @@ jest.mock("next/navigation", () => ({
       }
   }
 }));
-
-// describe("User not logged in", () => {
-
-//   let UpdateMoodEntry;
-//   beforeEach(() => {
-//     jest.mock("../../contexts/AuthContext", () => {
-//       return {
-//         useAuth: () => {
-//           return {
-//             user: null
-//           }
-         
-//         }
-//       };
-//     });
-//     UpdateMoodEntry = require('./page').default;
-//   })
-
-//   afterEach(() => {
-//     jest.clearAllMocks();
-//   })
  
-//   it("Error page shown", async () => {
-//     render( <UpdateMoodEntry params = { { updateEntryId: "10" } } /> );
-
-//       const text = await screen.findByText("Error 403 - Access Forbidden"); 
-//     expect(text).toBeInTheDocument();
-  
-//   })
-  
-// })
-
-
-describe("Logged in user", () => {
+describe("Update entry page", () => {
   let UpdateMoodEntry;
   let user = {
     uid: "AFADF123svdfg#fdsf"

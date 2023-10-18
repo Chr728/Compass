@@ -9,7 +9,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import Menu from "../../components/Menu";
 import { createMoodJournal } from "@/app/http/moodJournalAPI";
 
 export default function AddMoodEntry() {
@@ -554,12 +553,6 @@ export default function AddMoodEntry() {
 
         </div>
   </form> 
-
-    <div className="mt-5 ">
-        <div className={`xl:max-w-[1280px] w-full menu-container`}>
-          <Menu />
-        </div>
-    </div>
 
   </div> 
   )

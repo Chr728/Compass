@@ -582,13 +582,7 @@ export default function UpdateMoodEntry( {params: { updateEntryId } } : { params
 
         </div>
   </form> 
-
-    <div className="mt-5 ">
-        <div className={`xl:max-w-[1280px] w-full menu-container`}>
-          <Menu />
-        </div>
-    </div>
-
+ 
   </div> 
   )
 }
