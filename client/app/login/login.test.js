@@ -31,6 +31,17 @@ describe("Login Page error messages", () => {
     const passwordInput = screen.getByLabelText("Password");
     const button = screen.getByRole("button");
     const forgotPasswordText = screen.getByText(/forgot password?/i);
+
+    expect(signInHeader).toBeInTheDocument();
+    expect(noAccountHeader).toBeInTheDocument();
+    expect(signUpHeader).toBeInTheDocument();
+    expect(emailLabel).toBeInTheDocument();
+    expect(passwordLabel).toBeInTheDocument();
+    expect(emailInput).toBeInTheDocument();
+    expect(passwordInput).toBeInTheDocument();
+    expect(button).toBeInTheDocument();
+    expect(forgotPasswordText).toBeInTheDocument();
+    
   });
 
   test("renders error messages when email and password not entered", async () => {
