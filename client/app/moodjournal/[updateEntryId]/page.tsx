@@ -12,14 +12,14 @@ import Input from '@/app/components/Input';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default function UpdateMoodEntry(  {params: { updateEntryId } } : { params: { updateEntryId: string }}) {
+export default function UpdateMoodEntry( {params: { updateEntryId } } : { params: { updateEntryId: string }} ) {
     const { user } = useAuth();
     const router = useRouter();
     const [data, setData] = useState<any>();
     const [selectedMood, setSelectedMood] = useState<string>('');
 
     async function updateMoodEntry() {
-        try {
+        try {  
            const moodData = await getMoodJournal(updateEntryId);
            const updatedStressSignals = JSON.parse(moodData.data.stressSignals);
            const updatedMoodData = {
@@ -28,7 +28,7 @@ export default function UpdateMoodEntry(  {params: { updateEntryId } } : { param
            }
            setData(updatedMoodData);
         } catch (error) {
-            console.log('Error fetching appointment');
+            console.log('Error fetching mood data');
         }
     }
 
@@ -64,7 +64,6 @@ export default function UpdateMoodEntry(  {params: { updateEntryId } } : { param
             notes: '',
           },
           onSubmit: async (values) => {
-              console.log("onsubmit called");
               const moodData = {
                 howAreYou: values.howAreYou,
                 stressSignals: values.stressSignals,
@@ -147,7 +146,7 @@ export default function UpdateMoodEntry(  {params: { updateEntryId } } : { param
         formik.setFieldValue("howAreYou", mood);
         setSelectedMood(mood);
     }
-console.log(selectedMood);
+
   return (
     <div 
     className="bg-eggshell min-h-screen flex flex-col">
@@ -576,7 +575,7 @@ console.log(selectedMood);
                     type="button"
                     text="Cancel"
                     style={{ width: "140px", backgroundColor: "var(--Red, #FF7171)" }}
-                    onClick={() => router.push("")}
+                    onClick={() => router.push("/moodjournal")}
                 />
                 <Button type="submit" text="Submit" style={{ width: "140px" }} />
         </div>
