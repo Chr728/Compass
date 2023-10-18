@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import AddMoodEntry from './page';
 import { useAuth } from "../../contexts/AuthContext";
-import { createMoodJournal} from "../../http/moodJournalAPI"
+import { createMoodJournal } from "../../http/moodJournalAPI"
 
 
 const mockRouter= jest.fn();
@@ -125,7 +125,7 @@ describe("Logged In User", () => {
      
         render(<AddMoodEntry/>);
         const submitButton = screen.getAllByRole("button")[1];
-        const date = screen.getByRole('textbox', { id: 'date' });
+        const date = document.querySelector('input[name="date"]');
         const tiredStressSignal = screen.getByLabelText("I feel tired.");
         const sleepStressSignal = screen.getByLabelText("I'm not sleeping well.");
         const hungerStressSignal = screen.getByLabelText("I'm not hungry.");
@@ -153,8 +153,6 @@ describe("Logged In User", () => {
         await userEvent.type(notes, "Mood Notes");
         await userEvent.click(winkIcon);
         await userEvent.click(submitButton);
-        await createMoodJournal(mockData);
-        await mockRouter();
         expect(createMoodJournal).toHaveBeenCalledTimes(1);
         expect(mockRouter).toHaveBeenCalledWith('/moodjournal');
     })
