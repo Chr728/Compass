@@ -5,13 +5,13 @@ import db from "../models";
 import moment = require("moment-timezone");
 const webPush = require("web-push");
 
-const publicKey = process.env.VAPID_PUBLIC_KEY;
-const privateKey = process.env.VAPID_PRIVATE_KEY;
-
-// Set vapid keys
-webPush.setVapidDetails("mailto:test@gmail.com", publicKey, privateKey);
-
 export const subscribeUserReminders = async (req: Request, res: Response) => {
+  const publicKey = process.env.VAPID_PUBLIC_KEY;
+  const privateKey = process.env.VAPID_PRIVATE_KEY;
+
+  // Set vapid keys
+  webPush.setVapidDetails("mailto:test@gmail.com", publicKey, privateKey);
+
   try {
     const userUID = req.params.uid;
     const currenttime = moment.tz("America/Toronto").format("HH:mm:00");
