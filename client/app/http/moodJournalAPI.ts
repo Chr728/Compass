@@ -141,8 +141,6 @@ export async function deleteMoodJournal(moodJournalId: string): Promise<any> {
     if (!response.ok) {
       throw new Error(`Failed to delete mood journal entry`);
     }
-    const data = await response.json();
-    return data;
   } catch (error) {
     console.error('Error deleting mood journal:', error);
     throw error;
