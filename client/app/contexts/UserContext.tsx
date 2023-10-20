@@ -13,6 +13,7 @@ import { useAuth } from './AuthContext';
 import { useRouter } from 'next/navigation';
 import { auth } from '@/app/config/firebase';
 import { signOut } from 'firebase/auth';
+import {useProp} from '@/app/contexts/PropContext';
 
 type UserAttributes = {
   id: number;
@@ -59,6 +60,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const uid = user ? user.uid : null; // Access the UID if the user is authenticated
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const {handleError} = useProp();
   useEffect(() => {
     const fetchUserData = () => {
       if (uid) {
@@ -70,7 +72,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
             router.push('/tpage');
           })
           .catch((error) => {
-            console.error('Error fetching user data:', error);
+           handleError(error.message);
             signOut(auth);
           });
       } else {
@@ -92,7 +94,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
           setUserInfo(response.data[1]);
         })
         .catch((error) => {
-          console.error('Error updating user:', error);
+         console.error('Error updating user:', error)
         });
     }
   };

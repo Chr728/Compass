@@ -1,11 +1,13 @@
 import {ReactNode, useContext, useState, createContext} from 'react';
 
 type PropContextType = {
-    error: string | null,
+    isError: boolean,
+    errorText: string,
+    handleError: (text: string) => void,
     loading: boolean,
 }
-
-const useProp = () => {
+const PropContext = createContext<PropContextType>({} as PropContextType);
+export const useProp = () => {
     const context = useContext(PropContext);
     if (context === undefined) {
         throw new Error('useProp must be used within a PropProvider');
@@ -16,28 +18,27 @@ const useProp = () => {
 interface PropProviderProps {
     children?: ReactNode;
 }
-
-const PropContext = createContext<PropContextType>({} as PropContextType);
-
 export const PropProvider = ({children}: PropProviderProps) => {
-    const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState(false);
-
-
-
-    const handleError = (error: string) => {
-        setError(error);
+    const [isError, setIsError] = useState(false)
+    const [errorText, setErrorText] = useState('')
+    const handleError = (text: string) => {
+        setIsError(true);
+       setErrorText(text);
+       setTimeout(() => {
+              setIsError(false);
+       }, 3500);
     }
 
     const handleLoading = (loading: boolean) => {
-        setLoading(loading);
+        // setLoading(loading);
     }
 
     const values: PropContextType = {
-        error,
-        loading,
+        isError ,
+        errorText,
+        handleError,
+        loading: false,
     }
-
     return (
         <PropContext.Provider value={values}>
             {children}

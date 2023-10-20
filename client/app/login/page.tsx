@@ -6,9 +6,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { useFormik } from "formik";
 import { useAuth, AuthProvider } from "../contexts/AuthContext";
+import {useProp} from '@/app/contexts/PropContext';
 
 export default function Login() {
   const { user, login, error } = useAuth();
+  const {handleError} = useProp();
 
   const formik = useFormik({
     initialValues: {
@@ -17,9 +19,9 @@ export default function Login() {
     },
     onSubmit: async (values) => {
       try {
-        await login(values.email, values.password);
+        login(values.email, values.password);
       } catch (error) {
-        console.error("Login failed:", error);
+        handleError('Something went wrong');
       }
     },
     validate: (values) => {
