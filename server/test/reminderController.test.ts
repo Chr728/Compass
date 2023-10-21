@@ -7,6 +7,8 @@ const webPush = require("web-push");
 
 let server: any;
 const port = process.env.SERVER_DEV_PORT;
+const publicKey = process.env.VAPID_PUBLIC_KEY;
+const privateKey = process.env.VAPID_PRIVATE_KEY;
 
 const user = {
   id: 10,
@@ -115,9 +117,6 @@ function stopServer() {
 describe("Testing reminder controller", () => {
   beforeAll(() => {
     startServer();
-    const publicKey = process.env.VAPID_PUBLIC_KEY;
-    const privateKey = process.env.VAPID_PRIVATE_KEY;
-    webPush.setVapidDetails("mailto:test@gmail.com", publicKey, privateKey);
   });
 
   afterAll(() => {
@@ -142,6 +141,8 @@ describe("Testing reminder controller", () => {
   it("test should find all reminders", async () => {
     const currentTime = "12:00:00";
     const currentDate = "2023-09-30";
+
+    webPush.setVapidDetails("mailto:test@gmail.com", publicKey, privateKey);
 
     jest
       .spyOn(db.ActivityJournal, "findAll")
