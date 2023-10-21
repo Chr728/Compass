@@ -9,6 +9,7 @@ let server: any;
 const port = process.env.SERVER_DEV_PORT;
 const publicKey = process.env.VAPID_PUBLIC_KEY;
 const privateKey = process.env.VAPID_PRIVATE_KEY;
+webPush.setVapidDetails("mailto:test@gmail.com", publicKey, privateKey);
 
 const user = {
   id: 10,
@@ -117,7 +118,6 @@ function stopServer() {
 describe("Testing reminder controller", () => {
   beforeAll(() => {
     startServer();
-    webPush.setVapidDetails("mailto:test@gmail.com", publicKey, privateKey);
   });
 
   afterAll(() => {
