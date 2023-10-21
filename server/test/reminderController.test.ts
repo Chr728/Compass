@@ -117,6 +117,7 @@ function stopServer() {
 describe("Testing reminder controller", () => {
   beforeAll(() => {
     startServer();
+    webPush.setVapidDetails("mailto:test@gmail.com", publicKey, privateKey);
   });
 
   afterAll(() => {
@@ -141,8 +142,6 @@ describe("Testing reminder controller", () => {
   it("test should find all reminders", async () => {
     const currentTime = "12:00:00";
     const currentDate = "2023-09-30";
-
-    webPush.setVapidDetails("mailto:test@gmail.com", publicKey, privateKey);
 
     jest
       .spyOn(db.ActivityJournal, "findAll")
