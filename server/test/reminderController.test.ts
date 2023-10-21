@@ -3,6 +3,7 @@ import app from "../index";
 import db from "../models/index";
 import admin from "firebase-admin";
 import moment = require("moment-timezone");
+const webPush = require("web-push");
 
 let server: any;
 const port = process.env.SERVER_DEV_PORT;
@@ -114,6 +115,9 @@ function stopServer() {
 describe("Testing reminder controller", () => {
   beforeAll(() => {
     startServer();
+    const publicKey = process.env.VAPID_PUBLIC_KEY;
+    const privateKey = process.env.VAPID_PRIVATE_KEY;
+    webPush.setVapidDetails("mailto:test@gmail.com", publicKey, privateKey);
   });
 
   afterAll(() => {
