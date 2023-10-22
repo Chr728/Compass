@@ -30,9 +30,9 @@ export default function GetWeightJournal({params: { weightJournal } } : { params
     } catch (error) {
       console.error('Error retrieving weight journal entry:', error);
     }
-  }  
+  
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+
   useEffect(() => {
     if (!user) {
       router.push("/login")
@@ -152,4 +152,5 @@ export default function GetWeightJournal({params: { weightJournal } } : { params
 )}
     </div>
   );
+}
 }
