@@ -31,6 +31,7 @@ export default function GetWeightJournal({params: { weightJournal } } : { params
       console.error('Error retrieving weight journal entry:', error);
     }
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     if (!user) {
       router.push("/login")

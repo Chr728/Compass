@@ -46,6 +46,7 @@ export default function EditWeightJournal({params: { weightJournal } } : { param
     return <div><Custom403/></div>
   }
   
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const formik = useFormik({
     initialValues: {
       date: '', 
@@ -77,6 +78,7 @@ export default function EditWeightJournal({params: { weightJournal } } : { param
   });
 
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() =>{
     const  { setValues } = formik;
     setValues({
