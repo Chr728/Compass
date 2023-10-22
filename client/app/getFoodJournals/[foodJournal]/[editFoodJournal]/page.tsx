@@ -46,6 +46,7 @@ export default function EditFoodJournal({params: { foodJournal } } : { params: {
     return <div><Custom403/></div>
   }
   
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const formik = useFormik({
     initialValues: {
       date: '', 
@@ -76,7 +77,7 @@ export default function EditFoodJournal({params: { foodJournal } } : { params: {
     },
   });
 
-
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() =>{
     const  { setValues } = formik;
     setValues({

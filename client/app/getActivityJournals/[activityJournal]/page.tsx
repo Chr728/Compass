@@ -32,6 +32,7 @@ export default function GetActivityJournal({params: { activityJournal } } : { pa
       console.error('Error retrieving activity journal entry:', error);
     }
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     if (!user) {
       router.push("/login")

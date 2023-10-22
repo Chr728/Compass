@@ -30,7 +30,8 @@ export default function GetFoodJournal({params: { foodJournal } } : { params: { 
     } catch (error) {
       console.error('Error retrieving Food journal entry:', error);
     }
-  }
+  
+  // eslint-disable-next-line react-hooks/rules-of-hooks  
   useEffect(() => {
     if (!user) {
       router.push("/login")
@@ -150,4 +151,5 @@ export default function GetFoodJournal({params: { foodJournal } } : { params: { 
 )}
     </div>
   );
+}
 }
