@@ -113,7 +113,7 @@ export default function CreateFoodJournalPage() {
       )}      
       </div>
 
-      <div className="flex">
+      
   <div className="mt-3">
     <label
       htmlFor="foodName"
@@ -141,82 +141,54 @@ export default function CreateFoodJournalPage() {
       ) 
     )}
   </div>
-
-  <div className="mt-3  ml-3"
-  style={{
-    width: '25%',
-  }}
-  >
+ 
+  <div className="mt-3" >
     <label
       htmlFor="mealType"
       className="font-sans font-medium text-grey text-[16px]"
     >
       Meal Type
     </label>
+    
     <span className="text-red text-[20px]"> *</span>
     <br />
     <select
       className="text-darkgrey"
       name="mealType"
       id="mealType"
-      style={{
-        width: '100%',
-        border: '1px solid #DBE2EA', // Border style
-        borderRadius: '5px',
-        marginTop: '5px',
-      }}
+      style={{ width: '100%'}}
       onChange={formik.handleChange}
       onBlur={formik.handleBlur}
       value={formik.values.mealType}
     >
-      <option
-        className="text-darkgrey"
-        value="kg"
-      >
+      <option className="text-darkgrey" value="Breakfast">
         Breakfast
       </option>
-      <option
-        className="text-darkgrey"
-        value="lb"
-      >
-       Morning snack
+      <option className="text-darkgrey" value="Morning snack">
+        Morning snack
       </option>
-      <option
-        className="text-darkgrey"
-        value="lb"
-      >
-       Lunch
+      <option className="text-darkgrey" value="Lunch">
+        Lunch
       </option>
-      <option
-        className="text-darkgrey"
-        value="lb"
-      >
-      Afternoon Snack
+      <option className="text-darkgrey" value="Afternoon Snack">
+        Afternoon Snack
       </option>
-      <option
-        className="text-darkgrey"
-        value="lb"
-      >
-      Dinner
+      <option className="text-darkgrey" value="Dinner">
+        Dinner
       </option>
-      <option
-        className="text-darkgrey"
-        value="lb"
-      >
-      Bedtime Snack
+      <option className="text-darkgrey" value="Bedtime Snack">
+        Bedtime Snack
       </option>
-      <option
-        className="text-darkgrey"
-        value="lb"
-      >
-      Other
+      <option className="text-darkgrey" value="Other">
+        Other
       </option>
-    </select>        
+    </select>
     {formik.touched.mealType && !formik.values.mealType && (
       <p className="text-red text-[14px]">This field can't be left empty.</p>
     )}
   </div>
-</div>
+
+
 
 
       <div className="mt-3">

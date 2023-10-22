@@ -148,7 +148,7 @@ return (
     )}      
     </div>
 
-    <div className="flex">
+   
   <div className="mt-3">
     <label
       htmlFor="foodName"
@@ -177,11 +177,7 @@ return (
     )}
   </div>
 
-  <div className="mt-3  ml-3"
-  style={{
-    width: '25%',
-  }}
-  >
+  <div className="mt-3">
     <label
       htmlFor="mealType"
       className="font-sans font-medium text-grey text-[16px]"
@@ -189,17 +185,11 @@ return (
       Meal Type
     </label>
     <span className="text-red text-[20px]"> *</span>
-    <br />
     <select
       className="text-darkgrey"
       name="mealType"
       id="mealType"
-      style={{
-        width: '100%',
-        border: '1px solid #DBE2EA', // Border style
-        borderRadius: '5px',
-        marginTop: '5px',
-      }}
+      style={{ width: '100%'}}
       onChange={formik.handleChange}
       onBlur={formik.handleBlur}
       value={formik.values.mealType}
@@ -251,7 +241,7 @@ return (
       <p className="text-red text-[14px]">This field can't be left empty.</p>
     )}
   </div>
-</div>
+
 
 
       <div className="mt-3">
