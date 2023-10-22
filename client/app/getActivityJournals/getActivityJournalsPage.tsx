@@ -41,7 +41,7 @@ export default function GetActivityJournalsPage() {
   }, [user]);
 
 
-    async function deleteActivityJournals(userId: string,activityJournalId: string){
+    async function deleteActivityJournals(activityJournalId: string){
       const deleteresult = await deleteActivityJournal(activityJournalId);   
       location.reload();
     }
