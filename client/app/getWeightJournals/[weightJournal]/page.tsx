@@ -30,7 +30,7 @@ export default function GetWeightJournal({params: { weightJournal } } : { params
     } catch (error) {
       console.error('Error retrieving weight journal entry:', error);
     }
-
+  }
   useEffect(() => {
     if (!user) {
       router.push("/login")
@@ -150,5 +150,4 @@ export default function GetWeightJournal({params: { weightJournal } } : { params
 )}
     </div>
   );
-}
 }
