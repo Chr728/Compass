@@ -88,3 +88,4 @@ input[type="date"]:before {
 input[type="date"]:focus:before {
   content: '' !important;
 }
+
