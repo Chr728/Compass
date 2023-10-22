@@ -31,7 +31,7 @@ export default function GetActivityJournal({params: { activityJournal } } : { pa
     } catch (error) {
       console.error('Error retrieving activity journal entry:', error);
     }
-  }
+
   useEffect(() => {
     if (!user) {
       router.push("/login")
@@ -142,4 +142,5 @@ export default function GetActivityJournal({params: { activityJournal } } : { pa
       </div>
     </div>
   );
+}
 }
