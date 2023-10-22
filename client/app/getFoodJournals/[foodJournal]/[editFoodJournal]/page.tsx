@@ -15,20 +15,20 @@ import { formatDateYearMonthDate } from '@/app/helpers/utils/datetimeformat';
 import Custom403 from '@/app/pages/403';
 
 
-export default function EditWeightJournal({params: { weightJournal } } : { params: { weightJournal: string } }) {
+export default function EditFoodJournal({params: { foodJournal } } : { params: { foodJournal: string } }) {
   const { user } = useAuth();
   const router = useRouter();
-  const [weight, setweight] = useState<any>(null);
+  const [food, setfood] = useState<any>(null);
   const { userInfo } = useUser();
   
-  async function fetchWeightJournal() {
+  async function fetchFoodJournal() {
     try {
       const userId = user?.uid || '';
-      const result = await getWeightJournal(weightJournal);
-      console.log('Weight journal entry retrieved:', result);
-      setweight(result.data);
+      const result = await getFoodIntakeJournal(foodJournal);
+      console.log('Food journal entry retrieved:', result);
+      setfood(result.data);
     } catch (error) {
-      console.error('Error retrieving weight journal entry:', error);
+      console.error('Error retrieving Food journal entry:', error);
     }
   }
   
@@ -38,9 +38,9 @@ export default function EditWeightJournal({params: { weightJournal } } : { param
       alert('User not found.');
     } 
     if (user) {
-      fetchWeightJournal();
+      fetchFoodJournal();
     }
-  }, [user, weight]);
+  }, [user, food]);
   
   if (!user) {
     return <div><Custom403/></div>
@@ -50,9 +50,9 @@ export default function EditWeightJournal({params: { weightJournal } } : { param
     initialValues: {
       date: '', 
       time:'', 
-      weight: 0.0 as any,
-      height: 0.0 as any,
-      unit:'', 
+      foodName:'', 
+      mealType:'', 
+      servingNumber:0.0 as any, 
       notes: '', 
     },
 
@@ -62,16 +62,16 @@ export default function EditWeightJournal({params: { weightJournal } } : { param
         const data = {
           date: values.date,
           time: values.time,
-          weight: values.weight,
-          height: values.height,
-          unit: values.unit,
+          foodName: values.foodName,
+          mealType: values.mealType,
+          servingNumber: values.servingNumber,
           notes: values.notes,
         };
-        const result = await updateWeightJournal(weightJournal, data); 
-        console.log('Weight journal entry updated:', result);
-        router.push(`/getWeightJournals/${weightJournal}`)
+        const result = await updateFoodIntakeJournal(foodJournal, data); 
+        console.log('Food journal entry updated:', result);
+        router.push(`/getFoodJournals/${foodJournal}`)
       } catch (error) {
-        console.error('Error updating weight journal entry:', error);
+        console.error('Error updating Food journal entry:', error);
       }
     },
   });
@@ -80,14 +80,14 @@ export default function EditWeightJournal({params: { weightJournal } } : { param
   useEffect(() =>{
     const  { setValues } = formik;
     setValues({
-      date: formatDateYearMonthDate(weight?.date), 
-      time: weight?.time,
-      weight: weight?.weight,
-      height: weight?.height,
-      unit: weight?.unit,
-      notes: weight?.notes,
+      date: formatDateYearMonthDate(food?.date), 
+      time: food?.time,
+      foodName: food?.foodName,
+      mealType: food?.mealType,
+      servingNumber: food?.servingNumber,
+      notes: food?.notes,
     })
-  }, [weight])
+  }, [food])
 
 
 
@@ -95,7 +95,7 @@ return (
   <div className="bg-eggshell min-h-screen flex flex-col">
      <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
               <button onClick={() => router.back()}>
-              <Header headerText="Edit The Weight Journal"></Header>
+              <Header headerText="Edit The Food Journal"></Header>
               </button>
               </span>
     <form
@@ -149,167 +149,192 @@ return (
     </div>
 
     <div className="flex">
-<div className="mt-3">
-  <label
-    htmlFor="weight"
-    className="font-sans font-medium text-grey text-[16px]"
+  <div className="mt-3">
+    <label
+      htmlFor="foodName"
+      className="font-sans font-medium text-grey text-[16px]"
+    >
+      Name of Food
+    </label>
+    <span className="text-red text-[20px]"> *</span>
+    <br />
+    <Input
+      name="foodName"
+      id="foodName"
+      type="text"
+      style={{ width: '100%' }}
+      onChange={formik.handleChange}
+      value={formik.values.foodName}
+      onBlur={formik.handleBlur}
+    />
+    {/* Check if the field is touched */}
+    {formik.touched.foodName && (
+      // Check if the field is empty
+      !formik.values.foodName && 
+      (
+        <p className="text-red text-[14px]">This field can't be left empty or zero.</p>
+      ) 
+    )}
+  </div>
+
+  <div className="mt-3  ml-3"
+  style={{
+    width: '25%',
+  }}
   >
-    Weight
-  </label>
-  <span className="text-red text-[20px]"> *</span>
-  <br />
-  <Input
-    name="weight"
-    id="weight"
-    type="number"
-    style={{ width: '100%' }}
-    onChange={formik.handleChange}
-    value={formik.values.weight}
-    onBlur={formik.handleBlur}
-  />
-  {/* Check if the field is touched */}
-  {formik.touched.weight && (
+    <label
+      htmlFor="mealType"
+      className="font-sans font-medium text-grey text-[16px]"
+    >
+      Meal Type
+    </label>
+    <span className="text-red text-[20px]"> *</span>
+    <br />
+    <select
+      className="text-darkgrey"
+      name="mealType"
+      id="mealType"
+      style={{
+        width: '100%',
+        border: '1px solid #DBE2EA', // Border style
+        borderRadius: '5px',
+        marginTop: '5px',
+      }}
+      onChange={formik.handleChange}
+      onBlur={formik.handleBlur}
+      value={formik.values.mealType}
+    >
+      <option
+        className="text-darkgrey"
+        value="kg"
+      >
+        Breakfast
+      </option>
+      <option
+        className="text-darkgrey"
+        value="lb"
+      >
+       Morning snack
+      </option>
+      <option
+        className="text-darkgrey"
+        value="lb"
+      >
+       Lunch
+      </option>
+      <option
+        className="text-darkgrey"
+        value="lb"
+      >
+      Afternoon Snack
+      </option>
+      <option
+        className="text-darkgrey"
+        value="lb"
+      >
+      Dinner
+      </option>
+      <option
+        className="text-darkgrey"
+        value="lb"
+      >
+      Bedtime Snack
+      </option>
+      <option
+        className="text-darkgrey"
+        value="lb"
+      >
+      Other
+      </option>
+    </select>        
+    {formik.touched.mealType && !formik.values.mealType && (
+      <p className="text-red text-[14px]">This field can't be left empty.</p>
+    )}
+  </div>
+</div>
+
+
+      <div className="mt-3">
+        <label
+          htmlFor="servingNumber"
+          className="font-sans font-medium text-grey text-[16px]"
+        >
+         Number of Servings
+        </label>
+        <span className="text-red text-[20px]"> *</span>
+        <br />
+        <Input
+          name="servingNumber"
+          id="servingNumber"
+          type="number"
+          style={{ width: '100%' }}
+          onChange={formik.handleChange}
+          value={formik.values.servingNumber}
+          onBlur={formik.handleBlur}
+        />
+        
+
+       {/* Check if the field is touched */}
+  {formik.touched.servingNumber && (
     // Check if the field is empty
-    !formik.values.weight && (
+    !formik.values.servingNumber && (
       <p className="text-red text-[14px]">This field can't be left empty or zero.</p>
     ) || (
       // Check if the field is less than or equal to zero
-      formik.values.weight <= 0 && (
-        <p className="text-red text-[14px]">You can't enter a negative weight or a weight of zero.</p>
+      formik.values.servingNumber <= 0 && (
+        <p className="text-red text-[14px]">You can't enter a negative servings number or a number of zero.</p>
       )
     )
   )}
-</div>
-
-<div className="mt-3  ml-3"
-style={{
-  width: '25%',
-}}
->
-  <label
-    htmlFor="unit"
-    className="font-sans font-medium text-grey text-[16px]"
-  >
-    Unit
-  </label>
-  <span className="text-red text-[20px]"> *</span>
-  <br />
-  <select
-    className="text-darkgrey"
-    name="unit"
-    id="unit"
-    style={{
-      width: '100%',
-      border: '1px solid #DBE2EA', // Border style
-      borderRadius: '5px',
-      marginTop: '5px',
-    }}
-    onChange={formik.handleChange}
-    onBlur={formik.handleBlur}
-    value={formik.values.unit}
-  >
-    <option
-      className="text-darkgrey"
-      value="kg"
-    >
-      kg
-    </option>
-    <option
-      className="text-darkgrey"
-      value="lb"
-    >
-      lb
-    </option>
-  </select>        
-  {formik.touched.unit && !formik.values.unit && (
-    <p className="text-red text-[14px]">This field can't be left empty.</p>
-  )}
-</div>
-</div>
-    <div className="mt-3">
-      <label
-        htmlFor="height"
-        className="font-sans font-medium text-grey text-[16px]"
-      >
-        Height (in centimeters)
-      </label>
-      <span className="text-red text-[20px]"> *</span>
-      <br />
-      <Input
-        name="height"
-        id="height"
-        type="number"
-        style={{ width: '100%' }}
-        onChange={formik.handleChange}
-        value={formik.values.height}
-        onBlur={formik.handleBlur}
-      />
       
+      </div>
+      <div className="mt-3">
+                <label
+                  htmlFor="notes"
+                  className="font-sans font-medium text-grey text-[16px]"
+                >
+                  Notes
+                </label>
+                <br />
+                <Input
+                  name="notes"
+                  id="notes"
+                  type="text"
+                  style={{ width: '100%' }}
+                  onChange={formik.handleChange}
+                  value={formik.values.notes}
+                  onBlur={formik.handleBlur}
+                />
+              </div>
+      <div className="items-center">
+      <div className="mt-5 mb-5 space-x-2">
+        <Button
+          type="button"
+          text="Cancel"
+          style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)' }}
+          onClick={() => router.push(`/getFoodJournals/${foodJournal}`)}
+        />
 
-     {/* Check if the field is touched */}
-{formik.touched.height && (
-  // Check if the field is empty
-  !formik.values.height && (
-    <p className="text-red text-[14px]">This field can't be left empty or zero.</p>
-  ) || (
-    // Check if the field is less than or equal to zero
-    formik.values.height <= 0 && (
-      <p className="text-red text-[14px]">You can't enter a negative height or a height of zero.</p>
-    )
-  )
-)}
-    
-    </div>
-
-    
-
-    <div className="mt-3">
-              <label
-                htmlFor="notes"
-                className="font-sans font-medium text-grey text-[16px]"
-              >
-                Notes
-              </label>
-              <br />
-              <Input
-                name="notes"
-                id="notes"
-                type="text"
-                style={{ width: '100%' }}
-                onChange={formik.handleChange}
-                value={formik.values.notes}
-                onBlur={formik.handleBlur}
-              />
-            </div>
-    
-    <div className="mt-5 mb-5 space-x-2 items-center">
-      <Button
-        type="button"
-        text="Cancel"
-        style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)' }}
-        onClick={() => router.push(`/getWeightJournals/${weightJournal}`)}
-      />
 
 <Button
-        type="submit"
-        text="Submit"
-        disabled={
-          !(formik.isValid && formik.dirty) || // Check if the form is valid and dirty
-          formik.values.weight === 0 || // Check if weight is zero
-          formik.values.weight < 0 || // Check if weight is less than  zero
-          formik.values.height === 0 || // Check if height is zero
-          formik.values.height < 0 || // Check if height is less than zero
-          !formik.values.unit || // Check if unit is missing or empty
-          !formik.values.date || // Check if date is missing or empty
-          !formik.values.time || // Check if time is missing or empty
-          !formik.values.weight || // Check if weight is missing or empty
-          !formik.values.height // Check if height is missing or empty
-        }
-        style={{ width: '140px' }}
-        onClick={() => router.push(`/getWeightJournals/${weightJournal}`)}
-      />
-    </div>
-  </form>
+          type="submit"
+          text="Submit"
+          disabled={
+            !(formik.isValid && formik.dirty) || // Check if the form is valid and dirty
+            formik.values.servingNumber === 0 || // Check if Number of Servings is zero
+            formik.values.servingNumber < 0 || // Check if Number of Servings is less than zero
+            !formik.values.mealType || // Check if Meal Type is missing or empty
+            !formik.values.date || // Check if date is missing or empty
+            !formik.values.time || // Check if time is missing or empty
+            !formik.values.foodName || // Check if foodName is missing or empty
+            !formik.values.servingNumber // Check if Number of Servings is missing or empty
+          }
+          style={{ width: '140px', textAlign: 'center' }}
+          onClick={() => router.push("/getFoodJournals")}
+        />
+        </div>
+      </div>
+    </form>
   </div>
 );
 

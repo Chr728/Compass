@@ -1,8 +1,8 @@
 import {render, screen, act} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import EditWeightJournal from './page';
-import {getWeightJournal, updateWeightJournal} from '../../../http/weightJournalAPI';
+import EditFoodJournal from './page';
+import {getFoodIntakeJournal, updateFoodIntakeJournal} from '../../../http/foodJournalAPI';
 
 const mockRouter = jest.fn();
 jest.mock("next/navigation", () => ({
@@ -28,24 +28,24 @@ jest.mock("../../../contexts/AuthContext", () => {
 });
 
 
-jest.mock('../../../http/weightJournalAPI', () => {
+jest.mock('../../../http/foodJournalAPI', () => {
     return {
-        getWeightJournal: () => {
+      getFoodIntakeJournal: () => {
             return {
                     success: "SUCCESS",
                     data: 
                         {
-                            id: '1',
-                            date: '2014-01-01',
-                            time: '8:36',
-                            weight: '186',
-                            unit: 'lb',
-                            height: '174',
-                            notes: 'notes'
+                          uid: '1',
+                          date: '2014-01-01',
+                          time: '08:36',
+                          foodName: 'pasta',
+                          mealType:'Lunch',
+                          servingNumber: 2,
+                          Notes : 'I am still Hungry'
                     }
             }
         },
-        updateWeightJournal: jest.fn()
+        updateFoodJournal: jest.fn()
     }
 });
 
@@ -63,34 +63,34 @@ jest.mock("../../../contexts/UserContext", () => {
   });
 
 test("Form submits correctly", async () =>{
-    const updateWeightJournal = jest.fn();
-    render(<EditWeightJournal params={{ weightJournal:'1'}}/>);
-    await getWeightJournal();
+    const updateFoodJournal = jest.fn();
+    render(<EditFoodJournal params={{ foodJournal:'1'}}/>);
+    await getFoodIntakeJournal();
     const date = screen.getByLabelText("Date");
     const time  = screen.getByLabelText("Time");
-    const weight = screen.getByLabelText("Weight");
-    const height = screen.getByLabelText("Height (in centimeters)");
-    const unit = screen.getByLabelText("Unit");
+    const foodName = screen.getByLabelText("Name of Food");
+    const mealType = screen.getByLabelText("Meal Type");
+    const servingNumber = screen.getByLabelText("Number of Servings");
     const notes  = screen.getByLabelText("Notes");
     const submitButton = screen.getAllByRole('button')[2];
 
     expect(date).toBeInTheDocument();
     expect(time).toBeInTheDocument();
-    expect(weight).toBeInTheDocument();
-    expect(height).toBeInTheDocument();
-    expect(unit).toBeInTheDocument();
+    expect(foodName).toBeInTheDocument();
+    expect(mealType).toBeInTheDocument();
+    expect(servingNumber).toBeInTheDocument();
     expect(notes).toBeInTheDocument();
 
     userEvent.click(submitButton);
     setTimeout(() => {
-      expect(updateWeightJournal).toHaveBeenCalledTimes(1);
+      expect(updateFoodJournal).toHaveBeenCalledTimes(1);
     }, 1000);})
 
 test("Cancel button works correctly", async () =>{
-  render(<EditWeightJournal params={{ weightJournal:'1'}}/>);
-    await getWeightJournal();
+  render(<EditFoodJournal params={{ foodJournal:'1'}}/>);
+    await getFoodIntakeJournal();
     const cancelButton = screen.getAllByRole('button')[1];
     await userEvent.click(cancelButton);
     await mockRouter;
-    expect(mockRouter).toHaveBeenCalledWith(`/getWeightJournals/1`);
+    expect(mockRouter).toHaveBeenCalledWith(`/getFoodJournals/1`);
 })
