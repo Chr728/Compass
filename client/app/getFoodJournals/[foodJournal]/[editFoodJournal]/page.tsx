@@ -5,7 +5,7 @@ import Input from '../../../components/Input';
 import Link from 'next/link';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { createWeightJournal, getWeightJournal, getWeightJournals, updateWeightJournal } from '../../../http/weightJournalAPI'; // Replace '../api/yourApiFile' with the correct path
+import { createFoodIntakeJournal, getFoodIntakeJournal, getFoodIntakeJournals, updateFoodIntakeJournal } from '../../../http/foodJournalAPI';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useUser } from '../../../contexts/UserContext';
 import { useEffect, useState } from 'react';
