@@ -65,66 +65,71 @@ export default function GetActivityJournalsPage() {
                 </div>
               </div>
               <br></br>
-          <div className="flex">
-            <div className="flex-2">
-              <div className="font-sans  font-bold text-darkgrey text-[18px]">
-                Date<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+
+          <div className="flex" style={{ justifyContent: 'space-between' }}>
+            <div className="flex-2" style={{ marginRight: '-3%'}}>
+              <div className="font-sans  font-bold text-darkgrey text-[18px] text-center ">
+                Date
+                <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
               </div>
             </div>
-            <div className="flex-2">
-              <div className="font-sans  font-bold  text-darkgrey text-[18px] ml-14">
-               Activity<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
-
+            <div className="flex-2" style={{ marginRight: '2%' }} >
+              <div className="font-sans  font-bold  text-darkgrey text-[18px] ml-14 text-center">
+               Activity
+               <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
               </div>
             </div>
-            <div className="flex-2">
-              <div className="font-sans font-bold text-darkgrey text-[18px] ml-4">
-              Duration<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
-
+            <div className="flex-2" style={{ marginRight: '10%' }}>
+              <div className="font-sans font-bold text-darkgrey text-[18px] ml-4 text-center">
+              Duration
+              <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
               </div>
             </div>
           </div>
-        {activity.map((item: any, index: number) => (
-          <div
-            key={item.activityJournalId}
-            className={`flex justify-between items-left mt-3`}
-            style={{
-              backgroundColor: index % 2 === 0 ? 'white' : '#DBE2EA',
-            }}
-          >
-                <div className="flex-2">
-                  <p className="font-sans font-medium text-darkgrey text-[14px]">
-                    {`${new Date(item.date).toISOString().split('T')[0]}`}
-                  </p>
-                </div>
-                <div className="flex-2">
-                  <p className="font-sans ml-4 font-medium text-darkgrey text-[14px]">
-                    {item.activity}
-                  </p>
-                </div>
-                <div className="flex-2">
-                  <p className="font-sans ml-8 font-medium text-darkgrey text-[14px]">
-                    {item.duration}
-                  </p>
-                </div>
 
-            <div className="flex icons" style={{ marginLeft: '24px', marginRight: '2px' }}>
-                  <div className="icon">
-                    <MdInfoOutline
-                      style={{ color: 'var(--Black, #000000)', width: '25px', height: '30px' }}
-                      onClick={() => router.push(`/getActivityJournals/${item.id}`)}
-                    />
-                  </div>
-                  <div className="flex icon">
-                    <MdDeleteForever
-                      style={{ color: 'var(--Red, #FF7171)', width: '25px', height: '30px' }}
-                      onClick={() => deleteActivityJournals(item.uid, item.id)}
-                    />
-                  </div>
-            </div>
-            <br></br>
-          </div>
-        ))}
+          {activity.map((item: any, index: number) => (
+  <div
+    key={item.activityJournalId}
+    className={`flex justify-between items-left mt-3`}
+    style={{
+      backgroundColor: index % 2 === 0 ? 'white' : '#DBE2EA',
+    }}
+  >
+    <div className="flex-2">
+      <p className="font-sans font-medium text-darkgrey text-[14px]">
+        {`${new Date(item.date).toISOString().split('T')[0]}`}
+      </p>
+    </div>
+    <div className="flex-2">
+      <p className="font-sans ml-4 font-medium text-darkgrey text-[14px]">
+        {item.activity}
+      </p>
+    </div>
+    <div className="flex-2">
+      <p className="font-sans ml-4 font-medium text-darkgrey text-[14px]">
+        {item.duration}
+      </p>
+    </div>
+
+    <div className="flex icons" style={{ marginLeft: '5px', marginRight: '5px',  marginTop: '-2%'}}>
+        <div className="icon">
+          <MdInfoOutline
+            style={{ color: 'var(--Black, #000000)', width: '25px', height: '30px' }}
+            onClick={() => router.push(`/getActivityJournals/${item.id}`)}
+          />
+        </div>
+        <div className="icon">
+          <MdDeleteForever
+            style={{ color: 'var(--Red, #FF7171)', width: '25px', height: '30px' }}
+            onClick={() => deleteActivityJournals(item.id)}
+          />
+        </div>
+      </div>
+  </div>
+))}
+
+
+
 
   </div>
 )}

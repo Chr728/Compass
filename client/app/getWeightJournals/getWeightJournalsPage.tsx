@@ -117,6 +117,7 @@ export default function GetWeightJournalsPage() {
           {item.weight}
         </p>
       </div>
+      
       <div className="flex icons" style={{ marginLeft: '5px', marginRight: '5px' }}>
         <div className="icon">
           <MdInfoOutline
