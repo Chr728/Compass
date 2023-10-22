@@ -49,6 +49,23 @@ export default function Journal() {
       </div>
 </Link>
 <br></br>
+
+
+
+<Link href="/getFoodJournals">
+      <div className="rounded-3xl  mt-1 flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 " style={{backgroundColor: 'var(--Red, #F2AC57)' }}>
+        
+        <div className="mb-6 mt-1" >
+          <p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
+          Food Intake Journal
+          </p>
+          <p className="text-[14px] text-white font-IBM Plex Sans  text-start">
+          Keep track of what you eat.
+                    </p>
+        </div>
+      </div>
+</Link>
+<br></br>
     </div>
     
   );
