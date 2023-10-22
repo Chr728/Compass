@@ -62,6 +62,8 @@ jest.mock('../http/weightJournalAPI', () => {
 });
    
 
+
+
 test("Add an entry button  functions correctly", async() => {
     const addButton = screen.getAllByRole('button')[1];
     await userEvent.click(addButton);

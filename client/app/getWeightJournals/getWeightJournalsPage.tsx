@@ -11,7 +11,7 @@ import { useUser } from '../contexts/UserContext';
 import { useEffect, useState } from 'react';
 import { MdDeleteForever, MdInfoOutline, MdKeyboardArrowDown } from 'react-icons/md';
 import Header from '../components/Header';
-import Menu from '../components/Menu';
+
 
 export default function GetWeightJournalsPage() {
   const router = useRouter();
@@ -41,7 +41,7 @@ export default function GetWeightJournalsPage() {
   }, [user]);
 
 
-    async function deleteWeightJournals(userId: string,weightJournalId: string){
+    async function deleteWeightJournals(weightJournalId: string){
       const deleteresult = await deleteWeightJournal(weightJournalId);   
       location.reload();
     }
@@ -72,33 +72,6 @@ export default function GetWeightJournalsPage() {
       </div>
     </div>
     <br></br>
-    
-    {/* <div className="flex"  style={{ justifyContent: 'space-between' }}>
-  <div className="flex-2 flex-col">
-    <div className="font-sans font-medium text-darkgrey font-bold text-[18px] text-center">
-      Date/Time
-      <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
-    </div>
-  </div>
-  <div className="flex-2 flex-col">
-    <div className="font-sans font-medium text-darkgrey font-bold text-[18px] text-center">
-      BMI
-      <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
-    </div>
-  </div>
-  <div className="flex-2 flex-col" style={{ marginRight: '55px',paddingRight:'10px' }}>
-    <div className="font-sans font-medium text-darkgrey font-bold text-[18px] text-center">
-      Weight
-      <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
-    </div>
-  </div>
-</div> */}
-
-
-
-
-
-
 <div className="flex" style={{ justifyContent: 'space-between' }}>
     <div className="flex-2" style={{ marginRight: '18%' }}>
       <div className="font-sans font-medium text-darkgrey font-bold text-[18px] text-center">
@@ -154,7 +127,7 @@ export default function GetWeightJournalsPage() {
         <div className="icon">
           <MdDeleteForever
             style={{ color: 'var(--Red, #FF7171)', width: '25px', height: '30px' }}
-            onClick={() => deleteWeightJournals(item.uid, item.id)}
+            onClick={() => deleteWeightJournals(item.id)}
           />
         </div>
       </div>
