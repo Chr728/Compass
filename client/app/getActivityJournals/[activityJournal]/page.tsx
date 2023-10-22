@@ -31,6 +31,7 @@ export default function GetActivityJournal({params: { activityJournal } } : { pa
     } catch (error) {
       console.error('Error retrieving activity journal entry:', error);
     }
+  }
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
@@ -143,5 +144,4 @@ export default function GetActivityJournal({params: { activityJournal } } : { pa
       </div>
     </div>
   );
-}
 }

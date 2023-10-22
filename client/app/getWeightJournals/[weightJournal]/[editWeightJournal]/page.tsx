@@ -21,6 +21,7 @@ export default function EditWeightJournal({params: { weightJournal } } : { param
   const [weight, setweight] = useState<any>(null);
   const { userInfo } = useUser();
   
+  
   async function fetchWeightJournal() {
     try {
       const userId = user?.uid || '';
@@ -31,22 +32,6 @@ export default function EditWeightJournal({params: { weightJournal } } : { param
       console.error('Error retrieving weight journal entry:', error);
     }
   }
-  
-  useEffect(() => {  
-    if (!user) {
-      router.push('/login')
-      alert('User not found.');
-    } 
-    if (user) {
-      fetchWeightJournal();
-    }
-  }, [user, weight]);
-  
-  if (!user) {
-    return <div><Custom403/></div>
-  }
-  
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const formik = useFormik({
     initialValues: {
       date: '', 
@@ -56,7 +41,7 @@ export default function EditWeightJournal({params: { weightJournal } } : { param
       unit:'', 
       notes: '', 
     },
-
+    
     onSubmit: async (values) => {
       try {
         const userId = user?.uid || '';
@@ -78,7 +63,6 @@ export default function EditWeightJournal({params: { weightJournal } } : { param
   });
 
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() =>{
     const  { setValues } = formik;
     setValues({
@@ -91,6 +75,22 @@ export default function EditWeightJournal({params: { weightJournal } } : { param
     })
   }, [weight])
 
+  
+  useEffect(() => {  
+    if (!user) {
+      router.push('/login')
+      alert('User not found.');
+    } 
+    if (user) {
+      fetchWeightJournal();
+    }
+  }, [user, weight]);
+
+  if (!user) {
+    return <div><Custom403/></div>
+  }
+
+  
 
 
 return (

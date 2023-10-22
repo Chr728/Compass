@@ -153,4 +153,3 @@ export default function GetWeightJournal({params: { weightJournal } } : { params
     </div>
   );
 }
-// }
