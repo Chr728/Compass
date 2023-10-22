@@ -1,17 +1,15 @@
 import {render, screen,act} from '@testing-library/react';
 import '@testing-library/jest-dom';
-import GetWeightJournalsPage from './getWeightJournalsPage';
-import {getWeightJournals} from '../http/weightJournalAPI';
-import { deleteWeightJournal} from '../http/weightJournalAPI'; 
-
+import GetFoodJournalsPage from './getFoodJournalsPage';
+import {getFoodIntakeJournals} from '../http/foodJournalAPI';
+import { deleteFoodIntakeJournal} from '../http/foodJournalAPI'; 
 import userEvent from '@testing-library/user-event';
-
 import { useRouter } from "next/router";
 import { useUser } from '../contexts/UserContext';
 
 beforeEach(async () => {
     await act(async () => {
-        render(<GetWeightJournalsPage/>);
+        render(<GetFoodJournalsPage/>);
       });
 })
 
@@ -41,9 +39,9 @@ jest.mock("../contexts/UserContext", () => {
   });
 
 
-jest.mock('../http/weightJournalAPI', () => {
+jest.mock('../http/foodJournalAPI', () => {
     return {
-        getWeightJournals: () => {
+        getFoodIntakeJournals: () => {
             return {
                 
                     success: "SUCCESS",
@@ -52,19 +50,19 @@ jest.mock('../http/weightJournalAPI', () => {
                             uid: '1',
                             date: '2014-01-01',
                             time: '08:36',
-                            weight: '75.5',
-                            height: 1.65,
-                            unit:'kg',
+                            foodName: 'Pasta',
+                            servingNumber: 2,
+                            mealType:'Lunch',
                             Notes : 'I am feeling good today'
                     }
                 ]
             }
         },
 
-        deleteWeightJournal: async (weightJournalId) => {
+        deleteFoodJournal: async (foodJournalId) => {
             return {
                 status: "SUCCESS",
-                data: `Successfully deleted weight Journal.`,
+                data: `Successfully deleted Food Journal.`,
             };
         },
     }
@@ -77,20 +75,18 @@ test("Add an entry button  functions correctly", async() => {
     const addButton = screen.getAllByRole('button')[1];
     await userEvent.click(addButton);
     await mockRouter;
-    expect(mockRouter).toHaveBeenCalledWith('/createWeightJournal')
+    expect(mockRouter).toHaveBeenCalledWith('/createFoodJournal')
 })
 
 
 
 
-    test("Get Weight Journals list is displayed correctly", async () => {
+    test("Get Food Journals list is displayed correctly", async () => {
         const date = await screen.findByText('2014-01-01 08:36 AM');
-        const weight = await screen.findByText('75.5');
-        const height = await screen.findByText('1.65');
+        const foodName = await screen.findByText('Pasta');
 
         expect(date).toBeInTheDocument();
-        expect(weight).toBeInTheDocument();
-        expect(height).toBeInTheDocument();
+        expect(foodName).toBeInTheDocument();
     })
 
    
@@ -98,12 +94,12 @@ test("Add an entry button  functions correctly", async() => {
     
      // checks the texts
      test("Message displayed", async () => {
-        const message = screen.getByText(/Managing your weight helps you stay healthy./i);
+        const message = screen.getByText(/Keep track of what you eat each day./i);
         expect(message).toBeInTheDocument();
     })
 
 
      test("Message displayed", async () => {
-        const message = screen.getByText(/our BMI can tell you if you’re at risk for certain health conditions like heart disease./i);
+        const message = screen.getByText(/Remember, eating healthy is all about eating the right foods in the right amounts./i);
         expect(message).toBeInTheDocument();
     })

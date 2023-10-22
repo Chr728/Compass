@@ -5,7 +5,7 @@ import Input from '../components/Input';
 import Link from 'next/link';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { createFoodJournal } from '../http/foodJournalAPI'; 
+import { createFoodIntakeJournal } from '../http/foodJournalAPI'; 
 import { useAuth } from '../contexts/AuthContext';
 import { useUser } from '../contexts/UserContext';
 import { useEffect, useState } from 'react';
@@ -46,7 +46,7 @@ export default function CreateFoodJournalPage() {
           servingNumber: values.servingNumber,
           notes: values.notes,
         };
-        const result = await createFoodJournal(data); 
+        const result = await createFoodIntakeJournal(data); 
         console.log('Food journal entry created:', result);
         router.push('/getFoodJournals');
       } catch (error) {

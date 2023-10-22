@@ -1,7 +1,7 @@
 import { auth } from '../config/firebase';
 
 // Function to make a GET request to retrieve all food journals for a user
-export async function getFoodJournals(): Promise<any> {
+export async function getFoodIntakeJournals(): Promise<any> {
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
@@ -11,7 +11,7 @@ export async function getFoodJournals(): Promise<any> {
     const token = await currentUser.getIdToken();
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/food/user/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/foodIntake/user/${id}`,
       {
         method: 'GET',
         headers: {
@@ -35,7 +35,7 @@ export async function getFoodJournals(): Promise<any> {
 }
 
 // Function to make a GET request to retrieve a specific food journal entry
-export async function getFoodJournal(foodJournalId: string): Promise<any> {
+export async function getFoodIntakeJournal(foodJournalId: string): Promise<any> {
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
@@ -44,7 +44,7 @@ export async function getFoodJournal(foodJournalId: string): Promise<any> {
     const token = await currentUser.getIdToken();
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/food/${foodJournalId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/foodIntake/${foodJournalId}`,
       {
         method: 'GET',
         headers: {
@@ -67,7 +67,7 @@ export async function getFoodJournal(foodJournalId: string): Promise<any> {
 }
 
 // Function to make a POST request to create a new food journal entry
-export async function createFoodJournal(
+export async function createFoodIntakeJournal(
   foodJournalData: any
 ): Promise<any> {
   try {
@@ -79,7 +79,7 @@ export async function createFoodJournal(
     const token = await currentUser.getIdToken();
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/food/user/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/foodIntake/user/${id}`,
       {
         method: 'POST',
         headers: {
@@ -103,7 +103,7 @@ export async function createFoodJournal(
 }
 
 // Function to make a PUT request to update an existing food journal entry
-export async function updateFoodJournal(
+export async function updateFoodIntakeJournal(
   foodJournalId: string,
   updatedFoodJournalData: any
 ): Promise<any> {
@@ -115,7 +115,7 @@ export async function updateFoodJournal(
     const token = await currentUser.getIdToken();
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/food/${foodJournalId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/foodIntake/${foodJournalId}`,
       {
         method: 'PUT',
         headers: {
@@ -139,7 +139,7 @@ export async function updateFoodJournal(
 }
 
 // Function to make a DELETE request to delete a food journal entry
-export async function deleteFoodJournal(
+export async function deleteFoodIntakeJournal(
   foodJournalId: string
 ): Promise<any> {
   try {
@@ -150,7 +150,7 @@ export async function deleteFoodJournal(
     const token = await currentUser.getIdToken();
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/food/${foodJournalId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/foodIntake/${foodJournalId}`,
       {
         method: 'DELETE',
         headers: {

@@ -2,7 +2,7 @@ import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import CreateFoodJournalPage from './createFoodJournalPage';
-import {creatFoodJournal} from '../http/foodJournalAPI';
+import {createFoodIntakeJournal} from '../http/foodJournalAPI';
 
 
 const fakeUser = {
@@ -20,7 +20,7 @@ jest.mock('../contexts/AuthContext', () => {
 
 jest.mock('../http/foodJournalAPI', () => {
     return {
-        createFoodJournal: jest.fn()
+        createFoodIntakeJournal: jest.fn()
     }
 });
 
@@ -137,10 +137,10 @@ const { createFoodJournal} = require('../http/foodJournalAPI');
         await userEvent.type(notes, "abc");
 
         await userEvent.click(submitButton);
-        await createFoodJournal();
+        await createFoodIntakeJournal();
         await mockRouter;
 
-        expect(createFoodJournal).toHaveBeenCalledTimes(1);
+        expect(createFoodIntakeJournal).toHaveBeenCalledTimes(1);
         expect(mockRouter).toHaveBeenCalledWith('/getFoodJournals');
     })
 
