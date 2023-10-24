@@ -9,13 +9,16 @@ export async function subscribeUserReminders(): Promise<any> {
     }
     const uid = currentUser.uid;
     const token = await currentUser.getIdToken();
-    const response = await fetch(`http://localhost:8000/api/reminders/${uid}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/reminders/${uid}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     if (!response.ok) {
       throw new Error(
         `Failed to create reminder preference for user. HTTP Status: ${response.status}`

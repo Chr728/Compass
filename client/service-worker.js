@@ -231,14 +231,24 @@ registerRoute(
   })
 );
 
-// Function to run every 5 minutes
+// Function to run every 30 minutes
 function runTaskEvery5Minutes() {
-  // Your code for sending reminders and push notifications goes here
-  // This function will run every 5 minutes
+  // This function will run every 30 minutes
+  console.log("PUSH NOTIFICATION TASK!!!! :)");
   subscribeUserReminders();
 }
 
-// Schedule the task to run every 5 minutes
+// Schedule the task to run every 30 minutes
 setInterval(() => {
   runTaskEvery5Minutes();
-}, 5 * 60 * 1000); // 5 minutes in milliseconds
+}, 30 * 60 * 1000); // 30 minutes in milliseconds
+
+// Event listener for push notifications
+self.addEventListener("push", (event) => {
+  const options = {
+    icon: "/compass-removebg.png",
+    ...event.data.json(),
+  };
+
+  event.waitUntil(self.registration.showNotification(options.title, options));
+});
