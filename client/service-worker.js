@@ -17,6 +17,7 @@ import {
   cleanupOutdatedCaches,
 } from "workbox-precaching";
 import { CacheableResponsePlugin } from "workbox-cacheable-response";
+import { subscribeUserReminders } from "./app/http/remindersAPI";
 
 skipWaiting();
 clientsClaim();
@@ -229,3 +230,15 @@ registerRoute(
     ],
   })
 );
+
+// Function to run every 5 minutes
+function runTaskEvery5Minutes() {
+  // Your code for sending reminders and push notifications goes here
+  // This function will run every 5 minutes
+  subscribeUserReminders();
+}
+
+// Schedule the task to run every 5 minutes
+setInterval(() => {
+  runTaskEvery5Minutes();
+}, 5 * 60 * 1000); // 5 minutes in milliseconds

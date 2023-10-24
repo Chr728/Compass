@@ -16,6 +16,7 @@ export const subscribeUserReminders = async (req: Request, res: Response) => {
     const userUID = req.params.uid;
     const currenttime = moment.tz("America/Toronto").format("HH:mm:00");
     const currentdate = moment.tz("America/Toronto").format("YYYY-MM-DD");
+    const timeForAppointments = 1;
 
     const subscription = req.body;
 
