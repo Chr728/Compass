@@ -55,7 +55,7 @@ export default function EditActivityJournal({params: { activityJournal } } : { p
     if (user) {
       fetchActivityJournal();
     }
-  }, [user, activity]);
+  }, []);
   
   if (!user) {
     return <div><Custom403/></div>

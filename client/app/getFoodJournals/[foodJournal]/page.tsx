@@ -40,7 +40,7 @@ export default function GetFoodJournal({params: { foodJournal } } : { params: { 
     if (user) {
       fetchFoodJournal();
     }
-  }, [user, food]);
+  }, []);
 
   if (!user) {
     return <div><Custom403/></div>

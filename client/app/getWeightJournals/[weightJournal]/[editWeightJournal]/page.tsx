@@ -40,7 +40,7 @@ export default function EditWeightJournal({params: { weightJournal } } : { param
     if (user) {
       fetchWeightJournal();
     }
-  }, [user, weight]);
+  }, []);
   
   if (!user) {
     return <div><Custom403/></div>

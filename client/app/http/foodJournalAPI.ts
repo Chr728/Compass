@@ -55,7 +55,7 @@ export async function getFoodIntakeJournal(foodJournalId: string): Promise<any> 
     );
     if (!response.ok) {
       throw new Error(
-        `Failed to retrieve food journal entry ${foodJournalId} for user. HTTP Status: ${response.status}`
+        `Failed to retrieve food journal entry data. HTTP Status: ${response.status}`
       );
     }
     const data = await response.json();

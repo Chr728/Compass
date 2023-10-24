@@ -41,7 +41,7 @@ export default function GetActivityJournal({params: { activityJournal } } : { pa
     if (user) {
       fetchActivityJournal();
     }
-  }, [user, activity]);  
+  }, []);  
 
   if (!user) {
     return <div><Custom403/></div>

@@ -41,7 +41,7 @@ export default function GetWeightJournal({params: { weightJournal } } : { params
     if (user) {
       fetchWeightJournal();
     }
-  }, [user, weight]);
+  }, []);
 
   if (!user) {
     return <div><Custom403/></div>
