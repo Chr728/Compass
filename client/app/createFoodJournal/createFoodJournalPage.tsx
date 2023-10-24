@@ -156,7 +156,12 @@ export default function CreateFoodJournalPage() {
       className="text-darkgrey"
       name="mealType"
       id="mealType"
-      style={{ width: '100%'}}
+      style={{
+        width: '100%',
+        border: '1px solid #DBE2EA', // Border style
+        borderRadius: '5px',
+        marginTop: '5px',
+      }}
       onChange={formik.handleChange}
       onBlur={formik.handleBlur}
       value={formik.values.mealType}
