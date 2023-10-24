@@ -202,43 +202,43 @@ return (
     >
       <option
         className="text-darkgrey"
-        value="kg"
+        value="Breakfast"
       >
         Breakfast
       </option>
       <option
         className="text-darkgrey"
-        value="lb"
+        value="Morning snack"
       >
        Morning snack
       </option>
       <option
         className="text-darkgrey"
-        value="lb"
+        value="Lunch"
       >
        Lunch
       </option>
       <option
         className="text-darkgrey"
-        value="lb"
+        value="Afternoon Snack"
       >
       Afternoon Snack
       </option>
       <option
         className="text-darkgrey"
-        value="lb"
+        value="Dinner"
       >
       Dinner
       </option>
       <option
         className="text-darkgrey"
-        value="lb"
+        value="Bedtime Snack"
       >
       Bedtime Snack
       </option>
       <option
         className="text-darkgrey"
-        value="lb"
+        value="Other"
       >
       Other
       </option>
