@@ -4,9 +4,11 @@ import '@testing-library/jest-dom';
 import AppWrapper from './index';
 import { usePathname } from 'next/navigation';
 
+const mockUsePathname = jest.fn();
+
 // Mock the usePathname hook from next/navigation
 jest.mock('next/navigation', () => ({
-    usePathname: jest.fn()
+    usePathname: () => mockUsePathname()
 }));
 
 // Mocking the contexts and Menu component to isolate AppWrapper during the test
@@ -20,7 +22,6 @@ jest.mock('../../contexts/UserContext', () => ({
 
 jest.mock('../Menu', () => () => <div>Menu Component</div>);
 
-const mockUsePathname = usePathname;
 
 describe('AppWrapper', () => {
     it('renders children', () => {
