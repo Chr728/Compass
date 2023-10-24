@@ -120,7 +120,6 @@ export default function SettingsPage() {
         <br></br>
         <br></br>
         <br></br>
-        <Menu></Menu>
       </div>
     </div>
   );

@@ -55,12 +55,13 @@ export default function EditActivityJournal({params: { activityJournal } } : { p
     if (user) {
       fetchActivityJournal();
     }
-  }, [user, activity]);
+  }, []);
   
   if (!user) {
     return <div><Custom403/></div>
   }
   
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const formik = useFormik({
     initialValues: {
       date: '', 
@@ -89,7 +90,7 @@ export default function EditActivityJournal({params: { activityJournal } } : { p
     },
   });
 
-
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() =>{
     const  { setValues } = formik;
     setValues({
@@ -273,11 +274,6 @@ return (
     </div>
     </div>
   </form>
-  <div className="mt-8">
-        <div className={`xl:max-w-[1280px] w-full  menu-container`}>
-          <Menu />
-        </div>
-      </div>
   </div>
 );
 

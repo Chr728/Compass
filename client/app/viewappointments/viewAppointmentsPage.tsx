@@ -164,8 +164,6 @@ export default function ViewAppointmentsPage() {
             </TableContainer>
         </div>
       </div>
-
-          <Menu />
     </div>
   )
 }

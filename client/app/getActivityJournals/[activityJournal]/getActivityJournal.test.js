@@ -6,6 +6,7 @@ import {getActivityJournal} from '../../http/activityJournalAPI';
 import {useUser} from '../../contexts/UserContext';
 
 const mockRouter = jest.fn();
+
 jest.mock("next/navigation", () => ({
     useRouter: () => {
         return {
@@ -13,20 +14,6 @@ jest.mock("next/navigation", () => ({
         }
     }
 }));
-
-const userData = {
-    uid: '1',
-} 
-
-jest.mock("../../contexts/AuthContext", () => {
-    return {
-    useAuth: () =>{
-        return {
-            user: userData
-        }
-    }
-    };
-});
 
 jest.mock('../../http/activityJournalAPI', () => {
     return {

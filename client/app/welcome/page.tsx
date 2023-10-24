@@ -17,11 +17,11 @@ const Welcome = () => {
 
   return isLoading ? (
     // If page is still loading then splash screen
-    <div className="motion-safe:animate-pulse bg-eggshell min-h-screen flex justify-center items-center">
-      <div>
-        <NextImage src={compassImage} alt="Compass Logo" />
+    <div className="bg-eggshell min-h-screen z-10 flex justify-center items-center absolute">
+        <div className={'motion-safe:animate-pulse'}>
+            <NextImage src={compassImage} alt="Compass Logo" />
+        </div>
       </div>
-    </div>
   ) : (
     // If page is not loading then show the welcome screen
     <div>

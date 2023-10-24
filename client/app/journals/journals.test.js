@@ -37,6 +37,15 @@ jest.mock("next/navigation", () => ({
       expect(message1).toBeInTheDocument();
     });
   
+    test("Food Journals Message displayed", async () => {
+     
+      render(<Journals />);
+      const message = screen.getByText(/Food Intake Journal/i);
+      expect(message).toBeInTheDocument();
+      const message1 = screen.getByText(/Keep track of what you eat./i);
+      expect(message1).toBeInTheDocument();
+    });
+
     test("link redirects to weight journals page", async () => {  
       render(<Journals />);
       const linkElement = screen.getAllByRole("link")[1];
@@ -50,7 +59,14 @@ jest.mock("next/navigation", () => ({
       const linkElement = screen.getAllByRole("link")[0];
       expect(linkElement).toHaveAttribute("href", "/getActivityJournals");
     });
+
+    test("link redirects to food journals page", async () => {  
+      render(<Journals />);
+      const linkElement = screen.getAllByRole("link")[2];
+      expect(linkElement).toHaveAttribute("href", "/getFoodJournals");
+    });
   });
+
 
 
 

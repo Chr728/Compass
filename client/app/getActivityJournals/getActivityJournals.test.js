@@ -3,6 +3,7 @@ import '@testing-library/jest-dom';
 import GetActivityJournalsPage from './getActivityJournalsPage';
 import {getActivityJournals} from '../http/activityJournalAPI';
 import userEvent from '@testing-library/user-event';
+import { deleteActivityJournal} from '../http/activityJournalAPI'; 
 
 import { useRouter } from "next/router";
 import { useUser } from '../contexts/UserContext';
@@ -56,7 +57,13 @@ jest.mock('../http/activityJournalAPI', () => {
                     }
                 ]
             }
-        }
+        },
+        deleteActivityJournal: async (activityJournalId) => {
+            return {
+                status: "SUCCESS",
+                data: `Successfully deleted activity Journal.`,
+            };
+        },
     }
 });
    

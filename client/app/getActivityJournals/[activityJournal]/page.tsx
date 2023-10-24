@@ -31,6 +31,7 @@ export default function GetActivityJournal({params: { activityJournal } } : { pa
     } catch (error) {
       console.error('Error retrieving activity journal entry:', error);
     }
+  }
 
   useEffect(() => {
     if (!user) {
@@ -40,7 +41,7 @@ export default function GetActivityJournal({params: { activityJournal } } : { pa
     if (user) {
       fetchActivityJournal();
     }
-  }, [user, activity]);  
+  }, []);  
 
   if (!user) {
     return <div><Custom403/></div>
@@ -142,5 +143,5 @@ export default function GetActivityJournal({params: { activityJournal } } : { pa
       </div>
     </div>
   );
-}
+// }
 }

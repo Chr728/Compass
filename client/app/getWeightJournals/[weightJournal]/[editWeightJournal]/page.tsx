@@ -40,7 +40,7 @@ export default function EditWeightJournal({params: { weightJournal } } : { param
     if (user) {
       fetchWeightJournal();
     }
-  }, [user, weight]);
+  }, []);
   
   if (!user) {
     return <div><Custom403/></div>
@@ -310,11 +310,6 @@ style={{
       />
     </div>
   </form>
-  <div className="mt-8">
-        <div className={`xl:max-w-[1280px] w-full  menu-container`}>
-          <Menu />
-        </div>
-      </div>
   </div>
 );
 

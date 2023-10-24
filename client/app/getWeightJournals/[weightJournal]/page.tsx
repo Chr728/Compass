@@ -30,6 +30,8 @@ export default function GetWeightJournal({params: { weightJournal } } : { params
     } catch (error) {
       console.error('Error retrieving weight journal entry:', error);
     }
+  }
+
 
   useEffect(() => {
     if (!user) {
@@ -39,7 +41,7 @@ export default function GetWeightJournal({params: { weightJournal } } : { params
     if (user) {
       fetchWeightJournal();
     }
-  }, [user, weight]);
+  }, []);
 
   if (!user) {
     return <div><Custom403/></div>
@@ -148,12 +150,7 @@ export default function GetWeightJournal({params: { weightJournal } } : { params
     </div>
       </span>
 )}
-<div className="mt-8">
-        <div className={`xl:max-w-[1280px] w-full  menu-container`}>
-          <Menu />
-        </div>
-      </div>
     </div>
   );
-}
+// }
 }
