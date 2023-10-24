@@ -2,6 +2,8 @@ import {render, screen,act} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import GetWeightJournalsPage from './getWeightJournalsPage';
 import {getWeightJournals} from '../http/weightJournalAPI';
+import { deleteWeightJournal} from '../http/weightJournalAPI'; 
+
 import userEvent from '@testing-library/user-event';
 
 import { useRouter } from "next/router";
@@ -57,10 +59,19 @@ jest.mock('../http/weightJournalAPI', () => {
                     }
                 ]
             }
-        }
+        },
+
+        deleteWeightJournal: async (weightJournalId) => {
+            return {
+                status: "SUCCESS",
+                data: `Successfully deleted weight Journal.`,
+            };
+        },
     }
 });
    
+
+
 
 test("Add an entry button  functions correctly", async() => {
     const addButton = screen.getAllByRole('button')[1];

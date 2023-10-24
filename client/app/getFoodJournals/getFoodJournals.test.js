@@ -1,16 +1,15 @@
 import {render, screen,act} from '@testing-library/react';
 import '@testing-library/jest-dom';
-import GetActivityJournalsPage from './getActivityJournalsPage';
-import {getActivityJournals} from '../http/activityJournalAPI';
+import GetFoodJournalsPage from './getFoodJournalsPage';
+import {getFoodIntakeJournals} from '../http/foodJournalAPI';
+import { deleteFoodIntakeJournal} from '../http/foodJournalAPI'; 
 import userEvent from '@testing-library/user-event';
-import { deleteActivityJournal} from '../http/activityJournalAPI'; 
-
 import { useRouter } from "next/router";
 import { useUser } from '../contexts/UserContext';
 
 beforeEach(async () => {
     await act(async () => {
-        render(<GetActivityJournalsPage/>);
+        render(<GetFoodJournalsPage/>);
       });
 })
 
@@ -40,9 +39,9 @@ jest.mock("../contexts/UserContext", () => {
   });
 
 
-jest.mock('../http/activityJournalAPI', () => {
+jest.mock('../http/foodJournalAPI', () => {
     return {
-        getActivityJournals: () => {
+        getFoodIntakeJournals: () => {
             return {
                 
                     success: "SUCCESS",
@@ -51,41 +50,42 @@ jest.mock('../http/activityJournalAPI', () => {
                             uid: '1',
                             date: '2014-01-01',
                             time: '08:36',
-                            activity: 'running',
-                            duration: 60,
+                            foodName: 'pasta',
+                            servingNumber: 2,
+                            mealType:'Lunch',
                             Notes : 'I am feeling good today'
                     }
                 ]
             }
         },
-        deleteActivityJournal: async (activityJournalId) => {
+
+        deleteFoodJournal: async (foodJournalId) => {
             return {
                 status: "SUCCESS",
-                data: `Successfully deleted activity Journal.`,
+                data: `Successfully deleted Food Journal.`,
             };
         },
     }
 });
    
 
+
+
 test("Add an entry button  functions correctly", async() => {
     const addButton = screen.getAllByRole('button')[1];
     await userEvent.click(addButton);
     await mockRouter;
-    expect(mockRouter).toHaveBeenCalledWith('/createActivityJournal')
+    expect(mockRouter).toHaveBeenCalledWith('/createFoodJournal')
 })
 
 
 
-
-    test("Get Activity Journals list is displayed correctly", async () => {
-        const date = await screen.findByText('2014-01-01');
-        const activity = await screen.findByText('running');
-        const height = await screen.findByText('60');
+    test("Get Food Journals list is displayed correctly", async () => {
+        const date = await screen.findByText('2014-01-01 08:36 AM');
+        const foodName = await screen.findByText('pasta');
 
         expect(date).toBeInTheDocument();
-        expect(activity).toBeInTheDocument();
-        expect(height).toBeInTheDocument();
+        expect(foodName).toBeInTheDocument();
     })
 
    
@@ -93,7 +93,12 @@ test("Add an entry button  functions correctly", async() => {
     
      // checks the texts
      test("Message displayed", async () => {
-        const message = screen.getByText(/Manage your daily activities to help you stay fit. People with active lifestyles are often happier and healthier./i);
+        const message = screen.getByText(/Keep track of what you eat each day./i);
         expect(message).toBeInTheDocument();
     })
 
+
+     test("Message displayed", async () => {
+        const message = screen.getByText(/Remember, eating healthy is all about eating the right foods in the right amounts./i);
+        expect(message).toBeInTheDocument();
+    })
