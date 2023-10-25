@@ -9,6 +9,8 @@ interface NotificationPreferenceAttributes {
   medicationReminders: boolean;
   appointmentReminders: boolean;
   foodIntakeReminders: boolean;
+  insulinDosageReminders: boolean;
+  glucoseMeasurementReminders: boolean;
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
@@ -24,6 +26,8 @@ module.exports = (sequelize: any, DataTypes: any) => {
     medicationReminders!: boolean;
     appointmentReminders!: boolean;
     foodIntakeReminders!: boolean;
+    insulinDosageReminders!: boolean;
+    glucoseMeasurementReminders!: boolean;
     static associate(models: any) {
       // define association here
       NotificationPreference.belongsTo(models.User, {
@@ -60,6 +64,16 @@ module.exports = (sequelize: any, DataTypes: any) => {
         defaultValue: true,
       },
       foodIntakeReminders: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      },
+      insulinDosageReminders: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      },
+      glucoseMeasurementReminders: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: true,
