@@ -82,6 +82,12 @@ module.exports = (sequelize: any, DataTypes: any) => {
         foreignKey: "uid",
         sourceKey: "uid",
       });
+
+      User.hasOne(models.Subscription, {
+        foreignKey: "uid",
+        sourceKey: "uid",
+      });
+    
     }
   }
   User.init(
