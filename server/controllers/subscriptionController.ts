@@ -77,7 +77,7 @@ export const getSubscription = async (req: Request, res: Response) => {
     if(!getSubscription) {
         return res.status(404).json({
             status: 'ERROR',
-            message: 'Subscription not found, invalid uid.',
+            message: 'No subscription exist for this user, please create.',
           });
     }
 
