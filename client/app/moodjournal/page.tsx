@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { useAuth } from "../contexts/AuthContext";
 import Custom403 from '../pages/403';
-import GetMoodJournalsPage from "./getMoodJournalsPage";
+import ViewMoodJournalsPage from "./viewMoodJournalsPage";
 
 export default function GetMoodJournals() {
   const router = useRouter();
@@ -19,5 +19,5 @@ export default function GetMoodJournals() {
   }
 
   return (
-    <GetMoodJournalsPage />  );
+    <ViewMoodJournalsPage />  );
 }

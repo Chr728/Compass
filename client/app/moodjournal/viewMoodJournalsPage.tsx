@@ -19,7 +19,7 @@ import { data } from 'cypress/types/jquery';
 
 export default function ViewMoodJournalsPage() {
     const { user } = useAuth();
-    const [moodJournal, setMoodJournal] = useState<any>(null);
+    const [moodJournal, setMoodJournal] = useState<any>();
     const router = useRouter();
 
     useEffect(() =>{
@@ -34,7 +34,6 @@ export default function ViewMoodJournalsPage() {
           const userId = user?.uid || '';
           const result = await getMoodJournals();    
           console.log('All mood journal entries retrieved:', result);
-          console.log('Mood journal data', result.data)
           setMoodJournal(result.data);
         } catch (error) {
           console.error('Error retrieving mood journal entry:', error);
@@ -42,7 +41,6 @@ export default function ViewMoodJournalsPage() {
       }
       fetchMoodJournals();
     }, [user]);
-  
   
       async function deleteMoodJournals(moodJournalId: string){
         const deleteresult = await deleteMoodJournal(moodJournalId);   
@@ -90,20 +88,8 @@ export default function ViewMoodJournalsPage() {
                     fontSize: '14px'
                 }}/>
         </div>
-        
-        {/* <div className="m-2 w-1/2">
-                <Input 
-                name="date" 
-                id="date" 
-                type="date" 
-                value={Date()} 
-                style={{width: '100%'}} 
-                />
-        </div> */}
 
-
-        {moodJournal && Array.isArray(moodJournal) && moodJournal.map((data: any, index: number) => {
-              {data}
+        {moodJournal && moodJournal.map((data: any, index: number) => (
               <Card sx={{ maxWidth: 9/10 }} key={data.moodJournalId}>
                 <CardContent>
                   <Typography variant="h5" component="div">
@@ -122,7 +108,7 @@ export default function ViewMoodJournalsPage() {
                   </ButtonMUI>
                 </CardActions>
               </Card>
-          })}
+          ))}
         
 
         </div>
