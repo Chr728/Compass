@@ -2,37 +2,31 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import Button from '../components/Button';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Input from "@/app/components/Input";
+import ButtonMUI from '@mui/material/Button';
 import { useRouter } from 'next/navigation';
 import { deleteMoodJournal, getMoodJournal, getMoodJournals } from '../http/moodJournalAPI';
 import { useEffect, useState } from 'react';
 import { formatDate, formatMilitaryTime } from '../helpers/utils/datetimeformat';
 import { useAuth } from '../contexts/AuthContext';
+import { parse } from 'path';
+import { data } from 'cypress/types/jquery';
 
 export default function ViewMoodJournalsPage() {
     const { user } = useAuth();
     const [moodJournal, setMoodJournal] = useState<any>(null);
+    const router = useRouter();
 
     useEffect(() =>{
         if (!user) 
             router.push("/login")
         }, [user]);
 
-    const rowStyles = {
-        cursor: 'pointer',
-      };
-    const router = useRouter();
 
     useEffect(() => {
       async function fetchMoodJournals() {
@@ -40,6 +34,7 @@ export default function ViewMoodJournalsPage() {
           const userId = user?.uid || '';
           const result = await getMoodJournals();    
           console.log('All mood journal entries retrieved:', result);
+          console.log('Mood journal data', result.data)
           setMoodJournal(result.data);
         } catch (error) {
           console.error('Error retrieving mood journal entry:', error);
@@ -60,9 +55,7 @@ export default function ViewMoodJournalsPage() {
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col w-full">
-        <span 
-        className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4"
-        >
+        <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4">
             <Link href="">
             <Image
                 src="/icons/LeftArrow.svg"
@@ -76,21 +69,19 @@ export default function ViewMoodJournalsPage() {
             </Link>
             Mood Journal
         </span>
-      {/* the text color for the text below has to be black but that is not working for some reason, so I've put grey for now. */}
-        <p 
-            className="text-grey font-sans text-[16px] ml-4 mt-2">
+        <p className="text-grey font-sans text-[16px] ml-4 mt-2 w-11/12">
             Tracking your mood helps you understand when and what caused your mood to change.
         </p>
         <div 
-            className="max-h-[500px] w-full rounded-3xl 
-            bg-white flex flex-col space-y-4 mt-8 
+            className="max-h-[500px] w-11/12 rounded-3xl 
+            bg-white flex flex-col space-y-4 mt-8 self-center	
             shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
         >
             <div style={{padding: '24px 16px 0 16px'}}>
                 <Button 
                 type="button" 
                 text="Add an item" 
-                onClick={ () => router.push('/viewappointments/addappointment')} 
+                onClick={ () => router.push('/moodjournal/addentry')} 
                 style={{ 
                     width: '100px', 
                     height: '34px', 
@@ -100,81 +91,41 @@ export default function ViewMoodJournalsPage() {
                 }}/>
         </div>
         
-        <div className='appointment h-[400px]'>
-          <div className="m-2 w-1/2">
-                  <Input 
-                  name="date" 
-                  id="date" 
-                  type="date" 
-                  value={Date()} 
-                  style={{width: '100%'}} 
-                  />
-              </div>
+        {/* <div className="m-2 w-1/2">
+                <Input 
+                name="date" 
+                id="date" 
+                type="date" 
+                value={Date()} 
+                style={{width: '100%'}} 
+                />
+        </div> */}
 
-            <TableContainer sx={{ maxHeight: 440,  }}>
-                <Table stickyHeader aria-label="sticky table">
-                    <TableHead>
-                    <TableRow>
-                        <TableCell>
-                            <div>
-                                Date/Time
-                                <Image
-                                    src="/icons/downArrow.svg"
-                                    alt="Down Arrow icon"
-                                    width={10}
-                                    height={10}
-                                    className="ml-2 text-grey inline-block"
-                                    style={{ width: 'auto', height: 'auto' }}
-                                />
-                            </div>
-                        </TableCell>
-                        <TableCell>
-                            <div>
-                            Appointment
-                            <Image
-                                src="/icons/downArrow.svg"
-                                alt="Down Arrow icon"
-                                width={10}
-                                height={10}
-                                className="ml-2 text-grey inline-block"
-                                style={{ width: 'auto', height: 'auto' }}
-                            />
-                            </div>
-                        </TableCell>
-                        <TableCell></TableCell>
-                    </TableRow>
-                    </TableHead>
-                    <TableBody>
-                    {data && Array.isArray(data) && data.map((row, index) => (
-                                <TableRow 
-                                    onClick={() => handleClick(row.id)} 
-                                    style={rowStyles}
-                                key={index}
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                >
-                                    <TableCell component="th" scope="row">
-                                         {formatDate(row.date)},
-                                            <span className="font-bold"> {formatMilitaryTime(row.time)}</span>
-                                    </TableCell>
-                                    <TableCell >{row.appointmentWith}</TableCell>
-                                    <TableCell>
-                                        <Image 
-                                            src="/icons/trash.svg"
-                                            alt="Trash icon"
-                                            width={10}
-                                            height={10}
-                                            className="mr-4 md:hidden"
-                                            style={{ width: 'auto', height: 'auto' }}
-                                            onClick={() => handleDelete(row.id)}
-                                        />
-                                    </TableCell>
-                                </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+
+        {moodJournal && Array.isArray(moodJournal) && moodJournal.map((data: any, index: number) => {
+              {data}
+              <Card sx={{ maxWidth: 9/10 }} key={data.moodJournalId}>
+                <CardContent>
+                  <Typography variant="h5" component="div">
+                    {data.date}
+                  </Typography>
+                  <Typography variant="body2">
+                    {data.comment}
+                  </Typography>
+                </CardContent>
+                <CardActions>
+                  <ButtonMUI 
+                    size="small"
+                    onClick={() => handleClick(data.moodJournalId)}
+                  >
+                    View Entry
+                  </ButtonMUI>
+                </CardActions>
+              </Card>
+          })}
+        
+
         </div>
-      </div>
     </div>
   )
 }

@@ -7,7 +7,7 @@ import Custom403 from '@/app/pages/403';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import Menu from '../../components/Menu';
+import Menu from '../../../components/Menu';
 import Input from '@/app/components/Input';
 import Image from 'next/image';
 import Link from 'next/link';
