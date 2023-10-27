@@ -6,12 +6,14 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useUser } from '../../contexts/UserContext';
 import { useEffect, useState } from 'react';
 import Header from '@/app/components/Header';
+import Typography from '@mui/material/Typography';
 import Menu from '@/app/components/Menu';
-import { formatMilitaryTime } from '@/app/helpers/utils/datetimeformat';
+import { formatDate, formatMilitaryTime } from '@/app/helpers/utils/datetimeformat';
 import Custom403 from '@/app/pages/403';
 
 
-export default function GetMoodJournal({params: { moodJournalId } } : { params: { moodJournalId: string } }) {
+export default function GetMoodJournal( {params: { moodJournalId } } : { params: { moodJournalId: string }} ) {
+  
   const { user } = useAuth();
   const router = useRouter();
   const { userInfo } = useUser();
@@ -19,6 +21,7 @@ export default function GetMoodJournal({params: { moodJournalId } } : { params: 
   
   async function fetchMoodJournal() {
     try {
+      console.log('mood journal id: ', moodJournalId)
       const userId = user?.uid || '';
       const result = await getMoodJournal(moodJournalId);
       console.log('Mood journal entry retrieved:', result);
@@ -48,103 +51,61 @@ export default function GetMoodJournal({params: { moodJournalId } } : { params: 
               <button onClick={() => router.back()}>
               <Header headerText="View Journal Entry"></Header>
               </button>
-              </span>
+        </span>
      
-        {mood && (
-     <span
-     className="rounded-2xl  mt-6 mb-10 mr-28 bg-white flex flex-col m-auto w-full md:max-w-[800px] md:min-h-[600px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
-   >
-     <div className="mt-3 relative">
-     <div>
-     <div className="flex items-center">
-  <p className="text-lg ml-0 font-sans text-darkgrey font-bold text-[16px]" style={{ display: 'inline' }}>
-    Date: 
-  </p>
-  <p className="text-md ml-2 text-darkgrey">
-    {new Date(mood.date).toISOString().split('T')[0]}
-  </p>
-</div>
-       <p
-           className="text-lg ml-0 font-sans text-darkgrey  font-bold text-[16px]"
-           style={{display: 'inline'}}
-       >
-         Time:
-       </p>
-       <p
-           className="text-md ml-2 text-darkgrey"
-           style={{display: 'inline'}}
-       >
-         {/* {new Date(`1970-01-01T${weight.time}`).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })} */}
-         {/* {formatMilitaryTime(weight.time)} */}
-       </p>
-       <br></br>
-       <p
-           className="text-lg ml-0 font-sans text-darkgrey  font-bold text-[16px]"
-           style={{display: 'inline'}}
-       >
-         Weight:
-       </p>
-       <p
-           className="text-md ml-2 text-darkgrey"
-           style={{display: 'inline'}}
-       >
-         {/* {weight.weight} */}
-       </p>
-       <br></br>
-       <p
-           className="text-lg ml-0 font-sans text-darkgrey  font-bold text-[16px]"
-           style={{display: 'inline'}}
-       >
-         Unit:
-       </p>
-       <p
-           className="text-md ml-2 text-darkgrey"
-           style={{display: 'inline'}}
-       >
-        {/* {weight.unit} */}
-       </p>
-       <br></br>
+        <div 
+        className="w-11/12 rounded-3xl 
+        bg-white flex flex-col space-y-4 mt-8 self-center	
+        shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
+        >
+          {mood && mood.map((data: any, index: number) => (
+            <>
+            <Typography>
+              Date: {formatDate(data.date)}
+            </Typography>
+            <Typography>
+              How Were You: {data.howAreYou}
+            </Typography>
+            <Typography>
+              Stress Signals:
+            </Typography>
+            <Typography>
+              I feel tired: {data.stressSignals.tired}
+            </Typography>
+            <Typography>
+              I'm not sleeping well.': {data.stressSignals.tired}
+            </Typography>
+            <Typography>
+              I'm not hungry': {data.stressSignals.tired}
+            </Typography>
+            <Typography>
+              I ate too much: {data.stressSignals.tired}
+            </Typography>
+            <Typography>
+              I feel sad or depressed: {data.stressSignals.tired}
+            </Typography>
+            <Typography>
+              I feel like things are just too much: {data.stressSignals.tired}
+            </Typography>
+            <Typography>
+              I have trouble paying attention: {data.stressSignals.tired}
+            </Typography>
+            <Typography>
+              I feel nervous or anxious: {data.stressSignals.tired}
+            </Typography>
+            <Typography>
+              I feel angry or irritated: {data.stressSignals.tired}
+            </Typography>
+            <Typography>
+              I get headaches and&sol;or colds: {data.stressSignals.tired}
+            </Typography>
+            <Typography>
+              Notes: {data.notes}
+            </Typography>
+            </>
 
-       <p
-           className="text-lg ml-0 font-sans text-darkgrey font-bold text-[16px]"
-           style={{display: 'inline'}}
-       >
-         Height:
-       </p>
-       <p
-           className="text-md ml-2 text-darkgrey"
-           style={{display: 'inline'}}
-       >
-         {/* {weight.height} */}
-       </p>
-
-       <br></br>
-       <p
-           className="text-lg ml-0 font-sans text-darkgrey  font-bold text-[16px]"
-           style={{display: 'inline'}}
-       >
-         Notes:
-       </p>
-       <p
-           className="text-md ml-2 text-darkgrey"
-           style={{display: 'inline'}}
-       >
-         {mood.notes}
-       </p>
-       <br></br>
-     </div>
-   </div>
-    <div className='mt-10 mb-2 items-center'>
-    <Button type="button" text="Edit" style={{ width: '140px' }} onClick={() => router.push(`/moodJournals/updateEntryId/${mood.id}`)} />
-    <Button
-    type="button"
-    text="Cancel"
-    style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)',marginLeft:'12px' }}
-    onClick={() => router.push(`/getWeightJournals`)}
-    />
-    </div>
-      </span>
-)}
+        ))}
+        </div>
     </div>
   );
 // }

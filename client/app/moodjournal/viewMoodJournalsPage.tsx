@@ -7,7 +7,6 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import Input from "@/app/components/Input";
 import ButtonMUI from '@mui/material/Button';
 import { useRouter } from 'next/navigation';
 import { deleteMoodJournal, getMoodJournal, getMoodJournals } from '../http/moodJournalAPI';
@@ -63,7 +62,7 @@ export default function ViewMoodJournalsPage() {
     }
 
     const handleClick = (moodJournalID: string) => {
-        router.push(`/viewMoodJournal/${moodJournalID}`);
+        router.push(`/moodjournal/${moodJournalID}`);
     }
 
   return (
