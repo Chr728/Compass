@@ -20,13 +20,13 @@ import { data } from 'cypress/types/jquery';
 export default function ViewMoodJournalsPage() {
     const { user } = useAuth();
     const [moodJournal, setMoodJournal] = useState<any>();
+    const [moodColor, setMoodColor] = useState<any>();
     const router = useRouter();
 
     useEffect(() =>{
         if (!user) 
             router.push("/login")
         }, [user]);
-
 
     useEffect(() => {
       async function fetchMoodJournals() {
@@ -41,11 +41,26 @@ export default function ViewMoodJournalsPage() {
       }
       fetchMoodJournals();
     }, [user]);
-  
-      async function deleteMoodJournals(moodJournalId: string){
-        const deleteresult = await deleteMoodJournal(moodJournalId);   
-        location.reload();
+
+    function setColor(mood: String) {
+      switch(mood) {
+        case 'awesome':
+          return '#a5d6a7'
+        case 'good':
+          return '#90caf9'
+        case 'sad':
+          return '#e0e0e0'
+        case 'bad':
+          return '#fff59d'
+        case 'awful': 
+        return '#ffcdd2'
       }
+    }
+
+    async function deleteMoodJournals(moodJournalId: string){
+      const deleteresult = await deleteMoodJournal(moodJournalId);   
+      location.reload();
+    }
 
     const handleClick = (moodJournalID: string) => {
         router.push(`/viewMoodJournal/${moodJournalID}`);
@@ -71,7 +86,7 @@ export default function ViewMoodJournalsPage() {
             Tracking your mood helps you understand when and what caused your mood to change.
         </p>
         <div 
-            className="max-h-[500px] w-11/12 rounded-3xl 
+            className="w-11/12 rounded-3xl 
             bg-white flex flex-col space-y-4 mt-8 self-center	
             shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
         >
@@ -90,27 +105,42 @@ export default function ViewMoodJournalsPage() {
         </div>
 
         {moodJournal && moodJournal.map((data: any, index: number) => (
-              <Card sx={{ maxWidth: 9/10 }} key={data.moodJournalId}>
+            <div 
+              className="my-4 self-center w-11/12" 
+            >
+              <Card 
+                sx={{backgroundColor: setColor(data.howAreYou) }}
+                key={data.id}
+                // className = { setColor(data.howAreYou) }
+                // style={{ backgroundColor: setColor(data.howAreYou) }}
+              >
                 <CardContent>
-                  <Typography variant="h5" component="div">
-                    {data.date}
-                  </Typography>
                   <Typography variant="body2">
-                    {data.comment}
+                    {formatDate(data.date)}
+                  </Typography>
+                  <Typography variant="h5" component="div">
+                    {data.notes}
                   </Typography>
                 </CardContent>
                 <CardActions>
                   <ButtonMUI 
                     size="small"
-                    onClick={() => handleClick(data.moodJournalId)}
+                    onClick={() => handleClick(data.id)}
                   >
                     View Entry
                   </ButtonMUI>
+                  <ButtonMUI 
+                    size="small"
+                    onClick={() => deleteMoodJournals(data.id)}
+                  >
+                    Delete
+                  </ButtonMUI>
                 </CardActions>
               </Card>
-          ))}
-        
+            </div>
 
+          ))}
+            <div className="mb-2">&nbsp;</div>        
         </div>
     </div>
   )

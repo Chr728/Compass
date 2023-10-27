@@ -26,7 +26,7 @@ describe("Update entry page", () => {
   })
   
   beforeEach(() => {
-    jest.mock("../../contexts/AuthContext", () => {
+    jest.mock("../../../contexts/AuthContext", () => {
       return {
         useAuth: () => {
           return {
@@ -37,7 +37,7 @@ describe("Update entry page", () => {
       };
     });
 
-  jest.mock("../../http/moodJournalAPI", () => {
+  jest.mock("../../../http/moodJournalAPI", () => {
     return {
         getMoodJournal : jest.fn((updateEntryId) => {
             return {
