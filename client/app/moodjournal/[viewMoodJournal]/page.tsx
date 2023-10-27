@@ -12,7 +12,7 @@ import { formatDate, formatMilitaryTime } from '@/app/helpers/utils/datetimeform
 import Custom403 from '@/app/pages/403';
 
 
-export default function GetMoodJournal( {params: { moodJournalId } } : { params: { moodJournalId: string }} ) {
+export default function GetMoodJournal( {params: { viewMoodJournal } } : { params: { viewMoodJournal: string }} ) {
   
   const { user } = useAuth();
   const router = useRouter();
@@ -21,11 +21,15 @@ export default function GetMoodJournal( {params: { moodJournalId } } : { params:
   
   async function fetchMoodJournal() {
     try {
-      console.log('mood journal id: ', moodJournalId)
-      const userId = user?.uid || '';
-      const result = await getMoodJournal(moodJournalId);
+      const result = await getMoodJournal(viewMoodJournal);
       console.log('Mood journal entry retrieved:', result);
-      setMood(result.data);
+      const updatedStressSignals = JSON.parse(result.data.stressSignals);
+      const updatedMoodData = {
+       ...result.data,
+       stressSignals: updatedStressSignals, 
+      }
+      console.log('Updated mood data:', updatedMoodData);
+      setMood(updatedMoodData);
     } catch (error) {
       console.error('Error retrieving mood journal entry:', error);
     }
@@ -46,67 +50,71 @@ export default function GetMoodJournal( {params: { moodJournalId } } : { params:
   }
 
   return (
-    <div className="bg-eggshell min-h-screen flex flex-col">
+    mood && <div className="bg-eggshell min-h-screen flex flex-col">
        <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
               <button onClick={() => router.back()}>
               <Header headerText="View Journal Entry"></Header>
               </button>
         </span>
      
-        <div 
-        className="w-11/12 rounded-3xl 
-        bg-white flex flex-col space-y-4 mt-8 self-center	
-        shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
-        >
-          {mood && mood.map((data: any, index: number) => (
-            <>
-            <Typography>
-              Date: {formatDate(data.date)}
-            </Typography>
-            <Typography>
-              How Were You: {data.howAreYou}
-            </Typography>
-            <Typography>
-              Stress Signals:
-            </Typography>
-            <Typography>
-              I feel tired: {data.stressSignals.tired}
-            </Typography>
-            <Typography>
-              I'm not sleeping well.': {data.stressSignals.tired}
-            </Typography>
-            <Typography>
-              I'm not hungry': {data.stressSignals.tired}
-            </Typography>
-            <Typography>
-              I ate too much: {data.stressSignals.tired}
-            </Typography>
-            <Typography>
-              I feel sad or depressed: {data.stressSignals.tired}
-            </Typography>
-            <Typography>
-              I feel like things are just too much: {data.stressSignals.tired}
-            </Typography>
-            <Typography>
-              I have trouble paying attention: {data.stressSignals.tired}
-            </Typography>
-            <Typography>
-              I feel nervous or anxious: {data.stressSignals.tired}
-            </Typography>
-            <Typography>
-              I feel angry or irritated: {data.stressSignals.tired}
-            </Typography>
-            <Typography>
-              I get headaches and&sol;or colds: {data.stressSignals.tired}
-            </Typography>
-            <Typography>
-              Notes: {data.notes}
-            </Typography>
-            </>
+            <div 
+              className="w-11/12 rounded-3xl 
+              bg-white flex flex-col space-y-4 mt-2 self-center	text-black
+              shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
+            >
+              <Typography variant="body1" ml={2} mt={3} color="black">
+                <b>Date:</b> {formatDate(mood.date)}
+              </Typography>
+              <Typography variant="body1" ml={2} color="black">
+                <b>How Were You:</b> {mood.howAreYou}
+              </Typography>
+              <Typography variant="body1" ml={2} color="black">
+                <b>Stress Signals:</b>
+              </Typography>
+              <Typography variant="body1" ml={4} color="black">
+                <b>I feel tired:</b> {mood.stressSignals.tired}
+              </Typography>
+              <Typography variant="body1" ml={4} color="black">
+                <b>I'm not sleeping well:</b> {mood.stressSignals.tired}
+              </Typography>
+              <Typography variant="body1" ml={4} color="black">
+                <b>I'm not hungry:</b> {mood.stressSignals.tired}
+              </Typography>
+              <Typography variant="body1" ml={4} color="black">
+                <b>I ate too much:</b> {mood.stressSignals.tired}
+              </Typography>
+              <Typography variant="body1" ml={4} color="black">
+                <b>I feel sad or depressed:</b> {mood.stressSignals.tired}
+              </Typography>
+              <Typography variant="body1" ml={4} color="black">
+                <b>I feel like things are just too much:</b> {mood.stressSignals.tired}
+              </Typography>
+              <Typography variant="body1" ml={4} color="black">
+                <b>I have trouble paying attention:</b> {mood.stressSignals.tired}
+              </Typography>
+              <Typography variant="body1" ml={4} color="black">
+                <b>I feel nervous or anxious:</b> {mood.stressSignals.tired}
+              </Typography>
+              <Typography variant="body1" ml={4} color="black">
+                <b>I feel angry or irritated:</b> {mood.stressSignals.tired}
+              </Typography>
+              <Typography variant="body1" ml={4} color="black">
+                <b>I get headaches and/or colds:</b> {mood.stressSignals.tired}
+              </Typography>
+              <Typography variant="body1" ml={4} color="black">
+                <b>Notes:</b> {mood.notes}
+              </Typography>
 
-        ))}
+              <div className='mt-10 pb-4 self-center'>
+                <Button type="button" text="Edit" 
+                style={{ width: '140px' }} 
+                onClick={() => router.push(`/moodjournal/${viewMoodJournal}/${viewMoodJournal}`)} />
+                <Button type="button" text="Cancel"
+                style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)',marginLeft:'12px' }}
+                onClick={() => router.push(`/moodjournal`)}
+                />
+              </div>
+            </div>
         </div>
-    </div>
   );
-// }
 }
