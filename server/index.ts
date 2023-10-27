@@ -9,6 +9,7 @@ import moodJournalRoutes from './routes/moodJournalRoutes';
 import appointmentRoutes from './routes/appointmentRoutes';
 import notificationRoutes from './routes/notificationPreferenceRoutes';
 import foodIntakeJournalRoutes from './routes/foodIntakeJournalRoutes';
+import subscriptionRoutes from './routes/subscriptionRoutes';
 import Morgan from './middlewares/morgan';
 import { Logger } from './middlewares/logger';
 import decodeToken from './middlewares/decodeToken';
@@ -31,6 +32,7 @@ app.use('/api/journals/activity', activityJournalRoutes);
 app.use('/api/speed-dials', speedDialRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use("/api/journals/foodIntake", foodIntakeJournalRoutes);
+app.use("/api/subscription", subscriptionRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
