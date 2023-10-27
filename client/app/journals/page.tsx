@@ -69,6 +69,20 @@ export default function Journal() {
       </div>
 </Link>
 <br></br>
+
+<Link href="/moodjournal">
+      <div className="rounded-3xl flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 " style={{backgroundColor: 'var(--Green, #4caf50)' }}>
+        
+        <div>
+          <p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
+          Mood Journal
+          </p>
+          <p className="text-[14px] text-white font-IBM Plex Sans  text-start">
+          Document what changes your mood.
+          </p>
+        </div>
+      </div>
+</Link>
 </div>
 </div>
     </div>
