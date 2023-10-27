@@ -22,6 +22,15 @@ const user = {
   sex: "male",
 };
 
+const userNotificationPreferences = {
+  id: 1,
+  uid: "testuid",
+  activityReminders: true,
+  medicationReminders: true,
+  appointmentReminders: true,
+  foodIntakeReminders: true,
+};
+
 const userAppointment = {
   id: 1,
   uid: "testuid",
@@ -144,6 +153,10 @@ describe("Testing reminder controller", () => {
     const currentDate = "2023-09-30";
 
     jest
+      .spyOn(db.NotificationPreference, "findOne")
+      .mockResolvedValueOnce(userNotificationPreferences);
+
+    jest
       .spyOn(db.ActivityJournal, "findAll")
       .mockResolvedValueOnce(userActivityJournal);
     jest
@@ -164,6 +177,22 @@ describe("Testing reminder controller", () => {
     expect(db.ActivityJournal.findAll).toHaveBeenCalledTimes(1);
     expect(res.status).toBe(200);
     expect(res.body.status).toBe("SUCCESS");
+  });
+
+  it("should give error when the notification preference user id sent is wrong", async () => {
+    const nonExistentUserId = "user";
+    jest
+      .spyOn(db.NotificationPreference, "findOne")
+      .mockResolvedValueOnce(null);
+    const res = await request(app)
+      .get(`/api/notifications/${nonExistentUserId}`)
+      .set({ Authorization: "Bearer token" });
+    expect(db.NotificationPreference.findOne).toBeCalledTimes(1);
+    expect(res.status).toBe(404);
+    expect(res.body.status).toBe("ERROR");
+    expect(res.body.message).toBe(
+      "Notification preference not found, invalid user id."
+    );
   });
 
   it("the test should fail", async () => {

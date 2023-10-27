@@ -1,11 +1,11 @@
-import { auth } from '../config/firebase';
+import { auth } from "../config/firebase";
 
 // Function to create a notification preference of a user
 export async function createNotificationPreference(): Promise<any> {
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
-      throw new Error('No user is currently signed in.');
+      throw new Error("No user is currently signed in.");
     }
     const uid = currentUser.uid;
     const token = await currentUser.getIdToken();
@@ -18,11 +18,11 @@ export async function createNotificationPreference(): Promise<any> {
     };
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}api/notifications/${uid}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/notifications/${uid}`,
       {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(dataToBeStringified),
@@ -36,7 +36,7 @@ export async function createNotificationPreference(): Promise<any> {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error creating notification preference entry:', error);
+    console.error("Error creating notification preference entry:", error);
     throw error;
   }
 }
@@ -46,7 +46,7 @@ export async function getNotificationPreference(): Promise<any> {
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
-      throw new Error('No user is currently signed in.');
+      throw new Error("No user is currently signed in.");
     }
     const uid = currentUser.uid;
     const token = await currentUser.getIdToken();
@@ -54,9 +54,9 @@ export async function getNotificationPreference(): Promise<any> {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/notifications/${uid}`,
       {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       }
@@ -69,7 +69,7 @@ export async function getNotificationPreference(): Promise<any> {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error fetching notification preferences:', error);
+    console.error("Error fetching notification preferences:", error);
     throw error;
   }
 }
@@ -81,7 +81,7 @@ export async function updateNotificationPreference(
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
-      throw new Error('No user is currently signed in.');
+      throw new Error("No user is currently signed in.");
     }
     const uid = currentUser.uid;
     const token = await currentUser.getIdToken();
@@ -89,9 +89,9 @@ export async function updateNotificationPreference(
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/notifications/${uid}`,
       {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(updatedNotificationPreference),
@@ -105,7 +105,7 @@ export async function updateNotificationPreference(
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error updating notification preference:', error);
+    console.error("Error updating notification preference:", error);
     throw error;
   }
 }
@@ -117,14 +117,14 @@ export async function deleteNotificationPreference(
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
-      throw new Error('No user is currently signed in.');
+      throw new Error("No user is currently signed in.");
     }
     const token = await currentUser.getIdToken();
 
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/notifications/${userID}`,
       {
-        method: 'DELETE',
+        method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -135,9 +135,9 @@ export async function deleteNotificationPreference(
         `Failed to delete notification preference for user ${userID}. HTTP Status: ${response.status}`
       );
     }
-    return { message: 'Notification preference deleted successfully' };
+    return { message: "Notification preference deleted successfully" };
   } catch (error) {
-    console.error('Error deleting notification preference:', error);
+    console.error("Error deleting notification preference:", error);
     throw error;
   }
 }

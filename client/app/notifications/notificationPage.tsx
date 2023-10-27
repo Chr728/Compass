@@ -102,7 +102,6 @@ export default function NotificationPage() {
       const result = await updateNotificationPreference(data);
       console.log("Notification preference for user updated:", result);
       setSuccessAlert(true);
-      console.log("TADKAISAJOA", successAlert);
     } catch (error) {
       console.error("Error updating notification preference for user:", error);
       setErrorAlert(true);

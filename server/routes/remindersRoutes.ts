@@ -1,7 +1,7 @@
-import { subscribeUserReminders } from "../controllers/reminderController";
+import { sendUserReminders } from "../controllers/reminderController";
 import { Router } from "express";
 const router = Router();
 
-router.route("/:uid").post(subscribeUserReminders);
+router.route("/:uid").post(sendUserReminders);
 
 export default router;

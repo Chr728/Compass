@@ -1,7 +1,7 @@
 import { auth } from "../config/firebase";
 
 // Function to subscribe a user to reminders and prepare push notifications
-export async function subscribeUserReminders(): Promise<any> {
+export async function sendUserReminders(): Promise<any> {
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
@@ -9,6 +9,7 @@ export async function subscribeUserReminders(): Promise<any> {
     }
     const uid = currentUser.uid;
     const token = await currentUser.getIdToken();
+
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/reminders/${uid}`,
       {
