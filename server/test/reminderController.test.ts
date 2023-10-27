@@ -179,15 +179,19 @@ describe("Testing reminder controller", () => {
     expect(res.body.status).toBe("SUCCESS");
   });
 
-  it("should give error when the notification preference user id sent is wrong", async () => {
-    const nonExistentUserId = "user";
+  it("should handle the case when notification preferences are not found", async () => {
+    // Mock the function to simulate the absence of notification preferences
     jest
       .spyOn(db.NotificationPreference, "findOne")
       .mockResolvedValueOnce(null);
+
     const res = await request(app)
-      .get(`/api/notifications/${nonExistentUserId}`)
+      .post(`/api/reminders/${user.uid}`)
+      .send("test")
       .set({ Authorization: "Bearer token" });
-    expect(db.NotificationPreference.findOne).toBeCalledTimes(1);
+
+    // Expectations for the response
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
     expect(res.status).toBe(404);
     expect(res.body.status).toBe("ERROR");
     expect(res.body.message).toBe(
