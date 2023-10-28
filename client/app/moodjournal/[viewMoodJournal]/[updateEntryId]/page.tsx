@@ -71,7 +71,7 @@ export default function UpdateMoodEntry( {params: { updateEntryId } } : { params
                 notes: values.notes
               }
               await updateMoodJournal(updateEntryId, moodData);
-              router.push('/tpage')
+              router.push(`/moodjournal/${updateEntryId}`)
           },
 
           validate: async (values) => {
