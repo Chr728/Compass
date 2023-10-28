@@ -17,7 +17,6 @@ import {
   cleanupOutdatedCaches,
 } from "workbox-precaching";
 import { CacheableResponsePlugin } from "workbox-cacheable-response";
-import { auth } from "../config/firebase";
 
 skipWaiting();
 clientsClaim();
