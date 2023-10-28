@@ -19,6 +19,7 @@ import {
 import { useRouter } from "next/navigation";
 import createUser from "@/app/http/createUser";
 import { createUserAttributes } from "@/app/lib/Models/User";
+import { createNotificationPreference } from "../http/notificationPreferenceAPI";
 
 interface AuthContextProps {
   user: User | null;
@@ -89,6 +90,8 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         createUser(data)
           .then((res) => {
             if (res !== null) {
+              // Notification preference doesn't exist, create it
+              createNotificationPreference();
               setLoading(false);
               router.push("/tpage");
             }

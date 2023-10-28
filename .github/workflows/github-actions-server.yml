@@ -15,6 +15,8 @@ jobs:
       AUTH_PROVIDER_X509_CERT_URL: ${{ secrets.AUTH_PROVIDER_X509_CERT_URL }}
       CLIENT_X509_CERT_URL: ${{ secrets.CLIENT_X509_CERT_URL }}
       UNIVERSE_DOMAIN: ${{ secrets.UNIVERSE_DOMAIN }}
+      VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+      VAPID_PUBLIC_KEY: ${{ secrets.VAPID_PUBLIC_KEY }}
 
     steps:
       - uses: actions/checkout@v2
@@ -31,7 +33,9 @@ jobs:
             \"auth_uri\": \"$AUTH_URI\",
             \"token_uri\": \"$TOKEN_URI\",
             \"auth_provider_x509_cert_url\": \"$AUTH_PROVIDER_X509_CERT_URL\",
-            \"client_x509_cert_url\": \"$CLIENT_X509_CERT_URL\"
+            \"client_x509_cert_url\": \"$CLIENT_X509_CERT_URL\",
+            \"vapid_private_key\": \"$VAPID_PRIVATE_KEY\",
+            \"vapid_public_key\": \"$VAPID_PUBLIC_KEY\"
           }" > server/serviceAccountKey.json
 
       - name: Install Dependencies

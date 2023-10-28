@@ -17,6 +17,7 @@ import {
   cleanupOutdatedCaches,
 } from "workbox-precaching";
 import { CacheableResponsePlugin } from "workbox-cacheable-response";
+import { auth } from "../config/firebase";
 
 skipWaiting();
 clientsClaim();
@@ -229,3 +230,66 @@ registerRoute(
     ],
   })
 );
+
+// Utility function to convert base64 to Uint8Array
+function urlBase64ToUint8Array(base64String) {
+  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding)
+    .replace(/\-/g, "+")
+    .replace(/_/g, "/");
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
+
+// On install, subscribe the user to push notifications
+self.addEventListener("install", (event) => {
+  process.env.VAPID_PUBLIC_KEY;
+  event.waitUntil(
+    self.registration.pushManager
+      .subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(
+          "BKlaijHeFLlg0cuC8twkPz0p-vY8EzOJSATZnUdGu5Kc49ScJL4iVMaCIaSY4xI4t-XVeJS69H6c1tPSzstO0pw"
+        ),
+      })
+      .then((subscription) => {
+        // Store the subscription object on your server (to be added)
+        // fetch("/api/subscribe", {
+        //   method: "POST",
+        //   body: JSON.stringify(subscription),
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        // });
+      })
+      .catch((error) => {
+        console.error("Subscription failed:", error);
+      })
+  );
+});
+
+// Function to run every 30 minutes
+function runTaskEvery5Minutes() {
+  // This function will run every 30 minutes
+  console.log("Push Notification Task!");
+  //sendUserReminders();
+}
+
+// Schedule the task to run every 30 minutes
+setInterval(() => {
+  runTaskEvery5Minutes();
+}, 30 * 60 * 1000); // 30 minutes in milliseconds
+
+// Event listener for push notifications
+self.addEventListener("push", (event) => {
+  const options = {
+    icon: "/compass-removebg.png",
+    ...event.data.json(),
+  };
+
+  event.waitUntil(self.registration.showNotification(options.title, options));
+});
