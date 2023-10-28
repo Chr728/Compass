@@ -191,13 +191,13 @@ export const deleteSubscription= async (req: Request, res: Response) => {
 
     res.status(200).json({
       status: `SUCCESS`,
-      data: `Successfully deleted appointment.`,
+      message: `Successfully deleted subscription.`,
     });
   } catch (err) {
-    Logger.error(`Error occurred while deleting appointment: ${err}`);
+    Logger.error(`Error occurred while deleting subscription: ${err}`);
     res.status(400).json({
       status: "ERROR",
-      message: `Error deleting appointment record: ${err}`,
+      message: `Error deleting subscription: ${err}`,
     });
   }
 };

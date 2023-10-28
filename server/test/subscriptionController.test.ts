@@ -202,3 +202,126 @@ const mockedDecodedToken = {
       expect(res.body.status).toBe('ERROR');
     });
   });
+
+  describe('Testing the update subscription controller', () => {
+    it('test to update subscription', async () => {
+      jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(user);
+      jest.spyOn(db.Subscription, 'findOne').mockResolvedValueOnce(subscription);
+      jest.spyOn(db.Subscription, 'update').mockResolvedValueOnce(updateSubscription);
+      jest.spyOn(db.Subscription, 'findOne').mockResolvedValueOnce(updateSubscription);
+      const res = await request(app)
+        .put('/api/subscription/uid')
+        .send(updateSubscription)
+        .set({ Authorization: 'Bearer token' });
+      expect(db.User.findOne).toHaveBeenCalledTimes(1);
+      expect(db.Subscription.update).toHaveBeenCalledTimes(1);
+      expect(db.Subscription.findOne).toHaveBeenCalledTimes(2);
+      expect(res.status).toBe(200);
+      expect(res.body.status).toBe('SUCCESS');
+      expect(res.body.data).toStrictEqual(updateSubscription);
+    });
+
+    it('test the error if the user uid passed is invalid', async () => {
+        jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(null);
+        jest.spyOn(db.Subscription, 'findOne').mockResolvedValueOnce(subscription);
+        const res = await request(app)
+          .put('/api/subscription/uid')
+          .send(updateSubscription)
+          .set({ Authorization: 'Bearer token' });
+        expect(db.User.findOne).toHaveBeenCalledTimes(1);
+        expect(db.Subscription.findOne).toHaveBeenCalledTimes(0);
+        expect(res.status).toBe(404);
+        expect(res.body.status).toBe('ERROR');
+        expect(res.body.message).toBe(
+            'User not found, invalid user uid.'
+          );
+      });
+
+      it('test the error if user has no subscription', async () => {
+        jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(user);
+        jest.spyOn(db.Subscription, 'findOne').mockResolvedValueOnce(null);
+        const res = await request(app)
+          .put('/api/subscription/uid')
+          .send(updateSubscription)
+          .set({ Authorization: 'Bearer token' });
+        expect(db.User.findOne).toHaveBeenCalledTimes(1);
+        expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
+        expect(res.status).toBe(404);
+        expect(res.body.status).toBe('ERROR');
+        expect(res.body.message).toBe(
+            'No subscription exist for this user.'
+          );
+      });
+
+    it('test the error if request is not made properly', async () => {
+      jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(user);
+      jest.spyOn(db.Subscription, 'findOne').mockRejectedValue(new Error('query error'));
+      const res = await request(app)
+        .put('/api/subscription/uid')
+        .send(updateSubscription)
+        .set({ Authorization: 'Bearer token' });
+      expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
+      expect(res.status).toBe(400);
+      expect(res.body.status).toBe('ERROR');
+    });
+  });
+
+  describe('Testing the delete subscription controller', () => {
+    it('test to delete subscription', async () => {
+      jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(user);
+      jest.spyOn(db.Subscription, 'findOne').mockResolvedValueOnce(subscription);
+      jest.spyOn(db.Subscription, 'destroy').mockResolvedValueOnce(true);
+      const res = await request(app)
+        .delete('/api/subscription/uid')
+        .set({ Authorization: 'Bearer token' });
+      expect(db.User.findOne).toHaveBeenCalledTimes(1);
+      expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
+      expect(db.Subscription.destroy).toHaveBeenCalledTimes(1);
+      expect(res.status).toBe(200);
+      expect(res.body.status).toBe('SUCCESS');
+      expect(res.body.message).toBe(
+        'Successfully deleted subscription.'
+      );
+    });
+
+    it('test the error if the user uid passed is invalid', async () => {
+        jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(null);
+        jest.spyOn(db.Subscription, 'findOne').mockResolvedValueOnce(subscription);
+        const res = await request(app)
+          .delete('/api/subscription/uid')
+          .set({ Authorization: 'Bearer token' });
+        expect(db.User.findOne).toHaveBeenCalledTimes(1);
+        expect(db.Subscription.findOne).toHaveBeenCalledTimes(0);
+        expect(res.status).toBe(404);
+        expect(res.body.status).toBe('ERROR');
+        expect(res.body.message).toBe(
+            'User not found, invalid user uid.'
+          );
+      });
+
+      it('test the error if user has no subscription', async () => {
+        jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(user);
+        jest.spyOn(db.Subscription, 'findOne').mockResolvedValueOnce(null);
+        const res = await request(app)
+          .delete('/api/subscription/uid')
+          .set({ Authorization: 'Bearer token' });
+        expect(db.User.findOne).toHaveBeenCalledTimes(1);
+        expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
+        expect(res.status).toBe(404);
+        expect(res.body.status).toBe('ERROR');
+        expect(res.body.message).toBe(
+            'No subscription exist for this user.'
+          );
+      });
+
+    it('test the error if request is not made properly', async () => {
+      jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(user);
+      jest.spyOn(db.Subscription, 'findOne').mockRejectedValue(new Error('query error'));
+      const res = await request(app)
+        .delete('/api/subscription/uid')
+        .set({ Authorization: 'Bearer token' });
+      expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
+      expect(res.status).toBe(400);
+      expect(res.body.status).toBe('ERROR');
+    });
+  });
