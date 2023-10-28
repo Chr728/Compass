@@ -5,50 +5,19 @@
 git clone https://github.com/janong24/Compass.git
 ```
 
-Please make sure you have the node installed first
+Please make sure you have the nodeJs, the PostgreSQL, and the docker installed first  
 
-### Run the local firebase emulator for functions
-Please make sure you have the firebase CLI installed first
-```bash
-npm install -g firebase-tools
-```
+Check your computer to make sure that the port 3000,8000 and 5432 are not occupied and the PostgreSQL server is not currently running  
 
-change the dir to the firebase functions:
-```bash
-cd functions
-```
+Add the .env files in the right places, you should have 3 .env files in the root folder, the client folder, and the server folder
 
-If this is your first time running the project, first install the dependencies:
-```bash
-npm install
-```
-Then run the firebase emulator:
+### Build and run the development version of the project
+
+The docker file contains the commands to build and run the project  
 
 ```bash
-npm run serve
+docker-compose -f docker-compose-dev.yml up
 ```
-Enter the link given in your terminal into your browser, you will be able to see the emulator UI. Click Functions emulator to check all the functions and each endpoint.
-
-### Run the next project
-The [Next.js](https://nextjs.org/) project is bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
-change the dir to the next app:
-```bash
-cd compass
-```
-
-If this is your first time running the project, first install the dependencies:
-```bash
-npm install
-```
-Then run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+If you are running the project in your local environment, the server will be hosted on port 8000, the client will be hosted on port 3000 and the database will be hosted on post 5432  
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
