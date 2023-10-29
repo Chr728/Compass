@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import {
   createContext,
   useContext,
@@ -6,10 +6,13 @@ import {
   ReactNode,
   useState,
   useEffect,
-} from "react";
-import getUser from "@/app/http/getUser";
-import updateUser from "@/app/http/updateUser";
-import { useAuth } from "./AuthContext";
+} from 'react';
+import getUser from '@/app/http/getUser';
+import updateUser from '@/app/http/updateUser';
+import { useAuth } from './AuthContext';
+import { useRouter } from 'next/navigation';
+import { auth } from '@/app/config/firebase';
+import { signOut } from 'firebase/auth';
 
 type UserAttributes = {
   id: number;
@@ -40,7 +43,7 @@ const UserContext = createContext<UserContextProps | undefined>(undefined);
 export const useUser = () => {
   const context = useContext(UserContext);
   if (context === undefined) {
-    throw new Error("useUser must be used within a UserProvider");
+    throw new Error('useUser must be used within a UserProvider');
   }
   return context;
 };
@@ -55,6 +58,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   // can remove the following line as we check for user in req. maybe no more use for user const too.
   const uid = user ? user.uid : null; // Access the UID if the user is authenticated
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
   useEffect(() => {
     const fetchUserData = () => {
       if (uid) {
@@ -63,9 +67,11 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
             setLoading(true);
             setUserInfo(userData);
             setLoading(false);
+            router.push('/tpage');
           })
           .catch((error) => {
-            console.error("Error fetching user data:", error);
+            console.error('Error fetching user data:', error);
+            signOut(auth);
           });
       } else {
         setUserInfo(null);
@@ -82,11 +88,11 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     if (uid) {
       updateUser(userData)
         .then((response) => {
-          console.log("User updated successfully:", response);
-          setUserInfo(response.data[1])
+          console.log('User updated successfully:', response);
+          setUserInfo(response.data[1]);
         })
         .catch((error) => {
-          console.error("Error updating user:", error);
+          console.error('Error updating user:', error);
         });
     }
   };
