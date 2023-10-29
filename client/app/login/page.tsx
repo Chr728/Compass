@@ -55,7 +55,7 @@ export default function Login() {
   };
 
   return (
-      <div className="bg-white min-h-screen flex flex-col overflow-hidden">
+      <div className="bg-white min-h-screen flex flex-col items-center overflow-hidden">
         <div className={'w-full flex flex-col justify-center items-center space-y-0 px-2'}>
           <NextImage src={compassImage} height={250}  alt="Compass Logo" />
         </div>

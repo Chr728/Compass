@@ -116,19 +116,17 @@ describe("Login Page error messages", () => {
     expect(passwordInput).toHaveAttribute("type", "password");
   });
 
-  test("link redirects to register page", async () => {
-    render(<Login />);
-    const linkElement = screen.getAllByRole("link")[0];
-    expect(linkElement).toHaveAttribute("href", "/register");
-  });
-
   test("link redirects to forgotpassword page", async () => {
     render(<Login />);
-    const linkElement = screen.getAllByRole("link")[1];
+    const linkElement = screen.getAllByRole("link")[0];
     expect(linkElement).toHaveAttribute("href", "/forgotpassword");
   });
 });
-
+test("link redirects to register page", async () => {
+  render(<Login />);
+  const linkElement = screen.getAllByRole("link")[1];
+  expect(linkElement).toHaveAttribute("href", "/register");
+});
 describe("Invalid login credentails", () => {
   beforeEach(() => {
     useAuth.mockImplementation(() => {
