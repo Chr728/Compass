@@ -27,7 +27,7 @@ export default function Profile() {
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col justify-center">
-      <button onClick={() => router.back()}>
+      <button onClick={() => router.push('/tpage')}>
         <Header headerText="View Profile"></Header>
       </button>
       {profile && (

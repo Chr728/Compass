@@ -1,8 +1,6 @@
 'use client';
-import Link from 'next/link';
-import Image from 'next/image';
+
 import Button from '../components/Button';
-import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -13,8 +11,7 @@ import { deleteMoodJournal, getMoodJournal, getMoodJournals } from '../http/mood
 import { useEffect, useState } from 'react';
 import { formatDate, formatMilitaryTime } from '../helpers/utils/datetimeformat';
 import { useAuth } from '../contexts/AuthContext';
-import { parse } from 'path';
-import { data } from 'cypress/types/jquery';
+import Header from '../components/Header';
 
 export default function ViewMoodJournalsPage() {
     const { user } = useAuth();
@@ -68,18 +65,9 @@ export default function ViewMoodJournalsPage() {
   return (
     <div className="bg-eggshell min-h-screen flex flex-col w-full">
         <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4">
-            <Link href="">
-            <Image
-                src="/icons/LeftArrow.svg"
-                alt="LeftArrow icon"
-                width={10}
-                height={10}
-                className="mr-4 md:hidden"
-                style={{ width: 'auto', height: 'auto' }}
-                onClick={() => router.back()}
-            />
-            </Link>
-            Mood Journal
+        <button onClick={() => router.push('/journals')}>
+            <Header headerText="Mood Journal "></Header>
+        </button>
         </span>
         <p className="text-grey font-sans text-[16px] ml-4 mt-2 w-11/12">
             Tracking your mood helps you understand when and what caused your mood to change.
@@ -110,8 +98,6 @@ export default function ViewMoodJournalsPage() {
               <Card 
                 sx={{backgroundColor: setColor(data.howAreYou) }}
                 key={data.id}
-                // className = { setColor(data.howAreYou) }
-                // style={{ backgroundColor: setColor(data.howAreYou) }}
               >
                 <CardContent>
                   <Typography variant="body2">

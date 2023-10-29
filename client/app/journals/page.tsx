@@ -15,7 +15,7 @@ export default function Journal() {
     <div className="bg-eggshell p-5  min-h-screen flex flex-col justify-center">
       <div className="mt-6 mb-10 mr-28  flex flex-col m-auto w-full p-5">
       <div style={{ marginTop: '-5%' }} >
-      <button className="mt-3" onClick={() => router.back()}>
+      <button className="mt-3" onClick={() => router.push('/tpage')}>
         <Header  headerText="Journals"></Header>
       </button>
       
