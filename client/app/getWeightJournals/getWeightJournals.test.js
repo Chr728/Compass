@@ -51,7 +51,7 @@ jest.mock('../http/weightJournalAPI', () => {
                         {
                             uid: '1',
                             date: '2014-01-01',
-                            time: '08:36',
+                            time: '8:36',
                             weight: '75.5',
                             height: 1.65,
                             unit:'kg',
@@ -84,9 +84,9 @@ test("Add an entry button  functions correctly", async() => {
 
 
     test("Get Weight Journals list is displayed correctly", async () => {
-        const date = await screen.findByText('2014-01-01 08:36 AM');
+        const date = await screen.findByText('Jan 1, 2014 8h36');
         const weight = await screen.findByText('75.5');
-        const height = await screen.findByText('1.65');
+        const height = await screen.findByText('1.65cm');
 
         expect(date).toBeInTheDocument();
         expect(weight).toBeInTheDocument();

@@ -24,7 +24,7 @@ jest.mock('../../http/foodJournalAPI', () => {
                     data: 
                         {
                             uid: '1',
-                            date: '2014-01-01',
+                            date: 'Jan 1,2014',
                             time: '08:36',
                             foodName: 'pasta',
                             servingNumber: 2,
@@ -59,7 +59,7 @@ test("User data is displayed correctly", async () => {
         expect(screen.getByText("Meal Type:")).toBeInTheDocument();
         expect(screen.getByText("Number of Servings:")).toBeInTheDocument();
         expect(screen.getByText("Notes:")).toBeInTheDocument();
-        expect(screen.getByText("2014-01-01")).toBeInTheDocument();
+        expect(screen.getByText("Jan 1,2014")).toBeInTheDocument();
         expect(screen.getByText("8h36")).toBeInTheDocument();
         expect(screen.getByText("pasta")).toBeInTheDocument();
         expect(screen.getByText("Lunch")).toBeInTheDocument();

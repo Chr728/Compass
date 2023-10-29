@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react';
 import { MdDeleteForever, MdInfoOutline, MdKeyboardArrowDown } from 'react-icons/md';
 import Header from '../components/Header';
 import Menu from '../components/Menu';
+import { formatDate } from '../helpers/utils/datetimeformat';
 
 export default function GetActivityJournalsPage() {
   const router = useRouter();
@@ -97,7 +98,7 @@ export default function GetActivityJournalsPage() {
   >
     <div className="flex-2">
       <p className="font-sans font-medium text-darkgrey text-[14px]">
-        {`${new Date(item.date).toISOString().split('T')[0]}`}
+        {formatDate(item.date)}
       </p>
     </div>
     <div className="flex-2">

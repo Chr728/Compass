@@ -79,7 +79,7 @@ test("Add an entry button  functions correctly", async() => {
 
 
     test("Get Activity Journals list is displayed correctly", async () => {
-        const date = await screen.findByText('2014-01-01');
+        const date = await screen.findByText('Jan 1, 2014');
         const activity = await screen.findByText('running');
         const height = await screen.findByText('60');
 

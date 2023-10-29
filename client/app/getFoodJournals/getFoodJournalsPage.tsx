@@ -11,6 +11,7 @@ import { useUser } from '../contexts/UserContext';
 import { useEffect, useState } from 'react';
 import { MdDeleteForever, MdInfoOutline, MdKeyboardArrowDown } from 'react-icons/md';
 import Header from '../components/Header';
+import { formatDate, formatMilitaryTime } from '../helpers/utils/datetimeformat';
 
 
 export default function GetFoodJournalsPage() {
@@ -91,9 +92,7 @@ export default function GetFoodJournalsPage() {
     >
       <div className="flex-2">
         <p className="font-sans font-medium text-darkgrey text-[14px] text-center">
-          {`${new Date(item.date).toISOString().split('T')[0]} ${new Date(
-            `1970-01-01T${item.time}`
-          ).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`}
+        {`${formatDate(item.date)} ${formatMilitaryTime(item.time)}`}
         </p>
       </div>
       <div className="flex-2">

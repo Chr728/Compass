@@ -11,7 +11,7 @@ import { useUser } from '../../contexts/UserContext';
 import { useEffect, useState } from 'react';
 import Header from '@/app/components/Header';
 import Menu from '@/app/components/Menu';
-import { formatMilitaryTime } from '@/app/helpers/utils/datetimeformat';
+import { formatDate, formatMilitaryTime } from '@/app/helpers/utils/datetimeformat';
 import Custom403 from '@/app/pages/403';
 
 
@@ -66,7 +66,7 @@ export default function GetWeightJournal({params: { weightJournal } } : { params
     Date: 
   </p>
   <p className="text-md ml-2 text-darkgrey">
-    {new Date(weight.date).toISOString().split('T')[0]}
+    {formatDate(weight.date)}
   </p>
 </div>
        <p
@@ -79,7 +79,6 @@ export default function GetWeightJournal({params: { weightJournal } } : { params
            className="text-md ml-2 text-darkgrey"
            style={{display: 'inline'}}
        >
-         {/* {new Date(`1970-01-01T${weight.time}`).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })} */}
          {formatMilitaryTime(weight.time)}
        </p>
        <br></br>
