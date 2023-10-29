@@ -74,19 +74,19 @@ export default function GetWeightJournalsPage() {
     <br></br>
 <div className="flex" style={{ justifyContent: 'space-between' }}>
     <div className="flex-2" style={{ marginRight: '18%' }}>
-      <div className="font-sans font-medium text-darkgrey font-bold text-[18px] text-center">
+      <div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
         Date/Time
         <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
       </div>
     </div>
     <div className="flex-2" style={{ marginRight: '2%' }}>
-      <div className="font-sans font-medium text-darkgrey font-bold text-[18px] text-center">
+      <div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
         BMI
         <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
       </div>
     </div>
     <div className="flex-2" style={{ marginRight: '13%' }}>
-      <div className="font-sans font-medium text-darkgrey font-bold text-[18px] text-center">
+      <div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
         Weight
         <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
       </div>
