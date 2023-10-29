@@ -116,7 +116,7 @@ it("All buttons are displayed to the user", async() => {
     await waitFor(async () => {
       const cancelButton = screen.getAllByRole("button")[0];
       await userEvent.click(cancelButton);
-      // expect(mockRouter).toHaveBeenCalledWith('/moodjournal');
+      expect(mockRouter).toHaveBeenCalled();
     })
 
 })
