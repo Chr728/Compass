@@ -89,6 +89,7 @@ export default function GetFoodJournalsPage() {
       style={{
         backgroundColor: index % 2 === 0 ? 'white' : '#DBE2EA',
       }}
+      onClick={() => router.push(`/getFoodJournals/${item.id}`)}
     >
       <div className="flex-2">
         <p className="font-sans font-medium text-darkgrey text-[14px] text-center">
@@ -103,12 +104,6 @@ export default function GetFoodJournalsPage() {
 
       
       <div className="flex icons" style={{ marginLeft: '5px', marginRight: '5px' }}>
-        <div className="icon">
-          <MdInfoOutline
-            style={{ color: 'var(--Black, #000000)', width: '25px', height: '30px' }}
-            onClick={() => router.push(`/getFoodJournals/${item.id}`)}
-          />
-        </div>
         <div className="icon">
           <MdDeleteForever
             style={{ color: 'var(--Red, #FF7171)', width: '25px', height: '30px' }}

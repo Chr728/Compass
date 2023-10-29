@@ -81,7 +81,7 @@ export default function GetActivityJournalsPage() {
               </div>
             </div>
             <div className="flex-2" style={{ marginRight: '10%' }}>
-              <div className="font-sans font-bold text-darkgrey text-[18px] ml-4 text-center">
+              <div className="font-sans font-bold text-darkgrey text-[18px] ml-2 text-center">
               Duration
               <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
               </div>
@@ -95,6 +95,7 @@ export default function GetActivityJournalsPage() {
     style={{
       backgroundColor: index % 2 === 0 ? 'white' : '#DBE2EA',
     }}
+    onClick={() => router.push(`/getActivityJournals/${item.id}`)}
   >
     <div className="flex-2">
       <p className="font-sans font-medium text-darkgrey text-[14px]">
@@ -102,23 +103,17 @@ export default function GetActivityJournalsPage() {
       </p>
     </div>
     <div className="flex-2">
-      <p className="font-sans ml-4 font-medium text-darkgrey text-[14px]">
+      <p className="font-sans ml-2 font-medium text-darkgrey text-[14px]">
         {item.activity}
       </p>
     </div>
     <div className="flex-2">
-      <p className="font-sans ml-4 font-medium text-darkgrey text-[14px]">
+      <p className="font-sans ml-12 font-medium text-darkgrey text-[14px]">
         {item.duration}
       </p>
     </div>
 
     <div className="flex icons" style={{ marginLeft: '5px', marginRight: '5px',  marginTop: '-2%'}}>
-        <div className="icon">
-          <MdInfoOutline
-            style={{ color: 'var(--Black, #000000)', width: '25px', height: '30px' }}
-            onClick={() => router.push(`/getActivityJournals/${item.id}`)}
-          />
-        </div>
         <div className="icon">
           <MdDeleteForever
             style={{ color: 'var(--Red, #FF7171)', width: '25px', height: '30px' }}
