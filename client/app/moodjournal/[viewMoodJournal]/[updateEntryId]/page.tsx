@@ -154,7 +154,7 @@ export default function UpdateMoodEntry( {params: { updateEntryId } } : { params
       <span 
         className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4">
         <button onClick={() => router.push(`/moodjournal/${updateEntryId}`)}>
-            <Header headerText="Mood Journal "></Header>
+            <Header headerText="Edit an Entry - Mood"></Header>
         </button>
       {/* <Link 
       href=`/moodjournal/${updateEntryId}`>

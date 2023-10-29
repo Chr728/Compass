@@ -32,7 +32,7 @@ beforeAll(() => {
 
 describe("Settings Page", () => {
   //Test to check if page is rendered correctly with proper text and button
-  test("Renders correct content and button", () => {
+  test("Renders correct content and button", async () => {
     render(<SettingsPage />);
     const SettingsHeader = screen.getAllByText(/Settings/i)[0];
     const YourAccountHeader = screen.getByText(/Your account/i);
@@ -56,7 +56,9 @@ describe("Settings Page", () => {
 
     expect(BackButton).toBeInTheDocument();
     fireEvent.click(BackButton);
-    expect(mockRouterBack).toHaveBeenCalledTimes(1);
+
+    await mockRouterPush;
+    expect(mockRouterPush).toHaveBeenCalledTimes(1);
 
     expect(LogoutButton).toBeInTheDocument();
     fireEvent.click(LogoutButton);
