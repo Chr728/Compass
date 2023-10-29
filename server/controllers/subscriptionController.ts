@@ -145,10 +145,10 @@ export const updateSubscription = async (req: Request, res: Response) => {
     });
 
   } catch (err) {
-    Logger.error(`Error occurred while deleting appointment: ${err}`);
+    Logger.error(`Error occurred while updating subscription: ${err}`);
     res.status(400).json({
       status: "ERROR",
-      message: `Error deleting appointment record: ${err}`,
+      message: `Error updating subscription record: ${err}`,
     });
   }
 };
