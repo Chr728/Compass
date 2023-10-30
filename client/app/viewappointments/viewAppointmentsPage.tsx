@@ -14,7 +14,7 @@ import { useEffect, useState } from 'react';
 import { Appointment } from '../http/appointmentAPI';
 import { formatDate, formatMilitaryTime } from '../helpers/utils/datetimeformat';
 import { useAuth } from '../contexts/AuthContext';
-import Menu from '../components/Menu';
+import { MdKeyboardArrowDown } from 'react-icons/md';
 
 export default function ViewAppointmentsPage() {
     const { user } = useAuth();
@@ -56,7 +56,7 @@ export default function ViewAppointmentsPage() {
     const handleClick = (appointmentID: string) => {
         router.push(`/viewappointments/${appointmentID}`);
     }
-
+  
   return (
     <div className="bg-eggshell min-h-screen flex flex-col w-full">
         <span 
@@ -107,27 +107,13 @@ export default function ViewAppointmentsPage() {
                         <TableCell>
                             <div>
                                 Date/Time
-                                <Image
-                                    src="/icons/downArrow.svg"
-                                    alt="Down Arrow icon"
-                                    width={10}
-                                    height={10}
-                                    className="ml-2 text-grey inline-block"
-                                    style={{ width: 'auto', height: 'auto' }}
-                                />
+                                <MdKeyboardArrowDown className="inline-block text-[28px] text-darkgrey" />
                             </div>
                         </TableCell>
                         <TableCell>
                             <div>
                             Appointment
-                            <Image
-                                src="/icons/downArrow.svg"
-                                alt="Down Arrow icon"
-                                width={10}
-                                height={10}
-                                className="ml-2 text-grey inline-block"
-                                style={{ width: 'auto', height: 'auto' }}
-                            />
+                            <MdKeyboardArrowDown className="inline-block text-[28px] text-darkgrey" />
                             </div>
                         </TableCell>
                         <TableCell></TableCell>
