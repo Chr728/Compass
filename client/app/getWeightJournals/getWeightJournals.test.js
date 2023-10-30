@@ -3,11 +3,10 @@ import '@testing-library/jest-dom';
 import GetWeightJournalsPage from './getWeightJournalsPage';
 import {getWeightJournals} from '../http/weightJournalAPI';
 import { deleteWeightJournal} from '../http/weightJournalAPI'; 
-
 import userEvent from '@testing-library/user-event';
-
 import { useRouter } from "next/router";
 import { useUser } from '../contexts/UserContext';
+
 
 beforeEach(async () => {
     await act(async () => {
@@ -79,7 +78,6 @@ test("Add an entry button  functions correctly", async() => {
     await mockRouter;
     expect(mockRouter).toHaveBeenCalledWith('/createWeightJournal')
 })
-
 
 
 

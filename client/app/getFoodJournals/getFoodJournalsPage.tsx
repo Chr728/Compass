@@ -69,14 +69,14 @@ export default function GetFoodJournalsPage() {
     </div>
     <br></br>
 <div className="flex" style={{ justifyContent: 'space-between' }}>
-    <div className="flex-2" style={{ marginRight: '16%' }}>
-      <div className="font-sans font-medium text-darkgrey font-bold text-[18px] text-center">
+    <div className="flex-2" style={{ marginRight: '14%' }}>
+      <div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
         Date/Time
         <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
       </div>
     </div>
-    <div className="flex-2" style={{ marginRight: '22%' }}>
-      <div className="font-sans font-medium text-darkgrey font-bold text-[18px] text-center">
+    <div className="flex-2" style={{ marginRight: '20%' }}>
+      <div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
        Food Item
         <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
       </div>

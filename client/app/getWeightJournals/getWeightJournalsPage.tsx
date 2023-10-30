@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react';
 import { MdDeleteForever, MdInfoOutline, MdKeyboardArrowDown } from 'react-icons/md';
 import Header from '../components/Header';
 import { formatDate, formatMilitaryTime } from '../helpers/utils/datetimeformat';
+import ButtonMUI from '@mui/material/Button';
 
 
 export default function GetWeightJournalsPage() {
@@ -108,7 +109,7 @@ export default function GetWeightJournalsPage() {
         </p>
       </div>
       <div className="flex-2">
-        <p className="ml-4 font-sans font-medium text-darkgrey text-[14px] text-center">
+        <p className="ml-3 font-sans font-medium text-darkgrey text-[14px] text-center">
           {(item.weight / ((item.height / 100) ** 2)).toFixed(2)}
         </p>
       </div>
@@ -119,7 +120,7 @@ export default function GetWeightJournalsPage() {
       </div>
       
       <div className="flex icons" style={{ marginLeft: '5px', marginRight: '5px' }}>
-        <div className="icon">
+        <div className="icon" id= "Trash Icon">
           <MdDeleteForever
             style={{ color: 'var(--Red, #FF7171)', width: '25px', height: '30px' }}
             onClick={() => deleteWeightJournals(item.id)}
