@@ -18,7 +18,7 @@ import Link from 'next/link';
 
 const navs = [
   { href: '/tpage', label: 'Home', iconActive: <MdHome/>, iconInactive: <MdOutlineHome/> },
-  { href: '/viewappointments', label: 'Health', iconActive: <MdAddBox  />, iconInactive: <MdOutlineAddBox  /> },
+  { href: '/health', label: 'Health', iconActive: <MdAddBox  />, iconInactive: <MdOutlineAddBox  /> },
   { href: '/journals', label: 'Journals', iconActive: <MdNote  />, iconInactive: <MdEditNote  /> },
   { href: '/tpage', label: 'Contact', iconActive: <MdMessage  />, iconInactive: <MdOutlineMessage  /> },
   { href: '/settings', label: 'Settings', iconActive: <MdSettings  />, iconInactive: <MdOutlineSettings  /> },

@@ -15,7 +15,7 @@ describe("Menu components", () => {
 
     test("link redirects to appointments  page", async () => {
         const linkElement = screen.getAllByRole("link")[1];
-        expect(linkElement).toHaveAttribute("href", "/viewappointments");
+        expect(linkElement).toHaveAttribute("href", "/health");
     })
     
     test("link redirects to journals page", async () => {
