@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, {
   createContext,
@@ -7,19 +7,19 @@ import React, {
   useContext,
   useEffect,
   useState,
-} from "react";
-import { auth } from "@/app/config/firebase";
+} from 'react';
+import { auth } from '@/app/config/firebase';
 import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
   User,
   createUserWithEmailAndPassword,
-} from "firebase/auth";
-import { useRouter } from "next/navigation";
-import createUser from "@/app/http/createUser";
-import { createUserAttributes } from "@/app/lib/Models/User";
-import { createNotificationPreference } from "../http/notificationPreferenceAPI";
+} from 'firebase/auth';
+import { useRouter } from 'next/navigation';
+import createUser from '@/app/http/createUser';
+import { createUserAttributes } from '@/app/lib/Models/User';
+import { createNotificationPreference } from '../http/notificationPreferenceAPI';
 
 interface AuthContextProps {
   user: User | null;
@@ -34,7 +34,7 @@ const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
 };
@@ -54,12 +54,10 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         // Signed in
         const user = userCredential.user;
         setError(null);
-        router.push("/tpage");
-
         // ...
       })
       .catch((error) => {
-        setError("Invalid User Credentials. Please try again.");
+        setError('Invalid User Credentials. Please try again.');
         const errorCode = error.code;
         const errorMessage = error.message;
         console.error(errorCode, errorMessage);
@@ -70,11 +68,11 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     try {
       await signOut(auth);
       // Sign-out successful.
-      router.push("/logout");
-      console.log("Sign-out successful.");
+      router.push('/logout');
+      console.log('Sign-out successful.');
     } catch (error) {
       // Handle errors gracefully
-      console.error("Error signing out:", error);
+      console.error('Error signing out:', error);
     }
   };
 
@@ -93,7 +91,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
               // Notification preference doesn't exist, create it
               createNotificationPreference();
               setLoading(false);
-              router.push("/tpage");
+              router.push('/tpage');
             }
           })
           .catch((error) => {
@@ -103,8 +101,8 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
           });
       })
       .catch((error) => {
-        if (error.code === "auth/email-already-in-use") {
-          setError("Email address is already in use.");
+        if (error.code === 'auth/email-already-in-use') {
+          setError('Email address is already in use.');
         } else {
           setError(error.message);
         }
