@@ -85,6 +85,9 @@ export default function NotificationPage() {
           setMedicationReminders(result.data.medicationReminders);
           setAppointmentReminders(result.data.appointmentReminders);
           setFoodIntakeReminders(result.data.foodIntakeReminders);
+          // Uncomment once backend has been adjusted
+          // setBloodGlucoseReminders(result.data.bloodGlucoseReminders);
+          // setInsulinInjectionReminders(result.data.insulinInjectionReminders);
           console.log("Notification preference information all set!");
         }
       } catch (error) {
@@ -115,6 +118,9 @@ export default function NotificationPage() {
         medicationReminders: checkedMedicationReminders,
         appointmentReminders: checkedAppointmentReminders,
         foodIntakeReminders: checkedFoodIntakeReminders,
+        // Uncomment once backend has been adjusted
+        // bloodGlucoseReminders : checkedBloodGlucoseReminders,
+        // insulinInjectionReminders : checkedInsulinInjectionReminders
       };
       const result = await updateNotificationPreference(data);
       console.log("Notification preference for user updated:", result);
