@@ -119,8 +119,8 @@ export default function NotificationPage() {
         appointmentReminders: checkedAppointmentReminders,
         foodIntakeReminders: checkedFoodIntakeReminders,
         // Uncomment once backend has been adjusted
-        // bloodGlucoseReminders : checkedBloodGlucoseReminders,
-        // insulinInjectionReminders : checkedInsulinInjectionReminders
+        // bloodGlucoseReminders: checkedBloodGlucoseReminders,
+        // insulinInjectionReminders: checkedInsulinInjectionReminders,
       };
       const result = await updateNotificationPreference(data);
       console.log("Notification preference for user updated:", result);
