@@ -1,10 +1,20 @@
 import { Router } from 'express';
-import {} from '../controllers/diabeticInsulinJournalController';
+import {
+  getInsulinJournals,
+  getInsulinJournal,
+  createInsulinJournal,
+  updateInsulinJournal,
+  deleteInsulinJournal,
+} from '../controllers/diabeticInsulinJournalController';
 
 const router = Router();
 
-router.route('/user/:uid').get().post();
+router.route('/user/:uid').get(getInsulinJournals).post(createInsulinJournal);
 
-router.route('/:id').get().put().delete();
+router
+  .route('/:id')
+  .get(getInsulinJournal)
+  .put(updateInsulinJournal)
+  .delete(deleteInsulinJournal);
 
 export default router;
