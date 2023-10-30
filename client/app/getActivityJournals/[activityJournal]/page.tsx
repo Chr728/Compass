@@ -50,7 +50,7 @@ export default function GetActivityJournal({params: { activityJournal } } : { pa
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
        <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-              <button onClick={() => router.back()}>
+              <button onClick={() => router.push('/getActivityJournals')}>
               <Header headerText="View the Activity Journal"></Header>
               </button>
               </span>

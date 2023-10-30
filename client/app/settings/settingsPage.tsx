@@ -16,7 +16,7 @@ export default function SettingsPage() {
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
-      <button onClick={() => router.back()}>
+      <button onClick={() => router.push('/tpage')}>
         <Header headerText="Settings"></Header>
       </button>
       <div className="rounded-3xl bg-white flex flex-col m-auto w-full md:max-w-[800px] md:h-[600px] p-8">

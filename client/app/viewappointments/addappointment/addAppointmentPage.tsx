@@ -87,7 +87,7 @@ export default function AddAppointmentPage() {
 
       <form
         className="rounded-3xl bg-white flex flex-col space-y-4 mt-4 w-full p-8 
-                  shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
+                  shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)] mb-[74px]"
         onSubmit={formik.handleSubmit}
       >
         <div className="w-full">

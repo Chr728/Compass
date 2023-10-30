@@ -11,6 +11,7 @@ import Menu from '../../../components/Menu';
 import Input from '@/app/components/Input';
 import Image from 'next/image';
 import Link from 'next/link';
+import Header from '@/app/components/Header';
 
 export default function UpdateMoodEntry( {params: { updateEntryId } } : { params: { updateEntryId: string }} ) {
     const { user } = useAuth();
@@ -152,8 +153,11 @@ export default function UpdateMoodEntry( {params: { updateEntryId } } : { params
     className="bg-eggshell min-h-screen flex flex-col">
       <span 
         className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4">
-      <Link 
-      href="">
+        <button onClick={() => router.push(`/moodjournal/${updateEntryId}`)}>
+            <Header headerText="Edit an Entry - Mood"></Header>
+        </button>
+      {/* <Link 
+      href=`/moodjournal/${updateEntryId}`>
         <Image
           src="/icons/LeftArrow.svg"
           alt="LeftArrow icon"
@@ -163,7 +167,7 @@ export default function UpdateMoodEntry( {params: { updateEntryId } } : { params
           style={{ width: 'auto', height: 'auto' }}
         />
       </Link>
-      Edit an Entry - Mood
+      Edit an Entry - Mood */}
     </span>
     <p 
             className="text-grey font-sans text-[16px] ml-4 mt-2">

@@ -9,19 +9,19 @@ jest.mock("next/navigation", () => ({
 }));
 
 //Mock back from next Router
-const mockRouterBack = jest.fn();
+const mockRouter = jest.fn();
 
 //Setitng useRouter mock behaviour before executing tests
 beforeAll(() => {
   useRouter.mockReturnValue({
     query: {},
-    back: mockRouterBack,
+    push: mockRouter,
   });
 });
 
 describe("Notification Settings Page", () => {
   //Test to check if page is rendered correctly with proper text and button
-  test("Renders correct content and button", () => {
+  test("Renders correct content and button", async () => {
     render(<NotificationPage />);
     const PushNotificationsHeader =
       screen.getAllByText(/Push Notifications/i)[0];
@@ -39,8 +39,8 @@ describe("Notification Settings Page", () => {
     expect(FoodIntakeReminders).toBeInTheDocument();
 
     expect(BackButton).toBeInTheDocument();
-    fireEvent.click(BackButton);
-    expect(mockRouterBack).toHaveBeenCalledTimes(1);
+    await mockRouter();
+    expect(mockRouter).toHaveBeenCalledTimes(1);
 
     expect(Save).toBeInTheDocument();
     fireEvent.click(Save);

@@ -110,7 +110,7 @@ export default function NotificationPage() {
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
-      <button onClick={() => router.back()}>
+      <button onClick={() => router.push('/settings')}>
         <Header headerText="Push Notifications"></Header>
       </button>
       <div className="rounded-3xl bg-white flex flex-col m-auto w-full sm:max-w-[800px] h-[500px] p-8 mt-20 shadow-sm ">
