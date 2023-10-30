@@ -30,6 +30,11 @@ export default function NotificationPage() {
     React.useState(true);
   const [checkedFoodIntakeReminders, setFoodIntakeReminders] =
     React.useState(true);
+  const [checkedBloodGlucoseReminders, setBloodGlucoseReminders] =
+    React.useState(true);
+
+  const [checkedInsulinInjectionReminders, setInsulinInjectionReminders] =
+    React.useState(true);
 
   const handleActivityRemindersChange = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -53,6 +58,18 @@ export default function NotificationPage() {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setFoodIntakeReminders(event.target.checked);
+  };
+
+  const handleBloodGlucoseReminders = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setBloodGlucoseReminders(event.target.checked);
+  };
+
+  const handleInsulinInjectionReminders = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setInsulinInjectionReminders(event.target.checked);
   };
 
   // Retrieve notification preference information, if it doesnt exist, create it
@@ -110,7 +127,7 @@ export default function NotificationPage() {
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
-      <button onClick={() => router.push('/settings')}>
+      <button onClick={() => router.push("/settings")}>
         <Header headerText="Push Notifications"></Header>
       </button>
       <div className="rounded-3xl bg-white flex flex-col m-auto w-full sm:max-w-[800px] h-[500px] p-8 mt-20 shadow-sm ">
@@ -152,6 +169,26 @@ export default function NotificationPage() {
           />
           <span className="text-darkgrey text-base not-italic font-medium font-IBM Plex Sans text-lg ">
             Food Intake Reminders
+          </span>
+        </div>
+        <div className="m-4">
+          <Switch
+            checked={checkedBloodGlucoseReminders}
+            onChange={handleBloodGlucoseReminders}
+            inputProps={{ "aria-label": "BloodGlucoseSwitch" }}
+          />
+          <span className="text-darkgrey text-base not-italic font-medium font-IBM Plex Sans text-lg ">
+            Blood Glucose Reminders
+          </span>
+        </div>
+        <div className="m-4">
+          <Switch
+            checked={checkedInsulinInjectionReminders}
+            onChange={handleInsulinInjectionReminders}
+            inputProps={{ "aria-label": "InsulinInjectionSwitch" }}
+          />
+          <span className="text-darkgrey text-base not-italic font-medium font-IBM Plex Sans text-lg ">
+            Insulin Injection Reminders
           </span>
         </div>
         <div className="text-center mt-[100px]">
