@@ -1,9 +1,6 @@
 'use client';
 import React from 'react';
-import {useState} from 'react'
-import Link from 'next/link';
 import Menu from '../components/Menu';
-import {useUser} from '@/app/contexts/UserContext';
 import { useRouter } from "next/navigation";
 import { useAuth } from "../contexts/AuthContext";
 import Custom403 from '../pages/403';
