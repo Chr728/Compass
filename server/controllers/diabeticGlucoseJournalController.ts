@@ -170,7 +170,7 @@ export const deleteGlucoseJournal = async (req: Request, res: Response) => {
       },
     });
 
-    return res.status(204).json({
+    return res.status(200).json({
       status: 'SUCCESS',
       message: 'Glucose Journal deleted successfully',
     });
