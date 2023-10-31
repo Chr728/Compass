@@ -138,7 +138,7 @@ export default function GetFoodJournal({params: { foodJournal } } : { params: { 
        <br></br>
      </div>
    </div>
-    <div className='mt-10 mb-2 items-center'>
+    <div className='mt-10 pb-4 self-center'>
     <Button type="button" text="Edit"style={{ width: '140px' }} onClick={() => router.push(`/getFoodJournals/${foodJournal}/${foodJournal}`)} />
     <Button
     type="button"

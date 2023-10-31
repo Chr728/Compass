@@ -247,7 +247,7 @@ export default function CreateWeightJournalPage() {
                   onBlur={formik.handleBlur}
                 />
               </div>
-      <div className="items-center">
+      <div className='mt-10 pb-4 self-center'>
       <div className="mt-5 mb-5 space-x-2">
         <Button
           type="button"
