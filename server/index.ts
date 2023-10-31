@@ -12,6 +12,7 @@ import foodIntakeJournalRoutes from './routes/foodIntakeJournalRoutes';
 import reminderRoutes from './routes/remindersRoutes';
 import diabeticGlucoseJournalRoutes from './routes/diabeticGlucoseJournalRoutes';
 import diabeticInsulinJournalRoutes from './routes/diabeticInsulinJournalRoutes';
+import subscriptionRoutes from './routes/subscriptionRoutes';
 import Morgan from './middlewares/morgan';
 import { Logger } from './middlewares/logger';
 import decodeToken from './middlewares/decodeToken';
@@ -36,6 +37,8 @@ app.use('/api/journals/activity', activityJournalRoutes);
 app.use('/api/speed-dials', speedDialRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/journals/foodIntake', foodIntakeJournalRoutes);
+app.use('/api/reminders', reminderRoutes);
+app.use('/api/subscription', subscriptionRoutes);
 app.use('/api/reminders', reminderRoutes);
 
 app.get('/', (req, res) => {

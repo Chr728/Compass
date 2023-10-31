@@ -282,7 +282,7 @@ style={{
               />
             </div>
     
-    <div className="mt-5 mb-5 space-x-2 items-center">
+    <div className='mt-10 pb-4 space-x-2 self-center'>
       <Button
         type="button"
         text="Cancel"

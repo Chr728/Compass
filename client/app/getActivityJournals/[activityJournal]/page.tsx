@@ -11,7 +11,7 @@ import { useUser } from '../../contexts/UserContext';
 import { useEffect, useState } from 'react';
 import Header from '@/app/components/Header';
 import Menu from '@/app/components/Menu';
-import { formatMilitaryTime } from '@/app/helpers/utils/datetimeformat';
+import { formatDate, formatMilitaryTime } from '@/app/helpers/utils/datetimeformat';
 import Custom403 from '@/app/pages/403';
 
 
@@ -66,7 +66,7 @@ export default function GetActivityJournal({params: { activityJournal } } : { pa
     Date: 
   </p>
   <p className="text-md ml-2 text-darkgrey">
-    {new Date(activity.date).toISOString().split('T')[0]}
+    {formatDate(activity.date)}
   </p>
 </div>
        <p
@@ -125,7 +125,7 @@ export default function GetActivityJournal({params: { activityJournal } } : { pa
        <br></br>
      </div>
    </div>
-    <div className='mt-10 mb-2 items-center'>
+    <div className='mt-10 pb-4 self-center'>
     <Button type="button" text="Edit"style={{ width: '140px' }} onClick={() => router.push(`/getActivityJournals/${activityJournal}/${activityJournal}`)} />
     <Button
     type="button"

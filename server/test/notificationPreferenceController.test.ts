@@ -24,6 +24,8 @@ const notificationPreference = {
   medicationReminders: true,
   appointmentReminders: true,
   foodIntakeReminders: true,
+  insulinDosageReminders: true,
+  glucoseMeasurementReminders: true,
 };
 
 const updatedNotificationPreference = {
@@ -33,6 +35,8 @@ const updatedNotificationPreference = {
   medicationReminders: false,
   appointmentReminders: false,
   foodIntakeReminders: false,
+  insulinDosageReminders: false,
+  glucoseMeasurementReminders: false,
 };
 
 const mockedDecodedToken = {

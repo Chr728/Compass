@@ -49,7 +49,7 @@ jest.mock('../http/foodJournalAPI', () => {
                         {
                             uid: '1',
                             date: '2014-01-01',
-                            time: '08:36',
+                            time: '8:36',
                             foodName: 'pasta',
                             servingNumber: 2,
                             mealType:'Lunch',
@@ -81,7 +81,7 @@ test("Add an entry button  functions correctly", async() => {
 
 
     test("Get Food Journals list is displayed correctly", async () => {
-        const date = await screen.findByText('2014-01-01 08:36 AM');
+        const date = await screen.findByText('Jan 1, 2014 8h36');
         const foodName = await screen.findByText('pasta');
 
         expect(date).toBeInTheDocument();

@@ -23,7 +23,7 @@ jest.mock('../../http/activityJournalAPI', () => {
                     data: 
                         {
                             id: '1',
-                            date: '2014-01-01',
+                            date: 'Jan 1,2014',
                             time: '8:36',
                             activity: 'Swimming',
                             duration: 45,
@@ -55,7 +55,7 @@ test("User data is displayed correctly", async () => {
         expect(screen.getByText("Activity:")).toBeInTheDocument();
         expect(screen.getByText("Duration(min):")).toBeInTheDocument();
         expect(screen.getByText("Notes:")).toBeInTheDocument();
-        expect(screen.getByText("2014-01-01")).toBeInTheDocument();
+        expect(screen.getByText("Jan 1, 2014")).toBeInTheDocument();
         expect(screen.getByText("8h36")).toBeInTheDocument();
         expect(screen.getByText("Swimming")).toBeInTheDocument();
         expect(screen.getByText("45")).toBeInTheDocument();

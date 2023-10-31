@@ -24,8 +24,8 @@ jest.mock('../../http/weightJournalAPI', () => {
                     data: 
                         {
                             id: '1',
-                            date: '2014-01-01',
-                            time: '8:36',
+                            date: 'Jan 1,2014',
+                            time: '08:36',
                             weight: '186',
                             unit: 'lb',
                             height: '174',
@@ -59,7 +59,7 @@ test("User data is displayed correctly", async () => {
         expect(screen.getByText("Height:")).toBeInTheDocument();
         expect(screen.getByText("Unit:")).toBeInTheDocument();
         expect(screen.getByText("Notes:")).toBeInTheDocument();
-        expect(screen.getByText("2014-01-01")).toBeInTheDocument();
+        expect(screen.getByText("Jan 1,2014")).toBeInTheDocument();
         expect(screen.getByText("8h36")).toBeInTheDocument();
         expect(screen.getByText("186")).toBeInTheDocument();
         expect(screen.getByText("lb")).toBeInTheDocument();

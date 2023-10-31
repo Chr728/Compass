@@ -1,4 +1,5 @@
-import {render, screen, act} from '@testing-library/react';
+import {fireEvent, render, screen, waitFor} from '@testing-library/react';
+import act from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import EditWeightJournal from './page';
@@ -61,6 +62,8 @@ jest.mock("../../../contexts/UserContext", () => {
       }
     };
   });
+
+  
 
 test("Form submits correctly", async () =>{
     const updateWeightJournal = jest.fn();

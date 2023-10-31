@@ -11,6 +11,7 @@ import { useUser } from '../contexts/UserContext';
 import { useEffect, useState } from 'react';
 import { MdDeleteForever, MdInfoOutline, MdKeyboardArrowDown } from 'react-icons/md';
 import Header from '../components/Header';
+import { formatDate, formatMilitaryTime } from '../helpers/utils/datetimeformat';
 
 
 export default function GetFoodJournalsPage() {
@@ -68,14 +69,14 @@ export default function GetFoodJournalsPage() {
     </div>
     <br></br>
 <div className="flex" style={{ justifyContent: 'space-between' }}>
-    <div className="flex-2" style={{ marginRight: '16%' }}>
-      <div className="font-sans font-medium text-darkgrey font-bold text-[18px] text-center">
+    <div className="flex-2" style={{ marginRight: '14%' }}>
+      <div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
         Date/Time
         <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
       </div>
     </div>
-    <div className="flex-2" style={{ marginRight: '22%' }}>
-      <div className="font-sans font-medium text-darkgrey font-bold text-[18px] text-center">
+    <div className="flex-2" style={{ marginRight: '20%' }}>
+      <div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
        Food Item
         <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
       </div>
@@ -88,12 +89,11 @@ export default function GetFoodJournalsPage() {
       style={{
         backgroundColor: index % 2 === 0 ? 'white' : '#DBE2EA',
       }}
+      onClick={() => router.push(`/getFoodJournals/${item.id}`)}
     >
       <div className="flex-2">
         <p className="font-sans font-medium text-darkgrey text-[14px] text-center">
-          {`${new Date(item.date).toISOString().split('T')[0]} ${new Date(
-            `1970-01-01T${item.time}`
-          ).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`}
+        {`${formatDate(item.date)} ${formatMilitaryTime(item.time)}`}
         </p>
       </div>
       <div className="flex-2">
@@ -104,12 +104,6 @@ export default function GetFoodJournalsPage() {
 
       
       <div className="flex icons" style={{ marginLeft: '5px', marginRight: '5px' }}>
-        <div className="icon">
-          <MdInfoOutline
-            style={{ color: 'var(--Black, #000000)', width: '25px', height: '30px' }}
-            onClick={() => router.push(`/getFoodJournals/${item.id}`)}
-          />
-        </div>
         <div className="icon">
           <MdDeleteForever
             style={{ color: 'var(--Red, #FF7171)', width: '25px', height: '30px' }}
