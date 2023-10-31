@@ -85,9 +85,8 @@ export default function NotificationPage() {
           setMedicationReminders(result.data.medicationReminders);
           setAppointmentReminders(result.data.appointmentReminders);
           setFoodIntakeReminders(result.data.foodIntakeReminders);
-          // Uncomment once backend has been adjusted
-          // setBloodGlucoseReminders(result.data.bloodGlucoseReminders);
-          // setInsulinInjectionReminders(result.data.insulinInjectionReminders);
+          setBloodGlucoseReminders(result.data.glucoseMeasurementReminders);
+          setInsulinInjectionReminders(result.data.insulinDosageReminders);
           console.log("Notification preference information all set!");
         }
       } catch (error) {
@@ -118,9 +117,8 @@ export default function NotificationPage() {
         medicationReminders: checkedMedicationReminders,
         appointmentReminders: checkedAppointmentReminders,
         foodIntakeReminders: checkedFoodIntakeReminders,
-        // Uncomment once backend has been adjusted
-        // bloodGlucoseReminders: checkedBloodGlucoseReminders,
-        // insulinInjectionReminders: checkedInsulinInjectionReminders,
+        glucoseMeasurementReminders: checkedBloodGlucoseReminders,
+        insulinDosageReminders: checkedInsulinInjectionReminders,
       };
       const result = await updateNotificationPreference(data);
       console.log("Notification preference for user updated:", result);
@@ -136,7 +134,34 @@ export default function NotificationPage() {
       <button onClick={() => router.push("/settings")}>
         <Header headerText="Push Notifications"></Header>
       </button>
-      <div className="rounded-3xl bg-white flex flex-col m-auto w-full sm:max-w-[800px] h-[500px] p-8 mt-20 shadow-sm ">
+      <div style={{ marginTop: 10 }}>
+        {/* Success Alert */}
+        {successAlert && (
+          <Alert
+            onClose={() => {
+              setSuccessAlert(false);
+            }}
+            variant="outlined"
+            severity="success"
+          >
+            Preference saved!
+          </Alert>
+        )}
+
+        {/* Error Alert */}
+        {errorAlert && (
+          <Alert
+            onClose={() => {
+              setErrorAlert(false);
+            }}
+            variant="outlined"
+            severity="error"
+          >
+            Preference failed to save!
+          </Alert>
+        )}
+      </div>
+      <div className="rounded-3xl bg-white flex flex-col m-auto w-full sm:max-w-[800px] h-[600px] p-8 mt-10 shadow-sm ">
         <div className="m-4">
           <Switch
             checked={checkedActivityReminders}
@@ -197,40 +222,13 @@ export default function NotificationPage() {
             Insulin Injection Reminders
           </span>
         </div>
-        <div className="text-center mt-[100px]">
+        <div className="text-center">
           <Button
             type="submit"
             text="Save"
-            style={{ width: "50%" }}
+            style={{ width: "50%", height: "50px" }}
             onClick={onSubmit}
           />
-        </div>
-        <div style={{ marginTop: 70 }}>
-          {/* Success Alert */}
-          {successAlert && (
-            <Alert
-              onClose={() => {
-                setSuccessAlert(false);
-              }}
-              variant="outlined"
-              severity="success"
-            >
-              Preference saved!
-            </Alert>
-          )}
-
-          {/* Error Alert */}
-          {errorAlert && (
-            <Alert
-              onClose={() => {
-                setErrorAlert(false);
-              }}
-              variant="outlined"
-              severity="error"
-            >
-              Preference failed to save!
-            </Alert>
-          )}
         </div>
       </div>
     </div>
