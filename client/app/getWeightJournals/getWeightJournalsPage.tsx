@@ -11,6 +11,8 @@ import { useUser } from '../contexts/UserContext';
 import { useEffect, useState } from 'react';
 import { MdDeleteForever, MdInfoOutline, MdKeyboardArrowDown } from 'react-icons/md';
 import Header from '../components/Header';
+import { formatDate, formatMilitaryTime } from '../helpers/utils/datetimeformat';
+import ButtonMUI from '@mui/material/Button';
 
 
 export default function GetWeightJournalsPage() {
@@ -67,26 +69,26 @@ export default function GetWeightJournalsPage() {
       <div className="flex items-center">
         <p className="font-sans text-darkgrey ml-2 font-bold text-[14px]">Your height:</p>
         {weight.length > 0 && weight[0].height && (
-          <p className="font-sans text-darkgrey mr-8 font-bold text-[14px]">{weight[weight.length - 1].height}</p>
+          <p className="font-sans text-darkgrey mr-8 font-medium text-[14px]">{weight[weight.length - 1].height}cm</p>
         )}
       </div>
     </div>
     <br></br>
 <div className="flex" style={{ justifyContent: 'space-between' }}>
-    <div className="flex-2" style={{ marginRight: '18%' }}>
-      <div className="font-sans font-medium text-darkgrey font-bold text-[18px] text-center">
+    <div className="flex-2" style={{ marginRight: '10%' }}>
+      <div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
         Date/Time
         <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
       </div>
     </div>
     <div className="flex-2" style={{ marginRight: '2%' }}>
-      <div className="font-sans font-medium text-darkgrey font-bold text-[18px] text-center">
+      <div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
         BMI
         <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
       </div>
     </div>
-    <div className="flex-2" style={{ marginRight: '13%' }}>
-      <div className="font-sans font-medium text-darkgrey font-bold text-[18px] text-center">
+    <div className="flex-2" style={{ marginRight: '10%' }}>
+      <div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
         Weight
         <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
       </div>
@@ -99,16 +101,15 @@ export default function GetWeightJournalsPage() {
       style={{
         backgroundColor: index % 2 === 0 ? 'white' : '#DBE2EA',
       }}
+      onClick={() => router.push(`/getWeightJournals/${item.id}`)}
     >
       <div className="flex-2">
         <p className="font-sans font-medium text-darkgrey text-[14px] text-center">
-          {`${new Date(item.date).toISOString().split('T')[0]} ${new Date(
-            `1970-01-01T${item.time}`
-          ).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`}
+        {`${formatDate(item.date)} ${formatMilitaryTime(item.time)}`}
         </p>
       </div>
       <div className="flex-2">
-        <p className="ml-4 font-sans font-medium text-darkgrey text-[14px] text-center">
+        <p className="ml-3 font-sans font-medium text-darkgrey text-[14px] text-center">
           {(item.weight / ((item.height / 100) ** 2)).toFixed(2)}
         </p>
       </div>
@@ -119,13 +120,7 @@ export default function GetWeightJournalsPage() {
       </div>
       
       <div className="flex icons" style={{ marginLeft: '5px', marginRight: '5px' }}>
-        <div className="icon">
-          <MdInfoOutline
-            style={{ color: 'var(--Black, #000000)', width: '25px', height: '30px' }}
-            onClick={() => router.push(`/getWeightJournals/${item.id}`)}
-          />
-        </div>
-        <div className="icon">
+        <div className="icon" id= "Trash Icon">
           <MdDeleteForever
             style={{ color: 'var(--Red, #FF7171)', width: '25px', height: '30px' }}
             onClick={() => deleteWeightJournals(item.id)}

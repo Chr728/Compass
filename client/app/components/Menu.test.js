@@ -13,12 +13,19 @@ describe("Menu components", () => {
         expect(linkElement).toHaveAttribute("href", "/tpage");
     })
 
-    test("link redirects to settings page", async () => {
-        const linkElement = screen.getAllByRole("link")[4];
-        expect(linkElement).toHaveAttribute("href", "/settings");
+    test("link redirects to appointments  page", async () => {
+        const linkElement = screen.getAllByRole("link")[1];
+        expect(linkElement).toHaveAttribute("href", "/health");
     })
+    
     test("link redirects to journals page", async () => {
         const linkElement = screen.getAllByRole("link")[2];
         expect(linkElement).toHaveAttribute("href", "/journals");
     })
+
+    test("link redirects to settings page", async () => {
+        const linkElement = screen.getAllByRole("link")[4];
+        expect(linkElement).toHaveAttribute("href", "/settings");
+    })
+    
 });
