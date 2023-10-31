@@ -1,20 +1,21 @@
-import express from "express";
-import cors from "cors";
-import db from "./models";
-import userRoutes from "./routes/userRoutes";
-import activityJournalRoutes from "./routes/activityJournalRoutes";
-import speedDialRoutes from "./routes/speedDialRoutes";
-import weightJournalRoutes from "./routes/weightJournalRoutes";
-import moodJournalRoutes from "./routes/moodJournalRoutes";
-import appointmentRoutes from "./routes/appointmentRoutes";
-import notificationRoutes from "./routes/notificationPreferenceRoutes";
-import foodIntakeJournalRoutes from "./routes/foodIntakeJournalRoutes";
+import express from 'express';
+import cors from 'cors';
+import db from './models';
+import userRoutes from './routes/userRoutes';
+import activityJournalRoutes from './routes/activityJournalRoutes';
+import speedDialRoutes from './routes/speedDialRoutes';
+import weightJournalRoutes from './routes/weightJournalRoutes';
+import moodJournalRoutes from './routes/moodJournalRoutes';
+import appointmentRoutes from './routes/appointmentRoutes';
+import notificationRoutes from './routes/notificationPreferenceRoutes';
+import foodIntakeJournalRoutes from './routes/foodIntakeJournalRoutes';
 import reminderRoutes from "./routes/remindersRoutes";
-import Morgan from "./middlewares/morgan";
-import { Logger } from "./middlewares/logger";
-import decodeToken from "./middlewares/decodeToken";
-require("dotenv").config({
-  path: "./../.env",
+import subscriptionRoutes from './routes/subscriptionRoutes';
+import Morgan from './middlewares/morgan';
+import { Logger } from './middlewares/logger';
+import decodeToken from './middlewares/decodeToken';
+require('dotenv').config({
+  path: './../.env',
 });
 
 const app = express();
@@ -32,6 +33,7 @@ app.use("/api/journals/activity", activityJournalRoutes);
 app.use("/api/speed-dials", speedDialRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/journals/foodIntake", foodIntakeJournalRoutes);
+app.use("/api/subscription", subscriptionRoutes);
 app.use("/api/reminders", reminderRoutes);
 
 app.get("/", (req, res) => {
