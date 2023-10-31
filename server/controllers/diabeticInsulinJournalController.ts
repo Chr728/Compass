@@ -159,7 +159,7 @@ export const deleteInsulinJournal = async (req: Request, res: Response) => {
         id: insulinJournalId,
       },
     });
-    return res.status(204).json({
+    return res.status(200).json({
       status: 'SUCCESS',
       message: 'Insulin Journal deleted successfully',
     });
