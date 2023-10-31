@@ -9,7 +9,9 @@ import moodJournalRoutes from './routes/moodJournalRoutes';
 import appointmentRoutes from './routes/appointmentRoutes';
 import notificationRoutes from './routes/notificationPreferenceRoutes';
 import foodIntakeJournalRoutes from './routes/foodIntakeJournalRoutes';
-import reminderRoutes from "./routes/remindersRoutes";
+import reminderRoutes from './routes/remindersRoutes';
+import diabeticGlucoseJournalRoutes from './routes/diabeticGlucoseJournalRoutes';
+import diabeticInsulinJournalRoutes from './routes/diabeticInsulinJournalRoutes';
 import subscriptionRoutes from './routes/subscriptionRoutes';
 import Morgan from './middlewares/morgan';
 import { Logger } from './middlewares/logger';
@@ -25,25 +27,28 @@ app.use(express.json());
 app.use(Morgan);
 app.use(decodeToken);
 
-app.use("/api/journals/weight", weightJournalRoutes);
-app.use("/api/journals/mood", moodJournalRoutes);
-app.use("/api/users", userRoutes);
-app.use("/api/appointments", appointmentRoutes);
-app.use("/api/journals/activity", activityJournalRoutes);
-app.use("/api/speed-dials", speedDialRoutes);
-app.use("/api/notifications", notificationRoutes);
-app.use("/api/journals/foodIntake", foodIntakeJournalRoutes);
-app.use("/api/subscription", subscriptionRoutes);
-app.use("/api/reminders", reminderRoutes);
+app.use('/api/journals/weight', weightJournalRoutes);
+app.use('/api/journals/mood', moodJournalRoutes);
+app.use('/api/journals/diabetic/glucose', diabeticGlucoseJournalRoutes);
+app.use('/api/journals/diabetic/insulin', diabeticInsulinJournalRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/appointments', appointmentRoutes);
+app.use('/api/journals/activity', activityJournalRoutes);
+app.use('/api/speed-dials', speedDialRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/journals/foodIntake', foodIntakeJournalRoutes);
+app.use('/api/reminders', reminderRoutes);
+app.use('/api/subscription', subscriptionRoutes);
+app.use('/api/reminders', reminderRoutes);
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
+app.get('/', (req, res) => {
+  res.send('Hello World!');
 });
 
 //Connection to postgreSQL
-if (process.env.NODE_ENV !== "test") {
+if (process.env.NODE_ENV !== 'test') {
   db.sequelize.sync({ alter: true }).then(() => {
-    Logger.info("Database Synchronized");
+    Logger.info('Database Synchronized');
   });
 
   app.listen(process.env.SERVER_DEV_PORT, () => {
