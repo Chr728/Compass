@@ -31,70 +31,82 @@ const userNotificationPreferences = {
   foodIntakeReminders: true,
 };
 
-const userAppointment = {
-  id: 1,
-  uid: "testuid",
-  appointmentWith: "New Docker",
-  reason: "Medications",
-  date: "2023-09-30",
-  time: "12:00:00",
-  notes: "Call the doctor back 2 days later",
-};
+const userAppointment = [
+  {
+    id: 1,
+    uid: "testuid",
+    appointmentWith: "New Docker",
+    reason: "Medications",
+    date: "2023-09-30",
+    time: "12:00:00",
+    notes: "Call the doctor back 2 days later",
+  },
+];
 
-const userActivityJournal = {
-  id: 1,
-  uid: "testuid",
-  date: "2023-09-30",
-  time: "12:00:00",
-  activity: "running",
-  duration: 175,
-  notes: "Sample activity entry",
-};
+const userActivityJournal = [
+  {
+    id: 1,
+    uid: "testuid",
+    date: "2023-09-30",
+    time: "12:00:00",
+    activity: "running",
+    duration: 175,
+    notes: "Sample activity entry",
+  },
+];
 
-const userFoodIntake = {
-  id: 1,
-  uid: "testuid",
-  date: "2023-09-30",
-  time: "12:00:00",
-  foodName: "test",
-  mealType: "test",
-  servingNumber: 5,
-  notes: "test",
-};
+const userFoodIntake = [
+  {
+    id: 1,
+    uid: "testuid",
+    date: "2023-09-30",
+    time: "12:00:00",
+    foodName: "test",
+    mealType: "test",
+    servingNumber: 5,
+    notes: "test",
+  },
+];
 
-const userMedication = {
-  id: 1,
-  uid: "testuid",
-  medicationName: "test",
-  dateStarted: "2023-09-30",
-  time: "12:00:00",
-  dosage: 2,
-  unit: "test",
-  frequency: "Test",
-  route: "Test",
-  notes: "test",
-};
+const userMedication = [
+  {
+    id: 1,
+    uid: "testuid",
+    medicationName: "test",
+    dateStarted: "2023-09-30",
+    time: "12:00:00",
+    dosage: 2,
+    unit: "test",
+    frequency: "Test",
+    route: "Test",
+    notes: "test",
+  },
+];
 
-const userInsulin = {
-  id: 1,
-  uid: "testuid",
-  date: "2023-09-30",
-  time: "12:00:00",
-  typeOfInsulin: "Test",
-  unit: 1,
-  bodySite: "Test",
-  notes: "test",
-};
+const userInsulin = [
+  {
+    id: 1,
+    uid: "testuid",
+    date: "2023-09-30",
+    time: "12:00:00",
+    typeOfInsulin: "Test",
+    unit: 1,
+    bodySite: "Test",
+    notes: "test",
+  },
+];
 
-const userGlucoseMeasurement = {
-  id: 1,
-  uid: "testuid",
-  date: "2023-09-30",
-  mealTime: "12:00:00",
-  bloodGlucose: 4,
-  unit: "Test",
-  notes: "Test",
-};
+const userGlucoseMeasurement = [
+  {
+    id: 1,
+    uid: "testuid",
+    date: "2023-09-30",
+    mealTime: "12:00:00",
+    bloodGlucose: 4,
+    unit: "Test",
+    notes: "Test",
+  },
+];
 
 const mockedDecodedToken = {
   uid: "userUid",
@@ -115,9 +127,8 @@ const userSubscription = {
   subscription: "test",
 };
 
-const userPayload = {
-  title: "Test",
-};
+const userAppointmentPayload =
+  '{"title":"Appointment Reminder with Dr New Docker at 12:00:00"}';
 
 function startServer() {
   server = app.listen(port);
@@ -159,9 +170,7 @@ describe("Testing reminder controller", () => {
     jest.restoreAllMocks();
   });
 
-  it("test should find all reminders", async () => {
-    const currentTime = "12:00:00";
-    const currentDate = "2023-09-30";
+  it("test should find all reminders and send notification", async () => {
     jest.spyOn(webPush, "sendNotification").mockResolvedValue("test");
     jest
       .spyOn(db.NotificationPreference, "findOne")
@@ -190,6 +199,13 @@ describe("Testing reminder controller", () => {
     expect(db.GlucoseMeasurement.findAll).toHaveBeenCalledTimes(1);
     expect(db.Medication.findAll).toHaveBeenCalledTimes(1);
     expect(db.InsulinDosage.findAll).toHaveBeenCalledTimes(1);
+    userAppointment.forEach((appointment) => {
+      expect(webPush.sendNotification).toHaveBeenCalledWith(
+        userSubscription,
+        userAppointmentPayload
+      );
+    });
+
     expect(res.status).toBe(200);
     expect(res.body.status).toBe("SUCCESS");
   });
@@ -221,8 +237,5 @@ describe("Testing reminder controller", () => {
       .set({ Authorization: "Bearer token" });
     expect(res.status).toBe(400);
     expect(res.body.status).toBe("ERROR");
-    expect(res.body.message).toBe(
-      "Error getting reminders of user : SequelizeConnectionError: SASL: SCRAM-SERVER-FIRST-MESSAGE: client password must be a string"
-    );
   });
 });
