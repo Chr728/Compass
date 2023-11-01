@@ -22,6 +22,15 @@ export default function NotFound() {
                     <p className="text-[24px] text-darkgrey font-IBM Plex Sans font-bold text-center">
                         Error 404 - Page Not Found
                     </p>
+                    {
+                        user 
+                        ?
+                        <p className="text-[20px] text-darkgrey font-IBM Plex Sans text-center">
+                            Redirecting to Home...
+                        </p>
+                        :
+                        null
+                    }
                 </div>
                 { user 
                     ?
