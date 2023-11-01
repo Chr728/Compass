@@ -11,6 +11,7 @@ const publicKey = process.env.VAPID_PUBLIC_KEY;
 const privateKey = process.env.VAPID_PRIVATE_KEY;
 webPush.setVapidDetails("mailto:test@gmail.com", publicKey, privateKey);
 
+//Predefined user
 const user = {
   id: 10,
   uid: "testuid",
@@ -22,6 +23,7 @@ const user = {
   sex: "male",
 };
 
+//Predefined preferences
 const userNotificationPreferences = {
   id: 1,
   uid: "testuid",
@@ -29,8 +31,11 @@ const userNotificationPreferences = {
   medicationReminders: true,
   appointmentReminders: true,
   foodIntakeReminders: true,
+  glucoseMeasurementReminders: true,
+  insulinDosageReminders: true,
 };
 
+//Predefined appointment reminders
 const userAppointment = [
   {
     id: 1,
@@ -43,6 +48,7 @@ const userAppointment = [
   },
 ];
 
+//Prwdefined activity journal reminders
 const userActivityJournal = [
   {
     id: 1,
@@ -55,6 +61,7 @@ const userActivityJournal = [
   },
 ];
 
+//Predefined food intake reminders
 const userFoodIntake = [
   {
     id: 1,
@@ -68,6 +75,7 @@ const userFoodIntake = [
   },
 ];
 
+//Predefined medication reminders
 const userMedication = [
   {
     id: 1,
@@ -83,6 +91,7 @@ const userMedication = [
   },
 ];
 
+//Predefined insulin reminders
 const userInsulin = [
   {
     id: 1,
@@ -96,6 +105,7 @@ const userInsulin = [
   },
 ];
 
+//Predefined glucose measurement reminders
 const userGlucoseMeasurement = [
   {
     id: 1,
@@ -122,11 +132,13 @@ const mockedDecodedToken = {
   sub: "",
 };
 
+//Predefined subscription
 const userSubscription = {
   uid: "userUid",
   subscription: "test",
 };
 
+//Predefined title for notification
 const userAppointmentPayload =
   '{"title":"Appointment Reminder with Dr New Docker at 12:00:00"}';
 
@@ -155,10 +167,12 @@ describe("Testing reminder controller", () => {
       .mockResolvedValueOnce(mockedDecodedToken);
     jest.spyOn(db.User, "findOne").mockResolvedValue(user);
 
+    //Mock momemt library
     jest.mock("moment-timezone", () => {
       return moment.tz.setDefault("America/Toronto");
     });
 
+    //Mock web push library
     jest.mock("web-push", () => {
       return {
         sendNotification: jest.fn(),
@@ -171,7 +185,9 @@ describe("Testing reminder controller", () => {
   });
 
   it("test should find all reminders and send notification", async () => {
+    //Spy on the sendNotification Method
     jest.spyOn(webPush, "sendNotification").mockResolvedValue("test");
+    jest.spyOn(db.Subscription, "findOne").mockResolvedValue(userSubscription);
     jest
       .spyOn(db.NotificationPreference, "findOne")
       .mockResolvedValueOnce(userNotificationPreferences);
@@ -193,18 +209,24 @@ describe("Testing reminder controller", () => {
       .post(`/api/reminders/${user.uid}`)
       .send(userSubscription)
       .set({ Authorization: "Bearer token" });
+    expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
     expect(db.ActivityJournal.findAll).toHaveBeenCalledTimes(1);
     expect(db.Appointment.findAll).toHaveBeenCalledTimes(1);
     expect(db.FoodIntakeJournal.findAll).toHaveBeenCalledTimes(1);
     expect(db.GlucoseMeasurement.findAll).toHaveBeenCalledTimes(1);
     expect(db.Medication.findAll).toHaveBeenCalledTimes(1);
     expect(db.InsulinDosage.findAll).toHaveBeenCalledTimes(1);
+
+    //Expect to send notificaiton for the appoinment with the subscription and title
     userAppointment.forEach((appointment) => {
       expect(webPush.sendNotification).toHaveBeenCalledWith(
         userSubscription,
         userAppointmentPayload
       );
     });
+
+    //Expect the journals to send notification
     userActivityJournal.forEach((activity) => {
       expect(webPush.sendNotification).toBeCalled();
     });
@@ -235,12 +257,15 @@ describe("Testing reminder controller", () => {
       .spyOn(db.NotificationPreference, "findOne")
       .mockResolvedValueOnce(null);
 
+    jest.spyOn(db.Subscription, "findOne").mockResolvedValue(userSubscription);
+
     const res = await request(app)
       .post(`/api/reminders/${user.uid}`)
       .send("test")
       .set({ Authorization: "Bearer token" });
 
     // Expectations for the response
+    expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
     expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
     expect(res.status).toBe(404);
     expect(res.body.status).toBe("ERROR");
@@ -259,9 +284,11 @@ describe("Testing reminder controller", () => {
   });
 
   it("notification should fail sending", async () => {
+    //Spy On webpush to give error when calling the sendNotification Method
     jest
       .spyOn(webPush, "sendNotification")
       .mockRejectedValue(new Error("query error"));
+    jest.spyOn(db.Subscription, "findOne").mockResolvedValue(userSubscription);
     jest
       .spyOn(db.NotificationPreference, "findOne")
       .mockResolvedValueOnce(userNotificationPreferences);
@@ -283,9 +310,27 @@ describe("Testing reminder controller", () => {
       .post(`/api/reminders/${user.uid}`)
       .send(userSubscription)
       .set({ Authorization: "Bearer token" });
+    expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
     expect(db.Appointment.findAll).toHaveBeenCalledTimes(1);
+    //Expect it to be called
     userAppointment.forEach((appointment) => {
       expect(webPush.sendNotification).toHaveBeenCalled();
     });
+  });
+
+  it("should handle the case when subscription is not found in databases", async () => {
+    // Mock the function to simulate the absence of subscribtion
+    jest.spyOn(db.Subscription, "findOne").mockResolvedValueOnce(null);
+
+    const res = await request(app)
+      .post(`/api/reminders/${user.uid}`)
+      .send("null")
+      .set({ Authorization: "Bearer token" });
+
+    // Expectations for the response
+    expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
+    expect(res.status).toBe(404);
+    expect(res.body.status).toBe("ERROR");
+    expect(res.body.message).toBe("No Subscription was found.");
   });
 });

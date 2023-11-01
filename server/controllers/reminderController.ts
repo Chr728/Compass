@@ -17,10 +17,23 @@ export const sendUserReminders = async (req: Request, res: Response) => {
     const userUID = req.params.uid;
     const timeForAppointments = 1;
 
-    // To be modified, subscription should be retrieved from server
-    const subscription = req.body;
+    // Retrieve subscription from database
+    const subscription = await db.Subscription.findOne({
+      where: {
+        uid: userUID,
+      },
+    });
 
-    // Get the current time
+    if (!subscription) {
+      return res.status(404).json({
+        status: "ERROR",
+        message: `No Subscription was found.`,
+      });
+    } else {
+      console.log("Subscription retrieved");
+    }
+
+    // Get the current time and date
     const currentTime = moment.tz("America/Toronto").format("HH:mm:00");
     const currentDate = moment.tz("America/Toronto").format("YYYY-MM-DD");
 
@@ -100,7 +113,7 @@ export const sendUserReminders = async (req: Request, res: Response) => {
       }
     }
 
-    // Check if user has appointment notifications on
+    // Check if user has activity notifications on
     if (userNotificationPreferences.activityReminders) {
       //Get activity journals of users for prepearing reminder
       const userActivityJournals = await db.ActivityJournal.findAll({
@@ -128,7 +141,7 @@ export const sendUserReminders = async (req: Request, res: Response) => {
       }
     }
 
-    // Check if user has appointment notifications on
+    // Check if user has food intake notifications on
     if (userNotificationPreferences.foodIntakeReminders) {
       //Get food intake journals of users for preparing reminder
       const userFoodIntakeJournals = await db.FoodIntakeJournal.findAll({
@@ -155,8 +168,8 @@ export const sendUserReminders = async (req: Request, res: Response) => {
       }
     }
 
-    // Check if user has appointment notifications on
-    if (true) {
+    // Check if user has glucose measurement notifications on
+    if (userNotificationPreferences.glucoseMeasurementReminders) {
       //Get diabetic sub-journal1 of users for preparing remindner
       const userGlucoseMeasurement = await db.GlucoseMeasurement.findAll({
         where: {
@@ -182,8 +195,8 @@ export const sendUserReminders = async (req: Request, res: Response) => {
       }
     }
 
-    // Check if user has appointment notifications on
-    if (true) {
+    // Check if user has insulin dosage notifications on
+    if (userNotificationPreferences.insulinDosageReminders) {
       //Get diabetic sub-journal2 of users for preparing reminder
       const userInsulinDosage = await db.InsulinDosage.findAll({
         where: {
@@ -207,7 +220,7 @@ export const sendUserReminders = async (req: Request, res: Response) => {
       }
     }
 
-    // Check if user has appointment notifications on
+    // Check if user has medication notifications on
     if (userNotificationPreferences.medicationReminders) {
       //Get medication of user for preparing reminder
       const userMedication = await db.Medication.findAll({
