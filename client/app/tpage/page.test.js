@@ -1,5 +1,6 @@
 import {render, screen} from '@testing-library/react';
 import '@testing-library/jest-dom';
+import userEvent from '@testing-library/user-event';
 import  MainMenu from './page'
 import { useAuth } from '../contexts/AuthContext';
 
@@ -21,7 +22,14 @@ jest.mock("../contexts/AuthContext", () =>{
     }
 })
 
-describe("Main page shown only to logged in users", () =>{
+describe("Main page shown only to logged in users", () => {
+    beforeEach(() => {
+        useAuth.mockImplementation(() => {
+            return {
+            user: { uid: "AKSODN#KLAD12nkvs" },
+            };
+        });
+    })
 
     it("Error page is shown", async () => {
         useAuth.mockImplementation(() => {
@@ -36,13 +44,29 @@ describe("Main page shown only to logged in users", () =>{
 
 
     it("Error page is not shown", async () =>{
-        useAuth.mockImplementation(() => {
-            return {
-            user: { uid: "AKSODN#KLAD12nkvs" },
-            };
-        });
         render(<MainMenu/>);
         const errorMessage = screen.queryByText("Error 403 - Access Forbidden");
         expect(errorMessage).not.toBeInTheDocument();
         })
+
+    it("Redirect to appointments routes", async() => {
+        render(<MainMenu/>);
+        const appointments = screen.getByText("Appointments");
+        await userEvent.click(appointments);
+        expect(mockRouter).toBeCalledWith('/viewappointments');
+    })
+
+    it("Redirected to journals route ", async() => {
+        render(<MainMenu/>);
+        const journals = screen.getAllByText("Journals")[0];
+        await userEvent.click(journals);
+        expect(mockRouter).toBeCalledWith('/journals');
+    })
+
+    it("Redirected to profile route", async() => {
+        render(<MainMenu/>);
+        const profile = screen.getByText("Profile");
+        await userEvent.click(profile);
+        expect(mockRouter).toBeCalledWith('/profile');
+    })
 })

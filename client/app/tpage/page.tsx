@@ -20,15 +20,6 @@ export default function MainMenu() {
   
 return (
   <div className="bg-eggshell min-h-screen flex flex-col">
-  {/* <div className={`sm:px-16 px-6 flex justify-center items-center`}>
-  <div className="mb-6 mt-1"> */}
-        
-    {/* <div className={`xl:max-w-[1280px] w-full`}>
-    <p className="text-[24px] mt-72 flex justify-center items-center text-darkgrey font-IBM Plex Sans font-bold text-center">
-            Hello {user.displayName}, welcome to the Main Menu !
-          </p>
-        </div> */}
-     
       
       <div className="grid grid-cols-2 gap-3 p-4 my-auto text-center">
       <div className="text-darkgrey font-bold col-span-2 text-[24px]">Welcome to Compass</div>
@@ -66,8 +57,6 @@ return (
 
     </div>
     <Menu />
-    {/* </div>
-  </div> */}
 </div>
   )
 }
