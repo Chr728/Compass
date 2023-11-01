@@ -32,12 +32,9 @@ jest.mock('../contexts/UserContext', () => {
     }
 });
 
-
-
-
 describe("Error Messages", () => {
 
-    test("All fields are visible to the user", () => {
+    it("All fields are visible to the user", () => {
         render(<EditProfilePage/>);
         const firstName = screen.getByLabelText("First Name");
         const lastName = screen.getByLabelText("Last Name");
@@ -52,7 +49,16 @@ describe("Error Messages", () => {
         expect(submitButton).toBeInTheDocument();
     })
 
-    test("First name error message", async () => {
+    it("First name required error message", async () => {
+        render(<EditProfilePage/>);
+        const fname = await screen.findByLabelText("First Name");
+        await userEvent.clear(fname);
+        fireEvent.blur(fname);
+        const error = await screen.findByText("First Name Required");
+        expect(error).toBeInTheDocument();
+    }) 
+
+    it("First name error message", async () => {
         render(<EditProfilePage/>);
         const fname = await screen.findByLabelText("First Name");
         await userEvent.type(fname, "georgia9");
@@ -61,7 +67,16 @@ describe("Error Messages", () => {
         expect(error).toBeInTheDocument();
     })
 
-    test("Last name error message", async () => {
+    it("Last name required error message", async () => {
+        render(<EditProfilePage/>);
+        const lname = await screen.findByLabelText("Last Name");
+        await userEvent.clear(lname);
+        fireEvent.blur(lname);
+        const error = await screen.findByText("Last Name Required");
+        expect(error).toBeInTheDocument();
+    }) 
+
+    it("Last name error message", async () => {
         render(<EditProfilePage/>);
         const lname = await screen.findByLabelText("Last Name");
         await userEvent.type(lname, "georgia9");
@@ -70,7 +85,16 @@ describe("Error Messages", () => {
         expect(error).toBeInTheDocument();
     })
 
-    test("Phone number error message", async () => {
+    it("Phone number required error message", async () => {
+        render(<EditProfilePage/>);
+        const phone = await screen.findByLabelText("Phone Number");
+        await userEvent.clear(phone);
+        fireEvent.blur(phone);
+        const error = await screen.findByText("Phone Number Required");
+        expect(error).toBeInTheDocument();
+    }) 
+
+    it("Phone number error message", async () => {
         render(<EditProfilePage/>);
         const phone = await screen.findByLabelText("Phone Number");
         await userEvent.type(phone, "123123");
@@ -79,7 +103,7 @@ describe("Error Messages", () => {
         expect(error).toBeInTheDocument();
     })
 
-    test("Cancel button functions correctly", async () =>{
+    it("Cancel button functions correctly", async () =>{
         render(<EditProfilePage/>);
         const cancelButton = screen.getAllByRole("button")[0];
         await userEvent.click(cancelButton);
@@ -87,12 +111,10 @@ describe("Error Messages", () => {
         expect(mockRouter).toHaveBeenCalledTimes(1);
     })
 
-    test("Submit button functions correctly", async () =>{
+    it("Submit button functions correctly", async () => {
         render(<EditProfilePage/>);
         const submitButton = screen.getAllByRole("button")[1];
         await userEvent.click(submitButton);
         expect(mockRouter).toHaveBeenCalledWith('/profile');
     })
-
-
 })

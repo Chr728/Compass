@@ -15,14 +15,6 @@ import Menu from '../components/Menu';
 export default function CreateWeightJournalPage() {
   const router = useRouter();
   const { user } = useAuth();
-  const { userInfo } = useUser();
-
-  useEffect(() => {
-    if (!userInfo) {
-      alert('User not found.');
-    } 
-  }, [userInfo, router]);
-
   
   const formik = useFormik({
     initialValues: {

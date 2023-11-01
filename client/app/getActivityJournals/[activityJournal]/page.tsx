@@ -19,14 +19,12 @@ import Custom403 from '@/app/pages/403';
 export default function GetActivityJournal({params: { activityJournal } } : { params: { activityJournal: string } }) {
   const { user } = useAuth();
   const router = useRouter();
-  const { userInfo } = useUser();
   const [activity, setactivity] = useState<any>(null);
 
   async function fetchActivityJournal() {
     try {
       const userId = user?.uid || '';
       const result = await getActivityJournal(activityJournal);
-      console.log('Activity journal entry retrieved:', result);
       setactivity(result.data);
     } catch (error) {
       console.error('Error retrieving activity journal entry:', error);
@@ -126,7 +124,7 @@ export default function GetActivityJournal({params: { activityJournal } } : { pa
      </div>
    </div>
     <div className='mt-10 pb-4 self-center'>
-    <Button type="button" text="Edit"style={{ width: '140px' }} onClick={() => router.push(`/getActivityJournals/${activityJournal}/${activityJournal}`)} />
+    <Button type="button" text="Edit" style={{ width: '140px' }} onClick={() => router.push(`/getActivityJournals/${activityJournal}/${activityJournal}`)} />
     <Button
     type="button"
     text="Cancel"

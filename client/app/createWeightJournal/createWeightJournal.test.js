@@ -18,12 +18,6 @@ jest.mock('../contexts/AuthContext', () => {
     }
 });
 
-// jest.mock('../http/weightJournalAPI', () => {
-//     return {
-//         createWeightJournal: jest.fn()
-//     }
-// });
-
 const mockRouter= jest.fn();
 
 jest.mock("next/navigation", () => ({
@@ -45,8 +39,6 @@ jest.mock("../contexts/UserContext", () => {
       }
     };
   });
-
-
 
 describe("weight journal tests", () => {
 
