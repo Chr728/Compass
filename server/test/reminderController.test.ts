@@ -205,6 +205,25 @@ describe("Testing reminder controller", () => {
         userAppointmentPayload
       );
     });
+    userActivityJournal.forEach((activity) => {
+      expect(webPush.sendNotification).toBeCalled();
+    });
+
+    userFoodIntake.forEach((foodintake) => {
+      expect(webPush.sendNotification).toBeCalled();
+    });
+
+    userGlucoseMeasurement.forEach((glucose) => {
+      expect(webPush.sendNotification).toBeCalled();
+    });
+
+    userInsulin.forEach((Insulin) => {
+      expect(webPush.sendNotification).toBeCalled();
+    });
+
+    userMedication.forEach((medication) => {
+      expect(webPush.sendNotification).toBeCalled();
+    });
 
     expect(res.status).toBe(200);
     expect(res.body.status).toBe("SUCCESS");
@@ -237,5 +256,36 @@ describe("Testing reminder controller", () => {
       .set({ Authorization: "Bearer token" });
     expect(res.status).toBe(400);
     expect(res.body.status).toBe("ERROR");
+  });
+
+  it("notification should fail sending", async () => {
+    jest
+      .spyOn(webPush, "sendNotification")
+      .mockRejectedValue(new Error("query error"));
+    jest
+      .spyOn(db.NotificationPreference, "findOne")
+      .mockResolvedValueOnce(userNotificationPreferences);
+    jest
+      .spyOn(db.ActivityJournal, "findAll")
+      .mockResolvedValueOnce(userActivityJournal);
+    jest
+      .spyOn(db.Appointment, "findAll")
+      .mockResolvedValueOnce(userAppointment);
+    jest
+      .spyOn(db.FoodIntakeJournal, "findAll")
+      .mockResolvedValueOnce(userFoodIntake);
+    jest.spyOn(db.Medication, "findAll").mockResolvedValueOnce(userMedication);
+    jest.spyOn(db.InsulinDosage, "findAll").mockResolvedValueOnce(userInsulin);
+    jest
+      .spyOn(db.GlucoseMeasurement, "findAll")
+      .mockResolvedValueOnce(userGlucoseMeasurement);
+    const res = await request(app)
+      .post(`/api/reminders/${user.uid}`)
+      .send(userSubscription)
+      .set({ Authorization: "Bearer token" });
+    expect(db.Appointment.findAll).toHaveBeenCalledTimes(1);
+    userAppointment.forEach((appointment) => {
+      expect(webPush.sendNotification).toHaveBeenCalled();
+    });
   });
 });
