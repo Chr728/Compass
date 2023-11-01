@@ -156,7 +156,7 @@ export const sendUserReminders = async (req: Request, res: Response) => {
     }
 
     // Check if user has appointment notifications on
-    if (false) {
+    if (true) {
       //Get diabetic sub-journal1 of users for preparing remindner
       const userGlucoseMeasurement = await db.GlucoseMeasurement.findAll({
         where: {
@@ -183,7 +183,7 @@ export const sendUserReminders = async (req: Request, res: Response) => {
     }
 
     // Check if user has appointment notifications on
-    if (false) {
+    if (true) {
       //Get diabetic sub-journal2 of users for preparing reminder
       const userInsulinDosage = await db.InsulinDosage.findAll({
         where: {
