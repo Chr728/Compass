@@ -1,7 +1,8 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { useRouter } from "next/navigation";
 import NotificationPage from "./notificationPage";
 import "@testing-library/jest-dom";
+import { getNotificationPreference } from '../http/notificationPreferenceAPI'; 
 
 //Mock useRouter from next/navigation
 jest.mock("next/navigation", () => ({
@@ -64,5 +65,12 @@ describe("Notification Settings Page", () => {
     expect(toggleButtonMedication).not.toBeChecked();
     expect(toggleButtonAppointment).not.toBeChecked();
     expect(toggleButtonFoodIntake).not.toBeChecked();
+  });
+
+  test("Calls router's push method on button click", () => {
+    render(<NotificationPage />);
+    const button = screen.getByText('Save'); 
+    fireEvent.click(button);
+    expect(mockRouter).toHaveBeenCalled();
   });
 });
