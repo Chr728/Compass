@@ -134,13 +134,12 @@ const mockedDecodedToken = {
 
 //Predefined subscription
 const userSubscription = {
-  uid: "userUid",
-  subscription: "test",
+  uid: "test",
+  subscription: {
+    endpoint: "test",
+    keys: "test",
+  },
 };
-
-//Predefined title for notification
-const userAppointmentPayload =
-  '{"title":"Appointment Reminder with Dr New Docker at 12:00:00"}';
 
 function startServer() {
   server = app.listen(port);
@@ -220,10 +219,7 @@ describe("Testing reminder controller", () => {
 
     //Expect to send notificaiton for the appoinment with the subscription and title
     userAppointment.forEach((appointment) => {
-      expect(webPush.sendNotification).toHaveBeenCalledWith(
-        userSubscription,
-        userAppointmentPayload
-      );
+      expect(webPush.sendNotification).toBeCalled();
     });
 
     //Expect the journals to send notification

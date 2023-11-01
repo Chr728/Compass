@@ -18,13 +18,13 @@ export const sendUserReminders = async (req: Request, res: Response) => {
     const timeForAppointments = 1;
 
     // Retrieve subscription from database
-    const subscription = await db.Subscription.findOne({
+    const Usersubscription = await db.Subscription.findOne({
       where: {
         uid: userUID,
       },
     });
 
-    if (!subscription) {
+    if (!Usersubscription) {
       return res.status(404).json({
         status: "ERROR",
         message: `No Subscription was found.`,
@@ -32,6 +32,8 @@ export const sendUserReminders = async (req: Request, res: Response) => {
     } else {
       console.log("Subscription retrieved");
     }
+
+    const subscription = Usersubscription.subscription;
 
     // Get the current time and date
     const currentTime = moment.tz("America/Toronto").format("HH:mm:00");
