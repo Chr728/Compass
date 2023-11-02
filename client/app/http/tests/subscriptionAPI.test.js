@@ -1,6 +1,7 @@
 import { auth } from "../../config/firebase";
 import {
   createSubscription,
+  getSubscription,
   updateSubscription,
   deleteSubscription,
 } from "../subscriptionAPI";
@@ -86,6 +87,102 @@ describe("createSubscription", () => {
 
     await expect(createSubscription(mockUserSubscription)).rejects.toThrow(
       `Failed to create subscription object for user. HTTP Status: ${mockResponse.status}`
+    );
+  });
+});
+
+//test the getSubscription function
+describe("getSubscription", () => {
+  beforeEach(() => {
+    global.fetch = jest.fn();
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  it("should get a subscription object by ID", async () => {
+    const mockUser = "123";
+    const mockToken = "mockToken";
+    const mockCurrentUser = {
+      uid: mockUser.id,
+      getIdToken: jest.fn().mockResolvedValue(mockToken),
+    };
+
+    Object.defineProperty(auth, "currentUser", {
+      get: jest.fn().mockReturnValue(mockCurrentUser),
+    });
+
+    const mockResponse = {
+      ok: true,
+      json: jest.fn().mockResolvedValue({}),
+    };
+    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = mockFetch;
+
+    const result = await getSubscription();
+
+    expect(mockResponse.json).toHaveBeenCalled();
+    expect(mockFetch).toHaveBeenCalledWith(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/subscription/${mockUser.id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${mockToken}`,
+        },
+        method: "GET",
+      }
+    );
+  });
+
+  it("should throw an error if the user is not signed in", async () => {
+    Object.defineProperty(auth, "currentUser", {
+      get: jest.fn().mockReturnValue(null),
+    });
+
+    const mockResponse = {
+      ok: true,
+      json: jest.fn().mockResolvedValue({}),
+    };
+    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = mockFetch;
+
+    await expect(getSubscription()).rejects.toThrow(
+      "No user is currently signed in."
+    );
+  });
+
+  it("should throw an error if the request fails", async () => {
+    const mockUserId = 1;
+    const mockToken = "mockToken";
+    const mockCurrentUser = {
+      uid: mockUserId,
+      getIdToken: jest.fn().mockResolvedValue(mockToken),
+    };
+
+    Object.defineProperty(auth, "currentUser", {
+      get: jest.fn().mockReturnValue(mockCurrentUser),
+    });
+
+    const mockResponse = {
+      ok: false,
+      status: 500,
+    };
+    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = mockFetch;
+
+    await expect(getSubscription()).rejects.toThrow(
+      `Failed to retrieve subscription object for user. HTTP Status: ${mockResponse.status}`
+    );
+    expect(mockFetch).toHaveBeenCalledWith(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/subscription/${mockUserId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${mockToken}`,
+        },
+        method: "GET",
+      }
     );
   });
 });

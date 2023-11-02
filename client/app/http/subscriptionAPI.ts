@@ -34,6 +34,39 @@ export async function createSubscription(subscription: any): Promise<any> {
   }
 }
 
+// Function to get subscription object of a user
+export async function getSubscription(): Promise<any> {
+  try {
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      throw new Error("No user is currently signed in.");
+    }
+    const uid = currentUser.uid;
+    const token = await currentUser.getIdToken();
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/subscription/${uid}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error(
+        `Failed to retrieve subscription object for user. HTTP Status: ${response.status}`
+      );
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching subscription object:", error);
+    throw error;
+  }
+}
+
 // Function to update a subscription object for push notifications for a user
 export async function updateSubscription(subscription: any): Promise<any> {
   try {
