@@ -93,11 +93,11 @@ export default function ViewMoodJournalsPage() {
 
         {moodJournal && moodJournal.map((data: any, index: number) => (
             <div 
+              key={data.id}
               className="my-4 self-center w-11/12" 
             >
               <Card 
-                sx={{backgroundColor: setColor(data.howAreYou) }}
-                key={data.id}
+                sx={{backgroundColor: setColor(data.howAreYou) }}                
               >
                 <CardContent>
                   <Typography variant="body2">
