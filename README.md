@@ -23,7 +23,9 @@
 git clone https://github.com/janong24/Compass.git
 ```
 
-- Please make sure you have the nodeJs, the PostgreSQL, and the docker installed first  
+- Please make sure you have the nodeJs, the PostgreSQL, and the docker installed first
+  
+- Docker Desktop is recommended to help with managing the container, images, and volumns
 
 - Check your computer to make sure that the port 3000, 8000 and 5432 are not occupied and the PostgreSQL server is not currently running on your local machine  
 
@@ -78,7 +80,7 @@ This project uses the firebase authorization, therefore you can get those creden
 
 ### Build and run the development version of the project
 
-The docker file contains the commands to build and run the project  
+The docker file contains the commands to build and run the project. Please cd to the root folder (the Compass folder) and run:    
 
 ```bash
 docker-compose -f docker-compose-dev.yml up
@@ -108,7 +110,7 @@ ts-node tokenGenerator.ts ANY_UID_HERE
 ```bash
 Authorization:  Bearer token_here 
 ```
-#### If you meet other problems, please contact the team
+#### If you meet other problems, please contact the team leader
 
 ## Description
 
