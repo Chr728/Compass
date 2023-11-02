@@ -1,6 +1,6 @@
 import { auth } from "../config/firebase";
 
-// Function to subscribe a user to reminders and prepare push notifications
+// Function to prepare push notifications
 export async function sendUserReminders(): Promise<any> {
   try {
     const currentUser = auth.currentUser;
