@@ -63,12 +63,6 @@ export default function GetGlucoseJournalsPage() {
       <div>
         <Button type="button" text="Add an Entry" style={{ width: '120px', fontSize: '14px', padding: '1px 10px' }} onClick={() => router.push(`/createGlucoseJournal`)} />
       </div>
-      <div className="flex items-center">
-        <p className="font-sans text-darkgrey ml-2 font-bold text-[14px]">Your height:</p>
-        {glucose.length > 0 && glucose[0].height && (
-          <p className="font-sans text-darkgrey mr-8 font-medium text-[14px]">{glucose[glucose.length - 1].height}cm</p>
-        )}
-      </div>
     </div>
     <br></br>
 <div className="flex" style={{ justifyContent: 'space-between' }}>

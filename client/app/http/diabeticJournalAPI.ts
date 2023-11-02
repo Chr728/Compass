@@ -11,7 +11,7 @@ export async function getGlucoseJournals(): Promise<any> {
     const token = await currentUser.getIdToken();
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/glucose/user/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/diabetic/glucose/user/${id}`,
       {
         method: "GET",
         headers: {
@@ -46,7 +46,7 @@ export async function getGlucoseJournal(
     const token = await currentUser.getIdToken();
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/glucose/${glucoseJournalId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/diabetic/glucose/${glucoseJournalId}`,
       {
         method: "GET",
         headers: {
@@ -81,7 +81,7 @@ export async function createGlucoseJournal(
     const token = await currentUser.getIdToken();
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/glucose/user/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/diabetic/glucose/user/${id}`,
       {
         method: "POST",
         headers: {
@@ -117,7 +117,7 @@ export async function updateGlucoseJournal(
     const token = await currentUser.getIdToken();
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/glucose/${glucoseJournalId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/diabetic/glucose/${glucoseJournalId}`,
       {
         method: "PUT",
         headers: {
@@ -152,7 +152,7 @@ export async function deleteGlucoseJournal(
     const token = await currentUser.getIdToken();
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/glucose/${glucoseJournalId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/journals/diabetic/glucose/${glucoseJournalId}`,
       {
         method: "DELETE",
         headers: {

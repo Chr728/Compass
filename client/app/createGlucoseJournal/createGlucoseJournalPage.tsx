@@ -5,7 +5,7 @@ import Input from '../components/Input';
 import Link from 'next/link';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { createGlucoseJournal } from '../http/diabeticJournalAPI'; // Replace '../api/yourApiFile' with the correct path
+import { createGlucoseJournal } from '../http/diabeticJournalAPI'; 
 import { useAuth } from '../contexts/AuthContext';
 import { useUser } from '../contexts/UserContext';
 import { useEffect, useState } from 'react';
@@ -44,7 +44,7 @@ export default function CreateGlucoseJournalPage() {
         };
         const result = await createGlucoseJournal(data); 
         console.log('glucose journal entry created:', result);
-        router.push('/getDiabeticJournals');
+        router.push('/getGlucoseJournals');
       } catch (error) {
         console.error('Error creating glucose journal entry:', error);
       }
@@ -55,7 +55,7 @@ export default function CreateGlucoseJournalPage() {
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
        <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-              <button onClick={() => router.push('/getDiabeticJournals')}>
+              <button onClick={() => router.push('/getGlucoseJournals')}>
               <Header headerText="Create glucose Journal"></Header>
               </button>
               </span>
@@ -262,7 +262,7 @@ export default function CreateGlucoseJournalPage() {
           type="button"
           text="Cancel"
           style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)' }}
-          onClick={() => router.push("/getDiabeticJournals")}
+          onClick={() => router.push("/getGlucoseJournals")}
         />
 
 
@@ -278,7 +278,7 @@ export default function CreateGlucoseJournalPage() {
             !formik.values.mealTime  // Check if time is missing or empty
           }
           style={{ width: '140px', textAlign: 'center' }}
-          onClick={() => router.push("getDiabeticJournals")}
+          onClick={() => router.push("/getGlucoseJournals")}
         />
         </div>
       </div>
