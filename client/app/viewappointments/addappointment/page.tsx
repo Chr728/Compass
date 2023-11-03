@@ -5,7 +5,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import Custom403 from '../../pages/403';
 import AddAppointmentPage from "./addAppointmentPage";
 
-export default function ViewAppointments() {
+export default function AddAppointments() {
   const router = useRouter();
   const { user } = useAuth()
 

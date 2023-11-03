@@ -2,12 +2,24 @@ import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import CreateActivityJournalPage from './createActivityJournalPage';
-import {createActivityJournal} from '../http/activityJournalAPI';
+import { createActivityJournal } from '../http/activityJournalAPI';
+import { auth } from '../config/firebase';
 
+
+const mockRouter = jest.fn();
 
 const fakeUser = {
     uid: "1"
 }
+
+jest.mock("next/navigation", () => ({
+    useRouter: () => {
+        return {
+            push: mockRouter
+        }
+    }
+}));
+
 jest.mock('../contexts/AuthContext', () => {
     return {
         useAuth: () => {
@@ -18,39 +30,77 @@ jest.mock('../contexts/AuthContext', () => {
     }
 });
 
-jest.mock('../http/activityJournalAPI', () => {
-    return {
-        createActivityJournal: jest.fn()
-    }
-});
+describe("Activity Journal tests", () => { 
+    
+    beforeEach(() => {
+        global.fetch = jest.fn();
+      });
+    
+      afterEach(() => {
+        jest.resetAllMocks();
+      });
+    
+    it('activity journal entry is created on submitting', async () => {
+        const mockUserId = '11';
+        render(<CreateActivityJournalPage />);
 
-const mockRouter= jest.fn();
+        const submitButton = screen.getByRole('button', { name: /Submit/i });
+        const date = screen.getByLabelText('Date');
+        const time = screen.getByLabelText('Time');
+        const activity = screen.getByLabelText('Activity');
+        const duration = screen.getByLabelText('Duration (in minutes)');
+        const notes = screen.getByLabelText('Notes');
 
-jest.mock("next/navigation", () => ({
-    useRouter: () => {
-        return {
-            push: mockRouter
-        }
-    }
-}));
+        await userEvent.type(date, '2023-09-09');
+        await userEvent.type(time, '8:36');
+        await userEvent.type(activity, '85');
+        await userEvent.type(duration, '1.70');
+        await userEvent.type(notes, 'abc');
 
-jest.mock("../contexts/UserContext", () => {
-    return {
-      useUser: () =>{
-        return {
-            userInfo: {
-                uid: '1',
-            }
-        }
-      }
-    };
-  });
+        const mockActivityJournalData = {
+          date: date.value,
+          time: time.value,
+          activity: activity.value,
+          duration: duration.value,
+          notes: notes.value,
+        };
+    
+        await userEvent.click(submitButton);
 
+        const mockToken = 'mockToken';
+        const mockCurrentUser = {
+          uid: mockUserId,
+          getIdToken: jest.fn().mockResolvedValue(mockToken),
+        };
+    
+        Object.defineProperty(auth, 'currentUser', {
+          get: jest.fn().mockReturnValue(mockCurrentUser),
+        });
+    
+        const mockResponse = {
+          ok: true,
+          json: jest.fn().mockResolvedValue(mockActivityJournalData),
+        };
+        const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+        global.fetch = mockFetch;
+    
+        const result = await createActivityJournal(mockUserId, mockActivityJournalData);
+    
+        expect(mockFetch).toHaveBeenCalledWith(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/user/${mockUserId}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${mockToken}`,
+            },
+            body: "\"11\"",
+          }
+        );
+        expect(result).toEqual(mockActivityJournalData);
+      });
 
-
-// const { createActivityJournal} = require('../http/activityJournalAPI');
- 
-    test("All fields are displayed to the user", () => {
+    it("All fields are displayed to the user", () => {
         render(<CreateActivityJournalPage/>);
         const date = screen.getByLabelText("Date");
         const time  = screen.getByLabelText("Time");
@@ -65,7 +115,7 @@ jest.mock("../contexts/UserContext", () => {
         expect(notes).toBeInTheDocument();
     })
 
-    test("Error displayed if any of the fields are empty", async () => {
+    it("Error displayed if any of the fields are empty", async () => {
         render(<CreateActivityJournalPage/>);
         const date = screen.getByLabelText("Date");
         fireEvent.blur(date);
@@ -88,7 +138,7 @@ jest.mock("../contexts/UserContext", () => {
         expect(error1).toBeInTheDocument();
     })
 
-    test("Duration cant be zero", async () => {
+    it("Duration cant be zero", async () => {
       render(<CreateActivityJournalPage />);
       const duration = screen.getByLabelText("Duration (in minutes)");
       await userEvent.type(duration, "0");
@@ -98,7 +148,7 @@ jest.mock("../contexts/UserContext", () => {
       expect(durationError.textContent).toBe("This field can't be left empty or zero.");
     });
     
-    test("duration cant be negative", async () => {
+    it("duration cant be negative", async () => {
         render(<CreateActivityJournalPage />);
         
         const duration = screen.getByLabelText("Duration (in minutes)");
@@ -112,35 +162,11 @@ jest.mock("../contexts/UserContext", () => {
         })
       });
 
-
-
-    test("Submit button calls createactivityjournal function", async () => {
-        render(<CreateActivityJournalPage/>);
-        const date = screen.getByLabelText("Date");
-        const time  = screen.getByLabelText("Time");
-        const activity = screen.getByLabelText("Activity");
-        const duration = screen.getByLabelText("Duration (in minutes)");
-        const notes  = screen.getByLabelText("Notes");
-        const submitButton = screen.getAllByRole('button')[1];
-
-        await userEvent.type(date, "2023-09-09");
-        await userEvent.type(time, "8:36")
-        await userEvent.type(activity, "85");
-        await userEvent.type(duration, "1.70");
-        await userEvent.type(notes, "abc");
-
-        await userEvent.click(submitButton);
-        await createActivityJournal();
-        await mockRouter;
-
-        expect(createActivityJournal).toHaveBeenCalledTimes(1);
-        expect(mockRouter).toHaveBeenCalledWith('/getActivityJournals');
-    })
-
-    test("Cancel button redirects to getActivityJournals page", async () => {
+    it("Cancel button redirects to getActivityJournals page", async () => {
         render(<CreateActivityJournalPage/>);
         const cancelButton = screen.getAllByRole('button')[1];
         await userEvent.click(cancelButton);
         await mockRouter;
         expect(mockRouter).toHaveBeenCalledWith('/getActivityJournals');
     })
+})

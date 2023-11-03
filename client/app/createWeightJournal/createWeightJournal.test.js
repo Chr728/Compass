@@ -2,8 +2,8 @@ import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import CreateWeightJournalPage from './createWeightJournalPage';
-import {creatWeightJournal} from '../http/weightJournalAPI';
-
+import { createWeightJournal } from '../http/weightJournalAPI';
+import { auth } from '../config/firebase';
 
 const fakeUser = {
     uid: "1"
@@ -15,12 +15,6 @@ jest.mock('../contexts/AuthContext', () => {
                 user : fakeUser
             }
         }
-    }
-});
-
-jest.mock('../http/weightJournalAPI', () => {
-    return {
-        createWeightJournal: jest.fn()
     }
 });
 
@@ -46,18 +40,91 @@ jest.mock("../contexts/UserContext", () => {
     };
   });
 
+describe("weight journal tests", () => {
 
+    beforeEach(() => {
+        global.fetch = jest.fn();
+      });
+    
+      afterEach(() => {
+        jest.resetAllMocks();
+      });
+    
+    it('weight journal entry is created', async () => {
 
-const { createWeightJournal} = require('../http/weightJournalAPI');
- 
-    test("All fields are displayed to the user", () => {
-        render(<CreateWeightJournalPage/>);
+        render(<CreateWeightJournalPage />);
+
         const date = screen.getByLabelText("Date");
-        const time  = screen.getByLabelText("Time");
+        const time = screen.getByLabelText("Time");
         const weight = screen.getByLabelText("Weight");
         const height = screen.getByLabelText("Height (in centimeters)");
         const unit = screen.getByLabelText("Unit");
-        const notes  = screen.getByLabelText("Notes");
+        const notes = screen.getByLabelText("Notes");
+        const submitButton = screen.getAllByRole("button")[2];
+
+        await userEvent.type(date, "2023-09-09");
+        await userEvent.type(time, "8:36")
+        await userEvent.type(weight, "171");
+        await userEvent.type(height, "1.75");
+        await userEvent.selectOptions(unit, "kg");
+        await userEvent.type(notes, "abc");
+
+        const mockWeightJournalData = {
+            date: date.value,
+            time: time.vaue,
+            weight: weight.value,
+            height: height.value,
+            unit: unit.value,
+            notes: notes.value,
+        };
+        
+        await userEvent.click(submitButton);
+
+        const mockUserId = '11';
+       
+        const mockToken = 'mockToken';
+        const mockCurrentUser = {
+          uid: mockUserId,
+          getIdToken: jest.fn().mockResolvedValue(mockToken),
+        };
+    
+        Object.defineProperty(auth, 'currentUser', {
+          get: jest.fn().mockReturnValue(mockCurrentUser),
+        });
+    
+        const mockResponse = {
+          ok: true,
+          json: jest.fn().mockResolvedValue(mockWeightJournalData),
+        };
+        const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+        global.fetch = mockFetch;
+    
+        const result = await createWeightJournal(mockUserId, mockWeightJournalData);
+    
+        expect(mockFetch).toHaveBeenCalledWith(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/journals/weight/user/${mockUserId}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${mockToken}`,
+            },
+            body: "\"11\"",
+          }
+        );
+        expect(result).toEqual(mockWeightJournalData);
+      });
+
+
+ 
+    it("All fields are displayed to the user", () => {
+        render(<CreateWeightJournalPage />);
+        const date = screen.getByLabelText("Date");
+        const time = screen.getByLabelText("Time");
+        const weight = screen.getByLabelText("Weight");
+        const height = screen.getByLabelText("Height (in centimeters)");
+        const unit = screen.getByLabelText("Unit");
+        const notes = screen.getByLabelText("Notes");
 
         expect(date).toBeInTheDocument();
         expect(time).toBeInTheDocument();
@@ -67,8 +134,8 @@ const { createWeightJournal} = require('../http/weightJournalAPI');
         expect(notes).toBeInTheDocument();
     })
 
-    test("Error displayed if any of the fields are empty", async () => {
-        render(<CreateWeightJournalPage/>);
+    it("Error displayed if any of the fields are empty", async () => {
+        render(<CreateWeightJournalPage />);
         const date = screen.getByLabelText("Date");
         fireEvent.blur(date);
         const time = screen.getByLabelText("Time");
@@ -92,24 +159,24 @@ const { createWeightJournal} = require('../http/weightJournalAPI');
         expect(error1).toBeInTheDocument();
     })
 
-    test("Height or weight cant be zero", async () => {
-      render(<CreateWeightJournalPage />);
-      const weight = screen.getByLabelText("Weight");
-      await userEvent.type(weight, "0");
-      fireEvent.blur(weight);
+    it("Height or weight cant be zero", async () => {
+        render(<CreateWeightJournalPage />);
+        const weight = screen.getByLabelText("Weight");
+        await userEvent.type(weight, "0");
+        fireEvent.blur(weight);
     
-      const weightError = screen.getByLabelText("Weight").nextElementSibling;
-      expect(weightError.textContent).toBe("This field can't be left empty or zero.");
+        const weightError = screen.getByLabelText("Weight").nextElementSibling;
+        expect(weightError.textContent).toBe("This field can't be left empty or zero.");
     
-      const height = screen.getByLabelText("Height (in centimeters)");
-      await userEvent.type(height, "0");
-      fireEvent.blur(height);
+        const height = screen.getByLabelText("Height (in centimeters)");
+        await userEvent.type(height, "0");
+        fireEvent.blur(height);
     
-      const heightError = screen.getByLabelText("Height (in centimeters)").nextElementSibling;
-      expect(heightError.textContent).toBe("This field can't be left empty or zero.");
+        const heightError = screen.getByLabelText("Height (in centimeters)").nextElementSibling;
+        expect(heightError.textContent).toBe("This field can't be left empty or zero.");
     });
     
-    test("Height or weight cant be negative", async () => {
+    it("Height or weight cant be negative", async () => {
         render(<CreateWeightJournalPage />);
         
         const weight = screen.getByLabelText("Weight");
@@ -131,39 +198,14 @@ const { createWeightJournal} = require('../http/weightJournalAPI');
             const heightError = screen.getByLabelText("Height (in centimeters)").nextElementSibling;
             expect(heightError.textContent).toBe("You can't enter a negative height or a height of zero.");
         })
-      });
+    });
 
-
-
-    test("Submit button calls createweightjournal function", async () => {
-        render(<CreateWeightJournalPage/>);
-        const date = screen.getByLabelText("Date");
-        const time  = screen.getByLabelText("Time");
-        const weight = screen.getByLabelText("Weight");
-        const height = screen.getByLabelText("Height (in centimeters)");
-        const unit = screen.getByLabelText("Unit");
-        const notes  = screen.getByLabelText("Notes");
-        const submitButton = screen.getAllByRole('button')[1];
-
-        await userEvent.type(date, "2023-09-09");
-        await userEvent.type(time, "8:36")
-        await userEvent.type(weight, "85");
-        await userEvent.type(unit, "Kg");
-        await userEvent.type(height, "1.70");
-        await userEvent.type(notes, "abc");
-
-        await userEvent.click(submitButton);
-        await createWeightJournal();
-        await mockRouter;
-
-        expect(createWeightJournal).toHaveBeenCalledTimes(1);
-        expect(mockRouter).toHaveBeenCalledWith('/getWeightJournals');
-    })
-
-    test("Cancel button redirects to getWeightJournals page", async () => {
-        render(<CreateWeightJournalPage/>);
+    it("Cancel button redirects to getWeightJournals page", async () => {
+        render(<CreateWeightJournalPage />);
         const cancelButton = screen.getAllByRole('button')[1];
         await userEvent.click(cancelButton);
         await mockRouter;
         expect(mockRouter).toHaveBeenCalledWith('/getWeightJournals');
     })
+
+})

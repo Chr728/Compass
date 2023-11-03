@@ -1,33 +1,19 @@
 'use client';
-import Image from 'next/image';
 import Button from '../components/Button';
 import Input from '../components/Input';
-import Link from 'next/link';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { createActivityJournal } from '../http/activityJournalAPI'; // Replace '../api/yourApiFile' with the correct path
+import { createActivityJournal } from '../http/activityJournalAPI'; 
 import { useAuth } from '../contexts/AuthContext';
-import { useUser } from '../contexts/UserContext';
-import { useEffect, useState } from 'react';
 import Header from '../components/Header';
-import Menu from '../components/Menu';
-
 
 export default function CreateActivityJournalPage() {
   const router = useRouter();
   const { user } = useAuth();
-  const { userInfo } = useUser();
-
-  useEffect(() => {
-    if (!userInfo) {
-      alert('User not found.');
-    } 
-  }, [userInfo, router]);
-
   
   const formik = useFormik({
     initialValues: {
-      date: '', // Initialize the form fields with empty values
+      date: '', 
       time: '',
       activity: '',
       duration: 0,
@@ -38,7 +24,6 @@ export default function CreateActivityJournalPage() {
     onSubmit: async (values) => {
       try {
         const userId = user?.uid || '';
-
         const data = {
           date: values.date,
           time: values.time,
@@ -47,7 +32,6 @@ export default function CreateActivityJournalPage() {
           notes: values.notes,
         };
         const result = await createActivityJournal(data); 
-        console.log('activity journal entry created:', result);
         router.push('/getActivityJournals');
       } catch (error) {
         console.error('Error creating activity journal entry:', error);
