@@ -29,9 +29,7 @@ export const sendUserReminders = async (req: Request, res: Response) => {
         status: "ERROR",
         message: `No Subscription was found.`,
       });
-    } else {
-      console.log("Subscription retrieved");
-    }
+    } 
 
     const subscription = Usersubscription.subscription;
 
@@ -54,7 +52,7 @@ export const sendUserReminders = async (req: Request, res: Response) => {
     const startTime = moment(currentTime, "HH:mm:ss");
     const endTime = startTime.clone().add(30, "minutes");
 
-    console.log();
+   
 
     // Retrieve notification preference first. Make sure
     const userNotificationPreferences = await db.NotificationPreference.findOne(
@@ -65,16 +63,6 @@ export const sendUserReminders = async (req: Request, res: Response) => {
       }
     );
 
-    // Debug times
-    console.log(`currentDate: ${currentDate}`);
-    console.log(
-      `startTimeAppointments: ${startTimeAppointments.format("HH:mm:00")}`
-    );
-    console.log(
-      `endTimeAppointments: ${endTimeAppointments.format("HH:mm:00")}`
-    );
-    console.log(`startTime: ${startTime.format("HH:mm:00")}`);
-    console.log(`endTime: ${endTime.format("HH:mm:00")}`);
 
     // Return if there's an error
     if (!userNotificationPreferences) {
@@ -82,13 +70,11 @@ export const sendUserReminders = async (req: Request, res: Response) => {
         status: "ERROR",
         message: `Notification preference not found, invalid user id.`,
       });
-    } else {
-      console.log("Found notification preference for user!");
-    }
+    } 
 
     // Check if user has appointment notifications on
     if (userNotificationPreferences.appointmentReminders) {
-      console.log("FOUND APPOINTMENT NOTIFICATIONS ON");
+  
       //Get appointment of users for preperaing reminder
       const userAppointments = await db.Appointment.findAll({
         where: {
@@ -100,7 +86,7 @@ export const sendUserReminders = async (req: Request, res: Response) => {
           },
         },
       });
-      console.log(`Appointments: ${userAppointments}`);
+      
       if (userAppointments.length > 0) {
         userAppointments.forEach(
           (appointment: { appointmentWith: any; time: any }) => {
@@ -128,7 +114,7 @@ export const sendUserReminders = async (req: Request, res: Response) => {
           },
         },
       });
-      console.log(`Activity: ${userActivityJournals}`);
+      
       if (userActivityJournals.length > 0) {
         userActivityJournals.forEach(
           (activityjournal: { activityjournal: any }) => {
