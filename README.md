@@ -34,50 +34,7 @@ git clone https://github.com/janong24/Compass.git
 - one .env in the client folder
 - a serviceAccountKey.json in the server folder  
 
-#### In the .env file in the root folder (Compass folder), you should have the following variables:
-```bash
-SERVER_DEV_PORT=8000
-CLIENT_DEV_PORT=3000
-DB_USER=admin
-DB_PASS=admin
-DB_NAME=compass
-DB_PORT=5432
-NEXT_PUBLIC_FIREBASE_API_KEY="YOUR_NEXT_PUBLIC_FIREBASE_API_KEY"
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN="YOUR_NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN"
-NEXT_PUBLIC_FIREBASE_PROJECT_ID="YOUR_NEXT_PUBLIC_FIREBASE_PROJECT_ID"
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET="YOUR_NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET"
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID="YOUR_NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID"
-NEXT_PUBLIC_FIREBASE_APP_ID="YOUR_NEXT_PUBLIC_FIREBASE_APP_ID"
-NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID="YOUR_NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID"
-VAPID_PUBLIC_KEY="YOUR_VAPID_PUBLIC_KEY"
-VAPID_PRIVATE_KEY="YOUR_VAPID_PRIVATE_KEY"
-```
-#### In the .env file in the client folder, you should have the following variables:
-```bash
-NEXT_PUBLIC_FIREBASE_API_KEY="YOUR_NEXT_PUBLIC_FIREBASE_API_KEY"
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN="YOUR_NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN"
-NEXT_PUBLIC_FIREBASE_PROJECT_ID="YOUR_NEXT_PUBLIC_FIREBASE_PROJECT_ID"
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET="YOUR_NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET"
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID="YOUR_NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID"
-NEXT_PUBLIC_FIREBASE_APP_ID="YOUR_NEXT_PUBLIC_FIREBASE_APP_ID"
-NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID="YOUR_NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID"
-NEXT_PUBLIC_API_URL="http://localhost:8000"
-```
-#### In serviceAccountKey.json file in the server folder, you should have the following variables:
-```bash
-{"type": "service_account",
-  "project_id": "YOUR_project_id",
-  "private_key_id": "YOUR_private_key_id",
-  "private_key": "YOUR_private_key",
-  "client_email": "YOUR_client_email",
-  "client_id": "YOUR_client_id",
-  "auth_uri": "YOUR_auth_uri",
-  "token_uri": "YOUR_token_uri",
-  "auth_provider_x509_cert_url": "YOUR_auth_provider_x509_cert_url",
-  "client_x509_cert_url": "YOUR_client_x509_cert_url",
-  "universe_domain": "YOUR_universe_domain"}
-```
-This project uses the firebase authorization, therefore you can get those credentials from your Firebase project. If you want to access the team's firebase project, please contact the team leader.
+Those credential files contain the environment variables needed to run the project. If in your terminal, there are warning messages saying some variables are not set, and default to be a blank string, you are probably missing some environment variables in the three credential files. In this case, please contact the team leader to get the credentials.  
 
 ### Build and run the development version of the project
 
@@ -95,22 +52,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 #### If you add new packages or find that there's package update from the release which can cause 'having module not found' error
 Please rebuild the docker images. To do that you may need to delete the container and all the related volumes.
 
-#### Instruction for testing the backend API by sending requests:  
-
-Since the API routes are protected, each request needs to contain a valid token now. You can either send the request to the firebase api to get the idToken, or use the script in server folder (server/utils/tokenGenerator.ts). If you want to use the script, follow the steps:  
-- First please have the ts-node installed:
-```bash
-npm install -g ts-node
-```
-- Second, please get an valid uid (you can pick any uid in your firestore)  
-- Third, change the dir to server/utils and run the command:
-```bash
-ts-node tokenGenerator.ts ANY_UID_HERE
-```
-- When sending the requests, add this in the request head
-```bash
-Authorization:  Bearer token_here 
-```
 #### If you meet other problems, please contact the team leader
 
 ## Description
