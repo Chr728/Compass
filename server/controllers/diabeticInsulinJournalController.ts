@@ -6,7 +6,7 @@ export const getInsulinJournals = async (req: Request, res: Response) => {
   try {
     const user = await db.User.findOne({
       where: {
-        uid: req.params.user_id,
+        uid: req.params.uid,
       },
     });
     if (!user) {
@@ -17,7 +17,7 @@ export const getInsulinJournals = async (req: Request, res: Response) => {
     }
     const insulinJournals = await db.InsulinDosage.findAll({
       where: {
-        uid: req.params.user_id,
+        uid: req.params.uid,
       },
     });
     return res.status(200).json({
@@ -34,7 +34,7 @@ export const getInsulinJournals = async (req: Request, res: Response) => {
 };
 export const getInsulinJournal = async (req: Request, res: Response) => {
   try {
-    const insulinJournalId = req.params.insulin_journal_id;
+    const insulinJournalId = req.params.id;
     const insulinJournal = await db.InsulinDosage.findOne({
       where: {
         id: insulinJournalId,
@@ -62,7 +62,7 @@ export const createInsulinJournal = async (req: Request, res: Response) => {
   try {
     const user = await db.User.findOne({
       where: {
-        uid: req.params.user_id,
+        uid: req.params.uid,
       },
     });
     if (!user) {
@@ -73,7 +73,7 @@ export const createInsulinJournal = async (req: Request, res: Response) => {
     }
     const { date, time, typeOfInsulin, unit, bodySite, notes } = req.body;
     const insulinJournal = await db.InsulinDosage.create({
-      uid: req.params.user_id,
+      uid: req.params.uid,
       date,
       time,
       typeOfInsulin,
@@ -95,7 +95,7 @@ export const createInsulinJournal = async (req: Request, res: Response) => {
 };
 export const updateInsulinJournal = async (req: Request, res: Response) => {
   try {
-    const insulinJournalId = req.params.insulin_journal_id;
+    const insulinJournalId = req.params.id;
     const insulinJournal = await db.InsulinDosage.findOne({
       where: {
         id: insulinJournalId,
@@ -142,7 +142,7 @@ export const updateInsulinJournal = async (req: Request, res: Response) => {
 };
 export const deleteInsulinJournal = async (req: Request, res: Response) => {
   try {
-    const insulinJournalId = req.params.insulin_journal_id;
+    const insulinJournalId = req.params.id;
     const insulinJournal = await db.InsulinDosage.findOne({
       where: {
         id: insulinJournalId,
