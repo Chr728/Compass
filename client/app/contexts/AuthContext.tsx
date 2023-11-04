@@ -48,47 +48,15 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  const login = (email: string, password: string) => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        setError(null);
-        // Ask user permission for push notifications
-        if ("Notification" in window) {
-          const currentPermission = Notification.permission;
-          // Ask permission if its set to default or denied
-          if (
-            currentPermission === "default" ||
-            currentPermission === "denied"
-          ) {
-            Notification.requestPermission().then(function (permission) {
-              if (permission === "granted") {
-                // Permission has been granted. Send request to create subscription object for user
-                console.log("permission granted!");
-                if (
-                  "serviceWorker" in navigator &&
-                  navigator.serviceWorker.controller
-                ) {
-                  // Request user to turn on their notifications
-                  navigator.serviceWorker.controller.postMessage({
-                    action: "subscribeToPush",
-                  });
-                } else {
-                  // Handle the case where serviceWorker or controller is not available.
-                  console.error(
-                    "Service Worker or controller is not available."
-                  );
-                }
-              } else if (permission === "denied") {
-                // Permission has been denied.
-                console.log("Notification permission denied.");
-              } else if (permission === "default") {
-                // The user closed the permission dialog without making a choice.
-                console.log("Notification permission dismissed.");
-              }
-            });
-          } else {
+  const subscribeToPushNotifications = (userUID: any, userToken: any) => {
+    // Ask user permission for push notifications
+    if ("Notification" in window) {
+      const currentPermission = Notification.permission;
+      // Ask permission if its set to default or denied
+      if (currentPermission === "default" || currentPermission === "denied") {
+        Notification.requestPermission().then(function (permission) {
+          if (permission === "granted") {
+            // Permission has been granted. Send request to create subscription object for user
             if (
               "serviceWorker" in navigator &&
               navigator.serviceWorker.controller
@@ -96,13 +64,49 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
               // Request user to turn on their notifications
               navigator.serviceWorker.controller.postMessage({
                 action: "subscribeToPush",
+                userUID: userUID,
+                userToken: userToken,
               });
             } else {
               // Handle the case where serviceWorker or controller is not available.
               console.error("Service Worker or controller is not available.");
             }
+          } else if (permission === "denied") {
+            // Permission has been denied.
+            console.log("Notification permission denied.");
+          } else if (permission === "default") {
+            // The user closed the permission dialog without making a choice.
+            console.log("Notification permission dismissed.");
           }
+        });
+      } else {
+        if (
+          "serviceWorker" in navigator &&
+          navigator.serviceWorker.controller
+        ) {
+          // Request user to turn on their notifications
+          navigator.serviceWorker.controller.postMessage({
+            action: "subscribeToPush",
+            userUID: userUID,
+            userToken: userToken,
+          });
+        } else {
+          // Handle the case where serviceWorker or controller is not available.
+          console.error("Service Worker or controller is not available.");
         }
+      }
+    }
+  };
+
+  const login = (email: string, password: string) => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then(async (userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        setError(null);
+        const userToken = await userCredential.user.getIdToken();
+        // Subscribe user to push notifications if allowed
+        subscribeToPushNotifications(userCredential.user.uid, userToken);
       })
       .catch((error) => {
         setError("Invalid User Credentials. Please try again.");
@@ -133,11 +137,12 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
   const signUp = (values: createUserAttributes) => {
     createUserWithEmailAndPassword(auth, values.email, values.password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         setLoading(true);
         // Signed in
         const user = userCredential.user;
         setError(null);
+        const userToken = await userCredential.user.getIdToken();
         const data = values;
         data.uid = user.uid;
         createUser(data)
@@ -145,6 +150,8 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
             if (res !== null) {
               // Notification preference doesn't exist, create it
               createNotificationPreference();
+              // Subscribe user to push notifications if allowed
+              subscribeToPushNotifications(userCredential.user.uid, userToken);
               setLoading(false);
               router.push("/tpage");
             }
