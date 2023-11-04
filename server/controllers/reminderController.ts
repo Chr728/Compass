@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config({ path: "./../../.env" });
 import { Request, Response } from "express";
 import { Logger } from "../middlewares/logger";
 import db from "../models";
