@@ -20,6 +20,7 @@ import { CacheableResponsePlugin } from "workbox-cacheable-response";
 import sendUserReminders from "./app/http/remindersAPI";
 import {
   createSubscription,
+  getSubscription,
   updateSubscription,
 } from "./app/http/subscriptionAPI";
 
@@ -252,7 +253,7 @@ function urlBase64ToUint8Array(base64String) {
 }
 
 // Function to subscribe a user to push notifications
-function subscribeUserToPush() {
+function subscribeUserToPush(userUID, userToken) {
   // Register user for push notifications
   return self.registration.pushManager
     .subscribe({
@@ -261,17 +262,52 @@ function subscribeUserToPush() {
         "BKlaijHeFLlg0cuC8twkPz0p-vY8EzOJSATZnUdGu5Kc49ScJL4iVMaCIaSY4xI4t-XVeJS69H6c1tPSzstO0pw"
       ),
     })
-    .then((subscription) => {
-      console.log("Subscription object here it is:");
-      console.log(subscription);
-      // Store the subscription object on your server (to be added)
-      // fetch("/api/subscribe", {
-      //   method: "POST",w
-      //   body: JSON.stringify(subscription),
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      // });
+    .then(async (subscription) => {
+      // Convert keys into base64 string format
+      const base64AuthKey = btoa(
+        String.fromCharCode.apply(
+          null,
+          new Uint8Array(subscription.getKey("auth"))
+        )
+      );
+      const base64P256dhKey = btoa(
+        String.fromCharCode.apply(
+          null,
+          new Uint8Array(subscription.getKey("p256dh"))
+        )
+      );
+
+      const subscriptionData = {
+        endpoint: subscription.endpoint,
+        keys: {
+          auth: base64AuthKey, // Extract the auth key
+          p256dh: base64P256dhKey, // Extract the p256dh key
+        },
+      };
+
+      try {
+        // Check if subscription exists in the database for the user
+        const result = await getSubscription(userUID, userToken);
+        if (result && result.data) {
+          console.log("Found subscription object of the user");
+          console.log("Attempting to update it...");
+          try {
+            await updateSubscription(userUID, userToken, subscriptionData);
+            console.log("Updated subscription object of user");
+          } catch (error) {
+            console.log("Error updating subscription object of user:", error);
+          }
+        }
+      } catch (error) {
+        console.log("Error retrieving subscription object of user:", error);
+        console.log("Attempting to create subscription object for user");
+        try {
+          await createSubscription(userUID, userToken, subscriptionData);
+          console.log("Subscription for user created!");
+        } catch (error) {
+          console.error("Error creating subscription object for user:", error);
+        }
+      }
     })
     .catch((error) => {
       console.error("Subscription task failed:", error);
@@ -294,7 +330,9 @@ function unsubscribeUserFromPush() {
 self.addEventListener("message", (event) => {
   // Event to subscribe user to push notifications
   if (event.data.action === "subscribeToPush") {
-    event.waitUntil(subscribeUserToPush());
+    event.waitUntil(
+      subscribeUserToPush(event.data.userUID, event.data.userToken)
+    );
   }
 
   // Event to unsubscribe a user to push notifications
