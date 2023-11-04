@@ -17,23 +17,6 @@ const userData = {
     uid: '1',
 }
 
-jest.mock("../contexts/AuthContext", () => {
-    return {
-      useAuth: () =>{
-        return {
-            user: userData
-        }
-      }
-    };
-  });
-
-beforeEach(async () => {
-    await act(async () => {
-        render(<ViewAppointmentsPage />);
-      });
-})
-
-
 jest.mock('../http/appointmentAPI', () => {
     return {
         getAppointments: () => {
@@ -61,21 +44,66 @@ jest.mock('../http/appointmentAPI', () => {
         },
     }
 });
-   
-    test("Appointment list is displayed correctly", async () => {
-        const date = await screen.findByText('Jan 1, 2014,');
-        const time = await screen.findByText('8h36');
-        const doctor = await screen.findByText('Dr. John');
-        expect(date).toBeInTheDocument();
-        expect(time).toBeInTheDocument();
-        expect(doctor).toBeInTheDocument();
+
+describe ("Logged in user", () => {
+    jest.mock("../contexts/AuthContext", () => {
+        return {
+          useAuth: () =>{
+            return {
+                user: userData
+            }
+          }
+        };
+      });
+      
+    beforeEach(async () => {
+        await act(async () => {
+            render(<ViewAppointmentsPage />);
+          });
     })
 
-    test("Clicking on the trash icon calls the delete function", async () => {
-        const trashIcon = screen.getByAltText('Trash icon');
-        const appointmentId = '1';
-        await userEvent.click(trashIcon);
-        const result = await deleteAppointment(appointmentId);
-        expect(result.status).toEqual('SUCCESS');
-        expect(result.data).toEqual('Successfully deleted appointment.');
+        it("Appointment list is displayed correctly", async () => {
+            const date = await screen.findByText('Jan 1, 2014,');
+            const time = await screen.findByText('8h36');
+            const doctor = await screen.findByText('Dr. John');
+            expect(date).toBeInTheDocument();
+            expect(time).toBeInTheDocument();
+            expect(doctor).toBeInTheDocument();
+        })
+    
+        it("Clicking on the trash icon calls the delete function", async () => {
+            const trashIcon = screen.getByAltText('Trash icon');
+            const appointmentId = '1';
+            await userEvent.click(trashIcon);
+            const result = await deleteAppointment(appointmentId);
+            expect(result.status).toEqual('SUCCESS');
+            expect(result.data).toEqual('Successfully deleted appointment.');
+        })
+    
+})
+
+
+describe("User not logged in", () => {
+    beforeEach( () => {
+        jest.mock("../contexts/AuthContext", () => {
+            return {
+              useAuth: () =>{
+                return {
+                    user: null
+                }
+              }
+            };
+          });
+
     })
+
+    it("Router push method redirects to login page", () => {
+        render(<ViewAppointmentsPage />);
+        expect(mockRouter).toBeCalledWith('/login');
+    })
+
+
+})
+
+
+

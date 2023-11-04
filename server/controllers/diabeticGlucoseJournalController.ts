@@ -6,7 +6,7 @@ export const getGlucoseJournals = async (req: Request, res: Response) => {
   try {
     const user = await db.User.findOne({
       where: {
-        uid: req.params.user_id,
+        uid: req.params.uid,
       },
     });
 
@@ -19,7 +19,7 @@ export const getGlucoseJournals = async (req: Request, res: Response) => {
 
     const glucoseJournals = await db.GlucoseMeasurement.findAll({
       where: {
-        uid: req.params.user_id,
+        uid: req.params.uid,
       },
     });
 
@@ -37,7 +37,7 @@ export const getGlucoseJournals = async (req: Request, res: Response) => {
 };
 export const getGlucoseJournal = async (req: Request, res: Response) => {
   try {
-    const glucoseJournalId = req.params.glucose_journal_id;
+    const glucoseJournalId = req.params.id;
     const glucoseJournal = await db.GlucoseMeasurement.findOne({
       where: {
         id: glucoseJournalId,
@@ -67,7 +67,7 @@ export const createGlucoseJournal = async (req: Request, res: Response) => {
   try {
     const user = await db.User.findOne({
       where: {
-        uid: req.params.user_id,
+        uid: req.params.uid,
       },
     });
 
@@ -79,7 +79,7 @@ export const createGlucoseJournal = async (req: Request, res: Response) => {
     }
     const { date, mealTime, bloodGlucose, unit, notes } = req.body;
     const glucoseJournal = await db.GlucoseMeasurement.create({
-      uid: req.params.user_id,
+      uid: req.params.uid,
       date,
       mealTime,
       bloodGlucose,
@@ -100,7 +100,7 @@ export const createGlucoseJournal = async (req: Request, res: Response) => {
 };
 export const updateGlucoseJournal = async (req: Request, res: Response) => {
   try {
-    const glucoseJournalId = req.params.glucose_journal_id;
+    const glucoseJournalId = req.params.id;
     const glucoseJournal = await db.GlucoseMeasurement.findOne({
       where: {
         id: glucoseJournalId,
@@ -150,7 +150,7 @@ export const updateGlucoseJournal = async (req: Request, res: Response) => {
 };
 export const deleteGlucoseJournal = async (req: Request, res: Response) => {
   try {
-    const glucoseJournalId = req.params.glucose_journal_id;
+    const glucoseJournalId = req.params.id;
     const glucoseJournal = await db.GlucoseMeasurement.findOne({
       where: {
         id: glucoseJournalId,

@@ -1,9 +1,6 @@
 'use client';
 import React from 'react';
-import {useState} from 'react'
-import Link from 'next/link';
 import Menu from '../components/Menu';
-import {useUser} from '@/app/contexts/UserContext';
 import { useRouter } from "next/navigation";
 import { useAuth } from "../contexts/AuthContext";
 import Custom403 from '../pages/403';
@@ -23,17 +20,43 @@ export default function MainMenu() {
   
 return (
   <div className="bg-eggshell min-h-screen flex flex-col">
-  <div className={`sm:px-16 px-6 flex justify-center items-center`}>
-  <div className="mb-6 mt-1">
+      
+      <div className="grid grid-cols-2 gap-3 p-4 my-auto text-center">
+      <div className="text-darkgrey font-bold col-span-2 text-[24px]">Welcome to Compass</div>
+      <div className="text-grey font-sans font-semibold col-span-2">
+        Quickstart Your Journey...
+      </div>
+
+      <div 
+        className="bg-red rounded-xl h-36 py-14 bg-opacity-90 hover:-translate-y-1.5"
+        onClick = {() => router.push('/viewappointments')}
+      >
+          Appointments
+      </div>
         
-    <div className={`xl:max-w-[1280px] w-full`}>
-    <p className="text-[24px] mt-72 flex justify-center items-center text-darkgrey font-IBM Plex Sans font-bold text-center">
-            Hello {user.displayName}, welcome to the Main Menu !
-          </p>
-        </div>
-      <Menu />
+      <div 
+        className="bg-darkgrey rounded-xl h-36 py-14 bg-opacity-90 hover:-translate-y-1.5"
+        onClick = {() => router.push('/')}
+      >
+        Medications
+      </div>
+
+      <div 
+      className="bg-yellow rounded-xl h-36 py-14 bg-opacity-90 hover:-translate-y-1.5"
+      onClick = {() => router.push('/journals')}
+      >
+        Journals
+      </div>
+
+      <div 
+        className="bg-green rounded-xl h-36 py-14 bg-opacity-90 hover:-translate-y-1.5"
+        onClick = {() => router.push('/profile')}
+      >
+        Profile
+      </div>
+
     </div>
-  </div>
+    <Menu />
 </div>
   )
 }

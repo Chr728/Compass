@@ -17,10 +17,23 @@ export const sendUserReminders = async (req: Request, res: Response) => {
     const userUID = req.params.uid;
     const timeForAppointments = 1;
 
-    // To be modified, subscription should be retrieved from server
-    const subscription = req.body;
+    // Retrieve subscription from database
+    const Usersubscription = await db.Subscription.findOne({
+      where: {
+        uid: userUID,
+      },
+    });
 
-    // Get the current time
+    if (!Usersubscription) {
+      return res.status(404).json({
+        status: "ERROR",
+        message: `No Subscription was found.`,
+      });
+    } 
+
+    const subscription = Usersubscription.subscription;
+
+    // Get the current time and date
     const currentTime = moment.tz("America/Toronto").format("HH:mm:00");
     const currentDate = moment.tz("America/Toronto").format("YYYY-MM-DD");
 
@@ -39,7 +52,7 @@ export const sendUserReminders = async (req: Request, res: Response) => {
     const startTime = moment(currentTime, "HH:mm:ss");
     const endTime = startTime.clone().add(30, "minutes");
 
-    console.log();
+   
 
     // Retrieve notification preference first. Make sure
     const userNotificationPreferences = await db.NotificationPreference.findOne(
@@ -50,16 +63,6 @@ export const sendUserReminders = async (req: Request, res: Response) => {
       }
     );
 
-    // Debug times
-    console.log(`currentDate: ${currentDate}`);
-    console.log(
-      `startTimeAppointments: ${startTimeAppointments.format("HH:mm:00")}`
-    );
-    console.log(
-      `endTimeAppointments: ${endTimeAppointments.format("HH:mm:00")}`
-    );
-    console.log(`startTime: ${startTime.format("HH:mm:00")}`);
-    console.log(`endTime: ${endTime.format("HH:mm:00")}`);
 
     // Return if there's an error
     if (!userNotificationPreferences) {
@@ -67,13 +70,11 @@ export const sendUserReminders = async (req: Request, res: Response) => {
         status: "ERROR",
         message: `Notification preference not found, invalid user id.`,
       });
-    } else {
-      console.log("Found notification preference for user!");
-    }
+    } 
 
     // Check if user has appointment notifications on
     if (userNotificationPreferences.appointmentReminders) {
-      console.log("FOUND APPOINTMENT NOTIFICATIONS ON");
+  
       //Get appointment of users for preperaing reminder
       const userAppointments = await db.Appointment.findAll({
         where: {
@@ -85,7 +86,7 @@ export const sendUserReminders = async (req: Request, res: Response) => {
           },
         },
       });
-      console.log(`Appointments: ${userAppointments}`);
+      
       if (userAppointments.length > 0) {
         userAppointments.forEach(
           (appointment: { appointmentWith: any; time: any }) => {
@@ -100,7 +101,7 @@ export const sendUserReminders = async (req: Request, res: Response) => {
       }
     }
 
-    // Check if user has appointment notifications on
+    // Check if user has activity notifications on
     if (userNotificationPreferences.activityReminders) {
       //Get activity journals of users for prepearing reminder
       const userActivityJournals = await db.ActivityJournal.findAll({
@@ -113,7 +114,7 @@ export const sendUserReminders = async (req: Request, res: Response) => {
           },
         },
       });
-      console.log(`Activity: ${userActivityJournals}`);
+      
       if (userActivityJournals.length > 0) {
         userActivityJournals.forEach(
           (activityjournal: { activityjournal: any }) => {
@@ -128,7 +129,7 @@ export const sendUserReminders = async (req: Request, res: Response) => {
       }
     }
 
-    // Check if user has appointment notifications on
+    // Check if user has food intake notifications on
     if (userNotificationPreferences.foodIntakeReminders) {
       //Get food intake journals of users for preparing reminder
       const userFoodIntakeJournals = await db.FoodIntakeJournal.findAll({
@@ -155,8 +156,8 @@ export const sendUserReminders = async (req: Request, res: Response) => {
       }
     }
 
-    // Check if user has appointment notifications on
-    if (false) {
+    // Check if user has glucose measurement notifications on
+    if (userNotificationPreferences.glucoseMeasurementReminders) {
       //Get diabetic sub-journal1 of users for preparing remindner
       const userGlucoseMeasurement = await db.GlucoseMeasurement.findAll({
         where: {
@@ -182,8 +183,8 @@ export const sendUserReminders = async (req: Request, res: Response) => {
       }
     }
 
-    // Check if user has appointment notifications on
-    if (false) {
+    // Check if user has insulin dosage notifications on
+    if (userNotificationPreferences.insulinDosageReminders) {
       //Get diabetic sub-journal2 of users for preparing reminder
       const userInsulinDosage = await db.InsulinDosage.findAll({
         where: {
@@ -207,7 +208,7 @@ export const sendUserReminders = async (req: Request, res: Response) => {
       }
     }
 
-    // Check if user has appointment notifications on
+    // Check if user has medication notifications on
     if (userNotificationPreferences.medicationReminders) {
       //Get medication of user for preparing reminder
       const userMedication = await db.Medication.findAll({
