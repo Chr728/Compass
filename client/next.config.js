@@ -7,6 +7,7 @@
 // module.exports = nextConfig;
 
 const withPWA = require("@ducanh2912/next-pwa").default({
+  swcMinify: true,      //rust compiler
   dest: "public",
   register: true,
   workboxOptions: {
