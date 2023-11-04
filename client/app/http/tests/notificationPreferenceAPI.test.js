@@ -59,6 +59,23 @@ describe("createNotificationPreference", () => {
     expect(result).toEqual(mockNotificationPreferenceData);
   });
 
+  it("should throw an error if the user is not signed in", async () => {
+    Object.defineProperty(auth, "currentUser", {
+      get: jest.fn().mockReturnValue(null),
+    });
+
+    const mockResponse = {
+      ok: true,
+      json: jest.fn().mockResolvedValue({}),
+    };
+    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = mockFetch;
+
+    await expect(createNotificationPreference()).rejects.toThrow(
+      "No user is currently signed in."
+    );
+  });
+
   it("should throw an error if the activity journal entry creation fails", async () => {
     const mockUserId = "123";
     const mockToken = "mockToken";
@@ -234,6 +251,30 @@ describe("updateNotificationPreference", () => {
     expect(result).toEqual(mockNotificationPreferenceData);
   });
 
+  it("should throw an error if the user is not signed in", async () => {
+    Object.defineProperty(auth, "currentUser", {
+      get: jest.fn().mockReturnValue(null),
+    });
+
+    const mockNotificationPreferenceData = {
+      activityReminders: true,
+      medicationReminders: true,
+      appointmentReminders: true,
+      foodIntakeReminders: true,
+    };
+
+    const mockResponse = {
+      ok: true,
+      json: jest.fn().mockResolvedValue({}),
+    };
+    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = mockFetch;
+
+    await expect(
+      updateNotificationPreference(mockNotificationPreferenceData)
+    ).rejects.toThrow("No user is currently signed in.");
+  });
+
   it("should throw an error if the notification preference update fails", async () => {
     const mockUserId = "123";
 
@@ -320,6 +361,23 @@ describe("deleteNotificationPreference", () => {
     expect(result).toEqual({
       message: "Notification preference deleted successfully",
     });
+  });
+
+  it("should throw an error if the user is not signed in", async () => {
+    Object.defineProperty(auth, "currentUser", {
+      get: jest.fn().mockReturnValue(null),
+    });
+
+    const mockResponse = {
+      ok: true,
+      json: jest.fn().mockResolvedValue({}),
+    };
+    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = mockFetch;
+
+    await expect(deleteNotificationPreference()).rejects.toThrow(
+      "No user is currently signed in."
+    );
   });
 
   it("should throw an error if the notification preference deletion fails", async () => {
