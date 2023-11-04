@@ -17,11 +17,12 @@ import {
   cleanupOutdatedCaches,
 } from "workbox-precaching";
 import { CacheableResponsePlugin } from "workbox-cacheable-response";
-import sendUserReminders from "./app/http/remindersAPI";
+import { sendUserReminders } from "./app/http/remindersAPI";
 import {
   createSubscription,
   getSubscription,
   updateSubscription,
+  deleteSubscription,
 } from "./app/http/subscriptionAPI";
 
 skipWaiting();
@@ -318,8 +319,13 @@ function subscribeUserToPush(userUID, userToken) {
 function unsubscribeUserFromPush() {
   return self.registration.pushManager
     .getSubscription()
-    .then((subscription) => {
-      console.log("Unsubscribed from push notifications.");
+    .then(async (subscription) => {
+      try {
+        await deleteSubscription();
+        console.log("Unsubscribed from push notifications.");
+      } catch (error) {
+        console.error("Unsubscription task failed:", error);
+      }
     })
     .catch((error) => {
       console.error("Unsubscribe task failed:", error);
@@ -345,13 +351,13 @@ self.addEventListener("message", (event) => {
 function runTaskEvery5Minutes() {
   // This function will run every 30 minutes
   console.log("Push Notification Task!");
-  //sendUserReminders();
+  sendUserReminders();
 }
 
 // Schedule the task to run every 30 minutes
 setInterval(() => {
   runTaskEvery5Minutes();
-}, 30 * 60 * 1000); // 30 minutes in milliseconds
+}, 30 * 60 * 1000); // 30 minutes in milliseconds change 1 to 30 later
 
 // Event listener for push notifications
 self.addEventListener("push", (event) => {

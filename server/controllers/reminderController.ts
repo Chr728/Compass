@@ -1,4 +1,4 @@
-require("dotenv").config({ path: "./../../.env" });
+require("dotenv").config();
 import { Request, Response } from "express";
 import { Logger } from "../middlewares/logger";
 import db from "../models";
@@ -29,8 +29,9 @@ export const sendUserReminders = async (req: Request, res: Response) => {
         status: "ERROR",
         message: `No Subscription was found.`,
       });
-    } 
+    }
 
+    // Get user subscription
     const subscription = Usersubscription.subscription;
 
     // Get the current time and date
@@ -52,8 +53,6 @@ export const sendUserReminders = async (req: Request, res: Response) => {
     const startTime = moment(currentTime, "HH:mm:ss");
     const endTime = startTime.clone().add(30, "minutes");
 
-   
-
     // Retrieve notification preference first. Make sure
     const userNotificationPreferences = await db.NotificationPreference.findOne(
       {
@@ -63,18 +62,16 @@ export const sendUserReminders = async (req: Request, res: Response) => {
       }
     );
 
-
     // Return if there's an error
     if (!userNotificationPreferences) {
       return res.status(404).json({
         status: "ERROR",
         message: `Notification preference not found, invalid user id.`,
       });
-    } 
+    }
 
     // Check if user has appointment notifications on
     if (userNotificationPreferences.appointmentReminders) {
-  
       //Get appointment of users for preperaing reminder
       const userAppointments = await db.Appointment.findAll({
         where: {
@@ -86,7 +83,7 @@ export const sendUserReminders = async (req: Request, res: Response) => {
           },
         },
       });
-      
+
       if (userAppointments.length > 0) {
         userAppointments.forEach(
           (appointment: { appointmentWith: any; time: any }) => {
@@ -114,7 +111,7 @@ export const sendUserReminders = async (req: Request, res: Response) => {
           },
         },
       });
-      
+
       if (userActivityJournals.length > 0) {
         userActivityJournals.forEach(
           (activityjournal: { activityjournal: any }) => {

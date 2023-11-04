@@ -118,15 +118,14 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
   const logout = async () => {
     try {
-      await signOut(auth);
-      // Sign-out successful.
       // Unsubscribe a user from push notifications
       if ("serviceWorker" in navigator && navigator.serviceWorker.controller) {
         navigator.serviceWorker.controller.postMessage({
           action: "unsubscribeFromPush",
         });
       }
-
+      await signOut(auth);
+      // Sign-out successful.
       router.push("/logout");
       console.log("Sign-out successful.");
     } catch (error) {
