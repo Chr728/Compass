@@ -19,10 +19,10 @@ describe("createSubscription", () => {
   it("should create a subscription object for the user", async () => {
     const mockUserId = "123";
     const mockUserSubscription = {
-      uid: "test",
-      subscription: {
-        endpoint: "test",
-        keys: "test",
+      endpoint: "test",
+      keys: {
+        auth: "test",
+        p256dh: "test",
       },
     };
     const mockToken = "mockToken";
@@ -42,7 +42,11 @@ describe("createSubscription", () => {
     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch = mockFetch;
 
-    const result = await createSubscription(mockUserSubscription);
+    const result = await createSubscription(
+      mockUserId,
+      mockToken,
+      mockUserSubscription
+    );
 
     expect(mockFetch).toHaveBeenCalledWith(
       `${process.env.NEXT_PUBLIC_API_URL}/api/subscription/${mockUserId}`,
@@ -52,7 +56,7 @@ describe("createSubscription", () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${mockToken}`,
         },
-        body: '{"uid":"test","subscription":{"endpoint":"test","keys":"test"}}',
+        body: '{"subscription":{"endpoint":"test","keys":{"auth":"test","p256dh":"test"}}}',
       }
     );
     expect(mockResponse.json).toHaveBeenCalled();
@@ -62,10 +66,10 @@ describe("createSubscription", () => {
   it("should throw an error if the createSubscription function fails", async () => {
     const mockUserId = "123";
     const mockUserSubscription = {
-      uid: "test",
-      subscription: {
-        endpoint: "test",
-        keys: "test",
+      endpoint: "test",
+      keys: {
+        auth: "test",
+        p256dh: "test",
       },
     };
     const mockToken = "mockToken";
@@ -85,7 +89,9 @@ describe("createSubscription", () => {
     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch = mockFetch;
 
-    await expect(createSubscription(mockUserSubscription)).rejects.toThrow(
+    await expect(
+      createSubscription(mockUserId, mockToken, mockUserSubscription)
+    ).rejects.toThrow(
       `Failed to create subscription object for user. HTTP Status: ${mockResponse.status}`
     );
   });
@@ -102,10 +108,10 @@ describe("getSubscription", () => {
   });
 
   it("should get a subscription object by ID", async () => {
-    const mockUser = "123";
+    const mockUserId = "123";
     const mockToken = "mockToken";
     const mockCurrentUser = {
-      uid: mockUser.id,
+      uid: mockUserId,
       getIdToken: jest.fn().mockResolvedValue(mockToken),
     };
 
@@ -120,11 +126,11 @@ describe("getSubscription", () => {
     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch = mockFetch;
 
-    const result = await getSubscription();
+    const result = await getSubscription(mockUserId, mockToken);
 
     expect(mockResponse.json).toHaveBeenCalled();
     expect(mockFetch).toHaveBeenCalledWith(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/subscription/${mockUser.id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/subscription/${mockUserId}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -132,23 +138,6 @@ describe("getSubscription", () => {
         },
         method: "GET",
       }
-    );
-  });
-
-  it("should throw an error if the user is not signed in", async () => {
-    Object.defineProperty(auth, "currentUser", {
-      get: jest.fn().mockReturnValue(null),
-    });
-
-    const mockResponse = {
-      ok: true,
-      json: jest.fn().mockResolvedValue({}),
-    };
-    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
-    global.fetch = mockFetch;
-
-    await expect(getSubscription()).rejects.toThrow(
-      "No user is currently signed in."
     );
   });
 
@@ -171,7 +160,7 @@ describe("getSubscription", () => {
     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch = mockFetch;
 
-    await expect(getSubscription()).rejects.toThrow(
+    await expect(getSubscription(mockUserId, mockToken)).rejects.toThrow(
       `Failed to retrieve subscription object for user. HTTP Status: ${mockResponse.status}`
     );
     expect(mockFetch).toHaveBeenCalledWith(
@@ -200,10 +189,10 @@ describe("updateSubscription", () => {
   it("should update a subscription object for the user", async () => {
     const mockUserId = "123";
     const mockUserSubscription = {
-      uid: "test",
-      subscription: {
-        endpoint: "test",
-        keys: "test",
+      endpoint: "test",
+      keys: {
+        auth: "test",
+        p256dh: "test",
       },
     };
     const mockToken = "mockToken";
@@ -223,7 +212,11 @@ describe("updateSubscription", () => {
     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch = mockFetch;
 
-    const result = await updateSubscription(mockUserSubscription);
+    const result = await updateSubscription(
+      mockUserId,
+      mockToken,
+      mockUserSubscription
+    );
 
     expect(mockFetch).toHaveBeenCalledWith(
       `${process.env.NEXT_PUBLIC_API_URL}/api/subscription/${mockUserId}`,
@@ -233,7 +226,7 @@ describe("updateSubscription", () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${mockToken}`,
         },
-        body: '{"uid":"test","subscription":{"endpoint":"test","keys":"test"}}',
+        body: '{"subscription":{"endpoint":"test","keys":{"auth":"test","p256dh":"test"}}}',
       }
     );
     expect(mockResponse.json).toHaveBeenCalled();
@@ -243,10 +236,10 @@ describe("updateSubscription", () => {
   it("should throw an error if the updateSubscription function fails", async () => {
     const mockUserId = "123";
     const mockUserSubscription = {
-      uid: "test",
-      subscription: {
-        endpoint: "test",
-        keys: "test",
+      endpoint: "test",
+      keys: {
+        auth: "test",
+        p256dh: "test",
       },
     };
     const mockToken = "mockToken";
@@ -266,7 +259,9 @@ describe("updateSubscription", () => {
     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch = mockFetch;
 
-    await expect(updateSubscription(mockUserSubscription)).rejects.toThrow(
+    await expect(
+      updateSubscription(mockUserId, mockToken, mockUserSubscription)
+    ).rejects.toThrow(
       `Failed to update subscription object for user. HTTP Status: ${mockResponse.status}`
     );
   });
@@ -301,7 +296,7 @@ describe("deleteSubscription", () => {
     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch = mockFetch;
 
-    const result = await deleteSubscription();
+    const result = await deleteSubscription(mockUserId, mockToken);
 
     expect(mockFetch).toHaveBeenCalledWith(
       `${process.env.NEXT_PUBLIC_API_URL}/api/subscription/${mockUserId}`,
@@ -337,7 +332,7 @@ describe("deleteSubscription", () => {
     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch = mockFetch;
 
-    await expect(deleteSubscription()).rejects.toThrow(
+    await expect(deleteSubscription(mockUserId, mockToken)).rejects.toThrow(
       `Failed to delete subscription object for user. HTTP Status: ${mockResponse.status}`
     );
   });

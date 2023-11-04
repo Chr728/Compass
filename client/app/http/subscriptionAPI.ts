@@ -1,24 +1,19 @@
-import { auth } from "../config/firebase";
-
 // Function to create a subscription object for push notifications for a user
-export async function createSubscription(subscription: any): Promise<any> {
+export async function createSubscription(
+  userUID: any,
+  userToken: any,
+  subscription: any
+): Promise<any> {
   try {
-    const currentUser = auth.currentUser;
-    if (!currentUser) {
-      throw new Error("No user is currently signed in.");
-    }
-    const uid = currentUser.uid;
-    const token = await currentUser.getIdToken();
-
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/subscription/${uid}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/subscription/${userUID}`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${userToken}`,
         },
-        body: JSON.stringify(subscription),
+        body: JSON.stringify({ subscription: subscription }),
       }
     );
     if (!response.ok) {
@@ -35,22 +30,18 @@ export async function createSubscription(subscription: any): Promise<any> {
 }
 
 // Function to get subscription object of a user
-export async function getSubscription(): Promise<any> {
+export async function getSubscription(
+  userUID: any,
+  userToken: any
+): Promise<any> {
   try {
-    const currentUser = auth.currentUser;
-    if (!currentUser) {
-      throw new Error("No user is currently signed in.");
-    }
-    const uid = currentUser.uid;
-    const token = await currentUser.getIdToken();
-
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/subscription/${uid}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/subscription/${userUID}`,
       {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${userToken}`,
         },
       }
     );
@@ -68,24 +59,22 @@ export async function getSubscription(): Promise<any> {
 }
 
 // Function to update a subscription object for push notifications for a user
-export async function updateSubscription(subscription: any): Promise<any> {
+export async function updateSubscription(
+  userUID: any,
+  userToken: any,
+  subscription: any
+): Promise<any> {
   try {
-    const currentUser = auth.currentUser;
-    if (!currentUser) {
-      throw new Error("No user is currently signed in.");
-    }
-    const uid = currentUser.uid;
-    const token = await currentUser.getIdToken();
-
+    const subscriptionData = { ...subscription };
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/subscription/${uid}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/subscription/${userUID}`,
       {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${userToken}`,
         },
-        body: JSON.stringify(subscription),
+        body: JSON.stringify({ subscription: subscription }),
       }
     );
     if (!response.ok) {
@@ -102,21 +91,17 @@ export async function updateSubscription(subscription: any): Promise<any> {
 }
 
 // Function to delete a subscription object for push notifications for a user
-export async function deleteSubscription(): Promise<any> {
+export async function deleteSubscription(
+  userUID: any,
+  userToken: any
+): Promise<any> {
   try {
-    const currentUser = auth.currentUser;
-    if (!currentUser) {
-      throw new Error("No user is currently signed in.");
-    }
-    const uid = currentUser.uid;
-    const token = await currentUser.getIdToken();
-
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/subscription/${uid}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/subscription/${userUID}`,
       {
         method: "DELETE",
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${userToken}`,
         },
       }
     );
