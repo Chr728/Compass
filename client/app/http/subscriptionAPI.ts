@@ -1,3 +1,5 @@
+import { auth } from "../config/firebase";
+
 // Function to create a subscription object for push notifications for a user
 export async function createSubscription(
   userUID: any,
@@ -91,17 +93,20 @@ export async function updateSubscription(
 }
 
 // Function to delete a subscription object for push notifications for a user
-export async function deleteSubscription(
-  userUID: any,
-  userToken: any
-): Promise<any> {
+export async function deleteSubscription(): Promise<any> {
   try {
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      throw new Error("No user is currently signed in.");
+    }
+    const uid = currentUser.uid;
+    const token = await currentUser.getIdToken();
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/subscription/${userUID}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/subscription/${uid}`,
       {
         method: "DELETE",
         headers: {
-          Authorization: `Bearer ${userToken}`,
+          Authorization: `Bearer ${token}`,
         },
       }
     );

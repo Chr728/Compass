@@ -66,7 +66,7 @@ describe("sendUserReminders", () => {
     global.fetch = mockFetch;
 
     await expect(sendUserReminders()).rejects.toThrow(
-      `Failed to create reminder preference for user. HTTP Status: ${mockResponse.status}`
+      `Failed to create reminder for user. HTTP Status: ${mockResponse.status}`
     );
   });
 });

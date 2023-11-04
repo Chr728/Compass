@@ -313,6 +313,23 @@ describe("deleteSubscription", () => {
     });
   });
 
+  it("should throw an error if the user is not signed in", async () => {
+    Object.defineProperty(auth, "currentUser", {
+      get: jest.fn().mockReturnValue(null),
+    });
+
+    const mockResponse = {
+      ok: true,
+      json: jest.fn().mockResolvedValue({}),
+    };
+    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = mockFetch;
+
+    await expect(deleteSubscription()).rejects.toThrow(
+      "No user is currently signed in."
+    );
+  });
+
   it("should throw an error if the deleteSubscription function fails", async () => {
     const mockUserId = "123";
     const mockToken = "mockToken";

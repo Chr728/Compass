@@ -1,4 +1,3 @@
-import { create } from "domain";
 import { auth } from "../../config/firebase";
 import {
   createNotificationPreference,
