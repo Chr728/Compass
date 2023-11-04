@@ -20,6 +20,7 @@ import { useRouter } from 'next/navigation';
 import createUser from '@/app/http/createUser';
 import { createUserAttributes } from '@/app/lib/Models/User';
 import { createNotificationPreference } from '../http/notificationPreferenceAPI';
+import { useProp } from './PropContext';
 
 interface AuthContextProps {
   user: User | null;
@@ -44,15 +45,14 @@ interface AuthProviderProps {
 
 export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-
+  const {handleLoading, handleError} = useProp();
   const login = (email: string, password: string) => {
+    handleLoading(true);
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
+      .then(() => {
+        handleLoading(false);
         setError(null);
         // ...
       })
@@ -61,25 +61,29 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.error(errorCode, errorMessage);
+        handleError(errorMessage)
+        handleLoading(false);
       });
   };
 
   const logout = async () => {
     try {
+      handleLoading(true);
       await signOut(auth);
-      // Sign-out successful.
+      handleLoading(false);
       router.push('/logout');
       console.log('Sign-out successful.');
-    } catch (error) {
+    } catch (error : any) {
       // Handle errors gracefully
       console.error('Error signing out:', error);
+      handleError('Error signing out:' + error.message)
     }
   };
 
   const signUp = (values: createUserAttributes) => {
+    handleLoading(true);
     createUserWithEmailAndPassword(auth, values.email, values.password)
       .then((userCredential) => {
-        setLoading(true);
         // Signed in
         const user = userCredential.user;
         setError(null);
@@ -90,7 +94,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
             if (res !== null) {
               // Notification preference doesn't exist, create it
               createNotificationPreference();
-              setLoading(false);
+                handleLoading(false);
               router.push('/tpage');
             }
           })
@@ -98,6 +102,8 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
             const errorCode = error.code;
             const errorMessage = error.message;
             console.log(errorCode, errorMessage);
+            handleError(errorMessage)
+            handleLoading(false);
           });
       })
       .catch((error) => {
@@ -109,6 +115,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);
+        handleError(errorMessage)
       });
   };
 
@@ -116,7 +123,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
       // Specify the type here
       setUser(user);
-      setLoading(false);
+      handleLoading(false);
       setError(null);
     });
 
@@ -133,7 +140,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {children}
     </AuthContext.Provider>
   );
 };

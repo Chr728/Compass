@@ -1,10 +1,12 @@
 import {ReactNode, useContext, useState, createContext} from 'react';
+import LoadingScreen from '@/app/components/AppWrapper/LoadingScreen';
 
 type PropContextType = {
     isError: boolean,
     errorText: string,
     handleError: (text: string) => void,
     loading: boolean,
+    handleLoading: (loading: boolean,timeout?:number) => void,
 }
 const PropContext = createContext<PropContextType>({} as PropContextType);
 export const useProp = () => {
@@ -21,6 +23,7 @@ interface PropProviderProps {
 export const PropProvider = ({children}: PropProviderProps) => {
     const [isError, setIsError] = useState(false)
     const [errorText, setErrorText] = useState('')
+    const [loading, setLoading] = useState(false)
     const handleError = (text: string) => {
         setIsError(true);
        setErrorText(text);
@@ -29,19 +32,26 @@ export const PropProvider = ({children}: PropProviderProps) => {
        }, 3500);
     }
 
-    const handleLoading = (loading: boolean) => {
-        // setLoading(loading);
+    const handleLoading = (loading: boolean, timeout?: number) => {
+        if (timeout) {
+            setTimeout(() => {
+                setLoading(loading);
+            }, timeout);
+            return;
+        }
+        setLoading(loading);
     }
 
     const values: PropContextType = {
         isError ,
         errorText,
         handleError,
-        loading: false,
+        loading,
+        handleLoading,
     }
     return (
         <PropContext.Provider value={values}>
-            {children}
+            {loading ? <LoadingScreen /> : children}
         </PropContext.Provider>
     )
 }

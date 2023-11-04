@@ -14,7 +14,6 @@ import { useRouter } from 'next/navigation';
 import { auth } from '@/app/config/firebase';
 import { signOut } from 'firebase/auth';
 import {useProp} from '@/app/contexts/PropContext';
-
 type UserAttributes = {
   id: number;
   uid: string;
@@ -58,17 +57,16 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const [userInfo, setUserInfo] = useState<UserAttributes | null>(null);
   // can remove the following line as we check for user in req. maybe no more use for user const too.
   const uid = user ? user.uid : null; // Access the UID if the user is authenticated
-  const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const {handleError} = useProp();
+  const {handleError, loading, handleLoading} = useProp();
   useEffect(() => {
     const fetchUserData = () => {
       if (uid) {
         getUser()
           .then((userData) => {
-            setLoading(true);
+           handleLoading(true)
             setUserInfo(userData);
-            setLoading(false);
+            handleLoading(false)
             router.push('/tpage');
           })
           .catch((error) => {
@@ -77,13 +75,13 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
           });
       } else {
         setUserInfo(null);
-        setLoading(false);
+        handleLoading(false)
       }
     };
     if (user) {
       fetchUserData();
     } else {
-      setLoading(false);
+      handleLoading(false)
     }
   }, [uid]);
   const updateCurrentUser = (userData: EditableUserAttributes) => {
@@ -105,7 +103,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
 
   return (
     <UserContext.Provider value={value}>
-      {!loading && children}
+      {children}
     </UserContext.Provider>
   );
 };
