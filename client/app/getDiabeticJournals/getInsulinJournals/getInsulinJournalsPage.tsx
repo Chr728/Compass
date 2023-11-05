@@ -1,18 +1,18 @@
 'use client';
 import Image from 'next/image';
-import Button from '../components/Button';
-import Input from '../components/Input';
+import Button from '../../components/Button';
+import Input from '../../components/Input';
 import Link from 'next/link';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { deleteInsulinJournal, getInsulinJournal, getInsulinJournals} from '../http/diabeticJournalAPI'; 
-import { useAuth } from '../contexts/AuthContext';
-import { useUser } from '../contexts/UserContext';
+import { deleteInsulinJournal, getInsulinJournal, getInsulinJournals} from '../../http/diabeticJournalAPI'; 
+import { useAuth } from '../../contexts/AuthContext';
+import { useUser } from '../../contexts/UserContext';
 import { useEffect, useState } from 'react';
 import { MdDeleteForever, MdInfoOutline, MdKeyboardArrowDown } from 'react-icons/md';
-import Header from '../components/Header';
-import Menu from '../components/Menu';
-import { formatDate, formatMilitaryTime } from '../helpers/utils/datetimeformat';
+import Header from '../../components/Header';
+import Menu from '../../components/Menu';
+import { formatDate, formatMilitaryTime } from '../../helpers/utils/datetimeformat';
 
 export default function GetInsulinJournalsPage() {
   const router = useRouter();

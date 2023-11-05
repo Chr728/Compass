@@ -1,13 +1,13 @@
 'use client';
 import Image from 'next/image';
-import Button from '../../../components/Button';
-import Input from '../../../components/Input';
+import Button from '../../../../components/Button';
+import Input from '../../../../components/Input';
 import Link from 'next/link';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { createActivityJournal, getActivityJournal, getActivityJournals, updateActivityJournal } from '../../../http/activityJournalAPI'; // Replace '../api/yourApiFile' with the correct path
-import { useAuth } from '../../../contexts/AuthContext';
-import { useUser } from '../../../contexts/UserContext';
+import { createActivityJournal, getActivityJournal, getActivityJournals, updateActivityJournal } from '../../../../http/activityJournalAPI'; // Replace '../api/yourApiFile' with the correct path
+import { useAuth } from '../../../../contexts/AuthContext';
+import { useUser } from '../../../../contexts/UserContext';
 import { useEffect, useState } from 'react';
 import Header from '@/app/components/Header';
 import Menu from '@/app/components/Menu';

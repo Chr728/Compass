@@ -1,13 +1,13 @@
 'use client';
 import Image from 'next/image';
-import Button from '../../../components/Button';
-import Input from '../../../components/Input';
+import Button from '../../../../components/Button';
+import Input from '../../../../components/Input';
 import Link from 'next/link';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { createGlucoseJournal, getGlucoseJournal, getGlucoseJournals, updateGlucoseJournal } from '../../../http/diabeticJournalAPI'; 
-import { useAuth } from '../../../contexts/AuthContext';
-import { useUser } from '../../../contexts/UserContext';
+import { createGlucoseJournal, getGlucoseJournal, getGlucoseJournals, updateGlucoseJournal } from '../../../../http/diabeticJournalAPI'; 
+import { useAuth } from '../../../../contexts/AuthContext';
+import { useUser } from '../../../../contexts/UserContext';
 import { useEffect, useState } from 'react';
 import Header from '@/app/components/Header';
 import Menu from '@/app/components/Menu';

@@ -23,7 +23,7 @@ export default function Journal() {
         of your physical and mental health.</p>   
     
           
-<Link href="/getGlucoseJournals">
+<Link href="/getDiabeticJournals">
       <div className="rounded-3xl  mt-1 flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 " style={{backgroundColor: 'var(--Blue, #0880AE)' }}>
         
         <div>
