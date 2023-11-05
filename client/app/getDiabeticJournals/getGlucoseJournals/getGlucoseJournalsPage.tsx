@@ -52,14 +52,15 @@ export default function GetGlucoseJournalsPage() {
       <div className="bg-eggshell min-h-screen flex flex-col">
         <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
           <button onClick={() => router.push('/journals')}>
-            <Header headerText="Glucose Journals "></Header>
+            <Header headerText="Diabetes Journal "></Header>
           </button>
         </span>
         <p className="font-sans text-darkgrey ml-5 text-[14px]">Keep track of your insulin doses and glucose measurements to ensure a healthy lifestyle.</p>
         <br></br>    
         {glucose && (
   <div className="rounded-3xl bg-white flex flex-col mt-4 mb-6 w-full md:max-w-[800px] md:min-h-[550px] p-4 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]">
-    <div className="flex justify-between items-center">
+     <label className='text-darkgrey font-bold text-[22px] mb-3'>Glucose Measurement</label>
+            <div className="flex justify-between items-center">
       <div>
         <Button type="button" text="Add an Entry" style={{ width: '120px', fontSize: '14px', padding: '1px 10px' }} onClick={() => router.push(`/createGlucoseJournal`)} />
       </div>

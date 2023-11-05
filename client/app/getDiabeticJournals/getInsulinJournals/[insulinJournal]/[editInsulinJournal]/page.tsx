@@ -108,7 +108,7 @@ return (
   <div className="bg-eggshell min-h-screen flex flex-col">
      <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
               <button onClick={() => router.push(`/getActivityJournals/${activityJournal}`)}>
-              <Header headerText="Edit The Activity Journal"></Header>
+              <Header headerText="Edit The Insulin Dosage"></Header>
               </button>
               </span>
     <form

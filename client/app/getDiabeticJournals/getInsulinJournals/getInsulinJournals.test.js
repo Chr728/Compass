@@ -1,16 +1,16 @@
 import {render, screen,act} from '@testing-library/react';
 import '@testing-library/jest-dom';
-import GetActivityJournalsPage from './getActivityJournalsPage';
-import {getActivityJournals} from '../http/activityJournalAPI';
+import GetInsulinJournalsPage from './getInsulinJournalsPage';
+import {getInsulinJournals} from '../http/diabeticJournalAPI';
 import userEvent from '@testing-library/user-event';
-import { deleteActivityJournal} from '../http/activityJournalAPI'; 
+import { deleteInsulinJournal} from '../http/diabeticJournalAPI'; 
 
 import { useRouter } from "next/router";
 import { useUser } from '../contexts/UserContext';
 
 beforeEach(async () => {
     await act(async () => {
-        render(<GetActivityJournalsPage/>);
+        render(<GetInsulinJournalsPage/>);
       });
 })
 
@@ -40,9 +40,9 @@ jest.mock("../contexts/UserContext", () => {
   });
 
 
-jest.mock('../http/activityJournalAPI', () => {
+jest.mock('../http/diabeticJournalAPI', () => {
     return {
-        getActivityJournals: () => {
+        getInsulinJournals: () => {
             return {
                 
                     success: "SUCCESS",
@@ -51,17 +51,18 @@ jest.mock('../http/activityJournalAPI', () => {
                             uid: '1',
                             date: '2014-01-01',
                             time: '08:36',
-                            activity: 'running',
-                            duration: 60,
+                            typeOfInsulin: 'Humalog (Insulin lispro)',
+                            unit: 60,
+                            bodySite: 'Lower Back (left)',
                             Notes : 'I am feeling good today'
                     }
                 ]
             }
         },
-        deleteActivityJournal: async (activityJournalId) => {
+        deleteInsulinJournal: async (insulinJournalId) => {
             return {
                 status: "SUCCESS",
-                data: `Successfully deleted activity Journal.`,
+                data: `Successfully deleted Insulin Journal.`,
             };
         },
     }
@@ -72,28 +73,23 @@ test("Add an entry button  functions correctly", async() => {
     const addButton = screen.getAllByRole('button')[1];
     await userEvent.click(addButton);
     await mockRouter;
-    expect(mockRouter).toHaveBeenCalledWith('/createActivityJournal')
+    expect(mockRouter).toHaveBeenCalledWith('/createInsulinJournal')
 })
 
 
 
 
-    test("Get Activity Journals list is displayed correctly", async () => {
+    test("Get Insulin Journals list is displayed correctly", async () => {
         const date = await screen.findByText('Jan 1, 2014');
-        const activity = await screen.findByText('running');
-        const height = await screen.findByText('60');
+        const units = await screen.findByText('60');
+        const bodySite = await screen.findByText('Lower Back (left)');
 
         expect(date).toBeInTheDocument();
-        expect(activity).toBeInTheDocument();
-        expect(height).toBeInTheDocument();
+        expect(units).toBeInTheDocument();
+        expect(bodySite).toBeInTheDocument();
     })
 
    
 
     
-     // checks the texts
-     test("Message displayed", async () => {
-        const message = screen.getByText(/Manage your daily activities to help you stay fit. People with active lifestyles are often happier and healthier./i);
-        expect(message).toBeInTheDocument();
-    })
 
