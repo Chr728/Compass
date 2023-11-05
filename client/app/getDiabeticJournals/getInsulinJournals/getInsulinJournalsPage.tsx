@@ -64,19 +64,19 @@ export default function GetInsulinJournalsPage() {
               <br></br>
 
         <div className="flex" style={{ justifyContent: 'space-between' }}>
-    <div className="flex-2" style={{ marginRight: '10%' }}>
+    <div className="flex-2" style={{ marginRight: '2%' }}>
       <div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
         Date/Time
         <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
       </div>
     </div>
-    <div className="flex-2" style={{ marginRight: '2%' }}>
+    <div className="flex-2" style={{ marginRight: '5%' }}>
       <div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
         Units
         <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
       </div>
     </div>
-    <div className="flex-2" style={{ marginRight: '10%' }}>
+    <div className="flex-2" style={{ marginRight: '25%' }}>
       <div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
         Site
         <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
@@ -91,20 +91,20 @@ export default function GetInsulinJournalsPage() {
     style={{
       backgroundColor: index % 2 === 0 ? 'white' : '#DBE2EA',
     }}
-    onClick={() => router.push(`/getInsulinJournals/${item.id}`)}
+    onClick={() => router.push(`getDiabeticJournals/getInsulinJournals/${item.id}`)}
   >
-    <div className="flex-2">
+    <div className="flex-1">
       <p className="font-sans font-medium text-darkgrey text-[14px]">
         {`${formatDate(item.date)} ${formatMilitaryTime(item.time)}`}
       </p>
     </div>
-    <div className="flex-2">
-      <p className="font-sans ml-2 font-medium text-darkgrey text-[14px]">
+    <div className="flex-1">
+      <p className="font-sans ml-4 font-medium text-darkgrey text-[14px]">
         {item.unit}
       </p>
     </div>
-    <div className="flex-2">
-      <p className="font-sans ml-12 font-medium text-darkgrey text-[14px]">
+    <div className="flex-1">
+      <p className="font-sans ml-15 font-medium text-darkgrey text-[14px]">
         {item.bodySite}
       </p>
     </div>

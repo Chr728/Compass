@@ -1,2 +1,16 @@
 {
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.formatOnType": true,
+    "notebook.formatOnSave.enabled": true,
+    "html.format.indentHandlebars": true,
+    "html.format.indentInnerHtml": true,
+    "prettier.useTabs": true,
+    "prettier.vueIndentScriptAndStyle": true,
+    "C_Cpp.vcFormat.indent.braces": true,
+    "C_Cpp.vcFormat.indent.accessSpecifiers": true,
+    "C_Cpp.clang_format_style": "file",
+    "editor.indentSize": "tabSize",
+    "editor.wrappingIndent": "indent",
+    "C_Cpp.vcFormat.indent.caseLabels": true
 }

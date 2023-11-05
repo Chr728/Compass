@@ -369,7 +369,7 @@ return (
         type="button"
         text="Cancel"
         style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)' }}
-        onClick={() => router.push(`getDiabeticJournals/getInsulinJournals/${insulinJournal}`)}
+        onClick={() => router.push(`/getDiabeticJournals/getInsulinJournals/${insulinJournal}`)}
       />
 
 <Button
@@ -386,7 +386,7 @@ return (
           !formik.values.typeOfInsulin // Check if typeOfInsulin is missing or empty
         }
         style={{ width: '140px' }}
-        onClick={() => router.push(`getDiabeticJournals/getInsulinJournals/${insulinJournal}`)}
+        onClick={() => router.push(`/getDiabeticJournals/getInsulinJournals/${insulinJournal}`)}
       />
     </div>
     </div>
