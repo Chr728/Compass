@@ -5,7 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 import Custom403 from "../pages/403";
 import CreateGlucoseJournalPage from "./createGlucoseJournalPage";
 
-export default function CreateWeightJournal() {
+export default function CreateGlucoseJournal() {
   const router = useRouter();
   const { user } = useAuth();
 

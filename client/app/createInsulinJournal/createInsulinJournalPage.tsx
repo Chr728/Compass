@@ -1,62 +1,36 @@
 'use client';
 import Image from 'next/image';
-import Button from '../../../../components/Button';
-import Input from '../../../../components/Input';
+import Button from '../components/Button';
+import Input from '../components/Input';
 import Link from 'next/link';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { createInsulinJournal, getInsulinJournal, getInsulinJournals, updateInsulinJournal } from '../../../../http/diabeticJournalAPI'; 
-import { useAuth } from '../../../../contexts/AuthContext';
-import { useUser } from '../../../../contexts/UserContext';
+import { createInsulinJournal } from '../http/diabeticJournalAPI'; 
+import { useAuth } from '../contexts/AuthContext';
+import { useUser } from '../contexts/UserContext';
 import { useEffect, useState } from 'react';
-import Header from '@/app/components/Header';
-import Menu from '@/app/components/Menu';
-import Custom403 from '@/app/pages/403';
-import { formatDateYearMonthDate } from '@/app/helpers/utils/datetimeformat';
+import Header from '../components/Header';
 
-
-
-
-export default function EditInsulinJournal({params: { insulinJournal } } : { params: { insulinJournal: string } }) {
-  const { user } = useAuth();
+export default function CreateInsulinJournalPage() {
   const router = useRouter();
-  const [insulin, setinsulin] = useState<any>(null);
+  const { user } = useAuth();
   const { userInfo } = useUser();
 
-  async function fetchInsulinJournal() {
-    try {
-      const userId = user?.uid || '';
-      const result = await getInsulinJournal(insulinJournal);
-      console.log('Insulin journal entry retrieved:', result);
-      setinsulin(result.data);
-    } catch (error) {
-      console.error('Error retrieving Insulin journal entry:', error);
-    }
-  }
-
-  useEffect(() => {  
-    if (!user) {
-      router.push('/login')
+  useEffect(() => {
+    if (!userInfo) {
       alert('User not found.');
-    }
-    if (user) {
-      fetchInsulinJournal();
-    }
-  }, []);
+    } 
+  }, [userInfo, router]);
+
   
-  if (!user) {
-    return <div><Custom403/></div>
-  }
-  
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const formik = useFormik({
     initialValues: {
-      date: '', 
-      time:'', 
+      date: '', // Initialize the form fields with empty values
+      time: '',
       typeOfInsulin: '',
-      unit: 0 as any, 
+      unit: 0.0,
       bodySite: '',
-      notes: '', 
+      notes: '',
     },
 
     onSubmit: async (values) => {
@@ -64,92 +38,79 @@ export default function EditInsulinJournal({params: { insulinJournal } } : { par
         const userId = user?.uid || '';
         const data = {
           date: values.date,
-          time: values.time,
+           time: values.time,
           typeOfInsulin: values.typeOfInsulin,
           unit: values.unit,
           bodySite: values.bodySite,
           notes: values.notes,
         };
-        const result = await updateInsulinJournal(insulinJournal, data); 
-        console.log('Insulin journal entry updated:', result);
-        router.push(`/getInsulinJournals/${insulinJournal}`)
+        const result = await createInsulinJournal(data); 
+        console.log('Insulin journal entry created:', result);
+        router.push('/getInsulinJournals');
       } catch (error) {
-        console.error('Error updating Insulin journal entry:', error);
+        console.error('Error creating Insulin journal entry:', error);
       }
     },
   });
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  useEffect(() =>{
-    const  { setValues } = formik;
-    setValues({
-      date: formatDateYearMonthDate(insulin?.date), 
-      time: insulin?.time,
-      typeOfInsulin: insulin?.typeOfInsulin,
-      unit: insulin?.unit,
-      bodySite: insulin?.bodySite,
-      notes: insulin?.notes,
-    })
-  }, [insulin])
 
-
-
-return (
-  <div className="bg-eggshell min-h-screen flex flex-col">
-     <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-              <button onClick={() => router.push(`/getInsulinJournals/${insulinJournal}`)}>
-              <Header headerText="Edit The Insulin Dosage"></Header>
+  return (
+    <div className="bg-eggshell min-h-screen flex flex-col">
+       <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
+              <button onClick={() => router.push('/getInsulinJournals')}>
+              <Header headerText="Create Insulin Dosage"></Header>
               </button>
               </span>
-    <form
-    className="rounded-3xl bg-white flex flex-col mb-8 w-full md:max-w-[800px] md:min-h-[550px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
-    onSubmit={formik.handleSubmit}
-  >
-    <div className="mt-3 mb-3">
-      <label
-        htmlFor="date"
-        className="font-sans font-medium text-grey text-[16px]"
-      >
-        Date
-      </label>
-      <span className="text-red text-[20px]"> *</span>
-      <br />
-      <Input 
-  name="date"
-  id="date"
-  type="date"
-  style={{ width: '100%' }}
-  onChange={formik.handleChange}
-  value={formik.values.date}
-  onBlur={formik.handleBlur}
-  required={true} 
-  />
+      <form
+      className="rounded-3xl bg-white flex flex-col mb-8 w-full md:max-w-[800px] md:min-h-[550px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
+      onSubmit={formik.handleSubmit}
+    >
+      <div className="mt-3 mb-3">
+        <label
+          htmlFor="date"
+          className="font-sans font-medium text-grey text-[16px]"
+        >
+          Date
+        </label>
+        <span className="text-red text-[20px]"> *</span>
+        <br />
+        <Input 
+    name="date"
+    id="date"
+    type="date"
+    style={{ width: '100%' }}
+    onChange={formik.handleChange}
+    value={formik.values.date}
+    onBlur={formik.handleBlur}
+    required={true} 
+    />
 {formik.touched.date && !formik.values.date && (
-      <p className="text-red text-[14px]">This field can't be left empty.</p>
-    )}      </div>
+        <p className="text-red text-[14px]">This field can't be left empty.</p>
+      )}      </div>
 
-    <div className="mt-3">
-      <label
-        htmlFor="time"
-        className="font-sans font-medium text-grey text-[16px]"
-      >
-        Time
-      </label>
-      <span className="text-red text-[20px]"> *</span>
-      <br />
-      <Input
-  name="time"
-  id="time"
-  type="time"
-  style={{ width: '100%' }}
-  onChange={formik.handleChange}
-  value={formik.values.time}
-  onBlur={formik.handleBlur}
-/>
+      <div className="mt-3">
+        <label
+          htmlFor="time"
+          className="font-sans font-medium text-grey text-[16px]"
+        >
+         Time
+        </label>
+        <span className="text-red text-[20px]"> *</span>
+        <br />
+        <Input
+    name="time"
+    id="time"
+    type="time"
+    style={{ width: '100%' }}
+    onChange={formik.handleChange}
+    value={formik.values.time}
+    onBlur={formik.handleBlur}
+  />
 {formik.touched.time && !formik.values.time && (
-      <p className="text-red text-[14px]">This field can't be left empty.</p>
-    )}      
-    </div>
+        <p className="text-red text-[14px]">This field can't be left empty.</p>
+      )}      
+        </div>
+        
 
     <div className="flex">
 <div className="mt-3">
@@ -362,36 +323,34 @@ return (
                 onBlur={formik.handleBlur}
               />
             </div>
-    
-    <div className='mt-10 pb-4 self-center'>
-    <div className="mt-5 mb-5 space-x-2">
-      <Button
-        type="button"
-        text="Cancel"
-        style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)' }}
-        onClick={() => router.push(`/getInsulinJournals/${insulinJournal}`)}
-      />
+      <div className='mt-10 pb-4 self-center'>
+      <div className="mt-5 mb-5 space-x-2">
+        <Button
+          type="button"
+          text="Cancel"
+          style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)' }}
+          onClick={() => router.push("/getInsulinJournals")}
+        />
 
-<Button
-        type="submit"
-        text="Submit"
-        disabled={
-          !(formik.isValid && formik.dirty) || // Check if the form is valid and dirty
 
-          formik.values.unit === 0 || // Check if unit is zero
+        <Button
+          type="submit"
+          text="Submit"
+          disabled={
+            !(formik.isValid && formik.dirty) || // Check if the form is valid and dirty
+            formik.values.unit === 0 || // Check if unit is zero
           formik.values.unit < 0 || // Check if unit is less than zero
           !formik.values.date || // Check if date is missing or empty
           !formik.values.time || // Check if time is missing or empty
           !formik.values.bodySite || // Check if body site is missing or empty
           !formik.values.typeOfInsulin // Check if typeOfInsulin is missing or empty
-        }
-        style={{ width: '140px' }}
-        onClick={() => router.push(`/getInsulinJournals/${insulinJournal}`)}
-      />
+          }
+          style={{ width: '140px', textAlign: 'center' }}
+          onClick={() => router.push("/getinsulinJournals")}
+        />
+        </div>
+      </div>
+    </form>
     </div>
-    </div>
-  </form>
-  </div>
-);
-
+  );
 }

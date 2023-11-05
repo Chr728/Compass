@@ -3,9 +3,9 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { useAuth } from "../contexts/AuthContext";
 import Custom403 from "../pages/403";
-import CreateGlucoseJournalPage from "./createGlucoseJournalPage";
+import CreateInsulinJournalPage from "./createInsulinJournalPage";
 
-export default function CreateWeightJournal() {
+export default function CreateInsulinJournal() {
   const router = useRouter();
   const { user } = useAuth();
 
@@ -21,5 +21,5 @@ export default function CreateWeightJournal() {
     );
   }
 
-  return <CreateGlucoseJournalPage />;
+  return <CreateInsulinJournalPage />;
 }
