@@ -1,12 +1,12 @@
 import {render, screen,act} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import GetInsulinJournalsPage from './getInsulinJournalsPage';
-import {getInsulinJournals} from '../http/diabeticJournalAPI';
+import {getInsulinJournals} from '../../http/diabeticJournalAPI';
 import userEvent from '@testing-library/user-event';
-import { deleteInsulinJournal} from '../http/diabeticJournalAPI'; 
+import { deleteInsulinJournal} from '../../http/diabeticJournalAPI'; 
 
 import { useRouter } from "next/router";
-import { useUser } from '../contexts/UserContext';
+import { useUser } from '../../contexts/UserContext';
 
 beforeEach(async () => {
     await act(async () => {
@@ -27,7 +27,7 @@ const userData = {
     uid: '1',
 }
 
-jest.mock("../contexts/UserContext", () => {
+jest.mock("../../contexts/UserContext", () => {
     return {
       useUser: () =>{
         return {
@@ -40,7 +40,7 @@ jest.mock("../contexts/UserContext", () => {
   });
 
 
-jest.mock('../http/diabeticJournalAPI', () => {
+jest.mock('../../http/diabeticJournalAPI', () => {
     return {
         getInsulinJournals: () => {
             return {
@@ -50,7 +50,7 @@ jest.mock('../http/diabeticJournalAPI', () => {
                         {
                             uid: '1',
                             date: '2014-01-01',
-                            time: '08:36',
+                            time: '8:36',
                             typeOfInsulin: 'Humalog (Insulin lispro)',
                             unit: 60,
                             bodySite: 'Lower Back (left)',
@@ -70,7 +70,7 @@ jest.mock('../http/diabeticJournalAPI', () => {
    
 
 test("Add an entry button  functions correctly", async() => {
-    const addButton = screen.getAllByRole('button')[1];
+    const addButton = screen.getAllByRole('button')[0];
     await userEvent.click(addButton);
     await mockRouter;
     expect(mockRouter).toHaveBeenCalledWith('/createInsulinJournal')
@@ -80,7 +80,7 @@ test("Add an entry button  functions correctly", async() => {
 
 
     test("Get Insulin Journals list is displayed correctly", async () => {
-        const date = await screen.findByText('Jan 1, 2014');
+        const date = await screen.findByText('Jan 1, 2014 8h36');
         const units = await screen.findByText('60');
         const bodySite = await screen.findByText('Lower Back (left)');
 

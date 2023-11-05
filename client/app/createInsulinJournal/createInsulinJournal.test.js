@@ -68,7 +68,7 @@ const { createInsulinJournal} = require('../http/diabeticJournalAPI');
     })
 
     test("Error displayed if any of the fields are empty", async () => {
-        render(<CreateGlucoseJournalPage/>);
+        render(<CreateInsulinJournalPage/>);
         const date = screen.getByLabelText("Date");
         fireEvent.blur(date);
         const time = screen.getByLabelText("Time");
@@ -83,7 +83,7 @@ const { createInsulinJournal} = require('../http/diabeticJournalAPI');
         userEvent.click(submitButton);
 
         const errorMessages = await screen.findAllByText("This field can't be left empty.", { exact: false });
-        expect(errorMessages.length).toBe(3);
+        expect(errorMessages.length).toBe(4);
       
         const error = errorMessages[0];
         expect(error).toBeInTheDocument();

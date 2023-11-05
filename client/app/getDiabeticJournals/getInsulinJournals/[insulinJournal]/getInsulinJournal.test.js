@@ -2,9 +2,9 @@ import {render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import GetInsulinJournal from './page';
-import { getInsulinJournal } from '../../http/diabeticJournalAPI';
-import { auth } from '../../config/firebase';
-import { useAuth } from '../../contexts/AuthContext';
+import { getInsulinJournal } from '../../../http/diabeticJournalAPI';
+import { auth } from '../../../config/firebase';
+import { useAuth } from '../../../contexts/AuthContext';
 
 const mockRouter = jest.fn();
 const mockUsePathname = jest.fn();
@@ -18,7 +18,7 @@ jest.mock("next/navigation", () => ({
     usePathname: () => mockUsePathname()
 }));
 
-jest.mock("../../contexts/AuthContext", () => {
+jest.mock("../../../contexts/AuthContext", () => {
     return {
         useAuth: jest.fn()
     }
