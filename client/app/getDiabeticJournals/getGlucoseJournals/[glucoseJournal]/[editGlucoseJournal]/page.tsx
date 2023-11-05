@@ -60,7 +60,7 @@ export default function EditGlucoseJournal({params: { glucoseJournal } } : { par
         const userId = user?.uid || '';
         const data = {
           date: values.date,
-          time: values.mealTime,
+          mealTime: values.mealTime,
           bloodGlucose: values.bloodGlucose,
           unit: values.unit,
           notes: values.notes,
