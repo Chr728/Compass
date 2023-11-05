@@ -19,11 +19,11 @@ it("All elements of 404 page displayed to logged in user", async () => {
     })
     render(<NotFound/>);
     const errorText = await screen.findByText("Error 404 - Page Not Found");
-    const loginButton = screen.queryByRole("button");
-    const redirectText = await screen.findByText("Redirecting to Home...");
+    const loginButton = screen.queryByText("Back to Login");
+    const redirectButton = await screen.findByText("Back to Home");
     expect(errorText).toBeInTheDocument();
     expect(loginButton).not.toBeInTheDocument();
-    expect(redirectText).toBeInTheDocument();
+    expect(redirectButton).toBeInTheDocument();
 })
 
 it("All elements of 404 page displayed to a user not logged in", async () => {
@@ -35,10 +35,10 @@ it("All elements of 404 page displayed to a user not logged in", async () => {
     })
     render(<NotFound/>);
     const errorText = await screen.findByText("Error 404 - Page Not Found");
-    const loginButton = await screen.findByRole("button");
-    const redirectText = screen.queryByText("Redirecting to Home...");
+    const loginButton = await screen.findByText("Back to Login");
+    const redirectButton = screen.queryByText("Back to Home...");
     expect(errorText).toBeInTheDocument();
     expect(loginButton).toBeInTheDocument();
-    expect(redirectText).not.toBeInTheDocument();
+    expect(redirectButton).not.toBeInTheDocument();
 })
 
