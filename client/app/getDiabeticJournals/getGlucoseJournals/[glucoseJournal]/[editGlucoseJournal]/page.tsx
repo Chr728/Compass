@@ -91,7 +91,7 @@ export default function EditGlucoseJournal({params: { glucoseJournal } } : { par
 return (
   <div className="bg-eggshell min-h-screen flex flex-col">
      <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-              <button onClick={() => router.push(`/getGlucoseJournals/${glucoseJournal}`)}>
+              <button onClick={() => router.push(`/getDiabeticJournals/getGlucoseJournals/${glucoseJournal}`)}>
               <Header headerText="Edit The Glucose Measurement"></Header>
               </button>
               </span>
@@ -298,7 +298,7 @@ style={{
         type="button"
         text="Cancel"
         style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)' }}
-        onClick={() => router.push(`/getGlucoseJournals/${glucoseJournal}`)}
+        onClick={() => router.push(`/getDiabeticJournals/getGlucoseJournals/${glucoseJournal}`)}
       />
 
 <Button
@@ -313,7 +313,7 @@ style={{
             !formik.values.mealTime  // Check if time is missing or empty
         }
         style={{ width: '140px' }}
-        onClick={() => router.push(`/getGlucoseJournals/${glucoseJournal}`)}
+        onClick={() => router.push(`/getDiabeticJournals/getGlucoseJournals/${glucoseJournal}`)}
       />
     </div>
   </form>

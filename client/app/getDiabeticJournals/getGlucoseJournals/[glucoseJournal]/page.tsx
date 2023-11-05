@@ -50,7 +50,7 @@ export default function GetGlucoseJournal({params: { glucoseJournal } } : { para
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
        <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-              <button onClick={() => router.push('/getGlucoseJournals')}>
+              <button onClick={() => router.push('/getDiabeticJournals/getGlucoseJournals')}>
               <Header headerText="View the Glucose Journal"></Header>
               </button>
               </span>
@@ -125,12 +125,12 @@ export default function GetGlucoseJournal({params: { glucoseJournal } } : { para
      </div>
    </div>
     <div className='mt-10 pb-4 self-center'>
-    <Button type="button" text="Edit"style={{ width: '140px' }} onClick={() => router.push(`/getGlucoseJournals/${glucoseJournal}/${glucoseJournal}`)} />
+    <Button type="button" text="Edit"style={{ width: '140px' }} onClick={() => router.push(`/getDiabeticJournals/getGlucoseJournals/${glucoseJournal}/${glucoseJournal}`)} />
     <Button
     type="button"
     text="Cancel"
     style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)',marginLeft:'12px' }}
-    onClick={() => router.push(`/getGlucoseJournals`)}
+    onClick={() => router.push(`/getDiabeticJournals`)}
     />
     </div>
       </span>

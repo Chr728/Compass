@@ -141,7 +141,7 @@ const { createInsulinJournal} = require('../http/diabeticJournalAPI');
         await mockRouter;
 
         expect(createInsulinJournal).toHaveBeenCalledTimes(1);
-        expect(mockRouter).toHaveBeenCalledWith('/getInsulinJournals');
+        expect(mockRouter).toHaveBeenCalledWith('/getDiabeticJournals');
     })
 
     test("Cancel button redirects to getInsulinJournals page", async () => {
@@ -149,5 +149,5 @@ const { createInsulinJournal} = require('../http/diabeticJournalAPI');
         const cancelButton = screen.getAllByRole('button')[1];
         await userEvent.click(cancelButton);
         await mockRouter;
-        expect(mockRouter).toHaveBeenCalledWith('/getInsulinJournals');
+        expect(mockRouter).toHaveBeenCalledWith('/getDiabeticJournals');
     })

@@ -71,7 +71,7 @@ test("Cancel button functions correctly", async() => {
         const cancelButton = screen.getAllByRole('button')[2];
         userEvent.click(cancelButton);
         mockRouter;
-        expect(mockRouter).toHaveBeenCalledWith('/getGlucoseJournals')
+        expect(mockRouter).toHaveBeenCalledWith('/getDiabeticJournals')
     }, 1000);
 })
 
@@ -81,6 +81,6 @@ test("Update button functions correctly", async() => {
         const updateButton = screen.getAllByRole('button')[1];
         userEvent.click(updateButton);
         mockRouter;
-        expect(mockRouter).toHaveBeenCalledWith('/editGlucoseJournals/1')
+        expect(mockRouter).toHaveBeenCalledWith('/getDiabeticJournals/getGlucoseJournals/editGlucoseJournals/1')
     }, 1000);
 })

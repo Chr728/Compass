@@ -46,7 +46,7 @@ export default function CreateInsulinJournalPage() {
         };
         const result = await createInsulinJournal(data); 
         console.log('Insulin journal entry created:', result);
-        router.push('/getInsulinJournals');
+        router.push('/getDiabeticJournals');
       } catch (error) {
         console.error('Error creating Insulin journal entry:', error);
       }
@@ -57,7 +57,7 @@ export default function CreateInsulinJournalPage() {
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
        <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-              <button onClick={() => router.push('/getInsulinJournals')}>
+              <button onClick={() => router.push('/getDiabeticJournals')}>
               <Header headerText="Create Insulin Dosage"></Header>
               </button>
               </span>
@@ -329,7 +329,7 @@ export default function CreateInsulinJournalPage() {
           type="button"
           text="Cancel"
           style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)' }}
-          onClick={() => router.push("/getInsulinJournals")}
+          onClick={() => router.push("/getDiabeticJournals")}
         />
 
 
@@ -346,7 +346,7 @@ export default function CreateInsulinJournalPage() {
           !formik.values.typeOfInsulin // Check if typeOfInsulin is missing or empty
           }
           style={{ width: '140px', textAlign: 'center' }}
-          onClick={() => router.push("/getinsulinJournals")}
+          onClick={() => router.push("/getDiabeticJournals")}
         />
         </div>
       </div>

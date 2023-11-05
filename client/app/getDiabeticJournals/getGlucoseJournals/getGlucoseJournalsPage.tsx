@@ -93,7 +93,7 @@ export default function GetGlucoseJournalsPage() {
       style={{
         backgroundColor: index % 2 === 0 ? 'white' : '#DBE2EA',
       }}
-      onClick={() => router.push(`/getGlucoseJournals/${item.id}`)}
+      onClick={() => router.push(`/getDiabeticJournals/getGlucoseJournals/${item.id}`)}
     >
       <div className="flex-2">
         <p className="font-sans font-medium text-darkgrey text-[14px] text-center">
