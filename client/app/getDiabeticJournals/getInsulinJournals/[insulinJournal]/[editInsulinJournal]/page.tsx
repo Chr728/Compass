@@ -5,45 +5,32 @@ import Input from '../../../../components/Input';
 import Link from 'next/link';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { createActivityJournal, getActivityJournal, getActivityJournals, updateActivityJournal } from '../../../../http/activityJournalAPI'; // Replace '../api/yourApiFile' with the correct path
+import { createInsulinJournal, getInsulinJournal, getInsulinJournals, updateInsulinJournal } from '../../../../http/diabeticJournalAPI'; 
 import { useAuth } from '../../../../contexts/AuthContext';
 import { useUser } from '../../../../contexts/UserContext';
 import { useEffect, useState } from 'react';
 import Header from '@/app/components/Header';
 import Menu from '@/app/components/Menu';
 import Custom403 from '@/app/pages/403';
+import { formatDateYearMonthDate } from '@/app/helpers/utils/datetimeformat';
 
 
-export function formatDateYearMonthDate(date: any) {
-  var d = new Date(date);
-  d.setUTCHours(0, 0, 0, 0);
 
-  var month = '' + (d.getUTCMonth() + 1),
-      day = '' + d.getUTCDate(),
-      year = d.getUTCFullYear();
 
-  if (month.length < 2) 
-      month = '0' + month;
-  if (day.length < 2) 
-      day = '0' + day;
-
-  return [year, month, day].join('-');
-}
-
-export default function EditActivityJournal({params: { activityJournal } } : { params: { activityJournal: string } }) {
+export default function EditInsulinJournal({params: { insulinJournal } } : { params: { insulinJournal: string } }) {
   const { user } = useAuth();
   const router = useRouter();
-  const [activity, setactivity] = useState<any>(null);
+  const [insulin, setinsulin] = useState<any>(null);
   const { userInfo } = useUser();
 
-  async function fetchActivityJournal() {
+  async function fetchInsulinJournal() {
     try {
       const userId = user?.uid || '';
-      const result = await getActivityJournal(activityJournal);
-      console.log('activity journal entry retrieved:', result);
-      setactivity(result.data);
+      const result = await getInsulinJournal(insulinJournal);
+      console.log('Insulin journal entry retrieved:', result);
+      setinsulin(result.data);
     } catch (error) {
-      console.error('Error retrieving activity journal entry:', error);
+      console.error('Error retrieving Insulin journal entry:', error);
     }
   }
 
@@ -53,7 +40,7 @@ export default function EditActivityJournal({params: { activityJournal } } : { p
       alert('User not found.');
     }
     if (user) {
-      fetchActivityJournal();
+      fetchInsulinJournal();
     }
   }, []);
   
@@ -66,8 +53,9 @@ export default function EditActivityJournal({params: { activityJournal } } : { p
     initialValues: {
       date: '', 
       time:'', 
-      activity: '',
-      duration: 0 as any, 
+      typeOfInsulin: '',
+      unit: 0 as any, 
+      bodySite: '',
       notes: '', 
     },
 
@@ -77,15 +65,16 @@ export default function EditActivityJournal({params: { activityJournal } } : { p
         const data = {
           date: values.date,
           time: values.time,
-          activity: values.activity,
-          duration: values.duration,
+          typeOfInsulin: values.typeOfInsulin,
+          unit: values.unit,
+          bodySite: values.bodySite,
           notes: values.notes,
         };
-        const result = await updateActivityJournal(activityJournal, data); 
-        console.log('activity journal entry updated:', result);
-        router.push(`/getActivityJournals/${activityJournal}`)
+        const result = await updateInsulinJournal(insulinJournal, data); 
+        console.log('Insulin journal entry updated:', result);
+        router.push(`/getInsulinJournals/${insulinJournal}`)
       } catch (error) {
-        console.error('Error updating activity journal entry:', error);
+        console.error('Error updating Insulin journal entry:', error);
       }
     },
   });
@@ -94,20 +83,21 @@ export default function EditActivityJournal({params: { activityJournal } } : { p
   useEffect(() =>{
     const  { setValues } = formik;
     setValues({
-      date: formatDateYearMonthDate(activity?.date), 
-      time: activity?.time,
-      activity: activity?.activity,
-      duration: activity?.duration,
-      notes: activity?.notes,
+      date: formatDateYearMonthDate(insulin?.date), 
+      time: insulin?.time,
+      typeOfInsulin: insulin?.typeOfInsulin,
+      unit: insulin?.unit,
+      bodySite: insulin?.bodySite,
+      notes: insulin?.notes,
     })
-  }, [activity])
+  }, [insulin])
 
 
 
 return (
   <div className="bg-eggshell min-h-screen flex flex-col">
      <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-              <button onClick={() => router.push(`/getActivityJournals/${activityJournal}`)}>
+              <button onClick={() => router.push(`/getInsulinJournals/${insulinJournal}`)}>
               <Header headerText="Edit The Insulin Dosage"></Header>
               </button>
               </span>
@@ -164,27 +154,76 @@ return (
     <div className="flex">
 <div className="mt-3">
   <label
-    htmlFor="activity"
+    htmlFor="typeOfInsulin"
     className="font-sans font-medium text-grey text-[16px]"
   >
-    Activity
+   Type of Insulin
   </label>
   <span className="text-red text-[20px]"> *</span>
   <br />
-  <Input
-    name="activity"
-    id="activity"
-    type="text"
-    style={{ width: '100%' }}
-    onChange={formik.handleChange}
-    value={formik.values.activity}
-    onBlur={formik.handleBlur}
-  />
+       <select
+            className="text-darkgrey"
+          
+      name="typeOfInsulin"
+            id="typeOfInsulin"
+      style={{
+        width: '100%',
+        border: '1px solid #DBE2EA', // Border style
+        borderRadius: '5px',
+        marginTop: '5px',
+      }}
+      onChange={formik.handleChange}
+      onBlur={formik.handleBlur}
+      value={formik.values.typeOfInsulin}
+    >
+      <option className="text-darkgrey" value="Apidra (Insulin glulisine)">
+    Apidra (Insulin glulisine)
+      </option>
+      <option className="text-darkgrey" value="Fiasp (Insulin aspart)">
+      Fiasp (Insulin aspart)
+      </option>
+      <option className="text-darkgrey" value="Humalog (Insulin lispro)">
+     Humalog (Insulin lispro)
+      </option>
+      <option className="text-darkgrey" value="NovoRapid (Insulin aspart)">
+              NovoRapid (Insulin aspart)
+            </option>
+      <option className="text-darkgrey" value="Entuzity (Insulin regular)">
+      Entuzity (Insulin regular)
+      </option>
+      <option className="text-darkgrey" value="Humulin R (Insulin regular)">
+      Humulin R (Insulin regular)
+      </option>
+      <option className="text-darkgrey" value="Humulin N (Insulin NPH)">
+      Humulin N (Insulin NPH)
+      </option>
+      <option className="text-darkgrey" value="Basaglar (Insulin glargine)">
+      Basaglar (Insulin glargine)
+      </option>
+      <option className="text-darkgrey" value="Lantus (Insulin glargine U-100)">
+     Lantus (Insulin glargine U-100)
+      </option>
+      <option className="text-darkgrey" value="Lantus (Insulin glargine U-100)">
+      Lantus (Insulin glargine U-100)
+      </option>
+      <option className="text-darkgrey" value="Levemir (Insulin detemir)">
+     Levemir (Insulin detemir)
+      </option>
+      <option className="text-darkgrey" value="Toujeo (Insulin glargine U-300)">
+        Toujeo (Insulin glargine U-300)
+      </option>
+    <option className="text-darkgrey" value="Tresiba (Degludec)">
+       Tresiba (Degludec)
+      </option>
+      <option className="text-darkgrey" value="Other">
+        Other
+      </option>
+    </select>
   {/* Check if the field is touched */}
-  {formik.touched.activity && (
+  {formik.touched.typeOfInsulin && (
     // Check if the field is empty
-    !formik.values.activity && (
-      <p className="text-red text-[14px]">This field can't be left empty or zero.</p>
+    !formik.values.typeOfInsulin && (
+      <p className="text-red text-[14px]">This field can't be left empty.</p>
     )
   )}
 </div>
@@ -195,7 +234,7 @@ return (
         htmlFor="duration"
         className="font-sans font-medium text-grey text-[16px]"
       >
-        Duration (in minutes)
+       Units Given
       </label>
       <span className="text-red text-[20px]"> *</span>
       <br />
@@ -205,28 +244,106 @@ return (
         type="number"
         style={{ width: '100%' }}
         onChange={formik.handleChange}
-        value={formik.values.duration}
+        value={formik.values.unit}
         onBlur={formik.handleBlur}
       />
       
 
      {/* Check if the field is touched */}
-{formik.touched.duration && (
+{formik.touched.unit && (
   // Check if the field is empty
-  !formik.values.duration && (
+  !formik.values.unit && (
     <p className="text-red text-[14px]">This field can't be left empty or zero.</p>
   ) || (
     // Check if the field is less than or equal to zero
-    formik.values.duration <= 0 && (
+    formik.values.unit <= 0 && (
       <p className="text-red text-[14px]">You can't enter a negative duration or a duration of zero.</p>
     )
   )
 )}
-    
     </div>
 
     
-
+   <div className="flex">
+<div className="mt-3">
+  <label
+    htmlFor="bodySite"
+    className="font-sans font-medium text-grey text-[16px]"
+  >
+   Body Site
+  </label>
+  <span className="text-red text-[20px]"> *</span>
+  <br />
+       <select
+            className="text-darkgrey"
+          
+      name="bodySite"
+            id="bodySite"
+      style={{
+        width: '100%',
+        border: '1px solid #DBE2EA', // Border style
+        borderRadius: '5px',
+        marginTop: '5px',
+      }}
+      onChange={formik.handleChange}
+      onBlur={formik.handleBlur}
+      value={formik.values.bodySite}
+    >
+      <option className="text-darkgrey" value="Upper Abdomen (left)">
+   Upper Abdomen (left)
+      </option>
+      <option className="text-darkgrey" value="Upper Abdomen (right)">
+     Upper Abdomen (right)
+      </option>
+      <option className="text-darkgrey" value="Lower Abdomen (left)">
+   Lower Abdomen (left)
+      </option>
+      <option className="text-darkgrey" value="Lower Abdomen (right)">
+              Lower Abdomen (right)
+            </option>
+      <option className="text-darkgrey" value="Back of Upper Arm (left)">
+      Back of Upper Arm (left)
+      </option>
+      <option className="text-darkgrey" value="Back of Upper Arm (right)">
+      Back of Upper Arm (right)
+      </option>
+      <option className="text-darkgrey" value="Lower Back (left)">
+      Lower Back (left)
+      </option>
+      <option className="text-darkgrey" value="Lower Back (right)">
+      Lower Back (right)
+      </option>
+      <option className="text-darkgrey" value="Buttocks (left)">
+     Buttocks (left)
+      </option>
+      <option className="text-darkgrey" value="Buttocks (right)">
+     Buttocks (right)
+      </option>
+      <option className="text-darkgrey" value="Front of Thigh (left)">
+     Front of Thigh (left)
+      </option>
+      <option className="text-darkgrey" value="Front of Thigh (right)">
+        Front of Thigh (right)
+      </option>
+    <option className="text-darkgrey" value="Side of Thigh (left)">
+       Side of Thigh (left)
+      </option>
+      <option className="text-darkgrey" value="Side of Thigh (right)">
+        Side of Thigh (right)
+            </option>
+      <option className="text-darkgrey" value="other">
+       other
+      </option>
+    </select>
+  {/* Check if the field is touched */}
+  {formik.touched.bodySite && (
+    // Check if the field is empty
+    !formik.values.bodySite && (
+      <p className="text-red text-[14px]">This field can't be left empty.</p>
+    )
+  )}
+</div>
+</div>
     <div className="mt-3">
               <label
                 htmlFor="notes"
@@ -252,7 +369,7 @@ return (
         type="button"
         text="Cancel"
         style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)' }}
-        onClick={() => router.push(`/getActivityJournals/${activityJournal}`)}
+        onClick={() => router.push(`/getInsulinJournals/${insulinJournal}`)}
       />
 
 <Button
@@ -261,15 +378,15 @@ return (
         disabled={
           !(formik.isValid && formik.dirty) || // Check if the form is valid and dirty
 
-          formik.values.duration === 0 || // Check if duration is zero
-          formik.values.duration < 0 || // Check if duration is less than zero
+          formik.values.unit === 0 || // Check if unit is zero
+          formik.values.unit < 0 || // Check if unit is less than zero
           !formik.values.date || // Check if date is missing or empty
           !formik.values.time || // Check if time is missing or empty
-          !formik.values.activity || // Check if activity is missing or empty
-          !formik.values.duration // Check if duration is missing or empty
+          !formik.values.bodySite || // Check if insulin is missing or empty
+          !formik.values.typeOfInsulin // Check if duration is missing or empty
         }
         style={{ width: '140px' }}
-        onClick={() => router.push(`/getActivityJournals/${activityJournal}`)}
+        onClick={() => router.push(`/getInsulinJournals/${insulinJournal}`)}
       />
     </div>
     </div>
