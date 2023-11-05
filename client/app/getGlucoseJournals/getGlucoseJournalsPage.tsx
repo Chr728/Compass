@@ -57,7 +57,7 @@ export default function GetGlucoseJournalsPage() {
         </span>
         <p className="font-sans text-darkgrey ml-5 text-[14px]">Keep track of your insulin doses and glucose measurements to ensure a healthy lifestyle.</p>
         <br></br>    
-        {glucose && (
+        {/* {glucose && ( */}
   <div className="rounded-3xl bg-white flex flex-col mt-4 mb-6 w-full md:max-w-[800px] md:min-h-[550px] p-4 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]">
     <div className="flex justify-between items-center">
       <div>
@@ -85,7 +85,7 @@ export default function GetGlucoseJournalsPage() {
       </div>
     </div>
   </div>
-  {glucose.map((item: any, index: number) => (
+  {glucose && glucose.map((item: any, index: number) => (
     <div
       key={item.glucoseJournalId}
       className={`flex justify-between items-center mt-3`}
@@ -121,7 +121,7 @@ export default function GetGlucoseJournalsPage() {
     </div>
   ))}
   </div>
-)}
+{/* )} */}
       </div>
     );
     

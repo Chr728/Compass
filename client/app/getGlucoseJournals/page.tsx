@@ -18,6 +18,5 @@ export default function GetGlucoseJournals() {
     return <div><Custom403/></div>
   }
 
-  return (
-    <GetGlucoseJournalsPage />  );
+  return <GetGlucoseJournalsPage />  
 }
