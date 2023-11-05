@@ -1,8 +1,8 @@
 import {render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import GetActivityJournal from './page';
-import { getActivityJournal } from '../../http/activityJournalAPI';
+import GetInsulinJournal from './page';
+import { getInsulinJournal } from '../../http/diabeticJournalAPI';
 import { auth } from '../../config/firebase';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -24,7 +24,7 @@ jest.mock("../../contexts/AuthContext", () => {
     }
 })
 
-describe("Getting an activity journal", () => {
+describe("Getting an Insulin journal", () => {
 
     beforeEach(() => {
         global.fetch = jest.fn();
@@ -43,9 +43,9 @@ describe("Getting an activity journal", () => {
         jest.clearAllMocks();
     });
 
-    it('getActivityJournal() functions correctly', async () => {
+    it('getInsulinJournal() functions correctly', async () => {
         const mockUser = { id: '1', name: 'John Doe', email: 'johndoe@example.com' };
-        render(<GetActivityJournal params={{ activityJournal: mockUser.id }}/>);
+        render(<GetInsulinJournal params={{ insulinJournal: mockUser.id }}/>);
         const mockToken = 'mockToken';
         const mockCurrentUser = {
             uid: mockUser.id,
@@ -63,11 +63,11 @@ describe("Getting an activity journal", () => {
         const mockFetch = jest.fn().mockResolvedValue(mockResponse);
         global.fetch = mockFetch;
 
-        const userData = await getActivityJournal(mockUser.id);
+        const userData = await getInsulinJournal(mockUser.id);
 
         expect(mockResponse.json).toHaveBeenCalled();
         expect(mockFetch).toHaveBeenCalledWith(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/${mockUser.id}`,
+            `${process.env.NEXT_PUBLIC_API_URL}/api/journals/diabetic/insulin/${mockUser.id}`,
             {
             headers: {
                 'Content-Type': 'application/json',
@@ -79,35 +79,37 @@ describe("Getting an activity journal", () => {
     });
     
     it("All fields are is displayed correctly", async () => {
-        render(<GetActivityJournal params={{ activityJournal:'1' }}/>);
+        render(<GetInsulinJournal params={{ insulinJournal:'1' }}/>);
         setTimeout(() => {
             expect(screen.getByText(/Date:/i)).toBeInTheDocument();
             expect(screen.getByText("Time:")).toBeInTheDocument();
-            expect(screen.getByText("Activity:")).toBeInTheDocument();
-            expect(screen.getByText("Duration(min):")).toBeInTheDocument();
+            expect(screen.getByText("Type:")).toBeInTheDocument();
+            expect(screen.getByText("Units:")).toBeInTheDocument();
+            expect(screen.getByText("Body Site:")).toBeInTheDocument();
             expect(screen.getByText("Notes:")).toBeInTheDocument();
             expect(screen.getByText("Jan 1, 2014")).toBeInTheDocument();
             expect(screen.getByText("8h36")).toBeInTheDocument();
-            expect(screen.getByText("Swimming")).toBeInTheDocument();
-            expect(screen.getByText("45")).toBeInTheDocument();
+            expect(screen.getByText("Humalog (Insulin lispro)")).toBeInTheDocument();
+            expect(screen.getByText("10")).toBeInTheDocument();
+            expect(screen.getByText("Buttocks (left)")).toBeInTheDocument();
             expect(screen.getByText("notes")).toBeInTheDocument();
         }, 1000);
     })
     
     it("Cancel button functions correctly", async() => {
-        render(<GetActivityJournal params={{ activityJournal:'1' }}/>);
+        render(<GetInsulinJournal params={{ insulinJournal:'1' }}/>);
         setTimeout(() => {
             const cancelButton = screen.getAllByRole('button')[2];
             userEvent.click(cancelButton);
-            expect(mockRouter).toHaveBeenCalledWith('/getActivityJournals')
+            expect(mockRouter).toHaveBeenCalledWith('/getInsulinJournals')
         }, 1000);
     })
     
     it("Back button redirects to main journals view", async () => {
-        render(<GetActivityJournal params={{ activityJournal:'1' }}/>);
+        render(<GetInsulinJournal params={{ insulinJournal:'1' }}/>);
         const button = screen.getAllByRole("button")[0];
         await userEvent.click(button);
-        expect(mockRouter).toHaveBeenCalledWith('/getActivityJournals');
+        expect(mockRouter).toHaveBeenCalledWith('/getInsulinJournals');
     })
 })
 
@@ -127,7 +129,7 @@ describe("User not logged in", () => {
     })
 
     it("Error page displayed", async () => {
-        render(<GetActivityJournal params={{ activityJournal: null }}/>);
+        render(<GetInsulinJournal params={{ insulinJournal: null }}/>);
         const errorText = await screen.findByText("Error 403 - Access Forbidden");
         expect(errorText).toBeInTheDocument();
     })

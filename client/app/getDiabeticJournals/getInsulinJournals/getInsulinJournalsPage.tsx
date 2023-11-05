@@ -100,12 +100,12 @@ export default function GetInsulinJournalsPage() {
     </div>
     <div className="flex-2">
       <p className="font-sans ml-2 font-medium text-darkgrey text-[14px]">
-        {item.units}
+        {item.unit}
       </p>
     </div>
     <div className="flex-2">
       <p className="font-sans ml-12 font-medium text-darkgrey text-[14px]">
-        {item.site}
+        {item.bodySite}
       </p>
     </div>
 
