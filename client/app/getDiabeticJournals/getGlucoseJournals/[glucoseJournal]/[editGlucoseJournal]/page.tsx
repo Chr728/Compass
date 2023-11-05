@@ -203,7 +203,7 @@ return (
     name="bloodGlucose"
     id="bloodGlucose"
     type="number"
-    style={{ width: '100%' }}
+    style={{ width: '75%' }}
     onChange={formik.handleChange}
     value={formik.values.bloodGlucose}
     onBlur={formik.handleBlur}
@@ -244,6 +244,7 @@ style={{
       border: '1px solid #DBE2EA', // Border style
       borderRadius: '5px',
       marginTop: '5px',
+      marginLeft: '-2%'
     }}
     onChange={formik.handleChange}
     onBlur={formik.handleBlur}

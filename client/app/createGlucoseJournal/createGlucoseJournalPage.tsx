@@ -166,7 +166,7 @@ export default function CreateGlucoseJournalPage() {
       name="bloodGlucose"
       id="bloodGlucose"
       type="number"
-      style={{ width: '100%' }}
+      style={{ width: '75%' }}
       onChange={formik.handleChange}
       value={formik.values.bloodGlucose.toString()}
       onBlur={formik.handleBlur}
@@ -190,6 +190,7 @@ export default function CreateGlucoseJournalPage() {
   <div className="mt-3  ml-3"
   style={{
     width: '25%',
+    marginLeft :'-2%'
   }}
   >
     <label
