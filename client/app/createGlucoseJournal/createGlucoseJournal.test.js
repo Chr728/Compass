@@ -1,8 +1,8 @@
 import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import CreateWeightJournalPage from './createWeightJournalPage';
-import {creatWeightJournal} from '../http/weightJournalAPI';
+import CreateGlucoseJournalPage from './createGlucoseJournalPage';
+import {creatGlucoseJournal} from '../http/diabeticJournalAPI';
 
 
 const fakeUser = {
@@ -18,9 +18,9 @@ jest.mock('../contexts/AuthContext', () => {
     }
 });
 
-jest.mock('../http/weightJournalAPI', () => {
+jest.mock('../http/diabeticJournalAPI', () => {
     return {
-        createWeightJournal: jest.fn()
+        createGlucoseJournal: jest.fn()
     }
 });
 
@@ -48,37 +48,33 @@ jest.mock("../contexts/UserContext", () => {
 
 
 
-const { createWeightJournal} = require('../http/weightJournalAPI');
+const { createGlucoseJournal} = require('../http/diabeticJournalAPI');
  
     test("All fields are displayed to the user", () => {
-        render(<CreateWeightJournalPage/>);
+        render(<CreateGlucoseJournalPage/>);
         const date = screen.getByLabelText("Date");
-        const time  = screen.getByLabelText("Time");
-        const weight = screen.getByLabelText("Weight");
-        const height = screen.getByLabelText("Height (in centimeters)");
+        const mealTime  = screen.getByLabelText("Meal Time");
+        const bloodGlucose = screen.getByLabelText("Blood Glucose");
         const unit = screen.getByLabelText("Unit");
         const notes  = screen.getByLabelText("Notes");
 
         expect(date).toBeInTheDocument();
-        expect(time).toBeInTheDocument();
-        expect(weight).toBeInTheDocument();
-        expect(height).toBeInTheDocument();
+        expect(mealTime).toBeInTheDocument();
+        expect(bloodGlucose).toBeInTheDocument();
         expect(unit).toBeInTheDocument();
         expect(notes).toBeInTheDocument();
     })
 
     test("Error displayed if any of the fields are empty", async () => {
-        render(<CreateWeightJournalPage/>);
+        render(<CreateGlucoseJournalPage/>);
         const date = screen.getByLabelText("Date");
         fireEvent.blur(date);
-        const time = screen.getByLabelText("Time");
-        fireEvent.blur(time);
-        const weight = screen.getByLabelText("Weight");
-        fireEvent.blur(weight);
+        const mealTime = screen.getByLabelText("Meal Time");
+        fireEvent.blur(mealTime);
+        const bloodGlucose = screen.getByLabelText("Blood Glucose");
+        fireEvent.blur(bloodGlucose);
         const unit = screen.getByLabelText("Unit");
         fireEvent.blur(unit);
-        const height = screen.getByLabelText("Height (in centimeters)");
-        fireEvent.blur(height);
         const submitButton = screen.getByRole('button', { name: /submit/i });
         userEvent.click(submitButton);
 
@@ -92,78 +88,60 @@ const { createWeightJournal} = require('../http/weightJournalAPI');
         expect(error1).toBeInTheDocument();
     })
 
-    test("Height or weight cant be zero", async () => {
-      render(<CreateWeightJournalPage />);
-      const weight = screen.getByLabelText("Weight");
-      await userEvent.type(weight, "0");
-      fireEvent.blur(weight);
+    test("Blood Glucose cant be zero", async () => {
+      render(<CreateGlucoseJournalPage />);
+      const bloodGlucose = screen.getByLabelText("Blood Glucose");
+      await userEvent.type(bloodGlucose, "0");
+      fireEvent.blur(bloodGlucose);
     
-      const weightError = screen.getByLabelText("Weight").nextElementSibling;
-      expect(weightError.textContent).toBe("This field can't be left empty or zero.");
+      const bloodGlucoseError = screen.getByLabelText("Blood Glucose").nextElementSibling;
+      expect(bloodGlucoseError.textContent).toBe("This field can't be left empty or zero.");
     
-      const height = screen.getByLabelText("Height (in centimeters)");
-      await userEvent.type(height, "0");
-      fireEvent.blur(height);
-    
-      const heightError = screen.getByLabelText("Height (in centimeters)").nextElementSibling;
-      expect(heightError.textContent).toBe("This field can't be left empty or zero.");
     });
     
-    test("Height or weight cant be negative", async () => {
-        render(<CreateWeightJournalPage />);
+    test("Blood Glucose cant be negative", async () => {
+        render(<CreateGlucoseJournalPage />);
         
-        const weight = screen.getByLabelText("Weight");
-        userEvent.clear(weight);
-        userEvent.type(weight, `${parseInt("-1")}`);
-        fireEvent.blur(weight);
+        const bloodGlucose = screen.getByLabelText("Blood Glucose");
+        userEvent.clear(bloodGlucose);
+        userEvent.type(bloodGlucose, `${parseInt("-1")}`);
+        fireEvent.blur(bloodGlucose);
       
         await waitFor(() => {
-            const weightError = screen.getByLabelText("Weight").nextElementSibling;
-            expect(weightError.textContent).toBe("You can't enter a negative weight or a weight of zero.");
-        })
-      
-        const height = screen.getByLabelText("Height (in centimeters)");
-        userEvent.clear(height);
-        userEvent.type(height, `${parseInt("-1")}`);
-        fireEvent.blur(height);
-
-        await waitFor(() => {
-            const heightError = screen.getByLabelText("Height (in centimeters)").nextElementSibling;
-            expect(heightError.textContent).toBe("You can't enter a negative height or a height of zero.");
+            const bloodGlucoseError = screen.getByLabelText("Blood Glucose").nextElementSibling;
+            expect(bloodGlucoseError.textContent).toBe("You can't enter a negative  Blood Glucose or a  Blood Glucose of zero.");
         })
       });
 
 
 
-    test("Submit button calls createweightjournal function", async () => {
-        render(<CreateWeightJournalPage/>);
+    test("Submit button calls createGlucosejournal function", async () => {
+        render(<CreateGlucoseJournalPage/>);
         const date = screen.getByLabelText("Date");
-        const time  = screen.getByLabelText("Time");
-        const weight = screen.getByLabelText("Weight");
-        const height = screen.getByLabelText("Height (in centimeters)");
+        const mealTime  = screen.getByLabelText("Meal Time");
+        const bloodGlucose = screen.getByLabelText("Blood Glucose");
         const unit = screen.getByLabelText("Unit");
         const notes  = screen.getByLabelText("Notes");
         const submitButton = screen.getAllByRole('button')[1];
 
         await userEvent.type(date, "2023-09-09");
-        await userEvent.type(time, "8:36")
-        await userEvent.type(weight, "85");
-        await userEvent.type(unit, "Kg");
-        await userEvent.type(height, "1.70");
+        await userEvent.type(mealTime, "2hrs after breakfast")
+        await userEvent.type(bloodGlucose, "85");
+        await userEvent.type(unit, "mmol/L");
         await userEvent.type(notes, "abc");
 
         await userEvent.click(submitButton);
-        await createWeightJournal();
+        await createGlucoseJournal();
         await mockRouter;
 
-        expect(createWeightJournal).toHaveBeenCalledTimes(1);
-        expect(mockRouter).toHaveBeenCalledWith('/getWeightJournals');
+        expect(createGlucoseJournal).toHaveBeenCalledTimes(1);
+        expect(mockRouter).toHaveBeenCalledWith('/getGlucoseJournals');
     })
 
-    test("Cancel button redirects to getWeightJournals page", async () => {
-        render(<CreateWeightJournalPage/>);
+    test("Cancel button redirects to getGlucoseJournals page", async () => {
+        render(<CreateGlucoseJournalPage/>);
         const cancelButton = screen.getAllByRole('button')[1];
         await userEvent.click(cancelButton);
         await mockRouter;
-        expect(mockRouter).toHaveBeenCalledWith('/getWeightJournals');
+        expect(mockRouter).toHaveBeenCalledWith('/getGlucoseJournals');
     })

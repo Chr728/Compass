@@ -91,14 +91,15 @@ export default function CreateGlucoseJournalPage() {
           htmlFor="mealTime"
           className="font-sans font-medium text-grey text-[16px]"
         >
-          Meal
+          Meal Time
         </label>
         <span className="text-red text-[20px]"> *</span>
         <br />
         <select
-      className="text-darkgrey"
+            className="text-darkgrey"
+          
       name="mealTime"
-      id="mealTime"
+            id="mealTime"
       style={{
         width: '100%',
         border: '1px solid #DBE2EA', // Border style
@@ -154,7 +155,7 @@ export default function CreateGlucoseJournalPage() {
 <div className="flex">
   <div className="mt-3">
     <label
-      htmlFor="glucose"
+      htmlFor="bloodGlucose"
       className="font-sans font-medium text-grey text-[16px]"
     >
      Blood Glucose
@@ -221,7 +222,7 @@ export default function CreateGlucoseJournalPage() {
       </option>
       <option
         className="text-darkgrey"
-        value="lb"
+        value="mmol/L"
       >
         mmol/L
         </option>
