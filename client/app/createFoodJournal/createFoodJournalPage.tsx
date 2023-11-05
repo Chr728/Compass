@@ -1,28 +1,15 @@
 'use client';
-import Image from 'next/image';
 import Button from '../components/Button';
 import Input from '../components/Input';
-import Link from 'next/link';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
 import { createFoodIntakeJournal } from '../http/foodJournalAPI'; 
-import { useAuth } from '../contexts/AuthContext';
-import { useUser } from '../contexts/UserContext';
-import { useEffect, useState } from 'react';
 import Header from '../components/Header';
-import Menu from '../components/Menu';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function CreateFoodJournalPage() {
   const router = useRouter();
   const { user } = useAuth();
-  const { userInfo } = useUser();
-
-  useEffect(() => {
-    if (!userInfo) {
-      alert('User not found.');
-    } 
-  }, [userInfo, router]);
-
   
   const formik = useFormik({
     initialValues: {
@@ -37,7 +24,6 @@ export default function CreateFoodJournalPage() {
     onSubmit: async (values) => {
       try {
         const userId = user?.uid || '';
-
         const data = {
           date: values.date,
           time: values.time,
@@ -47,7 +33,6 @@ export default function CreateFoodJournalPage() {
           notes: values.notes,
         };
         const result = await createFoodIntakeJournal(data); 
-        console.log('Food journal entry created:', result);
         router.push('/getFoodJournals');
       } catch (error) {
         console.error('Error creating food journal entry:', error);

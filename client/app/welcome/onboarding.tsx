@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
@@ -7,7 +7,7 @@ import 'swiper/css/pagination';
 
 import './styles.css';
 
-import { Navigation} from 'swiper/modules';
+import { Navigation } from 'swiper/modules';
 import { Pagination } from 'swiper/modules';
 
 import Link from 'next/link';
