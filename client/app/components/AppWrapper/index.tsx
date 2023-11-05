@@ -6,6 +6,7 @@ import {PropProvider, useProp} from '@/app/contexts/PropContext';
 import {usePathname} from 'next/navigation';
 import Menu from '@/app/components/Menu';
 import ErrorPopUp from '@/app/components/AppWrapper/ErrorPopUp';
+import LoadingScreen from '@/app/components/AppWrapper/LoadingScreen';
 const MemoizedMenu = React.memo(Menu);
 
 
@@ -23,6 +24,7 @@ const AppWrapper = ({children} : {children:ReactNode}) => {
                     {isLoggedIn && <MemoizedMenu />}
                 </div>
                     <ErrorPopUp />
+                    <LoadingScreen />
             </UserProvider>
             </AuthProvider>
         </PropProvider>

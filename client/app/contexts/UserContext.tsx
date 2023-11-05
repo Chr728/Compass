@@ -61,13 +61,13 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const {handleError, loading, handleLoading} = useProp();
   useEffect(() => {
     const fetchUserData = () => {
+      handleLoading(true)
       if (uid) {
         getUser()
           .then((userData) => {
-           handleLoading(true)
             setUserInfo(userData);
-            handleLoading(false)
             router.push('/tpage');
+                handleLoading(false,1000)
           })
           .catch((error) => {
            handleError(error.message);

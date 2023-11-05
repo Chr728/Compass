@@ -37,9 +37,9 @@ export const PropProvider = ({children}: PropProviderProps) => {
             setTimeout(() => {
                 setLoading(loading);
             }, timeout);
-            return;
+        }else{
+            setLoading(loading);
         }
-        setLoading(loading);
     }
 
     const values: PropContextType = {
@@ -51,7 +51,7 @@ export const PropProvider = ({children}: PropProviderProps) => {
     }
     return (
         <PropContext.Provider value={values}>
-            {loading ? <LoadingScreen /> : children}
+            {children}
         </PropContext.Provider>
     )
 }

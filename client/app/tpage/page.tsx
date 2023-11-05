@@ -82,9 +82,7 @@ return (
           />
         </div>
       </div>
-
     </div>
-    <Menu />
 </div>
   )
 }

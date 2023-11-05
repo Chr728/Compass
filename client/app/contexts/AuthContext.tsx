@@ -49,10 +49,8 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const router = useRouter();
   const {handleLoading, handleError} = useProp();
   const login = (email: string, password: string) => {
-    handleLoading(true);
     signInWithEmailAndPassword(auth, email, password)
       .then(() => {
-        handleLoading(false);
         setError(null);
         // ...
       })
