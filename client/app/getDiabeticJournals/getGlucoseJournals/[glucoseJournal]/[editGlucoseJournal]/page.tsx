@@ -67,7 +67,7 @@ export default function EditGlucoseJournal({params: { glucoseJournal } } : { par
         };
         const result = await updateGlucoseJournal(glucoseJournal, data); 
         console.log('Glucose journal entry updated:', result);
-        router.push(`/getGlucoseJournals/${glucoseJournal}`)
+        router.push(`getDiabeticJournals/getGlucoseJournals/${glucoseJournal}`)
       } catch (error) {
         console.error('Error updating glucose journal entry:', error);
       }
