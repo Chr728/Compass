@@ -92,5 +92,5 @@ test("Cancel button works correctly", async () =>{
     const cancelButton = screen.getAllByRole('button')[1];
     await userEvent.click(cancelButton);
     await mockRouter;
-    expect(mockRouter).toHaveBeenCalledWith(`/getInsulinJournals/1`);
+    expect(mockRouter).toHaveBeenCalledWith(`getDiabeticJournals/getInsulinJournals/1`);
 })

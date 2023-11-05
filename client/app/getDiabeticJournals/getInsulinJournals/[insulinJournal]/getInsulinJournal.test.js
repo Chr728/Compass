@@ -101,7 +101,7 @@ describe("Getting an Insulin journal", () => {
         setTimeout(() => {
             const cancelButton = screen.getAllByRole('button')[2];
             userEvent.click(cancelButton);
-            expect(mockRouter).toHaveBeenCalledWith('/getInsulinJournals')
+            expect(mockRouter).toHaveBeenCalledWith('/getDiabeticJournals')
         }, 1000);
     })
     
@@ -109,7 +109,7 @@ describe("Getting an Insulin journal", () => {
         render(<GetInsulinJournal params={{ insulinJournal:'1' }}/>);
         const button = screen.getAllByRole("button")[0];
         await userEvent.click(button);
-        expect(mockRouter).toHaveBeenCalledWith('/getInsulinJournals');
+        expect(mockRouter).toHaveBeenCalledWith('/getDiabeticJournals');
     })
 })
 

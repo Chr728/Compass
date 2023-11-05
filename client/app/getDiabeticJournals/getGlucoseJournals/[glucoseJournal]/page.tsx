@@ -50,7 +50,7 @@ export default function GetGlucoseJournal({params: { glucoseJournal } } : { para
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
        <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-              <button onClick={() => router.push('/getDiabeticJournals/getGlucoseJournals')}>
+              <button onClick={() => router.push('/getDiabeticJournals')}>
               <Header headerText="View the Glucose Journal"></Header>
               </button>
               </span>
