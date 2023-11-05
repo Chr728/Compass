@@ -1,16 +1,16 @@
 import {render, screen,act} from '@testing-library/react';
 import '@testing-library/jest-dom';
-import GetGlucoseJournalsPage from './getGlucoseJournalsPage';
-import {getGlucoseJournals} from '../http/diabeticJournalAPI';
-import { deleteGlucoseJournal} from '../http/diabeticJournalAPI'; 
+import GetActivityJournalsPage from './getActivityJournalsPage';
+import {getActivityJournals} from '../http/activityJournalAPI';
 import userEvent from '@testing-library/user-event';
+import { deleteActivityJournal} from '../http/activityJournalAPI'; 
+
 import { useRouter } from "next/router";
 import { useUser } from '../contexts/UserContext';
 
-
 beforeEach(async () => {
     await act(async () => {
-        render(<GetGlucoseJournalsPage/>);
+        render(<GetActivityJournalsPage/>);
       });
 })
 
@@ -40,9 +40,9 @@ jest.mock("../contexts/UserContext", () => {
   });
 
 
-jest.mock('../http/diabeticJournalAPI', () => {
+jest.mock('../http/activityJournalAPI', () => {
     return {
-        getGlucoseJournals: () => {
+        getActivityJournals: () => {
             return {
                 
                     success: "SUCCESS",
@@ -50,44 +50,42 @@ jest.mock('../http/diabeticJournalAPI', () => {
                         {
                             uid: '1',
                             date: '2014-01-01',
-                            mealTime: 'Before lunch',
-                            bloodGlucose: 23,
-                            unit:'mg/dL',
+                            time: '08:36',
+                            activity: 'running',
+                            duration: 60,
                             Notes : 'I am feeling good today'
                     }
                 ]
             }
         },
-
-        deleteGlucoseJournal: async (glucoseJournalId) => {
+        deleteActivityJournal: async (activityJournalId) => {
             return {
                 status: "SUCCESS",
-                data: `Successfully deleted Glucose Journal.`,
+                data: `Successfully deleted activity Journal.`,
             };
         },
     }
 });
    
 
-
-
 test("Add an entry button  functions correctly", async() => {
     const addButton = screen.getAllByRole('button')[1];
     await userEvent.click(addButton);
     await mockRouter;
-    expect(mockRouter).toHaveBeenCalledWith('/createGlucoseJournal')
+    expect(mockRouter).toHaveBeenCalledWith('/createActivityJournal')
 })
 
 
 
-    test("Get Glucose Journals list is displayed correctly", async () => {
+
+    test("Get Activity Journals list is displayed correctly", async () => {
         const date = await screen.findByText('Jan 1, 2014');
-        const mealTime = await screen.findByText('Before lunch');
-        const bloodGlucose = await screen.findByText('23');
+        const activity = await screen.findByText('running');
+        const height = await screen.findByText('60');
 
         expect(date).toBeInTheDocument();
-        expect(mealTime).toBeInTheDocument();
-        expect(bloodGlucose).toBeInTheDocument();
+        expect(activity).toBeInTheDocument();
+        expect(height).toBeInTheDocument();
     })
 
    
@@ -95,9 +93,7 @@ test("Add an entry button  functions correctly", async() => {
     
      // checks the texts
      test("Message displayed", async () => {
-        const message = screen.getByText(/Keep track of your insulin doses and glucose measurements to ensure a healthy lifestyle./i);
+        const message = screen.getByText(/Manage your daily activities to help you stay fit. People with active lifestyles are often happier and healthier./i);
         expect(message).toBeInTheDocument();
     })
 
-
-    

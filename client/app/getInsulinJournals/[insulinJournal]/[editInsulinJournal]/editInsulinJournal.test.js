@@ -1,9 +1,8 @@
-import {fireEvent, render, screen, waitFor} from '@testing-library/react';
-import act from '@testing-library/react';
+import {render, screen, act} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import EditGlucoseJournal from './page';
-import {getGlucoseJournal, updateGlucoseJournal} from '../../../http/diabeticJournalAPI';
+import EditActivityJournal from './page';
+import {getActivityJournal, updateActivityJournal} from '../../../http/activityJournalAPI';
 
 const mockRouter = jest.fn();
 jest.mock("next/navigation", () => ({
@@ -29,26 +28,25 @@ jest.mock("../../../contexts/AuthContext", () => {
 });
 
 
-jest.mock('../../../http/diabeticJournalAPI', () => {
+jest.mock('../../../http/activityJournalAPI', () => {
     return {
-        getGlucoseJournal: () => {
+        getActivityJournal: () => {
             return {
                     success: "SUCCESS",
                     data: 
                         {
                             id: '1',
-                            date: 'Jan 1,2014',
-                            mealTime: '30min after breakfast',
-                            bloodGlucose: '3',
-                            unit: 'mmol/L',
+                            date: '2014-01-01',
+                            time: '8:36',
+                            activity: 'Cycling',
+                            duration: 75,
                             notes: 'notes'
                     }
             }
         },
-        updateGlucoseJournal: jest.fn()
+        updateActivityJournal: jest.fn()
     }
 });
-
 
 jest.mock("../../../contexts/UserContext", () => {
     return {
@@ -62,36 +60,34 @@ jest.mock("../../../contexts/UserContext", () => {
     };
   });
 
-  
-
 test("Form submits correctly", async () =>{
-    const updateGlucoseJournal = jest.fn();
-    render(<EditGlucoseJournal params={{ glucoseJournal:'1'}}/>);
-    await getGlucoseJournal();
+    const updateActivityJournal = jest.fn();
+    render(<EditActivityJournal params={{ activityJournal:'1'}}/>);
+    await getActivityJournal();
     const date = screen.getByLabelText("Date");
-    const mealTime  = screen.getByLabelText("Meal Time");
-    const bloodGlucose = screen.getByLabelText("Blood Glucose");
-    const unit = screen.getByLabelText("Unit");
+    const time  = screen.getByLabelText("Time");
+    const activity = screen.getByLabelText("Activity");
+    const duration = screen.getByLabelText("Duration (in minutes)");
     const notes  = screen.getByLabelText("Notes");
     const submitButton = screen.getAllByRole('button')[2];
 
     expect(date).toBeInTheDocument();
-    expect(mealTime).toBeInTheDocument();
-    expect(bloodGlucose).toBeInTheDocument();
-    expect(unit).toBeInTheDocument();
+    expect(time).toBeInTheDocument();
+    expect(activity).toBeInTheDocument();
+    expect(duration).toBeInTheDocument();
     expect(notes).toBeInTheDocument();
 
-    userEvent.click(submitButton);
+    await userEvent.click(submitButton);
     setTimeout(() => {
-      expect(updateGlucoseJournal).toHaveBeenCalledTimes(1);
-    }, 1000);})
+      expect(updateActivityJournal).toHaveBeenCalledTimes(1);
+    }, 1000);
+})
 
 test("Cancel button works correctly", async () =>{
-  render(<EditGlucoseJournal params={{ glucoseJournal:'1'}}/>);
-    await getGlucoseJournal();
+    render(<EditActivityJournal params={{ activityJournal:'1'}}/>);
+    await getActivityJournal();
     const cancelButton = screen.getAllByRole('button')[1];
     await userEvent.click(cancelButton);
     await mockRouter;
-    expect(mockRouter).toHaveBeenCalledWith(`/getGlucoseJournals/1`);
+    expect(mockRouter).toHaveBeenCalledWith(`/getActivityJournals/1`);
 })
-

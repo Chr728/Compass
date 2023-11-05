@@ -1,6 +1,6 @@
 import {render, screen, waitFor} from '@testing-library/react';
 import '@testing-library/jest-dom';
-import  GetGlucoseJournals from './page'
+import  GetInsulinJournals from './page'
 import { useAuth } from '../contexts/AuthContext';
 import { useUser } from '../contexts/UserContext';
 
@@ -28,7 +28,7 @@ jest.mock("../contexts/UserContext", () =>{
     }
 })
 
-describe("Glucose journals page shown only to logged in users", () =>{
+describe("Insulin journals page shown only to logged in users", () =>{
 
     it("Error page is shown", async () => {
         useAuth.mockImplementation(() => {
@@ -37,7 +37,7 @@ describe("Glucose journals page shown only to logged in users", () =>{
             };
         });
         
-        render(<GetGlucoseJournals />);
+        render(<GetInsulinJournals />);
         const errorMessage = await screen.findByText("Error 403 - Access Forbidden");
         expect(errorMessage).toBeInTheDocument();
     })
@@ -56,7 +56,7 @@ describe("Glucose journals page shown only to logged in users", () =>{
             };
         });
 
-        render(<GetGlucoseJournals/>);
+        render(<GetInsulinJournals/>);
         const errorMessage = screen.queryByText("Error 403 - Access Forbidden");
         expect(errorMessage).not.toBeInTheDocument();
         })

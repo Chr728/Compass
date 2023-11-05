@@ -5,7 +5,7 @@ import Input from '../../components/Input';
 import Link from 'next/link';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { getGlucoseJournal, getGlucoseJournals} from '../../http/diabeticJournalAPI'; 
+import { getActivityJournal, getActivityJournals} from '../../http/activityJournalAPI'; 
 import { useAuth } from '../../contexts/AuthContext';
 import { useUser } from '../../contexts/UserContext';
 import { useEffect, useState } from 'react';
@@ -15,23 +15,21 @@ import { formatDate, formatMilitaryTime } from '@/app/helpers/utils/datetimeform
 import Custom403 from '@/app/pages/403';
 
 
-export default function GetGlucoseJournal({params: { glucoseJournal } } : { params: { glucoseJournal: string } }) {
+
+export default function GetActivityJournal({params: { activityJournal } } : { params: { activityJournal: string } }) {
   const { user } = useAuth();
   const router = useRouter();
-  const { userInfo } = useUser();
-  const [glucose, setglucose] = useState<any>(null);
-  
-  async function fetchGlucoseJournal() {
+  const [activity, setactivity] = useState<any>(null);
+
+  async function fetchActivityJournal() {
     try {
       const userId = user?.uid || '';
-      const result = await getGlucoseJournal(glucoseJournal);
-      console.log('Glucose journal entry retrieved:', result);
-      setglucose(result.data);
+      const result = await getActivityJournal(activityJournal);
+      setactivity(result.data);
     } catch (error) {
-      console.error('Error retrieving Glucose journal entry:', error);
+      console.error('Error retrieving activity journal entry:', error);
     }
   }
-
 
   useEffect(() => {
     if (!user) {
@@ -39,9 +37,9 @@ export default function GetGlucoseJournal({params: { glucoseJournal } } : { para
       alert('User not found.');
     } 
     if (user) {
-      fetchGlucoseJournal();
+      fetchActivityJournal();
     }
-  }, []);
+  }, []);  
 
   if (!user) {
     return <div><Custom403/></div>
@@ -50,12 +48,12 @@ export default function GetGlucoseJournal({params: { glucoseJournal } } : { para
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
        <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-              <button onClick={() => router.push('/getGlucoseJournals')}>
-              <Header headerText="View the Glucose Journal"></Header>
+              <button onClick={() => router.push('/getActivityJournals')}>
+              <Header headerText="View the Activity Journal"></Header>
               </button>
               </span>
      
-        {glucose && (
+        {activity && (
      <span
      className="rounded-2xl  mt-6 mb-10 mr-28 bg-white flex flex-col m-auto w-full md:max-w-[800px] md:min-h-[600px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
    >
@@ -66,49 +64,50 @@ export default function GetGlucoseJournal({params: { glucoseJournal } } : { para
     Date: 
   </p>
   <p className="text-md ml-2 text-darkgrey">
-    {formatDate(glucose.date)}
+    {formatDate(activity.date)}
   </p>
 </div>
        <p
            className="text-lg ml-0 font-sans text-darkgrey  font-bold text-[16px]"
            style={{display: 'inline'}}
        >
-         Meal Time:
+         Time:
        </p>
        <p
            className="text-md ml-2 text-darkgrey"
            style={{display: 'inline'}}
        >
-         {glucose.mealTime}
+         {/* {new Date(`1970-01-01T${activity.time}`).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })} */}
+         {formatMilitaryTime(activity.time)}
        </p>
        <br></br>
        <p
            className="text-lg ml-0 font-sans text-darkgrey  font-bold text-[16px]"
            style={{display: 'inline'}}
        >
-        Blood Glucose:
+         Activity:
        </p>
        <p
            className="text-md ml-2 text-darkgrey"
            style={{display: 'inline'}}
        >
-         {glucose.bloodGlucose}
+         {activity.activity}
        </p>
        <br></br>
        <p
-           className="text-lg ml-0 font-sans text-darkgrey  font-bold text-[16px]"
+           className="text-lg ml-0 font-sans text-darkgrey font-bold text-[16px]"
            style={{display: 'inline'}}
        >
-         Unit:
+         Duration(min):
        </p>
        <p
            className="text-md ml-2 text-darkgrey"
            style={{display: 'inline'}}
        >
-        {glucose.unit}
+         {activity.duration}
        </p>
-       <br></br>
 
+       <br></br>
        <p
            className="text-lg ml-0 font-sans text-darkgrey  font-bold text-[16px]"
            style={{display: 'inline'}}
@@ -119,22 +118,27 @@ export default function GetGlucoseJournal({params: { glucoseJournal } } : { para
            className="text-md ml-2 text-darkgrey"
            style={{display: 'inline'}}
        >
-         {glucose.notes}
+         {activity.notes}
        </p>
        <br></br>
      </div>
    </div>
     <div className='mt-10 pb-4 self-center'>
-    <Button type="button" text="Edit"style={{ width: '140px' }} onClick={() => router.push(`/getGlucoseJournals/${glucoseJournal}/${glucoseJournal}`)} />
+    <Button type="button" text="Edit" style={{ width: '140px' }} onClick={() => router.push(`/getActivityJournals/${activityJournal}/${activityJournal}`)} />
     <Button
     type="button"
     text="Cancel"
-    style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)',marginLeft:'12px' }}
-    onClick={() => router.push(`/getGlucoseJournals`)}
+    style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)',marginLeft:'8px' }}
+    onClick={() => router.push(`/getActivityJournals`)}
     />
     </div>
       </span>
 )}
+<div className="mt-8">
+        <div className={`xl:max-w-[1280px] w-full  menu-container`}>
+          <Menu />
+        </div>
+      </div>
     </div>
   );
 // }
