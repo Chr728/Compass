@@ -1,8 +1,8 @@
 import {render, screen, waitFor} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import  GetInsulinJournals from './page'
-import { useAuth } from '../contexts/AuthContext';
-import { useUser } from '../contexts/UserContext';
+import { useAuth } from '../../contexts/AuthContext';
+import { useUser } from '../../contexts/UserContext';
 
 const mockRouter= jest.fn();
 const mockUsePathname = jest.fn();
@@ -16,13 +16,13 @@ jest.mock("next/navigation", () => ({
     usePathname: () => mockUsePathname()
 }));
 
-jest.mock("../contexts/AuthContext", () =>{
+jest.mock("../../contexts/AuthContext", () =>{
     return {
         useAuth: jest.fn(),
     }
 })
 
-jest.mock("../contexts/UserContext", () =>{
+jest.mock("../../contexts/UserContext", () =>{
     return {
         useUser: jest.fn(),
     }

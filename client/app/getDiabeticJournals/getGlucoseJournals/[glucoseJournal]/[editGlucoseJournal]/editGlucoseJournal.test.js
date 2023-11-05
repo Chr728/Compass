@@ -3,7 +3,7 @@ import act from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import EditGlucoseJournal from './page';
-import {getGlucoseJournal, updateGlucoseJournal} from '../../../http/diabeticJournalAPI';
+import {getGlucoseJournal, updateGlucoseJournal} from '../../../../http/diabeticJournalAPI';
 
 const mockRouter = jest.fn();
 jest.mock("next/navigation", () => ({
@@ -18,7 +18,7 @@ jest.mock("next/navigation", () => ({
 const userData = {
   uid: '1',
 } 
-jest.mock("../../../contexts/AuthContext", () => {
+jest.mock("../../../../contexts/AuthContext", () => {
   return {
     useAuth: () =>{
       return {
@@ -29,7 +29,7 @@ jest.mock("../../../contexts/AuthContext", () => {
 });
 
 
-jest.mock('../../../http/diabeticJournalAPI', () => {
+jest.mock('../../../../http/diabeticJournalAPI', () => {
     return {
         getGlucoseJournal: () => {
             return {
@@ -50,7 +50,7 @@ jest.mock('../../../http/diabeticJournalAPI', () => {
 });
 
 
-jest.mock("../../../contexts/UserContext", () => {
+jest.mock("../../../../contexts/UserContext", () => {
     return {
       useUser: () =>{
         return {
@@ -92,6 +92,6 @@ test("Cancel button works correctly", async () =>{
     const cancelButton = screen.getAllByRole('button')[1];
     await userEvent.click(cancelButton);
     await mockRouter;
-    expect(mockRouter).toHaveBeenCalledWith(`/getGlucoseJournals/1`);
+    expect(mockRouter).toHaveBeenCalledWith(`/getDiabeticJournals/getGlucoseJournals/1`);
 })
 

@@ -2,9 +2,9 @@ import {render, screen, act} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import GetGlucoseJournal from './page';
-import {getGlucoseJournal,getGlucoseJournals} from '../../http/diabeticJournalAPI';
+import {getGlucoseJournal,getGlucoseJournals} from '../../../http/diabeticJournalAPI';
 import { useRouter } from "next/navigation";
-import { useUser } from '../../contexts/UserContext';
+import { useUser } from '../../../contexts/UserContext';
 
 const mockRouter = jest.fn();
 
@@ -16,7 +16,7 @@ jest.mock("next/navigation", () => ({
     }
 }));
 
-jest.mock('../../http/diabeticJournalAPI', () => {
+jest.mock('../../../http/diabeticJournalAPI', () => {
     return {
         getGlucoseJournal: () => {
             return {
@@ -36,7 +36,7 @@ jest.mock('../../http/diabeticJournalAPI', () => {
 });
 
 
-jest.mock("../../contexts/UserContext", () => {
+jest.mock("../../../contexts/UserContext", () => {
     return {
       useUser: () =>{
         return {

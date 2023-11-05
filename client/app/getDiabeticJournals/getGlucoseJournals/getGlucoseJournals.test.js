@@ -1,11 +1,11 @@
 import {render, screen,act} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import GetGlucoseJournalsPage from './getGlucoseJournalsPage';
-import {getGlucoseJournals} from '../http/diabeticJournalAPI';
-import { deleteGlucoseJournal} from '../http/diabeticJournalAPI'; 
+import {getGlucoseJournals} from '../../http/diabeticJournalAPI';
+import { deleteGlucoseJournal} from '../../http/diabeticJournalAPI'; 
 import userEvent from '@testing-library/user-event';
 import { useRouter } from "next/router";
-import { useUser } from '../contexts/UserContext';
+import { useUser } from '../../contexts/UserContext';
 
 
 beforeEach(async () => {
@@ -27,7 +27,7 @@ const userData = {
     uid: '1',
 }
 
-jest.mock("../contexts/UserContext", () => {
+jest.mock("../../contexts/UserContext", () => {
     return {
       useUser: () =>{
         return {
@@ -40,7 +40,7 @@ jest.mock("../contexts/UserContext", () => {
   });
 
 
-jest.mock('../http/diabeticJournalAPI', () => {
+jest.mock('../../http/diabeticJournalAPI', () => {
     return {
         getGlucoseJournals: () => {
             return {
