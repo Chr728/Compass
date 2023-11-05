@@ -13,7 +13,7 @@ const MemoizedMenu = React.memo(Menu);
 const AppWrapper = ({children} : {children:ReactNode}) => {
     const pathname = usePathname();
     const isLoggedIn = useMemo(() => {
-        return !(pathname === '/login' || pathname === '/register' || pathname === '/logout');
+        return !(pathname === '/login' || pathname === '/register' || pathname === '/logout' || pathname === '/');
     }, [pathname]);
     return (
         <PropProvider>

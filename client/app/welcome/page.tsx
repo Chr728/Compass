@@ -6,7 +6,6 @@ import Onboarding from "./onboarding";
 
 const Welcome = () => {
   return  (
-    // If page is not loading then show the welcome screen
     <div>
       <Onboarding />
     </div>
