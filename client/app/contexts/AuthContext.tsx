@@ -91,8 +91,9 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
               // Notification preference doesn't exist, create it
               createNotificationPreference();
               setLoading(false);
-              router.push('/tpage');
+              router.push('/login');
             }
+            signOut(auth)
           })
           .catch((error) => {
             const errorCode = error.code;
@@ -115,7 +116,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
       // Specify the type here
-      setUser(user);
+      // setUser(user);
       setLoading(false);
       setError(null);
     });

@@ -69,7 +69,6 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
             setLoading(true);
             setUserInfo(userData);
             setLoading(false);
-            router.push('/tpage');
           })
           .catch((error) => {
            handleError(error.message);

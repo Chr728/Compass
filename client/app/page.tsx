@@ -8,6 +8,7 @@ import Welcome from "./welcome/page";
 export default function Home() {
   const router = useRouter();
   const { user } = useAuth();
+  console.log('user',user)
 
   useEffect(() => {
     if (user) {
