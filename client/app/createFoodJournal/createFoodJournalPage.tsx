@@ -151,7 +151,10 @@ export default function CreateFoodJournalPage() {
       onBlur={formik.handleBlur}
       value={formik.values.mealType}
     >
-      <option className="text-darkgrey" value="Breakfast">
+      <option className="text-darkgrey" value="">
+        Choose one
+      </option>
+            <option className="text-darkgrey" value="Breakfast">
         Breakfast
       </option>
       <option className="text-darkgrey" value="Morning snack">

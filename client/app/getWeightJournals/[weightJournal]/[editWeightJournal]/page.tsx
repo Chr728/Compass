@@ -208,7 +208,10 @@ style={{
     onBlur={formik.handleBlur}
     value={formik.values.unit}
   >
-    <option
+    <option className="text-darkgrey" value="">
+        Choose one
+      </option>
+            <option
       className="text-darkgrey"
       value="kg"
     >

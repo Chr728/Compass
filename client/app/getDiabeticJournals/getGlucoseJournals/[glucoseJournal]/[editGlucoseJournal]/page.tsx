@@ -145,7 +145,10 @@ return (
       onBlur={formik.handleBlur}
       value={formik.values.mealTime}
     >
-      <option className="text-darkgrey" value="Before breakfast">
+      <option className="text-darkgrey" value="">
+        Choose one
+      </option>
+          <option className="text-darkgrey" value="Before breakfast">
       Before breakfast
       </option>
       <option className="text-darkgrey" value="30min after breakfast">
@@ -221,9 +224,10 @@ return (
   )}
 </div>
 
-<div className="mt-3  ml-3"
+<div className="mt-3  ml-1"
 style={{
-  width: '25%',
+  width: '50%',
+  marginLeft: '2px;'
 }}
 >
   <label
@@ -249,7 +253,10 @@ style={{
     onBlur={formik.handleBlur}
     value={formik.values.unit}
   >
-    <option
+   <option className="text-darkgrey" value="">
+        Choose one
+      </option>
+            <option
       className="text-darkgrey"
       value="mg/dL"
     >

@@ -166,7 +166,10 @@ export default function CreateWeightJournalPage() {
       onChange={formik.handleChange}
       onBlur={formik.handleBlur}
       value={formik.values.unit}
-    >
+            >
+              <option className="text-darkgrey" value="">
+        Choose one
+      </option>
       <option
         className="text-darkgrey"
         value="kg"

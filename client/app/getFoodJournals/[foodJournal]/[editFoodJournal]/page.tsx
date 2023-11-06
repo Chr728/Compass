@@ -200,7 +200,10 @@ return (
       onBlur={formik.handleBlur}
       value={formik.values.mealType}
     >
-      <option
+      <option className="text-darkgrey" value="">
+        Choose one
+      </option>
+          <option
         className="text-darkgrey"
         value="Breakfast"
       >

@@ -110,7 +110,11 @@ export default function CreateGlucoseJournalPage() {
       onBlur={formik.handleBlur}
       value={formik.values.mealTime}
     >
-      <option className="text-darkgrey" value="Before breakfast">
+      
+     <option className="text-darkgrey" value="">
+        Choose one
+      </option>
+            <option className="text-darkgrey" value="Before breakfast">
       Before breakfast
       </option>
       <option className="text-darkgrey" value="30min after breakfast">
@@ -187,9 +191,9 @@ export default function CreateGlucoseJournalPage() {
     )}
   </div>
 
-  <div className="mt-3  ml-3"
+  <div className="mt-3  ml-2"
   style={{
-    width: '25%',
+    width: '50%',
     marginLeft :'-2%'
   }}
   >
@@ -214,7 +218,10 @@ export default function CreateGlucoseJournalPage() {
       onChange={formik.handleChange}
       onBlur={formik.handleBlur}
       value={formik.values.unit}
-    >
+            >
+      <option className="text-darkgrey" value="">
+        Choose one
+      </option>
       <option
         className="text-darkgrey"
         value="mg/dL"

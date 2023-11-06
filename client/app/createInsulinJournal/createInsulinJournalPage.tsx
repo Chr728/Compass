@@ -137,7 +137,11 @@ export default function CreateInsulinJournalPage() {
       onBlur={formik.handleBlur}
       value={formik.values.typeOfInsulin}
     >
-      <option className="text-darkgrey" value="Apidra (Insulin glulisine)">
+     
+     <option className="text-darkgrey" value="">
+        Choose one
+      </option>
+              <option className="text-darkgrey" value="Apidra (Insulin glulisine)">
     Apidra (Insulin glulisine)
       </option>
       <option className="text-darkgrey" value="Fiasp (Insulin aspart)">
@@ -250,7 +254,10 @@ export default function CreateInsulinJournalPage() {
       onBlur={formik.handleBlur}
       value={formik.values.bodySite}
     >
-      <option className="text-darkgrey" value="Upper Abdomen (left)">
+      <option className="text-darkgrey" value="">
+        Choose one
+      </option>
+              <option className="text-darkgrey" value="Upper Abdomen (left)">
    Upper Abdomen (left)
       </option>
       <option className="text-darkgrey" value="Upper Abdomen (right)">
