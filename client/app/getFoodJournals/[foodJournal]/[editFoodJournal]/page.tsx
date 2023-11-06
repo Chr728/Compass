@@ -200,7 +200,10 @@ return (
       onBlur={formik.handleBlur}
       value={formik.values.mealType}
     >
-      <option
+      <option className="text-darkgrey" value="">
+        Choose one
+      </option>
+          <option
         className="text-darkgrey"
         value="Breakfast"
       >
@@ -292,11 +295,11 @@ return (
                   Notes
                 </label>
                 <br />
-                <Input
+                <textarea
                   name="notes"
                   id="notes"
-                  type="text"
-                  style={{ width: '100%' }}
+                   className="w-full border border-solid border-lightgrey text-darkgrey rounded-md shadow-[0_4px_8px_0_rgba(44,39,56,0.04)]"
+                  rows={4}
                   onChange={formik.handleChange}
                   value={formik.values.notes}
                   onBlur={formik.handleBlur}

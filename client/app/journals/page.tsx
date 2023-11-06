@@ -22,6 +22,21 @@ export default function Journal() {
      <p className="p-6 text-darkgrey">Use our health journals to help you keep track
         of your physical and mental health.</p>   
     
+          
+<Link href="/getDiabeticJournals">
+      <div className="rounded-3xl  mt-1 flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 " style={{backgroundColor: 'var(--Blue, #0880AE)' }}>
+        
+        <div>
+          <p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
+           Diabetic Journal
+          </p>
+          <p className="text-[14px] text-white font-IBM Plex Sans  text-start">
+Monitor your insulin and glucose everyday.
+          </p>
+        </div>
+      </div>
+</Link>
+<br></br>          
 <Link href="/getActivityJournals">
       <div className="rounded-3xl  mt-1 flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 " style={{backgroundColor: 'var(--Black, #2C2738)' }}>
         
