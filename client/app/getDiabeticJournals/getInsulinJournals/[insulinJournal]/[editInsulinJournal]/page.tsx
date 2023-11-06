@@ -72,7 +72,6 @@ export default function EditInsulinJournal({params: { insulinJournal } } : { par
         };
         const result = await updateInsulinJournal(insulinJournal, data); 
         console.log('Insulin journal entry updated:', result);
-        router.push(`/getInsulinJournals/${insulinJournal}`)
       } catch (error) {
         console.error('Error updating Insulin journal entry:', error);
       }
