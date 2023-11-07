@@ -5,25 +5,7 @@ import compassImage from "../../public/compass-removebg.png";
 import Onboarding from "./onboarding";
 
 const Welcome = () => {
-  // Loading state
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    // Wait for 3 seconds
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
-  }, []);
-
-  return isLoading ? (
-    // If page is still loading then splash screen
-    <div className="bg-eggshell min-h-screen z-10 flex justify-center items-center absolute">
-        <div className={'motion-safe:animate-pulse'}>
-            <NextImage src={compassImage} alt="Compass Logo" />
-        </div>
-      </div>
-  ) : (
-    // If page is not loading then show the welcome screen
+  return  (
     <div>
       <Onboarding />
     </div>
