@@ -9,7 +9,7 @@ import {useAuth} from '@/app/contexts/AuthContext';
 
 export default function Register() {
   const {error, signUp} = useAuth();
-  const formik = useFormik({
+  const formik= useFormik({
     initialValues: {
       email: '',
       password: '',
@@ -32,7 +32,7 @@ export default function Register() {
                 sex: values.sex,
             }
             signUp(data);
-        }catch (error){
+        } catch (error){
             console.log(error)
         }
 
@@ -89,9 +89,6 @@ export default function Register() {
       if(!values.birthdate){
         errors.birthdate='Birthdate Required';
       }
-      else if (!values.birthdate) {
-        errors.birthdate = 'Birthdate Required';
-      }
       if (!values.sex) {
         errors.sex = 'Sex Required';
       }
@@ -100,43 +97,16 @@ export default function Register() {
     },
   });
 
-  
+
   useEffect(() => {
-      const email = document.getElementById("email") as HTMLInputElement;
-      const fname = document.getElementById("fname") as HTMLInputElement;
-      const lname = document.getElementById("lname") as HTMLInputElement;
-      const password = document.getElementById("password") as HTMLInputElement;
-      const confPassword = document.getElementById("confPassword") as HTMLInputElement;
-      const phone = document.getElementById("phone") as HTMLInputElement;
-      const birthdate = document.getElementById("birthdate") as HTMLInputElement;
-      const sex = document.getElementById("sex") as HTMLInputElement;
-      if(email.value.length!=0){
-        formik.touched.email=true;
+    const fields = ['email', 'password', 'confPassword', 'fname', 'lname', 'phone', 'birthdate', 'sex'];
+
+    fields.forEach(field => {
+      const input = document.getElementById(field) as HTMLInputElement;
+      if (input.value.length !== 0) {
+        formik.setFieldTouched(field, true);
       }
-      if(password.value.length!=0){
-        formik.touched.password=true;
-      }
-      if(confPassword.value.length!=0){
-        formik.touched.confPassword=true;
-      }
-      if(fname.value.length!=0){
-        formik.touched.fname=true;
-      }
-      if(lname.value.length!=0){
-        formik.touched.lname=true;
-      }
-    
-      if(phone.value.length!=0){
-        formik.touched.phone=true;
-      }
-    
-      if(birthdate.value.length!=0){
-        formik.touched.birthdate=true;
-      }
-     
-      if(sex.value.length!=0){
-        formik.touched.sex=true;
-      }
+  });
   }, [formik.values]);
  
   const [passwordVisibility, setPasswordVisibility] = useState<boolean>(false);
