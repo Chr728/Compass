@@ -24,7 +24,7 @@ export default function MainMenu() {
   }
   
 return (
-  <div className="bg-eggshell min-h-screen flex flex-col">
+  <div className="bg-eggshell min-h-screen flex flex-col pb-32">
       
       <div className="grid grid-cols-2 gap-3 p-4 my-auto text-center">
       <div className="text-darkgrey font-bold col-span-2 text-[24px]">Welcome to Compass</div>
