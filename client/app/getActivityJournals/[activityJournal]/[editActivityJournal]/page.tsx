@@ -12,23 +12,10 @@ import { useEffect, useState } from 'react';
 import Header from '@/app/components/Header';
 import Menu from '@/app/components/Menu';
 import Custom403 from '@/app/pages/403';
+import { formatDateYearMonthDate } from '@/app/helpers/utils/datetimeformat';
 
 
-export function formatDateYearMonthDate(date: any) {
-  var d = new Date(date);
-  d.setUTCHours(0, 0, 0, 0);
 
-  var month = '' + (d.getUTCMonth() + 1),
-      day = '' + d.getUTCDate(),
-      year = d.getUTCFullYear();
-
-  if (month.length < 2) 
-      month = '0' + month;
-  if (day.length < 2) 
-      day = '0' + day;
-
-  return [year, month, day].join('-');
-}
 
 export default function EditActivityJournal({params: { activityJournal } } : { params: { activityJournal: string } }) {
   const { user } = useAuth();
@@ -53,7 +40,9 @@ export default function EditActivityJournal({params: { activityJournal } } : { p
       alert('User not found.');
     }
     if (user) {
+      setTimeout(() => {
       fetchActivityJournal();
+    }, 1000);
     }
   }, []);
   

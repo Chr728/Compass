@@ -38,7 +38,9 @@ export default function EditWeightJournal({params: { weightJournal } } : { param
       alert('User not found.');
     } 
     if (user) {
+      setTimeout(() => {
       fetchWeightJournal();
+    }, 1000);
     }
   }, []);
   

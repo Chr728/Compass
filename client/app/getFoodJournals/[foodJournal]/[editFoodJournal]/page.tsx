@@ -38,7 +38,9 @@ export default function EditFoodJournal({params: { foodJournal } } : { params: {
       alert('User not found.');
     } 
     if (user) {
+     setTimeout(() => {
       fetchFoodJournal();
+    }, 1000);
     }
   }, []);
   

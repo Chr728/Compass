@@ -39,7 +39,9 @@ export default function GetGlucoseJournal({params: { glucoseJournal } } : { para
       alert('User not found.');
     } 
     if (user) {
+     setTimeout(() => {
       fetchGlucoseJournal();
+    }, 1000);
     }
   }, []);
 

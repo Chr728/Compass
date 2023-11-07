@@ -38,7 +38,9 @@ export default function GetFoodJournalsPage() {
         console.error('Error retrieving food journal entry:', error);
       }
     }
-    fetchFoodJournals();
+    setTimeout(() => {
+      fetchFoodJournals();
+    }, 1000);
   }, [user]);
 
 
