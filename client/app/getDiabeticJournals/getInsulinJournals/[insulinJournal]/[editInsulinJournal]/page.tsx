@@ -168,7 +168,7 @@ return (
       name="typeOfInsulin"
             id="typeOfInsulin"
       style={{
-        width: '100%',
+        width: '310px',
         border: '1px solid #DBE2EA', // Border style
         borderRadius: '5px',
         marginTop: '5px',
@@ -284,7 +284,7 @@ return (
       name="bodySite"
             id="bodySite"
       style={{
-        width: '100%',
+        width: '310px',
         border: '1px solid #DBE2EA', // Border style
         borderRadius: '5px',
         marginTop: '5px',

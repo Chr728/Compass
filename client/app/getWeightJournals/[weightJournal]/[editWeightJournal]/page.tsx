@@ -164,7 +164,7 @@ return (
     name="weight"
     id="weight"
     type="number"
-    style={{ width: '100%' }}
+    style={{ width: '75%' }}
     onChange={formik.handleChange}
     value={formik.values.weight}
     onBlur={formik.handleBlur}
@@ -183,9 +183,9 @@ return (
   )}
 </div>
 
-<div className="mt-3  ml-3"
+<div className="mt-3"
 style={{
-  width: '25%',
+  width: '50%',
 }}
 >
   <label
