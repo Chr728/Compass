@@ -174,12 +174,11 @@ export const sendUserReminders = async (req: Request, res: Response) => {
         userGlucoseMeasurement.forEach(
           (GlucoseMeasurement: {
             bloodGlucose: number;
-            date: Date;
             unit: string;
             mealTime: string;
           }) => {
             const payload = JSON.stringify({
-              title: `GlucoseMeasurement Reminder: ${GlucoseMeasurement.bloodGlucose} ${GlucoseMeasurement.unit} for ${GlucoseMeasurement.mealTime} at ${GlucoseMeasurement.date}`,
+              title: `GlucoseMeasurement Reminder: ${GlucoseMeasurement.bloodGlucose} ${GlucoseMeasurement.unit} for ${GlucoseMeasurement.mealTime}`,
             });
             webPush
               .sendNotification(subscription, payload)
