@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 import createUser from "@/app/http/createUser";
 import { createUserAttributes } from "@/app/lib/Models/User";
 import { createNotificationPreference } from "../http/notificationPreferenceAPI";
+import { useProp } from "./PropContext";
 
 interface AuthContextProps {
   user: User | null;
@@ -44,9 +45,9 @@ interface AuthProviderProps {
 
 export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const { handleLoading, handleError } = useProp();
 
   const subscribeToPushNotifications = (userUID: any, userToken: any) => {
     // Ask user permission for push notifications
@@ -113,6 +114,8 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.error(errorCode, errorMessage);
+        handleError(errorMessage);
+        handleLoading(false);
       });
   };
 
@@ -124,20 +127,22 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
           action: "unsubscribeFromPush",
         });
       }
+      handleLoading(true);
       await signOut(auth);
-      // Sign-out successful.
+      handleLoading(false);
       router.push("/logout");
       console.log("Sign-out successful.");
     } catch (error) {
       // Handle errors gracefully
       console.error("Error signing out:", error);
+      console.log("Sign-out successful.");
     }
   };
 
   const signUp = (values: createUserAttributes) => {
+    handleLoading(true);
     createUserWithEmailAndPassword(auth, values.email, values.password)
       .then(async (userCredential) => {
-        setLoading(true);
         // Signed in
         const user = userCredential.user;
         setError(null);
@@ -151,7 +156,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
               createNotificationPreference();
               // Subscribe user to push notifications if allowed
               subscribeToPushNotifications(userCredential.user.uid, userToken);
-              setLoading(false);
+              handleLoading(false);
               router.push("/tpage");
             }
           })
@@ -159,6 +164,8 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
             const errorCode = error.code;
             const errorMessage = error.message;
             console.log(errorCode, errorMessage);
+            handleError(errorMessage);
+            handleLoading(false);
           });
       })
       .catch((error) => {
@@ -170,6 +177,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);
+        handleError(errorMessage);
       });
   };
 
@@ -177,7 +185,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
       // Specify the type here
       setUser(user);
-      setLoading(false);
+      handleLoading(false);
       setError(null);
     });
 
@@ -192,11 +200,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     signUp,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {!loading && children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export default AuthContext;

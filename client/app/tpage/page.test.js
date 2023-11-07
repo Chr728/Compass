@@ -31,6 +31,23 @@ describe("Main page shown only to logged in users", () => {
         });
     })
 
+    it("All elements are shown to the user", () => {
+        render(<MainMenu/>);
+        const welcomeText = screen.getByText("Welcome to Compass");
+        const quickstartText = screen.getByText("Quickstart Your Journey...");
+        const appointmentTextElement = screen.getByText("Appointments");
+        const medicationTextElement = screen.getByText("Medications");
+        const JournalTextElement = screen.getAllByText("Journals")[0];
+        const profileTextElement = screen.getByText("Profile");
+
+        expect(welcomeText).toBeInTheDocument();
+        expect(quickstartText).toBeInTheDocument();
+        expect(appointmentTextElement).toBeInTheDocument();
+        expect(medicationTextElement).toBeInTheDocument();
+        expect(JournalTextElement).toBeInTheDocument();
+        expect(profileTextElement).toBeInTheDocument();
+    })
+
     it("Error page is shown", async () => {
         useAuth.mockImplementation(() => {
             return {
