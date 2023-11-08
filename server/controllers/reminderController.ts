@@ -53,6 +53,39 @@ export const sendUserReminders = async (req: Request, res: Response) => {
     const startTime = moment(currentTime, "HH:mm:ss");
     const endTime = startTime.clone().add(30, "minutes");
 
+    // Start time in minutes for comparison
+    const startTimeMinutes =
+      parseInt(startTime.format("HH:mm:00").substring(0, 2), 10) * 60 +
+      parseInt(startTime.format("HH:mm:00").substring(3, 5), 10);
+
+    // 30 minutes after start time
+    const thirtyMinutesLater = startTimeMinutes + 30;
+
+    // Define time-string pairs for glucose journals and medication
+    const timeStrings: [string, number][] = [
+      ["Before breakfast", 7 * 60],
+      ["30min after breakfast", 8 * 60 + 30],
+      ["2hrs after breakfast", 10 * 60],
+      ["Before lunch", 11 * 60],
+      ["30min after lunch", 12 * 60 + 30],
+      ["2hrs after lunch", 14 * 60],
+      ["Before dinner", 17 * 60],
+      ["30min after dinner", 18 * 60 + 30],
+      ["2hrs after dinner", 20 * 60],
+      ["Bedtime", 21 * 60],
+      ["Night", 22 * 60],
+    ];
+
+    // Find which string is associated to current time
+    let mealTime = "nothing";
+    for (const [text, time] of timeStrings) {
+      if (time >= startTimeMinutes && time <= thirtyMinutesLater) {
+        mealTime = text;
+        break;
+      }
+    }
+    console.log(`This is the meal time for glucose: ${mealTime}`);
+
     // Retrieve notification preference first. Make sure
     const userNotificationPreferences = await db.NotificationPreference.findOne(
       {
@@ -163,10 +196,7 @@ export const sendUserReminders = async (req: Request, res: Response) => {
       const userGlucoseMeasurement = await db.GlucoseMeasurement.findAll({
         where: {
           uid: userUID,
-          mealTime: {
-            [db.Sequelize.Op.gte]: startTime.format("HH:mm:00"),
-            [db.Sequelize.Op.lt]: endTime.format("HH:mm:00"),
-          },
+          mealTime: mealTime,
           date: currentDate,
         },
       });
