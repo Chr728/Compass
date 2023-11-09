@@ -2,9 +2,12 @@ import {ReactNode, useContext, useState, createContext} from 'react';
 import LoadingScreen from '@/app/components/AppWrapper/LoadingScreen';
 
 type PropContextType = {
-    isError: boolean,
-    errorText: string,
-    handleError: (text: string) => void,
+    popUp: {
+        show: boolean,
+        type: 'error' | 'success',
+        text: string,
+    },
+    handlePopUp: (type: 'error' | 'success', text: string) => void,
     loading: boolean,
     handleLoading: (loading: boolean,timeout?:number) => void,
 }
@@ -20,16 +23,21 @@ export const useProp = () => {
 interface PropProviderProps {
     children?: ReactNode;
 }
+type popUpState = {
+    show: boolean,
+    type: 'error' | 'success',
+    text: string,
+
+}
 export const PropProvider = ({children}: PropProviderProps) => {
-    const [isError, setIsError] = useState(false)
-    const [errorText, setErrorText] = useState('')
+    const [popUp, setPopUp] = useState<popUpState>({show: false,type:'error', text: ''});
     const [loading, setLoading] = useState(false)
-    const handleError = (text: string) => {
-        setIsError(true);
-       setErrorText(text);
-       setTimeout(() => {
-              setIsError(false);
-       }, 3500);
+   type popUpType = 'error' | 'success';
+    const handlePopUp = (type: popUpType, text:string) => {
+        setPopUp({show: true, type, text});
+        setTimeout(() => {
+            setPopUp({show: false, type, text});
+        }, 3500);
     }
 
     const handleLoading = (loading: boolean, timeout?: number) => {
@@ -43,9 +51,8 @@ export const PropProvider = ({children}: PropProviderProps) => {
     }
 
     const values: PropContextType = {
-        isError ,
-        errorText,
-        handleError,
+        popUp,
+        handlePopUp,
         loading,
         handleLoading,
     }

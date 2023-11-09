@@ -47,8 +47,6 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const { handleLoading, handleError } = useProp();
-
   const subscribeToPushNotifications = (userUID: any, userToken: any) => {
     // Ask user permission for push notifications
     if ("Notification" in window) {
@@ -98,6 +96,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       }
     }
   };
+  const {handleLoading, handlePopUp} = useProp();
 
   const login = (email: string, password: string) => {
     signInWithEmailAndPassword(auth, email, password)
@@ -114,7 +113,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.error(errorCode, errorMessage);
-        handleError(errorMessage);
+        handlePopUp('error', errorMessage)
         handleLoading(false);
       });
   };
@@ -132,10 +131,10 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       handleLoading(false);
       router.push("/logout");
       console.log("Sign-out successful.");
-    } catch (error) {
+    } catch (error:any) {
       // Handle errors gracefully
-      console.error("Error signing out:", error);
-      console.log("Sign-out successful.");
+      console.error('Error signing out:', error);
+      handlePopUp('error','Error signing out:' + error.message)
     }
   };
 
@@ -164,7 +163,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
             const errorCode = error.code;
             const errorMessage = error.message;
             console.log(errorCode, errorMessage);
-            handleError(errorMessage);
+            handlePopUp('error', errorMessage)
             handleLoading(false);
           });
       })
@@ -177,7 +176,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);
-        handleError(errorMessage);
+        handlePopUp('error', errorMessage)
       });
   };
 

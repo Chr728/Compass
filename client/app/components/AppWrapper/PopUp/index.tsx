@@ -1,17 +1,17 @@
-import React, {useEffect, useState} from 'react';
 import {Alert, Snackbar} from '@mui/material';
 import {useProp} from '@/app/contexts/PropContext';
 
-const ErrorPopUp = () => {
-    const {isError, errorText} = useProp()
+const PopUp = () => {
+    const {popUp} = useProp()
+    const {show, text, type} = popUp
     return (
         <Snackbar
-                    open={isError}
+                    open={show}
                     anchorOrigin={{vertical: 'top', horizontal: 'center'}}
         >
-            <Alert severity={'error'} >{errorText}</Alert>
+            <Alert severity={type} >{text}</Alert>
         </Snackbar>
     );
 };
 
-export default ErrorPopUp;
+export default PopUp;
