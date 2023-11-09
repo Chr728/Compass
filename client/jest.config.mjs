@@ -25,7 +25,6 @@ const config = {
       '!**/vendor/**',
       '!**/AuthContext.{js,jsx,ts,tsx}',
       '!**/UserContext.{js,jsx,ts,tsx}',
-      '!**/cypress.config.{js,jsx,ts,tsx}',
       '!**/tailwind.config.{js,jsx,ts,tsx}',
       '!**/welcome/**',     // ignored due to swiper lib not being compatible with jest
       '!**/spec.cy.{js,jsx,ts,tsx}',
