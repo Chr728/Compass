@@ -44,7 +44,9 @@ export default function GetFoodJournalsPage() {
 
     async function deleteFoodJournals(foodJournalId: string){
       const deleteresult = await deleteFoodIntakeJournal(foodJournalId);   
-      location.reload();
+      const newData = food && food.filter((item: { id: string; }) => item.id!=foodJournalId);
+      setfood(newData);
+      router.push('/getFoodJournals');
     }
 
 

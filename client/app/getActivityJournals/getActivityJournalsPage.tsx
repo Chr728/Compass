@@ -44,7 +44,9 @@ export default function GetActivityJournalsPage() {
 
     async function deleteActivityJournals(activityJournalId: string){
       const deleteresult = await deleteActivityJournal(activityJournalId);   
-      location.reload();
+      const newData = activity && activity.filter((item: { id: string; }) => item.id!=activityJournalId);
+      setactivity(newData);
+      router.push('/getActivityJournals');
     }
 
 

@@ -44,7 +44,10 @@ export default function GetGlucoseJournalsPage() {
 
     async function deleteGlucoseJournals(glucoseJournalId: string){
       const deleteresult = await deleteGlucoseJournal(glucoseJournalId);   
-      location.reload();
+      const newData = glucose && glucose.filter((item: { id: string; }) => item.id!=glucoseJournalId);
+      setglucose(newData);
+      router.push('/getDiabeticJournals');
+  
     }
 
 

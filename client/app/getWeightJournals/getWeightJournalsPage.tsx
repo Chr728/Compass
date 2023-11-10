@@ -45,7 +45,9 @@ export default function GetWeightJournalsPage() {
 
     async function deleteWeightJournals(weightJournalId: string){
       const deleteresult = await deleteWeightJournal(weightJournalId);   
-      location.reload();
+      const newData = weight && weight.filter((item: { id: string; }) => item.id!=weightJournalId);
+      setweight(newData);
+      router.push('/getWeightJournals');
     }
 
 

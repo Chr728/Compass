@@ -55,7 +55,9 @@ export default function ViewMoodJournalsPage() {
 
     async function deleteMoodJournals(moodJournalId: string){
       const deleteresult = await deleteMoodJournal(moodJournalId);   
-      location.reload();
+      const newData = moodJournal && moodJournal.filter((item: { id: string; }) => item.id!=moodJournalId);
+      setMoodJournal(newData);
+      router.push('/moodjournal');
     }
 
     const handleClick = (moodJournalID: string) => {
