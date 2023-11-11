@@ -41,9 +41,7 @@ export default function GetMoodJournal( {params: { viewMoodJournal } } : { param
       alert('User not found.');
     } 
     if (user) {
-     setTimeout(() => {
       fetchMoodJournal();
-    }, 1000);
     }
   }, []);
 

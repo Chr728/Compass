@@ -38,9 +38,7 @@ export default function GetActivityJournalsPage() {
         console.error('Error retrieving activity journal entry:', error);
       }
     }
-    setTimeout(() => {
       fetchActivityJournals();
-    }, 1000);
   }, [user]);
 
 

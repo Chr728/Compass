@@ -37,9 +37,7 @@ export default function GetActivityJournal({params: { activityJournal } } : { pa
       alert('User not found.');
     } 
     if (user) {
-      setTimeout(() => {
       fetchActivityJournal();
-    }, 1000);
     }
   }, []);  
 

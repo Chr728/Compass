@@ -39,9 +39,7 @@ export default function GetWeightJournalsPage() {
         console.error('Error retrieving weight journal entry:', error);
       }
     }
-    setTimeout(() => {
       fetchWeightJournals();
-    }, 1000);
   }, [user]);
 
 

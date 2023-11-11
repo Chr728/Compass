@@ -73,27 +73,23 @@ jest.mock('../http/weightJournalAPI', () => {
 
 
 test("Add an entry button  functions correctly", async() => {
-     setTimeout(() => {  
     const addButton = screen.getAllByRole('button')[1];
-    userEvent.click(addButton);
-    mockRouter;
-         expect(mockRouter).toHaveBeenCalledWith('/createWeightJournal')
-    }, 1000);
+    await  userEvent.click(addButton);
+    await mockRouter;
+    expect(mockRouter).toHaveBeenCalledWith('/createWeightJournal')
 })
 
 
 
     test("Get Weight Journals list is displayed correctly", async () => {
-         setTimeout(() => {  
-        const date = screen.findByText('Jan 1, 2014 8h36');
-        const weight =  screen.findByText('75.5');
-             const height = screen.findByText('1.65cm');
+        const date = await screen.findByText('Jan 1, 2014 8h36');
+        const weight =  await screen.findByText('75.5');
+        const height = await screen.findByText('1.65cm');
 
 
         expect(date).toBeInTheDocument();
         expect(weight).toBeInTheDocument();
-             expect(height).toBeInTheDocument();
-        }, 1000);     
+        expect(height).toBeInTheDocument();   
     })
 
    

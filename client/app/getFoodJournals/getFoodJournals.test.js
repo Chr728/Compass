@@ -72,24 +72,20 @@ jest.mock('../http/foodJournalAPI', () => {
 
 
 test("Add an entry button  functions correctly", async() => {
-     setTimeout(() => {  
     const addButton = screen.getAllByRole('button')[1];
-    userEvent.click(addButton);
-    mockRouter;
-         expect(mockRouter).toHaveBeenCalledWith('/createFoodJournal')
-    }, 1000);
+    await userEvent.click(addButton);
+    await mockRouter;
+    expect(mockRouter).toHaveBeenCalledWith('/createFoodJournal')
 })
 
 
 
     test("Get Food Journals list is displayed correctly", async () => {
-         setTimeout(() => {  
-        const date = screen.findByText('Jan 1, 2014 8h36');
-        const foodName = screen.findByText('pasta');
+        const date = await screen.findByText('Jan 1, 2014 8h36');
+        const foodName = await screen.findByText('pasta');
 
         expect(date).toBeInTheDocument();
-             expect(foodName).toBeInTheDocument();
-        }, 1000);    
+        expect(foodName).toBeInTheDocument();   
     })
 
    
