@@ -91,7 +91,7 @@ export const getMedication = async (req: Request,res: Response) => {
         if(!medication) {
             return res.status(404).json({
                 status: 'ERROR',
-                message: 'medication not found, invalid medication id.',
+                message: 'Medication not found, invalid medication id.',
               });
         }
 
