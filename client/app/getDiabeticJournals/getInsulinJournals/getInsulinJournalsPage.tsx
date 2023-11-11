@@ -38,7 +38,7 @@ export default function GetInsulinJournalsPage() {
         console.error('Error retrieving insulin journal entry:', error);
       }
     }
-    fetchInsulinJournals();
+      fetchInsulinJournals();
   }, [user]);
 
 

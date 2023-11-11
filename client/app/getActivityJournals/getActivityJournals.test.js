@@ -68,24 +68,27 @@ jest.mock('../http/activityJournalAPI', () => {
 });
    
 
-test("Add an entry button  functions correctly", async() => {
+test("Add an entry button  functions correctly", async () => {
+    
     const addButton = screen.getAllByRole('button')[1];
     await userEvent.click(addButton);
     await mockRouter;
-    expect(mockRouter).toHaveBeenCalledWith('/createActivityJournal')
+    expect(mockRouter).toHaveBeenCalledWith('/createActivityJournal')   
 })
 
 
 
 
     test("Get Activity Journals list is displayed correctly", async () => {
+       
         const date = await screen.findByText('Jan 1, 2014');
-        const activity = await screen.findByText('running');
+        const activity =  await screen.findByText('running');
         const height = await screen.findByText('60');
 
         expect(date).toBeInTheDocument();
         expect(activity).toBeInTheDocument();
         expect(height).toBeInTheDocument();
+       
     })
 
    

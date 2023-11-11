@@ -38,7 +38,7 @@ export default function GetActivityJournalsPage() {
         console.error('Error retrieving activity journal entry:', error);
       }
     }
-    fetchActivityJournals();
+      fetchActivityJournals();
   }, [user]);
 
 
@@ -59,7 +59,7 @@ export default function GetActivityJournalsPage() {
               <br></br>
               
               {activity && (
-            <div className="rounded-3xl bg-white flex flex-col mt-1 mb-6  w-full md:max-w-[800px] md:min-h-[550px] p-4 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]">
+            <div className="rounded-3xl bg-white flex flex-col mt-4 mb-44 w-full md:max-w-[800px] md:min-h-[550px] p-4 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]">
               <div className="flex justify-between items-center">
                 <div>
                   <Button type="button" text="Add an Entry" style={{ width: '120px', fontSize: '14px' }} onClick={() => router.push(`/createActivityJournal`)} />
@@ -68,7 +68,7 @@ export default function GetActivityJournalsPage() {
               <br></br>
 
           <div className="flex" style={{ justifyContent: 'space-between' }}>
-            <div className="flex-2" style={{ marginRight: '-3%'}}>
+            <div className="flex-2">
               <div className="font-sans  font-bold text-darkgrey text-[18px] text-center ">
                 Date
                 <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
@@ -91,24 +91,31 @@ export default function GetActivityJournalsPage() {
           {activity.map((item: any, index: number) => (
   <div
     key={item.activityJournalId}
-    className={`flex justify-between items-left mt-3`}
+    className={`flex justify-between items-center mt-3`}
     style={{
       backgroundColor: index % 2 === 0 ? 'white' : '#DBE2EA',
     }}
     onClick={() => router.push(`/getActivityJournals/${item.id}`)}
   >
     <div className="flex-2">
-      <p className="font-sans font-medium text-darkgrey text-[14px]">
+      <p className="font-sans  font-medium text-darkgrey text-[14px]  text-center ">
         {formatDate(item.date)}
       </p>
     </div>
-    <div className="flex-2">
-      <p className="font-sans ml-2 font-medium text-darkgrey text-[14px]">
+    <div className="flex-1">
+     <p className="font-sans ml-4 font-medium text-darkgrey text-[14px] text-center">
+    {item.activity.length > 10 ? (
+      <span className="break-words">
         {item.activity}
-      </p>
-    </div>
-    <div className="flex-2">
-      <p className="font-sans ml-12 font-medium text-darkgrey text-[14px]">
+      </span>
+    ) : (
+      item.activity
+    )}
+  </p>
+     </div>
+            
+     <div className="flex-1"> 
+      <p className="font-sans ml-4 font-medium text-darkgrey text-[14px]  text-center">
         {item.duration}
       </p>
     </div>
@@ -123,10 +130,6 @@ export default function GetActivityJournalsPage() {
       </div>
   </div>
 ))}
-
-
-
-
   </div>
 )}
 </div>

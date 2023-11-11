@@ -85,7 +85,7 @@ test("Add an entry button  functions correctly", async() => {
         const foodName = await screen.findByText('pasta');
 
         expect(date).toBeInTheDocument();
-        expect(foodName).toBeInTheDocument();
+        expect(foodName).toBeInTheDocument();   
     })
 
    

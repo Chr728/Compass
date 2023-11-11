@@ -39,7 +39,7 @@ export default function GetWeightJournalsPage() {
         console.error('Error retrieving weight journal entry:', error);
       }
     }
-    fetchWeightJournals();
+      fetchWeightJournals();
   }, [user]);
 
 
@@ -61,7 +61,7 @@ export default function GetWeightJournalsPage() {
         <p className="font-sans text-darkgrey ml-5 text-[14px]">Your BMI can tell you if you’re at risk for certain health conditions like heart disease.</p>
     
         {weight && (
-  <div className="rounded-3xl bg-white flex flex-col mt-4 mb-6 w-full md:max-w-[800px] md:min-h-[550px] p-4 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]">
+  <div className="rounded-3xl bg-white flex flex-col mt-4 mb-44 w-full md:max-w-[800px] md:min-h-[550px] p-4 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]">
     <div className="flex justify-between items-center">
       <div>
         <Button type="button" text="Add an Entry" style={{ width: '120px', fontSize: '14px', padding: '1px 10px' }} onClick={() => router.push(`/createWeightJournal`)} />
@@ -109,12 +109,12 @@ export default function GetWeightJournalsPage() {
         </p>
       </div>
       <div className="flex-2">
-        <p className="ml-3 font-sans font-medium text-darkgrey text-[14px] text-center">
+        <p className="ml-2 font-sans font-medium text-darkgrey text-[14px] text-center">
           {(item.weight / ((item.height / 100) ** 2)).toFixed(2)}
         </p>
       </div>
       <div className="flex-2">
-        <p className="ml-4 font-sans font-medium text-darkgrey text-[14px] text-center">
+        <p className="ml-3 font-sans font-medium text-darkgrey text-[14px] text-center">
           {item.weight}
         </p>
       </div>

@@ -63,16 +63,16 @@ jest.mock('../http/moodJournalAPI', () => {
    
     test("Mood journal is displayed correctly", async () => {
         const date = await screen.findByText('Oct 17, 2023');
-        const notes = await screen.findByText('abcd')
+        const notes =  await screen.findByText('abcd')
         expect(date).toBeInTheDocument();
-        expect(notes).toBeInTheDocument();
+            expect(notes).toBeInTheDocument();   
     })
 
     test("Clicking on the delete button calls the delete function", async () => {
-        const deleteBtn = screen.getByText('Delete');
-        const moodJournalId = '1';
-        await userEvent.click(deleteBtn);
-        const result = await deleteMoodJournal(moodJournalId);
-        expect(result.status).toEqual('SUCCESS');
-        expect(result.data).toEqual('Successfully deleted mood journal entry.');
+            const deleteBtn = screen.getByText('Delete');
+            const moodJournalId = '1';
+            await userEvent.click(deleteBtn);
+            const result = await deleteMoodJournal(moodJournalId);
+            expect(result.status).toEqual('SUCCESS');
+            expect(result.data).toEqual('Successfully deleted mood journal entry.');       
     })

@@ -71,18 +71,18 @@ jest.mock('../../http/diabeticJournalAPI', () => {
 
 
 
-test("Add an entry button  functions correctly", async() => {
+test("Add an entry button  functions correctly", async() => { 
     const addButton = screen.getAllByRole('button')[1];
     await userEvent.click(addButton);
     await mockRouter;
-    expect(mockRouter).toHaveBeenCalledWith('/createGlucoseJournal')
+    expect(mockRouter).toHaveBeenCalledWith('/createGlucoseJournal')   
 })
 
 
 
     test("Get Glucose Journals list is displayed correctly", async () => {
         const date = await screen.findByText('Jan 1, 2014');
-        const mealTime = await screen.findByText('Before lunch');
+        const mealTime =await  screen.findByText('Before lunch');
         const bloodGlucose = await screen.findByText('23');
 
         expect(date).toBeInTheDocument();
