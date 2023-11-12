@@ -17,6 +17,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 
 export default function ViewAppointmentsPage() {
+    const logger = require('pino')()
     const { user } = useAuth();
     useEffect(() =>{
         if (!user) 
@@ -34,9 +35,11 @@ export default function ViewAppointmentsPage() {
             try {
                 const userId = user?.uid || '';
                 const appointmentData = await getAppointments(userId);
+                logger.info('All appointments retrieved:', appointmentData.data)
                 setData(appointmentData.data);
             } catch (error) {
                 console.log('Error fetching appointments');
+                logger.error('Error fetching appointments', error);
             }
         }
         fetchAppointment();

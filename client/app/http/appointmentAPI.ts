@@ -9,11 +9,15 @@ export interface Appointment {
     uid:string;
 }
 
+const logger = require('pino')()
+
+
 // Function to get all appointments of a user
 export async function getAppointments(userId: string): Promise<any>{
     try {
         const currentUser = auth.currentUser;
         if (!currentUser) {
+          logger.error('No user is currently signed in.');
           throw new Error('No user is currently signed in.');
         }
         const token = await currentUser.getIdToken();
@@ -27,14 +31,17 @@ export async function getAppointments(userId: string): Promise<any>{
               },
             }
         );
+        logger.info(`Appointments fetched successfully for user ${userId}`)
         if (!response.ok) {
             throw new Error(
               `Failed to retrieve appointment. HTTP Status: ${response.status}`
             );
+            logger.error(`Failed to retrieve appointment. HTTP Status: ${response.status}`);
           }
         const data = await response.json();
         return data;
     } catch (error) {
+        logger.error('Error fetching appointments:', error);
         console.error('Error fetching appointments:', error);
         throw error;
       }
