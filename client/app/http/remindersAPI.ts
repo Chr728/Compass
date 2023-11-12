@@ -1,6 +1,6 @@
 import { auth } from "../config/firebase";
 
-// Function to subscribe a user to reminders and prepare push notifications
+// Function to prepare push notifications
 export async function sendUserReminders(): Promise<any> {
   try {
     const currentUser = auth.currentUser;
@@ -22,7 +22,7 @@ export async function sendUserReminders(): Promise<any> {
     );
     if (!response.ok) {
       throw new Error(
-        `Failed to create reminder preference for user. HTTP Status: ${response.status}`
+        `Failed to create reminder for user. HTTP Status: ${response.status}`
       );
     }
     const data = await response.json();

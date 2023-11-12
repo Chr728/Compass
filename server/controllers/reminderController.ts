@@ -29,8 +29,9 @@ export const sendUserReminders = async (req: Request, res: Response) => {
         status: "ERROR",
         message: `No Subscription was found.`,
       });
-    } 
+    }
 
+    // Get user subscription
     const subscription = Usersubscription.subscription;
 
     // Get the current time and date
@@ -52,7 +53,38 @@ export const sendUserReminders = async (req: Request, res: Response) => {
     const startTime = moment(currentTime, "HH:mm:ss");
     const endTime = startTime.clone().add(30, "minutes");
 
-   
+    // Start time in minutes for comparison
+    const startTimeMinutes =
+      parseInt(startTime.format("HH:mm:00").substring(0, 2), 10) * 60 +
+      parseInt(startTime.format("HH:mm:00").substring(3, 5), 10);
+
+    // 30 minutes after start time
+    const thirtyMinutesLater = startTimeMinutes + 30;
+
+    // Define time-string pairs for glucose journals and medication
+    const timeStrings: [string, number][] = [
+      ["Before breakfast", 7 * 60],
+      ["30min after breakfast", 8 * 60 + 30],
+      ["2hrs after breakfast", 10 * 60],
+      ["Before lunch", 11 * 60],
+      ["30min after lunch", 12 * 60 + 30],
+      ["2hrs after lunch", 14 * 60],
+      ["Before dinner", 17 * 60],
+      ["30min after dinner", 18 * 60 + 30],
+      ["2hrs after dinner", 20 * 60],
+      ["Bedtime", 21 * 60],
+      ["Night", 22 * 60],
+    ];
+
+    // Find which string is associated to current time
+    let mealTime = "nothing";
+    for (const [text, time] of timeStrings) {
+      if (time >= startTimeMinutes && time <= thirtyMinutesLater) {
+        mealTime = text;
+        break;
+      }
+    }
+    console.log(`This is the meal time for glucose: ${mealTime}`);
 
     // Retrieve notification preference first. Make sure
     const userNotificationPreferences = await db.NotificationPreference.findOne(
@@ -63,18 +95,16 @@ export const sendUserReminders = async (req: Request, res: Response) => {
       }
     );
 
-
     // Return if there's an error
     if (!userNotificationPreferences) {
       return res.status(404).json({
         status: "ERROR",
         message: `Notification preference not found, invalid user id.`,
       });
-    } 
+    }
 
     // Check if user has appointment notifications on
     if (userNotificationPreferences.appointmentReminders) {
-  
       //Get appointment of users for preperaing reminder
       const userAppointments = await db.Appointment.findAll({
         where: {
@@ -86,10 +116,10 @@ export const sendUserReminders = async (req: Request, res: Response) => {
           },
         },
       });
-      
+
       if (userAppointments.length > 0) {
         userAppointments.forEach(
-          (appointment: { appointmentWith: any; time: any }) => {
+          (appointment: { appointmentWith: string; time: Date }) => {
             const payload = JSON.stringify({
               title: `Appointment Reminder with Dr ${appointment.appointmentWith} at ${appointment.time}`,
             });
@@ -114,12 +144,12 @@ export const sendUserReminders = async (req: Request, res: Response) => {
           },
         },
       });
-      
+
       if (userActivityJournals.length > 0) {
         userActivityJournals.forEach(
-          (activityjournal: { activityjournal: any }) => {
+          (activityjournal: { activity: string; time: Date }) => {
             const payload = JSON.stringify({
-              title: `Activity Reminder `,
+              title: `Activity Reminder: ${activityjournal.activity} at ${activityjournal.time}`,
             });
             webPush
               .sendNotification(subscription, payload)
@@ -144,9 +174,13 @@ export const sendUserReminders = async (req: Request, res: Response) => {
       });
       if (userFoodIntakeJournals.length > 0) {
         userFoodIntakeJournals.forEach(
-          (userFoodIntakeJournal: { userFoodIntakeJournal: any }) => {
+          (userFoodIntakeJournal: {
+            foodName: string;
+            servingNumber: number;
+            time: Date;
+          }) => {
             const payload = JSON.stringify({
-              title: `Food Intake Reminder `,
+              title: `Food Intake Reminder: ${userFoodIntakeJournal.foodName} for ${userFoodIntakeJournal.servingNumber} servings at ${userFoodIntakeJournal.time}`,
             });
             webPush
               .sendNotification(subscription, payload)
@@ -162,18 +196,19 @@ export const sendUserReminders = async (req: Request, res: Response) => {
       const userGlucoseMeasurement = await db.GlucoseMeasurement.findAll({
         where: {
           uid: userUID,
-          mealTime: {
-            [db.Sequelize.Op.gte]: startTime.format("HH:mm:00"),
-            [db.Sequelize.Op.lt]: endTime.format("HH:mm:00"),
-          },
+          mealTime: mealTime,
           date: currentDate,
         },
       });
       if (userGlucoseMeasurement.length > 0) {
         userGlucoseMeasurement.forEach(
-          (GlucoseMeasurement: { GlucoseMeasurement: any }) => {
+          (GlucoseMeasurement: {
+            bloodGlucose: number;
+            unit: string;
+            mealTime: string;
+          }) => {
             const payload = JSON.stringify({
-              title: `GlucoseMeasurement Reminder `,
+              title: `GlucoseMeasurement Reminder: ${GlucoseMeasurement.bloodGlucose} ${GlucoseMeasurement.unit} for ${GlucoseMeasurement.mealTime}`,
             });
             webPush
               .sendNotification(subscription, payload)
@@ -197,14 +232,21 @@ export const sendUserReminders = async (req: Request, res: Response) => {
         },
       });
       if (userInsulinDosage.length > 0) {
-        userInsulinDosage.forEach((InsulinDosage: { InsulinDosage: any }) => {
-          const payload = JSON.stringify({
-            title: `Insulin Dosage Reminder `,
-          });
-          webPush
-            .sendNotification(subscription, payload)
-            .catch((error: any) => console.log(error));
-        });
+        userInsulinDosage.forEach(
+          (InsulinDosage: {
+            time: Date;
+            typeOfInsulin: string;
+            unit: number;
+            bodySite: string;
+          }) => {
+            const payload = JSON.stringify({
+              title: `Insulin Dosage Reminder: ${InsulinDosage.typeOfInsulin} ${InsulinDosage.unit} for the ${InsulinDosage.bodySite} at ${InsulinDosage.time}`,
+            });
+            webPush
+              .sendNotification(subscription, payload)
+              .catch((error: any) => console.log(error));
+          }
+        );
       }
     }
 
@@ -221,14 +263,21 @@ export const sendUserReminders = async (req: Request, res: Response) => {
         },
       });
       if (userMedication.length > 0) {
-        userMedication.forEach((Medication: { Medication: any }) => {
-          const payload = JSON.stringify({
-            title: `Medication Reminder `,
-          });
-          webPush
-            .sendNotification(subscription, payload)
-            .catch((error: any) => console.log(error));
-        });
+        userMedication.forEach(
+          (Medication: {
+            medicationName: string;
+            time: Date;
+            dosage: number;
+            unit: string;
+          }) => {
+            const payload = JSON.stringify({
+              title: `Medication Reminder:  ${Medication.medicationName} for ${Medication.dosage} ${Medication.unit} at ${Medication.time}`,
+            });
+            webPush
+              .sendNotification(subscription, payload)
+              .catch((error: any) => console.log(error));
+          }
+        );
       }
     }
 
