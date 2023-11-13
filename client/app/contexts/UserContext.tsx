@@ -58,7 +58,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   // can remove the following line as we check for user in req. maybe no more use for user const too.
   const uid = user ? user.uid : null; // Access the UID if the user is authenticated
   const router = useRouter();
-  const {handleError, loading, handleLoading} = useProp();
+  const {handlePopUp, loading, handleLoading} = useProp();
   useEffect(() => {
     const fetchUserData = () => {
       handleLoading(true)
@@ -70,7 +70,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
                 handleLoading(false,1000)
           })
           .catch((error) => {
-           handleError(error.message);
+           handlePopUp('error',error.message);
             signOut(auth);
           });
       } else {
