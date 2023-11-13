@@ -43,7 +43,7 @@ describe("createNotificationPreference", () => {
     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch = mockFetch;
 
-    const result = await createNotificationPreference();
+    const result = await createNotificationPreference(mockUserId, mockToken);
 
     expect(mockFetch).toHaveBeenCalledWith(
       `${process.env.NEXT_PUBLIC_API_URL}/api/notifications/${mockUserId}`,
@@ -57,23 +57,6 @@ describe("createNotificationPreference", () => {
       }
     );
     expect(result).toEqual(mockNotificationPreferenceData);
-  });
-
-  it("should throw an error if the user is not signed in", async () => {
-    Object.defineProperty(auth, "currentUser", {
-      get: jest.fn().mockReturnValue(null),
-    });
-
-    const mockResponse = {
-      ok: true,
-      json: jest.fn().mockResolvedValue({}),
-    };
-    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
-    global.fetch = mockFetch;
-
-    await expect(createNotificationPreference()).rejects.toThrow(
-      "No user is currently signed in."
-    );
   });
 
   it("should throw an error if the activity journal entry creation fails", async () => {
@@ -95,7 +78,9 @@ describe("createNotificationPreference", () => {
     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch = mockFetch;
 
-    await expect(createNotificationPreference()).rejects.toThrow(
+    await expect(
+      createNotificationPreference(mockUserId, mockToken)
+    ).rejects.toThrow(
       `Failed to create notification preference for user. HTTP Status: ${mockResponse.status}`
     );
   });

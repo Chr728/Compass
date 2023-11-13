@@ -96,7 +96,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       }
     }
   };
-  const {handleLoading, handlePopUp} = useProp();
+  const { handleLoading, handlePopUp } = useProp();
 
   const login = (email: string, password: string) => {
     signInWithEmailAndPassword(auth, email, password)
@@ -113,7 +113,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.error(errorCode, errorMessage);
-        handlePopUp('error', errorMessage)
+        handlePopUp("error", errorMessage);
         handleLoading(false);
       });
   };
@@ -131,10 +131,10 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       handleLoading(false);
       router.push("/logout");
       console.log("Sign-out successful.");
-    } catch (error:any) {
+    } catch (error: any) {
       // Handle errors gracefully
-      console.error('Error signing out:', error);
-      handlePopUp('error','Error signing out:' + error.message)
+      console.error("Error signing out:", error);
+      handlePopUp("error", "Error signing out:" + error.message);
     }
   };
 
@@ -149,10 +149,10 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         const data = values;
         data.uid = user.uid;
         createUser(data)
-          .then((res) => {
+          .then(async (res) => {
             if (res !== null) {
               // Notification preference doesn't exist, create it
-              createNotificationPreference();
+              createNotificationPreference(userCredential.user.uid, userToken);
               // Subscribe user to push notifications if allowed
               subscribeToPushNotifications(userCredential.user.uid, userToken);
               handleLoading(false);
@@ -163,7 +163,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
             const errorCode = error.code;
             const errorMessage = error.message;
             console.log(errorCode, errorMessage);
-            handlePopUp('error', errorMessage)
+            handlePopUp("error", errorMessage);
             handleLoading(false);
           });
       })
@@ -176,7 +176,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);
-        handlePopUp('error', errorMessage)
+        handlePopUp("error", errorMessage);
       });
   };
 
