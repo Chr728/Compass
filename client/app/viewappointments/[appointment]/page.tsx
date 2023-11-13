@@ -12,6 +12,7 @@ import Custom403 from '@/app/pages/403';
 
 
 export default function Appointment( {params: { appointment } } : { params: { appointment: string } }) {
+  const logger = require('pino')();
   const { user } = useAuth();
   const router = useRouter();
   const [data, setData] = useState<Appointment>();
@@ -21,7 +22,7 @@ export default function Appointment( {params: { appointment } } : { params: { ap
        const appointmentData = await getAppointment(appointment);
        setData(appointmentData.data);
     } catch (error) {
-        console.log('Error fetching appointment');
+        logger.error('Error fetching appointment');
     }
 }
 

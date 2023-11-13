@@ -13,6 +13,7 @@ import Header from '../components/Header';
 import Menu from '../components/Menu';
 
 export default function CreateWeightJournalPage() {
+  const logger = require('pino')()
   const router = useRouter();
   const { user } = useAuth();
   
@@ -39,10 +40,10 @@ export default function CreateWeightJournalPage() {
           notes: values.notes,
         };
         const result = await createWeightJournal(data); 
-        console.log('Weight journal entry created:', result);
+        logger.info('Weight journal entry created:', result);
         router.push('/getWeightJournals');
       } catch (error) {
-        console.error('Error creating weight journal entry:', error);
+        logger.error('Error creating weight journal entry:', error);
       }
     },
   });

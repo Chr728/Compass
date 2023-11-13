@@ -38,6 +38,7 @@ interface UserContextProps {
   updateCurrentUser: (userData: EditableUserAttributes) => void;
 }
 
+const logger = require('pino')()
 const UserContext = createContext<UserContextProps | undefined>(undefined);
 
 export const useUser = () => {
@@ -88,11 +89,11 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     if (uid) {
       updateUser(userData)
         .then((response) => {
-          console.log('User updated successfully:', response);
+          logger.info('User updated successfully:', response);
           setUserInfo(response.data[1]);
         })
         .catch((error) => {
-         console.error('Error updating user:', error)
+         logger.error('Error updating user:', error)
         });
     }
   };

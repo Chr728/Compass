@@ -8,6 +8,7 @@ import Header from '../components/Header';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function CreateFoodJournalPage() {
+  const logger = require('pino')()
   const router = useRouter();
   const { user } = useAuth();
   
@@ -35,7 +36,7 @@ export default function CreateFoodJournalPage() {
         const result = await createFoodIntakeJournal(data); 
         router.push('/getFoodJournals');
       } catch (error) {
-        console.error('Error creating food journal entry:', error);
+        logger.error('Error creating food journal entry:', error);
       }
     },
   });

@@ -1,6 +1,8 @@
 import {ReactNode, useContext, useState, createContext} from 'react';
 import LoadingScreen from '@/app/components/AppWrapper/LoadingScreen';
 
+const logger = require('pino')()
+
 type PropContextType = {
     popUp: {
         show: boolean,
@@ -15,6 +17,7 @@ const PropContext = createContext<PropContextType>({} as PropContextType);
 export const useProp = () => {
     const context = useContext(PropContext);
     if (context === undefined) {
+        logger.error('useProp must be used within a PropProvider');
         throw new Error('useProp must be used within a PropProvider');
     }
     return context;

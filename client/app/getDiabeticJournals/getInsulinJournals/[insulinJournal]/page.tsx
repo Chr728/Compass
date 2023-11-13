@@ -17,6 +17,7 @@ import Custom403 from '@/app/pages/403';
 
 
 export default function GetInsulinJournal({params: { insulinJournal } } : { params: { insulinJournal: string } }) {
+  const logger = require('pino')();
   const { user } = useAuth();
   const router = useRouter();
   const [insulin, setinsulin] = useState<any>(null);
@@ -25,15 +26,17 @@ export default function GetInsulinJournal({params: { insulinJournal } } : { para
     try {
       const userId = user?.uid || '';
       const result = await getInsulinJournal(insulinJournal);
+      logger.info('Insulin journal entry retrieved successfully.');
       setinsulin(result.data);
     } catch (error) {
-      console.error('Error retrieving Insulin journal entry:', error);
+      logger.error('Error retrieving Insulin journal entry:', error);
     }
   }
 
   useEffect(() => {
     if (!user) {
       router.push("/login")
+      logger.warn('User not found.')
       alert('User not found.');
     } 
     if (user) {

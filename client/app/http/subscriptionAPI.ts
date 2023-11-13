@@ -1,4 +1,5 @@
 import { auth } from "../config/firebase";
+const logger = require("pino")();
 
 // Function to create a subscription object for push notifications for a user
 export async function createSubscription(
@@ -18,7 +19,11 @@ export async function createSubscription(
         body: JSON.stringify({ subscription: subscription }),
       }
     );
+    logger.http(`Subscription object created successfully for user ${userUID}`);
     if (!response.ok) {
+      logger.error(
+        `Failed to create subscription object for user. HTTP Status: ${response.status}`
+      );
       throw new Error(
         `Failed to create subscription object for user. HTTP Status: ${response.status}`
       );
@@ -26,7 +31,7 @@ export async function createSubscription(
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error creating subscription object:", error);
+    logger.error("Error creating subscription object:", error);
     throw error;
   }
 }
@@ -47,7 +52,11 @@ export async function getSubscription(
         },
       }
     );
+    logger.http(`Subscription object fetched successfully for user ${userUID}`);
     if (!response.ok) {
+      logger.error(
+        `Failed to retrieve subscription object for user. HTTP Status: ${response.status}`
+      );
       throw new Error(
         `Failed to retrieve subscription object for user. HTTP Status: ${response.status}`
       );
@@ -55,7 +64,7 @@ export async function getSubscription(
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching subscription object:", error);
+    logger.error("Error fetching subscription object:", error);
     throw error;
   }
 }
@@ -79,7 +88,11 @@ export async function updateSubscription(
         body: JSON.stringify({ subscription: subscription }),
       }
     );
+    logger.http(`Subscription object updated successfully for user ${userUID}`);
     if (!response.ok) {
+      logger.error(
+        `Failed to update subscription object for user. HTTP Status: ${response.status}`
+      );
       throw new Error(
         `Failed to update subscription object for user. HTTP Status: ${response.status}`
       );
@@ -87,7 +100,7 @@ export async function updateSubscription(
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error updating subscription object:", error);
+    logger.error("Error updating subscription object:", error);
     throw error;
   }
 }
@@ -97,6 +110,7 @@ export async function deleteSubscription(): Promise<any> {
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
+      logger.error("No user is currently signed in.");
       throw new Error("No user is currently signed in.");
     }
     const uid = currentUser.uid;
@@ -110,7 +124,11 @@ export async function deleteSubscription(): Promise<any> {
         },
       }
     );
+    logger.http(`Subscription object deleted successfully for user ${uid}`);
     if (!response.ok) {
+      logger.error(
+        `Failed to delete subscription object for user. HTTP Status: ${response.status}`
+      );
       throw new Error(
         `Failed to delete subscription object for user. HTTP Status: ${response.status}`
       );
@@ -118,7 +136,7 @@ export async function deleteSubscription(): Promise<any> {
     const data = await response.json();
     return { message: "Subscription object deleted successfully" };
   } catch (error) {
-    console.error("Error deleting subscription object:", error);
+    logger.error("Error deleting subscription object:", error);
     throw error;
   }
 }

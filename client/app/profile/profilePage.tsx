@@ -9,6 +9,8 @@ import Button from '../components/Button';
 import Menu from '../components/Menu';
 
 export default function Profile() {
+  const logger = require('pino')();
+
   const router = useRouter();
   const { user } = useAuth();
   const { userInfo} = useUser(); 
@@ -20,6 +22,7 @@ export default function Profile() {
       setProfile(userInfo);
     } else  {
       // Handle the error here by redirecting to the home page
+      logger.error('User not found.');
       alert('User  not found.');
       router.push('/');
     }

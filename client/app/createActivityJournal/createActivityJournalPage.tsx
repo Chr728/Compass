@@ -8,6 +8,8 @@ import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/Header';
 
 export default function CreateActivityJournalPage() {
+  const logger = require('pino')()
+
   const router = useRouter();
   const { user } = useAuth();
   
@@ -34,7 +36,7 @@ export default function CreateActivityJournalPage() {
         const result = await createActivityJournal(data); 
         router.push('/getActivityJournals');
       } catch (error) {
-        console.error('Error creating activity journal entry:', error);
+        logger.error('Error creating activity journal entry:', error);
       }
     },
   });

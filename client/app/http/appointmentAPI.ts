@@ -31,18 +31,17 @@ export async function getAppointments(userId: string): Promise<any>{
               },
             }
         );
-        logger.info(`Appointments fetched successfully for user ${userId}`)
+        logger.http(`Appointments fetched successfully for user ${userId}`)
         if (!response.ok) {
+          logger.error(`Failed to retrieve appointment. HTTP Status: ${response.status}`);
             throw new Error(
               `Failed to retrieve appointment. HTTP Status: ${response.status}`
             );
-            logger.error(`Failed to retrieve appointment. HTTP Status: ${response.status}`);
           }
         const data = await response.json();
         return data;
     } catch (error) {
         logger.error('Error fetching appointments:', error);
-        console.error('Error fetching appointments:', error);
         throw error;
       }
 }
@@ -52,6 +51,7 @@ export async function getAppointment(appointmentId: string ): Promise<any>{
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
+      logger.error('No user is currently signed in.');
       throw new Error('No user is currently signed in.');
     }
     const token = await currentUser.getIdToken();
@@ -65,7 +65,9 @@ export async function getAppointment(appointmentId: string ): Promise<any>{
         },
       }
     );
+    logger.http(`Appointment fetched successfully for user ${appointmentId}`)
     if (!response.ok) {
+      logger.error(`Failed to retrieve appointment. HTTP Status: ${response.status}`);
       throw new Error(
         `Failed to fetch the appointment data. HTTP Status: ${response.status}`
       );
@@ -73,7 +75,7 @@ export async function getAppointment(appointmentId: string ): Promise<any>{
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error('Error fetching appointment data:', error);
+      logger.error('Error fetching appointment data:', error);
       throw error;
       }
 
@@ -84,6 +86,7 @@ export async function createAppointment(userId: string, appointmentData: any): P
     try {
       const currentUser = auth.currentUser;
       if (!currentUser) {
+        logger.error('No user is currently signed in.');
         throw new Error('No user is currently signed in.');
       }
       const id = currentUser.uid;
@@ -100,7 +103,9 @@ export async function createAppointment(userId: string, appointmentData: any): P
             body: JSON.stringify(appointmentData),
           }
         );
+        logger.http(`Appointment created successfully for user ${userId}`)
         if (!response.ok) {
+          logger.error(`Failed to create appointment for user ${userId}. HTTP Status: ${response.status}`);
           throw new Error(
             `Failed to create appointment for user ${userId}. HTTP Status: ${response.status}`
           );
@@ -108,7 +113,7 @@ export async function createAppointment(userId: string, appointmentData: any): P
         const data = await response.json();
         return data;
       } catch (error) {
-        console.error('Error creating appointment', error);
+        logger.error('Error creating appointment', error);
         throw error;
       }
 }
@@ -118,6 +123,7 @@ export async function deleteAppointment(appointmentId: string): Promise<any>{
     try {
         const currentUser = auth.currentUser;
         if (!currentUser) {
+          logger.error('No user is currently signed in.');
           throw new Error('No user is currently signed in.');
         }
         const token = await currentUser.getIdToken();
@@ -130,7 +136,9 @@ export async function deleteAppointment(appointmentId: string): Promise<any>{
               },
           }
         );
+        logger.http(`Appointment deleted successfully for user ${appointmentId}`)
         if (!response.ok) {
+          logger.error(`Failed to delete the appointment. HTTP Status: ${response.status}`);
           throw new Error(
             `Failed to delete the appointment. HTTP Status: ${response.status}`
           );
@@ -139,7 +147,7 @@ export async function deleteAppointment(appointmentId: string): Promise<any>{
         // return data;
         return { message: 'Appointment entry deleted successfully' };
       } catch (error) {
-        console.error('Error deleting appointment', error);
+        logger.error('Error deleting appointment', error);
         throw error;
       }
 }
@@ -149,6 +157,7 @@ export async function updateAppointment(appointmentId: string, appointmentData: 
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
+      logger.error('No user is currently signed in.');
       throw new Error('No user is currently signed in.');
     }
     const token = await currentUser.getIdToken();
@@ -163,7 +172,9 @@ export async function updateAppointment(appointmentId: string, appointmentData: 
         body: JSON.stringify(appointmentData),
       }
     );
+    logger.http(`Appointment updated successfully for user ${appointmentId}`)
     if (!response.ok) {
+      logger.error(`Failed to update the appointment. HTTP Status: ${response.status}`);
       throw new Error(
         `Failed to update the appointment. HTTP Status: ${response.status}`
       );
@@ -171,7 +182,7 @@ export async function updateAppointment(appointmentId: string, appointmentData: 
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error updating appointment', error);
+    logger.error('Error updating appointment', error);
     throw error;
   }
 }

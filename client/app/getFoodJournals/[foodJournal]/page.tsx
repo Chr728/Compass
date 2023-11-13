@@ -16,6 +16,7 @@ import Custom403 from '@/app/pages/403';
 
 
 export default function GetFoodJournal({params: { foodJournal } } : { params: { foodJournal: string } }) {
+  const logger = require('pino')();
   const { user } = useAuth();
   const router = useRouter();
   const { userInfo } = useUser();
@@ -25,16 +26,17 @@ export default function GetFoodJournal({params: { foodJournal } } : { params: { 
     try {
       const userId = user?.uid || '';
       const result = await getFoodIntakeJournal(foodJournal);
-      console.log('Food journal entry retrieved:', result);
+      logger.log('Food journal entry retrieved:', result);
       setfood(result.data);
     } catch (error) {
-      console.error('Error retrieving Food journal entry:', error);
+      logger.error('Error retrieving Food journal entry:', error);
     }
   }
   // eslint-disable-next-line react-hooks/rules-of-hooks  
   useEffect(() => {
     if (!user) {
       router.push("/login")
+      logger.warn('User not found.')
       alert('User not found.');
     } 
     if (user) {

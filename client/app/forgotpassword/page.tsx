@@ -10,6 +10,7 @@ import { sendPasswordResetEmail } from "firebase/auth";
 import { useSearchParams } from "next/navigation";
 
 export default function ForgotPassword() {
+  const logger = require('pino')()
   const searchParams = useSearchParams();
 
   let errors: {
@@ -24,8 +25,7 @@ export default function ForgotPassword() {
       try {
         if (values.email) {
           sendPasswordResetEmail(auth, values.email).catch((error) => {
-            console.log(error.code);
-            console.log(error.message);
+            logger.error(error.code, error.message);
             if (error.code == "auth/user-not-found") {
               errors.email = "This email is not on record";
             }
@@ -33,7 +33,7 @@ export default function ForgotPassword() {
           setLoggedIn(false);
         }
       } catch (error) {
-        console.error("Login failed:", error);
+        logger.error("Login failed:", error);
       }
     },
     validate: (values) => {

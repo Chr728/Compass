@@ -16,6 +16,7 @@ import { Alert } from "@mui/material";
 
 // Logging out the user
 export default function NotificationPage() {
+  const logger = require('pino')()
   const router = useRouter();
   const { user } = useAuth();
 
@@ -78,20 +79,20 @@ export default function NotificationPage() {
       try {
         const userId = user?.uid || "";
         const result = await getNotificationPreference();
-        console.log("Retrieved notification preference of user:", result);
+        logger.info("Retrieved notification preference of user:", result)
         if (result && result.data) {
-          console.log(result.data.activityReminders);
+          logger.info(result.data.activityReminders);
           setActivityReminders(result.data.activityReminders);
           setMedicationReminders(result.data.medicationReminders);
           setAppointmentReminders(result.data.appointmentReminders);
           setFoodIntakeReminders(result.data.foodIntakeReminders);
           setBloodGlucoseReminders(result.data.glucoseMeasurementReminders);
           setInsulinInjectionReminders(result.data.insulinDosageReminders);
-          console.log("Notification preference information all set!");
+          logger.info("Notification preference information all set!");
         }
       } catch (error) {
-        console.log("Error retrieving notification preference of user:", error);
-        console.log(
+        logger.error("Error retrieving notification preference of user:", error);
+        logger.error(
           "No notification preference settings found for this user in the database. Attempting to create an entry for the user."
         );
         // Notification preference doesn't exist, create it
@@ -100,10 +101,7 @@ export default function NotificationPage() {
           console.log("Notification preference created:", createdResult);
           location.reload();
         } catch (error) {
-          console.error(
-            "Error creating notification preference of user:",
-            error
-          );
+          logger.error("Error creating notification preference of user:", error);
         }
       }
     }
@@ -121,10 +119,10 @@ export default function NotificationPage() {
         insulinDosageReminders: checkedInsulinInjectionReminders,
       };
       const result = await updateNotificationPreference(data);
-      console.log("Notification preference for user updated:", result);
+      logger.info("Notification preference for user updated:", result);
       setSuccessAlert(true);
     } catch (error) {
-      console.error("Error updating notification preference for user:", error);
+      logger.error("Error updating notification preference for user:", error);
       setErrorAlert(true);
     }
   };

@@ -17,6 +17,7 @@ import Custom403 from '@/app/pages/403';
 
 
 export default function GetActivityJournal({params: { activityJournal } } : { params: { activityJournal: string } }) {
+  const logger = require('pino')();
   const { user } = useAuth();
   const router = useRouter();
   const [activity, setactivity] = useState<any>(null);
@@ -25,15 +26,17 @@ export default function GetActivityJournal({params: { activityJournal } } : { pa
     try {
       const userId = user?.uid || '';
       const result = await getActivityJournal(activityJournal);
+      logger.info('activity journal entry retrieved:', result)
       setactivity(result.data);
     } catch (error) {
-      console.error('Error retrieving activity journal entry:', error);
+      logger.error('Error retrieving activity journal entry:', error);
     }
   }
 
   useEffect(() => {
     if (!user) {
       router.push("/login")
+      logger.warn('User not found.')
       alert('User not found.');
     } 
     if (user) {

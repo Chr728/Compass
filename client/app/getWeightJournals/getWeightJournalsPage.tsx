@@ -16,6 +16,7 @@ import ButtonMUI from '@mui/material/Button';
 
 
 export default function GetWeightJournalsPage() {
+  const logger = require('pino')();
   const router = useRouter();
   const { user } = useAuth();
   const { userInfo } = useUser();
@@ -23,6 +24,7 @@ export default function GetWeightJournalsPage() {
   
   useEffect(() => {
     if (!userInfo) {
+      logger.warn('User not found.')
       alert('User not found.');
     } 
   }, [userInfo, router]);
@@ -33,10 +35,10 @@ export default function GetWeightJournalsPage() {
       try {
         const userId = user?.uid || '';
         const result = await getWeightJournals();    
-        console.log('All Weight journals entry retrieved:', result);
+        logger.log('All Weight journals entry retrieved:', result);
         setweight(result.data);
       } catch (error) {
-        console.error('Error retrieving weight journal entry:', error);
+        logger.error('Error retrieving weight journal entry:', error);
       }
     }
       fetchWeightJournals();

@@ -18,6 +18,7 @@ import { formatDateYearMonthDate } from '@/app/helpers/utils/datetimeformat';
 
 
 export default function EditInsulinJournal({params: { insulinJournal } } : { params: { insulinJournal: string } }) {
+  const logger = require('pino')();
   const { user } = useAuth();
   const router = useRouter();
   const [insulin, setinsulin] = useState<any>(null);
@@ -27,16 +28,17 @@ export default function EditInsulinJournal({params: { insulinJournal } } : { par
     try {
       const userId = user?.uid || '';
       const result = await getInsulinJournal(insulinJournal);
-      console.log('Insulin journal entry retrieved:', result);
+      logger.log('Insulin journal entry retrieved:', result);
       setinsulin(result.data);
     } catch (error) {
-      console.error('Error retrieving Insulin journal entry:', error);
+      logger.error('Error retrieving Insulin journal entry:', error);
     }
   }
 
   useEffect(() => {  
     if (!user) {
       router.push('/login')
+      logger.warn('User not found.')
       alert('User not found.');
     }
     if (user) {

@@ -38,7 +38,6 @@ export default function ViewAppointmentsPage() {
                 logger.info('All appointments retrieved:', appointmentData.data)
                 setData(appointmentData.data);
             } catch (error) {
-                console.log('Error fetching appointments');
                 logger.error('Error fetching appointments', error);
             }
         }
@@ -52,7 +51,7 @@ export default function ViewAppointmentsPage() {
             setData(newData);
             router.push('/viewappointments');
         } catch(error){
-            console.log('Error deleting appointment');
+            logger.error('Error deleting appointment');
         }
     }
 

@@ -16,6 +16,7 @@ import Custom403 from '@/app/pages/403';
 
 
 export default function GetWeightJournal({params: { weightJournal } } : { params: { weightJournal: string } }) {
+  const logger = require('pino')();
   const { user } = useAuth();
   const router = useRouter();
   const { userInfo } = useUser();
@@ -25,10 +26,10 @@ export default function GetWeightJournal({params: { weightJournal } } : { params
     try {
       const userId = user?.uid || '';
       const result = await getWeightJournal(weightJournal);
-      console.log('Weight journal entry retrieved:', result);
+      logger.log('Weight journal entry retrieved:', result);
       setweight(result.data);
     } catch (error) {
-      console.error('Error retrieving weight journal entry:', error);
+      logger.error('Error retrieving weight journal entry:', error);
     }
   }
 
@@ -36,6 +37,7 @@ export default function GetWeightJournal({params: { weightJournal } } : { params
   useEffect(() => {
     if (!user) {
       router.push("/login")
+      logger.warn('User not found.')
       alert('User not found.');
     } 
     if (user) {

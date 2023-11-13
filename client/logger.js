@@ -9,7 +9,12 @@ const levels = {
   fatal: 60,
 };
 
-module.exports = pinoLogger(
+const fileTransport = pino.transport({
+  target: 'pino/file',
+  options: { destination: `${__dirname}/app.log` },
+});
+
+module.exports = pino(
   {
     customLevels: levels, 
     useOnlyCustomLevels: true,
@@ -20,5 +25,5 @@ module.exports = pinoLogger(
       translateTime: 'yyyy-dd-mm, h:MM:ss TT',
     },
   },
-  pino.destination("./pino-logger.log")
+  fileTransport
 );
