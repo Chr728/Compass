@@ -1,5 +1,5 @@
 import { auth } from '../config/firebase';
-const logger = require('../../logger')();
+const logger = require('../../logger');
 
 export async function getUser() {
     const url = process.env.NEXT_PUBLIC_API_URL

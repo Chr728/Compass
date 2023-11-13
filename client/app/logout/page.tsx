@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 
 // Logging out the user
 export default function Logout() {
-  const logger = require('pino')()
+  const logger = require('../../logger');
   const { logout, user } = useAuth();
   
   const handleLogout = async () => {

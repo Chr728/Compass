@@ -22,7 +22,7 @@ import { createUserAttributes } from "@/app/lib/Models/User";
 import { createNotificationPreference } from "../http/notificationPreferenceAPI";
 import { useProp } from "./PropContext";
 
-const logger = require('pino')()
+const logger = require('../../logger');
 interface AuthContextProps {
   user: User | null;
   login: (email: string, password: string) => void;

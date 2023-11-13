@@ -15,7 +15,7 @@ import Menu from '../../components/Menu';
 import { formatDate, formatMilitaryTime } from '../../helpers/utils/datetimeformat';
 
 export default function GetInsulinJournalsPage() {
-  const logger = require('pino')();
+  const logger = require('../../logger');;
   const router = useRouter();
   const { user } = useAuth();
   const { userInfo } = useUser();

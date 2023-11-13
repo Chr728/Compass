@@ -1,5 +1,5 @@
 import {auth} from '../config/firebase'
-const logger = require('pino')();
+const logger = require('../../logger');;
 
 export const updateUser = async (userData: any) => {
     const currentUser = auth.currentUser;

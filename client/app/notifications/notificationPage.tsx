@@ -16,7 +16,7 @@ import { Alert } from "@mui/material";
 
 // Logging out the user
 export default function NotificationPage() {
-  const logger = require('pino')()
+  const logger = require('../../logger');
   const router = useRouter();
   const { user } = useAuth();
 

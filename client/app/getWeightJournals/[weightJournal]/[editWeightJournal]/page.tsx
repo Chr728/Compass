@@ -16,7 +16,7 @@ import Custom403 from '@/app/pages/403';
 
 
 export default function EditWeightJournal({params: { weightJournal } } : { params: { weightJournal: string } }) {
-  const logger = require('pino')();
+  const logger = require('../../logger');;
   const { user } = useAuth();
   const router = useRouter();
   const [weight, setweight] = useState<any>(null);

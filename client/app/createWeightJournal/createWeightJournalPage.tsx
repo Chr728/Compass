@@ -13,7 +13,7 @@ import Header from '../components/Header';
 import Menu from '../components/Menu';
 
 export default function CreateWeightJournalPage() {
-  const logger = require('pino')()
+  const logger = require('../../logger');
   const router = useRouter();
   const { user } = useAuth();
   

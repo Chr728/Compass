@@ -8,7 +8,7 @@ import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/Header';
 
 export default function CreateActivityJournalPage() {
-  const logger = require('pino')()
+  const logger = require('../../logger');
 
   const router = useRouter();
   const { user } = useAuth();

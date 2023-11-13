@@ -1,7 +1,7 @@
 import {ReactNode, useContext, useState, createContext} from 'react';
 import LoadingScreen from '@/app/components/AppWrapper/LoadingScreen';
 
-const logger = require('pino')()
+const logger = require('../../logger');
 
 type PropContextType = {
     popUp: {

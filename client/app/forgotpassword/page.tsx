@@ -10,7 +10,7 @@ import { sendPasswordResetEmail } from "firebase/auth";
 import { useSearchParams } from "next/navigation";
 
 export default function ForgotPassword() {
-  const logger = require('pino')()
+  const logger = require('../../logger');
   const searchParams = useSearchParams();
 
   let errors: {

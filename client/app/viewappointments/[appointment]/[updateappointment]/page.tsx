@@ -14,7 +14,7 @@ import Custom403 from '@/app/pages/403';
 
 
 export default function UpdateAppointment(  {params: { appointment } } : { params: { appointment: string }} ) { 
-    const logger = require('pino')();  
+    const logger = require('../../logger');;  
     const { user } = useAuth()
     const router = useRouter();
     const [data, setData] = useState<Appointment>();

@@ -17,7 +17,7 @@ import Custom403 from '@/app/pages/403';
 
 
 export default function GetInsulinJournal({params: { insulinJournal } } : { params: { insulinJournal: string } }) {
-  const logger = require('pino')();
+  const logger = require('../../../../logger');;
   const { user } = useAuth();
   const router = useRouter();
   const [insulin, setinsulin] = useState<any>(null);

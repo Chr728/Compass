@@ -17,7 +17,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 
 export default function ViewAppointmentsPage() {
-    const logger = require('pino')()
+    const logger = require('../../logger');
     const { user } = useAuth();
     useEffect(() =>{
         if (!user) 

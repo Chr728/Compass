@@ -8,7 +8,7 @@ import Header from '../components/Header';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function CreateFoodJournalPage() {
-  const logger = require('pino')()
+  const logger = require('../../logger');
   const router = useRouter();
   const { user } = useAuth();
   

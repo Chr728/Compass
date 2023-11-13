@@ -38,7 +38,7 @@ interface UserContextProps {
   updateCurrentUser: (userData: EditableUserAttributes) => void;
 }
 
-const logger = require('pino')()
+const logger = require('../../logger');
 const UserContext = createContext<UserContextProps | undefined>(undefined);
 
 export const useUser = () => {

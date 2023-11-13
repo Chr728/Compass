@@ -16,7 +16,7 @@ import Custom403 from '@/app/pages/403';
 
 
 export default function EditFoodJournal({params: { foodJournal } } : { params: { foodJournal: string } }) {
-  const logger = require('pino')();
+  const logger = require('../../logger');;
   const { user } = useAuth();
   const router = useRouter();
   const [food, setfood] = useState<any>(null);

@@ -9,7 +9,7 @@ export interface Appointment {
     uid:string;
 }
 
-const logger = require('pino')()
+const logger = require('../../logger');
 
 
 // Function to get all appointments of a user

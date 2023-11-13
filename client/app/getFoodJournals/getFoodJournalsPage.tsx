@@ -15,7 +15,7 @@ import { formatDate, formatMilitaryTime } from '../helpers/utils/datetimeformat'
 
 
 export default function GetFoodJournalsPage() {
-  const logger = require('pino')();
+  const logger = require('../../logger');;
   const router = useRouter();
   const { user } = useAuth();
   const { userInfo } = useUser();
