@@ -148,11 +148,14 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         const userToken = await userCredential.user.getIdToken();
         const data = values;
         data.uid = user.uid;
-        createUser(data)
+        await createUser(data)
           .then(async (res) => {
             if (res !== null) {
               // Notification preference doesn't exist, create it
-              createNotificationPreference(userCredential.user.uid, userToken);
+              await createNotificationPreference(
+                userCredential.user.uid,
+                userToken
+              );
               // Subscribe user to push notifications if allowed
               subscribeToPushNotifications(userCredential.user.uid, userToken);
               handleLoading(false);
