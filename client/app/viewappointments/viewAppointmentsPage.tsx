@@ -107,13 +107,13 @@ export default function ViewAppointmentsPage() {
                         <TableCell>
                             <div>
                                 Date/Time
-                                <MdKeyboardArrowDown className="inline-block text-[28px] text-darkgrey" />
+                                <MdKeyboardArrowDown className="inline-block text-[24px] text-darkgrey" />
                             </div>
                         </TableCell>
                         <TableCell>
                             <div>
                             Appointment
-                            <MdKeyboardArrowDown className="inline-block text-[28px] text-darkgrey" />
+                            <MdKeyboardArrowDown className="inline-block text-[24px] text-darkgrey" />
                             </div>
                         </TableCell>
                         <TableCell></TableCell>
