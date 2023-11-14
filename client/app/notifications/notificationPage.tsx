@@ -1,9 +1,7 @@
 "use client";
-import Link from "next/link";
 import Header from "../components/Header";
 import { useRouter } from "next/navigation";
 import Button from "../components/Button";
-import Menu from "../components/Menu";
 import Switch from "@mui/material/Switch";
 import React, { useEffect, useState } from "react";
 import {
@@ -13,11 +11,73 @@ import {
 } from "../http/notificationPreferenceAPI";
 import { useAuth } from "../contexts/AuthContext";
 import { Alert } from "@mui/material";
+import { useProp } from "../contexts/PropContext";
 
 // Logging out the user
 export default function NotificationPage() {
   const router = useRouter();
   const { user } = useAuth();
+  const { handlePopUp } = useProp();
+
+  // Function to subscribe users to push notifications
+  const subscribeToPushNotifications = async () => {
+    // Ask user permission for push notifications
+    if ("Notification" in window) {
+      const currentPermission = Notification.permission;
+      // Ask permission if its set to default or denied
+      if (currentPermission === "default" || currentPermission === "denied") {
+        Notification.requestPermission().then(function (permission) {
+          if (permission === "granted") {
+            // Permission has been granted. Send request to create subscription object for user
+            if (
+              "serviceWorker" in navigator &&
+              navigator.serviceWorker.controller
+            ) {
+              // Request user to turn on their notifications
+              navigator.serviceWorker.controller.postMessage({
+                action: "subscribeToPush",
+              });
+              handlePopUp("success", "Notification subscription created!");
+            } else {
+              // Handle the case where serviceWorker or controller is not available.
+              console.error("Service Worker or controller is not available.");
+              handlePopUp(
+                "error",
+                "Notification subscription failed to create!"
+              );
+            }
+          } else if (permission === "denied") {
+            // Permission has been denied.
+            console.log("Notification permission denied.");
+            // Unsubscribe a user from push notifications
+            if (
+              "serviceWorker" in navigator &&
+              navigator.serviceWorker.controller
+            ) {
+              navigator.serviceWorker.controller.postMessage({
+                action: "unsubscribeFromPush",
+              });
+            }
+            setSubscriptionReminders(false);
+            handlePopUp(
+              "error",
+              "Notification permission denied, please reset permissions in your browser if you want to enable the feature!"
+            );
+          } else if (permission === "default") {
+            // The user closed the permission dialog without making a choice.
+            console.log("Notification permission dismissed.");
+            setSubscriptionReminders(false);
+          }
+        });
+      } else {
+        handlePopUp(
+          "error",
+          "To turn off notifications, please change your settings in your browser!"
+        );
+        setSubscriptionReminders(false);
+      }
+    }
+  };
 
   // Alerts
   const [successAlert, setSuccessAlert] = useState(false);
@@ -34,6 +94,9 @@ export default function NotificationPage() {
     React.useState(true);
 
   const [checkedInsulinInjectionReminders, setInsulinInjectionReminders] =
+    React.useState(true);
+
+  const [checkedSubscriptionReminders, setSubscriptionReminders] =
     React.useState(true);
 
   const handleActivityRemindersChange = async (
@@ -72,6 +135,13 @@ export default function NotificationPage() {
     setInsulinInjectionReminders(event.target.checked);
   };
 
+  const handleSubcriptionReminders = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSubscriptionReminders(event.target.checked);
+    subscribeToPushNotifications();
+  };
+
   // Retrieve notification preference information, if it doesnt exist, create it
   useEffect(() => {
     async function fetchNotificationPreference() {
@@ -89,8 +159,29 @@ export default function NotificationPage() {
           setInsulinInjectionReminders(result.data.insulinDosageReminders);
           console.log("Notification preference information all set!");
         }
+
+        // Get current notification permissions
+        if ("Notification" in window) {
+          const currentPermission = Notification.permission;
+          if (
+            currentPermission === "default" ||
+            currentPermission === "denied"
+          ) {
+            setSubscriptionReminders(false);
+          } else {
+            setSubscriptionReminders(true);
+          }
+        }
       } catch (error) {
-        console.log("Error retrieving notification preference of user:", error);
+        // Notification preference doesn't exist, create it
+        try {
+          const createdResult = await createNotificationPreference(); // Assuming createNotificationPreference handles creation
+        } catch (error) {
+          console.error(
+            "Error creating notification preference of user:",
+            error
+          );
+        }
       }
     }
     fetchNotificationPreference();
@@ -107,7 +198,6 @@ export default function NotificationPage() {
         insulinDosageReminders: checkedInsulinInjectionReminders,
       };
       const result = await updateNotificationPreference(data);
-      console.log("Notification preference for user updated:", result);
       setSuccessAlert(true);
     } catch (error) {
       console.error("Error updating notification preference for user:", error);
@@ -148,6 +238,16 @@ export default function NotificationPage() {
         )}
       </div>
       <div className="rounded-3xl bg-white flex flex-col m-auto w-full sm:max-w-[800px] h-[600px] p-8 mt-10 shadow-sm ">
+        <div className="m-4">
+          <Switch
+            checked={checkedSubscriptionReminders}
+            onChange={handleSubcriptionReminders}
+            inputProps={{ "aria-label": "ActvitySwitch" }}
+          />
+          <span className="text-darkgrey text-base not-italic font-medium font-IBM Plex Sans text-lg ">
+            Enable Push Notifications
+          </span>
+        </div>
         <div className="m-4">
           <Switch
             checked={checkedActivityReminders}

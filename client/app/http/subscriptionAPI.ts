@@ -1,19 +1,21 @@
 import { auth } from "../config/firebase";
 
 // Function to create a subscription object for push notifications for a user
-export async function createSubscription(
-  userUID: any,
-  userToken: any,
-  subscription: any
-): Promise<any> {
+export async function createSubscription(subscription: any): Promise<any> {
   try {
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      throw new Error("No user is currently signed in.");
+    }
+    const uid = currentUser.uid;
+    const token = await currentUser.getIdToken();
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/subscription/${userUID}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/subscription/${uid}`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${userToken}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ subscription: subscription }),
       }
@@ -32,18 +34,21 @@ export async function createSubscription(
 }
 
 // Function to get subscription object of a user
-export async function getSubscription(
-  userUID: any,
-  userToken: any
-): Promise<any> {
+export async function getSubscription(): Promise<any> {
   try {
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      throw new Error("No user is currently signed in.");
+    }
+    const uid = currentUser.uid;
+    const token = await currentUser.getIdToken();
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/subscription/${userUID}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/subscription/${uid}`,
       {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${userToken}`,
+          Authorization: `Bearer ${token}`,
         },
       }
     );
@@ -61,20 +66,21 @@ export async function getSubscription(
 }
 
 // Function to update a subscription object for push notifications for a user
-export async function updateSubscription(
-  userUID: any,
-  userToken: any,
-  subscription: any
-): Promise<any> {
+export async function updateSubscription(subscription: any): Promise<any> {
   try {
-    const subscriptionData = { ...subscription };
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      throw new Error("No user is currently signed in.");
+    }
+    const uid = currentUser.uid;
+    const token = await currentUser.getIdToken();
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/subscription/${userUID}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/subscription/${uid}`,
       {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${userToken}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ subscription: subscription }),
       }

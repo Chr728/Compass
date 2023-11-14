@@ -254,7 +254,7 @@ function urlBase64ToUint8Array(base64String) {
 }
 
 // Function to subscribe a user to push notifications
-function subscribeUserToPush(userUID, userToken) {
+function subscribeUserToPush() {
   // Register user for push notifications
   return self.registration.pushManager
     .subscribe({
@@ -288,12 +288,12 @@ function subscribeUserToPush(userUID, userToken) {
 
       try {
         // Check if subscription exists in the database for the user
-        const result = await getSubscription(userUID, userToken);
+        const result = await getSubscription();
         if (result && result.data) {
           console.log("Found subscription object of the user");
           console.log("Attempting to update it...");
           try {
-            await updateSubscription(userUID, userToken, subscriptionData);
+            await updateSubscription(subscriptionData);
             console.log("Updated subscription object of user");
           } catch (error) {
             console.log("Error updating subscription object of user:", error);
@@ -303,7 +303,7 @@ function subscribeUserToPush(userUID, userToken) {
         console.log("Error retrieving subscription object of user:", error);
         console.log("Attempting to create subscription object for user");
         try {
-          await createSubscription(userUID, userToken, subscriptionData);
+          await createSubscription(subscriptionData);
           console.log("Subscription for user created!");
         } catch (error) {
           console.error("Error creating subscription object for user:", error);
@@ -321,8 +321,13 @@ function unsubscribeUserFromPush() {
     .getSubscription()
     .then(async (subscription) => {
       try {
-        await deleteSubscription();
-        console.log("Unsubscribed from push notifications.");
+        const result = await getSubscription();
+        if (result && result.data) {
+          console.log("Found subscription object of the user");
+          console.log("Attempting to delete it...");
+          await deleteSubscription();
+          console.log("Unsubscribed from push notifications.");
+        }
       } catch (error) {
         console.error("Unsubscription task failed:", error);
       }
@@ -336,9 +341,7 @@ function unsubscribeUserFromPush() {
 self.addEventListener("message", (event) => {
   // Event to subscribe user to push notifications
   if (event.data.action === "subscribeToPush") {
-    event.waitUntil(
-      subscribeUserToPush(event.data.userUID, event.data.userToken)
-    );
+    event.waitUntil(subscribeUserToPush());
   }
 
   // Event to unsubscribe a user to push notifications
@@ -357,7 +360,7 @@ function runTaskEvery30Minutes() {
 // Schedule the task to run every 30 minutes
 setInterval(() => {
   runTaskEvery30Minutes();
-}, 30 * 60 * 1000); // 30 minutes in milliseconds
+}, 1 * 60 * 1000); // 30 minutes in milliseconds
 
 // Event listener for push notifications
 self.addEventListener("push", (event) => {

@@ -1,13 +1,16 @@
 import { auth } from "../config/firebase";
 
 // Function to create a notification preference of a user
-export async function createNotificationPreference(
-  userUID: any,
-  token: any
-): Promise<any> {
+export async function createNotificationPreference(): Promise<any> {
   try {
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      throw new Error("No user is currently signed in.");
+    }
+    const uid = currentUser.uid;
+    const token = await currentUser.getIdToken();
     const dataToBeStringified = {
-      uid: userUID,
+      uid: uid,
       activityReminders: true,
       medicationReminders: true,
       appointmentReminders: true,
@@ -15,7 +18,7 @@ export async function createNotificationPreference(
     };
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/notifications/${userUID}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/notifications/${uid}`,
       {
         method: "POST",
         headers: {
