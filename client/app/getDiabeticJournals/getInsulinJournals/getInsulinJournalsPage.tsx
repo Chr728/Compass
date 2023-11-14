@@ -34,7 +34,7 @@ export default function GetInsulinJournalsPage() {
       try {
         const userId = user?.uid || '';
         const result = await getInsulinJournals();    
-        logger.log('All Insulin journals entry retrieved:', result);
+        logger.info('All Insulin journals entry retrieved:', result);
         setinsulin(result.data);
       } catch (error) {
         logger.error('Error retrieving insulin journal entry:', error);

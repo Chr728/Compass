@@ -34,7 +34,7 @@ export default function GetGlucoseJournalsPage() {
       try {
         const userId = user?.uid || '';
         const result = await getGlucoseJournals();    
-        logger.log('All Glucose journals entry retrieved:', result);
+        logger.info('All Glucose journals entry retrieved:', result);
         setglucose(result.data);
       } catch (error) {
         logger.error('Error retrieving glucose journal entry:', error);

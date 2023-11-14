@@ -26,7 +26,7 @@ export default function GetFoodJournal({params: { foodJournal } } : { params: { 
     try {
       const userId = user?.uid || '';
       const result = await getFoodIntakeJournal(foodJournal);
-      logger.log('Food journal entry retrieved:', result);
+      logger.info('Food journal entry retrieved:', result);
       setfood(result.data);
     } catch (error) {
       logger.error('Error retrieving Food journal entry:', error);

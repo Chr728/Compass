@@ -26,7 +26,7 @@ export default function EditGlucoseJournal({params: { glucoseJournal } } : { par
     try {
       const userId = user?.uid || '';
       const result = await getGlucoseJournal(glucoseJournal);
-      logger.log('Glucose journal entry retrieved:', result);
+      logger.info('Glucose journal entry retrieved:', result);
       setglucose(result.data);
     } catch (error) {
       logger.error('Error retrieving glucose journal entry:', error);

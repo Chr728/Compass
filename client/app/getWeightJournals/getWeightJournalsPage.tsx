@@ -35,10 +35,11 @@ export default function GetWeightJournalsPage() {
       try {
         const userId = user?.uid || '';
         const result = await getWeightJournals();    
-        logger.log('All Weight journals entry retrieved:', result);
+        logger.info('All Weight journals entry retrieved:', result);
         setweight(result.data);
       } catch (error) {
-        logger.error('Error retrieving weight journal entry:', error);
+        console.log('Error retrieving weight journal entry:', error);
+        // logger.error('Error retrieving weight journal entry:', error);
       }
     }
       fetchWeightJournals();

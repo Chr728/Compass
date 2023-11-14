@@ -34,7 +34,7 @@ export default function GetFoodJournalsPage() {
       try {
         const userId = user?.uid || '';
         const result = await getFoodIntakeJournals();    
-        logger.log('All Food journals entry retrieved:', result);
+        logger.info('All Food journals entry retrieved:', result);
         setfood(result.data);
       } catch (error) {
         logger.error('Error retrieving food journal entry:', error);

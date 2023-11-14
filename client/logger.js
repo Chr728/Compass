@@ -1,5 +1,6 @@
 const pino = require('pino');
 
+//working config
 module.exports = pino(
   {
     browser: {
@@ -9,6 +10,44 @@ module.exports = pino(
   },
 );
   
+// module.exports = pino ( 
+//   {
+//     transport: {
+//       target: "pino-pretty",
+//       options: {
+//         translateTime: "yyyy-dd-mm, h:MM:ss TT",
+//         ignore: "pid, hostname",
+//         destination: "./pino-logger.log",
+//       }
+//     }
+//   }
+// )
+
+// breaks numerous tests
+// module.exports = pino ( 
+//   {
+//     transport: {
+//       targets: [
+//         {
+//           target: "pino-pretty",
+//           options: {
+//             translateTime: "yyyy-dd-mm, h:MM:ss TT",
+//             ignore: "pid, hostname",
+//           }
+//         },
+//         {
+//           target: "pino/file",
+//           options: {
+//             translateTime: "yyyy-dd-mm, h:MM:ss TT",
+//             ignore: "pid, hostname",
+//             destination: "./pino-logger.log",
+//           }
+//         }
+//       ]
+//     }
+//   }
+// )
+
   //code below is deprecated for the time being
   //pino destination and pino transport is not working
 

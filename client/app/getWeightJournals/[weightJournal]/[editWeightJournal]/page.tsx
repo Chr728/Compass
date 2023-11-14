@@ -26,7 +26,7 @@ export default function EditWeightJournal({params: { weightJournal } } : { param
     try {
       const userId = user?.uid || '';
       const result = await getWeightJournal(weightJournal);
-      logger.log('Weight journal entry retrieved:', result);
+      logger.info('Weight journal entry retrieved:', result);
       setweight(result.data);
     } catch (error) {
       logger.error('Error retrieving weight journal entry:', error);
