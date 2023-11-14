@@ -98,7 +98,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       }
     }
   };
-  const {handleLoading, handlePopUp} = useProp();
+  const { handleLoading, handlePopUp } = useProp();
 
   const login = (email: string, password: string) => {
     signInWithEmailAndPassword(auth, email, password)
@@ -133,10 +133,10 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       handleLoading(false);
       router.push("/logout");
       logger.info("Sign-out successful.");
-    } catch (error) {
+    } catch (error: any) {
       // Handle errors gracefully
       logger.error("Error signing out:", error);
-      logger.info("Sign-out successful.");
+      handlePopUp("error", "Error signing out:" + error.message);
     }
   };
 
@@ -150,11 +150,14 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         const userToken = await userCredential.user.getIdToken();
         const data = values;
         data.uid = user.uid;
-        createUser(data)
-          .then((res) => {
+        await createUser(data)
+          .then(async (res) => {
             if (res !== null) {
               // Notification preference doesn't exist, create it
-              createNotificationPreference();
+              await createNotificationPreference(
+                userCredential.user.uid,
+                userToken
+              );
               // Subscribe user to push notifications if allowed
               subscribeToPushNotifications(userCredential.user.uid, userToken);
               handleLoading(false);

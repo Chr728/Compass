@@ -92,17 +92,6 @@ export default function NotificationPage() {
         }
       } catch (error) {
         logger.error("Error retrieving notification preference of user:", error);
-        logger.error(
-          "No notification preference settings found for this user in the database. Attempting to create an entry for the user."
-        );
-        // Notification preference doesn't exist, create it
-        try {
-          const createdResult = await createNotificationPreference(); // Assuming createNotificationPreference handles creation
-          console.log("Notification preference created:", createdResult);
-          location.reload();
-        } catch (error) {
-          logger.error("Error creating notification preference of user:", error);
-        }
       }
     }
     fetchNotificationPreference();
