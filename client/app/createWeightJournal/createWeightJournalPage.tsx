@@ -160,9 +160,10 @@ export default function CreateWeightJournalPage() {
       id="unit"
       style={{
         width: '100%',
+         height: '50px',
         border: '1px solid #DBE2EA', // Border style
         borderRadius: '5px',
-        marginTop: '5px',
+        marginTop: '2px',
       }}
       onChange={formik.handleChange}
       onBlur={formik.handleBlur}
