@@ -15,7 +15,7 @@ import { formatDate, formatMilitaryTime } from '../../helpers/utils/datetimeform
 
 
 export default function GetGlucoseJournalsPage() {
-  const logger = require('../../../logger');;
+  const logger = require('../../../logger');
   const router = useRouter();
   const { user } = useAuth();
   const { userInfo } = useUser();

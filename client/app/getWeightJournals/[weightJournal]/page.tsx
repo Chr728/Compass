@@ -16,7 +16,7 @@ import Custom403 from '@/app/pages/403';
 
 
 export default function GetWeightJournal({params: { weightJournal } } : { params: { weightJournal: string } }) {
-  const logger = require('../../../logger');;
+  const logger = require('../../../logger');
   const { user } = useAuth();
   const router = useRouter();
   const { userInfo } = useUser();

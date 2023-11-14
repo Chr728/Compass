@@ -9,7 +9,7 @@ import Button from '../components/Button';
 import Menu from '../components/Menu';
 
 export default function Profile() {
-  const logger = require('../../logger');;
+  const logger = require('../../logger');
 
   const router = useRouter();
   const { user } = useAuth();

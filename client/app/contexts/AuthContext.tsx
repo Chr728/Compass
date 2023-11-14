@@ -115,7 +115,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         logger.error(errorCode, errorMessage);
-        handleError(errorMessage);
+        handlePopUp('error', errorMessage);
         handleLoading(false);
       });
   };
@@ -165,7 +165,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
             const errorCode = error.code;
             const errorMessage = error.message;
             logger.error(errorCode, errorMessage);
-            handleError(errorMessage);
+            handlePopUp('error', errorMessage);
             handleLoading(false);
           });
       })
@@ -178,7 +178,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         logger.error(errorCode, errorMessage);
-        handleError(errorMessage);
+        handlePopUp('error', errorMessage);
       });
   };
 

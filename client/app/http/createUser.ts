@@ -1,5 +1,5 @@
 import { auth } from '../config/firebase';
-const logger = require('../../logger');;
+const logger = require('../../logger');
 
 export const createUser = async (body:any) => {
     try {

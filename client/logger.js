@@ -1,4 +1,5 @@
-const pino = require('pino');
+// const pino = require('pino');
+import { pino, destination } from "pino";
 
 const levels = {
   http: 10,
@@ -9,25 +10,42 @@ const levels = {
   fatal: 60,
 };
 
-// const transport = pino.transport({
-//   targets: [{
-//     target: '#pino/file',
+// const logger = pino(
+//   {
+//     customLevels: levels, 
+//     useOnlyCustomLevels: true,
+//     prettyPrint: {
+//       colorize: true,
+//       levelFirst: true,
+//       translateTime: "yyyy-dd-mm, h:MM:ss TT",
+//     },
+//   },
+//   destination("./pino-logger.log")
+// );
+
+// export default logger;
+
+// const transporter = pino.transport({
+//     target: './transport_config.mjs',
 //     options: {
-//       destination: `${__dirname}/app.log`
+//       destination: `./logs/app.log`,
+//       append: true,
 //     }
-//   }]
 // });
 
-// const logger = pino(transport);
+// pino(transporter);
 
 module.exports = pino(
   {
     customLevels: levels, 
     useOnlyCustomLevels: true,
-    prettyPrint: {
-      colorize: true, 
-      levelFirst: true,
-      translateTime: 'yyyy-dd-mm, h:MM:ss TT',
+    transport: {
+      target: 'pino-pretty',
+      options: {
+        colorize: true, 
+        levelFirst: true,
+        translateTime: 'yyyy-dd-mm, h:MM:ss TT',
+      },
     },
   },
 );

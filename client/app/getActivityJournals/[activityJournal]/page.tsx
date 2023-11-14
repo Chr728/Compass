@@ -17,7 +17,7 @@ import Custom403 from '@/app/pages/403';
 
 
 export default function GetActivityJournal({params: { activityJournal } } : { params: { activityJournal: string } }) {
-  const logger = require('../../../logger');;
+  const logger = require('../../../logger');
   const { user } = useAuth();
   const router = useRouter();
   const [activity, setactivity] = useState<any>(null);

@@ -18,7 +18,7 @@ import { formatDateYearMonthDate } from '@/app/helpers/utils/datetimeformat';
 
 
 export default function EditInsulinJournal({params: { insulinJournal } } : { params: { insulinJournal: string } }) {
-  const logger = require('../../logger');;
+  const logger = require('../../logger');
   const { user } = useAuth();
   const router = useRouter();
   const [insulin, setinsulin] = useState<any>(null);

@@ -18,7 +18,7 @@ import { formatDateYearMonthDate } from '@/app/helpers/utils/datetimeformat';
 
 
 export default function EditActivityJournal({params: { activityJournal } } : { params: { activityJournal: string } }) {
-  const logger = require('../../logger');;
+  const logger = require('../../logger');
   const { user } = useAuth();
   const router = useRouter();
   const [activity, setactivity] = useState<any>(null);

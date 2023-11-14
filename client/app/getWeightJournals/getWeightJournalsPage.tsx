@@ -16,7 +16,7 @@ import ButtonMUI from '@mui/material/Button';
 
 
 export default function GetWeightJournalsPage() {
-  const logger = require('../../logger');;
+  const logger = require('../../logger');
   const router = useRouter();
   const { user } = useAuth();
   const { userInfo } = useUser();

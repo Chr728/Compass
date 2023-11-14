@@ -1,5 +1,5 @@
 import { auth } from "../config/firebase";
-const logger = require('../../logger');;
+const logger = require('../../logger');
 
 // Function to make a GET request to retrieve all glucose journals for a user
 export async function getGlucoseJournals(): Promise<any> {

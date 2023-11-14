@@ -16,7 +16,7 @@ import Custom403 from '@/app/pages/403';
 
 
 export default function EditGlucoseJournal({params: { glucoseJournal } } : { params: { glucoseJournal: string } }) {
-  const logger = require('../../../../../logger');;
+  const logger = require('../../../../../logger');
   const { user } = useAuth();
   const router = useRouter();
   const [glucose, setglucose] = useState<any>(null);
