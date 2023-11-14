@@ -22,7 +22,7 @@ export async function sendUserReminders(): Promise<any> {
         },
       }
     );
-    logger.http(`Reminder notifications sent successfully for user ${uid}`);
+    logger.info(`Reminder notifications sent successfully for user ${uid}`);
     if (!response.ok) {
       logger.error(
         `Failed to send reminder notifications for user. HTTP Status: ${response.status}`

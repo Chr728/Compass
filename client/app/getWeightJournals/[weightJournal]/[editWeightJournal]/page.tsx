@@ -16,7 +16,7 @@ import Custom403 from '@/app/pages/403';
 
 
 export default function EditWeightJournal({params: { weightJournal } } : { params: { weightJournal: string } }) {
-  const logger = require('../../logger');
+  const logger = require('../../../../logger');
   const { user } = useAuth();
   const router = useRouter();
   const [weight, setweight] = useState<any>(null);
@@ -70,10 +70,10 @@ export default function EditWeightJournal({params: { weightJournal } } : { param
           notes: values.notes,
         };
         const result = await updateWeightJournal(weightJournal, data); 
-        console.log('Weight journal entry updated:', result);
+        logger.info('Weight journal entry updated:', result);
         router.push(`/getWeightJournals/${weightJournal}`)
       } catch (error) {
-        console.error('Error updating weight journal entry:', error);
+        logger.error('Error updating weight journal entry:', error);
       }
     },
   });

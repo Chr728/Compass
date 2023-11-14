@@ -19,7 +19,7 @@ export async function createSubscription(
         body: JSON.stringify({ subscription: subscription }),
       }
     );
-    logger.http(`Subscription object created successfully for user ${userUID}`);
+    logger.info(`Subscription object created successfully for user ${userUID}`);
     if (!response.ok) {
       logger.error(
         `Failed to create subscription object for user. HTTP Status: ${response.status}`
@@ -52,7 +52,7 @@ export async function getSubscription(
         },
       }
     );
-    logger.http(`Subscription object fetched successfully for user ${userUID}`);
+    logger.info(`Subscription object fetched successfully for user ${userUID}`);
     if (!response.ok) {
       logger.error(
         `Failed to retrieve subscription object for user. HTTP Status: ${response.status}`
@@ -88,7 +88,7 @@ export async function updateSubscription(
         body: JSON.stringify({ subscription: subscription }),
       }
     );
-    logger.http(`Subscription object updated successfully for user ${userUID}`);
+    logger.info(`Subscription object updated successfully for user ${userUID}`);
     if (!response.ok) {
       logger.error(
         `Failed to update subscription object for user. HTTP Status: ${response.status}`
@@ -124,7 +124,7 @@ export async function deleteSubscription(): Promise<any> {
         },
       }
     );
-    logger.http(`Subscription object deleted successfully for user ${uid}`);
+    logger.info(`Subscription object deleted successfully for user ${uid}`);
     if (!response.ok) {
       logger.error(
         `Failed to delete subscription object for user. HTTP Status: ${response.status}`

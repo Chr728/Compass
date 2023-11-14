@@ -16,7 +16,7 @@ import Custom403 from '@/app/pages/403';
 
 
 export default function EditFoodJournal({params: { foodJournal } } : { params: { foodJournal: string } }) {
-  const logger = require('../../logger');
+  const logger = require('../../../../logger');
   const { user } = useAuth();
   const router = useRouter();
   const [food, setfood] = useState<any>(null);
@@ -71,10 +71,10 @@ export default function EditFoodJournal({params: { foodJournal } } : { params: {
           notes: values.notes,
         };
         const result = await updateFoodIntakeJournal(foodJournal, data); 
-        console.log('Food journal entry updated:', result);
+        logger.info('Food journal entry updated:', result);
         router.push(`/getFoodJournals/${foodJournal}`)
       } catch (error) {
-        console.error('Error updating Food journal entry:', error);
+        logger.error('Error updating Food journal entry:', error);
       }
     },
   });

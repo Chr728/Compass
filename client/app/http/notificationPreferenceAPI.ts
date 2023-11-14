@@ -26,7 +26,7 @@ export async function createNotificationPreference(
         body: JSON.stringify(dataToBeStringified),
       }
     );
-    logger.http(`Notification preference created successfully for user ${userUID}`);
+    logger.info(`Notification preference created successfully for user ${userUID}`);
     if (!response.ok) {
       logger.error(
         `Failed to create notification preference for user. HTTP Status: ${response.status}`
@@ -64,7 +64,7 @@ export async function getNotificationPreference(): Promise<any> {
         },
       }
     );
-    logger.http(`Notification preference fetched successfully for user ${uid}`);
+    logger.info(`Notification preference fetched successfully for user ${uid}`);
     if (!response.ok) {
       logger.error(
         `Failed to retrieve notification preferences for user. HTTP Status: ${response.status}`
@@ -105,7 +105,7 @@ export async function updateNotificationPreference(
         body: JSON.stringify(updatedNotificationPreference),
       }
     );
-    logger.http(`Notification preference updated successfully for user ${uid}`);
+    logger.info(`Notification preference updated successfully for user ${uid}`);
     if (!response.ok) {
       logger.error(
         `Failed to update notification preference for user ${uid}. HTTP Status: ${response.status}`
@@ -143,7 +143,7 @@ export async function deleteNotificationPreference(
         },
       }
     );
-    logger.http(`Notification preference deleted successfully for user ${userID}`);
+    logger.info(`Notification preference deleted successfully for user ${userID}`);
     if (!response.ok) {
       logger.error(
         `Failed to delete notification preference for user ${userID}. HTTP Status: ${response.status}`

@@ -68,9 +68,9 @@ export default function EditGlucoseJournal({params: { glucoseJournal } } : { par
           notes: values.notes,
         };
         const result = await updateGlucoseJournal(glucoseJournal, data); 
-        console.log('Glucose journal entry updated:', result);
+        logger.info('Glucose journal entry updated:', result);
       } catch (error) {
-        console.error('Error updating glucose journal entry:', error);
+        logger.error('Error updating glucose journal entry:', error);
       }
     },
   });

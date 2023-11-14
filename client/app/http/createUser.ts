@@ -20,7 +20,7 @@ export const createUser = async (body:any) => {
             body: JSON.stringify(body),
         });
 
-        logger.http(`User created successfully`)
+        logger.info(`User created successfully`)
 
         if (!response.ok) {
             logger.error(`Failed to create user. HTTP Status: ${response.status}`);

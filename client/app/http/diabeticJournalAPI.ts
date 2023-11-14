@@ -23,7 +23,7 @@ export async function getGlucoseJournals(): Promise<any> {
       }
     );
     if (response.ok) {
-      logger.http(`Glucose journals fetched successfully for user ${id}`)
+      logger.info(`Glucose journals fetched successfully for user ${id}`)
       const data = await response.json();
       return data;
     } else {
@@ -60,7 +60,7 @@ export async function getGlucoseJournal(
         },
       }
     );
-    logger.http(`Glucose journal fetched successfully for user ${glucoseJournalId}`)
+    logger.info(`Glucose journal fetched successfully for user ${glucoseJournalId}`)
     if (!response.ok) {
       logger.error(`Failed to retrieve glucose journal entry ${glucoseJournalId} for user. HTTP Status: ${response.status}`)
       throw new Error(
@@ -99,7 +99,7 @@ export async function createGlucoseJournal(
         body: JSON.stringify(glucoseJournalData),
       }
     );
-    logger.http(`Glucose journal created successfully for user ${id}`)
+    logger.info(`Glucose journal created successfully for user ${id}`)
     if (!response.ok) {
       logger.error(`Failed to create glucose journal entry for user. HTTP Status: ${response.status}`)
       throw new Error(
@@ -138,7 +138,7 @@ export async function updateGlucoseJournal(
         body: JSON.stringify(updatedGlucoseJournalData),
       }
     );
-    logger.http(`Glucose journal updated successfully for user ${glucoseJournalId}`)
+    logger.info(`Glucose journal updated successfully for user ${glucoseJournalId}`)
     if (!response.ok) {
       logger.error(`Failed to update glucose journal entry ${glucoseJournalId} for user. HTTP Status: ${response.status}`)
       throw new Error(
@@ -174,7 +174,7 @@ export async function deleteGlucoseJournal(
         },
       }
     );
-    logger.http(`Glucose journal deleted successfully for user ${glucoseJournalId}`)
+    logger.info(`Glucose journal deleted successfully for user ${glucoseJournalId}`)
     if (response && response.status && !response.ok) {
       logger.error(`Failed to delete glucose journal entry. HTTP Status: ${response.status}`)
       throw new Error(
@@ -213,7 +213,7 @@ export async function getInsulinJournals(): Promise<any> {
         },
       }
     );
-    logger.http(`Insulin journals fetched successfully for user ${id}`)
+    logger.info(`Insulin journals fetched successfully for user ${id}`)
     if (response.ok) {
       const data = await response.json();
       return data;
@@ -251,7 +251,7 @@ export async function getInsulinJournal(
         },
       }
     );
-    logger.http(`Insulin journal fetched successfully for user ${insulinJournalId}`)
+    logger.info(`Insulin journal fetched successfully for user ${insulinJournalId}`)
     if (!response.ok) {
       logger.error(`Failed to retrieve insulin journal entry ${insulinJournalId} for user. HTTP Status: ${response.status}`)
       throw new Error(
@@ -290,7 +290,7 @@ export async function createInsulinJournal(
         body: JSON.stringify(insulinJournalData),
       }
     );
-    logger.http(`Insulin journal created successfully for user ${id}`)
+    logger.info(`Insulin journal created successfully for user ${id}`)
     if (!response.ok) {
       logger.error(`Failed to create insulin journal entry for user. HTTP Status: ${response.status}`)
       throw new Error(
@@ -329,7 +329,7 @@ export async function updateInsulinJournal(
         body: JSON.stringify(updatedInsulinJournalData),
       }
     );
-    logger.http(`Insulin journal updated successfully for user ${insulinJournalId}`)
+    logger.info(`Insulin journal updated successfully for user ${insulinJournalId}`)
     if (!response.ok) {
       logger.error(`Failed to update insulin journal entry ${insulinJournalId} for user. HTTP Status: ${response.status}`)
       throw new Error(
@@ -365,7 +365,7 @@ export async function deleteInsulinJournal(
         },
       }
     );
-    logger.http(`Insulin journal deleted successfully for user ${insulinJournalId}`)
+    logger.info(`Insulin journal deleted successfully for user ${insulinJournalId}`)
     if (response && response.status && !response.ok) {
       logger.error(`Failed to delete insulin journal entry. HTTP Status: ${response.status}`)
       throw new Error(

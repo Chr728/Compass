@@ -18,7 +18,7 @@ import { formatDateYearMonthDate } from '@/app/helpers/utils/datetimeformat';
 
 
 export default function EditInsulinJournal({params: { insulinJournal } } : { params: { insulinJournal: string } }) {
-  const logger = require('../../logger');
+  const logger = require('../../../../../logger');
   const { user } = useAuth();
   const router = useRouter();
   const [insulin, setinsulin] = useState<any>(null);
@@ -73,9 +73,9 @@ export default function EditInsulinJournal({params: { insulinJournal } } : { par
           notes: values.notes,
         };
         const result = await updateInsulinJournal(insulinJournal, data); 
-        console.log('Insulin journal entry updated:', result);
+        logger.info('Insulin journal entry updated:', result);
       } catch (error) {
-        console.error('Error updating Insulin journal entry:', error);
+        logger.error('Error updating Insulin journal entry:', error);
       }
     },
   });

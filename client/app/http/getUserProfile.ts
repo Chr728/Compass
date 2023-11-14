@@ -19,7 +19,7 @@ export async function getUserProfile() {
             },
         });
 
-        logger.http(`User data fetched successfully for user ${id}`)
+        logger.info(`User data fetched successfully for user ${id}`)
 
         if (!response.ok) {
             logger.error(`Failed to retrieve user data. HTTP Status: ${response.status}`)

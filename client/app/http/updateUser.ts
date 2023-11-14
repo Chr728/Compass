@@ -20,7 +20,7 @@ export const updateUser = async (userData: any) => {
             body: JSON.stringify(userData),
         });
 
-        logger.http(`User data updated successfully for user ${uid}`)
+        logger.info(`User data updated successfully for user ${uid}`)
 
         if (!response.ok) {
             logger.error(`Failed to update user data. HTTP Status: ${response.status}`)

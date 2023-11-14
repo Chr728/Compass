@@ -23,7 +23,7 @@ export async function getActivityJournals(): Promise<any> {
                 }
             }
         );
-        logger.http(`Activity journals fetched successfully for user ${id}`)
+        logger.info(`Activity journals fetched successfully for user ${id}`)
         if (!response.ok) {
             logger.error('Failed to retrieve activity journals for user');
             throw new Error(
@@ -58,7 +58,7 @@ export async function getActivityJournal(activityJournalId: string): Promise<any
                 }
             }
         );
-        logger.http(`Activity journal fetched successfully for user ${activityJournalId}`)
+        logger.info(`Activity journal fetched successfully for user ${activityJournalId}`)
         if (!response.ok) {
             logger.error('Failed to retrieve activity journal entry');
             throw new Error(
@@ -96,7 +96,7 @@ export async function createActivityJournal(activityJournalData: any): Promise<a
                 body: JSON.stringify(activityJournalData),
             }
         );
-        logger.http(`Activity journal entry created successfully for user ${id}`)
+        logger.info(`Activity journal entry created successfully for user ${id}`)
         if (!response.ok) {
             logger.error('Failed to create activity journal entry');
             throw new Error(
@@ -136,7 +136,7 @@ export async function updateActivityJournal(
                 body: JSON.stringify(updatedActivityJournalData),
             }
         );
-        logger.http(`Activity journal entry updated successfully for user ${activityJournalId}`)
+        logger.info(`Activity journal entry updated successfully for user ${activityJournalId}`)
         if (!response.ok) {
             logger.error('Failed to update activity journal entry');
             throw new Error(
@@ -171,7 +171,7 @@ export async function deleteActivityJournal(activityJournalId: string): Promise<
                 }
             }
         );
-        logger.http(`Activity journal entry deleted successfully for user ${activityJournalId}`)
+        logger.info(`Activity journal entry deleted successfully for user ${activityJournalId}`)
         if (!response.ok) {
             logger.error('Failed to delete activity journal entry');
             throw new Error(

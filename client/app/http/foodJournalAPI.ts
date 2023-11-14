@@ -6,7 +6,7 @@ export async function getFoodIntakeJournals(): Promise<any> {
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
-      logger.erro('No user is currently signed in.')
+      logger.error('No user is currently signed in.')
       throw new Error('No user is currently signed in.');
     }
     const id = currentUser.uid;
@@ -22,7 +22,7 @@ export async function getFoodIntakeJournals(): Promise<any> {
         },
       }
     );
-    logger.http(`Food intake journals fetched successfully for user ${id}`)
+    logger.info(`Food intake journals fetched successfully for user ${id}`)
     if (response.ok) {
       const data = await response.json();
       return data;
@@ -58,7 +58,7 @@ export async function getFoodIntakeJournal(foodJournalId: string): Promise<any> 
         },
       }
     );
-    logger.http(`Food intake journal entry ${foodJournalId} fetched successfully`)
+    logger.info(`Food intake journal entry ${foodJournalId} fetched successfully`)
     if (!response.ok) {
       logger.error(`Failed to retrieve food journal entry data. HTTP Status: ${response.status}`)
       throw new Error(
@@ -97,7 +97,7 @@ export async function createFoodIntakeJournal(
         body: JSON.stringify(foodJournalData),
       }
     );
-    logger.http(`Food intake journal entry created successfully for user ${id}`)
+    logger.info(`Food intake journal entry created successfully for user ${id}`)
     if (!response.ok) {
       logger.error(`Failed to create food journal entry for user. HTTP Status: ${response.status}`)
       throw new Error(
@@ -136,7 +136,7 @@ export async function updateFoodIntakeJournal(
         body: JSON.stringify(updatedFoodJournalData),
       }
     );
-    logger.http(`Food intake journal entry ${foodJournalId} updated successfully`)
+    logger.info(`Food intake journal entry ${foodJournalId} updated successfully`)
     if (!response.ok) {
       logger.error(`Failed to update food journal entry ${foodJournalId} for user. HTTP Status: ${response.status}`)
       throw new Error(
@@ -172,7 +172,7 @@ export async function deleteFoodIntakeJournal(
         },
       }
     );
-    logger.http(`Food intake journal entry ${foodJournalId} deleted successfully`)
+    logger.info(`Food intake journal entry ${foodJournalId} deleted successfully`)
     if (response && response.status && !response.ok) {
       logger.error(`Failed to delete food journal entry. HTTP Status: ${response.status}`)
       throw new Error(`Failed to delete food journal entry. HTTP Status: ${response.status}`);

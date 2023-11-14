@@ -31,7 +31,7 @@ export async function getAppointments(userId: string): Promise<any>{
               },
             }
         );
-        logger.http(`Appointments fetched successfully for user ${userId}`)
+        logger.info(`Appointments fetched successfully for user ${userId}`)
         if (!response.ok) {
           logger.error(`Failed to retrieve appointment. HTTP Status: ${response.status}`);
             throw new Error(
@@ -65,7 +65,7 @@ export async function getAppointment(appointmentId: string ): Promise<any>{
         },
       }
     );
-    logger.http(`Appointment fetched successfully for user ${appointmentId}`)
+    logger.info(`Appointment fetched successfully for user ${appointmentId}`)
     if (!response.ok) {
       logger.error(`Failed to retrieve appointment. HTTP Status: ${response.status}`);
       throw new Error(
@@ -103,7 +103,7 @@ export async function createAppointment(userId: string, appointmentData: any): P
             body: JSON.stringify(appointmentData),
           }
         );
-        logger.http(`Appointment created successfully for user ${userId}`)
+        logger.info(`Appointment created successfully for user ${userId}`)
         if (!response.ok) {
           logger.error(`Failed to create appointment for user ${userId}. HTTP Status: ${response.status}`);
           throw new Error(
@@ -136,7 +136,7 @@ export async function deleteAppointment(appointmentId: string): Promise<any>{
               },
           }
         );
-        logger.http(`Appointment deleted successfully for user ${appointmentId}`)
+        logger.info(`Appointment deleted successfully for user ${appointmentId}`)
         if (!response.ok) {
           logger.error(`Failed to delete the appointment. HTTP Status: ${response.status}`);
           throw new Error(
@@ -172,7 +172,7 @@ export async function updateAppointment(appointmentId: string, appointmentData: 
         body: JSON.stringify(appointmentData),
       }
     );
-    logger.http(`Appointment updated successfully for user ${appointmentId}`)
+    logger.info(`Appointment updated successfully for user ${appointmentId}`)
     if (!response.ok) {
       logger.error(`Failed to update the appointment. HTTP Status: ${response.status}`);
       throw new Error(

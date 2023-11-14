@@ -23,7 +23,7 @@ export async function getWeightJournals(): Promise<any> {
       }
     );
     if (response.ok) {
-      logger.http(`Weight journals fetched successfully for user ${id}`)
+      logger.info(`Weight journals fetched successfully for user ${id}`)
       const data = await response.json();
       return data;
     } else {
@@ -58,7 +58,7 @@ export async function getWeightJournal(weightJournalId: string): Promise<any> {
         },
       }
     );
-    logger.http(`Weight journal entry fetched successfully for user ${weightJournalId}`)
+    logger.info(`Weight journal entry fetched successfully for user ${weightJournalId}`)
     if (!response.ok) {
       logger.error(
         `Failed to retrieve weight journal entry ${weightJournalId} for user. HTTP Status: ${response.status}`
@@ -99,7 +99,7 @@ export async function createWeightJournal(
         body: JSON.stringify(weightJournalData),
       }
     );
-    logger.http(`Weight journal entry created successfully for user ${id}`)
+    logger.info(`Weight journal entry created successfully for user ${id}`)
     if (!response.ok) {
       logger.error(
         `Failed to create weight journal entry for user. HTTP Status: ${response.status}`
@@ -140,7 +140,7 @@ export async function updateWeightJournal(
         body: JSON.stringify(updatedWeightJournalData),
       }
     );
-    logger.http(`Weight journal entry updated successfully for user ${weightJournalId}`)
+    logger.info(`Weight journal entry updated successfully for user ${weightJournalId}`)
     if (!response.ok) {
       logger.error(
         `Failed to update weight journal entry ${weightJournalId} for user. HTTP Status: ${response.status}`
@@ -178,7 +178,7 @@ export async function deleteWeightJournal(
         },
       }
     );
-    logger.http(`Weight journal entry deleted successfully for user ${weightJournalId}`)
+    logger.info(`Weight journal entry deleted successfully for user ${weightJournalId}`)
     if (response && response.status && !response.ok) {
       logger.error(
         `Failed to delete weight journal entry. HTTP Status: ${response.status}`

@@ -21,7 +21,7 @@ export async function getMoodJournals(): Promise<any> {
         },
       }
     );
-    logger.http(`Mood journals fetched successfully for user ${id}`)
+    logger.info(`Mood journals fetched successfully for user ${id}`)
     if (!response.ok) {
       logger.error(`Failed to retrieve mood journals for user ${id}`)
       throw new Error(`Failed to retrieve mood journals for user`);
@@ -52,7 +52,7 @@ export async function getMoodJournal(moodJournalId: string): Promise<any> {
         },
       }
     );
-    logger.http(`Mood journal fetched successfully for user ${moodJournalId}`)
+    logger.info(`Mood journal fetched successfully for user ${moodJournalId}`)
     if (!response.ok) {
       logger.error(`Failed to retrieve mood journal for user ${moodJournalId}`)
       throw new Error(`Failed to retrieve mood journal entry`);
@@ -85,7 +85,7 @@ export async function createMoodJournal(moodJournal: any): Promise<any> {
         body: JSON.stringify(moodJournal),
       }
     );
-    logger.http(`Mood journal created successfully for user ${id}`)
+    logger.info(`Mood journal created successfully for user ${id}`)
     if (!response.ok) {
       logger.error(`Failed to create mood journal for user ${id}`)
       throw new Error(`Failed to create mood journal entry`);
@@ -121,7 +121,7 @@ export async function updateMoodJournal(
         body: JSON.stringify(updatedMoodJournalData),
       }
     );
-    logger.http(`Mood journal updated successfully for user ${moodJournalId}`)
+    logger.info(`Mood journal updated successfully for user ${moodJournalId}`)
     if (!response.ok) {
       logger.error(`Failed to update mood journal for user ${moodJournalId}`)
       throw new Error(`Failed to update mood journal entry`);
@@ -152,7 +152,7 @@ export async function deleteMoodJournal(moodJournalId: string): Promise<any> {
         },
       }
     );
-    logger.http(`Mood journal deleted successfully for user ${moodJournalId}`)
+    logger.info(`Mood journal deleted successfully for user ${moodJournalId}`)
     if (!response.ok) {
       logger.error(`Failed to delete mood journal for user ${moodJournalId}`)
       throw new Error(`Failed to delete mood journal entry`);
