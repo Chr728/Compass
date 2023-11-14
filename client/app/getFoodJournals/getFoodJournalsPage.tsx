@@ -40,7 +40,9 @@ export default function GetFoodJournalsPage() {
         logger.error('Error retrieving food journal entry:', error);
       }
     }
+    setTimeout(() => {
       fetchFoodJournals();
+    }, 1000);  
   }, [user]);
 
 

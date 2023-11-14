@@ -40,7 +40,9 @@ export default function GetInsulinJournal({params: { insulinJournal } } : { para
       alert('User not found.');
     } 
     if (user) {
-      fetchInsulinJournal();
+      setTimeout(() => {
+        fetchInsulinJournal();
+      },1000);
     }
   }, []);  
 

@@ -40,7 +40,9 @@ export default function GetFoodJournal({params: { foodJournal } } : { params: { 
       alert('User not found.');
     } 
     if (user) {
-      fetchFoodJournal();
+      setTimeout(() => {
+        fetchFoodJournal();
+      }, 1000);
     }
   }, []);
 

@@ -40,7 +40,9 @@ export default function GetInsulinJournalsPage() {
         logger.error('Error retrieving insulin journal entry:', error);
       }
     }
+    setTimeout(() => {
       fetchInsulinJournals();
+    }, 1000);
   }, [user]);
 
 

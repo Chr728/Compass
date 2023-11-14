@@ -36,7 +36,9 @@ export default function ViewMoodJournalsPage() {
           logger.error('Error retrieving mood journal entry:', error);
         }
       }
-      fetchMoodJournals();
+      setTimeout(() => {
+        fetchMoodJournals();
+      }, 1000);
     }, [user]);
 
     function setColor(mood: String) {

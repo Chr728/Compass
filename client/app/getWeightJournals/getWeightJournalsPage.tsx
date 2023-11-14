@@ -42,7 +42,9 @@ export default function GetWeightJournalsPage() {
         // logger.error('Error retrieving weight journal entry:', error);
       }
     }
+    setTimeout(() => {
       fetchWeightJournals();
+    }, 1000);  
   }, [user]);
 
 
@@ -80,7 +82,7 @@ export default function GetWeightJournalsPage() {
     </div>
     <br></br>
 <div className="flex" style={{ justifyContent: 'space-between' }}>
-    <div className="flex-2" style={{ marginRight: '10%' }}>
+    <div className="flex-2" style={{ marginRight: '12%' }}>
       <div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
         Date/Time
         <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
@@ -114,7 +116,7 @@ export default function GetWeightJournalsPage() {
         </p>
       </div>
       <div className="flex-2">
-        <p className="ml-2 font-sans font-medium text-darkgrey text-[14px] text-center">
+        <p className="mr-2 font-sans font-medium text-darkgrey text-[14px] text-center">
           {(item.weight / ((item.height / 100) ** 2)).toFixed(2)}
         </p>
       </div>
