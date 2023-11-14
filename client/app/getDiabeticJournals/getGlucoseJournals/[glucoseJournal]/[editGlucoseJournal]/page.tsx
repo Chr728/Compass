@@ -38,7 +38,9 @@ export default function EditGlucoseJournal({params: { glucoseJournal } } : { par
       alert('User not found.');
     } 
     if (user) {
-      fetchGlucoseJournal();
+      setTimeout(() => {
+        fetchGlucoseJournal();
+      }, 1000);  
     }
   }, []);
   

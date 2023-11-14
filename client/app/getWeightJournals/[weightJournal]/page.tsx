@@ -39,7 +39,9 @@ export default function GetWeightJournal({params: { weightJournal } } : { params
       alert('User not found.');
     } 
     if (user) {
-      fetchWeightJournal();
+      setTimeout(() => {
+        fetchWeightJournal();
+      }, 1000);  
     }
   }, []);
 
