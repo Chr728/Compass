@@ -38,7 +38,7 @@ export default function UpdateMoodEntry( {params: { updateEntryId } } : { params
           router.push("/login")
         }
 
-        if(user){
+        if (user) {
             updateMoodEntry();
         }
     }, [user]);

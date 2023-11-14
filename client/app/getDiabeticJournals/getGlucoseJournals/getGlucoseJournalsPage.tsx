@@ -38,7 +38,9 @@ export default function GetGlucoseJournalsPage() {
         console.error('Error retrieving glucose journal entry:', error);
       }
     }
+    setTimeout(() => {
       fetchGlucoseJournals();
+    }, 1000);
   }, [user]);
 
 

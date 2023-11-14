@@ -40,7 +40,9 @@ export default function EditActivityJournal({params: { activityJournal } } : { p
       alert('User not found.');
     }
     if (user) {
-      fetchActivityJournal();
+      setTimeout(() => {
+        fetchActivityJournal();
+      }, 1000);
     }
   }, []);
   
