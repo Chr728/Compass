@@ -9,7 +9,6 @@ import {
   createNotificationPreference,
 } from "../http/notificationPreferenceAPI";
 
-
 //Mock useRouter from next/navigation
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
@@ -72,6 +71,7 @@ describe("Notification Settings Page", () => {
     global.alert = jest.fn();
     const PushNotificationsHeader =
       screen.getAllByText(/Push Notifications/i)[0];
+    const SubscriptionReminder = screen.getByText(/Enable Push Notifications/i);
     const ActivityReminders = screen.getByText(/Activity Reminders/i);
     const MedicationReminders = screen.getByText(/Medication Reminders/i);
     const AppointmentReminders = screen.getByText(/Appointment Reminders/i);
@@ -84,6 +84,7 @@ describe("Notification Settings Page", () => {
     const Save = screen.getAllByRole("button")[1];
 
     expect(PushNotificationsHeader).toBeInTheDocument();
+    expect(SubscriptionReminder).toBeInTheDocument();
     expect(ActivityReminders).toBeInTheDocument();
     expect(MedicationReminders).toBeInTheDocument();
     expect(AppointmentReminders).toBeInTheDocument();
@@ -102,6 +103,8 @@ describe("Notification Settings Page", () => {
 
   test("Check if switch button works", () => {
     render(<NotificationPage />);
+    const toggleButtonSubscription =
+      screen.getByLabelText("SubscriptionSwitch");
     const toggleButtonActvity = screen.getByLabelText("ActvitySwitch");
     const toggleButtonMedication = screen.getByLabelText("MedicationSwitch");
     const toggleButtonAppointment = screen.getByLabelText("AppointmentSwitch");
@@ -111,12 +114,14 @@ describe("Notification Settings Page", () => {
     const toggleButtonInsulinDosage = screen.getByLabelText(
       "InsulinInjectionSwitch"
     );
+    expect(toggleButtonSubscription).toBeChecked();
     expect(toggleButtonActvity).toBeChecked();
     expect(toggleButtonMedication).toBeChecked();
     expect(toggleButtonAppointment).toBeChecked();
     expect(toggleButtonFoodIntake).toBeChecked();
     expect(toggleButtonBloodGlucose).toBeChecked();
     expect(toggleButtonInsulinDosage).toBeChecked();
+    fireEvent.click(toggleButtonSubscription);
     fireEvent.click(toggleButtonActvity);
     fireEvent.click(toggleButtonMedication);
     fireEvent.click(toggleButtonAppointment);
@@ -133,7 +138,7 @@ describe("Notification Settings Page", () => {
 
   test("Calls router's push method on button click", () => {
     render(<NotificationPage />);
-    const button = screen.getByText('Save'); 
+    const button = screen.getByText("Save");
     fireEvent.click(button);
     expect(mockRouter).toHaveBeenCalled();
   });

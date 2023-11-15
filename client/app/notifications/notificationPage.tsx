@@ -242,7 +242,7 @@ export default function NotificationPage() {
           <Switch
             checked={checkedSubscriptionReminders}
             onChange={handleSubcriptionReminders}
-            inputProps={{ "aria-label": "ActvitySwitch" }}
+            inputProps={{ "aria-label": "SubscriptionSwitch" }}
           />
           <span className="text-darkgrey text-base not-italic font-medium font-IBM Plex Sans text-lg ">
             Enable Push Notifications
