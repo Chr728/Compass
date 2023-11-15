@@ -16,6 +16,7 @@ import Custom403 from '@/app/pages/403';
 
 
 export default function EditWeightJournal({params: { weightJournal } } : { params: { weightJournal: string } }) {
+  const logger = require('../../../../logger');
   const { user } = useAuth();
   const router = useRouter();
   const [weight, setweight] = useState<any>(null);
@@ -25,16 +26,17 @@ export default function EditWeightJournal({params: { weightJournal } } : { param
     try {
       const userId = user?.uid || '';
       const result = await getWeightJournal(weightJournal);
-      console.log('Weight journal entry retrieved:', result);
+      logger.info('Weight journal entry retrieved:', result);
       setweight(result.data);
     } catch (error) {
-      console.error('Error retrieving weight journal entry:', error);
+      logger.error('Error retrieving weight journal entry:', error);
     }
   }
   
   useEffect(() => {  
     if (!user) {
       router.push('/login')
+      logger.warn('User not found.')
       alert('User not found.');
     } 
     if (user) {
@@ -70,10 +72,10 @@ export default function EditWeightJournal({params: { weightJournal } } : { param
           notes: values.notes,
         };
         const result = await updateWeightJournal(weightJournal, data); 
-        console.log('Weight journal entry updated:', result);
+        logger.info('Weight journal entry updated:', result);
         router.push(`/getWeightJournals/${weightJournal}`)
       } catch (error) {
-        console.error('Error updating weight journal entry:', error);
+        logger.error('Error updating weight journal entry:', error);
       }
     },
   });
@@ -201,11 +203,12 @@ style={{
     name="unit"
     id="unit"
     style={{
-      width: '100%',
-      border: '1px solid #DBE2EA', // Border style
-      borderRadius: '5px',
-      marginTop: '5px',
-    }}
+        width: '100%',
+         height: '50px',
+        border: '1px solid #DBE2EA', // Border style
+        borderRadius: '5px',
+        marginTop: '2px',
+      }}
     onChange={formik.handleChange}
     onBlur={formik.handleBlur}
     value={formik.values.unit}

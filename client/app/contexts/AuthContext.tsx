@@ -22,6 +22,7 @@ import { createUserAttributes } from "@/app/lib/Models/User";
 import { createNotificationPreference } from "../http/notificationPreferenceAPI";
 import { useProp } from "./PropContext";
 
+const logger = require('../../logger');
 interface AuthContextProps {
   user: User | null;
   login: (email: string, password: string) => void;
@@ -35,6 +36,7 @@ const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
+    logger.error("useAuth must be used within an AuthProvider");
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
@@ -68,14 +70,14 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
               });
             } else {
               // Handle the case where serviceWorker or controller is not available.
-              console.error("Service Worker or controller is not available.");
+              logger.error("Service Worker or controller is not available.");
             }
           } else if (permission === "denied") {
             // Permission has been denied.
-            console.log("Notification permission denied.");
+            logger.warn("Notification permission denied.");
           } else if (permission === "default") {
             // The user closed the permission dialog without making a choice.
-            console.log("Notification permission dismissed.");
+            logger.warn("Notification permission dismissed.");
           }
         });
       } else {
@@ -91,7 +93,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
           });
         } else {
           // Handle the case where serviceWorker or controller is not available.
-          console.error("Service Worker or controller is not available.");
+          logger.error("Service Worker or controller is not available.");
         }
       }
     }
@@ -112,8 +114,8 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         setError("Invalid User Credentials. Please try again.");
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.error(errorCode, errorMessage);
-        handlePopUp("error", errorMessage);
+        logger.error(errorCode, errorMessage);
+        handlePopUp('error', errorMessage);
         handleLoading(false);
       });
   };
@@ -130,10 +132,10 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       await signOut(auth);
       handleLoading(false);
       router.push("/logout");
-      console.log("Sign-out successful.");
+      logger.info("Sign-out successful.");
     } catch (error: any) {
       // Handle errors gracefully
-      console.error("Error signing out:", error);
+      logger.error("Error signing out:", error);
       handlePopUp("error", "Error signing out:" + error.message);
     }
   };
@@ -165,8 +167,8 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
           .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            console.log(errorCode, errorMessage);
-            handlePopUp("error", errorMessage);
+            logger.error(errorCode, errorMessage);
+            handlePopUp('error', errorMessage);
             handleLoading(false);
           });
       })
@@ -178,8 +180,8 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         }
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-        handlePopUp("error", errorMessage);
+        logger.error(errorCode, errorMessage);
+        handlePopUp('error', errorMessage);
       });
   };
 

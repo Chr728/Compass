@@ -13,6 +13,7 @@ import Header from '../components/Header';
 import Menu from '../components/Menu';
 
 export default function CreateWeightJournalPage() {
+  const logger = require('../../logger');
   const router = useRouter();
   const { user } = useAuth();
   
@@ -39,10 +40,10 @@ export default function CreateWeightJournalPage() {
           notes: values.notes,
         };
         const result = await createWeightJournal(data); 
-        console.log('Weight journal entry created:', result);
+        logger.info('Weight journal entry created:', result);
         router.push('/getWeightJournals');
       } catch (error) {
-        console.error('Error creating weight journal entry:', error);
+        logger.error('Error creating weight journal entry:', error);
       }
     },
   });
@@ -159,9 +160,10 @@ export default function CreateWeightJournalPage() {
       id="unit"
       style={{
         width: '100%',
+         height: '50px',
         border: '1px solid #DBE2EA', // Border style
         borderRadius: '5px',
-        marginTop: '5px',
+        marginTop: '2px',
       }}
       onChange={formik.handleChange}
       onBlur={formik.handleBlur}

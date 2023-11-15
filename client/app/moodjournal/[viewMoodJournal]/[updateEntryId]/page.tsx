@@ -14,6 +14,7 @@ import Link from 'next/link';
 import Header from '@/app/components/Header';
 
 export default function UpdateMoodEntry( {params: { updateEntryId } } : { params: { updateEntryId: string }} ) {
+    const logger = require('../../../../logger');
     const { user } = useAuth();
     const router = useRouter();
     const [data, setData] = useState<any>();
@@ -29,7 +30,7 @@ export default function UpdateMoodEntry( {params: { updateEntryId } } : { params
            }
            setData(updatedMoodData);
         } catch (error) {
-            console.log('Error fetching mood data');
+            logger.error('Error fetching mood data');
         }
     }
 

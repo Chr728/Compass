@@ -16,6 +16,7 @@ import Custom403 from '@/app/pages/403';
 
 
 export default function GetGlucoseJournal({params: { glucoseJournal } } : { params: { glucoseJournal: string } }) {
+  const logger = require('../../../../logger');
   const { user } = useAuth();
   const router = useRouter();
   const { userInfo } = useUser();
@@ -25,10 +26,10 @@ export default function GetGlucoseJournal({params: { glucoseJournal } } : { para
     try {
       const userId = user?.uid || '';
       const result = await getGlucoseJournal(glucoseJournal);
-      console.log('Glucose journal entry retrieved:', result);
+      logger.info('Glucose journal entry retrieved:', result);
       setglucose(result.data);
     } catch (error) {
-      console.error('Error retrieving Glucose journal entry:', error);
+      logger.error('Error retrieving Glucose journal entry:', error);
     }
   }
 
@@ -36,6 +37,7 @@ export default function GetGlucoseJournal({params: { glucoseJournal } } : { para
   useEffect(() => {
     if (!user) {
       router.push("/login")
+      logger.warn('User not found.')
       alert('User not found.');
     } 
     if (user) {

@@ -15,6 +15,7 @@ import Menu from '../components/Menu';
 import { formatDate } from '../helpers/utils/datetimeformat';
 
 export default function GetActivityJournalsPage() {
+  const logger = require('../../logger');
   const router = useRouter();
   const { user } = useAuth();
   const { userInfo } = useUser();
@@ -22,6 +23,7 @@ export default function GetActivityJournalsPage() {
   
   useEffect(() => {
     if (!userInfo) {
+      logger.warn('User not found.')
       alert('User not found.');
     } 
   }, [userInfo, router]);
@@ -32,10 +34,10 @@ export default function GetActivityJournalsPage() {
       try {
         const userId = user?.uid || '';
         const result = await getActivityJournals();    
-        console.log('All Activity journals entry retrieved:', result);
+        logger.info('All Activity journals entry retrieved:', result);
         setactivity(result.data);
       } catch (error) {
-        console.error('Error retrieving activity journal entry:', error);
+        logger.error('Error retrieving activity journal entry:', error);
       }
     }
     setTimeout(() => {

@@ -15,6 +15,7 @@ import { formatDate, formatMilitaryTime } from '../helpers/utils/datetimeformat'
 
 
 export default function GetFoodJournalsPage() {
+  const logger = require('../../logger');
   const router = useRouter();
   const { user } = useAuth();
   const { userInfo } = useUser();
@@ -22,6 +23,7 @@ export default function GetFoodJournalsPage() {
   
   useEffect(() => {
     if (!userInfo) {
+      logger.warn('User not found.');
       alert('User not found.');
     } 
   }, [userInfo, router]);
@@ -32,10 +34,10 @@ export default function GetFoodJournalsPage() {
       try {
         const userId = user?.uid || '';
         const result = await getFoodIntakeJournals();    
-        console.log('All Food journals entry retrieved:', result);
+        logger.info('All Food journals entry retrieved:', result);
         setfood(result.data);
       } catch (error) {
-        console.error('Error retrieving food journal entry:', error);
+        logger.error('Error retrieving food journal entry:', error);
       }
     }
     setTimeout(() => {

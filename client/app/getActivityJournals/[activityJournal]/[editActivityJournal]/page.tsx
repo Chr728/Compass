@@ -18,6 +18,7 @@ import { formatDateYearMonthDate } from '@/app/helpers/utils/datetimeformat';
 
 
 export default function EditActivityJournal({params: { activityJournal } } : { params: { activityJournal: string } }) {
+  const logger = require('../../../../logger');
   const { user } = useAuth();
   const router = useRouter();
   const [activity, setactivity] = useState<any>(null);
@@ -27,16 +28,17 @@ export default function EditActivityJournal({params: { activityJournal } } : { p
     try {
       const userId = user?.uid || '';
       const result = await getActivityJournal(activityJournal);
-      console.log('activity journal entry retrieved:', result);
+      logger.info('activity journal entry retrieved:', result);
       setactivity(result.data);
     } catch (error) {
-      console.error('Error retrieving activity journal entry:', error);
+      logger.error('Error retrieving activity journal entry:', error);
     }
   }
 
   useEffect(() => {  
     if (!user) {
       router.push('/login')
+      logger.warn('User not found.')
       alert('User not found.');
     }
     if (user) {
@@ -71,10 +73,10 @@ export default function EditActivityJournal({params: { activityJournal } } : { p
           notes: values.notes,
         };
         const result = await updateActivityJournal(activityJournal, data); 
-        console.log('activity journal entry updated:', result);
+        logger.info('activity journal entry updated:', result);
         router.push(`/getActivityJournals/${activityJournal}`)
       } catch (error) {
-        console.error('Error updating activity journal entry:', error);
+        logger.error('Error updating activity journal entry:', error);
       }
     },
   });

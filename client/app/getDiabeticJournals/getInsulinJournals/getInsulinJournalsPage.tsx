@@ -15,6 +15,7 @@ import Menu from '../../components/Menu';
 import { formatDate, formatMilitaryTime } from '../../helpers/utils/datetimeformat';
 
 export default function GetInsulinJournalsPage() {
+  const logger = require('../../../logger');
   const router = useRouter();
   const { user } = useAuth();
   const { userInfo } = useUser();
@@ -22,6 +23,7 @@ export default function GetInsulinJournalsPage() {
   
   useEffect(() => {
     if (!userInfo) {
+      logger.warn('User not found.')
       alert('User not found.');
     } 
   }, [userInfo, router]);
@@ -32,10 +34,10 @@ export default function GetInsulinJournalsPage() {
       try {
         const userId = user?.uid || '';
         const result = await getInsulinJournals();    
-        console.log('All Insulin journals entry retrieved:', result);
+        logger.info('All Insulin journals entry retrieved:', result);
         setinsulin(result.data);
       } catch (error) {
-        console.error('Error retrieving insulin journal entry:', error);
+        logger.error('Error retrieving insulin journal entry:', error);
       }
     }
     setTimeout(() => {

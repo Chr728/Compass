@@ -1,10 +1,12 @@
 import { auth } from '../config/firebase';
+const logger = require('../../logger');
 
 // Function to make a GET request to retrieve all food journals for a user
 export async function getFoodIntakeJournals(): Promise<any> {
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
+      logger.error('No user is currently signed in.')
       throw new Error('No user is currently signed in.');
     }
     const id = currentUser.uid;
@@ -20,16 +22,18 @@ export async function getFoodIntakeJournals(): Promise<any> {
         },
       }
     );
+    logger.info(`Food intake journals fetched successfully for user ${id}`)
     if (response.ok) {
       const data = await response.json();
       return data;
     } else {
+      logger.error(`Failed to retrieve food journals for user. HTTP Status: ${response.status}`)
       throw new Error(
         `Failed to retrieve food journals for user. HTTP Status: ${response.status}`
       );
     }
   } catch (error) {
-    console.error('Error fetching food journals:', error);
+    logger.error('Error fetching food journals:', error);
     throw error;
   }
 }
@@ -39,6 +43,7 @@ export async function getFoodIntakeJournal(foodJournalId: string): Promise<any> 
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
+      logger.error('No user is currently signed in.')
       throw new Error('No user is currently signed in.');
     }
     const token = await currentUser.getIdToken();
@@ -53,7 +58,9 @@ export async function getFoodIntakeJournal(foodJournalId: string): Promise<any> 
         },
       }
     );
+    logger.info(`Food intake journal entry ${foodJournalId} fetched successfully`)
     if (!response.ok) {
+      logger.error(`Failed to retrieve food journal entry data. HTTP Status: ${response.status}`)
       throw new Error(
         `Failed to retrieve food journal entry data. HTTP Status: ${response.status}`
       );
@@ -61,7 +68,7 @@ export async function getFoodIntakeJournal(foodJournalId: string): Promise<any> 
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error fetching food journal entry:', error);
+    logger.error('Error fetching food journal entry:', error);
     throw error;
   }
 }
@@ -73,6 +80,7 @@ export async function createFoodIntakeJournal(
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
+      logger.error('No user is currently signed in.')
       throw new Error('No user is currently signed in.');
     }
     const id = currentUser.uid;
@@ -89,7 +97,9 @@ export async function createFoodIntakeJournal(
         body: JSON.stringify(foodJournalData),
       }
     );
+    logger.info(`Food intake journal entry created successfully for user ${id}`)
     if (!response.ok) {
+      logger.error(`Failed to create food journal entry for user. HTTP Status: ${response.status}`)
       throw new Error(
         `Failed to create food journal entry for user. HTTP Status: ${response.status}`
       );
@@ -97,7 +107,7 @@ export async function createFoodIntakeJournal(
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error creating food journal entry:', error);
+    logger.error('Error creating food journal entry:', error);
     throw error;
   }
 }
@@ -110,6 +120,7 @@ export async function updateFoodIntakeJournal(
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
+      logger.error('No user is currently signed in.')
       throw new Error('No user is currently signed in.');
     }
     const token = await currentUser.getIdToken();
@@ -125,7 +136,9 @@ export async function updateFoodIntakeJournal(
         body: JSON.stringify(updatedFoodJournalData),
       }
     );
+    logger.info(`Food intake journal entry ${foodJournalId} updated successfully`)
     if (!response.ok) {
+      logger.error(`Failed to update food journal entry ${foodJournalId} for user. HTTP Status: ${response.status}`)
       throw new Error(
         `Failed to update food journal entry ${foodJournalId} for user. HTTP Status: ${response.status}`
       );
@@ -133,7 +146,7 @@ export async function updateFoodIntakeJournal(
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error updating food journal entry:', error);
+    logger.error('Error updating food journal entry:', error);
     throw error;
   }
 }
@@ -145,6 +158,7 @@ export async function deleteFoodIntakeJournal(
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
+      logger.error('No user is currently signed in.')
       throw new Error('No user is currently signed in.');
     }
     const token = await currentUser.getIdToken();
@@ -158,14 +172,17 @@ export async function deleteFoodIntakeJournal(
         },
       }
     );
+    logger.info(`Food intake journal entry ${foodJournalId} deleted successfully`)
     if (response && response.status && !response.ok) {
+      logger.error(`Failed to delete food journal entry. HTTP Status: ${response.status}`)
       throw new Error(`Failed to delete food journal entry. HTTP Status: ${response.status}`);
     } else if (response && response.status === 204) {
+      logger.info(`Food journal entry ${foodJournalId} deleted successfully`)
       return { message: 'Food journal entry deleted successfully' };
     }
     return { message: 'Food journal entry deleted successfully' };
   } catch (error) {
-    console.error('Error deleting food journal entry:', error);
+    logger.error('Error deleting food journal entry:', error);
     throw error;
   }
 }

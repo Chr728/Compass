@@ -1,9 +1,11 @@
 import {auth} from '../config/firebase';
+const logger = require('../../logger');
 
 export async function getUserProfile() {
     try {
         const currentUser = auth.currentUser;
         if (!currentUser) {
+            logger.error('No user is currently signed in.')
             throw new Error('No user is currently signed in.');
         }
         const id = currentUser.uid;
@@ -17,13 +19,17 @@ export async function getUserProfile() {
             },
         });
 
+        logger.info(`User data fetched successfully for user ${id}`)
+
         if (!response.ok) {
+            logger.error(`Failed to retrieve user data. HTTP Status: ${response.status}`)
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
         const userData = await response.json();
         return userData.data;
     } catch (error: any) {
+        logger.error('Error fetching user profile:', error);
         throw new Error('Error fetching user profile');
     }
 }

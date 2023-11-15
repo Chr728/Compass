@@ -1,11 +1,7 @@
-import {render, screen,act} from '@testing-library/react';
 import '@testing-library/jest-dom';
+import {render, screen, act, cleanup} from '@testing-library/react';
 import GetWeightJournalsPage from './getWeightJournalsPage';
-import {getWeightJournals} from '../http/weightJournalAPI';
-import { deleteWeightJournal} from '../http/weightJournalAPI'; 
 import userEvent from '@testing-library/user-event';
-import { useRouter } from "next/router";
-import { useUser } from '../contexts/UserContext';
 
 
 beforeEach(async () => {
@@ -14,6 +10,10 @@ beforeEach(async () => {
       });
 })
 
+afterEach(() => {
+  cleanup();
+});
+
 const mockRouter= jest.fn();
 jest.mock("next/navigation", () => ({
     useRouter: () => {
@@ -21,11 +21,8 @@ jest.mock("next/navigation", () => ({
             push: mockRouter
         }
     }
-}));
-
-const userData = {
-    uid: '1',
-}
+})
+);
 
 jest.mock("../contexts/UserContext", () => {
     return {
@@ -37,7 +34,8 @@ jest.mock("../contexts/UserContext", () => {
         }
       }
     };
-  });
+  }
+);
 
 
 jest.mock('../http/weightJournalAPI', () => {
