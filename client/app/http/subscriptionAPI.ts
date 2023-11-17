@@ -21,7 +21,7 @@ export async function createSubscription(subscription: any): Promise<any> {
         body: JSON.stringify({ subscription: subscription }),
       }
     );
-    logger.info(`Subscription object created successfully for user ${userUID}`);
+    logger.info(`Subscription object created successfully for user ${uid}`);
     if (!response.ok) {
       logger.error(
         `Failed to create subscription object for user. HTTP Status: ${response.status}`
@@ -57,7 +57,7 @@ export async function getSubscription(): Promise<any> {
         },
       }
     );
-    logger.info(`Subscription object fetched successfully for user ${userUID}`);
+    logger.info(`Subscription object fetched successfully for user ${uid}`);
     if (!response.ok) {
       logger.error(
         `Failed to retrieve subscription object for user. HTTP Status: ${response.status}`
@@ -94,7 +94,7 @@ export async function updateSubscription(subscription: any): Promise<any> {
         body: JSON.stringify({ subscription: subscription }),
       }
     );
-    logger.info(`Subscription object updated successfully for user ${userUID}`);
+    logger.info(`Subscription object updated successfully for user ${uid}`);
     if (!response.ok) {
       logger.error(
         `Failed to update subscription object for user. HTTP Status: ${response.status}`
