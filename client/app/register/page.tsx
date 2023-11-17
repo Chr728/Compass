@@ -8,6 +8,7 @@ import Link from 'next/link';
 import {useAuth} from '@/app/contexts/AuthContext';
 
 export default function Register() {
+  const logger = require('../../logger');
   const {error, signUp} = useAuth();
   const formik= useFormik({
     initialValues: {
@@ -33,7 +34,7 @@ export default function Register() {
             }
             signUp(data);
         } catch (error){
-            console.log(error)
+            logger.error(error)
         }
 
     },

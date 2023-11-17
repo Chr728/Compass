@@ -21,6 +21,7 @@ import createUser from "@/app/http/createUser";
 import { createUserAttributes } from "@/app/lib/Models/User";
 import { useProp } from "./PropContext";
 
+const logger = require("../../logger");
 interface AuthContextProps {
   user: User | null;
   login: (email: string, password: string) => void;
@@ -34,6 +35,7 @@ const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
+    logger.error("useAuth must be used within an AuthProvider");
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
@@ -58,7 +60,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         setError("Invalid User Credentials. Please try again.");
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.error(errorCode, errorMessage);
+        logger.error(errorCode, errorMessage);
         handlePopUp("error", errorMessage);
         handleLoading(false);
       });
@@ -70,10 +72,10 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       await signOut(auth);
       handleLoading(false);
       router.push("/logout");
-      console.log("Sign-out successful.");
+      logger.info("Sign-out successful.");
     } catch (error: any) {
       // Handle errors gracefully
-      console.error("Error signing out:", error);
+      logger.error("Error signing out:", error);
       handlePopUp("error", "Error signing out:" + error.message);
     }
   };
@@ -97,7 +99,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
           .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            console.log(errorCode, errorMessage);
+            logger.error(errorCode, errorMessage);
             handlePopUp("error", errorMessage);
             handleLoading(false);
           });
@@ -110,7 +112,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         }
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
+        logger.error(errorCode, errorMessage);
         handlePopUp("error", errorMessage);
       });
   };

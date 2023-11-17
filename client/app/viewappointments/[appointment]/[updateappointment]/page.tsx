@@ -14,6 +14,7 @@ import Custom403 from '@/app/pages/403';
 
 
 export default function UpdateAppointment(  {params: { appointment } } : { params: { appointment: string }} ) { 
+    const logger = require('../../../../logger');  
     const { user } = useAuth()
     const router = useRouter();
     const [data, setData] = useState<Appointment>();
@@ -22,7 +23,7 @@ export default function UpdateAppointment(  {params: { appointment } } : { param
          const appointmentData = await getAppointment(appointment);
          setData(appointmentData.data);
       } catch (error) {
-          console.log('Error fetching appointment');
+          console.error('Error fetching appointment');
       }
   }
 

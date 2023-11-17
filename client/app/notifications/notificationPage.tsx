@@ -15,6 +15,7 @@ import { useProp } from "../contexts/PropContext";
 
 // Logging out the user
 export default function NotificationPage() {
+  const logger = require('../../logger');
   const router = useRouter();
   const { user } = useAuth();
   const { handlePopUp } = useProp();
@@ -148,16 +149,16 @@ export default function NotificationPage() {
       try {
         const userId = user?.uid || "";
         const result = await getNotificationPreference();
-        console.log("Retrieved notification preference of user:", result);
+        logger.info("Retrieved notification preference of user:", result)
         if (result && result.data) {
-          console.log(result.data.activityReminders);
+          logger.info(result.data.activityReminders);
           setActivityReminders(result.data.activityReminders);
           setMedicationReminders(result.data.medicationReminders);
           setAppointmentReminders(result.data.appointmentReminders);
           setFoodIntakeReminders(result.data.foodIntakeReminders);
           setBloodGlucoseReminders(result.data.glucoseMeasurementReminders);
           setInsulinInjectionReminders(result.data.insulinDosageReminders);
-          console.log("Notification preference information all set!");
+          logger.info("Notification preference information all set!");
         }
 
         // Get current notification permissions
@@ -200,7 +201,7 @@ export default function NotificationPage() {
       const result = await updateNotificationPreference(data);
       setSuccessAlert(true);
     } catch (error) {
-      console.error("Error updating notification preference for user:", error);
+      logger.error("Error updating notification preference for user:", error);
       setErrorAlert(true);
     }
   };

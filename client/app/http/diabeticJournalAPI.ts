@@ -1,10 +1,12 @@
 import { auth } from "../config/firebase";
+const logger = require('../../logger');
 
 // Function to make a GET request to retrieve all glucose journals for a user
 export async function getGlucoseJournals(): Promise<any> {
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
+      logger.error('No user is currently signed in.');
       throw new Error("No user is currently signed in.");
     }
     const id = currentUser.uid;
@@ -21,15 +23,17 @@ export async function getGlucoseJournals(): Promise<any> {
       }
     );
     if (response.ok) {
+      logger.info(`Glucose journals fetched successfully for user ${id}`)
       const data = await response.json();
       return data;
     } else {
+      logger.error(`Failed to retrieve glucose journals for user. HTTP Status: ${response.status}`)
       throw new Error(
         `Failed to retrieve glucose journals for user. HTTP Status: ${response.status}`
       );
     }
   } catch (error) {
-    console.error("Error fetching glucose journals:", error);
+    logger.error("Error fetching glucose journals:", error);
     throw error;
   }
 }
@@ -41,6 +45,7 @@ export async function getGlucoseJournal(
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
+      logger.error('No user is currently signed in.');
       throw new Error("No user is currently signed in.");
     }
     const token = await currentUser.getIdToken();
@@ -55,7 +60,9 @@ export async function getGlucoseJournal(
         },
       }
     );
+    logger.info(`Glucose journal fetched successfully for user ${glucoseJournalId}`)
     if (!response.ok) {
+      logger.error(`Failed to retrieve glucose journal entry ${glucoseJournalId} for user. HTTP Status: ${response.status}`)
       throw new Error(
         `Failed to retrieve glucose journal entry ${glucoseJournalId} for user. HTTP Status: ${response.status}`
       );
@@ -63,7 +70,7 @@ export async function getGlucoseJournal(
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching glucose journal entry:", error);
+    logger.error("Error fetching glucose journal entry:", error);
     throw error;
   }
 }
@@ -75,6 +82,7 @@ export async function createGlucoseJournal(
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
+      logger.error('No user is currently signed in.');
       throw new Error("No user is currently signed in.");
     }
     const id = currentUser.uid;
@@ -91,7 +99,9 @@ export async function createGlucoseJournal(
         body: JSON.stringify(glucoseJournalData),
       }
     );
+    logger.info(`Glucose journal created successfully for user ${id}`)
     if (!response.ok) {
+      logger.error(`Failed to create glucose journal entry for user. HTTP Status: ${response.status}`)
       throw new Error(
         `Failed to create glucose journal entry for user. HTTP Status: ${response.status}`
       );
@@ -99,7 +109,7 @@ export async function createGlucoseJournal(
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error creating glucose journal entry:", error);
+    logger.error("Error creating glucose journal entry:", error);
     throw error;
   }
 }
@@ -112,6 +122,7 @@ export async function updateGlucoseJournal(
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
+      logger.error('No user is currently signed in.');
       throw new Error("No user is currently signed in.");
     }
     const token = await currentUser.getIdToken();
@@ -127,7 +138,9 @@ export async function updateGlucoseJournal(
         body: JSON.stringify(updatedGlucoseJournalData),
       }
     );
+    logger.info(`Glucose journal updated successfully for user ${glucoseJournalId}`)
     if (!response.ok) {
+      logger.error(`Failed to update glucose journal entry ${glucoseJournalId} for user. HTTP Status: ${response.status}`)
       throw new Error(
         `Failed to update glucose journal entry ${glucoseJournalId} for user. HTTP Status: ${response.status}`
       );
@@ -135,7 +148,7 @@ export async function updateGlucoseJournal(
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error updating glucose journal entry:", error);
+    logger.error("Error updating glucose journal entry:", error);
     throw error;
   }
 }
@@ -147,6 +160,7 @@ export async function deleteGlucoseJournal(
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
+      logger.error('No user is currently signed in.');
       throw new Error("No user is currently signed in.");
     }
     const token = await currentUser.getIdToken();
@@ -160,16 +174,19 @@ export async function deleteGlucoseJournal(
         },
       }
     );
+    logger.info(`Glucose journal deleted successfully for user ${glucoseJournalId}`)
     if (response && response.status && !response.ok) {
+      logger.error(`Failed to delete glucose journal entry. HTTP Status: ${response.status}`)
       throw new Error(
         `Failed to delete glucose journal entry. HTTP Status: ${response.status}`
       );
     } else if (response && response.status === 204) {
+      logger.info(`Glucose journal entry deleted successfully for user ${glucoseJournalId}`)
       return { message: "glucose journal entry deleted successfully" };
     }
     return { message: "glucose journal entry deleted successfully" };
   } catch (error) {
-    console.error("Error deleting glucose journal entry:", error);
+    logger.error("Error deleting glucose journal entry:", error);
     throw error;
   }
 }
@@ -180,6 +197,7 @@ export async function getInsulinJournals(): Promise<any> {
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
+      logger.error('No user is currently signed in.');
       throw new Error("No user is currently signed in.");
     }
     const id = currentUser.uid;
@@ -195,16 +213,18 @@ export async function getInsulinJournals(): Promise<any> {
         },
       }
     );
+    logger.info(`Insulin journals fetched successfully for user ${id}`)
     if (response.ok) {
       const data = await response.json();
       return data;
     } else {
+      logger.error(`Failed to retrieve insulin journals for user. HTTP Status: ${response.status}`)
       throw new Error(
         `Failed to retrieve insulin journals for user. HTTP Status: ${response.status}`
       );
     }
   } catch (error) {
-    console.error("Error fetching insulin journals:", error);
+    logger.error("Error fetching insulin journals:", error);
     throw error;
   }
 }
@@ -216,6 +236,7 @@ export async function getInsulinJournal(
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
+      logger.error('No user is currently signed in.');
       throw new Error("No user is currently signed in.");
     }
     const token = await currentUser.getIdToken();
@@ -230,7 +251,9 @@ export async function getInsulinJournal(
         },
       }
     );
+    logger.info(`Insulin journal fetched successfully for user ${insulinJournalId}`)
     if (!response.ok) {
+      logger.error(`Failed to retrieve insulin journal entry ${insulinJournalId} for user. HTTP Status: ${response.status}`)
       throw new Error(
         `Failed to retrieve insulin journal entry ${insulinJournalId} for user. HTTP Status: ${response.status}`
       );
@@ -238,7 +261,7 @@ export async function getInsulinJournal(
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching insulin journal entry:", error);
+    logger.error("Error fetching insulin journal entry:", error);
     throw error;
   }
 }
@@ -250,6 +273,7 @@ export async function createInsulinJournal(
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
+      logger.error('No user is currently signed in.');
       throw new Error("No user is currently signed in.");
     }
     const id = currentUser.uid;
@@ -266,7 +290,9 @@ export async function createInsulinJournal(
         body: JSON.stringify(insulinJournalData),
       }
     );
+    logger.info(`Insulin journal created successfully for user ${id}`)
     if (!response.ok) {
+      logger.error(`Failed to create insulin journal entry for user. HTTP Status: ${response.status}`)
       throw new Error(
         `Failed to create insulin journal entry for user. HTTP Status: ${response.status}`
       );
@@ -274,7 +300,7 @@ export async function createInsulinJournal(
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error creating insulin journal entry:", error);
+    logger.error("Error creating insulin journal entry:", error);
     throw error;
   }
 }
@@ -287,6 +313,7 @@ export async function updateInsulinJournal(
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
+      logger.error('No user is currently signed in.');
       throw new Error("No user is currently signed in.");
     }
     const token = await currentUser.getIdToken();
@@ -302,7 +329,9 @@ export async function updateInsulinJournal(
         body: JSON.stringify(updatedInsulinJournalData),
       }
     );
+    logger.info(`Insulin journal updated successfully for user ${insulinJournalId}`)
     if (!response.ok) {
+      logger.error(`Failed to update insulin journal entry ${insulinJournalId} for user. HTTP Status: ${response.status}`)
       throw new Error(
         `Failed to update insulin journal entry ${insulinJournalId} for user. HTTP Status: ${response.status}`
       );
@@ -310,7 +339,7 @@ export async function updateInsulinJournal(
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error updating insulin journal entry:", error);
+    logger.error("Error updating insulin journal entry:", error);
     throw error;
   }
 }
@@ -322,6 +351,7 @@ export async function deleteInsulinJournal(
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
+      logger.error('No user is currently signed in.');
       throw new Error("No user is currently signed in.");
     }
     const token = await currentUser.getIdToken();
@@ -335,16 +365,19 @@ export async function deleteInsulinJournal(
         },
       }
     );
+    logger.info(`Insulin journal deleted successfully for user ${insulinJournalId}`)
     if (response && response.status && !response.ok) {
+      logger.error(`Failed to delete insulin journal entry. HTTP Status: ${response.status}`)
       throw new Error(
         `Failed to delete insulin journal entry. HTTP Status: ${response.status}`
       );
     } else if (response && response.status === 204) {
+      logger.info(`Insulin journal entry deleted successfully for user ${insulinJournalId}`)
       return { message: "insulin journal entry deleted successfully" };
     }
     return { message: "insulin journal entry deleted successfully" };
   } catch (error) {
-    console.error("Error deleting insulin journal entry:", error);
+    logger.error("Error deleting insulin journal entry:", error);
     throw error;
   }
 }

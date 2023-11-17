@@ -16,6 +16,7 @@ import ButtonMUI from '@mui/material/Button';
 
 
 export default function GetWeightJournalsPage() {
+  const logger = require('../../logger');
   const router = useRouter();
   const { user } = useAuth();
   const { userInfo } = useUser();
@@ -23,6 +24,7 @@ export default function GetWeightJournalsPage() {
   
   useEffect(() => {
     if (!userInfo) {
+      logger.warn('User not found.')
       alert('User not found.');
     } 
   }, [userInfo, router]);
@@ -33,13 +35,16 @@ export default function GetWeightJournalsPage() {
       try {
         const userId = user?.uid || '';
         const result = await getWeightJournals();    
-        console.log('All Weight journals entry retrieved:', result);
+        logger.info('All Weight journals entry retrieved:', result);
         setweight(result.data);
       } catch (error) {
-        console.error('Error retrieving weight journal entry:', error);
+        console.log('Error retrieving weight journal entry:', error);
+        // logger.error('Error retrieving weight journal entry:', error);
       }
     }
+    setTimeout(() => {
       fetchWeightJournals();
+    }, 1000);  
   }, [user]);
 
 
@@ -77,7 +82,7 @@ export default function GetWeightJournalsPage() {
     </div>
     <br></br>
 <div className="flex" style={{ justifyContent: 'space-between' }}>
-    <div className="flex-2" style={{ marginRight: '10%' }}>
+    <div className="flex-2" style={{ marginRight: '12%' }}>
       <div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
         Date/Time
         <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
@@ -111,7 +116,7 @@ export default function GetWeightJournalsPage() {
         </p>
       </div>
       <div className="flex-2">
-        <p className="ml-2 font-sans font-medium text-darkgrey text-[14px] text-center">
+        <p className="mr-2 font-sans font-medium text-darkgrey text-[14px] text-center">
           {(item.weight / ((item.height / 100) ** 2)).toFixed(2)}
         </p>
       </div>
