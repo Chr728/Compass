@@ -57,6 +57,20 @@ const createMedication =
         notes: ''
     }
 
+    const updatedMedication =
+    {
+        id: 1,
+        uid: 'medicationUid',
+        medicationName: 'updatedMedication111',
+        dateStarted: '2002-02-22',
+        time: '14:30:00',
+        dosage: 15,
+        unit: 'updatedMedicationUnit',
+        frequency: 'updatedFrequency',
+        route: 'route',
+        notes: 'notes'
+    }
+
     const mockedDecodedToken = {
         uid: 'userUid',
         aud: '',
@@ -223,3 +237,96 @@ const createMedication =
           expect(res.body.status).toBe('ERROR');
         });
       });
+
+      describe('Testing the update medication controller', () => {
+        it('test to update medication', async () => {
+          jest.spyOn(db.Medication, 'findOne').mockResolvedValueOnce(medications[0]);
+          jest.spyOn(db.Medication, 'update').mockResolvedValueOnce(updatedMedication);
+          jest.spyOn(db.Medication, 'findOne').mockResolvedValueOnce(updatedMedication);
+          const res = await request(app)
+            .put('/api/medication/1')
+            .send(updatedMedication)
+            .set({ Authorization: 'Bearer token' });
+          expect(db.Medication.update).toBeCalledTimes(1);
+          expect(db.Medication.findOne).toBeCalledTimes(2);
+          expect(res.status).toBe(200);
+          expect(res.body.status).toBe('SUCCESS');
+          expect(res.body.data).toStrictEqual(updatedMedication);
+        });
+      
+        it('should give error if wrong medication id is sent', async () => {
+          jest.spyOn(db.Medication, 'findOne').mockResolvedValueOnce(null);
+          jest.spyOn(db.Medication, 'update').mockResolvedValueOnce(null);
+          const res = await request(app)
+            .put('/api/medication/1')
+            .send(updatedMedication)
+            .set({ Authorization: 'Bearer token' });
+          expect(db.Medication.findOne).toBeCalledTimes(1);
+          expect(db.Medication.update).toBeCalledTimes(0);
+          expect(res.status).toBe(404);
+          expect(res.body.status).toBe('ERROR');
+          expect(res.body.message).toBe(
+            'Medication not found, invalid medication id.'
+          );
+        });
+      
+        it('should catch error', async () => {
+          jest.spyOn(db.Medication, 'findOne').mockResolvedValueOnce(medications[0]);
+          jest.spyOn(db.Medication, 'update').mockRejectedValue(new Error('query error'));
+          const res = await request(app)
+            .put('/api/medication/1')
+            .send(updatedMedication)
+            .set({ Authorization: 'Bearer token' });
+          expect(db.Medication.findOne).toBeCalledTimes(1);
+          expect(db.Medication.update).toBeCalledTimes(1);
+          expect(res.status).toBe(400);
+          expect(res.body.status).toBe('ERROR');
+        });
+      });
+
+
+      describe('should test the delete medication controller', () => {
+        it('should delete one specific medication', async () => {
+          jest.spyOn(db.Medication, 'findOne').mockResolvedValueOnce(medications[0]);
+          jest.spyOn(db.Medication, 'destroy').mockResolvedValueOnce(medications[0]);
+          const res = await request(app)
+            .delete('/api/medication/1')
+            .set({ Authorization: 'Bearer token' });
+          expect(db.Medication.findOne).toBeCalledTimes(1);
+          expect(db.Medication.destroy).toBeCalledTimes(1);
+          expect(res.status).toBe(200);
+          expect(res.body.status).toBe('SUCCESS');
+          expect(res.body.message).toBe(
+            'Medication entry deleted successfully'
+          );
+        });
+      
+        it('should give error when the medication id sent is wrong', async () => {
+          const nonExistentMedicationId = 0;
+          jest.spyOn(db.Medication, 'findOne').mockResolvedValueOnce(null);
+          jest.spyOn(db.Medication, 'destroy').mockResolvedValueOnce(null);
+          const res = await request(app)
+            .delete(`/api/medication/${nonExistentMedicationId }`)
+            .set({ Authorization: 'Bearer token' });
+          expect(db.Medication.findOne).toBeCalledTimes(1);
+          expect(db.Medication.destroy).toBeCalledTimes(0);
+          expect(res.status).toBe(404);
+          expect(res.body.status).toBe('ERROR');
+          expect(res.body.message).toBe(
+            'Medication not found, invalid medication id.'
+          );
+        });
+      
+        it('should catch error ', async () => {
+          jest.spyOn(db.Medication, 'findOne').mockResolvedValueOnce(medications[0]);
+          jest.spyOn(db.Medication, 'destroy').mockRejectedValue(new Error('query error'));
+          const res = await request(app)
+            .delete('/api/medication/1')
+            .set({ Authorization: 'Bearer token' });
+          expect(db.Medication.findOne).toBeCalledTimes(1);
+          expect(db.Medication.destroy).toBeCalledTimes(1);
+          expect(res.status).toBe(400);
+          expect(res.body.status).toBe('ERROR');
+        });
+      });
+      
