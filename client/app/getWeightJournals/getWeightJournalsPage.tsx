@@ -13,6 +13,7 @@ import { MdDeleteForever, MdInfoOutline, MdKeyboardArrowDown } from 'react-icons
 import Header from '../components/Header';
 import { formatDate, formatMilitaryTime } from '../helpers/utils/datetimeformat';
 import ButtonMUI from '@mui/material/Button';
+import Swal from 'sweetalert2';
 
 
 export default function GetWeightJournalsPage() {
@@ -49,10 +50,28 @@ export default function GetWeightJournalsPage() {
 
 
     async function deleteWeightJournals(weightJournalId: string){
-      const deleteresult = await deleteWeightJournal(weightJournalId);   
-      const newData = weight && weight.filter((item: { id: string; }) => item.id!=weightJournalId);
-      setweight(newData);
-      router.push('/getWeightJournals');
+      Swal.fire({
+        title: "Are you sure you want to delete this weight journal entry?",
+        text: "You will not be able to retrieve it later",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Delete",
+        position: "bottom",
+      }).then(async (result: { isConfirmed: any; }) => {
+        if (result.isConfirmed) {
+          const deleteresult = await deleteWeightJournal(weightJournalId);   
+          const newData = weight && weight.filter((item: { id: string; }) => item.id!=weightJournalId);
+          setweight(newData);
+          router.push('/getWeightJournals'); 
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your weight journal entry has been deleted.",
+            icon: "success"
+          });    
+        }
+    }); 
     }
 
 
