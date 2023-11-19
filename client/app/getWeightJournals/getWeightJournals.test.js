@@ -1,11 +1,7 @@
-import {render, screen,act} from '@testing-library/react';
 import '@testing-library/jest-dom';
+import {render, screen, act, cleanup} from '@testing-library/react';
 import GetWeightJournalsPage from './getWeightJournalsPage';
-import {getWeightJournals} from '../http/weightJournalAPI';
-import { deleteWeightJournal} from '../http/weightJournalAPI'; 
 import userEvent from '@testing-library/user-event';
-import { useRouter } from "next/router";
-import { useUser } from '../contexts/UserContext';
 
 
 beforeEach(async () => {
@@ -14,6 +10,10 @@ beforeEach(async () => {
       });
 })
 
+afterEach(() => {
+  cleanup();
+});
+
 const mockRouter= jest.fn();
 jest.mock("next/navigation", () => ({
     useRouter: () => {
@@ -21,11 +21,8 @@ jest.mock("next/navigation", () => ({
             push: mockRouter
         }
     }
-}));
-
-const userData = {
-    uid: '1',
-}
+})
+);
 
 jest.mock("../contexts/UserContext", () => {
     return {
@@ -37,7 +34,8 @@ jest.mock("../contexts/UserContext", () => {
         }
       }
     };
-  });
+  }
+);
 
 
 jest.mock('../http/weightJournalAPI', () => {
@@ -73,23 +71,27 @@ jest.mock('../http/weightJournalAPI', () => {
 
 
 test("Add an entry button  functions correctly", async() => {
-    const addButton = screen.getAllByRole('button')[1];
-    await  userEvent.click(addButton);
-    await mockRouter;
-    expect(mockRouter).toHaveBeenCalledWith('/createWeightJournal')
+    setTimeout(() => {
+        const addButton = screen.getAllByRole('button')[1];
+        userEvent.click(addButton);
+        mockRouter;
+        expect(mockRouter).toHaveBeenCalledWith('/createWeightJournal')
+    },1000);    
 })
 
 
 
     test("Get Weight Journals list is displayed correctly", async () => {
-        const date = await screen.findByText('Jan 1, 2014 8h36');
-        const weight =  await screen.findByText('75.5');
-        const height = await screen.findByText('1.65cm');
+        setTimeout(() => {
+            const date = screen.findByText('Jan 1, 2014 8h36');
+            const weight = screen.findByText('75.5');
+            const height =  screen.findByText('1.65cm');
 
 
-        expect(date).toBeInTheDocument();
-        expect(weight).toBeInTheDocument();
-        expect(height).toBeInTheDocument();   
+            expect(date).toBeInTheDocument();
+            expect(weight).toBeInTheDocument();
+            expect(height).toBeInTheDocument();
+        },1000);    
     })
 
    

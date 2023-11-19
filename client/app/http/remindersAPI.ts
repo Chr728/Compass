@@ -1,10 +1,12 @@
 import { auth } from "../config/firebase";
+const logger = require("pino")();
 
-// Function to subscribe a user to reminders and prepare push notifications
+// Function to prepare push notifications
 export async function sendUserReminders(): Promise<any> {
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
+      logger.error("No user is currently signed in.")
       throw new Error("No user is currently signed in.");
     }
     const uid = currentUser.uid;
@@ -20,15 +22,19 @@ export async function sendUserReminders(): Promise<any> {
         },
       }
     );
+    logger.info(`Reminder notifications sent successfully for user ${uid}`);
     if (!response.ok) {
+      logger.error(
+        `Failed to send reminder notifications for user. HTTP Status: ${response.status}`
+      );
       throw new Error(
-        `Failed to create reminder preference for user. HTTP Status: ${response.status}`
+        `Failed to create reminder for user. HTTP Status: ${response.status}`
       );
     }
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error creating reminder entry:", error);
+    logger.error("Error creating reminder entry:", error);
     throw error;
   }
 }

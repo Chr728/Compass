@@ -1,4 +1,6 @@
+import { log } from 'console';
 import {auth} from '../config/firebase';
+const logger = require('../../logger');
 
 // Function to make a GET request to retrieve all activity journals for a user
 export async function getActivityJournals(): Promise<any> {
@@ -6,6 +8,7 @@ export async function getActivityJournals(): Promise<any> {
 
         const currentUser = auth.currentUser;
         if (!currentUser) {
+            logger.error('No user is currently signed in.');
             throw new Error('No user is currently signed in.');
         }
         const id = currentUser.uid;
@@ -20,7 +23,9 @@ export async function getActivityJournals(): Promise<any> {
                 }
             }
         );
+        logger.info(`Activity journals fetched successfully for user ${id}`)
         if (!response.ok) {
+            logger.error('Failed to retrieve activity journals for user');
             throw new Error(
                 `Failed to retrieve activity journals for user`
             );
@@ -28,7 +33,7 @@ export async function getActivityJournals(): Promise<any> {
         const data = await response.json();
         return data;
     } catch (error) {
-        console.error('Error fetching activity journals:', error);
+        logger.error('Error fetching activity journals:', error);
         throw error;
     }
 }
@@ -39,6 +44,7 @@ export async function getActivityJournal(activityJournalId: string): Promise<any
 
         const currentUser = auth.currentUser;
         if (!currentUser) {
+            logger.error('No user is currently signed in.');
             throw new Error('No user is currently signed in.');
         }
         const token = await currentUser.getIdToken();
@@ -52,7 +58,9 @@ export async function getActivityJournal(activityJournalId: string): Promise<any
                 }
             }
         );
+        logger.info(`Activity journal fetched successfully for user ${activityJournalId}`)
         if (!response.ok) {
+            logger.error('Failed to retrieve activity journal entry');
             throw new Error(
                 `Failed to retrieve activity journal entry`
             );
@@ -60,7 +68,7 @@ export async function getActivityJournal(activityJournalId: string): Promise<any
         const data = await response.json();
         return data;
     } catch (error) {
-        console.error('Error fetching activity journal entry:', error);
+        logger.error('Error fetching activity journal entry:', error);
         throw error;
     }
 }
@@ -71,6 +79,7 @@ export async function createActivityJournal(activityJournalData: any): Promise<a
 
         const currentUser = auth.currentUser;
         if (!currentUser) {
+            logger.error('No user is currently signed in.');
             throw new Error('No user is currently signed in.');
         }
         const id = currentUser.uid;
@@ -87,7 +96,9 @@ export async function createActivityJournal(activityJournalData: any): Promise<a
                 body: JSON.stringify(activityJournalData),
             }
         );
+        logger.info(`Activity journal entry created successfully for user ${id}`)
         if (!response.ok) {
+            logger.error('Failed to create activity journal entry');
             throw new Error(
                 `Failed to create activity journal entry`
             );
@@ -95,7 +106,7 @@ export async function createActivityJournal(activityJournalData: any): Promise<a
         const data = await response.json();
         return data;
     } catch (error) {
-        console.error('Error creating activity journal entry:', error);
+        logger.error('Error creating activity journal entry:', error);
         throw error;
     }
 }
@@ -109,6 +120,7 @@ export async function updateActivityJournal(
 
         const currentUser = auth.currentUser;
         if (!currentUser) {
+            logger.error('No user is currently signed in.');
             throw new Error('No user is currently signed in.');
         }
         const token = await currentUser.getIdToken();
@@ -124,7 +136,9 @@ export async function updateActivityJournal(
                 body: JSON.stringify(updatedActivityJournalData),
             }
         );
+        logger.info(`Activity journal entry updated successfully for user ${activityJournalId}`)
         if (!response.ok) {
+            logger.error('Failed to update activity journal entry');
             throw new Error(
                 `Failed to update activity journal entry`
             );
@@ -132,7 +146,7 @@ export async function updateActivityJournal(
         const data = await response.json();
         return data;
     } catch (error) {
-        console.error('Error updating activity journal entry:', error);
+        logger.error('Error updating activity journal entry:', error);
         throw error;
     }
 }
@@ -143,6 +157,7 @@ export async function deleteActivityJournal(activityJournalId: string): Promise<
 
         const currentUser = auth.currentUser;
         if (!currentUser) {
+            logger.error('No user is currently signed in.');
             throw new Error('No user is currently signed in.');
         }
         const token = await currentUser.getIdToken();
@@ -156,14 +171,16 @@ export async function deleteActivityJournal(activityJournalId: string): Promise<
                 }
             }
         );
+        logger.info(`Activity journal entry deleted successfully for user ${activityJournalId}`)
         if (!response.ok) {
+            logger.error('Failed to delete activity journal entry');
             throw new Error(
                 `Failed to delete activity journal entry`
             );
         }
         return {message: 'Activity journal entry deleted successfully'};
     } catch (error) {
-        console.error('Error deleting activity journal entry:', error);
+        logger.error('Error deleting activity journal entry:', error);
         throw error;
     }
 }

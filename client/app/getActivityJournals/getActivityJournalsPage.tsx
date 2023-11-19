@@ -15,6 +15,7 @@ import Menu from '../components/Menu';
 import { formatDate } from '../helpers/utils/datetimeformat';
 
 export default function GetActivityJournalsPage() {
+  const logger = require('../../logger');
   const router = useRouter();
   const { user } = useAuth();
   const { userInfo } = useUser();
@@ -22,6 +23,7 @@ export default function GetActivityJournalsPage() {
   
   useEffect(() => {
     if (!userInfo) {
+      logger.warn('User not found.')
       alert('User not found.');
     } 
   }, [userInfo, router]);
@@ -32,19 +34,23 @@ export default function GetActivityJournalsPage() {
       try {
         const userId = user?.uid || '';
         const result = await getActivityJournals();    
-        console.log('All Activity journals entry retrieved:', result);
+        logger.info('All Activity journals entry retrieved:', result);
         setactivity(result.data);
       } catch (error) {
-        console.error('Error retrieving activity journal entry:', error);
+        logger.error('Error retrieving activity journal entry:', error);
       }
     }
+    setTimeout(() => {
       fetchActivityJournals();
+    }, 1000);
   }, [user]);
 
 
     async function deleteActivityJournals(activityJournalId: string){
       const deleteresult = await deleteActivityJournal(activityJournalId);   
-      location.reload();
+      const newData = activity && activity.filter((item: { id: string; }) => item.id!=activityJournalId);
+      setactivity(newData);
+      router.push('/getActivityJournals');
     }
 
 
@@ -74,7 +80,7 @@ export default function GetActivityJournalsPage() {
                 <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
               </div>
             </div>
-            <div className="flex-2" style={{ marginRight: '2%' }} >
+            <div className="flex-2" style={{ marginRight: '3%' }} >
               <div className="font-sans  font-bold  text-darkgrey text-[18px] ml-14 text-center">
                Activity
                <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
@@ -103,7 +109,7 @@ export default function GetActivityJournalsPage() {
       </p>
     </div>
     <div className="flex-1">
-     <p className="font-sans ml-4 font-medium text-darkgrey text-[14px] text-center">
+     <p className="font-sans ml-5 font-medium text-darkgrey text-[14px] text-center">
     {item.activity.length > 10 ? (
       <span className="break-words">
         {item.activity}
@@ -115,7 +121,7 @@ export default function GetActivityJournalsPage() {
      </div>
             
      <div className="flex-1"> 
-      <p className="font-sans ml-4 font-medium text-darkgrey text-[14px]  text-center">
+      <p className="font-sans ml-3 font-medium text-darkgrey text-[14px]  text-center">
         {item.duration}
       </p>
     </div>

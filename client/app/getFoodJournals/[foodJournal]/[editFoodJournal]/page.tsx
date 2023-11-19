@@ -16,6 +16,7 @@ import Custom403 from '@/app/pages/403';
 
 
 export default function EditFoodJournal({params: { foodJournal } } : { params: { foodJournal: string } }) {
+  const logger = require('../../../../logger');
   const { user } = useAuth();
   const router = useRouter();
   const [food, setfood] = useState<any>(null);
@@ -25,20 +26,23 @@ export default function EditFoodJournal({params: { foodJournal } } : { params: {
     try {
       const userId = user?.uid || '';
       const result = await getFoodIntakeJournal(foodJournal);
-      console.log('Food journal entry retrieved:', result);
+      logger.info('Food journal entry retrieved:', result);
       setfood(result.data);
     } catch (error) {
-      console.error('Error retrieving Food journal entry:', error);
+      logger.error('Error retrieving Food journal entry:', error);
     }
   }
   
   useEffect(() => {  
     if (!user) {
       router.push('/login')
+      logger.warn('User not found.')
       alert('User not found.');
     } 
     if (user) {
-      fetchFoodJournal();
+      setTimeout(() => {
+        fetchFoodJournal();
+      },1000);
     }
   }, []);
   
@@ -69,10 +73,10 @@ export default function EditFoodJournal({params: { foodJournal } } : { params: {
           notes: values.notes,
         };
         const result = await updateFoodIntakeJournal(foodJournal, data); 
-        console.log('Food journal entry updated:', result);
+        logger.info('Food journal entry updated:', result);
         router.push(`/getFoodJournals/${foodJournal}`)
       } catch (error) {
-        console.error('Error updating Food journal entry:', error);
+        logger.error('Error updating Food journal entry:', error);
       }
     },
   });
@@ -192,6 +196,7 @@ return (
       id="mealType"
       style={{
         width: '100%',
+         height: '50px',
         border: '1px solid #DBE2EA', // Border style
         borderRadius: '5px',
         marginTop: '5px',

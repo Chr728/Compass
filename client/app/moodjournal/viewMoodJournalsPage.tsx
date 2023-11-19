@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react';
 import { formatDate, formatMilitaryTime } from '../helpers/utils/datetimeformat';
 import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/Header';
+import { logger } from 'firebase-functions/v1';
 
 export default function ViewMoodJournalsPage() {
     const { user } = useAuth();
@@ -29,13 +30,15 @@ export default function ViewMoodJournalsPage() {
         try {
           const userId = user?.uid || '';
           const result = await getMoodJournals();    
-          console.log('All mood journal entries retrieved:', result);
+          logger.info('All mood journal entries retrieved:', result);
           setMoodJournal(result.data);
         } catch (error) {
-          console.error('Error retrieving mood journal entry:', error);
+          logger.error('Error retrieving mood journal entry:', error);
         }
       }
-      fetchMoodJournals();
+      setTimeout(() => {
+        fetchMoodJournals();
+      }, 1000);
     }, [user]);
 
     function setColor(mood: String) {
@@ -55,7 +58,9 @@ export default function ViewMoodJournalsPage() {
 
     async function deleteMoodJournals(moodJournalId: string){
       const deleteresult = await deleteMoodJournal(moodJournalId);   
-      location.reload();
+      const newData = moodJournal && moodJournal.filter((item: { id: string; }) => item.id!=moodJournalId);
+      setMoodJournal(newData);
+      router.push('/moodjournal');
     }
 
     const handleClick = (moodJournalID: string) => {

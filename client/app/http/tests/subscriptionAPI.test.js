@@ -1,13 +1,13 @@
 import { auth } from "../../config/firebase";
 import {
-  createNotificationPreference,
-  getNotificationPreference,
-  updateNotificationPreference,
-  deleteNotificationPreference,
-} from "../notificationPreferenceAPI";
+  createSubscription,
+  getSubscription,
+  updateSubscription,
+  deleteSubscription,
+} from "../subscriptionAPI";
 
-//test the createNotificationPreference function
-describe("createNotificationPreference", () => {
+//test the createSubscription function
+describe("createSubscription", () => {
   beforeEach(() => {
     global.fetch = jest.fn();
   });
@@ -16,16 +16,15 @@ describe("createNotificationPreference", () => {
     jest.resetAllMocks();
   });
 
-  it("should create a notification preference for the user", async () => {
+  it("should create a subscription object for the user", async () => {
     const mockUserId = "123";
-    const mockNotificationPreferenceData = {
-      uid: mockUserId,
-      activityReminders: true,
-      medicationReminders: true,
-      appointmentReminders: true,
-      foodIntakeReminders: true,
+    const mockUserSubscription = {
+      endpoint: "test",
+      keys: {
+        auth: "test",
+        p256dh: "test",
+      },
     };
-
     const mockToken = "mockToken";
     const mockCurrentUser = {
       uid: mockUserId,
@@ -38,29 +37,41 @@ describe("createNotificationPreference", () => {
 
     const mockResponse = {
       ok: true,
-      json: jest.fn().mockResolvedValue(mockNotificationPreferenceData),
+      json: jest.fn().mockResolvedValue(mockUserSubscription),
     };
     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch = mockFetch;
 
-    const result = await createNotificationPreference(mockUserId, mockToken);
+    const result = await createSubscription(
+      mockUserId,
+      mockToken,
+      mockUserSubscription
+    );
 
     expect(mockFetch).toHaveBeenCalledWith(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/notifications/${mockUserId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/subscription/${mockUserId}`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${mockToken}`,
         },
-        body: JSON.stringify(mockNotificationPreferenceData),
+        body: '{"subscription":{"endpoint":"test","keys":{"auth":"test","p256dh":"test"}}}',
       }
     );
-    expect(result).toEqual(mockNotificationPreferenceData);
+    expect(mockResponse.json).toHaveBeenCalled();
+    expect(result).toEqual(mockUserSubscription);
   });
 
-  it("should throw an error if the activity journal entry creation fails", async () => {
+  it("should throw an error if the createSubscription function fails", async () => {
     const mockUserId = "123";
+    const mockUserSubscription = {
+      endpoint: "test",
+      keys: {
+        auth: "test",
+        p256dh: "test",
+      },
+    };
     const mockToken = "mockToken";
     const mockCurrentUser = {
       uid: mockUserId,
@@ -79,15 +90,15 @@ describe("createNotificationPreference", () => {
     global.fetch = mockFetch;
 
     await expect(
-      createNotificationPreference(mockUserId, mockToken)
+      createSubscription(mockUserId, mockToken, mockUserSubscription)
     ).rejects.toThrow(
-      `Failed to create notification preference for user. HTTP Status: ${mockResponse.status}`
+      `Failed to create subscription object for user. HTTP Status: ${mockResponse.status}`
     );
   });
 });
 
-//test the getNotificationPreference function
-describe("getNotificationPreference", () => {
+//test the getSubscription function
+describe("getSubscription", () => {
   beforeEach(() => {
     global.fetch = jest.fn();
   });
@@ -96,11 +107,11 @@ describe("getNotificationPreference", () => {
     jest.resetAllMocks();
   });
 
-  it("should get a notificationPreference by ID", async () => {
-    const mockUser = "123";
+  it("should get a subscription object by ID", async () => {
+    const mockUserId = "123";
     const mockToken = "mockToken";
     const mockCurrentUser = {
-      uid: mockUser.id,
+      uid: mockUserId,
       getIdToken: jest.fn().mockResolvedValue(mockToken),
     };
 
@@ -115,11 +126,11 @@ describe("getNotificationPreference", () => {
     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch = mockFetch;
 
-    const result = await getNotificationPreference();
+    const result = await getSubscription(mockUserId, mockToken);
 
     expect(mockResponse.json).toHaveBeenCalled();
     expect(mockFetch).toHaveBeenCalledWith(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/notifications/${mockUser.id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/subscription/${mockUserId}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -127,23 +138,6 @@ describe("getNotificationPreference", () => {
         },
         method: "GET",
       }
-    );
-  });
-
-  it("should throw an error if the user is not signed in", async () => {
-    Object.defineProperty(auth, "currentUser", {
-      get: jest.fn().mockReturnValue(null),
-    });
-
-    const mockResponse = {
-      ok: true,
-      json: jest.fn().mockResolvedValue({}),
-    };
-    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
-    global.fetch = mockFetch;
-
-    await expect(getNotificationPreference()).rejects.toThrow(
-      "No user is currently signed in."
     );
   });
 
@@ -166,11 +160,11 @@ describe("getNotificationPreference", () => {
     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch = mockFetch;
 
-    await expect(getNotificationPreference()).rejects.toThrow(
-      `Failed to retrieve notification preferences for user. HTTP Status: ${mockResponse.status}`
+    await expect(getSubscription(mockUserId, mockToken)).rejects.toThrow(
+      `Failed to retrieve subscription object for user. HTTP Status: ${mockResponse.status}`
     );
     expect(mockFetch).toHaveBeenCalledWith(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/notifications/${mockUserId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/subscription/${mockUserId}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -182,8 +176,8 @@ describe("getNotificationPreference", () => {
   });
 });
 
-//test the updateNotificationPreference function
-describe("updateNotificationPreference", () => {
+//test the sendUserReminders function
+describe("updateSubscription", () => {
   beforeEach(() => {
     global.fetch = jest.fn();
   });
@@ -192,15 +186,15 @@ describe("updateNotificationPreference", () => {
     jest.resetAllMocks();
   });
 
-  it("should update the notification preference for the user", async () => {
+  it("should update a subscription object for the user", async () => {
     const mockUserId = "123";
-    const mockNotificationPreferenceData = {
-      activityReminders: true,
-      medicationReminders: true,
-      appointmentReminders: true,
-      foodIntakeReminders: true,
+    const mockUserSubscription = {
+      endpoint: "test",
+      keys: {
+        auth: "test",
+        p256dh: "test",
+      },
     };
-
     const mockToken = "mockToken";
     const mockCurrentUser = {
       uid: mockUserId,
@@ -213,61 +207,40 @@ describe("updateNotificationPreference", () => {
 
     const mockResponse = {
       ok: true,
-      json: jest.fn().mockResolvedValue(mockNotificationPreferenceData),
+      json: jest.fn().mockResolvedValue(mockUserSubscription),
     };
     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch = mockFetch;
 
-    const result = await updateNotificationPreference(
-      mockNotificationPreferenceData
+    const result = await updateSubscription(
+      mockUserId,
+      mockToken,
+      mockUserSubscription
     );
 
     expect(mockFetch).toHaveBeenCalledWith(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/notifications/${mockUserId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/subscription/${mockUserId}`,
       {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${mockToken}`,
         },
-        body: JSON.stringify(mockNotificationPreferenceData),
+        body: '{"subscription":{"endpoint":"test","keys":{"auth":"test","p256dh":"test"}}}',
       }
     );
-    expect(result).toEqual(mockNotificationPreferenceData);
+    expect(mockResponse.json).toHaveBeenCalled();
+    expect(result).toEqual(mockUserSubscription);
   });
 
-  it("should throw an error if the user is not signed in", async () => {
-    Object.defineProperty(auth, "currentUser", {
-      get: jest.fn().mockReturnValue(null),
-    });
-
-    const mockNotificationPreferenceData = {
-      activityReminders: true,
-      medicationReminders: true,
-      appointmentReminders: true,
-      foodIntakeReminders: true,
-    };
-
-    const mockResponse = {
-      ok: true,
-      json: jest.fn().mockResolvedValue({}),
-    };
-    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
-    global.fetch = mockFetch;
-
-    await expect(
-      updateNotificationPreference(mockNotificationPreferenceData)
-    ).rejects.toThrow("No user is currently signed in.");
-  });
-
-  it("should throw an error if the notification preference update fails", async () => {
+  it("should throw an error if the updateSubscription function fails", async () => {
     const mockUserId = "123";
-
-    const mockNotificationPreferenceData = {
-      activityReminders: true,
-      medicationReminders: true,
-      appointmentReminders: true,
-      foodIntakeReminders: true,
+    const mockUserSubscription = {
+      endpoint: "test",
+      keys: {
+        auth: "test",
+        p256dh: "test",
+      },
     };
     const mockToken = "mockToken";
     const mockCurrentUser = {
@@ -286,24 +259,16 @@ describe("updateNotificationPreference", () => {
     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch = mockFetch;
 
-    await expect(updateNotificationPreference()).rejects.toThrow(
-      `Failed to update notification preference for user ${mockUserId}. HTTP Status: ${mockResponse.status}`
-    );
-    expect(mockFetch).toHaveBeenCalledWith(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/notifications/${mockUserId}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${mockToken}`,
-        },
-        method: "PUT",
-      }
+    await expect(
+      updateSubscription(mockUserId, mockToken, mockUserSubscription)
+    ).rejects.toThrow(
+      `Failed to update subscription object for user. HTTP Status: ${mockResponse.status}`
     );
   });
 });
 
-//test the deleteNotificationPreference function
-describe("deleteNotificationPreference", () => {
+//test the deleteSubscription function
+describe("deleteSubscription", () => {
   beforeEach(() => {
     global.fetch = jest.fn();
   });
@@ -312,30 +277,29 @@ describe("deleteNotificationPreference", () => {
     jest.resetAllMocks();
   });
 
-  it("should delete the notification preference for the user", async () => {
+  it("should delete the subscription object of the user", async () => {
     const mockUserId = "123";
     const mockToken = "mockToken";
-
     const mockCurrentUser = {
       uid: mockUserId,
       getIdToken: jest.fn().mockResolvedValue(mockToken),
     };
 
-    const mockResponse = {
-      ok: true,
-      status: 204,
-    };
-    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
-    global.fetch = mockFetch;
-
     Object.defineProperty(auth, "currentUser", {
       get: jest.fn().mockReturnValue(mockCurrentUser),
     });
 
-    const result = await deleteNotificationPreference(mockUserId);
+    const mockResponse = {
+      ok: true,
+      json: jest.fn().mockResolvedValue({}),
+    };
+    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = mockFetch;
+
+    const result = await deleteSubscription(mockUserId, mockToken);
 
     expect(mockFetch).toHaveBeenCalledWith(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/notifications/${mockUserId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/subscription/${mockUserId}`,
       {
         method: "DELETE",
         headers: {
@@ -343,8 +307,9 @@ describe("deleteNotificationPreference", () => {
         },
       }
     );
+    expect(mockResponse.json).toHaveBeenCalled();
     expect(result).toEqual({
-      message: "Notification preference deleted successfully",
+      message: "Subscription object deleted successfully",
     });
   });
 
@@ -360,42 +325,32 @@ describe("deleteNotificationPreference", () => {
     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch = mockFetch;
 
-    await expect(deleteNotificationPreference()).rejects.toThrow(
+    await expect(deleteSubscription()).rejects.toThrow(
       "No user is currently signed in."
     );
   });
 
-  it("should throw an error if the notification preference deletion fails", async () => {
+  it("should throw an error if the deleteSubscription function fails", async () => {
     const mockUserId = "123";
     const mockToken = "mockToken";
-
     const mockCurrentUser = {
       uid: mockUserId,
       getIdToken: jest.fn().mockResolvedValue(mockToken),
     };
 
-    const mockResponse = {
-      ok: false,
-      status: 204,
-    };
-    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
-    global.fetch = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve(mockResponse));
-
     Object.defineProperty(auth, "currentUser", {
       get: jest.fn().mockReturnValue(mockCurrentUser),
     });
 
-    const mockErrorResponse = {
+    const mockResponse = {
       ok: false,
       status: 500,
     };
-    const mockErrorFetch = jest.fn().mockResolvedValue(mockErrorResponse);
-    global.fetch = mockErrorFetch;
+    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = mockFetch;
 
-    await expect(deleteNotificationPreference(mockUserId)).rejects.toThrow(
-      `Failed to delete notification preference for user ${mockUserId}. HTTP Status: ${mockErrorResponse.status}`
+    await expect(deleteSubscription(mockUserId, mockToken)).rejects.toThrow(
+      `Failed to delete subscription object for user. HTTP Status: ${mockResponse.status}`
     );
   });
 });

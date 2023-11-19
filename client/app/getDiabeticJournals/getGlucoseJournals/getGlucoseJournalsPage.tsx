@@ -15,6 +15,7 @@ import { formatDate, formatMilitaryTime } from '../../helpers/utils/datetimeform
 
 
 export default function GetGlucoseJournalsPage() {
+  const logger = require('../../../logger');
   const router = useRouter();
   const { user } = useAuth();
   const { userInfo } = useUser();
@@ -22,6 +23,7 @@ export default function GetGlucoseJournalsPage() {
   
   useEffect(() => {
     if (!userInfo) {
+      logger.warn('User not found.')
       alert('User not found.');
     } 
   }, [userInfo, router]);
@@ -32,19 +34,24 @@ export default function GetGlucoseJournalsPage() {
       try {
         const userId = user?.uid || '';
         const result = await getGlucoseJournals();    
-        console.log('All Glucose journals entry retrieved:', result);
+        logger.info('All Glucose journals entry retrieved:', result);
         setglucose(result.data);
       } catch (error) {
-        console.error('Error retrieving glucose journal entry:', error);
+        logger.error('Error retrieving glucose journal entry:', error);
       }
     }
+    setTimeout(() => {
       fetchGlucoseJournals();
+    }, 1000);
   }, [user]);
 
 
     async function deleteGlucoseJournals(glucoseJournalId: string){
       const deleteresult = await deleteGlucoseJournal(glucoseJournalId);   
-      location.reload();
+      const newData = glucose && glucose.filter((item: { id: string; }) => item.id!=glucoseJournalId);
+      setglucose(newData);
+      router.push('/getDiabeticJournals');
+  
     }
 
 

@@ -13,7 +13,7 @@ import Custom403 from '@/app/pages/403';
 
 
 export default function GetMoodJournal( {params: { viewMoodJournal } } : { params: { viewMoodJournal: string }} ) {
-  
+  const logger = require('../../../logger');
   const { user } = useAuth();
   const router = useRouter();
   const { userInfo } = useUser();
@@ -22,16 +22,16 @@ export default function GetMoodJournal( {params: { viewMoodJournal } } : { param
   async function fetchMoodJournal() {
     try {
       const result = await getMoodJournal(viewMoodJournal);
-      console.log('Mood journal entry retrieved:', result);
+      logger.info('Mood journal entry retrieved:', result);
       const updatedStressSignals = JSON.parse(result.data.stressSignals);
       const updatedMoodData = {
        ...result.data,
        stressSignals: updatedStressSignals, 
       }
-      console.log('Updated mood data:', updatedMoodData);
+      logger.info('Updated mood data:', updatedMoodData);
       setMood(updatedMoodData);
     } catch (error) {
-      console.error('Error retrieving mood journal entry:', error);
+      logger.error('Error retrieving mood journal entry:', error);
     }
   }
 
@@ -41,7 +41,9 @@ export default function GetMoodJournal( {params: { viewMoodJournal } } : { param
       alert('User not found.');
     } 
     if (user) {
-      fetchMoodJournal();
+      setTimeout(() => {
+        fetchMoodJournal();
+      }, 1000);  
     }
   }, []);
 

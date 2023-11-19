@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react';
 import Header from '../components/Header';
 
 export default function CreateInsulinJournalPage() {
+  const logger = require('../../logger');
   const router = useRouter();
   const { user } = useAuth();
   const { userInfo } = useUser();
@@ -45,10 +46,10 @@ export default function CreateInsulinJournalPage() {
           notes: values.notes,
         };
         const result = await createInsulinJournal(data); 
-        console.log('Insulin journal entry created:', result);
+        logger.info('Insulin journal entry created:', result);
         router.push('/getDiabeticJournals');
       } catch (error) {
-        console.error('Error creating Insulin journal entry:', error);
+        logger.error('Error creating Insulin journal entry:', error);
       }
     },
   });

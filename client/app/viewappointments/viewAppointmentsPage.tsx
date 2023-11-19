@@ -17,6 +17,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 
 export default function ViewAppointmentsPage() {
+    const logger = require('../../logger');
     const { user } = useAuth();
     useEffect(() =>{
         if (!user) 
@@ -34,9 +35,10 @@ export default function ViewAppointmentsPage() {
             try {
                 const userId = user?.uid || '';
                 const appointmentData = await getAppointments(userId);
+                logger.info('All appointments retrieved:', appointmentData.data)
                 setData(appointmentData.data);
             } catch (error) {
-                console.log('Error fetching appointments');
+                logger.error('Error fetching appointments', error);
             }
         }
         fetchAppointment();
@@ -49,7 +51,7 @@ export default function ViewAppointmentsPage() {
             setData(newData);
             router.push('/viewappointments');
         } catch(error){
-            console.log('Error deleting appointment');
+            logger.error('Error deleting appointment');
         }
     }
 
@@ -107,13 +109,13 @@ export default function ViewAppointmentsPage() {
                         <TableCell>
                             <div>
                                 Date/Time
-                                <MdKeyboardArrowDown className="inline-block text-[28px] text-darkgrey" />
+                                <MdKeyboardArrowDown className="inline-block text-[24px] text-darkgrey" />
                             </div>
                         </TableCell>
                         <TableCell>
                             <div>
                             Appointment
-                            <MdKeyboardArrowDown className="inline-block text-[28px] text-darkgrey" />
+                            <MdKeyboardArrowDown className="inline-block text-[24px] text-darkgrey" />
                             </div>
                         </TableCell>
                         <TableCell></TableCell>
