@@ -13,6 +13,7 @@ import { MdDeleteForever, MdInfoOutline, MdKeyboardArrowDown } from 'react-icons
 import Header from '../components/Header';
 import Menu from '../components/Menu';
 import { formatDate } from '../helpers/utils/datetimeformat';
+import Swal from 'sweetalert2';
 
 export default function GetActivityJournalsPage() {
   const logger = require('../../logger');
@@ -47,10 +48,28 @@ export default function GetActivityJournalsPage() {
 
 
     async function deleteActivityJournals(activityJournalId: string){
-      const deleteresult = await deleteActivityJournal(activityJournalId);   
-      const newData = activity && activity.filter((item: { id: string; }) => item.id!=activityJournalId);
-      setactivity(newData);
-      router.push('/getActivityJournals');
+      Swal.fire({
+        title: "Are you sure you want to delete this activity journal entry?",
+        text: "You will not be able to retrieve it later",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Delete",
+        position: "bottom",
+      }).then(async (result: { isConfirmed: any; }) => {
+        if (result.isConfirmed) {
+          const deleteresult = await deleteActivityJournal(activityJournalId);   
+          const newData = activity && activity.filter((item: { id: string; }) => item.id!=activityJournalId);
+          setactivity(newData);
+          router.push('/getActivityJournals');
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your activity journal entry has been deleted.",
+            icon: "success"
+          });    
+        }
+     }); 
     }
 
 
