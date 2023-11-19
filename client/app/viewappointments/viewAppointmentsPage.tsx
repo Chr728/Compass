@@ -15,6 +15,7 @@ import { Appointment } from '../http/appointmentAPI';
 import { formatDate, formatMilitaryTime } from '../helpers/utils/datetimeformat';
 import { useAuth } from '../contexts/AuthContext';
 import { MdKeyboardArrowDown } from 'react-icons/md';
+import Swal from 'sweetalert2';
 
 export default function ViewAppointmentsPage() {
     const logger = require('../../logger');
@@ -45,14 +46,32 @@ export default function ViewAppointmentsPage() {
     }, [user]);
    
     const handleDelete = async (appointmentID: any) => {
-        try{
-            const response = await deleteAppointment(appointmentID);
-            const newData = data && data.filter(item => item.id!=appointmentID);
-            setData(newData);
-            router.push('/viewappointments');
-        } catch(error){
-            logger.error('Error deleting appointment');
-        }
+        Swal.fire({
+            title: "Are you sure you want to delete this appointment?",
+            text: "You will not be able to retrieve it later",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Delete",
+            position: "bottom",
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+                try{
+                    const response = await deleteAppointment(appointmentID);
+                    const newData = data && data.filter(item => item.id!=appointmentID);
+                    setData(newData);
+                    router.push('/viewappointments');
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Your appointment has been deleted.",
+                        icon: "success"
+                      });
+                } catch(error){
+                    logger.error('Error deleting appointment');
+                }       
+            }
+        });      
     }
 
     const handleClick = (appointmentID: string) => {
@@ -143,7 +162,7 @@ export default function ViewAppointmentsPage() {
                                             className="mr-4 md:hidden"
                                             style={{ width: 'auto', height: 'auto' }}
                                             onClick={() => handleDelete(row.id)}
-                                        />
+                                        />                              
                                     </TableCell>
                                 </TableRow>
                         ))}
