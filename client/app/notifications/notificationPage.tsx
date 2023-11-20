@@ -15,7 +15,7 @@ import { useProp } from "../contexts/PropContext";
 
 // Logging out the user
 export default function NotificationPage() {
-  const logger = require('../../logger');
+  const logger = require("../../logger");
   const router = useRouter();
   const { user } = useAuth();
   const { handlePopUp } = useProp();
@@ -98,7 +98,7 @@ export default function NotificationPage() {
     React.useState(true);
 
   const [checkedSubscriptionReminders, setSubscriptionReminders] =
-    React.useState(true);
+    React.useState(false);
 
   const handleActivityRemindersChange = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -149,7 +149,7 @@ export default function NotificationPage() {
       try {
         const userId = user?.uid || "";
         const result = await getNotificationPreference();
-        logger.info("Retrieved notification preference of user:", result)
+        logger.info("Retrieved notification preference of user:", result);
         if (result && result.data) {
           logger.info(result.data.activityReminders);
           setActivityReminders(result.data.activityReminders);

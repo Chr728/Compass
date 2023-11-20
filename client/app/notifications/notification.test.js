@@ -142,4 +142,17 @@ describe("Notification Settings Page", () => {
     fireEvent.click(button);
     expect(mockRouter).toHaveBeenCalled();
   });
+
+  test("Routes to settings page on button click", () => {
+    const mockPush = jest.fn();
+    useRouter.mockImplementation(() => ({
+      push: mockPush,
+    }));
+
+    render(<NotificationPage />);
+    const backButton = screen.getByText("Push Notifications");
+
+    fireEvent.click(backButton);
+    expect(mockPush).toHaveBeenCalledWith("/settings");
+  });
 });
