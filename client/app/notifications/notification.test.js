@@ -114,7 +114,7 @@ describe("Notification Settings Page", () => {
     const toggleButtonInsulinDosage = screen.getByLabelText(
       "InsulinInjectionSwitch"
     );
-    expect(toggleButtonSubscription).toBeChecked();
+    expect(toggleButtonSubscription).not.toBeChecked();
     expect(toggleButtonActvity).toBeChecked();
     expect(toggleButtonMedication).toBeChecked();
     expect(toggleButtonAppointment).toBeChecked();
@@ -128,6 +128,7 @@ describe("Notification Settings Page", () => {
     fireEvent.click(toggleButtonFoodIntake);
     fireEvent.click(toggleButtonBloodGlucose);
     fireEvent.click(toggleButtonInsulinDosage);
+    expect(toggleButtonSubscription).toBeChecked();
     expect(toggleButtonActvity).not.toBeChecked();
     expect(toggleButtonMedication).not.toBeChecked();
     expect(toggleButtonAppointment).not.toBeChecked();
