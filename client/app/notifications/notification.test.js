@@ -9,6 +9,7 @@ import {
   createNotificationPreference,
 } from "../http/notificationPreferenceAPI";
 import Alert from "@mui/material/Alert";
+import { act } from "react-dom/test-utils";
 
 //Mock useRouter from next/navigation
 jest.mock("next/navigation", () => ({
@@ -46,20 +47,7 @@ jest.mock("../contexts/UserContext", () => {
 //Mock http request to get notification preferences
 jest.mock("../http/notificationPreferenceAPI", () => {
   return {
-    getNotificationPreference: () => {
-      return {
-        status: "SUCCESS",
-        data: [
-          {
-            uid: "1",
-            activityReminders: true,
-            appointmentReminders: true,
-            foodIntakeReminders: true,
-            medicationReminders: true,
-          },
-        ],
-      };
-    },
+    getNotificationPreference: jest.fn(),
     updateNotificationPreference: jest.fn(),
     createNotificationPreference: jest.fn(),
   };
@@ -203,5 +191,53 @@ describe("AlertComponent", () => {
 
     // Check that the error alert is closed by verifying its absence
     expect(screen.queryByText("Preference failed to save!")).toBeNull();
+  });
+});
+
+describe("Notification Page useEffect", () => {
+  beforeEach(() => {
+    // Mock the Notification API in the window object
+    Object.defineProperty(window, "Notification", {
+      value: {
+        permission: "granted",
+      },
+      writable: true,
+    });
+  });
+
+  test("fetchNotificationPreference fetches and sets preferences", async () => {
+    const fakeData = {
+      data: {
+        activityReminders: true,
+        medicationReminders: false,
+        appointmentReminders: true,
+        foodIntakeReminders: true,
+        glucoseMeasurementReminders: true,
+        insulinDosageReminders: true,
+      },
+    };
+    getNotificationPreference.mockResolvedValue(fakeData);
+
+    await act(async () => {
+      render(<NotificationPage />);
+    });
+
+    // Assert that getNotificationPreference was called
+    expect(getNotificationPreference).toHaveBeenCalledTimes(1);
+  });
+
+  test("handles error while fetching notification preferences", async () => {
+    getNotificationPreference.mockRejectedValue("Some error");
+
+    await act(async () => {
+      render(<NotificationPage />);
+    });
+
+    // Assert that getNotificationPreference was called
+    // Note: we put expected calls to 2 due to react strict mode rendering the component twice in development mode
+    expect(getNotificationPreference).toHaveBeenCalledTimes(2);
+
+    // Assert that createNotificationPreference was attempted
+    expect(createNotificationPreference).toHaveBeenCalled();
   });
 });
