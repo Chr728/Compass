@@ -10,6 +10,7 @@ import {
 } from "../http/notificationPreferenceAPI";
 import Alert from "@mui/material/Alert";
 import { act } from "react-dom/test-utils";
+import { create } from "domain";
 
 //Mock useRouter from next/navigation
 jest.mock("next/navigation", () => ({
@@ -195,7 +196,7 @@ describe("AlertComponent", () => {
 });
 
 describe("Notification Page useEffect", () => {
-  beforeEach(() => {
+  test("fetchNotificationPreference fetches and sets preferences", async () => {
     // Mock the Notification API in the window object
     Object.defineProperty(window, "Notification", {
       value: {
@@ -203,9 +204,7 @@ describe("Notification Page useEffect", () => {
       },
       writable: true,
     });
-  });
 
-  test("fetchNotificationPreference fetches and sets preferences", async () => {
     const fakeData = {
       data: {
         activityReminders: true,
@@ -222,19 +221,28 @@ describe("Notification Page useEffect", () => {
       render(<NotificationPage />);
     });
 
-    // Assert that getNotificationPreference was called
+    // Assert that getNotificationPreference was called\
+    // Note: expected calls vary with environment, in CICD the call occurs 7 times
     expect(getNotificationPreference).toHaveBeenCalledTimes(7);
   });
 
   test("handles error while fetching notification preferences", async () => {
-    getNotificationPreference.mockRejectedValue("Some error");
+    // Mock the Notification API in the window object
+    Object.defineProperty(window, "Notification", {
+      value: {
+        permission: "default",
+      },
+      writable: true,
+    });
+    getNotificationPreference.mockRejectedValueOnce(new Error("Failed"));
+    createNotificationPreference.mockRejectedValueOnce(new Error("Failed"));
 
     await act(async () => {
       render(<NotificationPage />);
     });
 
     // Assert that getNotificationPreference was called
-    // Note: we put expected calls to 2 due to react strict mode rendering the component twice in development mode
+    // Note: expected calls vary with environment, in CICD the call occurs 8 times
     expect(getNotificationPreference).toHaveBeenCalledTimes(8);
 
     // Assert that createNotificationPreference was attempted
