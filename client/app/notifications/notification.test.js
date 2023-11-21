@@ -8,6 +8,7 @@ import {
   updateNotificationPreference,
   createNotificationPreference,
 } from "../http/notificationPreferenceAPI";
+import Alert from "@mui/material/Alert";
 
 //Mock useRouter from next/navigation
 jest.mock("next/navigation", () => ({
@@ -155,5 +156,40 @@ describe("Notification Settings Page", () => {
 
     fireEvent.click(backButton);
     expect(mockPush).toHaveBeenCalledWith("/settings");
+  });
+});
+
+// Assume the code is in a component named AlertComponent
+describe("AlertComponent", () => {
+  test("Renders success alert on successful update", async () => {
+    updateNotificationPreference.mockResolvedValueOnce({ status: "success" });
+
+    render(<NotificationPage />);
+
+    const saveButton = screen.getByText("Save");
+    fireEvent.click(saveButton);
+
+    await waitFor(() => {
+      expect(updateNotificationPreference).toHaveBeenCalled();
+    });
+
+    // Ensure that the success alert is shown
+    expect(screen.getByText("Preference saved!")).toBeInTheDocument();
+  });
+
+  test("Renders error alert on update failure", async () => {
+    updateNotificationPreference.mockRejectedValueOnce(new Error("Failed"));
+
+    render(<NotificationPage />);
+
+    const saveButton = screen.getByText("Save");
+    fireEvent.click(saveButton);
+
+    await waitFor(() => {
+      expect(updateNotificationPreference).toHaveBeenCalled();
+    });
+
+    // Ensure that the error alert is shown
+    expect(screen.getByText("Preference failed to save!")).toBeInTheDocument();
   });
 });
