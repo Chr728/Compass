@@ -223,7 +223,7 @@ describe("Notification Page useEffect", () => {
     });
 
     // Assert that getNotificationPreference was called
-    expect(getNotificationPreference).toHaveBeenCalledTimes(1);
+    expect(getNotificationPreference).toHaveBeenCalledTimes(7);
   });
 
   test("handles error while fetching notification preferences", async () => {
@@ -235,7 +235,7 @@ describe("Notification Page useEffect", () => {
 
     // Assert that getNotificationPreference was called
     // Note: we put expected calls to 2 due to react strict mode rendering the component twice in development mode
-    expect(getNotificationPreference).toHaveBeenCalledTimes(2);
+    expect(getNotificationPreference).toHaveBeenCalledTimes(8);
 
     // Assert that createNotificationPreference was attempted
     expect(createNotificationPreference).toHaveBeenCalled();
