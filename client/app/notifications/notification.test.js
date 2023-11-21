@@ -175,6 +175,12 @@ describe("AlertComponent", () => {
 
     // Ensure that the success alert is shown
     expect(screen.getByText("Preference saved!")).toBeInTheDocument();
+
+    // Simulate closing the success alert
+    fireEvent.click(screen.getByLabelText("Close"));
+
+    // Check that the success alert is closed by verifying its absence
+    expect(screen.queryByText("Preference saved!")).toBeNull();
   });
 
   test("Renders error alert on update failure", async () => {
@@ -191,5 +197,11 @@ describe("AlertComponent", () => {
 
     // Ensure that the error alert is shown
     expect(screen.getByText("Preference failed to save!")).toBeInTheDocument();
+
+    // Simulate closing the error alert
+    fireEvent.click(screen.getByLabelText("Close"));
+
+    // Check that the error alert is closed by verifying its absence
+    expect(screen.queryByText("Preference failed to save!")).toBeNull();
   });
 });
