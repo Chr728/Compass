@@ -51,12 +51,11 @@ export default function GetFoodJournalsPage() {
       Swal.fire({
         title: "Are you sure you want to delete this food journal entry?",
         text: "You will not be able to retrieve it later",
-        icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
         confirmButtonText: "Delete",
-        position: "bottom",
+        position:"bottom"
       }).then(async (result: { isConfirmed: any; }) => {
         if (result.isConfirmed) {
           const deleteresult = await deleteFoodIntakeJournal(foodJournalId);   

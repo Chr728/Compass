@@ -51,7 +51,6 @@ export default function GetGlucoseJournalsPage() {
         Swal.fire({
           title: "Are you sure you want to delete this glucose journal entry?",
           text: "You will not be able to retrieve it later",
-          icon: "warning",
           showCancelButton: true,
           confirmButtonColor: "#3085d6",
           cancelButtonColor: "#d33",
