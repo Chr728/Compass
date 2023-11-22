@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react';
 import { formatDate, formatMilitaryTime } from '../helpers/utils/datetimeformat';
 import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/Header';
+import Image from 'next/image';
 
 export default function ViewMoodJournalsPage() {
     const logger = require('../../logger');
@@ -44,9 +45,9 @@ export default function ViewMoodJournalsPage() {
     function setColor(mood: String) {
       switch(mood) {
         case 'awesome':
-          return '#a5d6a7'
-        case 'good':
           return '#14a38b'
+        case 'good':
+          return '#a5d6a7'
         case 'sad':
           return '#756f86'
         case 'bad':
@@ -69,6 +70,7 @@ export default function ViewMoodJournalsPage() {
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col w-full">
+    
         <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4">
         <button onClick={() => router.push('/journals')}>
             <Header headerText="Mood Journal "></Header>
@@ -77,11 +79,14 @@ export default function ViewMoodJournalsPage() {
         <p className="text-grey font-sans text-[16px] ml-4 mt-2 w-11/12">
             Tracking your mood helps you understand when and what caused your mood to change.
         </p>
-        <div 
+        {/* <div 
             className="w-11/12 rounded-3xl 
             bg-white flex flex-col space-y-4 mt-8 self-center	
             shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
-        >
+        > */}
+          <div 
+            className="w-11/12 rounded-3xl flex flex-col space-y-4 mt-2 self-center"
+          >
             <div className="flex space-x-2" style={{padding: '24px 16px 0 16px'}}>
                 <Button 
                 type="button" 
@@ -118,37 +123,49 @@ export default function ViewMoodJournalsPage() {
                 }}/>
         </div>
 
-      <div className="flex flex-col space-y-2 p-4 text-darkgrey">
+      <div className="flex flex-col space-y-2 p-4 text-darkgrey" style={{ overflowY: 'auto', maxHeight: '300px' }}>
         
         {moodJournal && moodJournal.map((data: any, index: number) => (
             <div 
               key={data.id}
               className="flex space-x-2" 
             >
-              
                 <div className="self-center border border-grey p-2 rounded-lg w-[75px] h-[75px] text-center font-bold text-darkgrey text-[20px]">
                   <p>{formatDate(data.date).substring(0,3).toUpperCase()}</p>
                   <p>{formatDate(data.date).substring(4,6).replace(',', '')}</p>
                 </div>
             
-              <div className="flex items-center">
-                <div className="h-[20px] w-[10px] flex items-center">
-                  <div className="border-b-[25px] border-r-[37.5px] border-t-[25px] border-b-transparent border-t-transparent"
-                      style={{ borderColor: 'transparent', borderRightColor: setColor(data.howAreYou)}}>
+                <div className="flex items-center">
+                  <div className="h-[20px] w-[10px] flex items-center">
+                    <div className="border-b-[25px] border-r-[37.5px] border-t-[25px] border-b-transparent border-t-transparent"
+                        style={{ borderColor: 'transparent', borderRightColor: setColor(data.howAreYou)}}>
+                    </div>
+                  </div>
+                  <div className="relative rounded-md p-2 w-[240px] h-[100px] text-white" style={{background: setColor(data.howAreYou)}}>
+                    <Image 
+                      src="/icons/info.svg"
+                      alt="Info icon"
+                      width={10}
+                      height={10}
+                      className="absolute top-2 right-2"
+                      style={{ width: 'auto', height: 'auto' }}
+                    />
+                    <p className="font-medium">Felt {data.howAreYou}!</p>
+                    {data.notes && (
+                        <p className="opacity-[0.86]">{data.notes.length > 55 ? `${data.notes.substring(0, 55)}...` : data.notes}</p>
+                    )}
                   </div>
                 </div>
-                <div className="rounded-md p-4 w-[240px] h-[90px] text-white" style={{background: setColor(data.howAreYou)}}>
-                  <p>Felt {data.howAreYou}!</p>
-                  <p>{data.notes}</p>
-                </div>
-              </div>
-              </div> ))}
+              </div> 
+            ))}
 
             </div>
             <div className="mb-2">&nbsp;</div>     
          </div>
-
-      </div> )}
+  
+    </div>
+  )
+}
          
          
 
