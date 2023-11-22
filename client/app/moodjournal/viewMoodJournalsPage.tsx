@@ -85,7 +85,7 @@ export default function ViewMoodJournalsPage() {
             shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
         > */}
           <div 
-            className="w-11/12 rounded-3xl flex flex-col space-y-4 mt-2 self-center"
+            className="w-11/12 rounded-3xl flex flex-col space-y-4 mt-2 self-center mb-4"
           >
             <div className="flex space-x-2" style={{padding: '24px 16px 0 16px'}}>
                 <Button 
@@ -121,9 +121,9 @@ export default function ViewMoodJournalsPage() {
                     borderRadius: '3px', 
                     fontSize: '14px'
                 }}/>
-        </div>
+            </div>
 
-      <div className="flex flex-col space-y-2 p-4 text-darkgrey" style={{ overflowY: 'auto', maxHeight: '300px' }}>
+      <div className="flex flex-col space-y-2 p-4 text-darkgrey" style={{ overflowY: 'auto', maxHeight: '380px'}}>
         
         {moodJournal && moodJournal.map((data: any, index: number) => (
             <div 
@@ -142,14 +142,16 @@ export default function ViewMoodJournalsPage() {
                     </div>
                   </div>
                   <div className="relative rounded-md p-2 w-[240px] h-[100px] text-white" style={{background: setColor(data.howAreYou)}}>
-                    <Image 
-                      src="/icons/info.svg"
-                      alt="Info icon"
-                      width={10}
-                      height={10}
-                      className="absolute top-2 right-2"
-                      style={{ width: 'auto', height: 'auto' }}
-                    />
+                    <div onClick={() => handleClick(data.id)}>
+                      <Image 
+                        src="/icons/info.svg"
+                        alt="Info icon"
+                        width={10}
+                        height={10}
+                        className="absolute top-2 right-2"
+                        style={{ width: 'auto', height: 'auto' }}
+                      />
+                    </div>
                     <p className="font-medium">Felt {data.howAreYou}!</p>
                     {data.notes && (
                         <p className="opacity-[0.86]">{data.notes.length > 55 ? `${data.notes.substring(0, 55)}...` : data.notes}</p>
