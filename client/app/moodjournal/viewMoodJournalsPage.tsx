@@ -46,13 +46,13 @@ export default function ViewMoodJournalsPage() {
         case 'awesome':
           return '#a5d6a7'
         case 'good':
-          return '#90caf9'
+          return '#14a38b'
         case 'sad':
-          return '#e0e0e0'
+          return '#756f86'
         case 'bad':
-          return '#fff59d'
+          return '#f2ac57'
         case 'awful': 
-        return '#ffcdd2'
+        return '#ff7171'
       }
     }
 
@@ -82,7 +82,7 @@ export default function ViewMoodJournalsPage() {
             bg-white flex flex-col space-y-4 mt-8 self-center	
             shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
         >
-            <div style={{padding: '24px 16px 0 16px'}}>
+            <div className="flex space-x-2" style={{padding: '24px 16px 0 16px'}}>
                 <Button 
                 type="button" 
                 text="Add an item" 
@@ -94,46 +94,70 @@ export default function ViewMoodJournalsPage() {
                     borderRadius: '3px', 
                     fontSize: '14px'
                 }}/>
+                <Button 
+                type="button" 
+                text="Daily" 
+                onClick={ () => router.push('/moodjournal/addentry')} 
+                style={{ 
+                    width: '100px', 
+                    height: '34px', 
+                    padding: '2px', 
+                    borderRadius: '3px', 
+                    fontSize: '14px'
+                }}/>
+                <Button 
+                type="button" 
+                text="Monthly" 
+                onClick={ () => router.push('/moodjournal/addentry')} 
+                style={{ 
+                    width: '100px', 
+                    height: '34px', 
+                    padding: '2px', 
+                    borderRadius: '3px', 
+                    fontSize: '14px'
+                }}/>
         </div>
 
+      <div className="flex flex-col space-y-2 p-4 text-darkgrey">
+        
         {moodJournal && moodJournal.map((data: any, index: number) => (
             <div 
               key={data.id}
-              className="my-4 self-center w-11/12" 
+              className="flex space-x-2" 
             >
-              <Card 
-                sx={{backgroundColor: setColor(data.howAreYou) }}                
-              >
-                <CardContent>
-                  <Typography variant="body2">
-                    {formatDate(data.date)}
-                  </Typography>
-                  <Typography variant="h5" component="div">
-                    {data.notes}
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <ButtonMUI 
-                    size="small"
-                    onClick={() => handleClick(data.id)}
-                  >
-                    View Entry
-                  </ButtonMUI>
-                  <ButtonMUI 
-                    size="small"
-                    onClick={() => deleteMoodJournals(data.id)}
-                  >
-                    Delete
-                  </ButtonMUI>
-                </CardActions>
-              </Card>
-            </div>
+              
+                <div className="self-center border border-grey p-2 rounded-lg w-[75px] h-[75px] text-center font-bold text-darkgrey text-[20px]">
+                  <p>{formatDate(data.date).substring(0,3).toUpperCase()}</p>
+                  <p>{formatDate(data.date).substring(4,6).replace(',', '')}</p>
+                </div>
+            
+              <div className="flex items-center">
+                <div className="h-[20px] w-[10px] flex items-center">
+                  <div className="border-b-[25px] border-r-[37.5px] border-t-[25px] border-b-transparent border-t-transparent"
+                      style={{ borderColor: 'transparent', borderRightColor: setColor(data.howAreYou)}}>
+                  </div>
+                </div>
+                <div className="rounded-md p-4 w-[240px] h-[90px] text-white" style={{background: setColor(data.howAreYou)}}>
+                  <p>Felt {data.howAreYou}!</p>
+                  <p>{data.notes}</p>
+                </div>
+              </div>
+              </div> ))}
 
-          ))}
-            <div className="mb-2">&nbsp;</div>        
-        </div>
-    </div>
-  )
-}
+            </div>
+            <div className="mb-2">&nbsp;</div>     
+         </div>
+
+      </div> )}
+         
+         
+
+
+
+  
+
+
+
+
 
 
