@@ -12,9 +12,9 @@ import { useEffect, useState } from 'react';
 import { formatDate, formatMilitaryTime } from '../helpers/utils/datetimeformat';
 import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/Header';
-import { logger } from 'firebase-functions/v1';
 
 export default function ViewMoodJournalsPage() {
+    const logger = require('../../logger');
     const { user } = useAuth();
     const [moodJournal, setMoodJournal] = useState<any>();
     const [moodColor, setMoodColor] = useState<any>();
