@@ -2,15 +2,12 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { useRouter } from "next/navigation";
 import NotificationPage from "./notificationPage";
 import "@testing-library/jest-dom";
-import { useUser } from "../contexts/UserContext";
 import {
   getNotificationPreference,
   updateNotificationPreference,
   createNotificationPreference,
 } from "../http/notificationPreferenceAPI";
-import Alert from "@mui/material/Alert";
 import { act } from "react-dom/test-utils";
-import { create } from "domain";
 
 //Mock useRouter from next/navigation
 jest.mock("next/navigation", () => ({

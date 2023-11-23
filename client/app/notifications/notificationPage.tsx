@@ -12,6 +12,7 @@ import {
 import { useAuth } from "../contexts/AuthContext";
 import { Alert } from "@mui/material";
 import { useProp } from "../contexts/PropContext";
+import { subscribeToPushNotifications } from "./pushNotificationService";
 
 // Logging out the user
 export default function NotificationPage() {
@@ -19,66 +20,6 @@ export default function NotificationPage() {
   const router = useRouter();
   const { user } = useAuth();
   const { handlePopUp } = useProp();
-
-  // Function to subscribe users to push notifications
-  const subscribeToPushNotifications = async () => {
-    // Ask user permission for push notifications
-    if ("Notification" in window) {
-      const currentPermission = Notification.permission;
-      // Ask permission if its set to default or denied
-      if (currentPermission === "default" || currentPermission === "denied") {
-        Notification.requestPermission().then(function (permission) {
-          if (permission === "granted") {
-            // Permission has been granted. Send request to create subscription object for user
-            if (
-              "serviceWorker" in navigator &&
-              navigator.serviceWorker.controller
-            ) {
-              // Request user to turn on their notifications
-              navigator.serviceWorker.controller.postMessage({
-                action: "subscribeToPush",
-              });
-              handlePopUp("success", "Notification subscription created!");
-            } else {
-              // Handle the case where serviceWorker or controller is not available.
-              console.error("Service Worker or controller is not available.");
-              handlePopUp(
-                "error",
-                "Notification subscription failed to create!"
-              );
-            }
-          } else if (permission === "denied") {
-            // Permission has been denied.
-            console.log("Notification permission denied.");
-            // Unsubscribe a user from push notifications
-            if (
-              "serviceWorker" in navigator &&
-              navigator.serviceWorker.controller
-            ) {
-              navigator.serviceWorker.controller.postMessage({
-                action: "unsubscribeFromPush",
-              });
-            }
-            setSubscriptionReminders(false);
-            handlePopUp(
-              "error",
-              "Notification permission denied, please reset permissions in your browser if you want to enable the feature!"
-            );
-          } else if (permission === "default") {
-            // The user closed the permission dialog without making a choice.
-            console.log("Notification permission dismissed.");
-            setSubscriptionReminders(false);
-          }
-        });
-      } else {
-        handlePopUp(
-          "error",
-          "To turn off notifications, please change your settings in your browser!"
-        );
-        setSubscriptionReminders(false);
-      }
-    }
-  };
 
   // Alerts
   const [successAlert, setSuccessAlert] = useState(false);
@@ -140,7 +81,7 @@ export default function NotificationPage() {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setSubscriptionReminders(event.target.checked);
-    subscribeToPushNotifications();
+    subscribeToPushNotifications(handlePopUp, setSubscriptionReminders);
   };
 
   // Retrieve notification preference information, if it doesnt exist, create it
