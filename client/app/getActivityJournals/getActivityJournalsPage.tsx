@@ -49,13 +49,11 @@ export default function GetActivityJournalsPage() {
 
     async function deleteActivityJournals(activityJournalId: string){
       Swal.fire({
-        title: "Are you sure you want to delete this activity journal entry?",
-        text: "You will not be able to retrieve it later",
+        text: "Are you sure you want to delete this activity journal entry?",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
         confirmButtonText: "Delete",
-        position: "bottom",
       }).then(async (result: { isConfirmed: any; }) => {
         if (result.isConfirmed) {
           const deleteresult = await deleteActivityJournal(activityJournalId);   
@@ -67,6 +65,9 @@ export default function GetActivityJournalsPage() {
             text: "Your activity journal entry has been deleted.",
             icon: "success"
           });    
+        }
+        else {
+          router.push('/getActivityJournals');
         }
      }); 
     }

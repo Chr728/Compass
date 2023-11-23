@@ -51,13 +51,11 @@ export default function GetWeightJournalsPage() {
 
     async function deleteWeightJournals(weightJournalId: string){
       Swal.fire({
-        title: "Are you sure you want to delete this weight journal entry?",
-        text: "You will not be able to retrieve it later",
+        text: "Are you sure you want to delete this weight journal entry?",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
         confirmButtonText: "Delete",
-        position: "bottom",
       }).then(async (result: { isConfirmed: any; }) => {
         if (result.isConfirmed) {
           const deleteresult = await deleteWeightJournal(weightJournalId);   
@@ -69,6 +67,9 @@ export default function GetWeightJournalsPage() {
             text: "Your weight journal entry has been deleted.",
             icon: "success"
           });    
+        }
+        else{
+          router.push('/getWeightJournals'); 
         }
     }); 
     }

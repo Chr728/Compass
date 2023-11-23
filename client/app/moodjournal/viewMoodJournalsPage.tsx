@@ -59,13 +59,11 @@ export default function ViewMoodJournalsPage() {
 
     async function deleteMoodJournals(moodJournalId: string){
       Swal.fire({
-        title: "Are you sure you want to delete this mood journal entry?",
-        text: "You will not be able to retrieve it later",
+        text: "Are you sure you want to delete this mood journal entry?",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
         confirmButtonText: "Delete",
-        position: "bottom",
       }).then(async (result: { isConfirmed: any; }) => {
         if (result.isConfirmed) {
           const deleteresult = await deleteMoodJournal(moodJournalId);   
@@ -77,6 +75,9 @@ export default function ViewMoodJournalsPage() {
             text: "Your mood journal entry has been deleted.",
             icon: "success"
           });    
+        }
+        else{
+          router.push("/moodjournal");
         }
      }); 
     

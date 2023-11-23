@@ -47,13 +47,11 @@ export default function ViewAppointmentsPage() {
    
     const handleDelete = async (appointmentID: any) => {
         Swal.fire({
-            title: "Are you sure you want to delete this appointment?",
-            text: "You will not be able to retrieve it later",
+            text: "Are you sure you want to delete this appointment?",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
             confirmButtonText: "Delete",
-            position: "bottom",
           }).then(async (result) => {
             if (result.isConfirmed) {
                 try{
@@ -70,7 +68,10 @@ export default function ViewAppointmentsPage() {
                     logger.error('Error deleting appointment');
                 }       
             }
-        });      
+            else{
+                router.push("/viewappointments")
+            }
+        });     
     }
 
     const handleClick = (appointmentID: string) => {

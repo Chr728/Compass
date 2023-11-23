@@ -49,13 +49,11 @@ export default function GetGlucoseJournalsPage() {
 
     async function deleteGlucoseJournals(glucoseJournalId: string){
         Swal.fire({
-          title: "Are you sure you want to delete this glucose journal entry?",
-          text: "You will not be able to retrieve it later",
+          text: "Are you sure you want to delete this glucose journal entry?",
           showCancelButton: true,
           confirmButtonColor: "#3085d6",
           cancelButtonColor: "#d33",
           confirmButtonText: "Delete",
-          position: "bottom",
         }).then(async (result: { isConfirmed: any; }) => {
           if (result.isConfirmed) {
             const deleteresult = await deleteGlucoseJournal(glucoseJournalId);   
@@ -67,6 +65,9 @@ export default function GetGlucoseJournalsPage() {
               text: "Your glucose journal entry has been deleted.",
               icon: "success"
             });    
+          }
+          else {
+            router.push("/getDiabeticJournals")
           }
         });
     }

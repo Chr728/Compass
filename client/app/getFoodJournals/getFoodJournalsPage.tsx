@@ -49,13 +49,11 @@ export default function GetFoodJournalsPage() {
 
     async function deleteFoodJournals(foodJournalId: string){
       Swal.fire({
-        title: "Are you sure you want to delete this food journal entry?",
-        text: "You will not be able to retrieve it later",
+        text: "Are you sure you want to delete this food journal entry?",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
         confirmButtonText: "Delete",
-        position:"bottom"
       }).then(async (result: { isConfirmed: any; }) => {
         if (result.isConfirmed) {
           const deleteresult = await deleteFoodIntakeJournal(foodJournalId);   
@@ -67,6 +65,9 @@ export default function GetFoodJournalsPage() {
             text: "Your food journal entry has been deleted.",
             icon: "success"
           });    
+        }
+        else{
+          router.push('/getFoodJournals');
         }
      }); 
     }
