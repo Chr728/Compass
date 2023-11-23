@@ -193,7 +193,7 @@ describe("AlertComponent", () => {
 });
 
 describe("Notification Page useEffect", () => {
-  test("fetchNotificationPreference fetches and sets preferences", async () => {
+  test("fetchNotificationPreference fetches and sets preferences when notification permission is default or denied", async () => {
     // Mock the Notification API in the window object
     Object.defineProperty(window, "Notification", {
       value: {
@@ -225,6 +225,40 @@ describe("Notification Page useEffect", () => {
     const toggleButtonSubscription =
       screen.getByLabelText("SubscriptionSwitch");
     expect(toggleButtonSubscription).not.toBeChecked();
+  });
+
+  test("fetchNotificationPreference fetches and sets preferences when notification permission is default or denied", async () => {
+    // Mock the Notification API in the window object
+    Object.defineProperty(window, "Notification", {
+      value: {
+        permission: "granted",
+      },
+      writable: true,
+    });
+
+    const fakeData = {
+      data: {
+        activityReminders: true,
+        medicationReminders: false,
+        appointmentReminders: true,
+        foodIntakeReminders: true,
+        glucoseMeasurementReminders: true,
+        insulinDosageReminders: true,
+      },
+    };
+    getNotificationPreference.mockResolvedValue(fakeData);
+
+    await act(async () => {
+      render(<NotificationPage />);
+    });
+
+    // Assert that getNotificationPreference was called\
+    expect(getNotificationPreference).toHaveBeenCalled();
+
+    // Expect subscription reminder state to be unchecked
+    const toggleButtonSubscription =
+      screen.getByLabelText("SubscriptionSwitch");
+    expect(toggleButtonSubscription).toBeChecked();
   });
 
   test("handles error while fetching notification preferences", async () => {
