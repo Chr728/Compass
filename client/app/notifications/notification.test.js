@@ -197,7 +197,7 @@ describe("Notification Page useEffect", () => {
     // Mock the Notification API in the window object
     Object.defineProperty(window, "Notification", {
       value: {
-        permission: "granted",
+        permission: "default",
       },
       writable: true,
     });
@@ -219,8 +219,12 @@ describe("Notification Page useEffect", () => {
     });
 
     // Assert that getNotificationPreference was called\
-    // Note: expected calls vary with environment, in CICD the call occurs 7 times
-    expect(getNotificationPreference).toHaveBeenCalledTimes(7);
+    expect(getNotificationPreference).toHaveBeenCalled();
+
+    // Expect subscription reminder state to be unchecked
+    const toggleButtonSubscription =
+      screen.getByLabelText("SubscriptionSwitch");
+    expect(toggleButtonSubscription).not.toBeChecked();
   });
 
   test("handles error while fetching notification preferences", async () => {
@@ -239,8 +243,7 @@ describe("Notification Page useEffect", () => {
     });
 
     // Assert that getNotificationPreference was called
-    // Note: expected calls vary with environment, in CICD the call occurs 8 times
-    expect(getNotificationPreference).toHaveBeenCalledTimes(8);
+    expect(getNotificationPreference).toHaveBeenCalled();
 
     // Assert that createNotificationPreference was attempted
     expect(createNotificationPreference).toHaveBeenCalled();
