@@ -71,7 +71,7 @@ describe('activity Journal Controller Tests', () => {
   beforeEach(() => {
     jest
       .spyOn(admin.auth(), 'verifyIdToken')
-      .mockResolvedValueOnce(mockedDecodedToken);
+      .mockResolvedValue(mockedDecodedToken);
     jest.spyOn(db.User, 'findOne').mockResolvedValue(user);
   });
 
