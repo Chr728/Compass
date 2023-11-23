@@ -36,7 +36,7 @@ const updatedActivityJournal = {
 };
 
 const mockedDecodedToken = {
-  uid: 'userUid',
+  uid: 'testuid',
   aud: '',
   auth_time: 0,
   exp: 0,

@@ -107,6 +107,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         const user = userCredential.user;
         setError(null);
         const userToken = await userCredential.user.getIdToken();
+        console.log(userToken);
         // Subscribe user to push notifications if allowed
         subscribeToPushNotifications(userCredential.user.uid, userToken);
       })
