@@ -5,7 +5,7 @@ import { useFormik } from 'formik';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import { useUser } from '../contexts/UserContext';
-import { createMedication } from '../http/medicationAPI';
+// import { createMedication } from '../http/medicationAPI';
 
 export default function MedicationPage() {
     const logger = require('../../logger');
@@ -25,8 +25,8 @@ export default function MedicationPage() {
         onSubmit: async (values)=> {
             try{
                 const data = {
-                    name: values.name,
-                    date: values.date,
+                    medicationName: values.name,
+                    dateStarted: values.date,
                     time: values.time,
                     dosage: values.dosage,
                     unit: values.unit,
