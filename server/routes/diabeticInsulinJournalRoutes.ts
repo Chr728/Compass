@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import enforceAuthorization from '../middlewares/enforceAuthorization';
 import {
   getInsulinJournals,
   getInsulinJournal,
@@ -9,7 +10,10 @@ import {
 
 const router = Router();
 
-router.route('/user/:uid').get(getInsulinJournals).post(createInsulinJournal);
+router
+  .route('/user/:uid')
+  .get(enforceAuthorization, getInsulinJournals)
+  .post(enforceAuthorization, createInsulinJournal);
 
 router
   .route('/:id')

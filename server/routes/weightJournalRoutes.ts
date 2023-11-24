@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import enforceAuthorization from '../middlewares/enforceAuthorization';
 import {
   getWeightJournals,
   getWeightJournal,
@@ -9,7 +10,10 @@ import {
 
 const router = Router();
 
-router.route('/user/:id').get(getWeightJournals).post(createWeightJournal);
+router
+  .route('/user/:uid')
+  .get(enforceAuthorization, getWeightJournals)
+  .post(enforceAuthorization, createWeightJournal);
 
 router
   .route('/:weightJournalId')
