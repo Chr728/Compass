@@ -68,9 +68,6 @@ export default function GetWeightJournalsPage() {
             icon: "success"
           });    
         }
-        else{
-          router.push('/getWeightJournals'); 
-        }
     }); 
     }
 
@@ -149,7 +146,7 @@ export default function GetWeightJournalsPage() {
         <div className="icon" id= "Trash Icon">
           <MdDeleteForever
             style={{ color: 'var(--Red, #FF7171)', width: '25px', height: '30px' }}
-            onClick={() => deleteWeightJournals(item.id)}
+            onClick={(event) => {event.stopPropagation();deleteWeightJournals(item.id);}}
           />
         </div>
       </div>

@@ -76,9 +76,6 @@ export default function ViewMoodJournalsPage() {
             icon: "success"
           });    
         }
-        else{
-          router.push("/moodjournal");
-        }
      }); 
     
     }

@@ -68,9 +68,6 @@ export default function ViewAppointmentsPage() {
                     logger.error('Error deleting appointment');
                 }       
             }
-            else{
-                router.push("/viewappointments")
-            }
         });     
     }
 
@@ -161,7 +158,7 @@ export default function ViewAppointmentsPage() {
                                             height={10}
                                             className="mr-4 md:hidden"
                                             style={{ width: 'auto', height: 'auto' }}
-                                            onClick={() => handleDelete(row.id)}
+                                            onClick={(event) => {event.stopPropagation();handleDelete(row.id)}}
                                         />                              
                                     </TableCell>
                                 </TableRow>

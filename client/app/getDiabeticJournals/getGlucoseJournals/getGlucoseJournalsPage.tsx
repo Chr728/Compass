@@ -66,9 +66,6 @@ export default function GetGlucoseJournalsPage() {
               icon: "success"
             });    
           }
-          else {
-            router.push("/getDiabeticJournals")
-          }
         });
     }
 
@@ -140,7 +137,7 @@ export default function GetGlucoseJournalsPage() {
         <div className="icon" id= "Trash Icon">
           <MdDeleteForever
             style={{ color: 'var(--Red, #FF7171)', width: '25px', height: '30px' }}
-            onClick={() => deleteGlucoseJournals(item.id)}
+            onClick={(event) => {event.stopPropagation();deleteGlucoseJournals(item.id);}}
           />
         </div>
       </div>

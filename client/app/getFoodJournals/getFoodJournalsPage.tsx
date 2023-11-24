@@ -66,9 +66,6 @@ export default function GetFoodJournalsPage() {
             icon: "success"
           });    
         }
-        else{
-          router.push('/getFoodJournals');
-        }
      }); 
     }
 
@@ -132,7 +129,7 @@ export default function GetFoodJournalsPage() {
         <div className="icon">
           <MdDeleteForever
             style={{ color: 'var(--Red, #FF7171)', width: '25px', height: '30px' }}
-            onClick={() => deleteFoodJournals(item.id)}
+            onClick={(event) => {event.stopPropagation();deleteFoodJournals(item.id);}}
           />
         </div>
       </div>
