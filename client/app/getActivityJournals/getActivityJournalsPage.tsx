@@ -149,7 +149,10 @@ export default function GetActivityJournalsPage() {
         <div className="icon">
           <MdDeleteForever
             style={{ color: 'var(--Red, #FF7171)', width: '25px', height: '30px' }}
-            onClick={() => deleteActivityJournals(item.id)}
+          onClick={(event) => {
+            event.stopPropagation();
+            deleteActivityJournals(item.id);
+          }}     
           />
         </div>
       </div>
