@@ -1,20 +1,50 @@
-import Header from '../components/Header';
-import { useRouter } from 'next/navigation';
+'use client';
+import Button from '@/app/components/Button';
+import Header from '@/app/components/Header';
+import Input from '@/app/components/Input';
+import { useAuth } from '@/app/contexts/AuthContext';
+import { formatDateYearMonthDate } from '@/app/helpers/utils/datetimeformat';
+import { getMedication, updateMedication } from '@/app/http/medicationAPI';
+import Custom403 from '@/app/pages/403';
 import { useFormik } from 'formik';
-import Input from '../components/Input';
-import Button from '../components/Button';
-import { createMedication } from '../http/medicationAPI';
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react'
 
-export default function MedicationPage() {
-    const logger = require('../../logger');
+export default function EditMedication( { params: { medication} } : { params : { medication: string}} ) {
+    const logger = require('../../../../logger');
     const router = useRouter();
+    const { user } = useAuth();
+    const [data, setData] = useState<any>();
+
+    async function editMedication() {
+        try {  
+           const medicationData = await getMedication(medication);
+           setData(medicationData.data);
+        } catch (error) {
+            logger.error('Error fetching mood data');
+        }
+    }
+
+    useEffect(() => {
+        if (!user){
+          router.push("/login")
+        }
+
+        if (user) {
+            editMedication();
+        }
+    }, [user]);
+
+    if (!user) {
+        return <div><Custom403/></div>
+    }
 
     const formik = useFormik({
         initialValues: {
             name: '',
             date: '',
             time: '',
-            dosage: 0.0,
+            dosage: 0.0 as any,
             unit: '',
             frequency: '',
             route: '',
@@ -22,7 +52,7 @@ export default function MedicationPage() {
         },
         onSubmit: async (values)=> {
             try{
-                const data = {
+                const medicationData = {
                     medicationName: values.name,
                     dateStarted: values.date,
                     time: values.time,
@@ -32,7 +62,7 @@ export default function MedicationPage() {
                     route: values.route,
                     notes: values.notes
                 };
-                const result = await createMedication(data);
+                const result = await updateMedication(medication, medicationData);
                 logger.info('Medication entry created:', result);
         router.push('/');
             } catch (error) {
@@ -42,6 +72,20 @@ export default function MedicationPage() {
         }
 
     });
+
+    useEffect(() =>{
+        const  { setValues } = formik;
+        setValues({
+            name: data?.medicationName,
+            date: formatDateYearMonthDate(data?.dateStarted),
+            time: data?.time,
+            dosage: data?.dosage,
+            unit: data?.unit,
+            frequency: data?.frequency,
+            route: data?.route,
+            notes: data?.notes,
+        });
+      }, [data])
 
     return (
         <div className="bg-eggshell min-h-screen flex flex-col">
@@ -151,7 +195,7 @@ export default function MedicationPage() {
                         type="number"
                         style={{ width: '75%' }}
                         onChange={formik.handleChange}
-                        value={formik.values.dosage.toString()}
+                        value={formik.values.dosage}
                         onBlur={formik.handleBlur}
                         />
                     </div>
@@ -280,9 +324,10 @@ export default function MedicationPage() {
                         type="button"
                         text="Cancel"
                         style={{ width:"140px", backgroundColor: "var(--Red, #FF7171)" }}
-                        onClick={() => router.push("/moodjournal")}
+                        onClick={() => router.push("/medication")}
                     />
-                    <Button type="submit" text="Submit" style={{ width: "140px" }} />
+                    <Button type="submit" text="Submit" style={{ width: "140px" }}
+                    onClick={() => router.push(`/getMedications/${medication}`)} />
                 </div>
 
             </form>
