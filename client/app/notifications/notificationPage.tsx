@@ -1,9 +1,7 @@
 "use client";
-import Link from "next/link";
 import Header from "../components/Header";
 import { useRouter } from "next/navigation";
 import Button from "../components/Button";
-import Menu from "../components/Menu";
 import Switch from "@mui/material/Switch";
 import React, { useEffect, useState } from "react";
 import {
@@ -13,12 +11,15 @@ import {
 } from "../http/notificationPreferenceAPI";
 import { useAuth } from "../contexts/AuthContext";
 import { Alert } from "@mui/material";
+import { useProp } from "../contexts/PropContext";
+import { subscribeToPushNotifications } from "./pushNotificationService";
 
 // Logging out the user
 export default function NotificationPage() {
-  const logger = require('../../logger');
+  const logger = require("../../logger");
   const router = useRouter();
   const { user } = useAuth();
+  const { handlePopUp } = useProp();
 
   // Alerts
   const [successAlert, setSuccessAlert] = useState(false);
@@ -36,6 +37,9 @@ export default function NotificationPage() {
 
   const [checkedInsulinInjectionReminders, setInsulinInjectionReminders] =
     React.useState(true);
+
+  const [checkedSubscriptionReminders, setSubscriptionReminders] =
+    React.useState(false);
 
   const handleActivityRemindersChange = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -73,13 +77,20 @@ export default function NotificationPage() {
     setInsulinInjectionReminders(event.target.checked);
   };
 
+  const handleSubcriptionReminders = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSubscriptionReminders(event.target.checked);
+    subscribeToPushNotifications(handlePopUp, setSubscriptionReminders);
+  };
+
   // Retrieve notification preference information, if it doesnt exist, create it
   useEffect(() => {
     async function fetchNotificationPreference() {
       try {
         const userId = user?.uid || "";
         const result = await getNotificationPreference();
-        logger.info("Retrieved notification preference of user:", result)
+        logger.info("Retrieved notification preference of user:", result);
         if (result && result.data) {
           logger.info(result.data.activityReminders);
           setActivityReminders(result.data.activityReminders);
@@ -90,8 +101,29 @@ export default function NotificationPage() {
           setInsulinInjectionReminders(result.data.insulinDosageReminders);
           logger.info("Notification preference information all set!");
         }
+
+        // Get current notification permissions
+        if ("Notification" in window) {
+          const currentPermission = Notification.permission;
+          if (
+            currentPermission === "default" ||
+            currentPermission === "denied"
+          ) {
+            setSubscriptionReminders(false);
+          } else {
+            setSubscriptionReminders(true);
+          }
+        }
       } catch (error) {
-        logger.error("Error retrieving notification preference of user:", error);
+        // Notification preference doesn't exist, create it
+        try {
+          const createdResult = await createNotificationPreference(); // Assuming createNotificationPreference handles creation
+        } catch (error) {
+          console.error(
+            "Error creating notification preference of user:",
+            error
+          );
+        }
       }
     }
     fetchNotificationPreference();
@@ -108,7 +140,6 @@ export default function NotificationPage() {
         insulinDosageReminders: checkedInsulinInjectionReminders,
       };
       const result = await updateNotificationPreference(data);
-      logger.info("Notification preference for user updated:", result);
       setSuccessAlert(true);
     } catch (error) {
       logger.error("Error updating notification preference for user:", error);
@@ -149,6 +180,16 @@ export default function NotificationPage() {
         )}
       </div>
       <div className="rounded-3xl bg-white flex flex-col m-auto w-full sm:max-w-[800px] h-[600px] p-8 mt-10 shadow-sm ">
+        <div className="m-4">
+          <Switch
+            checked={checkedSubscriptionReminders}
+            onChange={handleSubcriptionReminders}
+            inputProps={{ "aria-label": "SubscriptionSwitch" }}
+          />
+          <span className="text-darkgrey text-base not-italic font-medium font-IBM Plex Sans text-lg ">
+            Enable Push Notifications
+          </span>
+        </div>
         <div className="m-4">
           <Switch
             checked={checkedActivityReminders}

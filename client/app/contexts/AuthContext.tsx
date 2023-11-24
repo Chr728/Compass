@@ -102,13 +102,9 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
   const login = (email: string, password: string) => {
     signInWithEmailAndPassword(auth, email, password)
-      .then(async (userCredential) => {
+      .then(() => {
         // Signed in
-        const user = userCredential.user;
         setError(null);
-        const userToken = await userCredential.user.getIdToken();
-        // Subscribe user to push notifications if allowed
-        subscribeToPushNotifications(userCredential.user.uid, userToken);
       })
       .catch((error) => {
         setError('Invalid User Credentials. Please try again.');
@@ -143,23 +139,15 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const signUp = (values: createUserAttributes) => {
     handleLoading(true);
     createUserWithEmailAndPassword(auth, values.email, values.password)
-      .then(async (userCredential) => {
+      .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
         setError(null);
-        const userToken = await userCredential.user.getIdToken();
         const data = values;
         data.uid = user.uid;
-        await createUser(data)
-          .then(async (res) => {
+        createUser(data)
+          .then((res) => {
             if (res !== null) {
-              // Notification preference doesn't exist, create it
-              await createNotificationPreference(
-                userCredential.user.uid,
-                userToken
-              );
-              // Subscribe user to push notifications if allowed
-              subscribeToPushNotifications(userCredential.user.uid, userToken);
               handleLoading(false);
               router.push('/tpage');
             }
