@@ -40,7 +40,7 @@ const updatedNotificationPreference = {
 };
 
 const mockedDecodedToken = {
-  uid: 'userUid',
+  uid: 'testuid',
   aud: '',
   auth_time: 0,
   exp: 0,
@@ -74,7 +74,7 @@ afterAll(() => {
 beforeEach(() => {
   jest
     .spyOn(admin.auth(), 'verifyIdToken')
-    .mockResolvedValueOnce(mockedDecodedToken);
+    .mockResolvedValue(mockedDecodedToken);
   jest.spyOn(db.User, 'findOne').mockResolvedValue(user);
 });
 
@@ -102,7 +102,7 @@ describe('Testing the create notificationPreference controller', () => {
       .spyOn(db.NotificationPreference, 'create')
       .mockRejectedValue(new Error('query Error'));
     const res = await request(app)
-      .post(`/api/notifications/faketestuser`)
+      .post(`/api/notifications/${user.uid}`)
       .set({ Authorization: 'Bearer token' });
     expect(db.NotificationPreference.create).toBeCalledTimes(1);
     expect(res.status).toBe(400);
@@ -133,7 +133,7 @@ describe('Notification preference Controller tests', () => {
       .spyOn(db.NotificationPreference, 'findOne')
       .mockResolvedValueOnce(null);
     const res = await request(app)
-      .get(`/api/notifications/${nonExistentUserId}`)
+      .get(`/api/notifications/${user.uid}`)
       .set({ Authorization: 'Bearer token' });
     expect(db.NotificationPreference.findOne).toBeCalledTimes(1);
     expect(res.status).toBe(404);
@@ -176,7 +176,7 @@ describe('should test the deleteNotificationPreference Controller', () => {
       .spyOn(db.NotificationPreference, 'destroy')
       .mockResolvedValueOnce(null);
     const res = await request(app)
-      .delete(`/api/notifications/${nonExistentUserId}}`)
+      .delete(`/api/notifications/${user.uid}`)
       .set({ Authorization: 'Bearer token' });
     expect(db.NotificationPreference.destroy).toBeCalledTimes(1);
     expect(res.status).toBe(404);

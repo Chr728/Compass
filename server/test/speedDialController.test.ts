@@ -46,7 +46,7 @@ beforeAll(() => {
 beforeEach(() => {
   jest
     .spyOn(admin.auth(), 'verifyIdToken')
-    .mockResolvedValueOnce(mockedDecodedToken);
+    .mockResolvedValue(mockedDecodedToken);
 });
 
 afterAll(() => {
@@ -57,7 +57,7 @@ describe('should test the getSpeedDials Controller', () => {
   it('show get all speed dials', async () => {
     jest.spyOn(db.SpeedDial, 'findAll').mockResolvedValueOnce(speedDial);
     const res = await request(app)
-      .get('/api/speed-dials/123')
+      .get('/api/speed-dials/userUid')
       .set({ Authorization: 'Bearer token' });
     expect(db.SpeedDial.findAll).toBeCalledTimes(1);
     expect(res.status).toBe(200);
@@ -70,7 +70,7 @@ describe('should test the getSpeedDials Controller', () => {
       .spyOn(db.SpeedDial, 'findAll')
       .mockRejectedValue(new Error('connection error'));
     const res = await request(app)
-      .get('/api/speed-dials/123')
+      .get('/api/speed-dials/userUid')
       .set({ Authorization: 'Bearer token' });
     expect(db.SpeedDial.findAll).toBeCalledTimes(2);
     expect(res.status).toBe(400);
@@ -114,7 +114,7 @@ describe('should test the createSpeedDial Controller', () => {
   it('show create speed dial', async () => {
     jest.spyOn(db.SpeedDial, 'create').mockResolvedValueOnce(speedDial);
     const res = await request(app)
-      .post('/api/speed-dials/123')
+      .post('/api/speed-dials/userUid')
       .send(speedDial)
       .set({ Authorization: 'Bearer token' });
     expect(db.SpeedDial.create).toBeCalledTimes(1);
@@ -128,7 +128,7 @@ describe('should test the createSpeedDial Controller', () => {
       .spyOn(db.SpeedDial, 'create')
       .mockRejectedValue(new Error('connection error'));
     const res = await request(app)
-      .post('/api/speed-dials/123')
+      .post('/api/speed-dials/userUid')
       .send(invalidSpeedDial)
       .set({ Authorization: 'Bearer token' });
     expect(db.SpeedDial.create).toBeCalledTimes(1);

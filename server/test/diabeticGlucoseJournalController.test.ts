@@ -38,7 +38,7 @@ const updatedGlucoseJournal = {
 };
 
 const mockedDecodedToken = {
-  uid: 'userUid',
+  uid: 'testuid',
   aud: '',
   auth_time: 0,
   exp: 0,
@@ -72,7 +72,7 @@ afterAll(() => {
 beforeEach(() => {
   jest
     .spyOn(admin.auth(), 'verifyIdToken')
-    .mockResolvedValueOnce(mockedDecodedToken);
+    .mockResolvedValue(mockedDecodedToken);
   jest.spyOn(db.User, 'findOne').mockResolvedValue(user);
 });
 
@@ -87,7 +87,7 @@ describe('Testing the create glucose journal controller', () => {
       .spyOn(db.GlucoseMeasurement, 'create')
       .mockResolvedValueOnce(glucoseJournal);
     const res = await request(app)
-      .post(`/api/journals/diabetic/glucose/user/${user.uid}}`)
+      .post(`/api/journals/diabetic/glucose/user/${user.uid}`)
       .send(glucoseJournal)
       .set({ Authorization: 'Bearer token' });
     expect(db.User.findOne).toHaveBeenCalledTimes(1);
@@ -103,7 +103,7 @@ describe('Testing the create glucose journal controller', () => {
       .spyOn(db.GlucoseMeasurement, 'create')
       .mockResolvedValueOnce(glucoseJournal);
     const res = await request(app)
-      .post(`/api/journals/diabetic/glucose/user/${user.uid}}`)
+      .post(`/api/journals/diabetic/glucose/user/${user.uid}`)
       .send(glucoseJournal)
       .set({ Authorization: 'Bearer token' });
     expect(db.User.findOne).toHaveBeenCalledTimes(1);
@@ -119,7 +119,7 @@ describe('Testing the create glucose journal controller', () => {
       .spyOn(db.GlucoseMeasurement, 'create')
       .mockRejectedValue(new Error('query error'));
     const res = await request(app)
-      .post(`/api/journals/diabetic/glucose/user/${user.uid}}`)
+      .post(`/api/journals/diabetic/glucose/user/${user.uid}`)
       .send('')
       .set({ Authorization: 'Bearer token' });
     expect(db.GlucoseMeasurement.create).toHaveBeenCalledTimes(1);

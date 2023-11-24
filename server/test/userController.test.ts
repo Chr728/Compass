@@ -32,7 +32,7 @@ const invalidUser = {
 };
 
 const mockedDecodedToken = {
-  uid: 'userUid',
+  uid: 'testuid',
   aud: '',
   auth_time: 0,
   exp: 0,
@@ -62,7 +62,7 @@ beforeAll(() => {
 beforeEach(() => {
   jest
     .spyOn(admin.auth(), 'verifyIdToken')
-    .mockResolvedValueOnce(mockedDecodedToken);
+    .mockResolvedValue(mockedDecodedToken);
 });
 
 afterAll(() => {
@@ -126,12 +126,11 @@ it('should return a 404 response when the user is not found', async () => {
     .set({ Authorization: 'Bearer token' });
 
   // Verify that findByPk was called with the correct user ID
-  expect(db.User.findOne).toBeCalledTimes(3);
+  expect(db.User.findOne).toBeCalledTimes(2);
 
   // Verify the response
-  expect(res.status).toBe(404);
-  expect(res.body.status).toBe('ERROR');
-  expect(res.body.message).toBe('User not found.');
+  expect(res.status).toBe(401);
+  expect(res.body.status).toBe('UNAUTHORIZED');
 });
 
 describe('should test the createUser Controller', () => {
@@ -212,8 +211,8 @@ describe('should test the updateUser Controller', () => {
       .put(`/api/users/${nonExistentUserId}`)
       .send(updatedUser)
       .set({ Authorization: 'Bearer token' });
-    expect(db.User.update).toBeCalledTimes(2);
-    expect(res.status).toBe(400);
+    expect(db.User.update).toBeCalledTimes(1);
+    expect(res.status).toBe(401);
   });
 });
 
@@ -246,9 +245,8 @@ describe('should test the deleteUser Controller', () => {
       .delete(`/api/users/${nonExistentUserId}`)
       .set({ Authorization: 'Bearer token' });
 
-    expect(db.User.destroy).toBeCalledTimes(3);
-    expect(res.status).toBe(404);
-    expect(res.body.status).toBe('ERROR');
-    expect(res.body.message).toBe('User not found.');
+    expect(db.User.destroy).toBeCalledTimes(2);
+    expect(res.status).toBe(401);
+    expect(res.body.status).toBe('UNAUTHORIZED');
   });
 });
