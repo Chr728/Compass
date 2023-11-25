@@ -9,6 +9,8 @@ import Button from '../components/Button';
 import Menu from '../components/Menu';
 
 export default function Profile() {
+  const logger = require('../../logger');
+
   const router = useRouter();
   const { user } = useAuth();
   const { userInfo} = useUser(); 
@@ -20,6 +22,7 @@ export default function Profile() {
       setProfile(userInfo);
     } else  {
       // Handle the error here by redirecting to the home page
+      logger.error('User not found.');
       alert('User  not found.');
       router.push('/');
     }
@@ -27,7 +30,7 @@ export default function Profile() {
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col justify-center">
-      <button onClick={() => router.back()}>
+      <button onClick={() => router.push('/tpage')}>
         <Header headerText="View Profile"></Header>
       </button>
       {profile && (
@@ -73,58 +76,6 @@ export default function Profile() {
                 style={{display: 'inline'}}
             >
               {profile.email}
-            </p>
-            <br></br>
-            <p
-                className="text-lg ml-0 font-sans text-darkgrey  font-bold text-[16px]"
-                style={{display: 'inline'}}
-            >
-              Street Address :{' '}
-            </p>
-            <p
-                className="text-md ml-2 text-darkgrey"
-                style={{display: 'inline'}}
-            >
-              {profile.streetAddress}
-            </p>
-            <br></br>
-            <p
-                className="text-lg ml-0 font-sans text-darkgrey  font-bold text-[16px]"
-                style={{display: 'inline'}}
-            >
-              City:{' '}
-            </p>
-            <p
-                className="text-md ml-2 text-darkgrey"
-                style={{display: 'inline'}}
-            >
-              {profile.city}
-            </p>
-            <br></br>
-            <p
-                className="text-lg ml-0 font-sans text-darkgrey font-bold text-[16px]"
-                style={{display: 'inline'}}
-            >
-              Province:{' '}
-            </p>
-            <p
-                className="text-md ml-2 text-darkgrey"
-                style={{display: 'inline'}}
-            >
-              {profile.province}
-            </p>
-            <br></br>
-            <p
-                className="text-lg ml-0 font-sans text-darkgrey  font-bold text-[16px]"
-                style={{display: 'inline'}}
-            >
-              Postal Code :{' '}
-            </p>
-            <p
-                className="text-md ml-2 text-darkgrey"
-                style={{display: 'inline'}}
-            >
-              {profile.postalCode}
             </p>
             <br></br>
             <p
@@ -184,11 +135,6 @@ export default function Profile() {
         </div>
         </span>
       )}
-      <div className="mt-4">
-        <div className={`xl:max-w-[1280px] w-full  menu-container`}>
-          <Menu />
-        </div>
-      </div>
     </div>
   );
 }

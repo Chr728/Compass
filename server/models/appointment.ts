@@ -1,32 +1,30 @@
-'use strict';
-import {
-  Model
-} from 'sequelize';
+"use strict";
+import { Model } from "sequelize";
 
-type AppointmentAttributes = {
+export type AppointmentAttributes = {
   id: number;
-  email: string;
+  uid: string;
   appointmentWith: string;
   reason: string;
   date: Date;
   time: Date;
-  notes: string
-  
+  notes: string;
 
   // other attributes...
 };
 
-module.exports = (sequelize:any, DataTypes:any) => {
-
-  class Appointment extends Model<AppointmentAttributes>
-  implements AppointmentAttributes {
+module.exports = (sequelize: any, DataTypes: any) => {
+  class Appointment
+    extends Model<AppointmentAttributes>
+    implements AppointmentAttributes
+  {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     id!: number;
-    email!: string;
+    uid!: string;
     appointmentWith!: string;
     reason!: string;
     date!: Date;
@@ -35,8 +33,8 @@ module.exports = (sequelize:any, DataTypes:any) => {
 
     static associate(models:any) {
       Appointment.belongsTo(models.User,{
-        foreignKey: "email",
-        targetKey: 'email',}
+        foreignKey: "uid",
+        targetKey: 'uid',}
       )
       // define association here
     }
@@ -48,7 +46,7 @@ module.exports = (sequelize:any, DataTypes:any) => {
       autoIncrement: true,
       primaryKey: true
     },
-    email: {
+    uid: {
       type: DataTypes.STRING,
       allowNull: false
     },
@@ -70,7 +68,7 @@ module.exports = (sequelize:any, DataTypes:any) => {
     },
     notes: {
       type: DataTypes.TEXT,
-      allowNull: false,
+      allowNull: true,
     }
   },{
     sequelize,

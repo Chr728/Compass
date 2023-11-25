@@ -3,9 +3,9 @@ import {
   Model
 } from 'sequelize';
 
-type SpeedDialAttributes = {
+export type SpeedDialAttributes = {
   id: number;
-  email: string;
+  uid: string;
   contactName: string;
   contactNumber: string;
 
@@ -24,14 +24,14 @@ module.exports = (sequelize:any, DataTypes:any) => {
      */
 
     id!: number;
-    email!: string;
+    uid!: string;
     contactName!: string;
     contactNumber!: string;
 
     static associate(models:any) {
       SpeedDial.belongsTo(models.User,{
-        foreignKey: "email",
-        targetKey: 'email',}
+        foreignKey: "uid",
+        targetKey: 'uid',}
       )
       // define association here
     }
@@ -42,7 +42,7 @@ module.exports = (sequelize:any, DataTypes:any) => {
       autoIncrement: true,
       primaryKey: true
     },
-    email: {
+    uid: {
       type: DataTypes.STRING,
       allowNull: false
     },

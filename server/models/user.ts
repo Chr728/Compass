@@ -8,10 +8,6 @@ export type UserAttributes = {
   email: string;
   firstName: string;
   lastName: string;
-  streetAddress: string;
-  city: string;
-  province: string;
-  postalCode: string;
   phoneNumber: string;
   birthDate: Date;
   sex: string;
@@ -31,10 +27,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
     email!: string;
     firstName!: string;
     lastName!: string;
-    streetAddress!: string;
-    city!: string;
-    province!: string;
-    postalCode!: string;
     phoneNumber!: string;
     birthDate!: Date;
     sex!: string;
@@ -42,54 +34,60 @@ module.exports = (sequelize: any, DataTypes: any) => {
     static associate(models: any) {
       // define association here
       User.hasMany(models.GlucoseMeasurement, {
-        foreignKey: "email",
-        sourceKey: "email",
+        foreignKey: "uid",
+        sourceKey: "uid",
       });
 
       User.hasMany(models.InsulinDosage, {
-        foreignKey: "email",
-        sourceKey: "email",
+        foreignKey: "uid",
+        sourceKey: "uid",
       });
 
       User.hasMany(models.FoodIntakeJournal, {
-        foreignKey: "email",
-        sourceKey: "email",
+        foreignKey: "uid",
+        sourceKey: "uid",
       });
 
       User.hasMany(models.ActivityJournal, {
-        foreignKey: "email",
-        sourceKey: "email",
+        foreignKey: "uid",
+        sourceKey: "uid",
       });
 
       User.hasMany(models.MoodJournal, {
-        foreignKey: "email",
-        sourceKey: "email",
+        foreignKey: "uid",
+        sourceKey: "uid",
       });
 
       User.hasMany(models.WeightJournal, {
-        foreignKey: "email",
-        sourceKey: "email",
+        foreignKey: "uid",
+        sourceKey: "uid",
       });
 
       User.hasMany(models.Appointment, {
-        foreignKey: "email",
-        sourceKey: "email",
+        foreignKey: "uid",
+        sourceKey: "uid",
       });
 
       User.hasMany(models.Medication, {
-        foreignKey: "email",
-        sourceKey: "email",
+        foreignKey: "uid",
+        sourceKey: "uid",
       });
 
       User.hasMany(models.SpeedDial, {
-        foreignKey: "email",
-        sourceKey: "email",
+        foreignKey: "uid",
+        sourceKey: "uid",
       });
 
       User.hasOne(models.NotificationPreference, {
-        foreignKey: "email",
-        sourceKey: "email",
+        foreignKey: "uid",
+        sourceKey: "uid",
       });
+
+      User.hasOne(models.Subscription, {
+        foreignKey: "uid",
+        sourceKey: "uid",
+      });
+    
     }
   }
   User.init(
@@ -114,22 +112,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
         allowNull: false,
       },
       lastName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      streetAddress: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      city: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      province: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      postalCode: {
         type: DataTypes.STRING,
         allowNull: false,
       },

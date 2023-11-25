@@ -1,3 +1,4 @@
+"use client";
 import {
   createContext,
   useContext,
@@ -9,17 +10,16 @@ import {
 import getUser from "@/app/http/getUser";
 import updateUser from "@/app/http/updateUser";
 import { useAuth } from "./AuthContext";
-
+import { useRouter } from "next/navigation";
+import { auth } from "@/app/config/firebase";
+import { signOut } from "firebase/auth";
+import { useProp } from "@/app/contexts/PropContext";
 type UserAttributes = {
   id: number;
   uid: string;
   email: string;
   firstName: string;
   lastName: string;
-  streetAddress: string;
-  city: string;
-  province: string;
-  postalCode: string;
   phoneNumber: string;
   birthDate: Date;
   sex: string;
@@ -28,10 +28,6 @@ type UserAttributes = {
 type EditableUserAttributes = {
   firstName?: string;
   lastName?: string;
-  streetAddress?: string;
-  city?: string;
-  province?: string;
-  postalCode?: string;
   phoneNumber?: string;
   birthDate?: Date;
   sex?: string;
@@ -42,6 +38,7 @@ interface UserContextProps {
   updateCurrentUser: (userData: EditableUserAttributes) => void;
 }
 
+const logger = require("../../logger");
 const UserContext = createContext<UserContextProps | undefined>(undefined);
 
 export const useUser = () => {
@@ -59,39 +56,46 @@ interface UserProviderProps {
 export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const { user } = useAuth(); // Get the user from AuthContext
   const [userInfo, setUserInfo] = useState<UserAttributes | null>(null);
+  // can remove the following line as we check for user in req. maybe no more use for user const too.
   const uid = user ? user.uid : null; // Access the UID if the user is authenticated
-  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+  const { handlePopUp, loading, handleLoading } = useProp();
   useEffect(() => {
     const fetchUserData = () => {
+      handleLoading(true);
       if (uid) {
-        getUser(uid)
+        getUser()
           .then((userData) => {
-            setLoading(true);
-            setUserInfo(userData.data);
-            setLoading(false);
+            setUserInfo(userData);
+            router.push("/tpage");
+            handleLoading(false, 1000);
           })
           .catch((error) => {
-            console.error("Error fetching user data:", error);
+            handlePopUp("error", error.message);
+            signOut(auth);
           });
       } else {
         setUserInfo(null);
-        setLoading(false);
+        handleLoading(false);
       }
     };
     if (user) {
-      fetchUserData();
+      setTimeout(() => {
+        fetchUserData();
+      }, 1000);
     } else {
-      setLoading(false);
+      handleLoading(false);
     }
   }, [uid]);
   const updateCurrentUser = (userData: EditableUserAttributes) => {
     if (uid) {
       updateUser(userData)
         .then((response) => {
-          console.log("User updated successfully:", response);
+          logger.info("User updated successfully:", response);
+          setUserInfo(response.data[1]);
         })
         .catch((error) => {
-          console.error("Error updating user:", error);
+          logger.error("Error updating user:", error);
         });
     }
   };
@@ -100,9 +104,5 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     updateCurrentUser,
   };
 
-  return (
-    <UserContext.Provider value={value}>
-      {!loading && children}
-    </UserContext.Provider>
-  );
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };

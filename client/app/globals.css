@@ -50,3 +50,42 @@ input[type="date"]::-webkit-datetime-edit-day-field,
 input[type="date"]::-webkit-datetime-edit-year-field  {
     color: #0880AE;
 }
+
+.appointment .MuiTableBody-root .MuiTableRow-root:nth-child(odd){
+  background:var(--Light-Grey, #DBE2EA);
+}
+.appointment .MuiTableBody-root .MuiTableRow-root:nth-child(even){
+  background: white;
+}
+
+.appointment ::placeholder {
+  color: #0880AE !important;
+}
+
+.date input, .time input{
+  color: #0880AE !important;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  background: transparent;
+  background-image: url('/icons/calendar.svg');
+  background-repeat: no-repeat;
+  background-position: 98% 50%;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+  background: transparent;
+  background-image: url('/icons/timer.svg');
+  background-repeat: no-repeat;
+  background-position: 98% 50%;
+}
+
+input[type="date"]:before {
+  color: lightgrey;
+  content: attr(placeholder) !important;
+  margin-right: 0.5em;
+}
+input[type="date"]:focus:before {
+  content: '' !important;
+}
+

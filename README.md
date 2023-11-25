@@ -16,9 +16,53 @@
 ![express](https://img.shields.io/badge/Express%20js-000000?style=for-the-badge&logo=express&logoColor=white)
 ![postgresql](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
 
+## Getting Started
+
+### Clone the repo
+```bash 
+git clone https://github.com/janong24/Compass.git
+```
+
+- Please make sure you have Docker installed first.
+  
+- Docker Desktop is recommended to help with managing the container, images, and volumes.
+
+- Make sure that the ports 3000, 8000 and 5432 are not occupied and the PostgreSQL server is not currently running on your local machine.
+
+### Add the credential files in the right places, you should have 3 in total: 
+- one .env in the root folder
+- one .env in the client folder
+- a serviceAccountKey.json in the server folder
+
+Those credential files contain the environment variables needed to run the project. If you encounter warning messages saying some variables are not set defaulting to a blank string, you are probably missing some environment variables in one of the three credential files. In this case, please contact the team leader to get the credentials.  
+
+### Build and run the development version of the project
+
+The docker compose file contains the commands to build and run the project. Please cd to the root folder (the Compass folder) and run:    
+
+```bash
+docker-compose -f docker-compose-dev.yml up
+```
+
+If you are running the project in your local environment, the server will be hosted on port 8000, the client will be hosted on port 3000 and the database will be hosted on post 5432
+
+Once you see 'Database synchronized' is printed in the terminal, the preparation is done. If you want to check the database, you can either use the terminal or the Postgresql GUI like Pgadmin4 to see if all the tables/data exist in your database. Since the whole project is containerized, the database in the container is the not one you have locally. It can only be connected if the docker container is running. Please make sure to connect to the DB inside of the container instead of other local databases.
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+#### If you add new packages or find that there's package update from the release which can cause a 'module not found' error
+Please rebuild the docker images. To do that you may need to delete the container and all the related volumes.
+
+#### If you meet other problems, please contact the team leader
+
 ## Description
 
-Compass is a Wellness app for people who are aged 40 and above. The users are able to monitor their daily health habits and improve their overall health through the various features the app provides.
+Compass is a medical wellness app that targets specifically people above 40 years old who might  be interested in having  some  type of assistance to keep their healthy habits and lifestyles. Compass offers features of managing medical  reminders, booking appointments,tracking user’s medications and treatments  all in one consolidated application. In addition, having features of medical journals such as diabetic journals allows some patients to easily note their daily doses and treatment details making them able to follow the history of their treatments and use it as a reference for themselves or to show to their medical professional. Additionally,with the speed dial fast option to contact relatives during some emergency situations patients would be able to contact their relatives in a faster and easier way. With many features compass aims for users to be healthier and function hassle free. 
+
+## Mockups
+
+The following link directs to a read-only version of the application's UI mockups:
+[Mockups on Figma](https://www.figma.com/file/4kubnHTzbOWN2sgLAs3vcN/Compass-UI-Mockup?type=design&node-id=0%3A1&mode=design&t=iYqj5DWPPgECiq4M-1)
 
 ## Contributors
 

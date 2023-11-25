@@ -10,42 +10,34 @@ const createJestConfig = nextJest({
 const config = {
   // Add more setup options before each test is run
   // setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
- 
+  setupFiles: ['./jest.setup.js'],
+  transformIgnorePatterns: [
+    "/node_modules/(?!jose)"
+  ],
   testEnvironment: 'jest-environment-jsdom',
   testPathIgnorePatterns: [
       "client/app/contexts",
       "client/.next",
-      ".next/"
-      // "/node_modules/",
-      // "/.next/",
+      ".next/",
+      "client/app/welcome",   // ignored due to swiper lib not being compatible with jest
+      "client/app/moodjournal/viewMoodJournalsPage",  // ignored due to babel conflicts
+      "client/app/moodjournal/page", // ignored due to babel conflicts
     ],
     collectCoverageFrom: [
       '**/*.{ts,tsx}',
+      '!**/.next/**',
       '!**/node_modules/**',
       '!**/vendor/**',
       '!**/AuthContext.{js,jsx,ts,tsx}',
       '!**/UserContext.{js,jsx,ts,tsx}',
-      '!**/cypress.config.{js,jsx,ts,tsx}',
       '!**/tailwind.config.{js,jsx,ts,tsx}',
-      '!**/onboarding.{js,jsx,ts,tsx}',
-      '!**/tpage/page.{js,jsx,ts,tsx}',
-      '!**/welcome/page.{js,jsx,ts,tsx}',
+      '!**/welcome/**',     // ignored due to swiper lib not being compatible with jest
       '!**/spec.cy.{js,jsx,ts,tsx}',
       '!**/firebase.{js,jsx,ts,tsx}',
-      '!**/.next/types/app/layout.{js,jsx,ts,tsx}',
-      '!**/.next/types/app/login/page.{js,jsx,ts,tsx}',
-      '!**/.next/types/app/editprofile/page.{js,jsx,ts,tsx}',
-      '!**/.next/types/app/profile/page.{js,jsx,ts,tsx}',
-      '!**/.next/types/app/register/page.{js,jsx,ts,tsx}',
-      '!**/.next/types/app/settings/page.{js,jsx,ts,tsx}',
       '!**/app/head.{js,jsx,ts,tsx}',
       '!**/app/layout.{js,jsx,ts,tsx}',
-      '!**/app/page.{js,jsx,ts,tsx}',
-      '!**/app/editprofile/page.{js,jsx,ts,tsx}',
-      '!**/app/profile/page.{js,jsx,ts,tsx}',
-      '!**/app/settings/page.{js,jsx,ts,tsx}',
-      '!**/app/notifications/page.{js,jsx,ts,tsx}',
-      '!**/app/pages/403.{js,jsx,ts,tsx}',
+      '!**/app/moodjournal/viewMoodJournalsPage.{js,jsx,ts,tsx}',   // ignored due to babel conflicts
+      `!**/app/moodjournal/page.{js,jsx,ts,tsx}`,   // ignored due to babel conflicts
     ],
   }
 
