@@ -3,9 +3,9 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { useAuth } from "../contexts/AuthContext";
 import Custom403 from "../pages/403";
-import MedicationPage from './createMedicationPage';
+import CreateMedicationPage from './createMedicationPage';
 
-export default function CreateMedicationPage() {
+export default function CreateMedication() {
   const router = useRouter();
   const { user } = useAuth();
 
@@ -23,5 +23,5 @@ export default function CreateMedicationPage() {
     );
   }
 
-  return <MedicationPage />;
+  return <CreateMedicationPage />;
 }

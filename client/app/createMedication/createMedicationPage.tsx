@@ -4,10 +4,24 @@ import { useFormik } from 'formik';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import { createMedication } from '../http/medicationAPI';
+import { useEffect } from 'react';
+import { useAuth } from '../contexts/AuthContext';
+import Custom403 from '../pages/403';
 
-export default function MedicationPage() {
+export default function CreateMedicationPage() {
     const logger = require('../../logger');
     const router = useRouter();
+    const user = useAuth();
+
+    useEffect(() => {
+        if (!user){
+          router.push("/login")
+        }
+    }, [user]);
+    
+    if (!user) {
+      return <div><Custom403/></div>
+    }
 
     const formik = useFormik({
         initialValues: {
@@ -34,14 +48,31 @@ export default function MedicationPage() {
                 };
                 const result = await createMedication(data);
                 logger.info('Medication entry created:', result);
-        router.push('/');
+                router.push('/getMedications');
             } catch (error) {
                 logger.error('Error creating medication entry:', error);
             }
 
-        }
+        },
 
+        validate: async (values) => {
+            let errors: {
+                name?:string;
+                date?: string;
+            } = {};
+
+            if (!values.name){
+                errors.name = "This field cannot be left empty."
+            }
+            if (!values.date){
+                errors.date = "This field cannot be left empty."
+            }
+
+            return errors;
+        }
     });
+
+   
 
     return (
         <div className="bg-eggshell min-h-screen flex flex-col">
@@ -79,15 +110,15 @@ export default function MedicationPage() {
                         onBlur={formik.handleBlur}
                     />
                     {
-                        formik.touched.name && !formik.values.name && (
-                            <p className="text-red text-[14px]">This field can't be left empty.</p>
+                        formik.touched.name && formik.errors.name && (
+                            <p className="text-red text-[14px]">{formik.errors.name}</p>
                     )}      
                 </div>
 
 
                 <div className="mt-3 mb-3">
                     <label
-                        htmlFor="name"
+                        htmlFor="date"
                         className="font-sans font-medium text-grey text-[16px]"
                     >
                     <span className="text-red text-[20px]"> *</span>
@@ -106,14 +137,14 @@ export default function MedicationPage() {
                         />
                     </div>
                     {
-                        formik.touched.date && !formik.values.date && (
-                            <p className="text-red text-[14px]">This field can't be left empty.</p>
+                        formik.touched.date && formik.errors.date && (
+                            <p className="text-red text-[14px]">{formik.errors.date}</p>
                     )}      
                 </div>
 
                 <div className="mt-3 mb-3">
                     <label
-                        htmlFor="name"
+                        htmlFor="time"
                         className="font-sans font-medium text-grey text-[16px]"
                     >
                     Time
@@ -130,10 +161,10 @@ export default function MedicationPage() {
                             onBlur={formik.handleBlur}
                         />
                     </div>
-                    {
+                    {/* {
                         formik.touched.time && !formik.values.time && (
                             <p className="text-red text-[14px]">This field can't be left empty.</p>
-                    )}      
+                    )}       */}
                 </div>
 
                 <div className="flex">
@@ -280,7 +311,7 @@ export default function MedicationPage() {
                         type="button"
                         text="Cancel"
                         style={{ width:"140px", backgroundColor: "var(--Red, #FF7171)" }}
-                        onClick={() => router.push("/moodjournal")}
+                        onClick={() => router.push("/getMedications")}
                     />
                     <Button type="submit" text="Submit" style={{ width: "140px" }} />
                 </div>
