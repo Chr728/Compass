@@ -36,7 +36,7 @@ const updatedActivityJournal = {
 };
 
 const mockedDecodedToken = {
-  uid: 'userUid',
+  uid: 'testuid',
   aud: '',
   auth_time: 0,
   exp: 0,
@@ -71,7 +71,7 @@ describe('activity Journal Controller Tests', () => {
   beforeEach(() => {
     jest
       .spyOn(admin.auth(), 'verifyIdToken')
-      .mockResolvedValueOnce(mockedDecodedToken);
+      .mockResolvedValue(mockedDecodedToken);
     jest.spyOn(db.User, 'findOne').mockResolvedValue(user);
   });
 

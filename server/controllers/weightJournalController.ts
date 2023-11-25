@@ -6,7 +6,7 @@ export const getWeightJournals = async (req: Request, res: Response) => {
   try {
     const user = await db.User.findOne({
       where: {
-        uid: req.params.id,
+        uid: req.params.uid,
       },
     });
 
@@ -71,7 +71,7 @@ export const createWeightJournal = async (req: Request, res: Response) => {
   try {
     const user = await db.User.findOne({
       where: {
-        uid: req.params.id,
+        uid: req.params.uid,
       },
     });
 
