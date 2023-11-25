@@ -64,11 +64,26 @@ export default function EditMedication( { params: { medication} } : { params : {
                 };
                 const result = await updateMedication(medication, medicationData);
                 logger.info('Medication entry created:', result);
-        router.push('/');
+                router.push(`/getMedications/${medication}`);
             } catch (error) {
                 logger.error('Error creating medication entry:', error);
             }
 
+        },
+        validate: async (values) => {
+            let errors: {
+                name?:string;
+                date?: string;
+            } = {};
+
+            if (!values.name){
+                errors.name = "This field cannot be left empty."
+            }
+            if (!values.date){
+                errors.date = "This field cannot be left empty."
+            }
+
+            return errors;
         }
 
     });
@@ -91,7 +106,7 @@ export default function EditMedication( { params: { medication} } : { params : {
         <div className="bg-eggshell min-h-screen flex flex-col">
             <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
                 <button onClick={() => router.push('/getDiabeticJournals')}>
-                <Header headerText="Add Other Medications"></Header>
+                <Header headerText="Edit Medication"></Header>
                 </button>
             </span>
 
@@ -123,8 +138,8 @@ export default function EditMedication( { params: { medication} } : { params : {
                         onBlur={formik.handleBlur}
                     />
                     {
-                        formik.touched.name && !formik.values.name && (
-                            <p className="text-red text-[14px]">This field can't be left empty.</p>
+                        formik.touched.name && formik.errors.name && (
+                            <p className="text-red text-[14px]">{formik.errors.name}</p>
                     )}      
                 </div>
 
@@ -150,8 +165,8 @@ export default function EditMedication( { params: { medication} } : { params : {
                         />
                     </div>
                     {
-                        formik.touched.date && !formik.values.date && (
-                            <p className="text-red text-[14px]">This field can't be left empty.</p>
+                        formik.touched.date && formik.errors.date && (
+                            <p className="text-red text-[14px]">{formik.errors.date}</p>
                     )}      
                 </div>
 
@@ -173,11 +188,7 @@ export default function EditMedication( { params: { medication} } : { params : {
                             value={formik.values.time}
                             onBlur={formik.handleBlur}
                         />
-                    </div>
-                    {
-                        formik.touched.time && !formik.values.time && (
-                            <p className="text-red text-[14px]">This field can't be left empty.</p>
-                    )}      
+                    </div>  
                 </div>
 
                 <div className="flex">
