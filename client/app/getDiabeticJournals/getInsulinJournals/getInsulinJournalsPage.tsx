@@ -13,6 +13,7 @@ import { MdDeleteForever, MdInfoOutline, MdKeyboardArrowDown } from 'react-icons
 import Header from '../../components/Header';
 import Menu from '../../components/Menu';
 import { formatDate, formatMilitaryTime } from '../../helpers/utils/datetimeformat';
+import Swal from 'sweetalert2';
 
 export default function GetInsulinJournalsPage() {
   const logger = require('../../../logger');
@@ -47,10 +48,25 @@ export default function GetInsulinJournalsPage() {
 
 
     async function deleteInsulinJournals(insulinJournalId: string){
-      const deleteresult = await deleteInsulinJournal(insulinJournalId);   
-      const newData = insulin && insulin.filter((item: { id: string; }) => item.id!=insulinJournalId);
-      setinsulin(newData);
-      router.push('/getDiabeticJournals');
+      Swal.fire({
+        text: "Are you sure you want to delete this insulin journal entry?",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Delete",
+      }).then(async (result: { isConfirmed: any; }) => {
+        if (result.isConfirmed) {
+          const deleteresult = await deleteInsulinJournal(insulinJournalId);   
+          const newData = insulin && insulin.filter((item: { id: string; }) => item.id!=insulinJournalId);
+          setinsulin(newData);
+          router.push('/getDiabeticJournals');
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your insulin journal entry has been deleted.",
+            icon: "success"
+          });    
+        }
+      });
     }
 
 
@@ -119,7 +135,7 @@ export default function GetInsulinJournalsPage() {
         <div className="icon">
           <MdDeleteForever
             style={{ color: 'var(--Red, #FF7171)', width: '25px', height: '30px' }}
-            onClick={() => deleteInsulinJournals(item.id)}
+            onClick={(event) => {event.stopPropagation();deleteInsulinJournals(item.id);}}
           />
         </div>
       </div>
