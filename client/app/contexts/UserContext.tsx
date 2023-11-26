@@ -82,7 +82,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     if (user) {
       setTimeout(() => {
         fetchUserData();
-      }, 1000);
+      }, 500);
     } else {
       handleLoading(false);
     }

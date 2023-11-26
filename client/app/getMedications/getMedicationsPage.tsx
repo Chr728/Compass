@@ -1,0 +1,144 @@
+'use client';
+import Image from 'next/image';
+import Button from '../components/Button';
+import Input from '../components/Input';
+import Link from 'next/link';
+import { useFormik } from 'formik';
+import { useRouter } from 'next/navigation';
+import { deleteMedication, getMedication, getMedications} from '../http/medicationAPI'; 
+import { useAuth } from '../contexts/AuthContext';
+import { useUser } from '../contexts/UserContext';
+import { useEffect, useState } from 'react';
+import { MdDeleteForever, MdInfoOutline, MdKeyboardArrowDown } from 'react-icons/md';
+import Header from '../components/Header';
+import { formatDate } from '../helpers/utils/datetimeformat';
+
+export default function GetMedicationsPage() {
+  const logger = require('../../logger');
+  const router = useRouter();
+  const { user } = useAuth();
+  const { userInfo } = useUser();
+  const [medication, setmedication] = useState<any>(null);
+  
+  useEffect(() => {
+    if (!userInfo) {
+      logger.warn('User not found.')
+      alert('User not found.');
+    } 
+  }, [userInfo, router]);
+
+
+  useEffect(() => {
+    async function fetchMedications() {
+      try {
+        const userId = user?.uid || '';
+        const result = await getMedications();    
+        logger.info('All medications entry retrieved:', result);
+        setmedication(result.data);
+      } catch (error) {
+        logger.error('Error retrieving medication journal entry:', error);
+      }
+    }
+    setTimeout(() => {
+      fetchMedications();
+    }, 1000);
+  }, [user]);
+
+
+    async function deleteMedications(medicationId: string){
+      const deleteresult = await deleteMedication(medicationId);   
+      const newData = medication && medication.filter((item: { id: string; }) => item.id!=medicationId);
+      setmedication(newData);
+      router.push('/getMedications');
+    }
+
+
+  return (    
+      <div className="bg-eggshell min-h-screen flex flex-col">
+              <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
+              <button onClick={() => router.push('/health')}>
+              <Header headerText="Medications"></Header>
+              </button>
+              </span>
+              <p className="font-sans  text-darkgrey ml-5 p-5  text-[14px]">Keep track of all medications you take and follow the progress through the time.</p>
+              <br></br>
+              
+              {medication && (
+            <div className="rounded-3xl bg-white flex flex-col mt-4 mb-44 w-full md:max-w-[800px] md:min-h-[550px] p-4 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]">
+              <div className="flex justify-between items-center">
+                <div>
+                  <Button type="button" text="Add an Entry" style={{ width: '120px', fontSize: '14px' }} onClick={() => router.push(`/createMedication`)} />
+                </div>
+              </div>
+              <br></br>
+
+          <div className="flex" style={{ justifyContent: 'space-between' }}>
+            <div className="flex-1">
+              <div className="font-sans ml-1 font-bold text-darkgrey text-[18px] text-start ">
+                Name
+                <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+              </div>
+            </div>
+            <div className="flex-2" >
+              <div className="font-sans  font-bold  text-darkgrey text-[18px] ml-1 text-start">
+               Dosage
+               <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+              </div>
+            </div>
+            <div className="flex-1" style={{ marginRight: '5%' }}>
+              <div className="font-sans font-bold text-darkgrey text-[18px] ml-3 text-start">
+              Route
+              <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+              </div>
+            </div>
+          </div>
+
+          {medication.map((item: any, index: number) => (
+  <div
+    key={item.medicationId}
+    className={`flex justify-between items-center mt-3`}
+    style={{
+      backgroundColor: index % 2 === 0 ? 'white' : '#DBE2EA',
+    }}
+    onClick={() => router.push(`/getMedications/${item.id}`)}
+  >
+  
+    
+      <div className="flex-1">
+      <p className="font-sans  font-medium text-darkgrey text-[14px]  text-start ">
+        {item.medicationName.length > 8 ? (
+      <span className="break-words">
+        {item.medicationName}
+      </span>
+    ) : (
+      item.medicationName
+    )}
+      </p>
+    </div>
+    <div className="flex-1">
+     <p className="font-sans ml-5 font-medium text-darkgrey text-[14px] text-center">
+    {item.dosage}
+  </p>
+     </div>
+            
+     <div className="flex-1"> 
+      <p className="font-sans ml-3 font-medium text-darkgrey text-[14px]  text-center">
+        {item.route}
+      </p>
+    </div>
+
+    <div className="flex icons" style={{ marginLeft: '5px', marginRight: '5px',  marginTop: '-2%'}}>
+        <div className="icon">
+          <MdDeleteForever
+            style={{ color: 'var(--Red, #FF7171)', width: '25px', height: '30px' }}
+            onClick={() => deleteMedications(item.id)}
+          />
+        </div>
+      </div>
+  </div>
+))}
+  </div>
+)}
+</div>
+  );
+}

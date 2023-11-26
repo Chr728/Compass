@@ -58,7 +58,7 @@ export async function getMedication(medicationId: string): Promise<any> {
         },
       }
     );
-    logger.info(`medication  entry ${medicationId} fetched successfully`)
+    logger.info(`medication  entry fetched successfully`)
     if (!response.ok) {
       logger.error(`Failed to retrieve Medication entry data. HTTP Status: ${response.status}`)
       throw new Error(
