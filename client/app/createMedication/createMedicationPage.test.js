@@ -35,11 +35,6 @@ describe("Medication tests for logged in user", () => {
     
       afterEach(() => {
         jest.resetAllMocks();
-        // useAuth.mockImplementation(() => {
-        //     return {
-        //       user: null
-        //     };
-        //   });
       });
       
       it("All fields are displayed to the user", () => {
@@ -80,9 +75,37 @@ describe("Medication tests for logged in user", () => {
         fireEvent.blur(name);
         const date = screen.getByLabelText(/Date Started/i);
         fireEvent.blur(date);
+        const time = screen.getByLabelText("Time");
+        fireEvent.blur(time);
+        const dosage = screen.getByLabelText("Dosage");
+        fireEvent.blur(dosage);
+        const unit = screen.getByLabelText("Unit");
+        fireEvent.blur(unit);
+        const frequency = screen.getByLabelText("Frequency");
+        fireEvent.blur(frequency);
+        const route = screen.getByLabelText("Route");
+        fireEvent.blur(route);
        
         const errorMessages = await screen.findAllByText("This field cannot be left empty.");
-        expect(errorMessages.length).toBe(2);
+        expect(errorMessages.length).toBe(7);
+    })
+
+    it("Error displayed if dosage value is negative", async () => {
+        render(<CreateMedicationPage />);
+        const dosage = screen.getByLabelText("Dosage");
+        await userEvent.type(dosage, '-7');
+        fireEvent.blur(dosage);
+        const errorMessage = await screen.findByText("This field cannot be negative or zero.");
+        expect(errorMessage).toBeInTheDocument();
+    })
+
+    it("Error displayed if dosage value is zero", async () => {
+        render(<CreateMedicationPage />);
+        const dosage = screen.getByLabelText("Dosage");
+        await userEvent.type(dosage, "0");
+        fireEvent.blur(dosage);
+        const errorMessage = await screen.findByText("This field cannot be negative or zero.");
+        expect(errorMessage).toBeInTheDocument();
     })
 
     it("Should create a medication entry", async () => {

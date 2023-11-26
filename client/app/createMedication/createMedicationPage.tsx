@@ -28,7 +28,7 @@ export default function CreateMedicationPage() {
             name: '',
             date: '',
             time: '',
-            dosage: 0.0,
+            dosage: '',
             unit: '',
             frequency: '',
             route: '',
@@ -59,6 +59,12 @@ export default function CreateMedicationPage() {
             let errors: {
                 name?:string;
                 date?: string;
+                time?:string;
+                dosage?:string;
+                unit?: string;
+                frequency?: string;
+                route?: string;
+                notes?: string;
             } = {};
 
             if (!values.name){
@@ -68,11 +74,32 @@ export default function CreateMedicationPage() {
                 errors.date = "This field cannot be left empty."
             }
 
+            if (!values.time){
+                errors.time = "This field cannot be left empty."
+            }
+
+            if (parseFloat(values.dosage) <=0 ) {
+                    errors.dosage = "This field cannot be negative or zero.";
+            }
+            else if (!values.dosage) {
+                errors.dosage = "This field cannot be left empty.";
+            }
+
+            if(!values.unit){
+                errors.unit = "This field cannot be left empty."
+            }
+
+            if(!values.frequency){
+                errors.frequency = "This field cannot be left empty."
+            }
+
+            if(!values.route){
+                errors.route = "This field cannot be left empty."
+            }
             return errors;
         }
     });
 
-   
 
     return (
         <div className="bg-eggshell min-h-screen flex flex-col">
@@ -147,7 +174,8 @@ export default function CreateMedicationPage() {
                         htmlFor="time"
                         className="font-sans font-medium text-grey text-[16px]"
                     >
-                    Time
+                        <span className="text-red text-[20px]"> *</span>
+                        Time
                     </label>
                     <br />
                     <div className="max-w-[225px]">
@@ -160,11 +188,11 @@ export default function CreateMedicationPage() {
                             value={formik.values.time}
                             onBlur={formik.handleBlur}
                         />
+                        {
+                            formik.touched.time && formik.errors.time && (
+                                <p className="text-red text-[14px]">{formik.errors.time}</p>
+                        )} 
                     </div>
-                    {/* {
-                        formik.touched.time && !formik.values.time && (
-                            <p className="text-red text-[14px]">This field can't be left empty.</p>
-                    )}       */}
                 </div>
 
                 <div className="flex">
@@ -173,18 +201,23 @@ export default function CreateMedicationPage() {
                         htmlFor="dosage"
                         className="font-sans font-medium text-grey text-[16px]"
                         >
-                        Dosage
+                            <span className="text-red text-[20px]"> *</span>
+                            Dosage
                         </label>
                         <br />
                         <Input
-                        name="dosage"
-                        id="dosage"
-                        type="number"
-                        style={{ width: '75%' }}
-                        onChange={formik.handleChange}
-                        value={formik.values.dosage.toString()}
-                        onBlur={formik.handleBlur}
+                            name="dosage"
+                            id="dosage"
+                            type="number"
+                            style={{ width: '75%' }}
+                            onChange={formik.handleChange}
+                            value={formik.values.dosage.toString()}
+                            onBlur={formik.handleBlur}
                         />
+                         {
+                            formik.touched.dosage && formik.errors.dosage && (
+                                <p className="text-red text-[14px] mr-2">{formik.errors.dosage}</p>
+                        )} 
                     </div>
 
                     <div className="mt-3  ml-2"
@@ -197,7 +230,8 @@ export default function CreateMedicationPage() {
                             htmlFor="unit"
                             className="font-sans font-medium text-grey text-[16px]"
                         >
-                        Unit
+                            <span className="text-red text-[20px]"> *</span>
+                            Unit
                         </label>
                         <br />
                         <select
@@ -224,12 +258,19 @@ export default function CreateMedicationPage() {
                             <option value="g">gram (g)</option>
                             <option value="oz">ounce (oz)</option>
                             <option value="other">other</option>
-                        </select>        
+                        </select>   
+                        {
+                            formik.touched.unit && formik.errors.unit && (
+                                <p className="text-red text-[14px]">{formik.errors.unit}</p>
+                        )}      
                     </div>
                 </div>
 
                 <div className="mt-3">
-                    <label htmlFor="frequency" className="font-sans font-medium text-grey text-[16px]">Frequency</label>
+                    <label htmlFor="frequency" className="font-sans font-medium text-grey text-[16px]">
+                        <span className="text-red text-[20px]"> *</span>
+                        Frequency
+                    </label>
                     <br/>
                     <select
                         name="frequency"
@@ -260,10 +301,17 @@ export default function CreateMedicationPage() {
                         <option value="prn">As needed (PRN)</option>
                         <option value="other">Other</option>
                     </select>
+                        {
+                            formik.touched.frequency && formik.errors.frequency && (
+                                <p className="text-red text-[14px]">{formik.errors.frequency}</p>
+                        )} 
                 </div>
 
                 <div className="mt-3">
-                    <label htmlFor="route" className="font-sans font-medium text-grey text-[16px]">Route</label>
+                    <label htmlFor="route" className="font-sans font-medium text-grey text-[16px]">
+                        <span className="text-red text-[20px]"> *</span>
+                        Route
+                    </label>
                     <br/>
                     <select
                         name="route"
@@ -285,6 +333,10 @@ export default function CreateMedicationPage() {
                         <option value="topical">Topical</option>
                         <option value="other">Other</option>
                     </select>
+                        {
+                            formik.touched.route && formik.errors.route && (
+                                <p className="text-red text-[14px]">{formik.errors.route}</p>
+                        )} 
                 </div>
 
                 <div className="mt-3">
@@ -313,7 +365,11 @@ export default function CreateMedicationPage() {
                         style={{ width:"140px", backgroundColor: "var(--Red, #FF7171)" }}
                         onClick={() => router.push("/getMedications")}
                     />
-                    <Button type="submit" text="Submit" style={{ width: "140px" }} />
+                    <Button 
+                        type="submit" 
+                        text="Submit" 
+                        style={{ width: "140px" }} 
+                    />
                 </div>
 
             </form>

@@ -44,7 +44,7 @@ export default function EditMedication( { params: { medication} } : { params : {
             name: '',
             date: '',
             time: '',
-            dosage: 0.0 as any,
+            dosage: '',
             unit: '',
             frequency: '',
             route: '',
@@ -74,6 +74,12 @@ export default function EditMedication( { params: { medication} } : { params : {
             let errors: {
                 name?:string;
                 date?: string;
+                time?:string;
+                dosage?:string;
+                unit?: string;
+                frequency?: string;
+                route?: string;
+                notes?: string;
             } = {};
 
             if (!values.name){
@@ -81,6 +87,28 @@ export default function EditMedication( { params: { medication} } : { params : {
             }
             if (!values.date){
                 errors.date = "This field cannot be left empty."
+            }
+            if (!values.time){
+                errors.time = "This field cannot be left empty."
+            }
+
+            if (parseFloat(values.dosage) <=0 ) {
+                    errors.dosage = "This field cannot be negative or zero.";
+            }
+            else if (!values.dosage) {
+                errors.dosage = "This field cannot be left empty.";
+            }
+
+            if(!values.unit){
+                errors.unit = "This field cannot be left empty."
+            }
+
+            if(!values.frequency){
+                errors.frequency = "This field cannot be left empty."
+            }
+
+            if(!values.route){
+                errors.route = "This field cannot be left empty."
             }
 
             return errors;
@@ -175,6 +203,7 @@ export default function EditMedication( { params: { medication} } : { params : {
                         htmlFor="name"
                         className="font-sans font-medium text-grey text-[16px]"
                     >
+                    <span className="text-red text-[20px]"> *</span>
                     Time
                     </label>
                     <br />
@@ -188,6 +217,10 @@ export default function EditMedication( { params: { medication} } : { params : {
                             value={formik.values.time}
                             onBlur={formik.handleBlur}
                         />
+                         {
+                            formik.touched.time && formik.errors.time && (
+                                <p className="text-red text-[14px]">{formik.errors.time}</p>
+                        )} 
                     </div>  
                 </div>
 
@@ -197,6 +230,7 @@ export default function EditMedication( { params: { medication} } : { params : {
                         htmlFor="dosage"
                         className="font-sans font-medium text-grey text-[16px]"
                         >
+                        <span className="text-red text-[20px]"> *</span>
                         Dosage
                         </label>
                         <br />
@@ -209,6 +243,10 @@ export default function EditMedication( { params: { medication} } : { params : {
                         value={formik.values.dosage}
                         onBlur={formik.handleBlur}
                         />
+                        {
+                            formik.touched.dosage && formik.errors.dosage && (
+                                <p className="text-red text-[14px] mr-2">{formik.errors.dosage}</p>
+                        )} 
                     </div>
 
                     <div className="mt-3  ml-2"
@@ -221,6 +259,7 @@ export default function EditMedication( { params: { medication} } : { params : {
                             htmlFor="unit"
                             className="font-sans font-medium text-grey text-[16px]"
                         >
+                        <span className="text-red text-[20px]"> *</span>
                         Unit
                         </label>
                         <br />
@@ -248,12 +287,19 @@ export default function EditMedication( { params: { medication} } : { params : {
                             <option value="g">gram (g)</option>
                             <option value="oz">ounce (oz)</option>
                             <option value="other">other</option>
-                        </select>        
+                        </select>       
+                        {
+                            formik.touched.unit && formik.errors.unit && (
+                                <p className="text-red text-[14px]">{formik.errors.unit}</p>
+                        )}   
                     </div>
                 </div>
 
                 <div className="mt-3">
-                    <label htmlFor="frequency" className="font-sans font-medium text-grey text-[16px]">Frequency</label>
+                    <label htmlFor="frequency" className="font-sans font-medium text-grey text-[16px]">
+                        <span className="text-red text-[20px]"> *</span>
+                        Frequency
+                    </label>
                     <br/>
                     <select
                         name="frequency"
@@ -284,10 +330,17 @@ export default function EditMedication( { params: { medication} } : { params : {
                         <option value="prn">As needed (PRN)</option>
                         <option value="other">Other</option>
                     </select>
+                {
+                        formik.touched.frequency && formik.errors.frequency && (
+                            <p className="text-red text-[14px]">{formik.errors.frequency}</p>
+                    )} 
                 </div>
 
                 <div className="mt-3">
-                    <label htmlFor="route" className="font-sans font-medium text-grey text-[16px]">Route</label>
+                    <label htmlFor="route" className="font-sans font-medium text-grey text-[16px]">
+                        <span className="text-red text-[20px]"> *</span>
+                        Route
+                    </label>
                     <br/>
                     <select
                         name="route"
@@ -309,6 +362,10 @@ export default function EditMedication( { params: { medication} } : { params : {
                         <option value="topical">Topical</option>
                         <option value="other">Other</option>
                     </select>
+                    {
+                        formik.touched.route && formik.errors.route && (
+                            <p className="text-red text-[14px]">{formik.errors.route}</p>
+                    )} 
                 </div>
 
                 <div className="mt-3">
@@ -342,7 +399,6 @@ export default function EditMedication( { params: { medication} } : { params : {
                 </div>
 
             </form>
-            
     </div>
     )
 }

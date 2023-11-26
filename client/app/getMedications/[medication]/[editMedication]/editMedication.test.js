@@ -1,4 +1,4 @@
-import {fireEvent, render, screen} from '@testing-library/react';
+import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import EditMedication from './page';
@@ -43,8 +43,10 @@ describe("Edit medications page", () => {
           });
       });
 
-    test("All fields are displayed to the user", () => {
+    it("All fields are displayed to the user", async() => {
         render(<EditMedication params = { { medication: "123" } }/>);
+        await waitFor(async() => {
+             
         const heading = screen.getByText("Edit Medication");
         const name = screen.getByText("Medication Name");
         const date = screen.getByText("Date Started");
@@ -64,16 +66,40 @@ describe("Edit medications page", () => {
         expect(frequency).toBeInTheDocument();
         expect(route).toBeInTheDocument();
         expect(notes).toBeInTheDocument();
-
+        })
     })
 
-    test("All buttons are displayed to the user", () => {
+    it("All buttons are displayed to the user", async () => {
         render(<EditMedication params = { { medication: "123" } }/>);
-        const cancelButton = screen.getAllByRole("button")[0];
-        const submitButton = screen.getAllByRole("button")[1];
-        expect(cancelButton).toBeInTheDocument();
-        expect(submitButton).toBeInTheDocument();
+        await waitFor(async() => {
+            const cancelButton = screen.getAllByRole("button")[0];
+            const submitButton = screen.getAllByRole("button")[1];
+            expect(cancelButton).toBeInTheDocument();
+            expect(submitButton).toBeInTheDocument();
+        })
      })
+
+    it("Error displayed if dosage value is negative", async () => {
+        render(<EditMedication params = { { medication: "123" } }/>);
+        await waitFor(async() => {
+            const dosage = screen.getByLabelText("Dosage");
+            await userEvent.type(dosage, "-7");
+            fireEvent.blur(dosage);
+            const errorMessage = await screen.findByText("This field cannot be negative or zero.");
+            expect(errorMessage).toBeInTheDocument();
+        })
+    })
+
+    it("Error displayed if dosage value is zero", async () => {
+        render(<EditMedication params = { { medication: "123" } }/>);
+        await waitFor(async() => {
+            const dosage = screen.getByLabelText("Dosage");
+            await userEvent.type(dosage, "0");
+            fireEvent.blur(dosage);
+            const errorMessage = await screen.findByText("This field cannot be negative or zero.");
+            expect(errorMessage).toBeInTheDocument();
+        })
+    })
 
     it("Should update a medication entry", async () => {
         const mockUserId = '11';
