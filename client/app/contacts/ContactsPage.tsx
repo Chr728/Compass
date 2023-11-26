@@ -11,6 +11,24 @@ export default function Contacts() {
   const router = useRouter();
   const { user } = useAuth();
 
+  //check if the contact picker aPI is supported
+  const supported = ('contacts' in navigator && 'ContactsManager' in window);
+
+  const selectContact = async () => {
+    // feature check
+    if (!supported) {
+      return null;
+    }
+  
+    // open the picker
+    const contact = await navigator.contacts.select(['name', 'tel'], {
+      multiple: false,
+    });
+  
+    // handle the result
+    return `${contact[0].name[0]} - ${contact[0].tel[0]}`;
+  }
+
   useEffect(() => {
     if (!user){
       router.push("/login")
