@@ -1,0 +1,348 @@
+'use client';
+import Button from '@/app/components/Button';
+import Header from '@/app/components/Header';
+import Input from '@/app/components/Input';
+import { useAuth } from '@/app/contexts/AuthContext';
+import { formatDateYearMonthDate } from '@/app/helpers/utils/datetimeformat';
+import { getMedication, updateMedication } from '@/app/http/medicationAPI';
+import Custom403 from '@/app/pages/403';
+import { useFormik } from 'formik';
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react'
+
+export default function EditMedication( { params: { medication} } : { params : { medication: string}} ) {
+    const logger = require('../../../../logger');
+    const router = useRouter();
+    const { user } = useAuth();
+    const [data, setData] = useState<any>();
+
+    async function editMedication() {
+        try {  
+           const medicationData = await getMedication(medication);
+           setData(medicationData.data);
+        } catch (error) {
+            logger.error('Error fetching mood data');
+        }
+    }
+
+    useEffect(() => {
+        if (!user){
+          router.push("/login")
+        }
+
+        if (user) {
+            editMedication();
+        }
+    }, [user]);
+
+    if (!user) {
+        return <div><Custom403/></div>
+    }
+
+    const formik = useFormik({
+        initialValues: {
+            name: '',
+            date: '',
+            time: '',
+            dosage: 0.0 as any,
+            unit: '',
+            frequency: '',
+            route: '',
+            notes: ''
+        },
+        onSubmit: async (values)=> {
+            try{
+                const medicationData = {
+                    medicationName: values.name,
+                    dateStarted: values.date,
+                    time: values.time,
+                    dosage: values.dosage,
+                    unit: values.unit,
+                    frequency: values.frequency,
+                    route: values.route,
+                    notes: values.notes
+                };
+                const result = await updateMedication(medication, medicationData);
+                logger.info('Medication entry created:', result);
+                router.push(`/getMedications/${medication}`);
+            } catch (error) {
+                logger.error('Error creating medication entry:', error);
+            }
+
+        },
+        validate: async (values) => {
+            let errors: {
+                name?:string;
+                date?: string;
+            } = {};
+
+            if (!values.name){
+                errors.name = "This field cannot be left empty."
+            }
+            if (!values.date){
+                errors.date = "This field cannot be left empty."
+            }
+
+            return errors;
+        }
+
+    });
+
+    useEffect(() =>{
+        const  { setValues } = formik;
+        setValues({
+            name: data?.medicationName,
+            date: formatDateYearMonthDate(data?.dateStarted),
+            time: data?.time,
+            dosage: data?.dosage,
+            unit: data?.unit,
+            frequency: data?.frequency,
+            route: data?.route,
+            notes: data?.notes,
+        });
+      }, [data])
+
+    return (
+        <div className="bg-eggshell min-h-screen flex flex-col">
+            <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
+                <button onClick={() => router.push('/getDiabeticJournals')}>
+                <Header headerText="Edit Medication"></Header>
+                </button>
+            </span>
+
+            <form
+                className="rounded-3xl bg-white flex flex-col mb-8 w-full md:max-w-[800px] md:min-h-[550px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
+                onSubmit={formik.handleSubmit}
+            >
+                <div className="self-end -mt-4">
+                    <p className="text-red text-[20px]"> *
+                        <span className="font-sans font-medium text-grey text-[16px]"> indicates a required field</span>
+                    </p>
+                </div>
+                <div className="mt-3">
+                    <label
+                        htmlFor="name"
+                        className="font-sans font-medium text-grey text-[16px]"
+                    >
+                    <span className="text-red text-[20px]"> *</span>
+                    Medication Name
+                    </label>
+                    <br />
+                    <Input 
+                        name="name"
+                        id="name"
+                        type="text"
+                        style={{ width: '100%' }}
+                        onChange={formik.handleChange}
+                        value={formik.values.name}
+                        onBlur={formik.handleBlur}
+                    />
+                    {
+                        formik.touched.name && formik.errors.name && (
+                            <p className="text-red text-[14px]">{formik.errors.name}</p>
+                    )}      
+                </div>
+
+
+                <div className="mt-3 mb-3">
+                    <label
+                        htmlFor="name"
+                        className="font-sans font-medium text-grey text-[16px]"
+                    >
+                    <span className="text-red text-[20px]"> *</span>
+                    Date Started
+                    </label>
+                    <br />
+                    <div className="max-w-[225px]">
+                        <Input 
+                            name="date"
+                            id="date"
+                            type="date"
+                            style={{ width: '100%' }}
+                            onChange={formik.handleChange}
+                            value={formik.values.date}
+                            onBlur={formik.handleBlur}
+                        />
+                    </div>
+                    {
+                        formik.touched.date && formik.errors.date && (
+                            <p className="text-red text-[14px]">{formik.errors.date}</p>
+                    )}      
+                </div>
+
+                <div className="mt-3 mb-3">
+                    <label
+                        htmlFor="name"
+                        className="font-sans font-medium text-grey text-[16px]"
+                    >
+                    Time
+                    </label>
+                    <br />
+                    <div className="max-w-[225px]">
+                        <Input 
+                            name="time"
+                            id="time"
+                            type="time"
+                            style={{ width: '100%' }}
+                            onChange={formik.handleChange}
+                            value={formik.values.time}
+                            onBlur={formik.handleBlur}
+                        />
+                    </div>  
+                </div>
+
+                <div className="flex">
+                    <div className="mt-3">
+                        <label
+                        htmlFor="dosage"
+                        className="font-sans font-medium text-grey text-[16px]"
+                        >
+                        Dosage
+                        </label>
+                        <br />
+                        <Input
+                        name="dosage"
+                        id="dosage"
+                        type="number"
+                        style={{ width: '75%' }}
+                        onChange={formik.handleChange}
+                        value={formik.values.dosage}
+                        onBlur={formik.handleBlur}
+                        />
+                    </div>
+
+                    <div className="mt-3  ml-2"
+                        style={{
+                            width: '50%',
+                            marginLeft :'-2%'
+                        }}
+                    >
+                        <label
+                            htmlFor="unit"
+                            className="font-sans font-medium text-grey text-[16px]"
+                        >
+                        Unit
+                        </label>
+                        <br />
+                        <select
+                            className="text-darkgrey h-[52px] p-2"
+                            name="unit"
+                            id="unit"
+                            style={{
+                                width: '100%',
+                                border: '1px solid #DBE2EA',
+                                borderRadius: '5px',
+                            }}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            value={formik.values.unit}
+                        >
+                            <option value="">Choose one</option>
+                            <option value="gtts">drop (gtts)</option>
+                            <option value="tsp">teaspoon (tsp)</option>
+                            <option value="tbsp">tablespoon (tbsp)</option>
+                            <option value="mL">millilitre (mL)</option>
+                            <option value="fl">fluid ounce (fl oz)</option>
+                            <option value="mcg">microgram (mcg)</option>
+                            <option value="mg">milligram (mg)</option>
+                            <option value="g">gram (g)</option>
+                            <option value="oz">ounce (oz)</option>
+                            <option value="other">other</option>
+                        </select>        
+                    </div>
+                </div>
+
+                <div className="mt-3">
+                    <label htmlFor="frequency" className="font-sans font-medium text-grey text-[16px]">Frequency</label>
+                    <br/>
+                    <select
+                        name="frequency"
+                        id="frequency"
+                        onChange={formik.handleChange}
+                        value={formik.values.frequency}
+                        onBlur={formik.handleBlur}
+                        className="p-2 w-full h-[52px] border border-solid border-lightgrey rounded-md text-grey focus:outline-blue shadow-[0_4px_8px_0_rgba(44,39,56,0.04)]"
+                    >
+                        <option value="">Choose one</option>
+                        <option value="onceMorning">Once a day (morning)</option>
+                        <option value="onceEvening">Once a day (evening)</option>
+                        <option value="twice">Twice a day</option>
+                        <option value="thrice">Three times a day</option>
+                        <option value="four">Four times a day</option>
+                        <option value="five">Five times a day</option>
+                        <option value="six">Six times a day</option>
+                        <option value="thirtymin">Every 30 minutes</option>
+                        <option value="onehour">Every 1 hour</option>
+                        <option value="twohours">Every 2 hours</option>
+                        <option value="fourhours">Every 4 hours</option>
+                        <option value="sixhours">Every 6 hours</option>
+                        <option value="eighthours">Every 8 hours</option>
+                        <option value="beforemeals">Before meals</option>
+                        <option value="aftermeals">After meals</option>
+                        <option value="beforebed">Before bedtime</option>
+                        <option value="rtc">Round-the-clock (RTC)</option>
+                        <option value="prn">As needed (PRN)</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div className="mt-3">
+                    <label htmlFor="route" className="font-sans font-medium text-grey text-[16px]">Route</label>
+                    <br/>
+                    <select
+                        name="route"
+                        id="route"
+                        onChange={formik.handleChange}
+                        value={formik.values.route}
+                        onBlur={formik.handleBlur}
+                        className="p-2 w-full h-[52px] border border-solid border-lightgrey rounded-md text-grey focus:outline-blue shadow-[0_4px_8px_0_rgba(44,39,56,0.04)]"
+                    >
+                        <option value="">Choose one</option>
+                        <option value="oral">Oral</option>
+                        <option value="sublingual">Sublingual</option>
+                        <option value="enteral">Enteral</option>
+                        <option value="rectal">Rectal</option>
+                        <option value="inhalation">Inhalation</option>
+                        <option value="intramuscular">Intramuscular</option>
+                        <option value="subcutaneous">Subcutaneous</option>
+                        <option value="transdermal">Transdermal</option>
+                        <option value="topical">Topical</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div className="mt-3">
+                    <label
+                        htmlFor="notes"
+                        className="font-sans font-medium text-grey text-[16px]"
+                    >
+                    Notes
+                    </label>
+                    <br />
+                    <textarea
+                        name="notes"
+                        id="notes"
+                        value={formik.values.notes}
+                        className="w-full border border-solid border-lightgrey text-darkgrey rounded-md shadow-[0_4px_8px_0_rgba(44,39,56,0.04)]"
+                        rows={4}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                    />
+                </div>
+
+                <div className="mx-auto space-x-2 mb-8">
+                    <Button
+                        type="button"
+                        text="Cancel"
+                        style={{ width:"140px", backgroundColor: "var(--Red, #FF7171)" }}
+                        onClick={() => router.push("/medication")}
+                    />
+                    <Button type="submit" text="Submit" style={{ width: "140px" }}
+                    onClick={() => router.push(`/getMedications/${medication}`)} />
+                </div>
+
+            </form>
+            
+    </div>
+    )
+}
