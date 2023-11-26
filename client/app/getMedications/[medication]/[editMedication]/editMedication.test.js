@@ -48,13 +48,13 @@ describe("Edit medications page", () => {
         await waitFor(async() => {
              
         const heading = screen.getByText("Edit Medication");
-        const name = screen.getByText("Medication Name");
-        const date = screen.getByText("Date Started");
-        const time = screen.getByLabelText("Time");
-        const dosage = screen.getByLabelText("Dosage");
-        const unit = screen.getByLabelText("Unit");
-        const frequency = screen.getByLabelText("Frequency");
-        const route = screen.getByLabelText("Route");
+        const name = screen.getByLabelText(/Medication Name/i);
+        const date = screen.getByLabelText(/Date Started/i);
+        const time = screen.getByLabelText(/Time/i);
+        const dosage = screen.getByLabelText(/Dosage/i);
+        const unit = screen.getByLabelText(/Unit/i);
+        const frequency = screen.getByLabelText(/Frequency/i);
+        const route = screen.getByLabelText(/Route/i);
         const notes = screen.getByLabelText("Notes");
 
         expect(heading).toBeInTheDocument();
@@ -82,7 +82,7 @@ describe("Edit medications page", () => {
     it("Error displayed if dosage value is negative", async () => {
         render(<EditMedication params = { { medication: "123" } }/>);
         await waitFor(async() => {
-            const dosage = screen.getByLabelText("Dosage");
+            const dosage = screen.getByLabelText(/Dosage/i);
             await userEvent.type(dosage, "-7");
             fireEvent.blur(dosage);
             const errorMessage = await screen.findByText("This field cannot be negative or zero.");
@@ -93,7 +93,7 @@ describe("Edit medications page", () => {
     it("Error displayed if dosage value is zero", async () => {
         render(<EditMedication params = { { medication: "123" } }/>);
         await waitFor(async() => {
-            const dosage = screen.getByLabelText("Dosage");
+            const dosage = screen.getByLabelText(/Dosage/i);
             await userEvent.type(dosage, "0");
             fireEvent.blur(dosage);
             const errorMessage = await screen.findByText("This field cannot be negative or zero.");
@@ -107,11 +107,11 @@ describe("Edit medications page", () => {
         render(<EditMedication  params = { { medication: "123" } }/>);
         const name = screen.getByRole("textbox", { name: /name/i });
         const date = screen.getByLabelText(/Date Started/i);
-        const time = screen.getByLabelText("Time");
-        const dosage = screen.getByLabelText("Dosage");
-        const unit = screen.getByLabelText("Unit");
-        const frequency = screen.getByLabelText("Frequency");
-        const route = screen.getByLabelText("Route");
+        const time = screen.getByLabelText(/Time/i);
+        const dosage = screen.getByLabelText(/Dosage/i);
+        const unit = screen.getByLabelText(/Unit/i);
+        const frequency = screen.getByLabelText(/Frequency/i);
+        const route = screen.getByLabelText(/Route/i);
         const notes = screen.getByLabelText("Notes");
         const submitButton = screen.getAllByRole('button')[2];
 
