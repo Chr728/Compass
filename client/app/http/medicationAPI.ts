@@ -138,9 +138,9 @@ export async function updateMedication(
     );
     logger.info(`medication entry ${medicationId} updated successfully`)
     if (!response.ok) {
-      logger.error(`Failed to update Medication entry ${medicationId} for user. HTTP Status: ${response.status}`)
+      logger.error(`Failed to update Medication entry for user. HTTP Status: ${response.status}`)
       throw new Error(
-        `Failed to update Medication entry ${medicationId} for user. HTTP Status: ${response.status}`
+        `Failed to update Medication entry for user. HTTP Status: ${response.status}`
       );
     }
     const data = await response.json();
