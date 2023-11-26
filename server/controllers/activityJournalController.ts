@@ -6,7 +6,7 @@ export const getActivityJournals = async (req: Request, res: Response) => {
     try{
         const user = await db.User.findOne({
             where: {
-                uid: req.params.user_id
+                uid: req.params.uid
             }
         });
 
@@ -19,7 +19,7 @@ export const getActivityJournals = async (req: Request, res: Response) => {
 
         const activityJournals = await db.ActivityJournal.findAll({
             where: {
-                uid: req.params.user_id
+                uid: req.params.uid
             }
         });
 
@@ -71,7 +71,7 @@ export const createActivityJournal = async (req: Request, res: Response) => {
     try {
         const user = await db.User.findOne({
             where: {
-                uid: req.params.user_id
+                uid: req.params.uid
             }
         });
 
@@ -85,7 +85,7 @@ export const createActivityJournal = async (req: Request, res: Response) => {
         const { date, time, activity, duration, notes } = req.body;
 
         const activityJournal = await db.ActivityJournal.create({
-            uid: req.params.user_id,
+            uid: req.params.uid,
             date,
             time,
             activity,

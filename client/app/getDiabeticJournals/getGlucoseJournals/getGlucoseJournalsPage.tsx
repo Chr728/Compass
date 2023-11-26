@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react';
 import { MdDeleteForever, MdInfoOutline, MdKeyboardArrowDown } from 'react-icons/md';
 import Header from '../../components/Header';
 import { formatDate, formatMilitaryTime } from '../../helpers/utils/datetimeformat';
+import Swal from 'sweetalert2';
 
 
 export default function GetGlucoseJournalsPage() {
@@ -47,11 +48,25 @@ export default function GetGlucoseJournalsPage() {
 
 
     async function deleteGlucoseJournals(glucoseJournalId: string){
-      const deleteresult = await deleteGlucoseJournal(glucoseJournalId);   
-      const newData = glucose && glucose.filter((item: { id: string; }) => item.id!=glucoseJournalId);
-      setglucose(newData);
-      router.push('/getDiabeticJournals');
-  
+        Swal.fire({
+          text: "Are you sure you want to delete this glucose journal entry?",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Delete",
+        }).then(async (result: { isConfirmed: any; }) => {
+          if (result.isConfirmed) {
+            const deleteresult = await deleteGlucoseJournal(glucoseJournalId);   
+            const newData = glucose && glucose.filter((item: { id: string; }) => item.id!=glucoseJournalId);
+            setglucose(newData);
+            router.push('/getDiabeticJournals');
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your glucose journal entry has been deleted.",
+              icon: "success"
+            });    
+          }
+        });
     }
 
 
@@ -122,7 +137,7 @@ export default function GetGlucoseJournalsPage() {
         <div className="icon" id= "Trash Icon">
           <MdDeleteForever
             style={{ color: 'var(--Red, #FF7171)', width: '25px', height: '30px' }}
-            onClick={() => deleteGlucoseJournals(item.id)}
+            onClick={(event) => {event.stopPropagation();deleteGlucoseJournals(item.id);}}
           />
         </div>
       </div>
