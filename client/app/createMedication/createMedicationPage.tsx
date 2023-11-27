@@ -248,16 +248,16 @@ export default function CreateMedicationPage() {
                             value={formik.values.unit}
                         >
                             <option value="">Choose one</option>
-                            <option value="gtts">drop (gtts)</option>
-                            <option value="tsp">teaspoon (tsp)</option>
-                            <option value="tbsp">tablespoon (tbsp)</option>
-                            <option value="mL">millilitre (mL)</option>
-                            <option value="fl">fluid ounce (fl oz)</option>
-                            <option value="mcg">microgram (mcg)</option>
-                            <option value="mg">milligram (mg)</option>
-                            <option value="g">gram (g)</option>
-                            <option value="oz">ounce (oz)</option>
-                            <option value="other">other</option>
+                            <option value="drop (gtts)">drop (gtts)</option>
+                            <option value="teaspoon (tsp)">teaspoon (tsp)</option>
+                            <option value="tablespoon (tbsp)">tablespoon (tbsp)</option>
+                            <option value="millilitre (mL)">millilitre (mL)</option>
+                            <option value="fluid ounce (fl oz)">fluid ounce (fl oz)</option>
+                            <option value="microgram (mcg)">microgram (mcg)</option>
+                            <option value="milligram (mg)">milligram (mg)</option>
+                            <option value="gram (g)">gram (g)</option>
+                            <option value="ounce (oz)">ounce (oz)</option>
+                            <option value="Other">Other</option>
                         </select>   
                         {
                             formik.touched.unit && formik.errors.unit && (
@@ -281,25 +281,25 @@ export default function CreateMedicationPage() {
                         className="p-2 w-full h-[52px] border border-solid border-lightgrey rounded-md text-grey focus:outline-blue shadow-[0_4px_8px_0_rgba(44,39,56,0.04)]"
                     >
                         <option value="">Choose one</option>
-                        <option value="onceMorning">Once a day (morning)</option>
-                        <option value="onceEvening">Once a day (evening)</option>
-                        <option value="twice">Twice a day</option>
-                        <option value="thrice">Three times a day</option>
-                        <option value="four">Four times a day</option>
-                        <option value="five">Five times a day</option>
-                        <option value="six">Six times a day</option>
-                        <option value="thirtymin">Every 30 minutes</option>
-                        <option value="onehour">Every 1 hour</option>
-                        <option value="twohours">Every 2 hours</option>
-                        <option value="fourhours">Every 4 hours</option>
-                        <option value="sixhours">Every 6 hours</option>
-                        <option value="eighthours">Every 8 hours</option>
-                        <option value="beforemeals">Before meals</option>
-                        <option value="aftermeals">After meals</option>
-                        <option value="beforebed">Before bedtime</option>
-                        <option value="rtc">Round-the-clock (RTC)</option>
-                        <option value="prn">As needed (PRN)</option>
-                        <option value="other">Other</option>
+                        <option value="Once a day (morning)">Once a day (morning)</option>
+                        <option value="Once a day (evening)">Once a day (evening)</option>
+                        <option value="Twice a day">Twice a day</option>
+                        <option value="Three times a day">Three times a day</option>
+                        <option value="Four times a day">Four times a day</option>
+                        <option value="Five times a day">Five times a day</option>
+                        <option value="Six times a day">Six times a day</option>
+                        <option value="Every 30 minutes">Every 30 minutes</option>
+                        <option value="Every 1 hour">Every 1 hour</option>
+                        <option value="Every 2 hours">Every 2 hours</option>
+                        <option value="Every 4 hours">Every 4 hours</option>
+                        <option value="Every 6 hours">Every 6 hours</option>
+                        <option value="Every 8 hours">Every 8 hours</option>
+                        <option value="Before meals">Before meals</option>
+                        <option value="After meals">After meals</option>
+                        <option value="Before bedtime">Before bedtime</option>
+                        <option value="Round-the-clock (RTC)">Round-the-clock (RTC)</option>
+                        <option value="As needed (PRN)">As needed (PRN)</option>
+                        <option value="Other">Other</option>
                     </select>
                         {
                             formik.touched.frequency && formik.errors.frequency && (
@@ -322,16 +322,16 @@ export default function CreateMedicationPage() {
                         className="p-2 w-full h-[52px] border border-solid border-lightgrey rounded-md text-grey focus:outline-blue shadow-[0_4px_8px_0_rgba(44,39,56,0.04)]"
                     >
                         <option value="">Choose one</option>
-                        <option value="oral">Oral</option>
-                        <option value="sublingual">Sublingual</option>
-                        <option value="enteral">Enteral</option>
-                        <option value="rectal">Rectal</option>
-                        <option value="inhalation">Inhalation</option>
-                        <option value="intramuscular">Intramuscular</option>
-                        <option value="subcutaneous">Subcutaneous</option>
-                        <option value="transdermal">Transdermal</option>
-                        <option value="topical">Topical</option>
-                        <option value="other">Other</option>
+                        <option value="Oral">Oral</option>
+                        <option value="Sublingual">Sublingual</option>
+                        <option value="Enteral">Enteral</option>
+                        <option value="Rectal">Rectal</option>
+                        <option value="Inhalation">Inhalation</option>
+                        <option value="Intramuscular">Intramuscular</option>
+                        <option value="Subcutaneous">Subcutaneous</option>
+                        <option value="Transdermal">Transdermal</option>
+                        <option value="Topical">Topical</option>
+                        <option value="Other">Other</option>
                     </select>
                         {
                             formik.touched.route && formik.errors.route && (
