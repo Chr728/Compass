@@ -1,11 +1,5 @@
 'use client';
-
 import Button from '../components/Button';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import ButtonMUI from '@mui/material/Button';
 import { useRouter } from 'next/navigation';
 import { deleteMoodJournal, getMoodJournal, getMoodJournals } from '../http/moodJournalAPI';
 import { useEffect, useState } from 'react';
@@ -79,11 +73,6 @@ export default function ViewMoodJournalsPage() {
         <p className="text-grey font-sans text-[16px] ml-4 mt-2 w-11/12">
             Tracking your mood helps you understand when and what caused your mood to change.
         </p>
-        {/* <div 
-            className="w-11/12 rounded-3xl 
-            bg-white flex flex-col space-y-4 mt-8 self-center	
-            shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
-        > */}
           <div 
             className="w-11/12 rounded-3xl flex flex-col space-y-4 mt-2 self-center mb-4"
           >
@@ -102,7 +91,7 @@ export default function ViewMoodJournalsPage() {
                 <Button 
                 type="button" 
                 text="Daily" 
-                onClick={ () => router.push('/moodjournal/addentry')} 
+                onClick={ () => router.push('')} //this route will be changed next sprint when this feature is made
                 style={{ 
                     width: '100px', 
                     height: '34px', 
@@ -113,7 +102,7 @@ export default function ViewMoodJournalsPage() {
                 <Button 
                 type="button" 
                 text="Monthly" 
-                onClick={ () => router.push('/moodjournal/addentry')} 
+                onClick={ () => router.push('')}  //this route will be changed next sprint when this feature is made
                 style={{ 
                     width: '100px', 
                     height: '34px', 
@@ -141,21 +130,32 @@ export default function ViewMoodJournalsPage() {
                         style={{ borderColor: 'transparent', borderRightColor: setColor(data.howAreYou)}}>
                     </div>
                   </div>
-                  <div className="relative rounded-md p-2 w-[240px] h-[100px] text-white" style={{background: setColor(data.howAreYou)}}>
+              <div className="relative rounded-md p-2 w-[240px] h-[100px] text-white" style={{ background: setColor(data.howAreYou) }}>
+                <div className="flex space-x-2 items-center absolute top-2 right-2">
                     <div onClick={() => handleClick(data.id)}>
                       <Image 
                         src="/icons/info.svg"
                         alt="Info icon"
                         width={10}
                         height={10}
-                        className="absolute top-2 right-2"
                         style={{ width: 'auto', height: 'auto' }}
                       />
                     </div>
+                    <div className="w-[28px] h-[28px]" onClick={() => deleteMoodJournals(data.id)}>
+                              <Image 
+                                src="/icons/greyTrash.svg"
+                                alt="Grey-colored Trash icon"
+                                width={10}
+                                height={10}
+                                style={{ width: 'auto', height: 'auto' }}
+                              />
+                     </div>
+                  </div>
                     <p className="font-medium">Felt {data.howAreYou}!</p>
                     {data.notes && (
-                        <p className="opacity-[0.86]">{data.notes.length > 55 ? `${data.notes.substring(0, 55)}...` : data.notes}</p>
+                        <p className="opacity-[0.86] pt-1">{data.notes.length > 55 ? `${data.notes.substring(0, 55)}...` : data.notes}</p>
                     )}
+                   
                   </div>
                 </div>
               </div> 
@@ -168,15 +168,3 @@ export default function ViewMoodJournalsPage() {
     </div>
   )
 }
-         
-         
-
-
-
-  
-
-
-
-
-
-
