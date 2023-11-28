@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import Button from '../components/Button';
-import Input from '../components/Input';
+// import Input from '../components/Input';
 import { useRouter } from 'next/navigation';
 import { deleteMedication, getMedication, getMedications} from '../http/medicationAPI'; 
 import { useAuth } from '../contexts/AuthContext';
