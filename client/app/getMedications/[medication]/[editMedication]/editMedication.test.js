@@ -79,6 +79,29 @@ describe("Edit medications page", () => {
         })
      })
 
+     it("Error displayed if mandatory fields are left empty", async () => {
+        render(<EditMedication params = { { medication: "123" } } />);
+        const name = screen.getByRole("textbox", { name: /name/i });
+        await userEvent.clear(name);
+        fireEvent.blur(name);
+        const dosage = screen.getByLabelText(/Dosage/i);
+        await userEvent.clear(dosage);
+        fireEvent.blur(dosage);
+        const unit = screen.getByLabelText(/Unit/i);
+        await userEvent.selectOptions(unit, [""]);
+        fireEvent.blur(unit);
+        const frequency = screen.getByLabelText(/Frequency/i);
+        await userEvent.selectOptions(frequency, [""]);
+        fireEvent.blur(frequency);
+        const route = screen.getByLabelText(/Route/i);
+        await userEvent.selectOptions(route, [""]);
+        fireEvent.blur(route);
+       
+        const errorMessages = await screen.findAllByText(/This field cannot be left empty./i);
+
+        expect(errorMessages.length).toBe(5);
+    })
+
     it("Error displayed if dosage value is negative", async () => {
         render(<EditMedication params = { { medication: "123" } }/>);
         await waitFor(async() => {
