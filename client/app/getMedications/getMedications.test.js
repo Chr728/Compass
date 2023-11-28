@@ -4,6 +4,7 @@ import GetMedicationsPage from './getMedicationsPage';
 import {getMedications} from '../http/medicationAPI';
 import userEvent from '@testing-library/user-event';
 import { deleteMedication} from '../http/activityJournalAPI'; 
+import Swal from 'sweetalert2';
 
 import { useRouter } from "next/router";
 import { useUser } from '../contexts/UserContext';
