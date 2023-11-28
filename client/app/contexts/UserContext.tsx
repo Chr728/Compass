@@ -80,13 +80,14 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
       }
     };
     if (user) {
-      setTimeout(() => {
+      // setTimeout(() => {
         fetchUserData();
-      }, 1000);
+      // }, 1000);
     } else {
       handleLoading(false);
     }
   }, [uid]);
+
   const updateCurrentUser = (userData: EditableUserAttributes) => {
     if (uid) {
       updateUser(userData)
@@ -99,6 +100,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
         });
     }
   };
+
   const value: UserContextProps = {
     userInfo,
     updateCurrentUser,

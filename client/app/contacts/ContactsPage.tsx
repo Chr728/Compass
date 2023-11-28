@@ -1,11 +1,12 @@
 'use client';
+// import FormDialog from '../components/FormDialog'
 import Button from '../components/Button';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Header from '../components/Header';
 import Link from 'next/link';
 import { useAuth } from '@/app/contexts/AuthContext';
-import { deleteSpeedDial, getSpeedDial, getSpeedDials } from '../http/speedDialAPI';
+import { deleteSpeedDial, getSpeedDial, getSpeedDials, createSpeedDial } from '../http/speedDialAPI';
 import Custom403 from '../pages/403';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -46,12 +47,15 @@ export default function Contacts() {
 
   const selectContact = async () => {
     if (!supported) {
+      router.push('./');
       return null;
     }
     const contact = await navigator.contacts.select(['name', 'tel'], {
       multiple: false,
     });
-    return `${contact[0].name[0]} - ${contact[0].tel[0]}`;
+    const contactInfo = `${contact[0].name[0]}, ${contact[0].tel[0]}`;
+    createSpeedDial(contactInfo);
+    return contactInfo;
   }
 
   async function deleteContact(contactId: string){
@@ -74,6 +78,13 @@ export default function Contacts() {
         </button>
         
       <p className="text-darkgrey mb-4">Contact your loved ones with the click of a button.</p>   
+      
+      {/* <FormDialog
+        label="Add a Contact"
+        title="Add a Contact"
+        description="Please fill out the form."
+        onSubmit={handleFormSubmit}
+      /> */}
 
       <div style={{padding: '24px 16px 0 16px'}}>
           <Button 
@@ -107,7 +118,7 @@ export default function Contacts() {
           </Card>
         </div>
       </div>
-    ))}
+    ))} 
 
     </div>
   </div>
