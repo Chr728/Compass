@@ -88,7 +88,7 @@ describe("Create speed dial entry tests", () => {
             body: "\"11\"",
           }
         );
-        expect(result).toEqual(mockActivityJournalData);
+        expect(result).toEqual(mockSpeedDialData);
       });
 
     it("All fields are displayed to the user", () => {
@@ -110,7 +110,7 @@ describe("Create speed dial entry tests", () => {
         userEvent.click(submitButton);
 
         const errorMessages = await screen.findAllByText("This field can't be left empty.", { exact: false });
-        expect(errorMessages.length).toBe(3);
+        expect(errorMessages.length).toBe(2);
       
         const error = errorMessages[0];
         expect(error).toBeInTheDocument();

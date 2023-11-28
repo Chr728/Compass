@@ -18,6 +18,7 @@ export default function Contacts() {
   const { user } = useAuth();
   const [contacts, setContacts] = useState<any[]>([]); // [ { name: 'John Doe', phone: '123-456-7890' }
   const router = useRouter();
+  let supported = false;
 
   useEffect(() => {
     if (!user){
@@ -43,19 +44,26 @@ export default function Contacts() {
 
   // check if the contact picker API is supported
   // need to add fallback in case contact picker API is not supported
-  const supported = ('contacts' in navigator && 'ContactsManager' in window);
+  try {
+    supported = ('contacts' in navigator && 'ContactsManager' in window);
+  }
+  catch (error) {
+    logger.error('Contact picker API unsupported. ', error);
+    supported = false;
+  }
 
   const selectContact = async () => {
     if (!supported) {
-      router.push('./');
-      return null;
+      router.push('/createContacts');
     }
-    const contact = await navigator.contacts.select(['name', 'tel'], {
-      multiple: false,
-    });
-    const contactInfo = `${contact[0].name[0]}, ${contact[0].tel[0]}`;
-    createSpeedDial(contactInfo);
-    return contactInfo;
+    else {
+      const contact = await navigator.contacts.select(['name', 'tel'], {
+        multiple: false,
+      });
+      const contactInfo = `${contact[0].name[0]}, ${contact[0].tel[0]}`;
+      createSpeedDial(contactInfo);
+      return contactInfo;
+    }
   }
 
   async function deleteContact(contactId: string){

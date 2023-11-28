@@ -48,7 +48,7 @@ export default function CreateContactPage() {
       
   <div className="mt-3">
     <label
-      htmlFor="Name"
+      htmlFor="contactName"
       className="font-sans font-medium text-grey text-[16px]"
     >
       Contact Name
@@ -76,7 +76,7 @@ export default function CreateContactPage() {
 
   <div className="mt-3">
     <label
-      htmlFor="Phone Number"
+      htmlFor="phone"
       className="font-sans font-medium text-grey text-[16px]"
     >
       Phone Number
