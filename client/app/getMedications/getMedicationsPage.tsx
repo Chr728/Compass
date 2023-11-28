@@ -11,7 +11,7 @@ import { useUser } from '../contexts/UserContext';
 import { useEffect, useState } from 'react';
 import { MdDeleteForever, MdInfoOutline, MdKeyboardArrowDown } from 'react-icons/md';
 import Header from '../components/Header';
-import { formatDate } from '../helpers/utils/datetimeformat';
+import Swal from 'sweetalert2';
 
 export default function GetMedicationsPage() {
   const logger = require('../../logger');
@@ -46,10 +46,25 @@ export default function GetMedicationsPage() {
 
 
     async function deleteMedications(medicationId: string){
-      const deleteresult = await deleteMedication(medicationId);   
-      const newData = medication && medication.filter((item: { id: string; }) => item.id!=medicationId);
-      setmedication(newData);
-      router.push('/getMedications');
+ Swal.fire({
+        text: "Are you sure you want to delete this medication entry?",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Delete",
+      }).then(async (result: { isConfirmed: any; }) => {
+        if (result.isConfirmed) {
+          const deleteresult = await deleteMedication(medicationId);   
+          const newData = medication && medication.filter((item: { id: string; }) => item.id!=medicationId);
+          setmedication(newData);
+          router.push('/getMedications');
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your medication entry has been deleted.",
+            icon: "success"
+          });    
+        }
+     }); 
     }
 
 
@@ -131,7 +146,7 @@ export default function GetMedicationsPage() {
         <div className="icon">
           <MdDeleteForever
             style={{ color: 'var(--Red, #FF7171)', width: '25px', height: '30px' }}
-            onClick={() => deleteMedications(item.id)}
+             onClick={(event) => {event.stopPropagation();deleteMedications(item.id);}}
           />
         </div>
       </div>

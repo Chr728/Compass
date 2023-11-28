@@ -1,134 +1,95 @@
-import {render, screen} from '@testing-library/react';
+import {render, screen, act} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import GetActivityJournal from './page';
-import { getActivityJournal } from '../../http/activityJournalAPI';
-import { auth } from '../../config/firebase';
-import { useAuth } from '../../contexts/AuthContext';
+import GetMedication from './page';
+import {getMedication,getMedications} from '../../http/medicationAPI';
+import { useRouter } from "next/navigation";
+import { useUser } from '../../contexts/UserContext';
 
 const mockRouter = jest.fn();
-const mockUsePathname = jest.fn();
 
 jest.mock("next/navigation", () => ({
     useRouter: () => {
         return {
             push: mockRouter
         }
-    },
-    usePathname: () => mockUsePathname()
+    }
 }));
 
-jest.mock("../../contexts/AuthContext", () => {
+jest.mock('../../http/medicationAPI', () => {
     return {
-        useAuth: jest.fn()
+        getMedication: () => {
+            return {
+                    success: "SUCCESS",
+                    data: 
+                        {
+                            uid: '1',
+                             medicationName: 'Advil',
+                            dateStarted: '2014-01-01',
+                            time: '08:36',
+                            dosage: 60,
+                            unit: 'milligram (mg)',
+                            frequency: 'Six times a day',
+                            route: 'Rectal',
+                            Notes : 'Test medication'
+                    }
+            }
+        }
     }
+});
+
+
+jest.mock("../../contexts/UserContext", () => {
+    return {
+      useUser: () =>{
+        return {
+            userInfo: {
+                uid: '1',
+            }
+        }
+      }
+    };
+  });
+
+
+test("User data is displayed correctly", async () => {
+    render(<GetMedication params={{ medication:'1' }}/>);
+    setTimeout(() => {
+        expect(screen.getByText("Start Date:")).toBeInTheDocument();
+        expect(screen.getByText("Time:")).toBeInTheDocument();
+        expect(screen.getByText("Medication Name:")).toBeInTheDocument(); 
+        expect(screen.getByText("Dosage:")).toBeInTheDocument();
+        expect(screen.getByText("Frequency:")).toBeInTheDocument();
+        expect(screen.getByText("Unit:")).toBeInTheDocument();
+        expect(screen.getByText("Route:")).toBeInTheDocument();
+        expect(screen.getByText("Notes:")).toBeInTheDocument();
+        expect(screen.getByText("Jan 1,2014")).toBeInTheDocument();
+        expect(screen.getByText("8h36")).toBeInTheDocument();
+        expect(screen.getByText("advil")).toBeInTheDocument();
+        expect(screen.getByText("80")).toBeInTheDocument();
+        expect(screen.getByText("other")).toBeInTheDocument();
+        expect(screen.getByText("other")).toBeInTheDocument();
+        expect(screen.getByText("other")).toBeInTheDocument();
+        expect(screen.getByText("notes")).toBeInTheDocument();
+    }, 1000);
 })
 
-describe("Getting an activity journal", () => {
-
-    beforeEach(() => {
-        global.fetch = jest.fn();
-
-        useAuth.mockImplementation(() => {
-            return {
-                user: {
-                    uid: '1'
-                }
-            }
-        })
-
-    });
-    
-    afterEach(() => {
-        jest.clearAllMocks();
-    });
-
-    it('getActivityJournal() functions correctly', async () => {
-        const mockUser = { id: '1', name: 'John Doe', email: 'johndoe@example.com' };
-        render(<GetActivityJournal params={{ activityJournal: mockUser.id }}/>);
-        const mockToken = 'mockToken';
-        const mockCurrentUser = {
-            uid: mockUser.id,
-            getIdToken: jest.fn().mockResolvedValue(mockToken),
-        };
-
-        Object.defineProperty(auth, 'currentUser', {
-            get: jest.fn().mockReturnValue(mockCurrentUser),
-        });
-
-        const mockResponse = {
-            ok: true,
-            json: jest.fn().mockResolvedValue({}),
-        };
-        const mockFetch = jest.fn().mockResolvedValue(mockResponse);
-        global.fetch = mockFetch;
-
-        const userData = await getActivityJournal(mockUser.id);
-
-        expect(mockResponse.json).toHaveBeenCalled();
-        expect(mockFetch).toHaveBeenCalledWith(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/${mockUser.id}`,
-            {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${mockToken}`,
-            },
-            method: 'GET',
-            }
-        );
-    });
-    
-    it("All fields are is displayed correctly", async () => {
-        render(<GetActivityJournal params={{ activityJournal:'1' }}/>);
-        setTimeout(() => {
-            expect(screen.getByText(/Date:/i)).toBeInTheDocument();
-            expect(screen.getByText("Time:")).toBeInTheDocument();
-            expect(screen.getByText("Activity:")).toBeInTheDocument();
-            expect(screen.getByText("Duration(min):")).toBeInTheDocument();
-            expect(screen.getByText("Notes:")).toBeInTheDocument();
-            expect(screen.getByText("Jan 1, 2014")).toBeInTheDocument();
-            expect(screen.getByText("8h36")).toBeInTheDocument();
-            expect(screen.getByText("Swimming")).toBeInTheDocument();
-            expect(screen.getByText("45")).toBeInTheDocument();
-            expect(screen.getByText("notes")).toBeInTheDocument();
-        }, 1000);
-    })
-    
-    it("Cancel button functions correctly", async() => {
-        render(<GetActivityJournal params={{ activityJournal:'1' }}/>);
-        setTimeout(() => {
-            const cancelButton = screen.getAllByRole('button')[2];
-            userEvent.click(cancelButton);
-            expect(mockRouter).toHaveBeenCalledWith('/getActivityJournals')
-        }, 1000);
-    })
-    
-    it("Back button redirects to main journals view", async () => {
-        render(<GetActivityJournal params={{ activityJournal:'1' }}/>);
-        const button = screen.getAllByRole("button")[0];
-        await userEvent.click(button);
-        expect(mockRouter).toHaveBeenCalledWith('/getActivityJournals');
-    })
+test("Cancel button functions correctly", async() => {
+    render(<GetMedication params={{ medication:'1' }}/>);
+    setTimeout(() => {
+        const cancelButton = screen.getAllByRole('button')[2];
+        userEvent.click(cancelButton);
+        mockRouter;
+        expect(mockRouter).toHaveBeenCalledWith('/getMedications')
+    }, 1000);
 })
 
-
-describe("User not logged in", () => {
-
-    beforeEach(() => {
-        useAuth.mockImplementation(() => {
-            return {
-                user: null
-            }
-        })
-    })
-
-    afterEach( () => {
-        jest.resetAllMocks();
-    })
-
-    it("Error page displayed", async () => {
-        render(<GetActivityJournal params={{ activityJournal: null }}/>);
-        const errorText = await screen.findByText("Error 403 - Access Forbidden");
-        expect(errorText).toBeInTheDocument();
-    })
+test("Update button functions correctly", async() => {
+    render(<GetMedication params={{ medication:'1' }}/>);
+    setTimeout(() => {
+        const updateButton = screen.getAllByRole('button')[1];
+        userEvent.click(updateButton);
+        mockRouter;
+        expect(mockRouter).toHaveBeenCalledWith('/editMedication/1')
+    }, 1000);
 })

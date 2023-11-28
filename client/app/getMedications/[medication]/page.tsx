@@ -14,20 +14,20 @@ import { formatDate, formatMilitaryTime } from '@/app/helpers/utils/datetimeform
 import Custom403 from '@/app/pages/403';
 
 
-export default function GetMedication({params: { medicationId } } : { params: { medicationId: string } }) {
+export default function GetMedication({params: { medication } } : { params: { medication: string } }) {
   const logger = require('../../../logger');
   const { user } = useAuth();
   const router = useRouter();
   const { userInfo } = useUser();
-  const [medication, setmedication] = useState<any>(null);
+  const [medicationdata, setmedicationdata] = useState<any>(null);
   
   async function fetchMedication() {
     try {
       const userId = user?.uid || '';
-      // medicationId = '17';
-      const result = await getMedication(medicationId);
+      // medication = '17';
+      const result = await getMedication(medication);
       logger.info('Medication entry retrieved:', result);
-      setmedication(result.data);
+      setmedicationdata(result.data);
     } catch (error) {
       logger.error('Error retrieving Medication entry:', error);
     }
@@ -58,7 +58,7 @@ export default function GetMedication({params: { medicationId } } : { params: { 
               </button>
               </span>
      
-        {medication && (
+        {medicationdata && (
      <span
      className="rounded-2xl  mt-6 mb-10 mr-28 bg-white flex flex-col m-auto w-full md:max-w-[800px] md:min-h-[600px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
    >
@@ -69,7 +69,7 @@ export default function GetMedication({params: { medicationId } } : { params: { 
     Medication Name: 
   </p>
   <p className="text-md ml-2 text-darkgrey">
-  {medication.medicationName}
+  {medicationdata.medicationName}
   </p>
 </div>
        <p
@@ -82,7 +82,7 @@ export default function GetMedication({params: { medicationId } } : { params: { 
            className="text-md ml-2 text-darkgrey"
            style={{display: 'inline'}}
        >
-         {formatDate(medication.startDate)}
+         {formatDate(medicationdata.dateStarted)}
        </p>
        <br></br>
        <p
@@ -95,7 +95,7 @@ export default function GetMedication({params: { medicationId } } : { params: { 
            className="text-md ml-2 text-darkgrey"
            style={{display: 'inline'}}
        >
-         {formatMilitaryTime(medication.time)}
+         {formatMilitaryTime(medicationdata.time)}
        </p>
        <br></br>
        <p
@@ -108,7 +108,7 @@ export default function GetMedication({params: { medicationId } } : { params: { 
            className="text-md ml-2 text-darkgrey"
            style={{display: 'inline'}}
        >
-        {medication.dosage}
+        {medicationdata.dosage}
        </p>
        <br></br>
 
@@ -122,7 +122,7 @@ export default function GetMedication({params: { medicationId } } : { params: { 
            className="text-md ml-2 text-darkgrey"
            style={{display: 'inline'}}
        >
-         {medication.unit}
+         {medicationdata.unit}
        </p>
 
        <br></br>
@@ -136,7 +136,7 @@ export default function GetMedication({params: { medicationId } } : { params: { 
            className="text-md ml-2 text-darkgrey"
            style={{display: 'inline'}}
        >
-         {medication.frequency}
+         {medicationdata.frequency}
        </p>
               <br></br>
               <p
@@ -149,7 +149,7 @@ export default function GetMedication({params: { medicationId } } : { params: { 
            className="text-md ml-2 text-darkgrey"
            style={{display: 'inline'}}
        >
-         {medication.route}
+         {medicationdata.route}
        </p>
               <br></br>
               <p
@@ -162,13 +162,13 @@ export default function GetMedication({params: { medicationId } } : { params: { 
            className="text-md ml-2 text-darkgrey"
            style={{display: 'inline'}}
        >
-         {medication.notes}
+         {medicationdata.notes}
        </p>
        <br></br>
      </div>
    </div>
     <div className='mt-10 pb-4 self-center'>
-    <Button type="button" text="Edit"style={{ width: '140px' }} onClick={() => router.push(`/getMedications/${medicationId}/${medicationId}`)} />
+    <Button type="button" text="Edit"style={{ width: '140px' }} onClick={() => router.push(`/getMedications/${medication}/${medication}`)} />
     <Button
     type="button"
     text="Cancel"
