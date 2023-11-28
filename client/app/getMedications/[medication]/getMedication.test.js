@@ -70,7 +70,7 @@ test("User data is displayed correctly", async () => {
         expect(screen.getByText("other")).toBeInTheDocument();
         expect(screen.getByText("other")).toBeInTheDocument();
         expect(screen.getByText("other")).toBeInTheDocument();
-        expect(screen.getByText("I got higher dose")).toBeInTheDocument();
+        expect(screen.getByText("I got a lower dose")).toBeInTheDocument();
     }, 1000);
 })
 
