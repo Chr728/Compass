@@ -90,6 +90,6 @@ test("Update button functions correctly", async() => {
         const updateButton = screen.getAllByRole('button')[1];
         userEvent.click(updateButton);
         mockRouter;
-        expect(mockRouter).toHaveBeenCalledWith('/editMedication/1')
+        expect(mockRouter).toHaveBeenCalledWith('/getMedications/1/1')
     }, 1000);
 })
