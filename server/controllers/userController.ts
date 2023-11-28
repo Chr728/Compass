@@ -22,9 +22,9 @@ export const getUsers = async (req: Request, res: Response) => {
 export const getUser = async (req: Request, res: Response) => {
   try {
     const user = await db.User.findOne({
-      where : {
-        uid: req.params.id
-      }
+      where: {
+        uid: req.params.uid,
+      },
     });
 
     if (!user) {
@@ -47,19 +47,11 @@ export const getUser = async (req: Request, res: Response) => {
   }
 };
 
-
 export const createUser = async (req: Request, res: Response) => {
   try {
-    const {
-      uid,
-      email,
-      firstName,
-      lastName,
-      phoneNumber,
-      birthDate,
-      sex,
-    } = req.body;
-    userValidator(req.body)
+    const { uid, email, firstName, lastName, phoneNumber, birthDate, sex } =
+      req.body;
+    userValidator(req.body);
     const createdUser = await db.User.create({
       uid,
       email,
@@ -85,7 +77,7 @@ export const createUser = async (req: Request, res: Response) => {
 export const updateUser = async (req: Request, res: Response) => {
   try {
     const updatedUserData = req.body;
-    const userId = req.params.id;
+    const userId = req.params.uid;
     const updatedUser = await db.User.update(updatedUserData, {
       where: {
         uid: userId,
@@ -108,7 +100,7 @@ export const updateUser = async (req: Request, res: Response) => {
 
 export const deleteUser = async (req: Request, res: Response) => {
   try {
-    const userId = req.params.id;
+    const userId = req.params.uid;
     const deletedUser = await db.User.destroy({
       where: {
         id: userId,

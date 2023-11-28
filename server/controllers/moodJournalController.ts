@@ -6,7 +6,7 @@ export const getMoodJournals = async (req: Request, res: Response) => {
   try {
     const user = await db.User.findOne({
       where: {
-        uid: req.params.user_id,
+        uid: req.params.uid,
       },
     });
 
@@ -19,7 +19,7 @@ export const getMoodJournals = async (req: Request, res: Response) => {
 
     const moodJournals = await db.MoodJournal.findAll({
       where: {
-        uid: req.params.user_id,
+        uid: req.params.uid,
       },
     });
 
@@ -69,7 +69,7 @@ export const createMoodJournal = async (req: Request, res: Response) => {
   try {
     const user = await db.User.findOne({
       where: {
-        uid: req.params.user_id,
+        uid: req.params.uid,
       },
     });
 
@@ -85,7 +85,7 @@ export const createMoodJournal = async (req: Request, res: Response) => {
     const stressSignalsString = JSON.stringify(stressSignals);
 
     const moodJournal = await db.MoodJournal.create({
-      uid: req.params.user_id,
+      uid: req.params.uid,
       howAreYou,
       stressSignals: stressSignalsString,
       date,

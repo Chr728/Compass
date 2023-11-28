@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react';
 import { MdDeleteForever, MdInfoOutline, MdKeyboardArrowDown } from 'react-icons/md';
 import Header from '../components/Header';
 import { formatDate, formatMilitaryTime } from '../helpers/utils/datetimeformat';
+import Swal from 'sweetalert2';
 
 
 export default function GetFoodJournalsPage() {
@@ -47,10 +48,25 @@ export default function GetFoodJournalsPage() {
 
 
     async function deleteFoodJournals(foodJournalId: string){
-      const deleteresult = await deleteFoodIntakeJournal(foodJournalId);   
-      const newData = food && food.filter((item: { id: string; }) => item.id!=foodJournalId);
-      setfood(newData);
-      router.push('/getFoodJournals');
+      Swal.fire({
+        text: "Are you sure you want to delete this food journal entry?",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Delete",
+      }).then(async (result: { isConfirmed: any; }) => {
+        if (result.isConfirmed) {
+          const deleteresult = await deleteFoodIntakeJournal(foodJournalId);   
+          const newData = food && food.filter((item: { id: string; }) => item.id!=foodJournalId);
+          setfood(newData);
+          router.push('/getFoodJournals');
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your food journal entry has been deleted.",
+            icon: "success"
+          });    
+        }
+     }); 
     }
 
 
@@ -113,7 +129,7 @@ export default function GetFoodJournalsPage() {
         <div className="icon">
           <MdDeleteForever
             style={{ color: 'var(--Red, #FF7171)', width: '25px', height: '30px' }}
-            onClick={() => deleteFoodJournals(item.id)}
+            onClick={(event) => {event.stopPropagation();deleteFoodJournals(item.id);}}
           />
         </div>
       </div>

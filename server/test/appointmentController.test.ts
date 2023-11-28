@@ -48,7 +48,7 @@ const updateAppointment = {
 };
 
 const mockedDecodedToken = {
-  uid: 'userUid',
+  uid: 'appointUid',
   aud: '',
   auth_time: 0,
   exp: 0,
@@ -82,7 +82,7 @@ afterAll(() => {
 beforeEach(() => {
   jest
     .spyOn(admin.auth(), 'verifyIdToken')
-    .mockResolvedValueOnce(mockedDecodedToken);
+    .mockResolvedValue(mockedDecodedToken);
 });
 
 afterEach(() => {
@@ -184,7 +184,7 @@ describe('Testing the get all appointments Controller', () => {
       .spyOn(db.Appointment, 'findAll')
       .mockRejectedValue(new Error('query Error'));
     const res = await request(app)
-      .get('/api/appointments/0')
+      .get('/api/appointments/appointUid')
       .set({ Authorization: 'Bearer token' });
     expect(db.Appointment.findAll).toBeCalledTimes(1);
     expect(res.status).toBe(400);
@@ -201,7 +201,7 @@ describe('Testing the create appointment controller', () => {
       .spyOn(db.Appointment, 'create')
       .mockResolvedValueOnce(createAppointment);
     const res = await request(app)
-      .post('/api/appointments/5')
+      .post('/api/appointments/appointUid')
       .send(createAppointment)
       .set({ Authorization: 'Bearer token' });
     expect(db.Appointment.create).toHaveBeenCalledTimes(1);
@@ -213,7 +213,7 @@ describe('Testing the create appointment controller', () => {
   it('test the error if request is not made properly', async () => {
     jest.spyOn(db.Appointment, 'create').mockResolvedValueOnce('');
     const res = await request(app)
-      .post('/api/appointments/0')
+      .post('/api/appointments/appointUid')
       .send('')
       .set({ Authorization: 'Bearer token' });
     expect(db.Appointment.create).toHaveBeenCalledTimes(0);

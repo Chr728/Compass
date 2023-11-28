@@ -40,7 +40,7 @@ const updatedInsulinJournal = {
 };
 
 const mockedDecodedToken = {
-  uid: 'userUid',
+  uid: 'testuid',
   aud: '',
   auth_time: 0,
   exp: 0,
@@ -74,8 +74,7 @@ afterAll(() => {
 beforeEach(() => {
   jest
     .spyOn(admin.auth(), 'verifyIdToken')
-    .mockResolvedValueOnce(mockedDecodedToken);
-  jest.spyOn(db.User, 'findOne').mockResolvedValue(user);
+    .mockResolvedValue(mockedDecodedToken);
 });
 
 afterEach(() => {
@@ -89,14 +88,14 @@ describe('Testing the create insulin journal controller', () => {
       .spyOn(db.InsulinDosage, 'create')
       .mockResolvedValueOnce(insulinJournal);
     const res = await request(app)
-      .post(`/api/journals/diabetic/insulin/user/${user.uid}}`)
+      .post(`/api/journals/diabetic/insulin/user/${user.uid}`)
       .send(insulinJournal)
       .set({ Authorization: 'Bearer token' });
     expect(db.User.findOne).toHaveBeenCalledTimes(1);
     expect(db.InsulinDosage.create).toHaveBeenCalledTimes(1);
     expect(res.status).toBe(201);
     expect(res.body.status).toBe('SUCCESS');
-    expect(res.body.data).toStrictEqual(insulinJournal);
+    expect(res.body.data).toEqual(insulinJournal);
   });
 
   it('test the error if the user uid passed is invalid', async () => {
@@ -105,7 +104,7 @@ describe('Testing the create insulin journal controller', () => {
       .spyOn(db.InsulinDosage, 'create')
       .mockResolvedValueOnce(insulinJournal);
     const res = await request(app)
-      .post(`/api/journals/diabetic/insulin/user/${user.uid}}`)
+      .post(`/api/journals/diabetic/insulin/user/${user.uid}`)
       .send(insulinJournal)
       .set({ Authorization: 'Bearer token' });
     expect(db.User.findOne).toHaveBeenCalledTimes(1);
@@ -121,7 +120,7 @@ describe('Testing the create insulin journal controller', () => {
       .spyOn(db.InsulinDosage, 'create')
       .mockRejectedValue(new Error('query error'));
     const res = await request(app)
-      .post(`/api/journals/diabetic/insulin/user/${user.uid}}`)
+      .post(`/api/journals/diabetic/insulin/user/${user.uid}`)
       .send('')
       .set({ Authorization: 'Bearer token' });
     expect(db.InsulinDosage.create).toHaveBeenCalledTimes(1);

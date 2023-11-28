@@ -1,18 +1,22 @@
-import { Router } from "express";
+import { Router } from 'express';
+import enforceAuthorization from '../middlewares/enforceAuthorization';
 import {
   getAppointments,
   createAppointment,
   getAppointment,
   deleteAppointment,
   updateAppointments,
-} from "../controllers/appointmentController";
+} from '../controllers/appointmentController';
 
 const router = Router();
 
-router.route("/:id").get(getAppointments).post(createAppointment);
+router
+  .route('/:uid')
+  .get(enforceAuthorization, getAppointments)
+  .post(enforceAuthorization, createAppointment);
 
 router
-  .route("/single/:id")
+  .route('/single/:id')
   .get(getAppointment)
   .delete(deleteAppointment)
   .put(updateAppointments);

@@ -60,9 +60,10 @@ export const getInsulinJournal = async (req: Request, res: Response) => {
 };
 export const createInsulinJournal = async (req: Request, res: Response) => {
   try {
+    const userID = req.params.uid;
     const user = await db.User.findOne({
       where: {
-        uid: req.params.uid,
+        uid: userID,
       },
     });
     if (!user) {
@@ -73,7 +74,7 @@ export const createInsulinJournal = async (req: Request, res: Response) => {
     }
     const { date, time, typeOfInsulin, unit, bodySite, notes } = req.body;
     const insulinJournal = await db.InsulinDosage.create({
-      uid: req.params.uid,
+      uid: userID,
       date,
       time,
       typeOfInsulin,

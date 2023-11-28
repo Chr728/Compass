@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, {
   createContext,
@@ -7,21 +7,21 @@ import React, {
   useContext,
   useEffect,
   useState,
-} from "react";
-import { auth } from "@/app/config/firebase";
+} from 'react';
+import { auth } from '@/app/config/firebase';
 import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
   User,
   createUserWithEmailAndPassword,
-} from "firebase/auth";
-import { useRouter } from "next/navigation";
-import createUser from "@/app/http/createUser";
-import { createUserAttributes } from "@/app/lib/Models/User";
-import { useProp } from "./PropContext";
+} from 'firebase/auth';
+import { useRouter } from 'next/navigation';
+import createUser from '@/app/http/createUser';
+import { createUserAttributes } from '@/app/lib/Models/User';
+import { useProp } from './PropContext';
 
-const logger = require("../../logger");
+const logger = require('../../logger');
 interface AuthContextProps {
   user: User | null;
   login: (email: string, password: string) => void;
@@ -35,8 +35,8 @@ const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    logger.error("useAuth must be used within an AuthProvider");
-    throw new Error("useAuth must be used within an AuthProvider");
+    logger.error('useAuth must be used within an AuthProvider');
+    throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
 };
@@ -57,11 +57,11 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         setError(null);
       })
       .catch((error) => {
-        setError("Invalid User Credentials. Please try again.");
+        setError('Invalid User Credentials. Please try again.');
         const errorCode = error.code;
         const errorMessage = error.message;
         logger.error(errorCode, errorMessage);
-        handlePopUp("error", errorMessage);
+        handlePopUp('error', errorMessage);
         handleLoading(false);
       });
   };
@@ -71,12 +71,12 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       handleLoading(true);
       await signOut(auth);
       handleLoading(false);
-      router.push("/logout");
-      logger.info("Sign-out successful.");
+      router.push('/logout');
+      logger.info('Sign-out successful.');
     } catch (error: any) {
       // Handle errors gracefully
-      logger.error("Error signing out:", error);
-      handlePopUp("error", "Error signing out:" + error.message);
+      logger.error('Error signing out:', error);
+      handlePopUp('error', 'Error signing out:' + error.message);
     }
   };
 
@@ -93,27 +93,27 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
           .then((res) => {
             if (res !== null) {
               handleLoading(false);
-              router.push("/tpage");
+              router.push('/tpage');
             }
           })
           .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
             logger.error(errorCode, errorMessage);
-            handlePopUp("error", errorMessage);
+            handlePopUp('error', errorMessage);
             handleLoading(false);
           });
       })
       .catch((error) => {
-        if (error.code === "auth/email-already-in-use") {
-          setError("Email address is already in use.");
+        if (error.code === 'auth/email-already-in-use') {
+          setError('Email address is already in use.');
         } else {
           setError(error.message);
         }
         const errorCode = error.code;
         const errorMessage = error.message;
         logger.error(errorCode, errorMessage);
-        handlePopUp("error", errorMessage);
+        handlePopUp('error', errorMessage);
       });
   };
 

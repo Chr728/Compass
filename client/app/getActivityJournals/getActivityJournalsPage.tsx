@@ -13,6 +13,7 @@ import { MdDeleteForever, MdInfoOutline, MdKeyboardArrowDown } from 'react-icons
 import Header from '../components/Header';
 import Menu from '../components/Menu';
 import { formatDate } from '../helpers/utils/datetimeformat';
+import Swal from 'sweetalert2';
 
 export default function GetActivityJournalsPage() {
   const logger = require('../../logger');
@@ -47,10 +48,28 @@ export default function GetActivityJournalsPage() {
 
 
     async function deleteActivityJournals(activityJournalId: string){
-      const deleteresult = await deleteActivityJournal(activityJournalId);   
-      const newData = activity && activity.filter((item: { id: string; }) => item.id!=activityJournalId);
-      setactivity(newData);
-      router.push('/getActivityJournals');
+      Swal.fire({
+        text: "Are you sure you want to delete this activity journal entry?",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Delete",
+      }).then(async (result: { isConfirmed: any; }) => {
+        if (result.isConfirmed) {
+          const deleteresult = await deleteActivityJournal(activityJournalId);   
+          const newData = activity && activity.filter((item: { id: string; }) => item.id!=activityJournalId);
+          setactivity(newData);
+          router.push('/getActivityJournals');
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your activity journal entry has been deleted.",
+            icon: "success"
+          });    
+        }
+        else {
+          router.push('/getActivityJournals');
+        }
+     }); 
     }
 
 
@@ -130,7 +149,10 @@ export default function GetActivityJournalsPage() {
         <div className="icon">
           <MdDeleteForever
             style={{ color: 'var(--Red, #FF7171)', width: '25px', height: '30px' }}
-            onClick={() => deleteActivityJournals(item.id)}
+          onClick={(event) => {
+            event.stopPropagation();
+            deleteActivityJournals(item.id);
+          }}     
           />
         </div>
       </div>
