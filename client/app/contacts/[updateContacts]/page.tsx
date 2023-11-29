@@ -1,17 +1,30 @@
 'use client';
-import Button from '../components/Button';
-import Input from '../components/Input';
+import { useEffect, useState } from 'react';
+import Button from '../../components/Button';
+import Input from '../../components/Input';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { createSpeedDial } from '../http/speedDialAPI'; 
-import Header from '../components/Header';
-import { useAuth } from '../contexts/AuthContext';
+import { updateSpeedDial, getSpeedDials } from '../../http/speedDialAPI'; 
+import Header from '../../components/Header';
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function CreateContactPage() {
   const logger = require('../../logger');
   const router = useRouter();
   const { user } = useAuth();
+  const [contacts, setContacts] = useState<any>(null); 
   
+  async function fetchContacts() {
+    try {
+      const userId = user?.uid || '';
+      const result = await getSpeedDials();    
+      logger.info('All speed dial entries retrieved:', result);
+      setContacts(result.data);
+    } catch (error) {
+      logger.error('Error retrieving speed dial entries:', error);
+    }
+  }
+
   const formik = useFormik({
     initialValues: {
       contactName: '', // Initialize the form fields with empty values
@@ -25,7 +38,7 @@ export default function CreateContactPage() {
           contactName: values.contactName,
           contactNumber: values.phone,
         };
-        const result = await createSpeedDial(data); 
+        const result = await updateSpeedDial(contacts, data); 
         router.push('/contacts');
       } catch (error) {
         logger.error('Error creating speed dial entry:', error);

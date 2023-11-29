@@ -12,6 +12,9 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Swal from 'sweetalert2';
+
 
 export default function Contacts() {
   const logger = require('../../logger');
@@ -67,10 +70,25 @@ export default function Contacts() {
   }
 
   async function deleteContact(contactId: string){
-    const deleteresult = await deleteSpeedDial(contactId);   
-    const newData = contacts && contacts.filter((item: { id: string; }) => item.id!=contactId);
-    setContacts(newData);
-    router.push('/contacts');
+    Swal.fire({
+      text: "Are you sure you want to delete this contact?",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Delete",
+    }).then(async (result: { isConfirmed: any; }) => {
+      if (result.isConfirmed) {
+        const deleteresult = await deleteSpeedDial(contactId);   
+        const newData = contacts && contacts.filter((item: { id: string; }) => item.id!=contactId);
+        setContacts(newData);
+        router.push('/contacts'); 
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your contact has been deleted.",
+          icon: "success"
+        });    
+      }
+  }); 
   }
 
   if (!user) {
@@ -94,7 +112,7 @@ export default function Contacts() {
         onSubmit={handleFormSubmit}
       /> */}
 
-      <div style={{padding: '24px 16px 0 16px'}}>
+      <div style={{padding: '8px 8px 0 16px'}}>
           <Button 
           type="button" 
           text="Add a contact" 
@@ -108,25 +126,32 @@ export default function Contacts() {
           }}/>
       </div>
 
-    {contacts && contacts.map((contact: any) => (
-      <div className="grid grid-cols-2 gap-2">
-        <div>
-          <Card sx={{ minWidth: 275 }}>
-            <CardContent>
-              <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                {contact.name}
-              </Typography>
-              <Typography variant="h5" component="div">
-                {contact.phone}
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <button onClick={() => deleteContact(contact.id)}>Delete</button>
-            </CardActions>
-          </Card>
-        </div>
+      <div className="mt-4">
+        <Grid container spacing = {2}>
+          {contacts && contacts.map((data: any, index: number) => (
+            <Grid item xs={6} key={index}>
+              <div onClick={() => router.push(`/contacts/${data.id}`)}>
+                <Card>
+                  <CardContent>
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                      {data.contactNumber}
+                    </Typography>
+                    <Typography variant="h5" component="div">
+                      {data.contactName}
+                    </Typography>
+                  </CardContent>
+                  <CardActions>
+                    <button onClick={(event) => {
+                      event.stopPropagation();
+                      deleteContact(data.id);
+                    }}>Delete</button>
+                  </CardActions>
+                </Card>
+              </div>
+            </Grid>
+          ))} 
+        </Grid>
       </div>
-    ))} 
 
     </div>
   </div>
