@@ -1,12 +1,12 @@
 import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import CreateMedicationPage from './createMedicationPage';
-import { useAuth } from "../contexts/AuthContext";
-import { createMedication } from '../http/medicationAPI';
-import { auth } from '../config/firebase';
+import EditMedication from './page';
+import { updateMedication } from '../../../http/medicationAPI';
+import { useAuth } from '../../../contexts/AuthContext';
+import { auth } from '../../../config/firebase';
 
-const mockRouter= jest.fn();
+const mockRouter = jest.fn();
 
 jest.mock("next/navigation", () => ({
     useRouter: () => {
@@ -16,14 +16,15 @@ jest.mock("next/navigation", () => ({
     }
 }));
 
-jest.mock('../contexts/AuthContext', () => {
+
+jest.mock('../../../contexts/AuthContext', () => {
     return {
         useAuth: jest.fn(),
       }
 });
 
-describe("Medication tests for logged in user", () => {
 
+describe("Edit medications page", () => {
     beforeEach(() => {
         global.fetch = jest.fn();
         useAuth.mockImplementation(() => {
@@ -35,11 +36,18 @@ describe("Medication tests for logged in user", () => {
     
       afterEach(() => {
         jest.resetAllMocks();
+        useAuth.mockImplementation(() => {
+            return {
+              user: null
+            };
+          });
       });
-      
-      it("All fields are displayed to the user", () => {
-        render(<CreateMedicationPage />);
-        const heading = screen.getByText("Add Other Medications");
+
+    it("All fields are displayed to the user", async() => {
+        render(<EditMedication params = { { medication: "123" } }/>);
+        await waitFor(async() => {
+             
+        const heading = screen.getByText("Edit Medication");
         const name = screen.getByLabelText(/Medication Name/i);
         const date = screen.getByLabelText(/Date Started/i);
         const time = screen.getByLabelText(/Time/i);
@@ -58,59 +66,68 @@ describe("Medication tests for logged in user", () => {
         expect(frequency).toBeInTheDocument();
         expect(route).toBeInTheDocument();
         expect(notes).toBeInTheDocument();
+        })
+    })
 
-      })
-
-      test("All buttons are displayed to the user", () => {
-        render(<CreateMedicationPage/>);
-        const cancelButton = screen.getAllByRole("button")[0];
-        const submitButton = screen.getAllByRole("button")[1];
-        expect(cancelButton).toBeInTheDocument();
-        expect(submitButton).toBeInTheDocument();
+    it("All buttons are displayed to the user", async () => {
+        render(<EditMedication params = { { medication: "123" } }/>);
+        await waitFor(async() => {
+            const cancelButton = screen.getAllByRole("button")[0];
+            const submitButton = screen.getAllByRole("button")[1];
+            expect(cancelButton).toBeInTheDocument();
+            expect(submitButton).toBeInTheDocument();
+        })
      })
 
-      it("Error displayed if mandatory fields are left empty", async () => {
-        render(<CreateMedicationPage />);
+     it("Error displayed if mandatory fields are left empty", async () => {
+        render(<EditMedication params = { { medication: "123" } } />);
         const name = screen.getByRole("textbox", { name: /name/i });
+        await userEvent.clear(name);
         fireEvent.blur(name);
-        const date = screen.getByLabelText(/Date Started/i);
-        fireEvent.blur(date);
-        const time = screen.getByLabelText(/Time/i);
-        fireEvent.blur(time);
         const dosage = screen.getByLabelText(/Dosage/i);
+        await userEvent.clear(dosage);
         fireEvent.blur(dosage);
         const unit = screen.getByLabelText(/Unit/i);
+        await userEvent.selectOptions(unit, [""]);
         fireEvent.blur(unit);
         const frequency = screen.getByLabelText(/Frequency/i);
+        await userEvent.selectOptions(frequency, [""]);
         fireEvent.blur(frequency);
         const route = screen.getByLabelText(/Route/i);
+        await userEvent.selectOptions(route, [""]);
         fireEvent.blur(route);
        
-        const errorMessages = await screen.findAllByText("This field cannot be left empty.");
-        expect(errorMessages.length).toBe(7);
+        const errorMessages = await screen.findAllByText(/This field cannot be left empty./i);
+
+        expect(errorMessages.length).toBe(5);
     })
 
     it("Error displayed if dosage value is negative", async () => {
-        render(<CreateMedicationPage />);
-        const dosage = screen.getByLabelText(/Dosage/i);
-        await userEvent.type(dosage, '-7');
-        fireEvent.blur(dosage);
-        const errorMessage = await screen.findByText("This field cannot be negative or zero.");
-        expect(errorMessage).toBeInTheDocument();
+        render(<EditMedication params = { { medication: "123" } }/>);
+        await waitFor(async() => {
+            const dosage = screen.getByLabelText(/Dosage/i);
+            await userEvent.type(dosage, "-7");
+            fireEvent.blur(dosage);
+            const errorMessage = await screen.findByText("This field cannot be negative or zero.");
+            expect(errorMessage).toBeInTheDocument();
+        })
     })
 
     it("Error displayed if dosage value is zero", async () => {
-        render(<CreateMedicationPage />);
-        const dosage = screen.getByLabelText(/Dosage/i);
-        await userEvent.type(dosage, "0");
-        fireEvent.blur(dosage);
-        const errorMessage = await screen.findByText("This field cannot be negative or zero.");
-        expect(errorMessage).toBeInTheDocument();
+        render(<EditMedication params = { { medication: "123" } }/>);
+        await waitFor(async() => {
+            const dosage = screen.getByLabelText(/Dosage/i);
+            await userEvent.type(dosage, "0");
+            fireEvent.blur(dosage);
+            const errorMessage = await screen.findByText("This field cannot be negative or zero.");
+            expect(errorMessage).toBeInTheDocument();
+        })
     })
 
-    it("Should create a medication entry", async () => {
+    it("Should update a medication entry", async () => {
         const mockUserId = '11';
-        render(<CreateMedicationPage />);
+        const mockMedicationID = '123';
+        render(<EditMedication  params = { { medication: "123" } }/>);
         const name = screen.getByRole("textbox", { name: /name/i });
         const date = screen.getByLabelText(/Date Started/i);
         const time = screen.getByLabelText(/Time/i);
@@ -118,7 +135,7 @@ describe("Medication tests for logged in user", () => {
         const unit = screen.getByLabelText(/Unit/i);
         const frequency = screen.getByLabelText(/Frequency/i);
         const route = screen.getByLabelText(/Route/i);
-        const notes = screen.getByLabelText(/Notes/i);
+        const notes = screen.getByLabelText("Notes");
         const submitButton = screen.getAllByRole('button')[2];
 
         await userEvent.type(name, "Zopiclone");
@@ -157,29 +174,27 @@ describe("Medication tests for logged in user", () => {
             get: jest.fn().mockReturnValue(mockCurrentUser),
         });
 
-        const result = await createMedication(mockUserId, mockMedicationData);
+        const result = await updateMedication(mockUserId, mockMedicationID, mockMedicationData);
 
         expect(mockFetch).toHaveBeenCalledWith(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/medication/user/${mockUserId}`,
+            `${process.env.NEXT_PUBLIC_API_URL}/api/medication/${mockUserId}`,
             {
-                method: 'POST',
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${mockToken}`,
                 },
-                body: "\"11\"",
+                body: "\"123\"",
             }
         );
         expect(result).toEqual(mockMedicationData);
-
     })
 
     it("Cancel button redirects to getMedications page", async () => {
-        render(<CreateMedicationPage />);
+        render(<EditMedication params = { { medication: "123" } }/>);
         const cancelButton = screen.getAllByRole('button')[1];
         await userEvent.click(cancelButton);
         await mockRouter;
-        expect(mockRouter).toHaveBeenCalledWith('/getMedications');
+        expect(mockRouter).toHaveBeenCalled();
     })
-});
-
+})

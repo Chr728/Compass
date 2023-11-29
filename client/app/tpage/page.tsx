@@ -1,6 +1,5 @@
 'use client';
 import React from 'react';
-import Menu from '../components/Menu';
 import { useRouter } from "next/navigation";
 import { useAuth } from "../contexts/AuthContext";
 import Custom403 from '../pages/403';
