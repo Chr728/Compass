@@ -75,9 +75,48 @@ const speedDialValidator = (values: { contactName: string; contactNumber: string
 
 }
 
+const notificationPreferenceValidator = (values: { activityReminders: boolean; medicationReminders: boolean; appointmentReminders: boolean; foodIntakeReminders: boolean; insulinDosageReminders: boolean; glucoseMeasurementReminders: boolean }) => {
+    const {activityReminders, medicationReminders, appointmentReminders, foodIntakeReminders, insulinDosageReminders, glucoseMeasurementReminders} = values;
+    //check if activityReminders is valid
+    if(typeof activityReminders !== 'boolean') {
+        Logger.error(`Invalid activityReminders: ${activityReminders}`);
+        throw new Error(`Invalid activityReminders: ${activityReminders}`);
+    }
+    //check if medicationReminders is valid
+    if(typeof medicationReminders !== 'boolean') {
+        Logger.error(`Invalid medicationReminders: ${medicationReminders}`);
+        throw new Error(`Invalid medicationReminders: ${medicationReminders}`);
+    }
+    //check if appointmentReminders is valid
+    if(typeof appointmentReminders !== 'boolean') {
+        Logger.error(`Invalid appointmentReminders: ${appointmentReminders}`);
+        throw new Error(`Invalid appointmentReminders: ${appointmentReminders}`);
+    }
+    //check if foodIntakeReminders is valid
+    if(typeof foodIntakeReminders !== 'boolean') {
+        Logger.error(`Invalid foodIntakeReminders: ${foodIntakeReminders}`);
+        throw new Error(`Invalid foodIntakeReminders: ${foodIntakeReminders}`);
+    }
+    //check if insulinDosageReminders is valid
+    if(typeof insulinDosageReminders !== 'boolean') {
+        Logger.error(`Invalid insulinDosageReminders: ${insulinDosageReminders}`);
+        throw new Error(`Invalid insulinDosageReminders: ${insulinDosageReminders}`);
+    }
+    //check if glucoseMeasurementReminders is valid
+    if(typeof glucoseMeasurementReminders !== 'boolean') {
+        Logger.error(`Invalid glucoseMeasurementReminders: ${glucoseMeasurementReminders}`);
+        throw new Error(`Invalid glucoseMeasurementReminders: ${glucoseMeasurementReminders}`);
+    }
+}
+
+
+
 export {
-   userValidator,
+  userValidator,
   speedDialValidator,
-  appointmentValidator
+  appointmentValidator,
+  notificationPreferenceValidator,
+
+
 }
 
