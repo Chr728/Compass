@@ -130,27 +130,17 @@ export default function ViewMoodJournalsPage() {
                         style={{ borderColor: 'transparent', borderRightColor: setColor(data.howAreYou)}}>
                     </div>
                   </div>
-              <div className="relative rounded-md p-2 w-[240px] h-[100px] text-white" style={{ background: setColor(data.howAreYou) }}>
-                <div className="flex space-x-2 items-center absolute top-2 right-2">
-                    <div onClick={() => handleClick(data.id)}>
-                      <Image 
-                        src="/icons/info.svg"
-                        alt="Info icon"
-                        width={10}
-                        height={10}
-                        style={{ width: 'auto', height: 'auto' }}
-                      />
-                    </div>
-                    <div className="w-[28px] h-[28px]" onClick={() => deleteMoodJournals(data.id)}>
+              <div className="relative rounded-md p-2 w-[240px] h-[100px] text-white" onClick={() => handleClick(data.id)} style={{ background: setColor(data.howAreYou) }}>
+                    <div onClick={() => deleteMoodJournals(data.id)}>
                               <Image 
                                 src="/icons/greyTrash.svg"
                                 alt="Grey-colored Trash icon"
                                 width={10}
                                 height={10}
+                                className="absolute top-2 right-2"
                                 style={{ width: 'auto', height: 'auto' }}
                               />
                      </div>
-                  </div>
                     <p className="font-medium">Felt {data.howAreYou}!</p>
                     {data.notes && (
                         <p className="opacity-[0.86] pt-1">{data.notes.length > 55 ? `${data.notes.substring(0, 55)}...` : data.notes}</p>
