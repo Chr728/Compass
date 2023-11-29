@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { Logger } from '../middlewares/logger';
 import db from '../models';
+import {moodJournalValidator} from '../utils/databaseValidators';
 
 export const getMoodJournals = async (req: Request, res: Response) => {
   try {
@@ -81,6 +82,9 @@ export const createMoodJournal = async (req: Request, res: Response) => {
     }
 
     const { howAreYou, stressSignals, date, notes } = req.body;
+    moodJournalValidator({ howAreYou, stressSignals, date, notes })
+
+
 
     const stressSignalsString = JSON.stringify(stressSignals);
 
@@ -122,6 +126,7 @@ export const updateMoodJournal = async (req: Request, res: Response) => {
     }
 
     const { howAreYou, stressSignals, date, notes } = req.body;
+    moodJournalValidator({ howAreYou, stressSignals, date, notes })
 
     const stressSignalsString = JSON.stringify(stressSignals);
 

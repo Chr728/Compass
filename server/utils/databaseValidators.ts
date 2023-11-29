@@ -153,6 +153,34 @@ const medicationValidator = (values: { medicationName: string; dateStarted: Date
     }
 }
 
+interface stressSignals {
+    [key: string]: string
+}
+
+const moodJournalValidator = (values: { howAreYou: string; stressSignals: stressSignals, date: Date; notes: string }) => {
+    const {howAreYou, stressSignals, date, notes} = values;
+    //check if howAreYou is valid
+    if(!howAreYou || typeof howAreYou !== 'string') {
+        Logger.error(`Invalid howAreYou: ${howAreYou}`);
+        throw new Error(`Invalid howAreYou: ${howAreYou}`);
+    }
+    //check if stressSignals is valid
+    if(!stressSignals || typeof stressSignals !== 'object') {
+        Logger.error(`Invalid stressSignals: ${stressSignals}`);
+        throw new Error(`Invalid stressSignals: ${stressSignals}`);
+    }
+    //check if date is valid
+    if(!date || typeof date !== 'string') {
+        Logger.error(`Invalid date: ${date}`);
+        throw new Error(`Invalid date: ${date}`);
+    }
+    //check if notes is valid
+    if (notes !== undefined && (/\d/.test(notes) || typeof notes !== 'string')) {
+        Logger.error(`Invalid notes: ${notes}`);
+        throw new Error(`Invalid notes: ${notes}`);
+    }
+}
+
 
 
 export {
@@ -160,7 +188,8 @@ export {
   speedDialValidator,
   appointmentValidator,
   notificationPreferenceValidator,
-    medicationValidator
+    medicationValidator,
+    moodJournalValidator
 
 
 }
