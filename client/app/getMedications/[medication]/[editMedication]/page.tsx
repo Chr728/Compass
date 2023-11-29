@@ -44,7 +44,7 @@ export default function EditMedication( { params: { medication} } : { params : {
             name: '',
             date: '',
             time: '',
-            dosage: 0.0 as any,
+            dosage: '',
             unit: '',
             frequency: '',
             route: '',
@@ -74,6 +74,12 @@ export default function EditMedication( { params: { medication} } : { params : {
             let errors: {
                 name?:string;
                 date?: string;
+                time?:string;
+                dosage?:string;
+                unit?: string;
+                frequency?: string;
+                route?: string;
+                notes?: string;
             } = {};
 
             if (!values.name){
@@ -81,6 +87,28 @@ export default function EditMedication( { params: { medication} } : { params : {
             }
             if (!values.date){
                 errors.date = "This field cannot be left empty."
+            }
+            if (!values.time){
+                errors.time = "This field cannot be left empty."
+            }
+
+            if (parseFloat(values.dosage) <=0 ) {
+                    errors.dosage = "This field cannot be negative or zero.";
+            }
+            else if (!values.dosage) {
+                errors.dosage = "This field cannot be left empty.";
+            }
+
+            if(!values.unit){
+                errors.unit = "This field cannot be left empty."
+            }
+
+            if(!values.frequency){
+                errors.frequency = "This field cannot be left empty."
+            }
+
+            if(!values.route){
+                errors.route = "This field cannot be left empty."
             }
 
             return errors;
@@ -175,6 +203,7 @@ export default function EditMedication( { params: { medication} } : { params : {
                         htmlFor="name"
                         className="font-sans font-medium text-grey text-[16px]"
                     >
+                    <span className="text-red text-[20px]"> *</span>
                     Time
                     </label>
                     <br />
@@ -188,6 +217,10 @@ export default function EditMedication( { params: { medication} } : { params : {
                             value={formik.values.time}
                             onBlur={formik.handleBlur}
                         />
+                         {
+                            formik.touched.time && formik.errors.time && (
+                                <p className="text-red text-[14px]">{formik.errors.time}</p>
+                        )} 
                     </div>  
                 </div>
 
@@ -197,6 +230,7 @@ export default function EditMedication( { params: { medication} } : { params : {
                         htmlFor="dosage"
                         className="font-sans font-medium text-grey text-[16px]"
                         >
+                        <span className="text-red text-[20px]"> *</span>
                         Dosage
                         </label>
                         <br />
@@ -209,6 +243,10 @@ export default function EditMedication( { params: { medication} } : { params : {
                         value={formik.values.dosage}
                         onBlur={formik.handleBlur}
                         />
+                        {
+                            formik.touched.dosage && formik.errors.dosage && (
+                                <p className="text-red text-[14px] mr-2">{formik.errors.dosage}</p>
+                        )} 
                     </div>
 
                     <div className="mt-3  ml-2"
@@ -221,6 +259,7 @@ export default function EditMedication( { params: { medication} } : { params : {
                             htmlFor="unit"
                             className="font-sans font-medium text-grey text-[16px]"
                         >
+                        <span className="text-red text-[20px]"> *</span>
                         Unit
                         </label>
                         <br />
@@ -238,22 +277,29 @@ export default function EditMedication( { params: { medication} } : { params : {
                             value={formik.values.unit}
                         >
                             <option value="">Choose one</option>
-                            <option value="gtts">drop (gtts)</option>
-                            <option value="tsp">teaspoon (tsp)</option>
-                            <option value="tbsp">tablespoon (tbsp)</option>
-                            <option value="mL">millilitre (mL)</option>
-                            <option value="fl">fluid ounce (fl oz)</option>
-                            <option value="mcg">microgram (mcg)</option>
-                            <option value="mg">milligram (mg)</option>
-                            <option value="g">gram (g)</option>
-                            <option value="oz">ounce (oz)</option>
-                            <option value="other">other</option>
-                        </select>        
+                            <option value="drop (gtts)">drop (gtts)</option>
+                            <option value="teaspoon (tsp)">teaspoon (tsp)</option>
+                            <option value="tablespoon (tbsp)">tablespoon (tbsp)</option>
+                            <option value="millilitre (mL)">millilitre (mL)</option>
+                            <option value="fluid ounce (fl oz)">fluid ounce (fl oz)</option>
+                            <option value="microgram (mcg)">microgram (mcg)</option>
+                            <option value="milligram (mg)">milligram (mg)</option>
+                            <option value="gram (g)">gram (g)</option>
+                            <option value="ounce (oz)">ounce (oz)</option>
+                            <option value="Other">Other</option>
+                        </select>       
+                        {
+                            formik.touched.unit && formik.errors.unit && (
+                                <p className="text-red text-[14px]">{formik.errors.unit}</p>
+                        )}   
                     </div>
                 </div>
 
                 <div className="mt-3">
-                    <label htmlFor="frequency" className="font-sans font-medium text-grey text-[16px]">Frequency</label>
+                    <label htmlFor="frequency" className="font-sans font-medium text-grey text-[16px]">
+                        <span className="text-red text-[20px]"> *</span>
+                        Frequency
+                    </label>
                     <br/>
                     <select
                         name="frequency"
@@ -264,30 +310,37 @@ export default function EditMedication( { params: { medication} } : { params : {
                         className="p-2 w-full h-[52px] border border-solid border-lightgrey rounded-md text-grey focus:outline-blue shadow-[0_4px_8px_0_rgba(44,39,56,0.04)]"
                     >
                         <option value="">Choose one</option>
-                        <option value="onceMorning">Once a day (morning)</option>
-                        <option value="onceEvening">Once a day (evening)</option>
-                        <option value="twice">Twice a day</option>
-                        <option value="thrice">Three times a day</option>
-                        <option value="four">Four times a day</option>
-                        <option value="five">Five times a day</option>
-                        <option value="six">Six times a day</option>
-                        <option value="thirtymin">Every 30 minutes</option>
-                        <option value="onehour">Every 1 hour</option>
-                        <option value="twohours">Every 2 hours</option>
-                        <option value="fourhours">Every 4 hours</option>
-                        <option value="sixhours">Every 6 hours</option>
-                        <option value="eighthours">Every 8 hours</option>
-                        <option value="beforemeals">Before meals</option>
-                        <option value="aftermeals">After meals</option>
-                        <option value="beforebed">Before bedtime</option>
-                        <option value="rtc">Round-the-clock (RTC)</option>
-                        <option value="prn">As needed (PRN)</option>
-                        <option value="other">Other</option>
+                        <option value="Once a day (morning)">Once a day (morning)</option>
+                        <option value="Once a day (evening)">Once a day (evening)</option>
+                        <option value="Twice a day">Twice a day</option>
+                        <option value="Three times a day">Three times a day</option>
+                        <option value="Four times a day">Four times a day</option>
+                        <option value="Five times a day">Five times a day</option>
+                        <option value="Six times a day">Six times a day</option>
+                        <option value="Every 30 minutes<">Every 30 minutes</option>
+                        <option value="Every 1 hour">Every 1 hour</option>
+                        <option value="Every 2 hours">Every 2 hours</option>
+                        <option value="Every 4 hours">Every 4 hours</option>
+                        <option value="Every 6 hours">Every 6 hours</option>
+                        <option value="Every 8 hours">Every 8 hours</option>
+                        <option value="Before meals">Before meals</option>
+                        <option value="After meals">After meals</option>
+                        <option value="Before bedtime">Before bedtime</option>
+                        <option value="Round-the-clock (RTC)">Round-the-clock (RTC)</option>
+                        <option value="As needed (PRN)">As needed (PRN)</option>
+                        <option value="Other">Other</option>
                     </select>
+                {
+                        formik.touched.frequency && formik.errors.frequency && (
+                            <p className="text-red text-[14px]">{formik.errors.frequency}</p>
+                    )} 
                 </div>
 
                 <div className="mt-3">
-                    <label htmlFor="route" className="font-sans font-medium text-grey text-[16px]">Route</label>
+                    <label htmlFor="route" className="font-sans font-medium text-grey text-[16px]">
+                        <span className="text-red text-[20px]"> *</span>
+                        Route
+                    </label>
                     <br/>
                     <select
                         name="route"
@@ -298,17 +351,21 @@ export default function EditMedication( { params: { medication} } : { params : {
                         className="p-2 w-full h-[52px] border border-solid border-lightgrey rounded-md text-grey focus:outline-blue shadow-[0_4px_8px_0_rgba(44,39,56,0.04)]"
                     >
                         <option value="">Choose one</option>
-                        <option value="oral">Oral</option>
-                        <option value="sublingual">Sublingual</option>
-                        <option value="enteral">Enteral</option>
-                        <option value="rectal">Rectal</option>
-                        <option value="inhalation">Inhalation</option>
-                        <option value="intramuscular">Intramuscular</option>
-                        <option value="subcutaneous">Subcutaneous</option>
-                        <option value="transdermal">Transdermal</option>
-                        <option value="topical">Topical</option>
-                        <option value="other">Other</option>
+                        <option value="Oral">Oral</option>
+                        <option value="Sublingual">Sublingual</option>
+                        <option value="Enteral">Enteral</option>
+                        <option value="Rectal">Rectal</option>
+                        <option value="Inhalation">Inhalation</option>
+                        <option value="Intramuscular">Intramuscular</option>
+                        <option value="Subcutaneous">Subcutaneous</option>
+                        <option value="Transdermal">Transdermal</option>
+                        <option value="Topical">Topical</option>
+                        <option value="Other">Other</option>
                     </select>
+                    {
+                        formik.touched.route && formik.errors.route && (
+                            <p className="text-red text-[14px]">{formik.errors.route}</p>
+                    )} 
                 </div>
 
                 <div className="mt-3">
@@ -342,7 +399,6 @@ export default function EditMedication( { params: { medication} } : { params : {
                 </div>
 
             </form>
-            
     </div>
     )
 }

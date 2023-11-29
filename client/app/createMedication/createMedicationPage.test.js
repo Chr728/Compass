@@ -35,23 +35,18 @@ describe("Medication tests for logged in user", () => {
     
       afterEach(() => {
         jest.resetAllMocks();
-        // useAuth.mockImplementation(() => {
-        //     return {
-        //       user: null
-        //     };
-        //   });
       });
       
       it("All fields are displayed to the user", () => {
         render(<CreateMedicationPage />);
         const heading = screen.getByText("Add Other Medications");
-        const name = screen.getByText("Medication Name");
-        const date = screen.getByText("Date Started");
-        const time = screen.getByLabelText("Time");
-        const dosage = screen.getByLabelText("Dosage");
-        const unit = screen.getByLabelText("Unit");
-        const frequency = screen.getByLabelText("Frequency");
-        const route = screen.getByLabelText("Route");
+        const name = screen.getByLabelText(/Medication Name/i);
+        const date = screen.getByLabelText(/Date Started/i);
+        const time = screen.getByLabelText(/Time/i);
+        const dosage = screen.getByLabelText(/Dosage/i);
+        const unit = screen.getByLabelText(/Unit/i);
+        const frequency = screen.getByLabelText(/Frequency/i);
+        const route = screen.getByLabelText(/Route/i);
         const notes = screen.getByLabelText("Notes");
 
         expect(heading).toBeInTheDocument();
@@ -80,9 +75,37 @@ describe("Medication tests for logged in user", () => {
         fireEvent.blur(name);
         const date = screen.getByLabelText(/Date Started/i);
         fireEvent.blur(date);
+        const time = screen.getByLabelText(/Time/i);
+        fireEvent.blur(time);
+        const dosage = screen.getByLabelText(/Dosage/i);
+        fireEvent.blur(dosage);
+        const unit = screen.getByLabelText(/Unit/i);
+        fireEvent.blur(unit);
+        const frequency = screen.getByLabelText(/Frequency/i);
+        fireEvent.blur(frequency);
+        const route = screen.getByLabelText(/Route/i);
+        fireEvent.blur(route);
        
         const errorMessages = await screen.findAllByText("This field cannot be left empty.");
-        expect(errorMessages.length).toBe(2);
+        expect(errorMessages.length).toBe(7);
+    })
+
+    it("Error displayed if dosage value is negative", async () => {
+        render(<CreateMedicationPage />);
+        const dosage = screen.getByLabelText(/Dosage/i);
+        await userEvent.type(dosage, '-7');
+        fireEvent.blur(dosage);
+        const errorMessage = await screen.findByText("This field cannot be negative or zero.");
+        expect(errorMessage).toBeInTheDocument();
+    })
+
+    it("Error displayed if dosage value is zero", async () => {
+        render(<CreateMedicationPage />);
+        const dosage = screen.getByLabelText(/Dosage/i);
+        await userEvent.type(dosage, "0");
+        fireEvent.blur(dosage);
+        const errorMessage = await screen.findByText("This field cannot be negative or zero.");
+        expect(errorMessage).toBeInTheDocument();
     })
 
     it("Should create a medication entry", async () => {
@@ -90,12 +113,12 @@ describe("Medication tests for logged in user", () => {
         render(<CreateMedicationPage />);
         const name = screen.getByRole("textbox", { name: /name/i });
         const date = screen.getByLabelText(/Date Started/i);
-        const time = screen.getByLabelText("Time");
-        const dosage = screen.getByLabelText("Dosage");
-        const unit = screen.getByLabelText("Unit");
-        const frequency = screen.getByLabelText("Frequency");
-        const route = screen.getByLabelText("Route");
-        const notes = screen.getByLabelText("Notes");
+        const time = screen.getByLabelText(/Time/i);
+        const dosage = screen.getByLabelText(/Dosage/i);
+        const unit = screen.getByLabelText(/Unit/i);
+        const frequency = screen.getByLabelText(/Frequency/i);
+        const route = screen.getByLabelText(/Route/i);
+        const notes = screen.getByLabelText(/Notes/i);
         const submitButton = screen.getAllByRole('button')[2];
 
         await userEvent.type(name, "Zopiclone");
@@ -160,4 +183,3 @@ describe("Medication tests for logged in user", () => {
     })
 
 });
-
