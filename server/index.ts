@@ -13,6 +13,7 @@ import reminderRoutes from './routes/remindersRoutes';
 import diabeticGlucoseJournalRoutes from './routes/diabeticGlucoseJournalRoutes';
 import diabeticInsulinJournalRoutes from './routes/diabeticInsulinJournalRoutes';
 import subscriptionRoutes from './routes/subscriptionRoutes';
+import medicationRoutes from './routes/medicationRoutes';
 import Morgan from './middlewares/morgan';
 import { Logger } from './middlewares/logger';
 import decodeToken from './middlewares/decodeToken';
@@ -40,6 +41,7 @@ app.use('/api/journals/foodIntake', foodIntakeJournalRoutes);
 app.use('/api/reminders', reminderRoutes);
 app.use('/api/subscription', subscriptionRoutes);
 app.use('/api/reminders', reminderRoutes);
+app.use('/api/medication', medicationRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');

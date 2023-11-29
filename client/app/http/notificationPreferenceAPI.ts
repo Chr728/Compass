@@ -2,13 +2,16 @@ import { auth } from "../config/firebase";
 const logger = require("pino")();
 
 // Function to create a notification preference of a user
-export async function createNotificationPreference(
-  userUID: any,
-  token: any
-): Promise<any> {
+export async function createNotificationPreference(): Promise<any> {
   try {
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      throw new Error("No user is currently signed in.");
+    }
+    const uid = currentUser.uid;
+    const token = await currentUser.getIdToken();
     const dataToBeStringified = {
-      uid: userUID,
+      uid: uid,
       activityReminders: true,
       medicationReminders: true,
       appointmentReminders: true,
@@ -16,7 +19,7 @@ export async function createNotificationPreference(
     };
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/notifications/${userUID}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/notifications/${uid}`,
       {
         method: "POST",
         headers: {
@@ -26,7 +29,7 @@ export async function createNotificationPreference(
         body: JSON.stringify(dataToBeStringified),
       }
     );
-    logger.info(`Notification preference created successfully for user ${userUID}`);
+    logger.info(`Notification preference created successfully for user ${uid}`);
     if (!response.ok) {
       logger.error(
         `Failed to create notification preference for user. HTTP Status: ${response.status}`
@@ -48,7 +51,7 @@ export async function getNotificationPreference(): Promise<any> {
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
-      logger.error("No user is currently signed in.")
+      logger.error("No user is currently signed in.");
       throw new Error("No user is currently signed in.");
     }
     const uid = currentUser.uid;
@@ -88,7 +91,7 @@ export async function updateNotificationPreference(
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
-      logger.error("No user is currently signed in.")
+      logger.error("No user is currently signed in.");
       throw new Error("No user is currently signed in.");
     }
     const uid = currentUser.uid;
@@ -129,7 +132,7 @@ export async function deleteNotificationPreference(
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
-      logger.error("No user is currently signed in.")
+      logger.error("No user is currently signed in.");
       throw new Error("No user is currently signed in.");
     }
     const token = await currentUser.getIdToken();
@@ -143,7 +146,9 @@ export async function deleteNotificationPreference(
         },
       }
     );
-    logger.info(`Notification preference deleted successfully for user ${userID}`);
+    logger.info(
+      `Notification preference deleted successfully for user ${userID}`
+    );
     if (!response.ok) {
       logger.error(
         `Failed to delete notification preference for user ${userID}. HTTP Status: ${response.status}`
@@ -158,4 +163,3 @@ export async function deleteNotificationPreference(
     throw error;
   }
 }
-

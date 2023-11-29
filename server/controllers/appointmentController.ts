@@ -1,15 +1,15 @@
-import { Request, Response } from "express";
-import { Logger } from "../middlewares/logger";
-import db from "../models";
-import { appointmentValidator } from "../utils/databaseValidators";
+import { Request, Response } from 'express';
+import { Logger } from '../middlewares/logger';
+import db from '../models';
+import { appointmentValidator } from '../utils/databaseValidators';
 
 //Retrieve all appoinments for a given user
 export const getAppointments = async (req: Request, res: Response) => {
   try {
-    const userUID = req.params.id;
+    const uid = req.params.uid;
     const userAppointments = await db.Appointment.findAll({
       where: {
-        uid: userUID,
+        uid: uid,
       },
     });
 
@@ -29,7 +29,7 @@ export const getAppointments = async (req: Request, res: Response) => {
 //Create appointment for a user
 export const createAppointment = async (req: Request, res: Response) => {
   try {
-    const uid = req.params.id;
+    const uid = req.params.uid;
     const { appointmentWith, reason, date, time, notes } = req.body;
     appointmentValidator(req.body);
     const createdAppointment = await db.Appointment.create({
@@ -64,7 +64,7 @@ export const getAppointment = async (req: Request, res: Response) => {
 
     if (!appointment) {
       return res.status(404).json({
-        status: "ERROR",
+        status: 'ERROR',
         message: `Appointment not found, invalid appointment id.`,
       });
     }
@@ -93,8 +93,8 @@ export const deleteAppointment = async (req: Request, res: Response) => {
 
     if (!deletedAppointment) {
       return res.status(404).json({
-        status: "ERROR",
-        message: "Appointment not found, invalid appointment id.",
+        status: 'ERROR',
+        message: 'Appointment not found, invalid appointment id.',
       });
     }
 
@@ -105,7 +105,7 @@ export const deleteAppointment = async (req: Request, res: Response) => {
   } catch (err) {
     Logger.error(`Error occurred while deleting appointment: ${err}`);
     res.status(400).json({
-      status: "ERROR",
+      status: 'ERROR',
       message: `Error deleting appointment record: ${err}`,
     });
   }
@@ -116,8 +116,8 @@ export const updateAppointments = async (req: Request, res: Response) => {
     const appointmentId = req.params.id;
     const { appointmentWith, reason, date, time, notes } = req.body;
 
-    const updatedAppointment =await db.Appointment.update(
-      { appointmentWith, reason, date, time, notes},
+    const updatedAppointment = await db.Appointment.update(
+      { appointmentWith, reason, date, time, notes },
       {
         where: {
           id: appointmentId,
@@ -127,11 +127,11 @@ export const updateAppointments = async (req: Request, res: Response) => {
 
     if (!updatedAppointment) {
       return res.status(404).json({
-        status: "ERROR",
-        message: "Appointment not found, invalid appointment id.",
+        status: 'ERROR',
+        message: 'Appointment not found, invalid appointment id.',
       });
     }
-    
+
     const latestAppointment = await db.Appointment.findOne({
       where: {
         id: appointmentId,
@@ -150,4 +150,4 @@ export const updateAppointments = async (req: Request, res: Response) => {
       message: `Error updating appointment: ${error}`,
     });
   }
-}
+};

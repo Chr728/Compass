@@ -7,6 +7,7 @@ import { formatDate, formatMilitaryTime } from '../helpers/utils/datetimeformat'
 import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/Header';
 import Image from 'next/image';
+import Swal from 'sweetalert2';
 
 export default function ViewMoodJournalsPage() {
     const logger = require('../../logger');
@@ -52,10 +53,26 @@ export default function ViewMoodJournalsPage() {
     }
 
     async function deleteMoodJournals(moodJournalId: string){
-      const deleteresult = await deleteMoodJournal(moodJournalId);   
-      const newData = moodJournal && moodJournal.filter((item: { id: string; }) => item.id!=moodJournalId);
-      setMoodJournal(newData);
-      router.push('/moodjournal');
+      Swal.fire({
+        text: "Are you sure you want to delete this mood journal entry?",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Delete",
+      }).then(async (result: { isConfirmed: any; }) => {
+        if (result.isConfirmed) {
+          const deleteresult = await deleteMoodJournal(moodJournalId);   
+          const newData = moodJournal && moodJournal.filter((item: { id: string; }) => item.id!=moodJournalId);
+          setMoodJournal(newData);
+          router.push('/moodjournal');
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your mood journal entry has been deleted.",
+            icon: "success"
+          });    
+        }
+     }); 
+    
     }
 
     const handleClick = (moodJournalID: string) => {

@@ -42,11 +42,7 @@ describe("createSubscription", () => {
     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch = mockFetch;
 
-    const result = await createSubscription(
-      mockUserId,
-      mockToken,
-      mockUserSubscription
-    );
+    const result = await createSubscription(mockUserSubscription);
 
     expect(mockFetch).toHaveBeenCalledWith(
       `${process.env.NEXT_PUBLIC_API_URL}/api/subscription/${mockUserId}`,
@@ -61,6 +57,23 @@ describe("createSubscription", () => {
     );
     expect(mockResponse.json).toHaveBeenCalled();
     expect(result).toEqual(mockUserSubscription);
+  });
+
+  it("should throw an error if the user is not signed in", async () => {
+    Object.defineProperty(auth, "currentUser", {
+      get: jest.fn().mockReturnValue(null),
+    });
+
+    const mockResponse = {
+      ok: true,
+      json: jest.fn().mockResolvedValue({}),
+    };
+    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = mockFetch;
+
+    await expect(createSubscription()).rejects.toThrow(
+      "No user is currently signed in."
+    );
   });
 
   it("should throw an error if the createSubscription function fails", async () => {
@@ -89,9 +102,7 @@ describe("createSubscription", () => {
     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch = mockFetch;
 
-    await expect(
-      createSubscription(mockUserId, mockToken, mockUserSubscription)
-    ).rejects.toThrow(
+    await expect(createSubscription(mockUserSubscription)).rejects.toThrow(
       `Failed to create subscription object for user. HTTP Status: ${mockResponse.status}`
     );
   });
@@ -126,7 +137,7 @@ describe("getSubscription", () => {
     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch = mockFetch;
 
-    const result = await getSubscription(mockUserId, mockToken);
+    const result = await getSubscription();
 
     expect(mockResponse.json).toHaveBeenCalled();
     expect(mockFetch).toHaveBeenCalledWith(
@@ -138,6 +149,23 @@ describe("getSubscription", () => {
         },
         method: "GET",
       }
+    );
+  });
+
+  it("should throw an error if the user is not signed in", async () => {
+    Object.defineProperty(auth, "currentUser", {
+      get: jest.fn().mockReturnValue(null),
+    });
+
+    const mockResponse = {
+      ok: true,
+      json: jest.fn().mockResolvedValue({}),
+    };
+    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = mockFetch;
+
+    await expect(getSubscription()).rejects.toThrow(
+      "No user is currently signed in."
     );
   });
 
@@ -160,7 +188,7 @@ describe("getSubscription", () => {
     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch = mockFetch;
 
-    await expect(getSubscription(mockUserId, mockToken)).rejects.toThrow(
+    await expect(getSubscription()).rejects.toThrow(
       `Failed to retrieve subscription object for user. HTTP Status: ${mockResponse.status}`
     );
     expect(mockFetch).toHaveBeenCalledWith(
@@ -212,11 +240,7 @@ describe("updateSubscription", () => {
     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch = mockFetch;
 
-    const result = await updateSubscription(
-      mockUserId,
-      mockToken,
-      mockUserSubscription
-    );
+    const result = await updateSubscription(mockUserSubscription);
 
     expect(mockFetch).toHaveBeenCalledWith(
       `${process.env.NEXT_PUBLIC_API_URL}/api/subscription/${mockUserId}`,
@@ -231,6 +255,23 @@ describe("updateSubscription", () => {
     );
     expect(mockResponse.json).toHaveBeenCalled();
     expect(result).toEqual(mockUserSubscription);
+  });
+
+  it("should throw an error if the user is not signed in", async () => {
+    Object.defineProperty(auth, "currentUser", {
+      get: jest.fn().mockReturnValue(null),
+    });
+
+    const mockResponse = {
+      ok: true,
+      json: jest.fn().mockResolvedValue({}),
+    };
+    const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+    global.fetch = mockFetch;
+
+    await expect(updateSubscription()).rejects.toThrow(
+      "No user is currently signed in."
+    );
   });
 
   it("should throw an error if the updateSubscription function fails", async () => {
@@ -259,9 +300,7 @@ describe("updateSubscription", () => {
     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch = mockFetch;
 
-    await expect(
-      updateSubscription(mockUserId, mockToken, mockUserSubscription)
-    ).rejects.toThrow(
+    await expect(updateSubscription(mockUserSubscription)).rejects.toThrow(
       `Failed to update subscription object for user. HTTP Status: ${mockResponse.status}`
     );
   });
