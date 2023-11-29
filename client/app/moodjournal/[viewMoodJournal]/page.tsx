@@ -63,8 +63,9 @@ export default function GetMoodJournal( {params: { viewMoodJournal } } : { param
               className="w-11/12 rounded-3xl 
               bg-white flex flex-col space-y-4 mt-2 self-center	text-black
               shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
+              style={{ overflowY: 'auto', maxHeight: '480px'}}
             >
-              <Typography variant="body1" ml={2} mt={3} color="black">
+              <Typography variant="body1" ml={2} mt={2} color="black">
                 <b>Date:</b> {formatDate(mood.date)}
               </Typography>
               <Typography variant="body1" ml={2} color="black">
