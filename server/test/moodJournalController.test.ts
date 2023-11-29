@@ -21,7 +21,18 @@ const moodJournal = {
   id: 1,
   uid: 'testuid',
   howAreYou: 'Good',
-  stressSignals: { tired: 'rarely' , sleep:'rarely'},
+  stressSignals: {
+    tired: "rarely",
+    sleep: "sometimes",
+    hunger: "sometimes",
+    overeating: "rarely",
+    depressed: "often",
+    pressure: "rarely",
+    anxiety: "rarely",
+    attention: "never",
+    anger: "never",
+    headache: "sometimes"
+  },
   date: '2023-10-08T10:00:00Z',
   notes: 'Sample mood entry',
 };
@@ -29,7 +40,18 @@ const moodJournal = {
 const updateMoodJournal = {
   uid: 'testuid',
   howAreYou: 'Horrible',
-  stressSignals: { tired: 'rarely' , sleep:'rarely'},
+  stressSignals: {
+    tired: "rarely",
+    sleep: "sometimes",
+    hunger: "sometimes",
+    overeating: "rarely",
+    depressed: "often",
+    pressure: "rarely",
+    anxiety: "rarely",
+    attention: "never",
+    anger: "never",
+    headache: "sometimes"
+  },
   date: '2023-10-08T10:00:00Z',
   notes: 'Updated Sample mood entry',
 };

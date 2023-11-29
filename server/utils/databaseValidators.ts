@@ -164,10 +164,11 @@ const moodJournalValidator = (values: { howAreYou: string; stressSignals: stress
         Logger.error(`Invalid howAreYou: ${howAreYou}`);
         throw new Error(`Invalid howAreYou: ${howAreYou}`);
     }
-    //check if stressSignals is valid
-    if(!stressSignals || typeof stressSignals !== 'object') {
-        Logger.error(`Invalid stressSignals: ${stressSignals}`);
-        throw new Error(`Invalid stressSignals: ${stressSignals}`);
+    const requiredKeys = ['tired', 'sleep', 'hunger', 'overeating', 'depressed', 'pressure', 'anxiety', 'attention', 'anger', 'headache'];
+
+    if (!stressSignals || typeof stressSignals !== 'object' || !requiredKeys.every(key => key in stressSignals)) {
+        Logger.error(`Invalid stressSignals: ${JSON.stringify(stressSignals)}`);
+        throw new Error(`Invalid stressSignals: ${JSON.stringify(stressSignals)}`);
     }
     //check if date is valid
     if(!date || typeof date !== 'string') {
