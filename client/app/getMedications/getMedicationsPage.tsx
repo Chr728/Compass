@@ -118,7 +118,7 @@ export default function GetMedicationsPage() {
   
     
       <div className="flex-1">
-      <p className="font-sans  font-medium text-darkgrey text-[14px]  text-start ">
+      <p className="font-sans  ml-2 font-medium text-darkgrey text-[14px]  text-start ">
         {item.medicationName.length > 8 ? (
       <span className="break-words">
         {item.medicationName}
@@ -129,13 +129,13 @@ export default function GetMedicationsPage() {
       </p>
     </div>
     <div className="flex-1">
-     <p className="font-sans ml-5 font-medium text-darkgrey text-[14px] text-center">
+     <p className="font-sans ml-5  font-medium text-darkgrey text-[14px] text-center">
     {item.dosage}
   </p>
      </div>
             
      <div className="flex-1"> 
-      <p className="font-sans ml-3 font-medium text-darkgrey text-[14px]  text-center">
+      <p className="font-sans ml-2 mr-1 font-medium text-darkgrey text-[14px]  text-center">
         {item.route}
       </p>
     </div>
