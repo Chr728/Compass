@@ -43,7 +43,7 @@ return (
         
       <div 
         className="bg-darkgrey rounded-xl h-36 py-14 bg-opacity-90 hover:-translate-y-1.5"
-        onClick = {() => router.push('/createMedication')}
+        onClick = {() => router.push('/getMedications')}
       >
         Medications
         <div className="flex justify-center">

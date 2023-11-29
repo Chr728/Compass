@@ -181,6 +181,5 @@ describe("Medication tests for logged in user", () => {
         await mockRouter;
         expect(mockRouter).toHaveBeenCalledWith('/getMedications');
     })
-
 });
 
