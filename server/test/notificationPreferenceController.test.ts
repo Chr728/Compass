@@ -199,6 +199,15 @@ describe('should test the deleteNotificationPreference Controller', () => {
   });
 });
 
+const validInput = {
+  activityReminders: true,
+  medicationReminders: true,
+  appointmentReminders: true,
+  foodIntakeReminders: true,
+  insulinDosageReminders: true,
+  glucoseMeasurementReminders: true,
+};
+
 describe('Testing the update notificationPreference controller', () => {
   it('test to update notificationPreference', async () => {
     jest
@@ -209,6 +218,7 @@ describe('Testing the update notificationPreference controller', () => {
       .mockResolvedValueOnce(updatedNotificationPreference);
     const res = await request(app)
       .put(`/api/notifications/${user.uid}`)
+        .send(validInput) // Send valid input
       .set({ Authorization: 'Bearer token' });
     expect(db.NotificationPreference.update).toBeCalledTimes(1);
     expect(db.NotificationPreference.findOne).toBeCalledTimes(1);
@@ -221,6 +231,7 @@ describe('Testing the update notificationPreference controller', () => {
     jest.spyOn(db.NotificationPreference, 'update').mockResolvedValueOnce(null);
     const res = await request(app)
       .put(`/api/notifications/${user.uid}`)
+        .send(validInput) // Send valid input
       .set({ Authorization: 'Bearer token' });
     expect(db.NotificationPreference.update).toBeCalledTimes(1);
     expect(res.status).toBe(404);
@@ -231,12 +242,17 @@ describe('Testing the update notificationPreference controller', () => {
   });
 
   it('should catch error', async () => {
+    // Provide valid input for the validator
+
     jest
-      .spyOn(db.NotificationPreference, 'update')
-      .mockRejectedValue(new Error('query error'));
+        .spyOn(db.NotificationPreference, 'update')
+        .mockRejectedValue(new Error('query error'));
+
     const res = await request(app)
-      .put(`/api/notifications/${user.uid}`)
-      .set({ Authorization: 'Bearer token' });
+        .put(`/api/notifications/${user.uid}`)
+        .send(validInput) // Send valid input
+        .set({ Authorization: 'Bearer token' });
+
     expect(db.NotificationPreference.update).toBeCalledTimes(1);
     expect(res.status).toBe(400);
     expect(res.body.status).toBe('ERROR');
