@@ -109,6 +109,50 @@ const notificationPreferenceValidator = (values: { activityReminders: boolean; m
     }
 }
 
+const medicationValidator = (values: { medicationName: string; dateStarted: Date; time: Date; dosage: number; unit: string; frequency: string; route: string; notes: string }) => {
+    const {medicationName, dateStarted, time, dosage, unit, frequency, route, notes} = values;
+    //check if medication name is valid
+    if(!medicationName || /\d/.test(medicationName) || typeof medicationName !== 'string') {
+        Logger.error(`Invalid medication name: ${medicationName}`);
+        throw new Error(`Invalid medication name: ${medicationName}`);
+    }
+    //check if date started is valid
+    if(!dateStarted || typeof dateStarted !== 'string') {
+        Logger.error(`Invalid date started: ${dateStarted}`);
+        throw new Error(`Invalid date started: ${dateStarted}`);
+    }
+    //check if time is valid
+    if(!time || typeof time !== 'string') {
+        Logger.error(`Invalid time: ${time}`);
+        throw new Error(`Invalid time: ${time}`);
+    }
+    //check if dosage is valid
+    if(!dosage || typeof dosage !== 'number') {
+        Logger.error(`Invalid dosage: ${dosage}`);
+        throw new Error(`Invalid dosage: ${dosage}`);
+    }
+    //check if unit is valid
+    if(!unit || /\d/.test(unit) || typeof unit !== 'string') {
+        Logger.error(`Invalid unit: ${unit}`);
+        throw new Error(`Invalid unit: ${unit}`);
+    }
+    //check if frequency is valid
+    if(!frequency || typeof frequency !== 'string') {
+        Logger.error(`Invalid frequency: ${frequency}`);
+        throw new Error(`Invalid frequency: ${frequency}`);
+    }
+    //check if route is valid
+    if(!route || /\d/.test(route) || typeof route !== 'string') {
+        Logger.error(`Invalid route: ${route}`);
+        throw new Error(`Invalid route: ${route}`);
+    }
+    //check if notes is valid
+    if (notes !== undefined && (/\d/.test(notes) || typeof notes !== 'string')) {
+        Logger.error(`Invalid notes: ${notes}`);
+        throw new Error(`Invalid notes: ${notes}`);
+    }
+}
+
 
 
 export {
@@ -116,6 +160,7 @@ export {
   speedDialValidator,
   appointmentValidator,
   notificationPreferenceValidator,
+    medicationValidator
 
 
 }

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Logger } from "../middlewares/logger";
 import db from "../models";
+import {medicationValidator} from '../utils/databaseValidators';
 
 export const createMedication = async (req: Request,res: Response) => {
     try {
@@ -19,6 +20,7 @@ export const createMedication = async (req: Request,res: Response) => {
         }
 
         const { medicationName, dateStarted, time, dosage, unit, frequency, route, notes } = req.body;
+        medicationValidator(req.body);
         const medication = await db.Medication.create({
             uid: userId,
             medicationName,
@@ -125,7 +127,7 @@ export const updateMedication = async (req: Request,res: Response) => {
         }
 
         const { medicationName, dateStarted, time, dosage, unit, frequency, route, notes } = req.body;
-
+        medicationValidator(req.body);
         await db.Medication.update({
             medicationName,
             dateStarted,

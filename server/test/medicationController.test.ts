@@ -47,11 +47,11 @@ const medications = [
 const createMedication = {
   id: 1,
   uid: 'medicationUid',
-  medicationName: 'newMedication111',
+  medicationName: 'test med',
   dateStarted: '2002-02-22',
   time: '14:30:00',
   dosage: 12,
-  unit: 'medicationUnit111',
+  unit: 'millilitre (mL)',
   frequency: 'frequency111',
   route: 'route',
   notes: '',
@@ -60,11 +60,11 @@ const createMedication = {
 const updatedMedication = {
   id: 1,
   uid: 'medicationUid',
-  medicationName: 'updatedMedication111',
+  medicationName: 'some other med name',
   dateStarted: '2002-02-22',
   time: '14:30:00',
   dosage: 15,
-  unit: 'updatedMedicationUnit',
+  unit: 'millilitre (mL)',
   frequency: 'updatedFrequency',
   route: 'route',
   notes: 'notes',
@@ -150,7 +150,6 @@ describe('Testing the create medication controller', () => {
       .post('/api/medication/user/uid')
       .send('')
       .set({ Authorization: 'Bearer token' });
-    expect(db.Medication.create).toHaveBeenCalledTimes(1);
     expect(res.status).toBe(400);
     expect(res.body.status).toBe('ERROR');
   });
@@ -285,7 +284,6 @@ describe('Testing the update medication controller', () => {
       .send(updatedMedication)
       .set({ Authorization: 'Bearer token' });
     expect(db.Medication.findOne).toBeCalledTimes(1);
-    expect(db.Medication.update).toBeCalledTimes(1);
     expect(res.status).toBe(400);
     expect(res.body.status).toBe('ERROR');
   });
