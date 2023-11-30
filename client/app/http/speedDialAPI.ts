@@ -140,12 +140,14 @@ export async function updateSpeedDial(
         body: JSON.stringify(updatedSpeedDialData),
       }
     );
-    logger.info(`Speed dial entry ${speedDialId} updated successfully`)
     if (!response.ok) {
       logger.error(`Failed to update speed dial entry ${speedDialId} for user. HTTP Status: ${response.status}`)
       throw new Error(
         `Failed to update speed dial entry ${speedDialId} for user. HTTP Status: ${response.status}`
-      );
+        );
+      }
+    else {
+      logger.info(`Speed dial entry ${speedDialId} updated successfully`)
     }
     const data = await response.json();
     return data;

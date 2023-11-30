@@ -4,26 +4,53 @@ import Button from '../../components/Button';
 import Input from '../../components/Input';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { updateSpeedDial, getSpeedDials } from '../../http/speedDialAPI'; 
+import { updateSpeedDial, getSpeedDial } from '../../http/speedDialAPI'; 
 import Header from '../../components/Header';
 import { useAuth } from '../../contexts/AuthContext';
+import Custom403 from '@/app/pages/403';
 
-export default function CreateContactPage() {
-  const logger = require('../../logger');
+
+export default function UpdateContactPage( {params: { updateContacts } } : { params: { updateContacts: string }} ) {
+  const logger = require('../../../logger');
   const router = useRouter();
   const { user } = useAuth();
   const [contacts, setContacts] = useState<any>(null); 
   
-  async function fetchContacts() {
+  async function fetchContact() {
     try {
       const userId = user?.uid || '';
-      const result = await getSpeedDials();    
-      logger.info('All speed dial entries retrieved:', result);
+      const result = await getSpeedDial(updateContacts);    
+      logger.info('Speed dial entry retrieved:', result);
       setContacts(result.data);
     } catch (error) {
-      logger.error('Error retrieving speed dial entries:', error);
+      logger.error('Error retrieving speed dial entry:', error);
     }
   }
+
+  useEffect(() => {  
+    if (!user) {
+      router.push('/login')
+      logger.warn('User not found.')
+      alert('User not found.');
+    } 
+    if (user) {
+      setTimeout(() => {
+        fetchContact();
+      },1000);
+    }
+  }, []);
+  
+  if (!user) {
+    return <div><Custom403/></div>
+  }
+
+  useEffect(() =>{
+    const  { setValues } = formik;
+    setValues({
+        contactName: contacts?.contactName || '',
+        phone: contacts?.contactNumber || '',
+    })
+  }, [contacts])
 
   const formik = useFormik({
     initialValues: {
@@ -38,10 +65,10 @@ export default function CreateContactPage() {
           contactName: values.contactName,
           contactNumber: values.phone,
         };
-        const result = await updateSpeedDial(contacts, data); 
+        const result = await updateSpeedDial(updateContacts, data); 
         router.push('/contacts');
       } catch (error) {
-        logger.error('Error creating speed dial entry:', error);
+        logger.error('Error updating speed dial entry:', error);
       }
     },
   });
@@ -51,7 +78,7 @@ export default function CreateContactPage() {
     <div className="bg-eggshell min-h-screen flex flex-col">
        <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
               <button onClick={() => router.push('/contacts')}>
-              <Header headerText="Create Speed Dial"></Header>
+              <Header headerText="Update Contact"></Header>
               </button>
               </span>
       <form

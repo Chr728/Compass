@@ -4,7 +4,6 @@ import Button from '../components/Button';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Header from '../components/Header';
-import Link from 'next/link';
 import { useAuth } from '@/app/contexts/AuthContext';
 import { deleteSpeedDial, getSpeedDial, getSpeedDials, createSpeedDial } from '../http/speedDialAPI';
 import Custom403 from '../pages/403';
@@ -12,6 +11,7 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
+import { MdDeleteForever, MdModeEdit } from 'react-icons/md';
 import Grid from '@mui/material/Grid';
 import Swal from 'sweetalert2';
 
@@ -130,7 +130,7 @@ export default function Contacts() {
         <Grid container spacing = {2}>
           {contacts && contacts.map((data: any, index: number) => (
             <Grid item xs={6} key={index}>
-              <div onClick={() => router.push(`/contacts/${data.id}`)}>
+              <div onClick={() => window.location.href = `tel:${data.contactNumber}`}>
                 <Card>
                   <CardContent>
                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
@@ -141,10 +141,20 @@ export default function Contacts() {
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <button onClick={(event) => {
-                      event.stopPropagation();
-                      deleteContact(data.id);
-                    }}>Delete</button>
+                    <MdModeEdit 
+                      style={{ width: '25px', height: '30px', float: 'left' }}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        router.push(`/contacts/${data.id}`);
+                      }}
+                    />
+                    <MdDeleteForever
+                      style={{ color: 'var(--Red, #FF7171)', width: '25px', height: '30px', float: 'right' }}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        deleteContact(data.id);
+                      }}
+                    />
                   </CardActions>
                 </Card>
               </div>
