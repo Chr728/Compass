@@ -182,6 +182,40 @@ const moodJournalValidator = (values: { howAreYou: string; stressSignals: stress
     }
 }
 
+const weightJournalValidator = (values: { date: Date; time: Date; weight: number; height: number; unit: string; notes: string }) => {
+    const {date, time, weight, height, unit, notes} = values;
+    //check if date is valid
+    if(!date || typeof date !== 'string') {
+        Logger.error(`Invalid date: ${date}`);
+        throw new Error(`Invalid date: ${date}`);
+    }
+    //check if time is valid
+    if(!time || typeof time !== 'string') {
+        Logger.error(`Invalid time: ${time}`);
+        throw new Error(`Invalid time: ${time}`);
+    }
+    //check if weight is valid
+    if(!weight || typeof weight !== 'number') {
+        Logger.error(`Invalid weight: ${weight}`);
+        throw new Error(`Invalid weight: ${weight}`);
+    }
+    //check if height is valid
+    if(!height || typeof height !== 'number') {
+        Logger.error(`Invalid height: ${height}`);
+        throw new Error(`Invalid height: ${height}`);
+    }
+    //check if unit is valid
+    if(!unit || /\d/.test(unit) || typeof unit !== 'string') {
+        Logger.error(`Invalid unit: ${unit}`);
+        throw new Error(`Invalid unit: ${unit}`);
+    }
+    //check if notes is valid
+    if (notes !== undefined && (/\d/.test(notes) || typeof notes !== 'string')) {
+        Logger.error(`Invalid notes: ${notes}`);
+        throw new Error(`Invalid notes: ${notes}`);
+    }
+}
+
 
 
 export {
@@ -189,8 +223,10 @@ export {
   speedDialValidator,
   appointmentValidator,
   notificationPreferenceValidator,
-    medicationValidator,
-    moodJournalValidator
+  medicationValidator,
+  moodJournalValidator,
+    weightJournalValidator
+
 
 
 }
