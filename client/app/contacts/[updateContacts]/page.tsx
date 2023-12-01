@@ -65,8 +65,10 @@ export default function UpdateContactPage( {params: { updateContacts } } : { par
           contactName: values.contactName,
           contactNumber: values.phone,
         };
-        const result = await updateSpeedDial(updateContacts, data); 
-        router.push('/contacts');
+        updateSpeedDial(updateContacts, data)
+          .then(result => {
+            router.push('/contacts');
+          })
       } catch (error) {
         logger.error('Error updating speed dial entry:', error);
       }
