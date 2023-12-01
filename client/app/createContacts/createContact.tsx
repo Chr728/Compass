@@ -25,7 +25,7 @@ export default function CreateContactPage() {
           contactName: values.contactName,
           contactNumber: values.phone,
         };
-        createSpeedDial(data)
+        await createSpeedDial(data)
           .then(result => {
             router.push('/contacts');
           })
@@ -33,6 +33,27 @@ export default function CreateContactPage() {
       } catch (error) {
         logger.error('Error creating speed dial entry:', error);
       }
+    },
+
+    validate: (values) => {
+      let errors: {
+        contactName?:string;
+        phone?: string;
+      } = {};
+      if (!values.contactName) {
+        errors.contactName = 'Contact Name Required';
+      } else if (
+        !/^[^0-9 ][^\d]*[^0-9 ]$/i.test(values.contactName)
+      ){
+        errors.contactName = 'Names cannot contain numbers and must not begin or end with a space.';
+      }
+      if (!values.phone) {
+        errors.phone = 'Phone Number Required';
+      } else if (!/^[0-9]{10}$/i.test(values.phone)) {
+        errors.phone = 'Please enter a 10 digit number';
+      }
+
+      return errors;
     },
   });
 
@@ -67,13 +88,10 @@ export default function CreateContactPage() {
       value={formik.values.contactName}
       onBlur={formik.handleBlur}
     />
-    {/* Check if the field is touched */}
-    {formik.touched.contactName && (
-      // Check if the field is empty
-      !formik.values.contactName && 
-      (
-        <p className="text-red text-[14px]">This field can't be left empty.</p>
-      ) 
+    {formik.touched.contactName && formik.errors.contactName && (
+        <p className="text-[16px] text-red font-sans">
+        {formik.errors.contactName}
+      </p>
     )}
   </div>
 
@@ -95,13 +113,10 @@ export default function CreateContactPage() {
       value={formik.values.phone}
       onBlur={formik.handleBlur}
     />
-    {/* Check if the field is touched */}
-    {formik.touched.phone && (
-      // Check if the field is empty
-      !formik.values.phone && 
-      (
-        <p className="text-red text-[14px]">This field can't be left empty.</p>
-      ) 
+    {formik.touched.phone && formik.errors.phone && (
+        <p className="text-[16px] text-red font-sans">
+        {formik.errors.phone}
+      </p>
     )}
   </div>
  

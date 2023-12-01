@@ -109,14 +109,12 @@ describe("Create speed dial entry tests", () => {
         const submitButton = screen.getByRole('button', { name: /submit/i });
         userEvent.click(submitButton);
 
-        const errorMessages = await screen.findAllByText("This field can't be left empty.", { exact: false });
-        expect(errorMessages.length).toBe(2);
-      
-        const error = errorMessages[0];
-        expect(error).toBeInTheDocument();
-      
-        const error1 = errorMessages[1];
-        expect(error1).toBeInTheDocument();
+        const errorMessage1 = await screen.findByText("Contact name required", { exact: false });
+        expect(errorMessage1).toBeInTheDocument();
+
+        const errorMessage2 = await screen.findByText("Phone number required", { exact: false });
+        expect(errorMessage2).toBeInTheDocument();
+
     })
 
     it("Cancel button redirects to contacts page", async () => {
