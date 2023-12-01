@@ -60,8 +60,9 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const uid = user ? user.uid : null; // Access the UID if the user is authenticated
   const router = useRouter();
   const { handlePopUp, loading, handleLoading } = useProp();
+  
   useEffect(() => {
-    const fetchUserData = () => {
+    const fetchUserData = async () => {
       handleLoading(true);
       if (uid) {
         getUser()
@@ -79,13 +80,17 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
         handleLoading(false);
       }
     };
+
     if (user) {
       // setTimeout(() => {
-        fetchUserData();
+        (async () => {
+          await fetchUserData();
+        })();
       // }, 1000);
     } else {
       handleLoading(false);
     }
+
   }, [uid]);
 
   const updateCurrentUser = (userData: EditableUserAttributes) => {
