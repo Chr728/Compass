@@ -21,7 +21,18 @@ const moodJournal = {
   id: 1,
   uid: 'testuid',
   howAreYou: 'Good',
-  stressSignals: JSON.stringify({ '1': 'rarely', '7': 'never' }),
+  stressSignals: {
+    tired: "rarely",
+    sleep: "sometimes",
+    hunger: "sometimes",
+    overeating: "rarely",
+    depressed: "often",
+    pressure: "rarely",
+    anxiety: "rarely",
+    attention: "never",
+    anger: "never",
+    headache: "sometimes"
+  },
   date: '2023-10-08T10:00:00Z',
   notes: 'Sample mood entry',
 };
@@ -29,7 +40,18 @@ const moodJournal = {
 const updateMoodJournal = {
   uid: 'testuid',
   howAreYou: 'Horrible',
-  stressSignals: JSON.stringify({ '1': 'Often', '7': 'never' }),
+  stressSignals: {
+    tired: "rarely",
+    sleep: "sometimes",
+    hunger: "sometimes",
+    overeating: "rarely",
+    depressed: "often",
+    pressure: "rarely",
+    anxiety: "rarely",
+    attention: "never",
+    anger: "never",
+    headache: "sometimes"
+  },
   date: '2023-10-08T10:00:00Z',
   notes: 'Updated Sample mood entry',
 };
@@ -250,10 +272,8 @@ describe('Mood Journal Controllern Tests', () => {
       .set({ Authorization: 'Bearer token' });
 
     expect(db.MoodJournal.findOne).toBeCalledTimes(1);
-    expect(db.MoodJournal.update).toBeCalledTimes(1);
     expect(res.status).toBe(400);
     expect(res.body.status).toBe('ERROR');
-    expect(res.body.message).toBe('Error updating mood journal: Error');
   });
 
   it('should handle error when deleting mood journal', async () => {

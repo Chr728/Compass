@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { Logger } from '../middlewares/logger';
 import db from '../models';
+import {weightJournalValidator} from '../utils/databaseValidators';
 
 export const getWeightJournals = async (req: Request, res: Response) => {
   try {
@@ -83,6 +84,7 @@ export const createWeightJournal = async (req: Request, res: Response) => {
     }
 
     const { date, time, weight, height, unit, notes } = req.body;
+    weightJournalValidator({ date, time, weight, height, unit, notes })
 
     const weightJournal = await db.WeightJournal.create({
       uid: user.uid,
@@ -107,6 +109,7 @@ export const createWeightJournal = async (req: Request, res: Response) => {
 export const updateWeightJournal = async (req: Request, res: Response) => {
   try {
     const { date, time, weight, height, unit, notes } = req.body;
+    weightJournalValidator({ date, time, weight, height, unit, notes })
 
     const weightJournalId = req.params.weightJournalId;
 

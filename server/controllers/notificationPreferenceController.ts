@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Logger } from "../middlewares/logger";
 import db from "../models";
+import {notificationPreferenceValidator} from '../utils/databaseValidators';
 
 // Create the notification preferences for a given user
 export const createNotificationPreference = async (
@@ -94,7 +95,7 @@ export const updateNotificationPreference = async (
       insulinDosageReminders,
       glucoseMeasurementReminders,
     } = req.body;
-
+    notificationPreferenceValidator(req.body)
     const updatedNotificationPreference =
       await db.NotificationPreference.update(
         {
