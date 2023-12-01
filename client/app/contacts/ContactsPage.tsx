@@ -137,7 +137,7 @@ export default function Contacts() {
                       {data.contactNumber}
                     </Typography>
                     <Typography variant="h5" component="div">
-                      {data.contactName}
+                      {data.contactName.length > 8 ? `${data.contactName.substring(0, 8)}...` : data.contactName}
                     </Typography>
                   </CardContent>
                   <CardActions>

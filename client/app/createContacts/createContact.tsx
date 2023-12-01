@@ -25,8 +25,11 @@ export default function CreateContactPage() {
           contactName: values.contactName,
           contactNumber: values.phone,
         };
-        const result = await createSpeedDial(data); 
-        router.push('/contacts');
+        createSpeedDial(data)
+          .then(result => {
+            router.push('/contacts');
+          })
+        logger.info('Speed dial entry created:', data);
       } catch (error) {
         logger.error('Error creating speed dial entry:', error);
       }
