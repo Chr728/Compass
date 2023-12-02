@@ -255,52 +255,140 @@ describe('Notification Preference Validator', () => {
 });
 
 describe('Medication Validator', () => {
-  it('should validate valid medication details', () => {
+  it('should validate a valid medication attributes object', () => {
     const validMedication: any = {
-      medicationName: 'Medication XYZ',
-      dateStarted: '2023-01-01',
+      medicationName: 'Medicine A',
+      dateStarted: '2023-12-15',
       time: '08:00',
-      dosage: 50,
+      dosage: 1,
       unit: 'mg',
       frequency: 'Twice daily',
       route: 'Oral',
-      notes: 'Take after meals',
+      notes: 'Take after meals.',
     };
 
     expect(() => medicationValidator(validMedication)).not.toThrow();
   });
 
   it('should throw errors for invalid medication name', () => {
-    const invalidMedication: any = {
+    const invalidMedicationName: any = {
       medicationName: 123,
-      dateStarted: new Date(),
+      dateStarted: '2023-12-15',
       time: '08:00',
-      dosage: '50',
+      dosage: 1,
       unit: 'mg',
       frequency: 'Twice daily',
       route: 'Oral',
-      notes: 'Take after meals',
+      notes: 'Take after meals.',
     };
 
-    expect(() => medicationValidator(invalidMedication)).toThrow();
+    expect(() => medicationValidator(invalidMedicationName)).toThrow();
   });
 
   it('should throw errors for invalid date started', () => {
-    const invalidMedication: any = {
-      medicationName: 'Medication XYZ',
-      dateStarted: 123,
+    const invalidDateStarted: any = {
+      medicationName: 'Medicine A',
+      dateStarted: 123, // Invalid dateStarted type
       time: '08:00',
-      dosage: '50',
+      dosage: 1,
       unit: 'mg',
       frequency: 'Twice daily',
       route: 'Oral',
-      notes: 'Take after meals',
+      notes: 'Take after meals.',
     };
 
-    expect(() => medicationValidator(invalidMedication)).toThrow();
+    expect(() => medicationValidator(invalidDateStarted)).toThrow();
   });
 
-  // add more tests later
+  it('should throw errors for invalid time', () => {
+    const invalidTime: any = {
+      medicationName: 'Medicine A',
+      dateStarted: '2023-12-15',
+      time: 123, // Invalid time type
+      dosage: 1,
+      unit: 'mg',
+      frequency: 'Twice daily',
+      route: 'Oral',
+      notes: 'Take after meals.',
+    };
+
+    expect(() => medicationValidator(invalidTime)).toThrow();
+  });
+
+  it('should throw errors for invalid dosage', () => {
+    const invalidDosage: any = {
+      medicationName: 'Medicine A',
+      dateStarted: '2023-12-15',
+      time: '08:00',
+      dosage: '1', // Invalid dosage type
+      unit: 'mg',
+      frequency: 'Twice daily',
+      route: 'Oral',
+      notes: 'Take after meals.',
+    };
+
+    expect(() => medicationValidator(invalidDosage)).toThrow();
+  });
+
+  it('should throw errors for invalid unit', () => {
+    const invalidUnit: any = {
+      medicationName: 'Medicine A',
+      dateStarted: '2023-12-15',
+      time: '08:00',
+      dosage: 1,
+      unit: 123, // Invalid unit type
+      frequency: 'Twice daily',
+      route: 'Oral',
+      notes: 'Take after meals.',
+    };
+
+    expect(() => medicationValidator(invalidUnit)).toThrow();
+  });
+
+  it('should throw errors for invalid frequency', () => {
+    const invalidFrequency: any = {
+      medicationName: 'Medicine A',
+      dateStarted: '2023-12-15',
+      time: '08:00',
+      dosage: 1,
+      unit: 'mg',
+      frequency: 123, // Invalid frequency type
+      route: 'Oral',
+      notes: 'Take after meals.',
+    };
+
+    expect(() => medicationValidator(invalidFrequency)).toThrow();
+  });
+
+  it('should throw errors for invalid route', () => {
+    const invalidRoute: any = {
+      medicationName: 'Medicine A',
+      dateStarted: '2023-12-15',
+      time: '08:00',
+      dosage: 1,
+      unit: 'mg',
+      frequency: 'Twice daily',
+      route: 123, // Invalid route type
+      notes: 'Take after meals.',
+    };
+
+    expect(() => medicationValidator(invalidRoute)).toThrow();
+  });
+
+  it('should throw errors for invalid notes', () => {
+    const invalidNotes: any = {
+      medicationName: 'Medicine A',
+      dateStarted: '2023-12-15',
+      time: '08:00',
+      dosage: 1,
+      unit: 'mg',
+      frequency: 'Twice daily',
+      route: 'Oral',
+      notes: 123, // Invalid notes type
+    };
+
+    expect(() => medicationValidator(invalidNotes)).toThrow();
+  });
 });
 
 describe('Mood Journal Validator', () => {
