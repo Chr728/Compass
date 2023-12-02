@@ -8,270 +8,216 @@ import {
   weightJournalValidator,
 } from '../utils/databaseValidators';
 
-describe('User Validator', () => {
-  it('should validate a valid user attributes object', () => {
-    const validUser: any = {
-      email: 'test@example.com',
-      firstName: 'John',
-      lastName: 'Doe',
-      phoneNumber: '1234567890',
-    };
+type ValidatorFunction = (data: any) => void;
 
-    expect(() => userValidator(validUser)).not.toThrow();
+interface TestParams {
+  validator: ValidatorFunction;
+  validData: any;
+  invalidData: { [key: string]: any }[];
+}
+
+function runTests({ validator, validData, invalidData }: TestParams) {
+  describe(validator, () => {
+    it('should validate a valid attributes object', () => {
+      expect(() => validator(validData)).not.toThrow();
+    });
+
+    invalidData.forEach((data, index) => {
+      it(`should throw errors for invalid ${invalidData[index].incorrectData}`, () => {
+        expect(() => validator(data)).toThrow();
+      });
+    });
   });
+}
 
-  it('should throw errors for invalid email', () => {
-    const invalidEmailUser: any = {
+//Testing User Validator
+runTests({
+  validator: userValidator,
+  validData: {
+    email: 'test@example.com',
+    firstName: 'John',
+    lastName: 'Doe',
+    phoneNumber: '1234567890',
+  },
+  invalidData: [
+    {
       email: 'invalidemail',
       firstName: 'John',
       lastName: 'Doe',
       phoneNumber: '1234567890',
-    };
-
-    expect(() => userValidator(invalidEmailUser)).toThrow();
-  });
-
-  it('should throw errors for invalid first name', () => {
-    const invalidFirstNameUser: any = {
+      incorrectData: 'email',
+    },
+    {
       email: 'test@example.com',
-      firstName: '123',
+      firstName: 'John123',
       lastName: 'Doe',
       phoneNumber: '1234567890',
-    };
-
-    expect(() => userValidator(invalidFirstNameUser)).toThrow();
-  });
-
-  it('should throw errors for invalid last name', () => {
-    const invalidLastNameUser: any = {
+      incorrectData: 'firstName',
+    },
+    {
       email: 'test@example.com',
       firstName: 'John',
       lastName: 'Doe123',
       phoneNumber: '1234567890',
-    };
-
-    expect(() => userValidator(invalidLastNameUser)).toThrow();
-  });
-
-  it('should throw errors for invalid phone number', () => {
-    const invalidPhoneNumberUser: any = {
+      incorrectData: 'lastName',
+    },
+    {
       email: 'test@example.com',
       firstName: 'John',
       lastName: 'Doe',
-      phoneNumber: 'invalidnumber',
-    };
-
-    expect(() => userValidator(invalidPhoneNumberUser)).toThrow();
-  });
-
-  it('should throw errors for missing required fields', () => {
-    const missingFieldsUser: any = {
-      firstName: 'John',
-      lastName: 'Doe',
-    };
-
-    expect(() => userValidator(missingFieldsUser)).toThrow();
-  });
+      phoneNumber: 'invalidNumberx',
+      incorrectData: 'phoneNumber',
+    },
+  ],
 });
 
-describe('Appointment Validator', () => {
-  it('should validate a valid appointment attributes object', () => {
-    const validAppointment: any = {
-      appointmentWith: 'John Doe',
-      reason: 'Regular checkup',
-      date: '2023-12-15',
-      time: '14:30',
-      notes: 'Some notes',
-    };
-
-    expect(() => appointmentValidator(validAppointment)).not.toThrow();
-  });
-
-  it('should throw errors for invalid appointmentWith', () => {
-    const invalidAppointmentWith: any = {
+//Testing Appointment Validator
+runTests({
+  validator: appointmentValidator,
+  validData: {
+    appointmentWith: 'John Doe',
+    reason: 'Regular checkup',
+    date: '2023-12-15',
+    time: '14:30',
+    notes: 'Some notes',
+  },
+  invalidData: [
+    {
       appointmentWith: 'Invalid123',
       reason: 'Regular checkup',
       date: '2023-12-15',
       time: '14:30',
       notes: 'Some notes',
-    };
-
-    expect(() => appointmentValidator(invalidAppointmentWith)).toThrow();
-  });
-
-  it('should throw errors for invalid reason', () => {
-    const invalidReason: any = {
+      incorrectData: 'appointmentWith',
+    },
+    {
       appointmentWith: 'John Doe',
       reason: 123,
       date: '2023-12-15',
       time: '14:30',
       notes: 'Some notes',
-    };
-
-    expect(() => appointmentValidator(invalidReason)).toThrow();
-  });
-
-  it('should throw errors for invalid date', () => {
-    const invalidDate: any = {
+      incorrectData: 'reason',
+    },
+    {
       appointmentWith: 'John Doe',
       reason: 'Regular checkup',
       time: '14:30',
       notes: 'Some notes',
-    };
-
-    expect(() => appointmentValidator(invalidDate)).toThrow();
-  });
-
-  it('should throw errors for missing required fields', () => {
-    const missingFieldsAppointment: any = {
+      incorrectData: 'date',
+    },
+    {
       appointmentWith: 'John Doe',
       reason: 'Regular checkup',
-    };
-
-    expect(() => appointmentValidator(missingFieldsAppointment)).toThrow();
-  });
+      incorrectData: 'time',
+    },
+  ],
 });
 
-describe('Speed Dial Validator', () => {
-  it('should validate a valid speed dial contact', () => {
-    const validContact: any = {
-      contactName: 'John Doe',
-      contactNumber: '1234567890',
-    };
-
-    expect(() => speedDialValidator(validContact)).not.toThrow();
-  });
-
-  it('should throw errors for invalid contactName', () => {
-    const invalidContactName: any = {
+//Testing Speed Dial Validator
+runTests({
+  validator: speedDialValidator,
+  validData: {
+    contactName: 'John Doe',
+    contactNumber: '1234567890',
+  },
+  invalidData: [
+    {
       contactName: 'Invalid123',
       contactNumber: '1234567890',
-    };
-
-    expect(() => speedDialValidator(invalidContactName)).toThrow();
-  });
-
-  it('should throw errors for invalid contactNumber', () => {
-    const invalidContactNumber: any = {
+      incorrectData: 'contactName',
+    },
+    {
       contactName: 'John Doe',
       contactNumber: 'invalidNumber',
-    };
-
-    expect(() => speedDialValidator(invalidContactNumber)).toThrow();
-  });
+      incorrectData: 'contactNumber',
+    },
+  ],
 });
 
-describe('Notification Preference Validator', () => {
-  it('should validate for valid notification preferences', () => {
-    const validPrefs: any = {
-      activityReminders: true,
-      medicationReminders: false,
-      appointmentReminders: true,
-      foodIntakeReminders: false,
-      insulinDosageReminders: true,
-      glucoseMeasurementReminders: false,
-    };
-
-    expect(() => notificationPreferenceValidator(validPrefs)).not.toThrow();
-  });
-
-  it('should throw errors for invalid Activity notification preferences', () => {
-    const invalidPrefs: any = {
+//Testing Notification Preference Validator
+runTests({
+  validator: notificationPreferenceValidator,
+  validData: {
+    activityReminders: true,
+    medicationReminders: false,
+    appointmentReminders: true,
+    foodIntakeReminders: false,
+    insulinDosageReminders: true,
+    glucoseMeasurementReminders: false,
+  },
+  invalidData: [
+    {
       activityReminders: 'true',
       medicationReminders: true,
       appointmentReminders: true,
       foodIntakeReminders: false,
       insulinDosageReminders: true,
       glucoseMeasurementReminders: false,
-    };
-
-    expect(() => notificationPreferenceValidator(invalidPrefs)).toThrow();
-  });
-
-  it('should throw errors for invalid Medication notification preferences', () => {
-    const invalidPrefs: any = {
+      incorrectData: 'activityReminders',
+    },
+    {
       activityReminders: true,
       medicationReminders: 'true',
       appointmentReminders: true,
       foodIntakeReminders: false,
       insulinDosageReminders: true,
       glucoseMeasurementReminders: false,
-    };
-
-    expect(() => notificationPreferenceValidator(invalidPrefs)).toThrow();
-  });
-
-  it('should throw errors for invalid Appointment notification preferences', () => {
-    const invalidPrefs: any = {
+      incorrectData: 'medicationReminders',
+    },
+    {
       activityReminders: true,
       medicationReminders: false,
       appointmentReminders: 'true',
       foodIntakeReminders: false,
       insulinDosageReminders: true,
       glucoseMeasurementReminders: false,
-    };
-
-    expect(() => notificationPreferenceValidator(invalidPrefs)).toThrow();
-  });
-
-  it('should throw errors for invalid FoodIntake notification preferences', () => {
-    const invalidPrefs: any = {
+      incorrectData: 'appointmentReminders',
+    },
+    {
       activityReminders: true,
-      medicationReminders: false,
+      medicationReminders: true,
       appointmentReminders: true,
       foodIntakeReminders: 'false',
       insulinDosageReminders: true,
       glucoseMeasurementReminders: false,
-    };
-
-    expect(() => notificationPreferenceValidator(invalidPrefs)).toThrow();
-  });
-
-  it('should throw errors for invalid Insulin Dosage notification preferences', () => {
-    const invalidPrefs: any = {
+      incorrectData: 'foodIntakeReminders',
+    },
+    {
       activityReminders: true,
-      medicationReminders: false,
+      medicationReminders: true,
       appointmentReminders: true,
       foodIntakeReminders: false,
       insulinDosageReminders: 'true',
       glucoseMeasurementReminders: false,
-    };
-
-    expect(() => notificationPreferenceValidator(invalidPrefs)).toThrow();
-  });
-
-  it('should throw errors for invalid Glucose Measurement notification preferences', () => {
-    const invalidPrefs: any = {
+      incorrectData: 'insulinDosageReminders',
+    },
+    {
       activityReminders: true,
-      medicationReminders: false,
+      medicationReminders: true,
       appointmentReminders: true,
       foodIntakeReminders: false,
       insulinDosageReminders: true,
       glucoseMeasurementReminders: 'false',
-    };
-
-    expect(() => notificationPreferenceValidator(invalidPrefs)).toThrow();
-  });
+      incorrectData: 'glucoseMeasurementReminders',
+    },
+  ],
 });
 
-describe('Medication Validator', () => {
-  it('should validate a valid medication attributes object', () => {
-    const validMedication: any = {
-      medicationName: 'Medicine A',
-      dateStarted: '2023-12-15',
-      time: '08:00',
-      dosage: 1,
-      unit: 'mg',
-      frequency: 'Twice daily',
-      route: 'Oral',
-      notes: 'Take after meals.',
-    };
-
-    expect(() => medicationValidator(validMedication)).not.toThrow();
-  });
-
-  it('should throw errors for invalid medication name', () => {
-    const invalidMedicationName: any = {
+//Testing Medication Validator
+runTests({
+  validator: medicationValidator,
+  validData: {
+    medicationName: 'Medicine A',
+    dateStarted: '2023-12-15',
+    time: '08:00',
+    dosage: 1,
+    unit: 'mg',
+    frequency: 'Twice daily',
+    route: 'Oral',
+    notes: 'Take after meals.',
+  },
+  invalidData: [
+    {
       medicationName: 123,
       dateStarted: '2023-12-15',
       time: '08:00',
@@ -280,103 +226,75 @@ describe('Medication Validator', () => {
       frequency: 'Twice daily',
       route: 'Oral',
       notes: 'Take after meals.',
-    };
-
-    expect(() => medicationValidator(invalidMedicationName)).toThrow();
-  });
-
-  it('should throw errors for invalid date started', () => {
-    const invalidDateStarted: any = {
+      incorrectData: 'medicationName',
+    },
+    {
       medicationName: 'Medicine A',
-      dateStarted: 123, // Invalid dateStarted type
+      dateStarted: 123,
       time: '08:00',
       dosage: 1,
       unit: 'mg',
       frequency: 'Twice daily',
       route: 'Oral',
       notes: 'Take after meals.',
-    };
-
-    expect(() => medicationValidator(invalidDateStarted)).toThrow();
-  });
-
-  it('should throw errors for invalid time', () => {
-    const invalidTime: any = {
+      incorrectData: 'dateStarted',
+    },
+    {
       medicationName: 'Medicine A',
       dateStarted: '2023-12-15',
-      time: 123, // Invalid time type
+      time: 123,
       dosage: 1,
       unit: 'mg',
       frequency: 'Twice daily',
       route: 'Oral',
       notes: 'Take after meals.',
-    };
-
-    expect(() => medicationValidator(invalidTime)).toThrow();
-  });
-
-  it('should throw errors for invalid dosage', () => {
-    const invalidDosage: any = {
+      incorrectData: 'time',
+    },
+    {
       medicationName: 'Medicine A',
       dateStarted: '2023-12-15',
       time: '08:00',
-      dosage: '1', // Invalid dosage type
+      dosage: '1',
       unit: 'mg',
       frequency: 'Twice daily',
       route: 'Oral',
       notes: 'Take after meals.',
-    };
-
-    expect(() => medicationValidator(invalidDosage)).toThrow();
-  });
-
-  it('should throw errors for invalid unit', () => {
-    const invalidUnit: any = {
+      incorrectData: 'dosage',
+    },
+    {
       medicationName: 'Medicine A',
       dateStarted: '2023-12-15',
       time: '08:00',
       dosage: 1,
-      unit: 123, // Invalid unit type
+      unit: 123,
       frequency: 'Twice daily',
       route: 'Oral',
       notes: 'Take after meals.',
-    };
-
-    expect(() => medicationValidator(invalidUnit)).toThrow();
-  });
-
-  it('should throw errors for invalid frequency', () => {
-    const invalidFrequency: any = {
+      incorrectData: 'unit',
+    },
+    {
       medicationName: 'Medicine A',
       dateStarted: '2023-12-15',
       time: '08:00',
       dosage: 1,
       unit: 'mg',
-      frequency: 123, // Invalid frequency type
+      frequency: 123,
       route: 'Oral',
       notes: 'Take after meals.',
-    };
-
-    expect(() => medicationValidator(invalidFrequency)).toThrow();
-  });
-
-  it('should throw errors for invalid route', () => {
-    const invalidRoute: any = {
+      incorrectData: 'frequency',
+    },
+    {
       medicationName: 'Medicine A',
       dateStarted: '2023-12-15',
       time: '08:00',
       dosage: 1,
       unit: 'mg',
       frequency: 'Twice daily',
-      route: 123, // Invalid route type
+      route: 123,
       notes: 'Take after meals.',
-    };
-
-    expect(() => medicationValidator(invalidRoute)).toThrow();
-  });
-
-  it('should throw errors for invalid notes', () => {
-    const invalidNotes: any = {
+      incorrectData: 'route',
+    },
+    {
       medicationName: 'Medicine A',
       dateStarted: '2023-12-15',
       time: '08:00',
@@ -384,38 +302,34 @@ describe('Medication Validator', () => {
       unit: 'mg',
       frequency: 'Twice daily',
       route: 'Oral',
-      notes: 123, // Invalid notes type
-    };
-
-    expect(() => medicationValidator(invalidNotes)).toThrow();
-  });
+      notes: 123,
+      incorrectData: 'notes',
+    },
+  ],
 });
 
-describe('Mood Journal Validator', () => {
-  it('should validate a valid mood journal attributes object', () => {
-    const validMoodJournal: any = {
-      howAreYou: 'Feeling good',
-      stressSignals: {
-        tired: 'Low',
-        sleep: 'Normal',
-        hunger: 'Low',
-        overeating: 'No',
-        depressed: 'No',
-        pressure: 'Low',
-        anxiety: 'No',
-        attention: 'Normal',
-        anger: 'No',
-        headache: 'No',
-      },
-      date: '2023-12-15',
-      notes: 'Feeling happy today!',
-    };
-
-    expect(() => moodJournalValidator(validMoodJournal)).not.toThrow();
-  });
-
-  it('should throw errors for invalid howAreYou', () => {
-    const invalidHowAreYou: any = {
+//Testing Mood Journal Validator
+runTests({
+  validator: moodJournalValidator,
+  validData: {
+    howAreYou: 'Feeling good',
+    stressSignals: {
+      tired: 'Low',
+      sleep: 'Normal',
+      hunger: 'Low',
+      overeating: 'No',
+      depressed: 'No',
+      pressure: 'Low',
+      anxiety: 'No',
+      attention: 'Normal',
+      anger: 'No',
+      headache: 'No',
+    },
+    date: '2023-12-15',
+    notes: 'Feeling happy today!',
+  },
+  invalidData: [
+    {
       howAreYou: 123,
       stressSignals: {
         tired: 'Low',
@@ -431,24 +345,16 @@ describe('Mood Journal Validator', () => {
       },
       date: '2023-12-15',
       notes: 'Feeling happy today!',
-    };
-
-    expect(() => moodJournalValidator(invalidHowAreYou)).toThrow();
-  });
-
-  it('should throw errors for invalid stressSignals', () => {
-    const invalidStressSignals: any = {
+      incorrectData: 'howAreYou',
+    },
+    {
       howAreYou: 'Feeling good',
       stressSignals: 'Invalid',
       date: '2023-12-15',
       notes: 'Feeling happy today!',
-    };
-
-    expect(() => moodJournalValidator(invalidStressSignals)).toThrow();
-  });
-
-  it('should throw errors for invalid date', () => {
-    const invalidDate: any = {
+      incorrectData: 'stressSignals',
+    },
+    {
       howAreYou: 'Feeling good',
       stressSignals: {
         tired: 'Low',
@@ -464,13 +370,9 @@ describe('Mood Journal Validator', () => {
       },
       date: 123,
       notes: 'Feeling happy today!',
-    };
-
-    expect(() => moodJournalValidator(invalidDate)).toThrow();
-  });
-
-  it('should throw errors for invalid notes', () => {
-    const invalidNotes: any = {
+      incorrectData: 'date',
+    },
+    {
       howAreYou: 'Feeling good',
       stressSignals: {
         tired: 'Low',
@@ -486,103 +388,76 @@ describe('Mood Journal Validator', () => {
       },
       date: '2023-12-15',
       notes: 123,
-    };
-
-    expect(() => moodJournalValidator(invalidNotes)).toThrow();
-  });
+      incorrectData: 'notes',
+    },
+  ],
 });
 
-describe('Weight Journal Validator', () => {
-  it('should validate a valid weight journal attributes object', () => {
-    const validWeightJournal: any = {
-      date: '2023-12-15', // Replace with a valid date string
-      time: '14:30', // Replace with a valid time string
-      weight: 70, // Replace with a valid weight value
-      height: 175, // Replace with a valid height value
-      unit: 'kg', // Replace with a valid unit value
-      notes: 'Maintaining weight well.',
-    };
-
-    expect(() => weightJournalValidator(validWeightJournal)).not.toThrow();
-  });
-
-  it('should throw errors for invalid date', () => {
-    const invalidDate: any = {
-      date: 123, // Invalid date format
-      time: '14:30', // Replace with a valid time string
+//Testing Weight Journal Validator
+runTests({
+  validator: weightJournalValidator,
+  validData: {
+    date: '2023-12-15',
+    time: '14:30',
+    weight: 70,
+    height: 175,
+    unit: 'kg',
+    notes: 'Maintaining weight well.',
+  },
+  invalidData: [
+    {
+      date: 123,
+      time: '14:30',
       weight: 70,
       height: 175,
       unit: 'kg',
       notes: 'Maintaining weight well.',
-    };
-
-    expect(() => weightJournalValidator(invalidDate)).toThrow();
-  });
-
-  it('should throw errors for invalid time', () => {
-    const invalidTime: any = {
-      date: '2023-12-15', // Replace with a valid date string
-      time: 123, // Invalid time type
+      incorrectData: 'date',
+    },
+    {
+      date: '2023-12-15',
+      time: 123,
       weight: 70,
       height: 175,
       unit: 'kg',
       notes: 'Maintaining weight well.',
-    };
-
-    expect(() => weightJournalValidator(invalidTime)).toThrow();
-  });
-
-  it('should throw errors for invalid weight', () => {
-    const invalidWeight: any = {
-      date: '2023-12-15', // Replace with a valid date string
-      time: '14:30', // Replace with a valid time string
-      weight: 'InvalidWeight', // Invalid weight type
+      incorrectData: 'time',
+    },
+    {
+      date: '2023-12-15',
+      time: '14:30',
+      weight: 'InvalidWeight',
       height: 175,
       unit: 'kg',
       notes: 'Maintaining weight well.',
-    };
-
-    expect(() => weightJournalValidator(invalidWeight)).toThrow();
-  });
-
-  it('should throw errors for invalid height', () => {
-    const invalidHeight: any = {
-      date: '2023-12-15', // Replace with a valid date string
-      time: '14:30', // Replace with a valid time string
+      incorrectData: 'weight',
+    },
+    {
+      date: '2023-12-15',
+      time: '14:30',
       weight: 70,
-      height: 'InvalidHeight', // Invalid height type
+      height: 'InvalidHeight',
       unit: 'kg',
       notes: 'Maintaining weight well.',
-    };
-
-    expect(() => weightJournalValidator(invalidHeight)).toThrow();
-  });
-
-  it('should throw errors for invalid unit', () => {
-    const invalidUnit: any = {
-      date: '2023-12-15', // Replace with a valid date string
-      time: '14:30', // Replace with a valid time string
+      incorrectData: 'height',
+    },
+    {
+      date: '2023-12-15',
+      time: '14:30',
       weight: 70,
       height: 175,
-      unit: 123, // Invalid unit type
+      unit: 123,
       notes: 'Maintaining weight well.',
-    };
-
-    expect(() => weightJournalValidator(invalidUnit)).toThrow();
-  });
-
-  it('should throw errors for invalid notes', () => {
-    const invalidNotes: any = {
-      date: '2023-12-15', // Replace with a valid date string
-      time: '14:30', // Replace with a valid time string
+      incorrectData: 'unit',
+    },
+    {
+      date: '2023-12-15',
+      time: '14:30',
       weight: 70,
       height: 175,
       unit: 'kg',
-      notes: 123, // Invalid notes type
-    };
-
-    expect(() => weightJournalValidator(invalidNotes)).toThrow();
-  });
-
-  // Add more test cases as needed to cover other scenarios
+      notes: 123,
+      incorrectData: 'notes',
+    },
+  ],
 });
