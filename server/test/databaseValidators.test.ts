@@ -131,3 +131,125 @@ describe('Appointment Validator', () => {
     expect(() => appointmentValidator(missingFieldsAppointment)).toThrow();
   });
 });
+
+describe('Speed Dial Validator', () => {
+  it('should validate a valid speed dial contact', () => {
+    const validContact: any = {
+      contactName: 'John Doe',
+      contactNumber: '1234567890',
+    };
+
+    expect(() => speedDialValidator(validContact)).not.toThrow();
+  });
+
+  it('should throw errors for invalid contactName', () => {
+    const invalidContactName: any = {
+      contactName: 'Invalid123',
+      contactNumber: '1234567890',
+    };
+
+    expect(() => speedDialValidator(invalidContactName)).toThrow();
+  });
+
+  it('should throw errors for invalid contactNumber', () => {
+    const invalidContactNumber: any = {
+      contactName: 'John Doe',
+      contactNumber: 'invalidNumber',
+    };
+
+    expect(() => speedDialValidator(invalidContactNumber)).toThrow();
+  });
+});
+
+describe('Notification Preference Validator', () => {
+  it('should validate for valid notification preferences', () => {
+    const validPrefs: any = {
+      activityReminders: true,
+      medicationReminders: false,
+      appointmentReminders: true,
+      foodIntakeReminders: false,
+      insulinDosageReminders: true,
+      glucoseMeasurementReminders: false,
+    };
+
+    expect(() => notificationPreferenceValidator(validPrefs)).not.toThrow();
+  });
+
+  it('should throw errors for invalid Activity notification preferences', () => {
+    const invalidPrefs: any = {
+      activityReminders: 'true',
+      medicationReminders: true,
+      appointmentReminders: true,
+      foodIntakeReminders: false,
+      insulinDosageReminders: true,
+      glucoseMeasurementReminders: false,
+    };
+
+    expect(() => notificationPreferenceValidator(invalidPrefs)).toThrow();
+  });
+
+  it('should throw errors for invalid Medication notification preferences', () => {
+    const invalidPrefs: any = {
+      activityReminders: true,
+      medicationReminders: 'true',
+      appointmentReminders: true,
+      foodIntakeReminders: false,
+      insulinDosageReminders: true,
+      glucoseMeasurementReminders: false,
+    };
+
+    expect(() => notificationPreferenceValidator(invalidPrefs)).toThrow();
+  });
+
+  it('should throw errors for invalid Appointment notification preferences', () => {
+    const invalidPrefs: any = {
+      activityReminders: true,
+      medicationReminders: false,
+      appointmentReminders: 'true',
+      foodIntakeReminders: false,
+      insulinDosageReminders: true,
+      glucoseMeasurementReminders: false,
+    };
+
+    expect(() => notificationPreferenceValidator(invalidPrefs)).toThrow();
+  });
+
+  it('should throw errors for invalid FoodIntake notification preferences', () => {
+    const invalidPrefs: any = {
+      activityReminders: true,
+      medicationReminders: false,
+      appointmentReminders: true,
+      foodIntakeReminders: 'false',
+      insulinDosageReminders: true,
+      glucoseMeasurementReminders: false,
+    };
+
+    expect(() => notificationPreferenceValidator(invalidPrefs)).toThrow();
+  });
+
+  it('should throw errors for invalid Insulin Dosage notification preferences', () => {
+    const invalidPrefs: any = {
+      activityReminders: true,
+      medicationReminders: false,
+      appointmentReminders: true,
+      foodIntakeReminders: false,
+      insulinDosageReminders: 'true',
+      glucoseMeasurementReminders: false,
+    };
+
+    expect(() => notificationPreferenceValidator(invalidPrefs)).toThrow();
+  });
+
+  it('should throw errors for invalid Glucose Measurement notification preferences', () => {
+    const invalidPrefs: any = {
+      activityReminders: true,
+      medicationReminders: false,
+      appointmentReminders: true,
+      foodIntakeReminders: false,
+      insulinDosageReminders: true,
+      glucoseMeasurementReminders: 'false',
+    };
+
+    expect(() => notificationPreferenceValidator(invalidPrefs)).toThrow();
+  });
+});
