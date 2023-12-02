@@ -253,3 +253,248 @@ describe('Notification Preference Validator', () => {
     expect(() => notificationPreferenceValidator(invalidPrefs)).toThrow();
   });
 });
+
+describe('Medication Validator', () => {
+  it('should validate valid medication details', () => {
+    const validMedication: any = {
+      medicationName: 'Medication XYZ',
+      dateStarted: '2023-01-01',
+      time: '08:00',
+      dosage: 50,
+      unit: 'mg',
+      frequency: 'Twice daily',
+      route: 'Oral',
+      notes: 'Take after meals',
+    };
+
+    expect(() => medicationValidator(validMedication)).not.toThrow();
+  });
+
+  it('should throw errors for invalid medication name', () => {
+    const invalidMedication: any = {
+      medicationName: 123,
+      dateStarted: new Date(),
+      time: '08:00',
+      dosage: '50',
+      unit: 'mg',
+      frequency: 'Twice daily',
+      route: 'Oral',
+      notes: 'Take after meals',
+    };
+
+    expect(() => medicationValidator(invalidMedication)).toThrow();
+  });
+
+  it('should throw errors for invalid date started', () => {
+    const invalidMedication: any = {
+      medicationName: 'Medication XYZ',
+      dateStarted: 123,
+      time: '08:00',
+      dosage: '50',
+      unit: 'mg',
+      frequency: 'Twice daily',
+      route: 'Oral',
+      notes: 'Take after meals',
+    };
+
+    expect(() => medicationValidator(invalidMedication)).toThrow();
+  });
+
+  // add more tests later
+});
+
+describe('Mood Journal Validator', () => {
+  it('should validate a valid mood journal attributes object', () => {
+    const validMoodJournal: any = {
+      howAreYou: 'Feeling good',
+      stressSignals: {
+        tired: 'Low',
+        sleep: 'Normal',
+        hunger: 'Low',
+        overeating: 'No',
+        depressed: 'No',
+        pressure: 'Low',
+        anxiety: 'No',
+        attention: 'Normal',
+        anger: 'No',
+        headache: 'No',
+      },
+      date: '2023-12-15',
+      notes: 'Feeling happy today!',
+    };
+
+    expect(() => moodJournalValidator(validMoodJournal)).not.toThrow();
+  });
+
+  it('should throw errors for invalid howAreYou', () => {
+    const invalidHowAreYou: any = {
+      howAreYou: 123,
+      stressSignals: {
+        tired: 'Low',
+        sleep: 'Normal',
+        hunger: 'Low',
+        overeating: 'No',
+        depressed: 'No',
+        pressure: 'Low',
+        anxiety: 'No',
+        attention: 'Normal',
+        anger: 'No',
+        headache: 'No',
+      },
+      date: '2023-12-15',
+      notes: 'Feeling happy today!',
+    };
+
+    expect(() => moodJournalValidator(invalidHowAreYou)).toThrow();
+  });
+
+  it('should throw errors for invalid stressSignals', () => {
+    const invalidStressSignals: any = {
+      howAreYou: 'Feeling good',
+      stressSignals: 'Invalid',
+      date: '2023-12-15',
+      notes: 'Feeling happy today!',
+    };
+
+    expect(() => moodJournalValidator(invalidStressSignals)).toThrow();
+  });
+
+  it('should throw errors for invalid date', () => {
+    const invalidDate: any = {
+      howAreYou: 'Feeling good',
+      stressSignals: {
+        tired: 'Low',
+        sleep: 'Normal',
+        hunger: 'Low',
+        overeating: 'No',
+        depressed: 'No',
+        pressure: 'Low',
+        anxiety: 'No',
+        attention: 'Normal',
+        anger: 'No',
+        headache: 'No',
+      },
+      date: 123,
+      notes: 'Feeling happy today!',
+    };
+
+    expect(() => moodJournalValidator(invalidDate)).toThrow();
+  });
+
+  it('should throw errors for invalid notes', () => {
+    const invalidNotes: any = {
+      howAreYou: 'Feeling good',
+      stressSignals: {
+        tired: 'Low',
+        sleep: 'Normal',
+        hunger: 'Low',
+        overeating: 'No',
+        depressed: 'No',
+        pressure: 'Low',
+        anxiety: 'No',
+        attention: 'Normal',
+        anger: 'No',
+        headache: 'No',
+      },
+      date: '2023-12-15',
+      notes: 123,
+    };
+
+    expect(() => moodJournalValidator(invalidNotes)).toThrow();
+  });
+});
+
+describe('Weight Journal Validator', () => {
+  it('should validate a valid weight journal attributes object', () => {
+    const validWeightJournal: any = {
+      date: '2023-12-15', // Replace with a valid date string
+      time: '14:30', // Replace with a valid time string
+      weight: 70, // Replace with a valid weight value
+      height: 175, // Replace with a valid height value
+      unit: 'kg', // Replace with a valid unit value
+      notes: 'Maintaining weight well.',
+    };
+
+    expect(() => weightJournalValidator(validWeightJournal)).not.toThrow();
+  });
+
+  it('should throw errors for invalid date', () => {
+    const invalidDate: any = {
+      date: 123, // Invalid date format
+      time: '14:30', // Replace with a valid time string
+      weight: 70,
+      height: 175,
+      unit: 'kg',
+      notes: 'Maintaining weight well.',
+    };
+
+    expect(() => weightJournalValidator(invalidDate)).toThrow();
+  });
+
+  it('should throw errors for invalid time', () => {
+    const invalidTime: any = {
+      date: '2023-12-15', // Replace with a valid date string
+      time: 123, // Invalid time type
+      weight: 70,
+      height: 175,
+      unit: 'kg',
+      notes: 'Maintaining weight well.',
+    };
+
+    expect(() => weightJournalValidator(invalidTime)).toThrow();
+  });
+
+  it('should throw errors for invalid weight', () => {
+    const invalidWeight: any = {
+      date: '2023-12-15', // Replace with a valid date string
+      time: '14:30', // Replace with a valid time string
+      weight: 'InvalidWeight', // Invalid weight type
+      height: 175,
+      unit: 'kg',
+      notes: 'Maintaining weight well.',
+    };
+
+    expect(() => weightJournalValidator(invalidWeight)).toThrow();
+  });
+
+  it('should throw errors for invalid height', () => {
+    const invalidHeight: any = {
+      date: '2023-12-15', // Replace with a valid date string
+      time: '14:30', // Replace with a valid time string
+      weight: 70,
+      height: 'InvalidHeight', // Invalid height type
+      unit: 'kg',
+      notes: 'Maintaining weight well.',
+    };
+
+    expect(() => weightJournalValidator(invalidHeight)).toThrow();
+  });
+
+  it('should throw errors for invalid unit', () => {
+    const invalidUnit: any = {
+      date: '2023-12-15', // Replace with a valid date string
+      time: '14:30', // Replace with a valid time string
+      weight: 70,
+      height: 175,
+      unit: 123, // Invalid unit type
+      notes: 'Maintaining weight well.',
+    };
+
+    expect(() => weightJournalValidator(invalidUnit)).toThrow();
+  });
+
+  it('should throw errors for invalid notes', () => {
+    const invalidNotes: any = {
+      date: '2023-12-15', // Replace with a valid date string
+      time: '14:30', // Replace with a valid time string
+      weight: 70,
+      height: 175,
+      unit: 'kg',
+      notes: 123, // Invalid notes type
+    };
+
+    expect(() => weightJournalValidator(invalidNotes)).toThrow();
+  });
+
+  // Add more test cases as needed to cover other scenarios
+});
