@@ -13,6 +13,7 @@ import Header from '@/app/components/Header';
 import Menu from '@/app/components/Menu';
 import { formatDateYearMonthDate } from '@/app/helpers/utils/datetimeformat';
 import Custom403 from '@/app/pages/403';
+import {useProp} from '../../../contexts/PropContext';  
 
 
 export default function EditFoodJournal({params: { foodJournal } } : { params: { foodJournal: string } }) {
@@ -21,7 +22,8 @@ export default function EditFoodJournal({params: { foodJournal } } : { params: {
   const router = useRouter();
   const [food, setfood] = useState<any>(null);
   const { userInfo } = useUser();
-  
+  const { handlePopUp} = useProp();
+
   async function fetchFoodJournal() {
     try {
       const userId = user?.uid || '';
@@ -29,7 +31,8 @@ export default function EditFoodJournal({params: { foodJournal } } : { params: {
       logger.info('Food journal entry retrieved:', result);
       setfood(result.data);
     } catch (error) {
-      logger.error('Error retrieving Food journal entry:', error);
+      handlePopUp('error', "Error retrieving Food journal entry:");
+
     }
   }
   
@@ -76,7 +79,8 @@ export default function EditFoodJournal({params: { foodJournal } } : { params: {
         logger.info('Food journal entry updated:', result);
         router.push(`/getFoodJournals/${foodJournal}`)
       } catch (error) {
-        logger.error('Error updating Food journal entry:', error);
+        handlePopUp('error', "Error updating Food journal entry:");
+
       }
     },
   });

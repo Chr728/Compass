@@ -7,11 +7,13 @@ import { createMedication } from '../http/medicationAPI';
 import { useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import Custom403 from '../pages/403';
+import {useProp} from '../contexts/PropContext';  
 
 export default function CreateMedicationPage() {
     const logger = require('../../logger');
     const router = useRouter();
     const user = useAuth();
+    const { handlePopUp} = useProp();
 
     useEffect(() => {
         if (!user){
@@ -50,7 +52,8 @@ export default function CreateMedicationPage() {
                 logger.info('Medication entry created:', result);
                 router.push('/getMedications');
             } catch (error) {
-                logger.error('Error creating medication entry:', error);
+                handlePopUp('error', "Error creating medication entry:");
+
             }
 
         },

@@ -6,12 +6,14 @@ import { useRouter } from 'next/navigation';
 import { createFoodIntakeJournal } from '../http/foodJournalAPI'; 
 import Header from '../components/Header';
 import { useAuth } from '../contexts/AuthContext';
+import {useProp} from '../contexts/PropContext';  
 
 export default function CreateFoodJournalPage() {
   const logger = require('../../logger');
   const router = useRouter();
   const { user } = useAuth();
-  
+    const { handlePopUp} = useProp();
+
   const formik = useFormik({
     initialValues: {
       date: '', // Initialize the form fields with empty values
@@ -36,7 +38,7 @@ export default function CreateFoodJournalPage() {
         const result = await createFoodIntakeJournal(data); 
         router.push('/getFoodJournals');
       } catch (error) {
-        logger.error('Error creating food journal entry:', error);
+       handlePopUp('error', "Error creating food journal entry:");
       }
     },
   });

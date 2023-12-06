@@ -13,6 +13,7 @@ import Header from '@/app/components/Header';
 import Menu from '@/app/components/Menu';
 import { formatDateYearMonthDate } from '@/app/helpers/utils/datetimeformat';
 import Custom403 from '@/app/pages/403';
+import {useProp} from '../../../../contexts/PropContext';  
 
 
 export default function EditGlucoseJournal({params: { glucoseJournal } } : { params: { glucoseJournal: string } }) {
@@ -21,7 +22,8 @@ export default function EditGlucoseJournal({params: { glucoseJournal } } : { par
   const router = useRouter();
   const [glucose, setglucose] = useState<any>(null);
   const { userInfo } = useUser();
-  
+  const { handlePopUp} = useProp();
+
   async function fetchGlucoseJournal() {
     try {
       const userId = user?.uid || '';
@@ -29,7 +31,8 @@ export default function EditGlucoseJournal({params: { glucoseJournal } } : { par
       logger.info('Glucose journal entry retrieved:', result);
       setglucose(result.data);
     } catch (error) {
-      logger.error('Error retrieving glucose journal entry:', error);
+      handlePopUp('error', "Error retrieving glucose journal entry:");
+
     }
   }
   
@@ -72,7 +75,8 @@ export default function EditGlucoseJournal({params: { glucoseJournal } } : { par
         const result = await updateGlucoseJournal(glucoseJournal, data); 
         logger.info('Glucose journal entry updated:', result);
       } catch (error) {
-        logger.error('Error updating glucose journal entry:', error);
+        handlePopUp('error', "Error updating glucose journal entry:");
+
       }
     },
   });

@@ -13,6 +13,7 @@ import Header from '@/app/components/Header';
 import Menu from '@/app/components/Menu';
 import Custom403 from '@/app/pages/403';
 import { formatDateYearMonthDate } from '@/app/helpers/utils/datetimeformat';
+import {useProp} from '../../../contexts/PropContext';  
 
 
 
@@ -23,6 +24,7 @@ export default function EditActivityJournal({params: { activityJournal } } : { p
   const router = useRouter();
   const [activity, setactivity] = useState<any>(null);
   const { userInfo } = useUser();
+  const { handlePopUp} = useProp();
 
   async function fetchActivityJournal() {
     try {
@@ -31,7 +33,8 @@ export default function EditActivityJournal({params: { activityJournal } } : { p
       logger.info('activity journal entry retrieved:', result);
       setactivity(result.data);
     } catch (error) {
-      logger.error('Error retrieving activity journal entry:', error);
+      handlePopUp('error', "Error retrieving activity journal entry:");
+
     }
   }
 
@@ -76,7 +79,8 @@ export default function EditActivityJournal({params: { activityJournal } } : { p
         logger.info('activity journal entry updated:', result);
         router.push(`/getActivityJournals/${activityJournal}`)
       } catch (error) {
-        logger.error('Error updating activity journal entry:', error);
+        handlePopUp('error', "Error updating activity journal entry:");
+
       }
     },
   });

@@ -13,6 +13,7 @@ import Header from '@/app/components/Header';
 import Menu from '@/app/components/Menu';
 import { formatDateYearMonthDate } from '@/app/helpers/utils/datetimeformat';
 import Custom403 from '@/app/pages/403';
+import {useProp} from '../../../contexts/PropContext';  
 
 
 export default function EditWeightJournal({params: { weightJournal } } : { params: { weightJournal: string } }) {
@@ -21,7 +22,8 @@ export default function EditWeightJournal({params: { weightJournal } } : { param
   const router = useRouter();
   const [weight, setweight] = useState<any>(null);
   const { userInfo } = useUser();
-  
+  const { handlePopUp} = useProp();
+
   async function fetchWeightJournal() {
     try {
       const userId = user?.uid || '';
@@ -29,7 +31,8 @@ export default function EditWeightJournal({params: { weightJournal } } : { param
       logger.info('Weight journal entry retrieved:', result);
       setweight(result.data);
     } catch (error) {
-      logger.error('Error retrieving weight journal entry:', error);
+      handlePopUp('error', "Error retrieving weight journal entry:");
+
     }
   }
   
@@ -75,7 +78,8 @@ export default function EditWeightJournal({params: { weightJournal } } : { param
         logger.info('Weight journal entry updated:', result);
         router.push(`/getWeightJournals/${weightJournal}`)
       } catch (error) {
-        logger.error('Error updating weight journal entry:', error);
+        handlePopUp('error', "Error updating weight journal entry:");
+
       }
     },
   });

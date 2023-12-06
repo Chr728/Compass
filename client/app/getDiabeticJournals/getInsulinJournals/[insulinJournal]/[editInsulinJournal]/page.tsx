@@ -13,6 +13,7 @@ import Header from '@/app/components/Header';
 import Menu from '@/app/components/Menu';
 import Custom403 from '@/app/pages/403';
 import { formatDateYearMonthDate } from '@/app/helpers/utils/datetimeformat';
+import {useProp} from '../../../../contexts/PropContext';  
 
 
 
@@ -23,6 +24,7 @@ export default function EditInsulinJournal({params: { insulinJournal } } : { par
   const router = useRouter();
   const [insulin, setinsulin] = useState<any>(null);
   const { userInfo } = useUser();
+  const { handlePopUp} = useProp();
 
   async function fetchInsulinJournal() {
     try {
@@ -31,7 +33,8 @@ export default function EditInsulinJournal({params: { insulinJournal } } : { par
       logger.info('Insulin journal entry retrieved:', result);
       setinsulin(result.data);
     } catch (error) {
-      logger.error('Error retrieving Insulin journal entry:', error);
+      handlePopUp('error', "Error retrieving Insulin journal entry:");
+
     }
   }
 
@@ -77,7 +80,8 @@ export default function EditInsulinJournal({params: { insulinJournal } } : { par
         const result = await updateInsulinJournal(insulinJournal, data); 
         logger.info('Insulin journal entry updated:', result);
       } catch (error) {
-        logger.error('Error updating Insulin journal entry:', error);
+        handlePopUp('error', "Error updating Insulin journal entry:");
+
       }
     },
   });

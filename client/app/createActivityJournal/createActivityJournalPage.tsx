@@ -6,13 +6,14 @@ import { useRouter } from 'next/navigation';
 import { createActivityJournal } from '../http/activityJournalAPI'; 
 import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/Header';
+import {useProp} from '../contexts/PropContext';  
 
 export default function CreateActivityJournalPage() {
   const logger = require('../../logger');
-
   const router = useRouter();
-  const { user } = useAuth();
-  
+  const { user} = useAuth();
+  const { handlePopUp} = useProp();
+
   const formik = useFormik({
     initialValues: {
       date: '', 
@@ -36,7 +37,7 @@ export default function CreateActivityJournalPage() {
         const result = await createActivityJournal(data); 
         router.push('/getActivityJournals');
       } catch (error) {
-        logger.error('Error creating activity journal entry:', error);
+        handlePopUp('error', "Error creating activity journal entry:");
       }
     },
   });

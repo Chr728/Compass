@@ -9,19 +9,22 @@ import Custom403 from '@/app/pages/403';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
+import {useProp} from '../../../contexts/PropContext';  
 
 export default function EditMedication( { params: { medication} } : { params : { medication: string}} ) {
     const logger = require('../../../../logger');
     const router = useRouter();
     const { user } = useAuth();
     const [data, setData] = useState<any>();
+    const { handlePopUp} = useProp();
 
     async function editMedication() {
         try {  
            const medicationData = await getMedication(medication);
            setData(medicationData.data);
         } catch (error) {
-            logger.error('Error fetching mood data');
+            handlePopUp('error', "Error fetching medication data");
+
         }
     }
 
@@ -66,7 +69,8 @@ export default function EditMedication( { params: { medication} } : { params : {
                 logger.info('Medication entry created:', result);
                 router.push(`/getMedications/${medication}`);
             } catch (error) {
-                logger.error('Error creating medication entry:', error);
+              handlePopUp('error', "Error editing medication entry:");
+
             }
 
         },

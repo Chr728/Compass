@@ -10,12 +10,14 @@ import { useAuth } from '../contexts/AuthContext';
 import { useUser } from '../contexts/UserContext';
 import { useEffect, useState } from 'react';
 import Header from '../components/Header';
+import {useProp} from '../contexts/PropContext';  
 
 export default function CreateInsulinJournalPage() {
   const logger = require('../../logger');
   const router = useRouter();
   const { user } = useAuth();
   const { userInfo } = useUser();
+    const { handlePopUp} = useProp();
 
   useEffect(() => {
     if (!userInfo) {
@@ -49,7 +51,8 @@ export default function CreateInsulinJournalPage() {
         logger.info('Insulin journal entry created:', result);
         router.push('/getDiabeticJournals');
       } catch (error) {
-        logger.error('Error creating Insulin journal entry:', error);
+        handlePopUp('error', "Error creating Insulin journal entry:");
+
       }
     },
   });

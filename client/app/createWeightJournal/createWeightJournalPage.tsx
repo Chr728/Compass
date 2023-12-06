@@ -11,12 +11,14 @@ import { useUser } from '../contexts/UserContext';
 import { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Menu from '../components/Menu';
+import {useProp} from '../contexts/PropContext';  
 
 export default function CreateWeightJournalPage() {
   const logger = require('../../logger');
   const router = useRouter();
   const { user } = useAuth();
-  
+  const { handlePopUp} = useProp();
+
   const formik = useFormik({
     initialValues: {
       date: '', // Initialize the form fields with empty values
@@ -43,7 +45,7 @@ export default function CreateWeightJournalPage() {
         logger.info('Weight journal entry created:', result);
         router.push('/getWeightJournals');
       } catch (error) {
-        logger.error('Error creating weight journal entry:', error);
+        handlePopUp('error', "Error creating weight journal entry:");
       }
     },
   });
