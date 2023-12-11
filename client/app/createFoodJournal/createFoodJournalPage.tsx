@@ -1,12 +1,12 @@
 'use client';
-import Button from '../components/Button';
-import Input from '../components/Input';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { createFoodIntakeJournal } from '../http/foodJournalAPI'; 
+import Button from '../components/Button';
 import Header from '../components/Header';
+import Input from '../components/Input';
 import { useAuth } from '../contexts/AuthContext';
-import {useProp} from '../contexts/PropContext';  
+import { useProp } from '../contexts/PropContext';
+import { createFoodIntakeJournal } from '../http/foodJournalAPI';
 
 export default function CreateFoodJournalPage() {
   const logger = require('../../logger');
@@ -183,10 +183,6 @@ export default function CreateFoodJournalPage() {
       <p className="text-red text-[14px]">This field can't be left empty.</p>
     )}
   </div>
-
-
-
-
       <div className="mt-3">
         <label
           htmlFor="servingNumber"

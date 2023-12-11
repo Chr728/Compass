@@ -1,9 +1,9 @@
-interface x {
+interface entryprops {
     label: string;
     value: string;
 }
 
-const result = ( props: x ): JSX.Element => {
+const result = ( props: entryprops ): JSX.Element => {
     return (
         <>
             <p
