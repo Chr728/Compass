@@ -1,19 +1,17 @@
 'use client';
-import Image from 'next/image';
-import Button from '../../../components/Button';
-import Input from '../../../components/Input';
-import Link from 'next/link';
-import { useFormik } from 'formik';
-import { useRouter } from 'next/navigation';
-import { createWeightJournal, getWeightJournal, getWeightJournals, updateWeightJournal } from '../../../http/weightJournalAPI'; // Replace '../api/yourApiFile' with the correct path
-import { useAuth } from '../../../contexts/AuthContext';
-import { useUser } from '../../../contexts/UserContext';
-import { useEffect, useState } from 'react';
+import FormLabel from '@/app/components/FormLabel';
 import Header from '@/app/components/Header';
-import Menu from '@/app/components/Menu';
 import { formatDateYearMonthDate } from '@/app/helpers/utils/datetimeformat';
 import Custom403 from '@/app/pages/403';
-import {useProp} from '../../../contexts/PropContext';  
+import { useFormik } from 'formik';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import Button from '../../../components/Button';
+import Input from '../../../components/Input';
+import { useAuth } from '../../../contexts/AuthContext';
+import { useProp } from '../../../contexts/PropContext';
+import { useUser } from '../../../contexts/UserContext';
+import { getWeightJournal, updateWeightJournal } from '../../../http/weightJournalAPI'; // Replace '../api/yourApiFile' with the correct path
 
 
 export default function EditWeightJournal({params: { weightJournal } } : { params: { weightJournal: string } }) {
@@ -110,15 +108,8 @@ return (
     className="rounded-3xl bg-white flex flex-col mb-8 w-full md:max-w-[800px] md:min-h-[550px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
     onSubmit={formik.handleSubmit}
   >
-    <div className="mt-3 mb-3">
-      <label
-        htmlFor="date"
-        className="font-sans font-medium text-grey text-[16px]"
-      >
-        Date
-      </label>
-      <span className="text-red text-[20px]"> *</span>
-      <br />
+  <div className="mt-3 mb-3">
+  <FormLabel htmlFor={ 'date' } label={'Date'}></FormLabel>                                            
       <Input 
   name="date"
   id="date"
@@ -133,15 +124,8 @@ return (
       <p className="text-red text-[14px]">This field can't be left empty.</p>
     )}      </div>
 
-    <div className="mt-3">
-      <label
-        htmlFor="time"
-        className="font-sans font-medium text-grey text-[16px]"
-      >
-        Time
-      </label>
-      <span className="text-red text-[20px]"> *</span>
-      <br />
+  <div className="mt-3">
+  <FormLabel htmlFor={ 'time' } label={'Time'}></FormLabel>                                            
       <Input
   name="time"
   id="time"
@@ -157,15 +141,8 @@ return (
     </div>
 
     <div className="flex">
-<div className="mt-3">
-  <label
-    htmlFor="weight"
-    className="font-sans font-medium text-grey text-[16px]"
-  >
-    Weight
-  </label>
-  <span className="text-red text-[20px]"> *</span>
-  <br />
+    <div className="mt-3">
+  <FormLabel htmlFor={ 'weight' } label={'Weight'}></FormLabel>                                            
   <Input
     name="weight"
     id="weight"
@@ -193,15 +170,8 @@ return (
 style={{
   width: '50%',
 }}
->
-  <label
-    htmlFor="unit"
-    className="font-sans font-medium text-grey text-[16px]"
-  >
-    Unit
-  </label>
-  <span className="text-red text-[20px]"> *</span>
-  <br />
+        >
+  <FormLabel htmlFor={ 'unit' } label={'Unit'}></FormLabel>                                            
   <select
     className="text-darkgrey"
     name="unit"
@@ -238,15 +208,8 @@ style={{
   )}
 </div>
 </div>
-    <div className="mt-3">
-      <label
-        htmlFor="height"
-        className="font-sans font-medium text-grey text-[16px]"
-      >
-        Height (in centimeters)
-      </label>
-      <span className="text-red text-[20px]"> *</span>
-      <br />
+      <div className="mt-3">
+  <FormLabel htmlFor={ 'height' } label={'Height (in centimeters)'}></FormLabel>                                            
       <Input
         name="height"
         id="height"
