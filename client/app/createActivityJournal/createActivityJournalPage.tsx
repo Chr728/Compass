@@ -1,4 +1,5 @@
 'use client';
+import FormLabel from '@/app/components/FormLabel';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
 import Button from '../components/Button';
@@ -50,15 +51,8 @@ export default function CreateActivityJournalPage() {
       className="rounded-3xl bg-white flex flex-col mb-8 w-full md:max-w-[800px] md:min-h-[550px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
       onSubmit={formik.handleSubmit}
       >
-      <div className="mt-3 mb-3">
-        <label
-          htmlFor="date"
-          className="font-sans font-medium text-grey text-[16px]"
-        >
-          Date
-        </label>
-        <span className="text-red text-[20px]"> *</span>
-        <br />
+        <div className="mt-3 mb-3">
+        <FormLabel htmlFor={ 'date' } label={'Date'}></FormLabel>
         <Input 
     name="date"
     id="date"
@@ -72,15 +66,8 @@ export default function CreateActivityJournalPage() {
 {formik.touched.date && !formik.values.date && (
         <p className="text-red text-[14px]">This field can't be left empty.</p>
       )}      </div>
-  <div className="mt-3">
-        <label
-          htmlFor="time"
-          className="font-sans font-medium text-grey text-[16px]"
-        >
-          Time  
-          </label>
-        <span className="text-red text-[20px]"> *</span>
-        <br />
+        <div className="mt-3">
+        <FormLabel htmlFor={ 'time' } label={'Time'}></FormLabel>
         <Input
     name="time"
     id="time"
@@ -96,15 +83,8 @@ export default function CreateActivityJournalPage() {
       </div>
 
 <div className="flex">
-  <div className="mt-3">
-    <label
-      htmlFor="activity"
-      className="font-sans font-medium text-grey text-[16px]"
-    >
-      Activity
-    </label>
-    <span className="text-red text-[20px]"> *</span>
-    <br />
+    <div className="mt-3">
+    <FormLabel htmlFor={ 'activity' } label={'Activity'}></FormLabel>
     <Input
       name="activity"
       id="activity"
@@ -125,15 +105,8 @@ export default function CreateActivityJournalPage() {
   </div>
 
   </div>
-      <div className="mt-3">
-        <label
-          htmlFor="duration"
-          className="font-sans font-medium text-grey text-[16px]"
-        >
-          Duration (in minutes)
-        </label>
-        <span className="text-red text-[20px]"> *</span>
-        <br />
+        <div className="mt-3">
+        <FormLabel htmlFor={ 'duration' } label={'Duration (in minutes)'}></FormLabel>
         <Input
           name="duration"
           id="duration"
@@ -157,7 +130,7 @@ export default function CreateActivityJournalPage() {
   )}
       
       </div>
-      <div className="mt-3">
+        <div className="mt-3">
                 <label
                   htmlFor="notes"
                   className="font-sans font-medium text-grey text-[16px]"

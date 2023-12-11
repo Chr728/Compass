@@ -3,6 +3,7 @@ import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import Button from '../components/Button';
+import FormLabel from '../components/FormLabel';
 import Header from '../components/Header';
 import Input from '../components/Input';
 import { useProp } from '../contexts/PropContext';
@@ -64,15 +65,7 @@ export default function CreateInsulinJournalPage() {
       onSubmit={formik.handleSubmit}
     >
         <div className="mt-3 mb-3">
-         
-        <label
-          htmlFor="date"
-          className="font-sans font-medium text-grey text-[16px]"
-        >
-          Date
-               </label>
-        <span className="text-red text-[20px]"> *</span>
-        <br />
+          <FormLabel htmlFor={ 'date' } label={'Date'}></FormLabel>          
         <Input 
     name="date"
     id="date"
@@ -87,15 +80,8 @@ export default function CreateInsulinJournalPage() {
         <p className="text-red text-[14px]">This field can't be left empty.</p>
       )}      </div>
 
-      <div className="mt-3">
-        <label
-          htmlFor="time"
-          className="font-sans font-medium text-grey text-[16px]"
-        >
-         Time
-        </label>
-        <span className="text-red text-[20px]"> *</span>
-        <br />
+        <div className="mt-3">
+        <FormLabel htmlFor={ 'time' } label={'Time'}></FormLabel>          
         <Input
     name="time"
     id="time"
@@ -109,18 +95,9 @@ export default function CreateInsulinJournalPage() {
         <p className="text-red text-[14px]">This field can't be left empty.</p>
       )}      
         </div>
-        
-
     <div className="flex">
-<div className="mt-3">
-  <label
-    htmlFor="typeOfInsulin"
-    className="font-sans font-medium text-grey text-[16px]"
-  >
-  Type of Insulin  
-  </label>
-  <span className="text-red text-[20px]"> *</span>
-  <br />
+  <div className="mt-3">
+          <FormLabel htmlFor={ 'typeOfInsulin' } label={'Type of Insulin'}></FormLabel>          
        <select
             className="text-darkgrey"
           
@@ -193,15 +170,8 @@ export default function CreateInsulinJournalPage() {
 </div>
 </div>
 
-    <div className="mt-3">
-      <label
-        htmlFor="unit"
-        className="font-sans font-medium text-grey text-[16px]"
-      >
-       Units Given
-      </label>
-      <span className="text-red text-[20px]"> *</span>
-      <br />
+<div className="mt-3">
+<FormLabel htmlFor={ 'unit' } label={'Units Given'}></FormLabel>                    
       <Input
         name="unit"
         id="unit"
@@ -229,15 +199,8 @@ export default function CreateInsulinJournalPage() {
 
     
   <div className="flex">
-<div className="mt-3">
-  <label
-    htmlFor="bodySite"
-    className="font-sans font-medium text-grey text-[16px]"
-  >
-   Body Site
-  </label>
-  <span className="text-red text-[20px]"> *</span>
-  <br />
+          <div className="mt-3">
+ <FormLabel htmlFor={ 'bodySite' } label={'Body Site'}></FormLabel>                               
        <select
             className="text-darkgrey"
           
@@ -311,7 +274,7 @@ export default function CreateInsulinJournalPage() {
   )}
 </div>
 </div>
-    <div className="mt-3">
+  <div className="mt-3">        
               <label
                 htmlFor="notes"
                 className="font-sans font-medium text-grey text-[16px]"
@@ -336,9 +299,8 @@ export default function CreateInsulinJournalPage() {
           text="Cancel"
           style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)' }}
           onClick={() => router.push("/getDiabeticJournals")}
-        />
-
-
+            />
+            
         <Button
           type="submit"
           text="Submit"

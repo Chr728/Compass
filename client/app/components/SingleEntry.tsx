@@ -1,6 +1,6 @@
 interface entryprops {
     label: string;
-    value: string;
+    value?: string;
 }
 
 const result = ( props: entryprops ): JSX.Element => {

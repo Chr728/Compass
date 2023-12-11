@@ -2,6 +2,7 @@
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
 import Button from '../components/Button';
+import FormLabel from '../components/FormLabel';
 import Header from '../components/Header';
 import Input from '../components/Input';
 import { useAuth } from '../contexts/AuthContext';
@@ -54,15 +55,8 @@ export default function CreateFoodJournalPage() {
       className="rounded-3xl bg-white flex flex-col mb-8 w-full md:max-w-[800px] md:min-h-[550px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
       onSubmit={formik.handleSubmit}
     >
-      <div className="mt-3 mb-3">
-        <label
-          htmlFor="date"
-          className="font-sans font-medium text-grey text-[16px]"
-        >
-          Date
-        </label>
-        <span className="text-red text-[20px]"> *</span>
-        <br />
+        <div className="mt-3 mb-3">
+        <FormLabel htmlFor={ 'date' } label={'Date'}></FormLabel>
         <Input 
     name="date"
     id="date"
@@ -77,15 +71,8 @@ export default function CreateFoodJournalPage() {
         <p className="text-red text-[14px]">This field can't be left empty.</p>
       )}      </div>
 
-      <div className="mt-3">
-        <label
-          htmlFor="time"
-          className="font-sans font-medium text-grey text-[16px]"
-        >
-          Time
-        </label>
-        <span className="text-red text-[20px]"> *</span>
-        <br />
+        <div className="mt-3">
+        <FormLabel htmlFor={ 'time' } label={'Time'}></FormLabel>
         <Input
     name="time"
     id="time"
@@ -101,15 +88,8 @@ export default function CreateFoodJournalPage() {
       </div>
 
       
-  <div className="mt-3">
-    <label
-      htmlFor="foodName"
-      className="font-sans font-medium text-grey text-[16px]"
-    >
-      Name of Food
-    </label>
-    <span className="text-red text-[20px]"> *</span>
-    <br />
+    <div className="mt-3">
+    <FormLabel htmlFor={ 'foodName' } label={'Name of Food'}></FormLabel>
     <Input
       name="foodName"
       id="foodName"
@@ -130,15 +110,7 @@ export default function CreateFoodJournalPage() {
   </div>
  
   <div className="mt-3" >
-    <label
-      htmlFor="mealType"
-      className="font-sans font-medium text-grey text-[16px]"
-    >
-      Meal Type
-    </label>
-    
-    <span className="text-red text-[20px]"> *</span>
-    <br />
+  <FormLabel htmlFor={ 'mealType' } label={'Meal Type'}></FormLabel>
     <select
       className="text-darkgrey"
       name="mealType"
@@ -183,15 +155,8 @@ export default function CreateFoodJournalPage() {
       <p className="text-red text-[14px]">This field can't be left empty.</p>
     )}
   </div>
-      <div className="mt-3">
-        <label
-          htmlFor="servingNumber"
-          className="font-sans font-medium text-grey text-[16px]"
-        >
-         Number of Servings
-        </label>
-        <span className="text-red text-[20px]"> *</span>
-        <br />
+        <div className="mt-3">
+        <FormLabel htmlFor={ 'servingNumber' } label={'Number of Servings'}></FormLabel>
         <Input
           name="servingNumber"
           id="servingNumber"
@@ -217,7 +182,7 @@ export default function CreateFoodJournalPage() {
   )}
       
       </div>
-      <div className="mt-3">
+        <div className="mt-3">
                 <label
                   htmlFor="notes"
                   className="font-sans font-medium text-grey text-[16px]"
