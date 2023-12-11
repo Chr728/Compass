@@ -1,21 +1,17 @@
 'use client';
-import Image from 'next/image';
 import Button from '../components/Button';
 import Input from '../components/Input';
-import Link from 'next/link';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
 import { createGlucoseJournal } from '../http/diabeticJournalAPI'; 
-import { useAuth } from '../contexts/AuthContext';
 import { useUser } from '../contexts/UserContext';
-import { useEffect, useState } from 'react';
+import { useEffect} from 'react';
 import Header from '../components/Header';
 import {useProp} from '../contexts/PropContext';  
 
 export default function CreateGlucoseJournalPage() {
   const logger = require('../../logger');
   const router = useRouter();
-  const { user } = useAuth();
   const { userInfo } = useUser();
   const { handlePopUp} = useProp();
 
@@ -37,7 +33,6 @@ export default function CreateGlucoseJournalPage() {
 
     onSubmit: async (values) => {
       try {
-        const userId = user?.uid || '';
         const data = {
           date: values.date,
           mealTime: values.mealTime,

@@ -1,17 +1,15 @@
 'use client';
-import Button from '../components/Button';
-import Input from '../components/Input';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { createActivityJournal } from '../http/activityJournalAPI'; 
-import { useAuth } from '../contexts/AuthContext';
+import Button from '../components/Button';
 import Header from '../components/Header';
-import {useProp} from '../contexts/PropContext';  
+import Input from '../components/Input';
+import { useProp } from '../contexts/PropContext';
+import { createActivityJournal } from '../http/activityJournalAPI';
 
 export default function CreateActivityJournalPage() {
   const logger = require('../../logger');
   const router = useRouter();
-  const { user} = useAuth();
   const { handlePopUp} = useProp();
 
   const formik = useFormik({
@@ -26,7 +24,6 @@ export default function CreateActivityJournalPage() {
 
     onSubmit: async (values) => {
       try {
-        const userId = user?.uid || '';
         const data = {
           date: values.date,
           time: values.time,
@@ -42,7 +39,6 @@ export default function CreateActivityJournalPage() {
     },
   });
 
-
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
        <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
@@ -53,7 +49,7 @@ export default function CreateActivityJournalPage() {
       <form
       className="rounded-3xl bg-white flex flex-col mb-8 w-full md:max-w-[800px] md:min-h-[550px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
       onSubmit={formik.handleSubmit}
-    >
+      >
       <div className="mt-3 mb-3">
         <label
           htmlFor="date"
@@ -76,14 +72,13 @@ export default function CreateActivityJournalPage() {
 {formik.touched.date && !formik.values.date && (
         <p className="text-red text-[14px]">This field can't be left empty.</p>
       )}      </div>
-
-      <div className="mt-3">
+  <div className="mt-3">
         <label
           htmlFor="time"
           className="font-sans font-medium text-grey text-[16px]"
         >
-          Time
-        </label>
+          Time  
+          </label>
         <span className="text-red text-[20px]"> *</span>
         <br />
         <Input
@@ -100,7 +95,7 @@ export default function CreateActivityJournalPage() {
       )}      
       </div>
 
-      <div className="flex">
+<div className="flex">
   <div className="mt-3">
     <label
       htmlFor="activity"
@@ -130,8 +125,6 @@ export default function CreateActivityJournalPage() {
   </div>
 
   </div>
-
-
       <div className="mt-3">
         <label
           htmlFor="duration"

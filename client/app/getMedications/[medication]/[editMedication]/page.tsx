@@ -8,8 +8,8 @@ import { getMedication, updateMedication } from '@/app/http/medicationAPI';
 import Custom403 from '@/app/pages/403';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react'
-import {useProp} from '../../../contexts/PropContext';  
+import { useEffect, useState } from 'react';
+import { useProp } from '../../../contexts/PropContext';
 
 export default function EditMedication( { params: { medication} } : { params : { medication: string}} ) {
     const logger = require('../../../../logger');
@@ -22,8 +22,9 @@ export default function EditMedication( { params: { medication} } : { params : {
         try {  
            const medicationData = await getMedication(medication);
            setData(medicationData.data);
-        } catch (error) {
-            handlePopUp('error', "Error fetching medication data");
+        } catch ( error ) {
+             logger.error('Error fetching medication data:', error);
+            // handlePopUp('error', "Error fetching medication data");
 
         }
     }
@@ -235,7 +236,7 @@ export default function EditMedication( { params: { medication} } : { params : {
                         className="font-sans font-medium text-grey text-[16px]"
                         >
                         <span className="text-red text-[20px]"> *</span>
-                        Dosage
+                        Dosage        
                         </label>
                         <br />
                         <Input

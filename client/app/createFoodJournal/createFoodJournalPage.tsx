@@ -26,7 +26,6 @@ export default function CreateFoodJournalPage() {
 
     onSubmit: async (values) => {
       try {
-        const userId = user?.uid || '';
         const data = {
           date: values.date,
           time: values.time,

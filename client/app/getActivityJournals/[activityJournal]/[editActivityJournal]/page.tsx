@@ -1,34 +1,25 @@
 'use client';
-import Image from 'next/image';
-import Button from '../../../components/Button';
-import Input from '../../../components/Input';
-import Link from 'next/link';
+import Header from '@/app/components/Header';
+import { formatDateYearMonthDate } from '@/app/helpers/utils/datetimeformat';
+import Custom403 from '@/app/pages/403';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { createActivityJournal, getActivityJournal, getActivityJournals, updateActivityJournal } from '../../../http/activityJournalAPI'; // Replace '../api/yourApiFile' with the correct path
-import { useAuth } from '../../../contexts/AuthContext';
-import { useUser } from '../../../contexts/UserContext';
 import { useEffect, useState } from 'react';
-import Header from '@/app/components/Header';
-import Menu from '@/app/components/Menu';
-import Custom403 from '@/app/pages/403';
-import { formatDateYearMonthDate } from '@/app/helpers/utils/datetimeformat';
-import {useProp} from '../../../contexts/PropContext';  
-
-
-
+import Button from '../../../components/Button';
+import Input from '../../../components/Input';
+import { useAuth } from '../../../contexts/AuthContext';
+import { useProp } from '../../../contexts/PropContext';
+import { getActivityJournal, updateActivityJournal } from '../../../http/activityJournalAPI';
 
 export default function EditActivityJournal({params: { activityJournal } } : { params: { activityJournal: string } }) {
   const logger = require('../../../../logger');
   const { user } = useAuth();
   const router = useRouter();
   const [activity, setactivity] = useState<any>(null);
-  const { userInfo } = useUser();
   const { handlePopUp} = useProp();
 
   async function fetchActivityJournal() {
     try {
-      const userId = user?.uid || '';
       const result = await getActivityJournal(activityJournal);
       logger.info('activity journal entry retrieved:', result);
       setactivity(result.data);
@@ -67,7 +58,6 @@ export default function EditActivityJournal({params: { activityJournal } } : { p
 
     onSubmit: async (values) => {
       try {
-        const userId = user?.uid || '';
         const data = {
           date: values.date,
           time: values.time,

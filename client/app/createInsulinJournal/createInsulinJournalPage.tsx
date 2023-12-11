@@ -1,21 +1,17 @@
 'use client';
-import Image from 'next/image';
-import Button from '../components/Button';
-import Input from '../components/Input';
-import Link from 'next/link';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { createInsulinJournal } from '../http/diabeticJournalAPI'; 
-import { useAuth } from '../contexts/AuthContext';
-import { useUser } from '../contexts/UserContext';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import Button from '../components/Button';
 import Header from '../components/Header';
-import {useProp} from '../contexts/PropContext';  
+import Input from '../components/Input';
+import { useProp } from '../contexts/PropContext';
+import { useUser } from '../contexts/UserContext';
+import { createInsulinJournal } from '../http/diabeticJournalAPI';
 
 export default function CreateInsulinJournalPage() {
   const logger = require('../../logger');
   const router = useRouter();
-  const { user } = useAuth();
   const { userInfo } = useUser();
     const { handlePopUp} = useProp();
 
@@ -25,7 +21,6 @@ export default function CreateInsulinJournalPage() {
     } 
   }, [userInfo, router]);
 
-  
   const formik = useFormik({
     initialValues: {
       date: '', // Initialize the form fields with empty values
@@ -38,7 +33,6 @@ export default function CreateInsulinJournalPage() {
 
     onSubmit: async (values) => {
       try {
-        const userId = user?.uid || '';
         const data = {
           date: values.date,
            time: values.time,
@@ -64,18 +58,19 @@ export default function CreateInsulinJournalPage() {
               <button onClick={() => router.push('/getDiabeticJournals')}>
               <Header headerText="Create Insulin Dosage"></Header>
               </button>
-              </span>
-      <form
+</span>  
+    <form
       className="rounded-3xl bg-white flex flex-col mb-8 w-full md:max-w-[800px] md:min-h-[550px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
       onSubmit={formik.handleSubmit}
     >
-      <div className="mt-3 mb-3">
+        <div className="mt-3 mb-3">
+         
         <label
           htmlFor="date"
           className="font-sans font-medium text-grey text-[16px]"
         >
           Date
-        </label>
+               </label>
         <span className="text-red text-[20px]"> *</span>
         <br />
         <Input 
@@ -122,7 +117,7 @@ export default function CreateInsulinJournalPage() {
     htmlFor="typeOfInsulin"
     className="font-sans font-medium text-grey text-[16px]"
   >
-   Type of Insulin
+  Type of Insulin  
   </label>
   <span className="text-red text-[20px]"> *</span>
   <br />
@@ -233,7 +228,7 @@ export default function CreateInsulinJournalPage() {
     </div>
 
     
-   <div className="flex">
+  <div className="flex">
 <div className="mt-3">
   <label
     htmlFor="bodySite"

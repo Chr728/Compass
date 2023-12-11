@@ -1,8 +1,8 @@
-import {render, screen, act} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { getActivityJournal } from '../../../http/activityJournalAPI';
 import EditActivityJournal from './page';
-import {getActivityJournal, updateActivityJournal} from '../../../http/activityJournalAPI';
 
 const mockRouter = jest.fn();
 jest.mock("next/navigation", () => ({

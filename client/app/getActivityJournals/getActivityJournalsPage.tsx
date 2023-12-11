@@ -1,19 +1,14 @@
 'use client';
-import Image from 'next/image';
-import Button from '../components/Button';
-import Input from '../components/Input';
-import Link from 'next/link';
-import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { deleteActivityJournal, getActivityJournal, getActivityJournals} from '../http/activityJournalAPI'; 
+import { useEffect, useState } from 'react';
+import { MdDeleteForever, MdKeyboardArrowDown } from 'react-icons/md';
+import Swal from 'sweetalert2';
+import Button from '../components/Button';
+import Header from '../components/Header';
 import { useAuth } from '../contexts/AuthContext';
 import { useUser } from '../contexts/UserContext';
-import { useEffect, useState } from 'react';
-import { MdDeleteForever, MdInfoOutline, MdKeyboardArrowDown } from 'react-icons/md';
-import Header from '../components/Header';
-import Menu from '../components/Menu';
 import { formatDate } from '../helpers/utils/datetimeformat';
-import Swal from 'sweetalert2';
+import { deleteActivityJournal, getActivityJournals } from '../http/activityJournalAPI';
 
 export default function GetActivityJournalsPage() {
   const logger = require('../../logger');
@@ -33,7 +28,6 @@ export default function GetActivityJournalsPage() {
   useEffect(() => {
     async function fetchActivityJournals() {
       try {
-        const userId = user?.uid || '';
         const result = await getActivityJournals();    
         logger.info('All Activity journals entry retrieved:', result);
         setactivity(result.data);
