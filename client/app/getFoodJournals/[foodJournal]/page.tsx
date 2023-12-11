@@ -61,8 +61,8 @@ export default function GetFoodJournal({params: { foodJournal } } : { params: { 
     <SingleEntry label={ 'Name of Food:' } value={food.foodName}></SingleEntry>
     <SingleEntry label={ 'Meal Type:' } value={ food.mealType}></SingleEntry>
     <SingleEntry label={ 'Number of Servings:' } value={ food.servingNumber}></SingleEntry>
-    <SingleEntry label={ 'Notes:' } value={ food.notes }></SingleEntry>  
-   </div>
+    <SingleEntry label={ 'Notes:' } value={ food.notes }></SingleEntry>      
+    </div>
     <div className='mt-10 pb-4 self-center'>
     <Button type="button" text="Edit"style={{ width: '140px' }} onClick={() => router.push(`/getFoodJournals/${foodJournal}/${foodJournal}`)} />
     <Button
