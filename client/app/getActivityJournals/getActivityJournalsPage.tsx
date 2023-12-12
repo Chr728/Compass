@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import Button from '../components/Button';
 import Header from '../components/Header';
 import { useAuth } from '../contexts/AuthContext';
+import { useProp } from '../contexts/PropContext';
 import { useUser } from '../contexts/UserContext';
 import { formatDate } from '../helpers/utils/datetimeformat';
 import { deleteActivityJournal, getActivityJournals } from '../http/activityJournalAPI';
@@ -16,7 +17,8 @@ export default function GetActivityJournalsPage() {
   const { user } = useAuth();
   const { userInfo } = useUser();
   const [activity, setactivity] = useState<any>(null);
-  
+      const { handlePopUp} = useProp();
+
   useEffect(() => {
     if (!userInfo) {
       logger.warn('User not found.')
@@ -31,8 +33,8 @@ export default function GetActivityJournalsPage() {
         const result = await getActivityJournals();    
         logger.info('All Activity journals entry retrieved:', result);
         setactivity(result.data);
-      } catch (error) {
-        logger.error('Error retrieving activity journal entry:', error);
+      } catch ( error ) {
+        handlePopUp('error', "Error retrieving activity journal entry:");
       }
     }
     setTimeout(() => {

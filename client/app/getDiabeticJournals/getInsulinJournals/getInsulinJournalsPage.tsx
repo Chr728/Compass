@@ -5,6 +5,7 @@ import { MdDeleteForever, MdKeyboardArrowDown } from 'react-icons/md';
 import Swal from 'sweetalert2';
 import Button from '../../components/Button';
 import { useAuth } from '../../contexts/AuthContext';
+import { useProp } from '../../contexts/PropContext';
 import { useUser } from '../../contexts/UserContext';
 import { formatDate, formatMilitaryTime } from '../../helpers/utils/datetimeformat';
 import { deleteInsulinJournal, getInsulinJournals } from '../../http/diabeticJournalAPI';
@@ -15,7 +16,8 @@ export default function GetInsulinJournalsPage() {
   const { user } = useAuth();
   const { userInfo } = useUser();
   const [insulin, setinsulin] = useState<any>(null);
-  
+    const { handlePopUp} = useProp();
+
   useEffect(() => {
     if (!userInfo) {
       logger.warn('User not found.')
@@ -30,8 +32,9 @@ export default function GetInsulinJournalsPage() {
         const result = await getInsulinJournals();    
         logger.info('All Insulin journals entry retrieved:', result);
         setinsulin(result.data);
-      } catch (error) {
-        logger.error('Error retrieving insulin journal entry:', error);
+      } catch ( error ) {
+      handlePopUp('error', "Error retrieving insulin journal entry:");
+
       }
     }
     setTimeout(() => {

@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Button from '../../../components/Button';
 import { useAuth } from '../../../contexts/AuthContext';
+import { useProp } from '../../../contexts/PropContext';
 import { getInsulinJournal } from '../../../http/diabeticJournalAPI';
 
 
@@ -17,15 +18,15 @@ export default function GetInsulinJournal({params: { insulinJournal } } : { para
   const { user } = useAuth();
   const router = useRouter();
   const [insulin, setinsulin] = useState<any>(null);
+    const { handlePopUp} = useProp();
 
   async function fetchInsulinJournal() {
     try {
-      const userId = user?.uid || '';
       const result = await getInsulinJournal(insulinJournal);
       logger.info('Insulin journal entry retrieved successfully.');
       setinsulin(result.data);
-    } catch (error) {
-      logger.error('Error retrieving Insulin journal entry:', error);
+    } catch ( error ) {
+      handlePopUp('error', "Error retrieving insulin journal entry:");
     }
   }
 

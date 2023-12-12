@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import Button from '../../components/Button';
 import { useAuth } from '../../contexts/AuthContext';
 import { getFoodIntakeJournal } from '../../http/foodJournalAPI';
+import { useProp } from '../contexts/PropContext';
 
 
 export default function GetFoodJournal({params: { foodJournal } } : { params: { foodJournal: string } }) {
@@ -15,14 +16,16 @@ export default function GetFoodJournal({params: { foodJournal } } : { params: { 
   const { user } = useAuth();
   const router = useRouter();
   const [food, setfood] = useState<any>(null);
-  
+        const { handlePopUp} = useProp();
+
   async function fetchFoodJournal() {
     try {
       const result = await getFoodIntakeJournal(foodJournal);
       logger.info('Food journal entry retrieved:', result);
       setfood(result.data);
-    } catch (error) {
-      logger.error('Error retrieving Food journal entry:', error);
+    } catch ( error ) {
+      handlePopUp('error', "Error retrieving food journal entry:");
+
     }
   }
   // eslint-disable-next-line react-hooks/rules-of-hooks  

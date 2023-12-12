@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Button from '../../components/Button';
 import { useAuth } from '../../contexts/AuthContext';
+import { useProp } from '../../contexts/PropContext';
 import { getActivityJournal } from '../../http/activityJournalAPI';
 
 
@@ -16,6 +17,7 @@ export default function GetActivityJournal({params: { activityJournal } } : { pa
   const { user } = useAuth();
   const router = useRouter();
   const [activity, setactivity] = useState<any>(null);
+    const { handlePopUp} = useProp();
 
   async function fetchActivityJournal() {
     try {
@@ -23,7 +25,8 @@ export default function GetActivityJournal({params: { activityJournal } } : { pa
       logger.info('activity journal entry retrieved:', result)
       setactivity(result.data);
     } catch (error) {
-      logger.error('Error retrieving activity journal entry:', error);
+      handlePopUp('error', "Error retrieving activity journal entry:");
+
     }
   }
 

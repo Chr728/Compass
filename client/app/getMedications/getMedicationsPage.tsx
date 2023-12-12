@@ -1,15 +1,13 @@
 'use client';
-import Image from 'next/image';
-import Button from '../components/Button';
-// import Input from '../components/Input';
 import { useRouter } from 'next/navigation';
-import { deleteMedication, getMedication, getMedications} from '../http/medicationAPI'; 
+import { useEffect, useState } from 'react';
+import { MdDeleteForever, MdKeyboardArrowDown } from 'react-icons/md';
+import Swal from 'sweetalert2';
+import Button from '../components/Button';
+import Header from '../components/Header';
 import { useAuth } from '../contexts/AuthContext';
 import { useUser } from '../contexts/UserContext';
-import { useEffect, useState } from 'react';
-import { MdDeleteForever, MdInfoOutline, MdKeyboardArrowDown } from 'react-icons/md';
-import Header from '../components/Header';
-import Swal from 'sweetalert2';
+import { deleteMedication, getMedications } from '../http/medicationAPI';
 
 export default function GetMedicationsPage() {
   const logger = require('../../logger');

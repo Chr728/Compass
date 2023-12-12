@@ -10,7 +10,6 @@ import Button from '../../../../components/Button';
 import Input from '../../../../components/Input';
 import { useAuth } from '../../../../contexts/AuthContext';
 import { useProp } from '../../../../contexts/PropContext';
-import { useUser } from '../../../../contexts/UserContext';
 import { getInsulinJournal, updateInsulinJournal } from '../../../../http/diabeticJournalAPI';
 
 
@@ -21,12 +20,10 @@ export default function EditInsulinJournal({params: { insulinJournal } } : { par
   const { user } = useAuth();
   const router = useRouter();
   const [insulin, setinsulin] = useState<any>(null);
-  const { userInfo } = useUser();
   const { handlePopUp} = useProp();
 
   async function fetchInsulinJournal() {
     try {
-      const userId = user?.uid || '';
       const result = await getInsulinJournal(insulinJournal);
       logger.info('Insulin journal entry retrieved:', result);
       setinsulin(result.data);

@@ -5,14 +5,12 @@ import Button from '../components/Button';
 import FormLabel from '../components/FormLabel';
 import Header from '../components/Header';
 import Input from '../components/Input';
-import { useAuth } from '../contexts/AuthContext';
 import { useProp } from '../contexts/PropContext';
 import { createFoodIntakeJournal } from '../http/foodJournalAPI';
 
 export default function CreateFoodJournalPage() {
   const logger = require('../../logger');
   const router = useRouter();
-  const { user } = useAuth();
     const { handlePopUp} = useProp();
 
   const formik = useFormik({
