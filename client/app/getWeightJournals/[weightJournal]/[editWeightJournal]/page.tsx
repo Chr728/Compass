@@ -187,11 +187,11 @@ style={{
     <option className="text-darkgrey" value="">
         Choose one
       </option>
-            <option
+    <option
       className="text-darkgrey"
       value="kg"
     >
-      kg
+      kg     
     </option>
     <option
       className="text-darkgrey"

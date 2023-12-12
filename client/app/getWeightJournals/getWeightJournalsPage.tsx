@@ -89,7 +89,7 @@ export default function GetWeightJournalsPage() {
         {weight.length > 0 && weight[0].height && (
           <p className="font-sans text-darkgrey mr-8 font-medium text-[14px]">{weight[weight.length - 1].height}cm</p>
         )}
-      </div>
+       </div>
     </div>
     <br></br>
 <div className="flex" style={{ justifyContent: 'space-between' }}>

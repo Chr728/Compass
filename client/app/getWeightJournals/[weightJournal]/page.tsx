@@ -23,8 +23,8 @@ export default function GetWeightJournal({params: { weightJournal } } : { params
       const result = await getWeightJournal(weightJournal);
       logger.info('Weight journal entry retrieved:', result);
       setweight(result.data);
-    } catch ( error ) {
-              handlePopUp( 'error', "Error retrieving weight journal entry:" );
+    } catch ( error ) {   
+      handlePopUp( 'error', "Error retrieving weight journal entry:" );
 
     }
   }
@@ -66,7 +66,7 @@ export default function GetWeightJournal({params: { weightJournal } } : { params
     <SingleEntry label={ 'Unit:' } value={weight.unit}></SingleEntry>
     <SingleEntry label={ 'Height:' } value={weight.height}></SingleEntry>
     <SingleEntry label={ 'Notes:' } value={weight.notes}></SingleEntry>         
-   </div>
+    </div>
     <div className='mt-10 pb-4 self-center'>
     <Button type="button" text="Edit"style={{ width: '140px' }} onClick={() => router.push(`/getWeightJournals/${weightJournal}/${weightJournal}`)} />
     <Button
