@@ -7,8 +7,8 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Button from '../../components/Button';
 import { useAuth } from '../../contexts/AuthContext';
+import { useProp } from '../../contexts/PropContext';
 import { getFoodIntakeJournal } from '../../http/foodJournalAPI';
-import { useProp } from '../contexts/PropContext';
 
 
 export default function GetFoodJournal({params: { foodJournal } } : { params: { foodJournal: string } }) {

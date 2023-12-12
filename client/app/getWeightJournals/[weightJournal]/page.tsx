@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Button from '../../components/Button';
 import { useAuth } from '../../contexts/AuthContext';
+import { useProp } from '../../contexts/PropContext';
 import { getWeightJournal } from '../../http/weightJournalAPI';
 
 
@@ -15,14 +16,16 @@ export default function GetWeightJournal({params: { weightJournal } } : { params
   const { user } = useAuth();
   const router = useRouter();
   const [weight, setweight] = useState<any>(null);
-  
+  const { handlePopUp} = useProp();
+
   async function fetchWeightJournal() {
     try {
       const result = await getWeightJournal(weightJournal);
       logger.info('Weight journal entry retrieved:', result);
       setweight(result.data);
-    } catch (error) {
-      logger.error('Error retrieving weight journal entry:', error);
+    } catch ( error ) {
+              handlePopUp( 'error', "Error retrieving weight journal entry:" );
+
     }
   }
 

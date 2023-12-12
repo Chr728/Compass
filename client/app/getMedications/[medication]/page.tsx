@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Button from '../../components/Button';
 import { useAuth } from '../../contexts/AuthContext';
-import { useUser } from '../../contexts/UserContext';
+import { useProp } from '../../contexts/PropContext';
 import { getMedication } from '../../http/medicationAPI';
 
 
@@ -15,18 +15,16 @@ export default function GetMedication({params: { medication } } : { params: { me
   const logger = require('../../../logger');
   const { user } = useAuth();
   const router = useRouter();
-  const { userInfo } = useUser();
   const [medicationdata, setmedicationdata] = useState<any>(null);
-  
+  const { handlePopUp} = useProp();
+
   async function fetchMedication() {
     try {
-      const userId = user?.uid || '';
-      // medication = '17';
       const result = await getMedication(medication);
       logger.info('Medication entry retrieved:', result);
       setmedicationdata(result.data);
-    } catch (error) {
-      logger.error('Error retrieving Medication entry:', error);
+    } catch ( error ) {
+      handlePopUp('error', "Error retrieving medication journal entry:");
     }
   }
   // eslint-disable-next-line react-hooks/rules-of-hooks  

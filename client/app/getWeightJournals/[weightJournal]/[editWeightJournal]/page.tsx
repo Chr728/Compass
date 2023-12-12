@@ -10,7 +10,6 @@ import Button from '../../../components/Button';
 import Input from '../../../components/Input';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useProp } from '../../../contexts/PropContext';
-import { useUser } from '../../../contexts/UserContext';
 import { getWeightJournal, updateWeightJournal } from '../../../http/weightJournalAPI'; // Replace '../api/yourApiFile' with the correct path
 
 
@@ -19,12 +18,10 @@ export default function EditWeightJournal({params: { weightJournal } } : { param
   const { user } = useAuth();
   const router = useRouter();
   const [weight, setweight] = useState<any>(null);
-  const { userInfo } = useUser();
   const { handlePopUp} = useProp();
 
   async function fetchWeightJournal() {
     try {
-      const userId = user?.uid || '';
       const result = await getWeightJournal(weightJournal);
       logger.info('Weight journal entry retrieved:', result);
       setweight(result.data);

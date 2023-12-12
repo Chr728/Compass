@@ -1,9 +1,8 @@
-import {fireEvent, render, screen, waitFor} from '@testing-library/react';
-import act from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { getWeightJournal } from '../../../http/weightJournalAPI';
 import EditWeightJournal from './page';
-import {getWeightJournal, updateWeightJournal} from '../../../http/weightJournalAPI';
 
 const mockRouter = jest.fn();
 jest.mock("next/navigation", () => ({

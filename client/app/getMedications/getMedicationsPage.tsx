@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import Button from '../components/Button';
 import Header from '../components/Header';
 import { useAuth } from '../contexts/AuthContext';
+import { useProp } from '../contexts/PropContext';
 import { useUser } from '../contexts/UserContext';
 import { deleteMedication, getMedications } from '../http/medicationAPI';
 
@@ -15,7 +16,8 @@ export default function GetMedicationsPage() {
   const { user } = useAuth();
   const { userInfo } = useUser();
   const [medication, setmedication] = useState<any>(null);
-  
+          const { handlePopUp} = useProp();
+
   useEffect(() => {
     if (!userInfo) {
       logger.warn('User not found.')
@@ -27,12 +29,11 @@ export default function GetMedicationsPage() {
   useEffect(() => {
     async function fetchMedications() {
       try {
-        const userId = user?.uid || '';
         const result = await getMedications();    
         logger.info('All medications entry retrieved:', result);
         setmedication(result.data);
-      } catch (error) {
-        logger.error('Error retrieving medication journal entry:', error);
+      } catch ( error ) {
+        handlePopUp('error', "Error retrieving medication journal entry:");
       }
     }
     setTimeout(() => {
