@@ -26,7 +26,7 @@ if (!user) {
   
   return (
     <div className="bg-eggshell p-2 min-h-screen flex flex-col">
-        <div className="mb-10 flex flex-col w-full p-4">
+        <div className="mb-10 flex flex-col w-full p-2">
         <div style={{ marginTop: '-5%' }} >
         <button className="mt-3 mb-4" onClick={() => router.push('/tpage')}>
           <Header  headerText="Your Health"></Header>
@@ -36,21 +36,22 @@ if (!user) {
           when you have important medical appointments.</p>   
     
       <Link href="/viewappointments">
-            <div className="rounded-3xl  flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 " style={{backgroundColor: '#0880AE' }}>
-              <div>
+            <div className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 " style={{backgroundColor: '#0880AE' }}>
+              <div> 
                 <p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
                   Appointments
                 </p>
-                <p className="text-[14px] text-white font-IBM Plex Sans  text-start">
+                <p className="text-[14px] text-white pr-20 font-IBM Plex Sans  text-start">
                 Reminders for those important events.
                 </p>
                 <NextImage
         src = {appointments}
         alt="appointments"
-        width={120}
-        height={ 70 }
-        className="absolute top-0 right-0  ml-16 transform: rotate(-14.774deg) flex-shrink: 0"
+        width={59}
+        height={ 121 }
+        className="absolute   inset-y-0 right-0  flex-shrink: 0"
       />
+              
               </div>
             </div>
       </Link>
@@ -59,7 +60,7 @@ if (!user) {
 
 
       <Link href="/getMedications">
-            <div className="rounded-3xl flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 " style={{backgroundColor: 'var(--Black, #2C2738)' }}>
+            <div className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 " style={{backgroundColor: 'var(--Black, #2C2738)' }}>
               
               <div>
                 <p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
@@ -71,9 +72,9 @@ if (!user) {
                  <NextImage
         src = {medications}
         alt="medications"
-        width={120}
-        height={ 70 }
-        className="absolute top-0 right-0  ml-16 transform: rotate(-14.774deg) flex-shrink: 0"
+        width={88}
+        height={ 106 }
+        className="absolute  inset-y-0  right-0 flex-shrink: 0"
       />
               </div>
             </div>
