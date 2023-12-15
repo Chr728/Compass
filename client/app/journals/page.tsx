@@ -1,12 +1,8 @@
 'use client';
-import { useState, useEffect } from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import { useUser } from '@/app/contexts/UserContext';
+import Image from "next/image";
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Header from '../components/Header';
-import Link from 'next/link';
-import Button from '../components/Button';
-import Menu from '../components/Menu';
 
 export default function Journal() {
   const router = useRouter();
@@ -32,7 +28,14 @@ export default function Journal() {
           <p className="text-[14px] text-white font-IBM Plex Sans  text-start">
 Monitor your insulin and glucose everyday.
           </p>
-        </div>
+            </div>
+              <Image
+        src="/icons/LeftArrow.svg"
+        alt="LeftArrow icon"
+        width={12}
+        height={12}
+        className="mr-4"
+      />
       </div>
 </Link>
 <br></br>          

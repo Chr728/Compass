@@ -1,5 +1,6 @@
 'use client';
 import Button from '@/app/components/Button';
+import FormLabel from '@/app/components/FormLabel';
 import Header from '@/app/components/Header';
 import Input from '@/app/components/Input';
 import { useAuth } from '@/app/contexts/AuthContext';
@@ -153,14 +154,7 @@ export default function EditMedication( { params: { medication} } : { params : {
                     </p>
                 </div>
                 <div className="mt-3">
-                    <label
-                        htmlFor="name"
-                        className="font-sans font-medium text-grey text-[16px]"
-                    >
-                    <span className="text-red text-[20px]"> *</span>
-                    Medication Name
-                    </label>
-                    <br />
+                <FormLabel htmlFor={ 'name' } label={ 'Medication Name' }></FormLabel>
                     <Input 
                         name="name"
                         id="name"
@@ -178,14 +172,7 @@ export default function EditMedication( { params: { medication} } : { params : {
 
 
                 <div className="mt-3 mb-3">
-                    <label
-                        htmlFor="name"
-                        className="font-sans font-medium text-grey text-[16px]"
-                    >
-                    <span className="text-red text-[20px]"> *</span>
-                    Date Started
-                    </label>
-                    <br />
+                <FormLabel htmlFor={ 'date' } label={ 'Date Started' }></FormLabel>
                     <div className="max-w-[225px]">
                         <Input 
                             name="date"
@@ -204,14 +191,7 @@ export default function EditMedication( { params: { medication} } : { params : {
                 </div>
 
                 <div className="mt-3 mb-3">
-                    <label
-                        htmlFor="name"
-                        className="font-sans font-medium text-grey text-[16px]"
-                    >
-                    <span className="text-red text-[20px]"> *</span>
-                    Time
-                    </label>
-                    <br />
+                <FormLabel htmlFor={ 'time' } label={ 'Time' }></FormLabel>
                     <div className="max-w-[225px]">
                         <Input 
                             name="time"
@@ -231,14 +211,7 @@ export default function EditMedication( { params: { medication} } : { params : {
 
                 <div className="flex">
                     <div className="mt-3">
-                        <label
-                        htmlFor="dosage"
-                        className="font-sans font-medium text-grey text-[16px]"
-                        >
-                        <span className="text-red text-[20px]"> *</span>
-                        Dosage        
-                        </label>
-                        <br />
+                    <FormLabel htmlFor={ 'dosage' } label={ 'Dosage' }></FormLabel>
                         <Input
                         name="dosage"
                         id="dosage"
@@ -260,14 +233,7 @@ export default function EditMedication( { params: { medication} } : { params : {
                             marginLeft :'-2%'
                         }}
                     >
-                        <label
-                            htmlFor="unit"
-                            className="font-sans font-medium text-grey text-[16px]"
-                        >
-                        <span className="text-red text-[20px]"> *</span>
-                        Unit
-                        </label>
-                        <br />
+                    <FormLabel htmlFor={ 'unit' } label={ 'Unit' }></FormLabel>
                         <select
                             className="text-darkgrey h-[52px] p-2"
                             name="unit"
@@ -301,11 +267,7 @@ export default function EditMedication( { params: { medication} } : { params : {
                 </div>
 
                 <div className="mt-3">
-                    <label htmlFor="frequency" className="font-sans font-medium text-grey text-[16px]">
-                        <span className="text-red text-[20px]"> *</span>
-                        Frequency
-                    </label>
-                    <br/>
+                <FormLabel htmlFor={ 'frequency' } label={ 'Frequency' }></FormLabel>
                     <select
                         name="frequency"
                         id="frequency"
@@ -342,11 +304,7 @@ export default function EditMedication( { params: { medication} } : { params : {
                 </div>
 
                 <div className="mt-3">
-                    <label htmlFor="route" className="font-sans font-medium text-grey text-[16px]">
-                        <span className="text-red text-[20px]"> *</span>
-                        Route
-                    </label>
-                    <br/>
+                <FormLabel htmlFor={ 'route' } label={ 'Route' }></FormLabel>
                     <select
                         name="route"
                         id="route"
