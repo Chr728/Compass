@@ -1,9 +1,12 @@
 'use client';
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import Header from '../components/Header';
-import Link from 'next/link';
 import { useAuth } from '@/app/contexts/AuthContext';
+import NextImage from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import appointments from '../../public/appointments.svg';
+import medications from '../../public/medications.svg';
+import Header from '../components/Header';
 import Custom403 from '../pages/403';
 
 
@@ -41,6 +44,13 @@ if (!user) {
                 <p className="text-[14px] text-white font-IBM Plex Sans  text-start">
                 Reminders for those important events.
                 </p>
+                <NextImage
+        src = {appointments}
+        alt="appointments"
+        width={120}
+        height={ 70 }
+        className="absolute top-0 right-0  ml-16 transform: rotate(-14.774deg) flex-shrink: 0"
+      />
               </div>
             </div>
       </Link>
@@ -58,6 +68,13 @@ if (!user) {
                 <p className="text-[14px] text-white font-IBM Plex Sans  text-start">
                 Never miss a crucial dose.
                 </p>
+                 <NextImage
+        src = {medications}
+        alt="medications"
+        width={120}
+        height={ 70 }
+        className="absolute top-0 right-0  ml-16 transform: rotate(-14.774deg) flex-shrink: 0"
+      />
               </div>
             </div>
       </Link>
