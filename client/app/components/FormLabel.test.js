@@ -10,11 +10,11 @@ describe( 'Result Component', () =>
       htmlFor: 'date',
       label: 'Test Label',
     };
-    const htmlFor = 'date';
 
-      render( <FormLabel { ...props } text={ htmlFor } /> );
-      const htmlForText = screen.getByText(htmlFor);
+    render( <FormLabel { ...props }/> );
+    const htmlForText = screen.getByText(props.label);
     expect(htmlForText).toBeInTheDocument();
+    expect(htmlForText).toHaveAttribute('for', props.htmlFor);
   } );
     
     test('renders htmlfor and label', () => {

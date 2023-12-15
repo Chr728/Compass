@@ -1,9 +1,9 @@
 'use client';
-import Image from "next/image";
+import NextImage from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import diabetes from '../../public/diabetes.svg';
 import Header from '../components/Header';
-
 export default function Journal() {
   const router = useRouter();
   
@@ -19,23 +19,23 @@ export default function Journal() {
     
           
 <Link href="/getDiabeticJournals">
-      <div className="rounded-3xl  mt-1 flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 " style={{backgroundColor: 'var(--Blue, #0880AE)' }}>
+      <div className="rounded-3xl relative mt-1 flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 " style={{backgroundColor: 'var(--Blue, #0880AE)' }}>
         
-        <div>
-          <p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
+        <div className='width:500px'>
+          <p className="text-[18px] text-white font-IBM   Plex Sans font-bold text-start">
            Diabetic Journal
           </p>
           <p className="text-[14px] text-white font-IBM Plex Sans  text-start">
 Monitor your insulin and glucose everyday.
-          </p>
-            </div>
-              <Image
-        src="/icons/LeftArrow.svg"
-        alt="LeftArrow icon"
-        width={12}
-        height={12}
-        className="mr-4"
+        </p>
+        <NextImage
+        src = {diabetes}
+        alt="diabetic journal"
+        width={120}
+        height={ 70 }
+        className="absolute top-0 right-0  ml-16 transform: rotate(-14.774deg) flex-shrink: 0"
       />
+      </div>
       </div>
 </Link>
 <br></br>          
