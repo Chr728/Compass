@@ -1,13 +1,9 @@
 "use client";
-import React from "react";
-import ProfileIcon from "../../public/icons/Mask.svg";
 import Image from "next/image";
-import RedButton from "../components/RedButton";
-import Button from "../components/Button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Header from "../components/Header";
-import Menu from "../components/Menu";
+import RedButton from "../components/RedButton";
 import { useAuth } from "../contexts/AuthContext";
 
 export default function SettingsPage() {
@@ -89,7 +85,7 @@ export default function SettingsPage() {
           More Info
         </span>
 
-        <Link href="">
+        <Link href="/aboutUs">
           <div className="flex items-center m-2">
             <Image
               src="/icons/AboutIcon.svg"
