@@ -34,8 +34,10 @@ export default function AddAppointmentPage() {
         time: values.time,
         notes: values.notes,
       };
-      await createAppointment(userId, data);
-      router.push("/viewappointments");
+      await createAppointment(userId, data)
+      .then(result => {
+        router.push("/viewappointments");
+      })    
     },
     validate: (values) => {
       let errors: {
