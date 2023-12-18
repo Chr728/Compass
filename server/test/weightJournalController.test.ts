@@ -1,10 +1,17 @@
 import request from 'supertest';
 import app from '../index';
 import db from '../models';
-import admin from 'firebase-admin';
-
-let server: any;
-const port = process.env.SERVER_DEV_PORT;
+import {
+  startServer,
+  stopServer,
+  mockCreate,
+  mockDestroy,
+  mockFindAll,
+  mockFindOne,
+  mockTokenVerification,
+  mockUpdate,
+  mockRejectedValueOnce,
+} from '../utils/journalsTestHelper';
 
 const user = {
   id: 10,
@@ -51,16 +58,6 @@ const mockedDecodedToken = {
   sub: '',
 };
 
-function startServer() {
-  server = app.listen(port);
-}
-
-function stopServer() {
-  if (server) {
-    server.close();
-  }
-}
-
 describe('Weight Journal Controller Tests', () => {
   beforeAll(() => {
     startServer();
@@ -71,10 +68,8 @@ describe('Weight Journal Controller Tests', () => {
   });
 
   beforeEach(() => {
-    jest
-      .spyOn(admin.auth(), 'verifyIdToken')
-      .mockResolvedValue(mockedDecodedToken);
-    jest.spyOn(db.User, 'findOne').mockResolvedValue(user);
+    mockTokenVerification(mockedDecodedToken);
+    mockFindOne(db.User, user);
   });
 
   afterEach(() => {
@@ -82,9 +77,7 @@ describe('Weight Journal Controller Tests', () => {
   });
 
   it('should get weight journals for a user', async () => {
-    jest
-      .spyOn(db.WeightJournal, 'findAll')
-      .mockResolvedValueOnce([weightJournal]);
+    mockFindAll(db.WeightJournal, [weightJournal]);
 
     const res = await request(app)
       .get(`/api/journals/weight/user/${user.uid}`)
@@ -98,9 +91,7 @@ describe('Weight Journal Controller Tests', () => {
   });
 
   it('should get a weight journal for a user', async () => {
-    jest
-      .spyOn(db.WeightJournal, 'findOne')
-      .mockResolvedValueOnce(weightJournal);
+    mockFindOne(db.WeightJournal, weightJournal);
 
     const res = await request(app)
       .get(`/api/journals/weight/${weightJournal.id}`)
@@ -113,7 +104,7 @@ describe('Weight Journal Controller Tests', () => {
   });
 
   it('should create a weight journal for a user', async () => {
-    jest.spyOn(db.WeightJournal, 'create').mockResolvedValueOnce(weightJournal);
+    mockCreate(db.WeightJournal, weightJournal);
 
     const res = await request(app)
       .post(`/api/journals/weight/user/${user.uid}`)
@@ -128,16 +119,9 @@ describe('Weight Journal Controller Tests', () => {
   });
 
   it('should update a weight journal for a user', async () => {
-    jest
-      .spyOn(db.WeightJournal, 'findOne')
-      .mockResolvedValueOnce(weightJournal);
-    jest
-      .spyOn(db.WeightJournal, 'update')
-      .mockResolvedValueOnce([1, [updatedWeightJournal]]);
-
-    jest
-      .spyOn(db.WeightJournal, 'findOne')
-      .mockResolvedValueOnce(updatedWeightJournal);
+    mockFindOne(db.WeightJournal, weightJournal);
+    mockUpdate(db.WeightJournal, updatedWeightJournal);
+    mockFindOne(db.WeightJournal, updatedWeightJournal);
 
     const res = await request(app)
       .put(`/api/journals/weight/${weightJournal.id}`)
@@ -152,12 +136,8 @@ describe('Weight Journal Controller Tests', () => {
   });
 
   it('should delete a weight journal for a user', async () => {
-    jest
-      .spyOn(db.WeightJournal, 'findOne')
-      .mockResolvedValueOnce(weightJournal);
-    jest
-      .spyOn(db.WeightJournal, 'destroy')
-      .mockResolvedValueOnce([1, [weightJournal]]);
+    mockFindOne(db.WeightJournal, weightJournal);
+    mockDestroy(db.WeightJournal, weightJournal);
 
     const res = await request(app)
       .delete(`/api/journals/weight/${weightJournal.id}`)
@@ -171,7 +151,7 @@ describe('Weight Journal Controller Tests', () => {
   });
 
   it('should handle weight journal not found error', async () => {
-    jest.spyOn(db.WeightJournal, 'findOne').mockResolvedValueOnce(null);
+    mockFindOne(db.WeightJournal, null);
 
     const res = await request(app)
       .get(`/api/journals/weight/${weightJournal.id}`)
@@ -184,7 +164,7 @@ describe('Weight Journal Controller Tests', () => {
   });
 
   it('should handle weight journal not found error when updating', async () => {
-    jest.spyOn(db.WeightJournal, 'findOne').mockResolvedValueOnce(null);
+    mockFindOne(db.WeightJournal, null);
 
     const res = await request(app)
       .put(`/api/journals/weight/${weightJournal.id}`)
@@ -198,7 +178,7 @@ describe('Weight Journal Controller Tests', () => {
   });
 
   it('should handle weight journal not found error when deleting', async () => {
-    jest.spyOn(db.WeightJournal, 'findOne').mockResolvedValueOnce(null);
+    mockFindOne(db.WeightJournal, null);
 
     const res = await request(app)
       .delete(`/api/journals/weight/${weightJournal.id}`)
@@ -211,7 +191,7 @@ describe('Weight Journal Controller Tests', () => {
   });
 
   it('should handle error when getting weight journals', async () => {
-    jest.spyOn(db.WeightJournal, 'findAll').mockRejectedValueOnce('error');
+    mockRejectedValueOnce('findAll', db.WeightJournal, 'error');
 
     const res = await request(app)
       .get(`/api/journals/weight/user/${user.uid}`)
@@ -224,7 +204,7 @@ describe('Weight Journal Controller Tests', () => {
   });
 
   it('should handle error when getting weight journal', async () => {
-    jest.spyOn(db.WeightJournal, 'findOne').mockRejectedValueOnce('error');
+    mockRejectedValueOnce('findOne', db.WeightJournal, 'error');
 
     const res = await request(app)
       .get(`/api/journals/weight/${weightJournal.id}`)
@@ -237,7 +217,7 @@ describe('Weight Journal Controller Tests', () => {
   });
 
   it('should handle error when creating weight journal', async () => {
-    jest.spyOn(db.WeightJournal, 'create').mockRejectedValueOnce('error');
+    mockRejectedValueOnce('create', db.WeightJournal, 'error');
 
     const res = await request(app)
       .post(`/api/journals/weight/user/${user.uid}`)
@@ -252,7 +232,7 @@ describe('Weight Journal Controller Tests', () => {
   });
 
   it('should handle error when updating weight journal', async () => {
-    jest.spyOn(db.WeightJournal, 'findOne').mockRejectedValueOnce('error');
+    mockRejectedValueOnce('findOne', db.WeightJournal, 'error');
 
     const res = await request(app)
       .put(`/api/journals/weight/${weightJournal.id}`)
@@ -266,7 +246,7 @@ describe('Weight Journal Controller Tests', () => {
   });
 
   it('should handle error when deleting weight journal', async () => {
-    jest.spyOn(db.WeightJournal, 'findOne').mockRejectedValueOnce('error');
+    mockRejectedValueOnce('findOne', db.WeightJournal, 'error');
 
     const res = await request(app)
       .delete(`/api/journals/weight/${weightJournal.id}`)
@@ -279,7 +259,7 @@ describe('Weight Journal Controller Tests', () => {
   });
 
   it('should handle user not found error for create', async () => {
-    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(null);
+    mockFindOne(db.User, null);
 
     const res = await request(app)
       .post(`/api/journals/weight/user/${user.uid}`)
@@ -292,7 +272,7 @@ describe('Weight Journal Controller Tests', () => {
   });
 
   it('should handle user not found error for getallweightjournals', async () => {
-    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(null);
+    mockFindOne(db.User, null);
 
     const res = await request(app)
       .get(`/api/journals/weight/user/${user.uid}`)
