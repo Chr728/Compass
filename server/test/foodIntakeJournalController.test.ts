@@ -87,11 +87,11 @@ const mockedDecodedToken = {
 };
 
 beforeAll(() => {
-  startServer(app, port); // Start the server before running tests
+  startServer(); // Start the server before running tests
 });
 
 afterAll(() => {
-  stopServer(server); // Stop the server after all tests are done
+  stopServer(); // Stop the server after all tests are done
 });
 
 beforeEach(() => {

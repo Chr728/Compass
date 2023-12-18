@@ -1,10 +1,14 @@
 import admin from 'firebase-admin';
+import app from '../index';
 
-export const startServer = (app: any, port: any) => {
-  return app.listen(port);
+let server: any;
+const port = process.env.SERVER_DEV_PORT;
+
+export const startServer = () => {
+  server = app.listen(port);
 };
 
-export const stopServer = (server: any) => {
+export const stopServer = () => {
   if (server) {
     server.close();
   }

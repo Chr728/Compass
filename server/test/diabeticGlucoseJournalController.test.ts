@@ -13,9 +13,6 @@ import {
   mockRejectedValueOnce,
 } from '../utils/journalsTestHelper';
 
-let server: any;
-const port = process.env.SERVER_DEV_PORT;
-
 const user = {
   id: 10,
   uid: 'testuid',
@@ -62,11 +59,11 @@ const mockedDecodedToken = {
 };
 
 beforeAll(() => {
-  startServer(app, port);
+  startServer();
 });
 
 afterAll(() => {
-  stopServer(server);
+  stopServer();
 });
 
 beforeEach(() => {
