@@ -18,7 +18,7 @@ export const mockFindOne = (model: any, data: any) => {
   jest.spyOn(model, 'findOne').mockResolvedValue(data);
 };
 
-export const mockFindAll = (model: any, data: any[]) => {
+export const mockFindAll = (model: any, data: any) => {
   jest.spyOn(model, 'findAll').mockResolvedValue(data);
 };
 

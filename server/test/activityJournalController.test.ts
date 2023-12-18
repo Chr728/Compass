@@ -1,7 +1,6 @@
 import request from 'supertest';
 import app from '../index';
 import db from '../models';
-import admin from 'firebase-admin';
 import {
   startServer,
   stopServer,
