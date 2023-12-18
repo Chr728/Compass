@@ -62,9 +62,11 @@ export default function EditMedication( { params: { medication} } : { params : {
                     route: values.route,
                     notes: values.notes
                 };
-                const result = await updateMedication(medication, medicationData);
-                logger.info('Medication entry created:', result);
-                router.push(`/getMedications/${medication}`);
+                const result = await updateMedication(medication, medicationData)
+                .then(result => {
+                    logger.info('Medication entry created:', result);
+                    router.push(`/getMedications/${medication}`);
+                  })
             } catch (error) {
                 logger.error('Error creating medication entry:', error);
             }

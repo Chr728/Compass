@@ -46,9 +46,11 @@ export default function CreateMedicationPage() {
                     route: values.route,
                     notes: values.notes
                 };
-                const result = await createMedication(data);
-                logger.info('Medication entry created:', result);
-                router.push('/getMedications');
+                const result = await createMedication(data)
+                .then(result => {
+                    logger.info('Medication entry created:', result);
+                    router.push('/getMedications');
+                  })
             } catch (error) {
                 logger.error('Error creating medication entry:', error);
             }

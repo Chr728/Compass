@@ -40,9 +40,7 @@ export default function GetMedication({params: { medication } } : { params: { me
       alert('User not found.');
     } 
     if (user) {
-      setTimeout(() => {
-        fetchMedication();
-      }, 1000);
+      fetchMedication();
     }
   }, []);
 
