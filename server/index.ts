@@ -23,6 +23,8 @@ require('dotenv').config({
 
 const app = express();
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 app.use(cors());
 app.use(express.json());
 app.use(Morgan);
@@ -48,16 +50,22 @@ app.get('/', (req, res) => {
 });
 
 //Connection to postgreSQL
-if (process.env.NODE_ENV !== 'test') {
-  db.sequelize.sync({ alter: true }).then(() => {
+db.sequelize.authenticate().then(() => {
+  Logger.info("Database connected.");
+}).catch((err: any) => {
+  Logger.error(err)
+})
+
+if (!isProduction) {
+  db.sequelize.sync({alter: true}).then(() => {
     Logger.info('Database Synchronized');
   });
+}
 
   app.listen(process.env.SERVER_DEV_PORT, () => {
     Logger.info(
       `Server listening on port ${process.env.SERVER_DEV_PORT || 8000}`
     );
   });
-}
 
 export default app;
