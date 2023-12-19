@@ -217,6 +217,45 @@ const weightJournalValidator = (values: { date: Date; time: Date; weight: number
 }
 
 
+const activityJournalValidator = (values: { 
+    date: Date;
+    time: Date;
+    activity: string;
+    duration: number;
+    notes: string; }) => {
+    const {date, time, activity, duration, notes } = values;
+    //check if date is valid, should be date
+    if (!date || date instanceof Date) {
+        Logger.error(`Invalid Date: ${date}`);
+        throw new Error(`Invalid Date : ${date}`);
+     }
+
+    //check if time is valid, should be date
+    if (!time || time instanceof Date) {
+        Logger.error(`Invalid Time: ${time}`);
+        throw new Error(`Invalid Time : ${time}`);
+      }
+
+    //check if activity is valid, should be string
+    if(!activity || typeof activity !== 'string') {
+        Logger.error(`Invalid activity: ${activity}`);
+        throw new Error(`Invalid activity: ${activity}`);
+    }
+
+    //check if duration is valid, should be number
+    if(!duration || typeof duration !== 'number') {
+        Logger.error(`Invalid duration: ${duration}`);
+        throw new Error(`Invalid duration: ${duration}`);
+    }
+
+    //check if notes is valid, should be string
+    if (notes == undefined || typeof notes !== 'string') {
+        Logger.error(`Invalid notes: ${notes}`);
+        throw new Error(`Invalid notes: ${notes}`);
+    }
+}
+
+
 
 export {
   userValidator,
@@ -225,7 +264,8 @@ export {
   notificationPreferenceValidator,
   medicationValidator,
   moodJournalValidator,
-    weightJournalValidator
+  weightJournalValidator,
+  activityJournalValidator
 
 
 

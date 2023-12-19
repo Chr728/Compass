@@ -30,7 +30,7 @@ const activityJournal = {
 const updatedActivityJournal = {
   date: '2023-09-30',
   time: '12:00:00',
-  activity: 70,
+  activity: 'swimming',
   duration: 175,
   notes: 'Sample activity entry',
 };
@@ -143,6 +143,7 @@ describe('activity Journal Controller Tests', () => {
       .put(`/api/journals/activity/${activityJournal.id}`)
       .send(updatedActivityJournal)
       .set({ Authorization: 'Bearer token' });
+    
 
     expect(db.ActivityJournal.findOne).toBeCalledTimes(2);
     expect(db.ActivityJournal.update).toBeCalledTimes(1);
