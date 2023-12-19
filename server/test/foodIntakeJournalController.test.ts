@@ -144,7 +144,7 @@ describe('Testing the create food intake journal controller', () => {
       .mockRejectedValue(new Error('query error'));
     const res = await request(app)
       .post('/api/journals/foodIntake/user/uid')
-      .send('')
+      .send(createFoodIntakeJournal)
       .set({ Authorization: 'Bearer token' });
     expect(db.FoodIntakeJournal.create).toHaveBeenCalledTimes(1);
     expect(res.status).toBe(400);

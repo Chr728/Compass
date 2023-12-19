@@ -338,6 +338,51 @@ const diabeticInsulinJournalValidator = (values: {
     }
 }
 
+const foodIntakeJournalValidator = (values: { 
+    date: Date;
+    time: Date;
+    foodName: string;
+    mealType: string;
+    servingNumber: number;
+    notes: string;}) => {
+    const {date, time, foodName, mealType, servingNumber, notes } = values;
+    //check if date is valid, should be date
+    if (!date || date instanceof Date) {
+        Logger.error(`Invalid Date: ${date}`);
+        throw new Error(`Invalid Date : ${date}`);
+     }
+
+    //check if time is valid, should be date
+    if (!time || time instanceof Date) {
+        Logger.error(`Invalid time : ${time}`);
+        throw new Error(`Invalid time  : ${time}`);
+      }
+
+    //check if foodName is valid, should be string
+    if(!foodName || typeof foodName !== 'string') {
+        Logger.error(`Invalid foodName: ${foodName}`);
+        throw new Error(`Invalid foodName: ${foodName}`);
+    }
+
+    //check if mealType is valid, should be string
+    if(!mealType || typeof mealType !== 'string') {
+        Logger.error(`Invalid mealType: ${mealType}`);
+        throw new Error(`Invalid mealType: ${mealType}`);
+    }
+
+    //check if unit is valid, should be number
+    if(!servingNumber || typeof servingNumber !== 'number') {
+        Logger.error(`Invalid servingNumber: ${servingNumber}`);
+        throw new Error(`Invalid servingNumber: ${servingNumber}`);
+    }
+
+    //check if notes is valid, should be string
+    if (notes == undefined || typeof notes !== 'string') {
+        Logger.error(`Invalid notes: ${notes}`);
+        throw new Error(`Invalid notes: ${notes}`);
+    }
+}
+
 export {
   userValidator,
   speedDialValidator,
@@ -348,7 +393,7 @@ export {
   weightJournalValidator,
   activityJournalValidator,
   diabeticGlucoseJournalValidator,
-  diabeticInsulinJournalValidator
-
+  diabeticInsulinJournalValidator,
+  foodIntakeJournalValidator
 }
 
