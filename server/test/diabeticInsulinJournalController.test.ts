@@ -23,7 +23,7 @@ const insulinJournal = {
   date: '2020-12-31T00:00:00.000Z',
   time: '2020-12-31T00:00:00.000Z',
   typeOfInsulin: 'testTypeOfInsulin',
-  unit: 'testUnit',
+  unit: 10,
   bodySite: 'testBodySite',
   notes: 'testNotes',
 };
@@ -34,7 +34,7 @@ const updatedInsulinJournal = {
   date: '2020-12-31T00:00:00.000Z',
   time: '2020-12-31T00:00:00.000Z',
   typeOfInsulin: 'Humalog',
-  unit: '10',
+  unit: 12,
   bodySite: 'L Buttock',
   notes: 'testNotes',
 };
@@ -121,7 +121,7 @@ describe('Testing the create insulin journal controller', () => {
       .mockRejectedValue(new Error('query error'));
     const res = await request(app)
       .post(`/api/journals/diabetic/insulin/user/${user.uid}`)
-      .send('')
+      .send(insulinJournal)
       .set({ Authorization: 'Bearer token' });
     expect(db.InsulinDosage.create).toHaveBeenCalledTimes(1);
     expect(res.status).toBe(400);

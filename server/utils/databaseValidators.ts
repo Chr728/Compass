@@ -293,6 +293,50 @@ const diabeticGlucoseJournalValidator = (values: {
     }
 }
 
+const diabeticInsulinJournalValidator = (values: { 
+    date: Date;
+    time: Date;
+    typeOfInsulin: string;
+    unit: number;
+    bodySite: string;
+    notes: string;}) => {
+    const {date, time, typeOfInsulin, unit, bodySite, notes } = values;
+    //check if date is valid, should be date
+    if (!date || date instanceof Date) {
+        Logger.error(`Invalid Date: ${date}`);
+        throw new Error(`Invalid Date : ${date}`);
+     }
+
+    //check if time is valid, should be date
+    if (!time || time instanceof Date) {
+        Logger.error(`Invalid time : ${time}`);
+        throw new Error(`Invalid time  : ${time}`);
+      }
+
+    //check if typeOfInsulin is valid, should be string
+    if(!typeOfInsulin || typeof typeOfInsulin !== 'string') {
+        Logger.error(`Invalid typeOfInsulin: ${typeOfInsulin}`);
+        throw new Error(`Invalid typeOfInsulin: ${typeOfInsulin}`);
+    }
+
+    //check if bodySite is valid, should be string
+    if(!bodySite || typeof bodySite !== 'string') {
+        Logger.error(`Invalid bodySite: ${bodySite}`);
+        throw new Error(`Invalid bodySite: ${bodySite}`);
+    }
+
+    //check if unit is valid, should be number
+    if(!unit || typeof unit !== 'number') {
+        Logger.error(`Invalid unit: ${unit}`);
+        throw new Error(`Invalid unit: ${unit}`);
+    }
+
+    //check if notes is valid, should be string
+    if (notes == undefined || typeof notes !== 'string') {
+        Logger.error(`Invalid notes: ${notes}`);
+        throw new Error(`Invalid notes: ${notes}`);
+    }
+}
 
 export {
   userValidator,
@@ -303,9 +347,8 @@ export {
   moodJournalValidator,
   weightJournalValidator,
   activityJournalValidator,
-  diabeticGlucoseJournalValidator
-
-
+  diabeticGlucoseJournalValidator,
+  diabeticInsulinJournalValidator
 
 }
 
