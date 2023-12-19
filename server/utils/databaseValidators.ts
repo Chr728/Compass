@@ -274,7 +274,7 @@ const diabeticGlucoseJournalValidator = (values: {
         throw new Error(`Invalid mealTime : ${mealTime}`);
       }
 
-    //check if bloodGlucose is valid, should be string
+    //check if bloodGlucose is valid, should be number
     if(!bloodGlucose || typeof bloodGlucose !== 'number') {
         Logger.error(`Invalid bloodGlucose: ${bloodGlucose}`);
         throw new Error(`Invalid bloodGlucose: ${bloodGlucose}`);
