@@ -21,7 +21,7 @@ services:
     container_name: server_dev_container
     image: server_dev_image
     environment:
-      - SERVER_DEV_PORT=${SERVER_DEV_PORT}
+      - PORT=${PORT}
       - DB_HOST=postgres_dev_compass
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
@@ -32,12 +32,12 @@ services:
       context: ./server/
       dockerfile: dev.Dockerfile
       args:
-        - SERVER_DEV_PORT=${SERVER_DEV_PORT}
+        - PORT=${PORT}
     volumes:
       - ./server/:/app/server:cached
       - /app/server/node_modules/
     ports:
-      - "${SERVER_DEV_PORT}:${SERVER_DEV_PORT}"
+      - "${PORT}:${PORT}"
     depends_on:
       postgres_dev_compass:
         condition: service_healthy
