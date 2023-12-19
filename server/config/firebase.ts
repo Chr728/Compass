@@ -1,6 +1,7 @@
 import admin from 'firebase-admin';
-// const path = require('path');
-// const serviceAccount = require(path.resolve(__dirname,'../serviceAccountKey.json'))
+require('dotenv').config({
+    path: './../.env',
+});
 
 admin.initializeApp({
     credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_SA as string))
