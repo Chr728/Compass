@@ -120,7 +120,7 @@ describe('Testing the create glucose journal controller', () => {
       .mockRejectedValue(new Error('query error'));
     const res = await request(app)
       .post(`/api/journals/diabetic/glucose/user/${user.uid}`)
-      .send('')
+      .send(glucoseJournal)
       .set({ Authorization: 'Bearer token' });
     expect(db.GlucoseMeasurement.create).toHaveBeenCalledTimes(1);
     expect(res.status).toBe(400);

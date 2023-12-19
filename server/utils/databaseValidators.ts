@@ -255,6 +255,43 @@ const activityJournalValidator = (values: {
     }
 }
 
+const diabeticGlucoseJournalValidator = (values: { 
+    date: Date;
+    mealTime: string;
+    bloodGlucose: number;
+    unit: string;
+    notes: string;}) => {
+    const {date, mealTime, bloodGlucose, unit, notes } = values;
+    //check if date is valid, should be date
+    if (!date || date instanceof Date) {
+        Logger.error(`Invalid Date: ${date}`);
+        throw new Error(`Invalid Date : ${date}`);
+     }
+
+    //check if mealTime is valid, should be string
+    if (!mealTime || typeof mealTime !== 'string') {
+        Logger.error(`Invalid mealTime: ${mealTime}`);
+        throw new Error(`Invalid mealTime : ${mealTime}`);
+      }
+
+    //check if bloodGlucose is valid, should be string
+    if(!bloodGlucose || typeof bloodGlucose !== 'number') {
+        Logger.error(`Invalid bloodGlucose: ${bloodGlucose}`);
+        throw new Error(`Invalid bloodGlucose: ${bloodGlucose}`);
+    }
+
+    //check if unit is valid, should be string
+    if(!unit || typeof unit !== 'string') {
+        Logger.error(`Invalid unit: ${unit}`);
+        throw new Error(`Invalid unit: ${unit}`);
+    }
+
+    //check if notes is valid, should be string
+    if (notes == undefined || typeof notes !== 'string') {
+        Logger.error(`Invalid notes: ${notes}`);
+        throw new Error(`Invalid notes: ${notes}`);
+    }
+}
 
 
 export {
@@ -265,7 +302,8 @@ export {
   medicationValidator,
   moodJournalValidator,
   weightJournalValidator,
-  activityJournalValidator
+  activityJournalValidator,
+  diabeticGlucoseJournalValidator
 
 
 
