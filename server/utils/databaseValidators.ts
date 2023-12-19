@@ -224,16 +224,16 @@ const activityJournalValidator = (values: {
     duration: number;
     notes: string; }) => {
     const {date, time, activity, duration, notes } = values;
-    //check if date is valid, should be date
-    if (!date || date instanceof Date) {
+    //check if date is valid, should be string
+    if (!date || typeof date !== 'string') {
         Logger.error(`Invalid Date: ${date}`);
         throw new Error(`Invalid Date : ${date}`);
      }
 
-    //check if time is valid, should be date
-    if (!time || time instanceof Date) {
-        Logger.error(`Invalid Time: ${time}`);
-        throw new Error(`Invalid Time : ${time}`);
+    //check if time is valid, should be string
+    if (!time || typeof time !== 'string') {
+        Logger.error(`Invalid time : ${time}`);
+        throw new Error(`Invalid time  : ${time}`);
       }
 
     //check if activity is valid, should be string
@@ -263,7 +263,8 @@ const diabeticGlucoseJournalValidator = (values: {
     notes: string;}) => {
     const {date, mealTime, bloodGlucose, unit, notes } = values;
     //check if date is valid, should be date
-    if (!date || date instanceof Date) {
+    //check if date is valid, should be string
+    if (!date || typeof date !== 'string') {
         Logger.error(`Invalid Date: ${date}`);
         throw new Error(`Invalid Date : ${date}`);
      }
@@ -301,14 +302,14 @@ const diabeticInsulinJournalValidator = (values: {
     bodySite: string;
     notes: string;}) => {
     const {date, time, typeOfInsulin, unit, bodySite, notes } = values;
-    //check if date is valid, should be date
-    if (!date || date instanceof Date) {
+    //check if date is valid, should be string
+    if (!date || typeof date !== 'string') {
         Logger.error(`Invalid Date: ${date}`);
         throw new Error(`Invalid Date : ${date}`);
      }
 
-    //check if time is valid, should be date
-    if (!time || time instanceof Date) {
+    //check if time is valid, should be string
+    if (!time || typeof time !== 'string') {
         Logger.error(`Invalid time : ${time}`);
         throw new Error(`Invalid time  : ${time}`);
       }
@@ -346,14 +347,14 @@ const foodIntakeJournalValidator = (values: {
     servingNumber: number;
     notes: string;}) => {
     const {date, time, foodName, mealType, servingNumber, notes } = values;
-    //check if date is valid, should be date
-    if (!date || date instanceof Date) {
+    //check if date is valid, should be string
+    if (!date || typeof date !== 'string') {
         Logger.error(`Invalid Date: ${date}`);
         throw new Error(`Invalid Date : ${date}`);
      }
 
-    //check if time is valid, should be date
-    if (!time || time instanceof Date) {
+    //check if time is valid, should be string
+    if (!time || typeof time !== 'string') {
         Logger.error(`Invalid time : ${time}`);
         throw new Error(`Invalid time  : ${time}`);
       }
