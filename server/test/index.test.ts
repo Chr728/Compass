@@ -3,7 +3,7 @@ import app from "./../index";
 import admin from "../config/firebase";
 
 let server:any;
-const port = process.env.SERVER_DEV_PORT;
+const port = process.env.PORT;
 
 function startServer() {
     server = app.listen(port, () => {

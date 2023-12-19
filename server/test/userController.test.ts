@@ -4,7 +4,7 @@ import db from './../models/index';
 import admin from 'firebase-admin';
 
 let server: any;
-const port = process.env.SERVER_DEV_PORT;
+const port = process.env.PORT;
 
 const user = {
   id: 1,

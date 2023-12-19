@@ -62,9 +62,9 @@ if (!isProduction) {
   });
 }
 
-  app.listen(process.env.SERVER_DEV_PORT, () => {
+  app.listen(process.env.PORT, () => {
     Logger.info(
-      `Server listening on port ${process.env.SERVER_DEV_PORT || 8000}`
+      `Server listening on port ${process.env.PORT || 8000}`
     );
   });
 
