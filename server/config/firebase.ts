@@ -1,6 +1,6 @@
 import admin from 'firebase-admin';
 require('dotenv').config({
-    path: './../.env',
+    path: './../../.env',
 });
 
 admin.initializeApp({
