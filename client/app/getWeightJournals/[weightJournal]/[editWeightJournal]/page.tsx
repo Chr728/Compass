@@ -71,9 +71,11 @@ export default function EditWeightJournal({params: { weightJournal } } : { param
           unit: values.unit,
           notes: values.notes,
         };
-        const result = await updateWeightJournal(weightJournal, data); 
+        const result = await updateWeightJournal(weightJournal, data)
+        .then(result => {
+          router.push(`/getWeightJournals/${weightJournal}`)
+        })
         logger.info('Weight journal entry updated:', result);
-        router.push(`/getWeightJournals/${weightJournal}`)
       } catch (error) {
         logger.error('Error updating weight journal entry:', error);
       }

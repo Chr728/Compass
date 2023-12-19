@@ -33,8 +33,10 @@ export default function CreateActivityJournalPage() {
           duration: values.duration,
           notes: values.notes,
         };
-        const result = await createActivityJournal(data); 
-        router.push('/getActivityJournals');
+        const result = await createActivityJournal(data)
+        .then(result => {
+          router.push('/getActivityJournals');
+        })
       } catch (error) {
         logger.error('Error creating activity journal entry:', error);
       }

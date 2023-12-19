@@ -72,9 +72,11 @@ export default function EditFoodJournal({params: { foodJournal } } : { params: {
           servingNumber: values.servingNumber,
           notes: values.notes,
         };
-        const result = await updateFoodIntakeJournal(foodJournal, data); 
+        const result = await updateFoodIntakeJournal(foodJournal, data)
+        .then(result => {
+          router.push(`/getFoodJournals/${foodJournal}`)
+        })
         logger.info('Food journal entry updated:', result);
-        router.push(`/getFoodJournals/${foodJournal}`)
       } catch (error) {
         logger.error('Error updating Food journal entry:', error);
       }

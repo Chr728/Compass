@@ -72,9 +72,11 @@ export default function EditActivityJournal({params: { activityJournal } } : { p
           duration: values.duration,
           notes: values.notes,
         };
-        const result = await updateActivityJournal(activityJournal, data); 
+        const result = await updateActivityJournal(activityJournal, data)
+        .then(result => {
+          router.push(`/getActivityJournals/${activityJournal}`)
+        })
         logger.info('activity journal entry updated:', result);
-        router.push(`/getActivityJournals/${activityJournal}`)
       } catch (error) {
         logger.error('Error updating activity journal entry:', error);
       }
