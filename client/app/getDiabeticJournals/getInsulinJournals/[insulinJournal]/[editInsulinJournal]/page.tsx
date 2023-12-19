@@ -74,7 +74,10 @@ export default function EditInsulinJournal({params: { insulinJournal } } : { par
           bodySite: values.bodySite,
           notes: values.notes,
         };
-        const result = await updateInsulinJournal(insulinJournal, data); 
+        const result = await updateInsulinJournal(insulinJournal, data)
+        .then(result => {
+          router.push(`/getDiabeticJournals/getInsulinJournals/${insulinJournal}`);
+        }) 
         logger.info('Insulin journal entry updated:', result);
       } catch (error) {
         logger.error('Error updating Insulin journal entry:', error);

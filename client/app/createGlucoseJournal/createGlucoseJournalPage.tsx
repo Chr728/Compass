@@ -43,9 +43,11 @@ export default function CreateGlucoseJournalPage() {
           unit: values.unit,
           notes: values.notes,
         };
-        const result = await createGlucoseJournal(data); 
+        const result = await createGlucoseJournal(data)
+        .then(result => {
+          router.push('/getDiabeticJournals');
+        })
         logger.info('glucose journal entry created:', result);
-        router.push('/getDiabeticJournals');
       } catch (error) {
         logger.error('Error creating glucose journal entry:', error);
       }
