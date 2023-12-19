@@ -27,6 +27,16 @@ const activityJournal = {
   notes: 'Sample activity entry',
 };
 
+const invalidActivityJournal = {
+  id: 1,
+  uid: 'testuid',
+  date: '2023-09-30',
+  time: '12:00:00',
+  activity: 'running',
+  duration: "175",
+  notes: 'Sample activity entry',
+};
+
 const updatedActivityJournal = {
   date: '2023-09-30',
   time: '12:00:00',
@@ -305,5 +315,43 @@ describe('activity Journal Controller Tests', () => {
     expect(res.status).toBe(404);
     expect(res.body.status).toBe('NOT_FOUND');
     expect(res.body.message).toBe('User not found');
+  });
+
+  it('should throw error for invalid data when creating a activity journal for a user', async () => {
+    jest
+      .spyOn(db.ActivityJournal, 'create')
+      .mockResolvedValueOnce(activityJournal);
+
+    const res = await request(app)
+      .post(`/api/journals/activity/user/${user.uid}`)
+      .send(invalidActivityJournal)
+      .set({ Authorization: 'Bearer token' });
+
+    expect(db.User.findOne).toBeCalledTimes(1);
+    expect(db.ActivityJournal.create).toBeCalledTimes(0);
+    expect(res.status).toBe(400);
+  });
+
+  it('should throw error for invalid data when updating a activity journal for a user', async () => {
+    jest
+      .spyOn(db.ActivityJournal, 'findOne')
+      .mockResolvedValueOnce(activityJournal);
+    jest
+      .spyOn(db.ActivityJournal, 'update')
+      .mockResolvedValueOnce([1, [updatedActivityJournal]]);
+
+    jest
+      .spyOn(db.ActivityJournal, 'findOne')
+      .mockResolvedValueOnce(updatedActivityJournal);
+
+    const res = await request(app)
+      .put(`/api/journals/activity/${activityJournal.id}`)
+      .send(invalidActivityJournal)
+      .set({ Authorization: 'Bearer token' });
+    
+
+    expect(db.ActivityJournal.findOne).toBeCalledTimes(1);
+    expect(db.ActivityJournal.update).toBeCalledTimes(0);
+    expect(res.status).toBe(400);
   });
 });
