@@ -80,42 +80,73 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const signUp = (values: createUserAttributes) => {
+  const signUp = (values: createUserAttributes): Promise<void> => {
     handleLoading(true);
-    createUserWithEmailAndPassword(auth, values.email, values.password)
+    return createUserWithEmailAndPassword(auth, values.email, values.password)
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
         setError(null);
         const data = values;
         data.uid = user.uid;
-        createUser(data)
-          .then((res) => {
-            if (res !== null) {
-              handleLoading(false);
-              router.push('/tpage');
-            }
-          })
-          .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            logger.error(errorCode, errorMessage);
-            handlePopUp('error', errorMessage);
-            handleLoading(false);
-          });
+        return createUser(data);
+      })
+      .then((res) => {
+        if (res !== null) {
+          handleLoading(false);
+          router.push('/tpage');
+        }
       })
       .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        logger.error(errorCode, errorMessage);
+        handlePopUp('error', errorMessage);
+        handleLoading(false);
         if (error.code === 'auth/email-already-in-use') {
           setError('Email address is already in use.');
         } else {
           setError(error.message);
         }
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        logger.error(errorCode, errorMessage);
-        handlePopUp('error', errorMessage);
       });
   };
+
+  // const signUp = (values: createUserAttributes) => {
+  //   handleLoading(true);
+  //   createUserWithEmailAndPassword(auth, values.email, values.password)
+  //     .then((userCredential) => {
+  //       // Signed in
+  //       const user = userCredential.user;
+  //       setError(null);
+  //       const data = values;
+  //       data.uid = user.uid;
+  //       createUser(data)
+  //         .then((res) => {
+  //           if (res !== null) {
+  //             handleLoading(false);
+  //             router.push('/tpage');
+  //           }
+  //         })
+  //         .catch((error) => {
+  //           const errorCode = error.code;
+  //           const errorMessage = error.message;
+  //           logger.error(errorCode, errorMessage);
+  //           handlePopUp('error', errorMessage);
+  //           handleLoading(false);
+  //         });
+  //     })
+  //     .catch((error) => {
+  //       if (error.code === 'auth/email-already-in-use') {
+  //         setError('Email address is already in use.');
+  //       } else {
+  //         setError(error.message);
+  //       }
+  //       const errorCode = error.code;
+  //       const errorMessage = error.message;
+  //       logger.error(errorCode, errorMessage);
+  //       handlePopUp('error', errorMessage);
+  //     });
+  // };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {

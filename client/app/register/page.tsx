@@ -5,11 +5,13 @@ import Image from 'next/image';
 import Button from '../components/Button';
 import Input from '../components/Input';
 import Link from 'next/link';
-import {useAuth} from '@/app/contexts/AuthContext';
+import { useAuth } from '@/app/contexts/AuthContext';
+import { useUser } from '@/app/contexts/UserContext';
 
 export default function Register() {
   const logger = require('../../logger');
   const {error, signUp} = useAuth();
+  const { setHasSignedUp } = useUser();
   const formik= useFormik({
     initialValues: {
       email: '',
@@ -21,7 +23,7 @@ export default function Register() {
       birthdate: '',
       sex: '',
     },
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
         try{
             const data = {
                 email: values.email,
@@ -32,7 +34,8 @@ export default function Register() {
                 birthDate: values.birthdate,
                 sex: values.sex,
             }
-            signUp(data);
+            await signUp(data);
+            setHasSignedUp(true);
         } catch (error){
             logger.error(error)
         }

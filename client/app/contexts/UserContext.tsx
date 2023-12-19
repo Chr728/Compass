@@ -36,6 +36,7 @@ type EditableUserAttributes = {
 interface UserContextProps {
   userInfo: UserAttributes | null;
   updateCurrentUser: (userData: EditableUserAttributes) => void;
+  setHasSignedUp: (value: boolean) => void;
 }
 
 const logger = require("../../logger");
@@ -59,12 +60,13 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   // can remove the following line as we check for user in req. maybe no more use for user const too.
   const uid = user ? user.uid : null; // Access the UID if the user is authenticated
   const router = useRouter();
+  const [hasSignedUp, setHasSignedUp] = useState(false);
   const { handlePopUp, loading, handleLoading } = useProp();
   
   useEffect(() => {
     const fetchUserData = async () => {
       handleLoading(true);
-      if (uid) {
+      if (uid && hasSignedUp) {
         getUser()
           .then((userData) => {
             setUserInfo(userData);
@@ -91,7 +93,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
       handleLoading(false);
     }
 
-  }, [uid]);
+  }, [uid, hasSignedUp]);
 
   const updateCurrentUser = (userData: EditableUserAttributes) => {
     if (uid) {
@@ -109,6 +111,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const value: UserContextProps = {
     userInfo,
     updateCurrentUser,
+    setHasSignedUp,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
