@@ -2,6 +2,7 @@ import request from 'supertest';
 import app from '../index';
 import db from '../models';
 import {
+  user,
   startServer,
   stopServer,
   mockCreate,
@@ -12,17 +13,6 @@ import {
   mockUpdate,
   mockRejectedValueOnce,
 } from '../utils/journalsTestHelper';
-
-const user = {
-  id: 10,
-  uid: 'testuid',
-  email: 'test@gmail.com',
-  firstName: 'John',
-  lastName: 'Doe',
-  phoneNumber: '5147894561',
-  birthDate: '1990-12-31T00:00:00.000Z',
-  sex: 'male',
-};
 
 const activityJournal = {
   id: 1,

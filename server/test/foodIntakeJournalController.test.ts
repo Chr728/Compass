@@ -13,11 +13,8 @@ import {
   mockRejectedValueOnce,
 } from '../utils/journalsTestHelper';
 
-let server: any;
-const port = process.env.SERVER_DEV_PORT;
-
 const user = {
-  id: 1,
+  id: 10,
   uid: 'uid',
   email: 'test@gmail.com',
   firstName: 'John',

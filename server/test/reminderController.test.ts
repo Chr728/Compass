@@ -4,24 +4,11 @@ import db from '../models/index';
 import admin from 'firebase-admin';
 import moment = require('moment-timezone');
 const webPush = require('web-push');
+import { user, startServer, stopServer } from '../utils/journalsTestHelper';
 
-let server: any;
-const port = process.env.SERVER_DEV_PORT;
 const publicKey = process.env.VAPID_PUBLIC_KEY;
 const privateKey = process.env.VAPID_PRIVATE_KEY;
 webPush.setVapidDetails('mailto:test@gmail.com', publicKey, privateKey);
-
-//Predefined user
-const user = {
-  id: 10,
-  uid: 'testuid',
-  email: 'test@gmail.com',
-  firstName: 'John',
-  lastName: 'Doe',
-  phoneNumber: '5147894561',
-  birthDate: '1990-12-31T00:00:00.000Z',
-  sex: 'male',
-};
 
 //Predefined preferences
 const userNotificationPreferences = {
@@ -140,16 +127,6 @@ const userSubscription = {
     keys: 'test',
   },
 };
-
-function startServer() {
-  server = app.listen(port);
-}
-
-function stopServer() {
-  if (server) {
-    server.close();
-  }
-}
 
 describe('Testing reminder controller', () => {
   beforeAll(() => {
