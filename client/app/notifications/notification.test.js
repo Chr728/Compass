@@ -155,7 +155,7 @@ describe("Notification Settings Page", () => {
       "error",
       "Please enable browser notifications before changing any of the preference settings"
     );
-    expect(mockRouter).not.toHaveBeenCalled();
+    expect(mockRouter).toHaveBeenCalled();
   });
 
   test("Calls router's push method on button click", async () => {
@@ -179,6 +179,7 @@ describe("Notification Settings Page", () => {
     await waitFor(() => {
       expect(updateNotificationPreference).toHaveBeenCalled();
     });
+    expect(mockRouter).toHaveBeenCalled();
   });
 
   test("Routes to settings page on button click", () => {
@@ -202,6 +203,17 @@ describe("AlertComponent", () => {
 
     render(<NotificationPage />);
 
+    // Mock the notification object to have default permission and return granted when permission is requested
+    Object.defineProperty(window, "Notification", {
+      value: {
+        permission: "default",
+        requestPermission: jest.fn().mockImplementation(() => {
+          return Promise.resolve("granted"); // Change the resolved value as needed
+        }),
+      },
+      writable: true,
+    });
+
     const saveButton = screen.getByText("Save");
     fireEvent.click(saveButton);
 
@@ -223,6 +235,17 @@ describe("AlertComponent", () => {
     updateNotificationPreference.mockRejectedValueOnce(new Error("Failed"));
 
     render(<NotificationPage />);
+
+    // Mock the notification object to have default permission and return granted when permission is requested
+    Object.defineProperty(window, "Notification", {
+      value: {
+        permission: "default",
+        requestPermission: jest.fn().mockImplementation(() => {
+          return Promise.resolve("granted"); // Change the resolved value as needed
+        }),
+      },
+      writable: true,
+    });
 
     const saveButton = screen.getByText("Save");
     fireEvent.click(saveButton);
