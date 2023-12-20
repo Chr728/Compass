@@ -40,7 +40,7 @@ const invalidActivityJournal = {
   date: '2023-09-30',
   time: '12:00:00',
   activity: 'running',
-  duration: "175",
+  duration: '175',
   notes: 'Sample activity entry',
 };
 
@@ -135,7 +135,6 @@ describe('activity Journal Controller Tests', () => {
       .put(`/api/journals/activity/${activityJournal.id}`)
       .send(updatedActivityJournal)
       .set({ Authorization: 'Bearer token' });
-    
 
     expect(db.ActivityJournal.findOne).toBeCalledTimes(2);
     expect(db.ActivityJournal.update).toBeCalledTimes(1);
@@ -295,9 +294,7 @@ describe('activity Journal Controller Tests', () => {
   });
 
   it('should throw error for invalid data when creating a activity journal for a user', async () => {
-    jest
-      .spyOn(db.ActivityJournal, 'create')
-      .mockResolvedValueOnce(activityJournal);
+    mockCreate(db.ActivityJournal, activityJournal);
 
     const res = await request(app)
       .post(`/api/journals/activity/user/${user.uid}`)
@@ -310,22 +307,14 @@ describe('activity Journal Controller Tests', () => {
   });
 
   it('should throw error for invalid data when updating a activity journal for a user', async () => {
-    jest
-      .spyOn(db.ActivityJournal, 'findOne')
-      .mockResolvedValueOnce(activityJournal);
-    jest
-      .spyOn(db.ActivityJournal, 'update')
-      .mockResolvedValueOnce([1, [updatedActivityJournal]]);
-
-    jest
-      .spyOn(db.ActivityJournal, 'findOne')
-      .mockResolvedValueOnce(updatedActivityJournal);
+    mockFindOne(db.ActivityJournal, activityJournal);
+    mockUpdate(db.ActivityJournal, updatedActivityJournal);
+    mockFindOne(db.ActivityJournal, updatedActivityJournal);
 
     const res = await request(app)
       .put(`/api/journals/activity/${activityJournal.id}`)
       .send(invalidActivityJournal)
       .set({ Authorization: 'Bearer token' });
-    
 
     expect(db.ActivityJournal.findOne).toBeCalledTimes(1);
     expect(db.ActivityJournal.update).toBeCalledTimes(0);

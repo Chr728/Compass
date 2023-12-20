@@ -68,7 +68,7 @@ const invalidFoodIntakeJournal = {
   time: '13:00:00',
   foodName: 'steak',
   mealType: 'mealType1',
-  servingNumber: "servingNumber",
+  servingNumber: 'servingNumber',
   notes: 'notes1',
 };
 
@@ -162,10 +162,9 @@ describe('Testing the create food intake journal controller', () => {
   });
 
   it('test the error if the data received is invalid', async () => {
-    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(user);
-    jest
-      .spyOn(db.FoodIntakeJournal, 'create')
-      .mockRejectedValue(null);
+    mockFindOne(db.User, user);
+    mockRejectedValueOnce('create', db.FoodIntakeJournal, null);
+
     const res = await request(app)
       .post('/api/journals/foodIntake/user/uid')
       .send(invalidFoodIntakeJournal)
@@ -346,12 +345,13 @@ describe('Testing the update food intake journal controller', () => {
   });
 
   it('should return an error updating the journal if the data is invalid', async () => {
-    jest
-      .spyOn(db.FoodIntakeJournal, 'findOne')
-      .mockResolvedValueOnce(foodIntakeJournals[0]);
-    jest
-      .spyOn(db.FoodIntakeJournal, 'update')
-      .mockRejectedValue(new Error('query error'));
+    mockFindOne(db.FoodIntakeJournal, foodIntakeJournals[0]);
+    mockRejectedValueOnce(
+      'update',
+      db.FoodIntakeJournal,
+      new Error('query error')
+    );
+
     const res = await request(app)
       .put('/api/journals/foodIntake/1')
       .send(invalidFoodIntakeJournal)

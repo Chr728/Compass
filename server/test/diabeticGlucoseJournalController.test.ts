@@ -133,10 +133,13 @@ describe('Testing the create glucose journal controller', () => {
   });
 
   it('test the error if data is invalid', async () => {
-    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(user);
-    jest
-      .spyOn(db.GlucoseMeasurement, 'create')
-      .mockRejectedValue(new Error('query error'));
+    mockFindOne(db.User, user);
+    mockRejectedValueOnce(
+      'create',
+      db.GlucoseMeasurement,
+      new Error('query error')
+    );
+
     const res = await request(app)
       .post(`/api/journals/diabetic/glucose/user/${user.uid}`)
       .send(invalidGlucoseJournal)
@@ -201,8 +204,9 @@ describe('Testing the update glucose journal controller', () => {
   });
 
   it('should return an error if the journal data is invalid ', async () => {
-    jest.spyOn(db.GlucoseMeasurement, 'findOne').mockResolvedValueOnce(glucoseJournal);
-    jest.spyOn(db.GlucoseMeasurement, 'update').mockResolvedValueOnce([1]);
+    mockFindOne(db.GlucoseMeasurement, glucoseJournal);
+    mockUpdate(db.GlucoseMeasurement, [1]);
+
     const res = await request(app)
       .put(`/api/journals/diabetic/glucose/${glucoseJournal.id}`)
       .send(invalidGlucoseJournal)
@@ -213,7 +217,6 @@ describe('Testing the update glucose journal controller', () => {
     expect(res.status).toBe(400);
     expect(res.body.status).toBe('ERROR');
   });
-
 });
 describe('Testing the delete glucose journal controller', () => {
   it('should delete a glucose journal for a user', async () => {
