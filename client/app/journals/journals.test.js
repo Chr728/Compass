@@ -24,7 +24,7 @@ jest.mock("next/navigation", () => ({
       render(<Journals />);
       const message = screen.getByText(/Activity Journal/i);
       expect(message).toBeInTheDocument();
-      const message1 = screen.getByText(/Record the activities that get you moving./i);
+      const message1 = screen.getByText(/Record what gets you moving./i);
       expect(message1).toBeInTheDocument();
     });
   
@@ -61,7 +61,7 @@ jest.mock("next/navigation", () => ({
       render(<Journals />);
       const message = screen.getByText(/Diabetic Journal/i);
       expect(message).toBeInTheDocument();
-      const message1 = screen.getByText(/Monitor your insulin and glucose everyday./i);
+      const message1 = screen.getByText(/Monitor your insulin and glucose./i);
       expect(message1).toBeInTheDocument();
     });
 
