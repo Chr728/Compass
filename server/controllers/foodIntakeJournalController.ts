@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Logger } from "../middlewares/logger";
 import db from "../models";
+import {foodIntakeJournalValidator} from '../utils/databaseValidators';
 
 // Create one food intake Journal for a user
 export const createFoodIntakeJournal = async (req: Request,res: Response) => {
@@ -20,6 +21,7 @@ export const createFoodIntakeJournal = async (req: Request,res: Response) => {
         }
 
         const { date, time, foodName, mealType, servingNumber, notes } = req.body;
+        foodIntakeJournalValidator(req.body);
         const foodIntakeJournal = await db.FoodIntakeJournal.create({
             uid: userId,
             date,
@@ -131,6 +133,7 @@ export const updateFoodIntakeJournal = async (
         }
 
         const { date, time, foodName, mealType, servingNumber, notes } = req.body;
+        foodIntakeJournalValidator(req.body);
 
         await db.FoodIntakeJournal.update({
             date,

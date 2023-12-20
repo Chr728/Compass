@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Logger } from "../middlewares/logger";
 import db from "../models";
+import { activityJournalValidator } from '../utils/databaseValidators';
 
 export const getActivityJournals = async (req: Request, res: Response) => {
     try{
@@ -83,6 +84,7 @@ export const createActivityJournal = async (req: Request, res: Response) => {
         }
 
         const { date, time, activity, duration, notes } = req.body;
+        activityJournalValidator(req.body);
 
         const activityJournal = await db.ActivityJournal.create({
             uid: req.params.uid,
@@ -124,6 +126,7 @@ export const updateActivityJournal = async (req: Request, res: Response) => {
         }
 
         const { date, time, activity, duration, notes } = req.body;
+        activityJournalValidator(req.body);
 
         await db.ActivityJournal.update({
             date,
