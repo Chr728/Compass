@@ -34,6 +34,15 @@ const glucoseJournal = {
   notes: 'test',
 };
 
+const invalidGlucoseJournal = {
+  id: 10,
+  uid: 'testuid',
+  date: '2020-12-31T00:00:00.000Z',
+  mealTime: 'breakfast',
+  bloodGlucose: 100,
+  unit: 'mg/dL',
+};
+
 const updatedGlucoseJournal = {
   id: 10,
   uid: 'testuid',
@@ -116,13 +125,28 @@ describe('Testing the create glucose journal controller', () => {
 
     const res = await request(app)
       .post(`/api/journals/diabetic/glucose/user/${user.uid}`)
-      .send('')
+      .send(glucoseJournal)
       .set({ Authorization: 'Bearer token' });
     expect(db.GlucoseMeasurement.create).toHaveBeenCalledTimes(1);
     expect(res.status).toBe(400);
     expect(res.body.status).toBe('ERROR');
   });
+
+  it('test the error if data is invalid', async () => {
+    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(user);
+    jest
+      .spyOn(db.GlucoseMeasurement, 'create')
+      .mockRejectedValue(new Error('query error'));
+    const res = await request(app)
+      .post(`/api/journals/diabetic/glucose/user/${user.uid}`)
+      .send(invalidGlucoseJournal)
+      .set({ Authorization: 'Bearer token' });
+    expect(db.GlucoseMeasurement.create).toHaveBeenCalledTimes(0);
+    expect(res.status).toBe(400);
+    expect(res.body.status).toBe('ERROR');
+  });
 });
+
 describe('Testing the update glucose journal controller', () => {
   it('should update a glucose journal for a user', async () => {
     mockFindOne(db.GlucoseMeasurement, glucoseJournal);
@@ -175,6 +199,21 @@ describe('Testing the update glucose journal controller', () => {
     expect(res.status).toBe(400);
     expect(res.body.status).toBe('ERROR');
   });
+
+  it('should return an error if the journal data is invalid ', async () => {
+    jest.spyOn(db.GlucoseMeasurement, 'findOne').mockResolvedValueOnce(glucoseJournal);
+    jest.spyOn(db.GlucoseMeasurement, 'update').mockResolvedValueOnce([1]);
+    const res = await request(app)
+      .put(`/api/journals/diabetic/glucose/${glucoseJournal.id}`)
+      .send(invalidGlucoseJournal)
+      .set({ Authorization: 'Bearer token' });
+
+    expect(db.GlucoseMeasurement.findOne).toHaveBeenCalledTimes(1);
+    expect(db.GlucoseMeasurement.update).toHaveBeenCalledTimes(0);
+    expect(res.status).toBe(400);
+    expect(res.body.status).toBe('ERROR');
+  });
+
 });
 describe('Testing the delete glucose journal controller', () => {
   it('should delete a glucose journal for a user', async () => {

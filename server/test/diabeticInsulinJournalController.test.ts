@@ -30,7 +30,18 @@ const insulinJournal = {
   date: '2020-12-31T00:00:00.000Z',
   time: '2020-12-31T00:00:00.000Z',
   typeOfInsulin: 'testTypeOfInsulin',
-  unit: 'testUnit',
+  unit: 10,
+  bodySite: 'testBodySite',
+  notes: 'testNotes',
+};
+
+const invalidInsulinJournal = {
+  id: 1,
+  uid: 'testuid',
+  date: '2020-12-31T00:00:00.000Z',
+  time: '2020-12-31T00:00:00.000Z',
+  typeOfInsulin: 'testTypeOfInsulin',
+  unit: "10",
   bodySite: 'testBodySite',
   notes: 'testNotes',
 };
@@ -41,7 +52,7 @@ const updatedInsulinJournal = {
   date: '2020-12-31T00:00:00.000Z',
   time: '2020-12-31T00:00:00.000Z',
   typeOfInsulin: 'Humalog',
-  unit: '10',
+  unit: 12,
   bodySite: 'L Buttock',
   notes: 'testNotes',
 };
@@ -113,12 +124,27 @@ describe('Testing the create insulin journal controller', () => {
 
     const res = await request(app)
       .post(`/api/journals/diabetic/insulin/user/${user.uid}`)
-      .send('')
+      .send(insulinJournal)
       .set({ Authorization: 'Bearer token' });
     expect(db.InsulinDosage.create).toHaveBeenCalledTimes(1);
     expect(res.status).toBe(400);
     expect(res.body.status).toBe('ERROR');
   });
+
+  it('test the error if the data is invalid', async () => {
+    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(user);
+    jest
+      .spyOn(db.InsulinDosage, 'create')
+      .mockRejectedValue(insulinJournal);
+    const res = await request(app)
+      .post(`/api/journals/diabetic/insulin/user/${user.uid}`)
+      .send(invalidInsulinJournal)
+      .set({ Authorization: 'Bearer token' });
+    expect(db.InsulinDosage.create).toHaveBeenCalledTimes(0);
+    expect(res.status).toBe(400);
+    expect(res.body.status).toBe('ERROR');
+  });
+
 });
 describe('Testing the update insulin journal controller', () => {
   it('should update a insulin journal for a user', async () => {
@@ -168,6 +194,21 @@ describe('Testing the update insulin journal controller', () => {
     expect(res.status).toBe(400);
     expect(res.body.status).toBe('ERROR');
   });
+
+  it('should return an error if the data is invalid when updating the journal', async () => {
+    jest.spyOn(db.InsulinDosage, 'findOne').mockResolvedValueOnce(insulinJournal);
+    jest.spyOn(db.InsulinDosage, 'update').mockRejectedValue(updatedInsulinJournal);
+    const res = await request(app)
+      .put(`/api/journals/diabetic/insulin/${insulinJournal.id}`)
+      .send(invalidInsulinJournal)
+      .set({ Authorization: 'Bearer token' });
+
+    expect(db.InsulinDosage.findOne).toHaveBeenCalledTimes(1);
+    expect(db.InsulinDosage.update).toHaveBeenCalledTimes(0);
+    expect(res.status).toBe(400);
+    expect(res.body.status).toBe('ERROR');
+  });
+
 });
 describe('Testing the delete insulin journal controller', () => {
   it('should delete a insulin journal for a user', async () => {

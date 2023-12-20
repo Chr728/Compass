@@ -217,6 +217,172 @@ const weightJournalValidator = (values: { date: Date; time: Date; weight: number
 }
 
 
+const activityJournalValidator = (values: { 
+    date: Date;
+    time: Date;
+    activity: string;
+    duration: number;
+    notes: string; }) => {
+    const {date, time, activity, duration, notes } = values;
+    //check if date is valid, should be string
+    if (!date || typeof date !== 'string') {
+        Logger.error(`Invalid Date: ${date}`);
+        throw new Error(`Invalid Date : ${date}`);
+     }
+
+    //check if time is valid, should be string
+    if (!time || typeof time !== 'string') {
+        Logger.error(`Invalid time : ${time}`);
+        throw new Error(`Invalid time  : ${time}`);
+      }
+
+    //check if activity is valid, should be string
+    if(!activity || typeof activity !== 'string') {
+        Logger.error(`Invalid activity: ${activity}`);
+        throw new Error(`Invalid activity: ${activity}`);
+    }
+
+    //check if duration is valid, should be number
+    if(!duration || typeof duration !== 'number') {
+        Logger.error(`Invalid duration: ${duration}`);
+        throw new Error(`Invalid duration: ${duration}`);
+    }
+
+    //check if notes is valid, should be string
+    if (notes == undefined || typeof notes !== 'string') {
+        Logger.error(`Invalid notes: ${notes}`);
+        throw new Error(`Invalid notes: ${notes}`);
+    }
+}
+
+const diabeticGlucoseJournalValidator = (values: { 
+    date: Date;
+    mealTime: string;
+    bloodGlucose: number;
+    unit: string;
+    notes: string;}) => {
+    const {date, mealTime, bloodGlucose, unit, notes } = values;
+    //check if date is valid, should be date
+    //check if date is valid, should be string
+    if (!date || typeof date !== 'string') {
+        Logger.error(`Invalid Date: ${date}`);
+        throw new Error(`Invalid Date : ${date}`);
+     }
+
+    //check if mealTime is valid, should be string
+    if (!mealTime || typeof mealTime !== 'string') {
+        Logger.error(`Invalid mealTime: ${mealTime}`);
+        throw new Error(`Invalid mealTime : ${mealTime}`);
+      }
+
+    //check if bloodGlucose is valid, should be number
+    if(!bloodGlucose || typeof bloodGlucose !== 'number') {
+        Logger.error(`Invalid bloodGlucose: ${bloodGlucose}`);
+        throw new Error(`Invalid bloodGlucose: ${bloodGlucose}`);
+    }
+
+    //check if unit is valid, should be string
+    if(!unit || typeof unit !== 'string') {
+        Logger.error(`Invalid unit: ${unit}`);
+        throw new Error(`Invalid unit: ${unit}`);
+    }
+
+    //check if notes is valid, should be string
+    if (notes == undefined || typeof notes !== 'string') {
+        Logger.error(`Invalid notes: ${notes}`);
+        throw new Error(`Invalid notes: ${notes}`);
+    }
+}
+
+const diabeticInsulinJournalValidator = (values: { 
+    date: Date;
+    time: Date;
+    typeOfInsulin: string;
+    unit: number;
+    bodySite: string;
+    notes: string;}) => {
+    const {date, time, typeOfInsulin, unit, bodySite, notes } = values;
+    //check if date is valid, should be string
+    if (!date || typeof date !== 'string') {
+        Logger.error(`Invalid Date: ${date}`);
+        throw new Error(`Invalid Date : ${date}`);
+     }
+
+    //check if time is valid, should be string
+    if (!time || typeof time !== 'string') {
+        Logger.error(`Invalid time : ${time}`);
+        throw new Error(`Invalid time  : ${time}`);
+      }
+
+    //check if typeOfInsulin is valid, should be string
+    if(!typeOfInsulin || typeof typeOfInsulin !== 'string') {
+        Logger.error(`Invalid typeOfInsulin: ${typeOfInsulin}`);
+        throw new Error(`Invalid typeOfInsulin: ${typeOfInsulin}`);
+    }
+
+    //check if bodySite is valid, should be string
+    if(!bodySite || typeof bodySite !== 'string') {
+        Logger.error(`Invalid bodySite: ${bodySite}`);
+        throw new Error(`Invalid bodySite: ${bodySite}`);
+    }
+
+    //check if unit is valid, should be number
+    if(!unit || typeof unit !== 'number') {
+        Logger.error(`Invalid unit: ${unit}`);
+        throw new Error(`Invalid unit: ${unit}`);
+    }
+
+    //check if notes is valid, should be string
+    if (notes == undefined || typeof notes !== 'string') {
+        Logger.error(`Invalid notes: ${notes}`);
+        throw new Error(`Invalid notes: ${notes}`);
+    }
+}
+
+const foodIntakeJournalValidator = (values: { 
+    date: Date;
+    time: Date;
+    foodName: string;
+    mealType: string;
+    servingNumber: number;
+    notes: string;}) => {
+    const {date, time, foodName, mealType, servingNumber, notes } = values;
+    //check if date is valid, should be string
+    if (!date || typeof date !== 'string') {
+        Logger.error(`Invalid Date: ${date}`);
+        throw new Error(`Invalid Date : ${date}`);
+     }
+
+    //check if time is valid, should be string
+    if (!time || typeof time !== 'string') {
+        Logger.error(`Invalid time : ${time}`);
+        throw new Error(`Invalid time  : ${time}`);
+      }
+
+    //check if foodName is valid, should be string
+    if(!foodName || typeof foodName !== 'string') {
+        Logger.error(`Invalid foodName: ${foodName}`);
+        throw new Error(`Invalid foodName: ${foodName}`);
+    }
+
+    //check if mealType is valid, should be string
+    if(!mealType || typeof mealType !== 'string') {
+        Logger.error(`Invalid mealType: ${mealType}`);
+        throw new Error(`Invalid mealType: ${mealType}`);
+    }
+
+    //check if unit is valid, should be number
+    if(!servingNumber || typeof servingNumber !== 'number') {
+        Logger.error(`Invalid servingNumber: ${servingNumber}`);
+        throw new Error(`Invalid servingNumber: ${servingNumber}`);
+    }
+
+    //check if notes is valid, should be string
+    if (notes == undefined || typeof notes !== 'string') {
+        Logger.error(`Invalid notes: ${notes}`);
+        throw new Error(`Invalid notes: ${notes}`);
+    }
+}
 
 export {
   userValidator,
@@ -225,9 +391,10 @@ export {
   notificationPreferenceValidator,
   medicationValidator,
   moodJournalValidator,
-    weightJournalValidator
-
-
-
+  weightJournalValidator,
+  activityJournalValidator,
+  diabeticGlucoseJournalValidator,
+  diabeticInsulinJournalValidator,
+  foodIntakeJournalValidator
 }
 

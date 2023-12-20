@@ -61,6 +61,17 @@ const createFoodIntakeJournal = {
   notes: 'notes1',
 };
 
+const invalidFoodIntakeJournal = {
+  id: 1,
+  uid: 'foodIntakeUid',
+  date: '2023-10-19',
+  time: '13:00:00',
+  foodName: 'steak',
+  mealType: 'mealType1',
+  servingNumber: "servingNumber",
+  notes: 'notes1',
+};
+
 const updatedFoodIntakeJournal = {
   id: 1,
   uid: 'foodIntakeUid',
@@ -143,9 +154,23 @@ describe('Testing the create food intake journal controller', () => {
 
     const res = await request(app)
       .post('/api/journals/foodIntake/user/uid')
-      .send('')
+      .send(createFoodIntakeJournal)
       .set({ Authorization: 'Bearer token' });
     expect(db.FoodIntakeJournal.create).toHaveBeenCalledTimes(1);
+    expect(res.status).toBe(400);
+    expect(res.body.status).toBe('ERROR');
+  });
+
+  it('test the error if the data received is invalid', async () => {
+    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(user);
+    jest
+      .spyOn(db.FoodIntakeJournal, 'create')
+      .mockRejectedValue(null);
+    const res = await request(app)
+      .post('/api/journals/foodIntake/user/uid')
+      .send(invalidFoodIntakeJournal)
+      .set({ Authorization: 'Bearer token' });
+    expect(db.FoodIntakeJournal.create).toHaveBeenCalledTimes(0);
     expect(res.status).toBe(400);
     expect(res.body.status).toBe('ERROR');
   });
@@ -292,7 +317,7 @@ describe('Testing the update food intake journal controller', () => {
       .send(foodIntakeJournals[0])
       .set({ Authorization: 'Bearer token' });
 
-    // expect(db.FoodIntakeJournal.findOne).toHaveBeenCalledTimes(2);
+    expect(db.FoodIntakeJournal.findOne).toHaveBeenCalledTimes(1);
     expect(db.FoodIntakeJournal.update).toHaveBeenCalledTimes(0);
     expect(res.status).toBe(404);
     expect(res.body.status).toBe('ERROR');
@@ -316,6 +341,24 @@ describe('Testing the update food intake journal controller', () => {
 
     expect(db.FoodIntakeJournal.findOne).toHaveBeenCalledTimes(1);
     expect(db.FoodIntakeJournal.update).toHaveBeenCalledTimes(1);
+    expect(res.status).toBe(400);
+    expect(res.body.status).toBe('ERROR');
+  });
+
+  it('should return an error updating the journal if the data is invalid', async () => {
+    jest
+      .spyOn(db.FoodIntakeJournal, 'findOne')
+      .mockResolvedValueOnce(foodIntakeJournals[0]);
+    jest
+      .spyOn(db.FoodIntakeJournal, 'update')
+      .mockRejectedValue(new Error('query error'));
+    const res = await request(app)
+      .put('/api/journals/foodIntake/1')
+      .send(invalidFoodIntakeJournal)
+      .set({ Authorization: 'Bearer token' });
+
+    expect(db.FoodIntakeJournal.findOne).toHaveBeenCalledTimes(1);
+    expect(db.FoodIntakeJournal.update).toHaveBeenCalledTimes(0);
     expect(res.status).toBe(400);
     expect(res.body.status).toBe('ERROR');
   });
