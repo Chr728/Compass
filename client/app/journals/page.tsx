@@ -17,9 +17,6 @@ export default function Journal() {
       <button className="mt-3" onClick={() => router.push('/tpage')}>
         <Header  headerText="Journals"></Header>
       </button>
-      
-     <p className="p-6 text-darkgrey">Use our health journals to help you keep track
-        of your physical and mental health.</p>   
     
           
 <Link href="/getDiabeticJournals">
@@ -30,14 +27,14 @@ export default function Journal() {
            Diabetic Journal
           </p>
           <p className="text-[14px] text-white pr-20 font-IBM Plex Sans  text-start">
-Monitor your insulin and glucose everyday.
+Monitor your insulin and glucose.
         </p>
         <NextImage
         src = {diabetes}
         alt="diabetic journal"
         width={120}
         height={ 70 }
-        className="absolute top-0 right-0  ml-16 transform: rotate(-14.774deg) flex-shrink: 0"
+        className="absolute top-0 right-0 ml-16 rotate-[-14.774deg] shrink-0"
       />
       </div>
       </div>
@@ -50,15 +47,15 @@ Monitor your insulin and glucose everyday.
           <p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
             Activity Journal
           </p>
-          <p className="text-[14px] text-white  font-IBM Plex Sans  text-start">
-          Record the activities that get you moving.
+          <p className="text-[14px] text-white font-IBM Plex Sans  text-start">
+          Record what gets you moving.
               </p>
         <NextImage
         src = {activity}
         alt="activity journal"
         width={39}
         height={ 95 }
-        className="absolute top-0 right-0 flex-shrink: 0"
+        className="absolute top-0 right-8 shrink-0"
       />
         </div>
       </div>
@@ -81,7 +78,7 @@ Monitor your insulin and glucose everyday.
         alt="weight journal"
         width={120}
         height={ 70 }
-        className="absolute top-0 right-0  ml-16 transform: rotate(-10.527deg) flex-shrink: 0"
+        className="absolute top-1 right-0 ml-16 rotate-[-10.527deg] shrink-0 scale-[1.15]"
       />
         </div>
       </div>
@@ -105,7 +102,7 @@ Monitor your insulin and glucose everyday.
         alt="food journal"
         width={113}
         height={ 87 }
-        className="absolute top-0 right-0 z-40  ml-16 transform: rotate(-180deg) flex-shrink: 0"
+        className="absolute top-0 right-0 z-40 ml-16 transform -scale-x-100 shrink-0"
       />     
         </div>
       </div>
@@ -113,7 +110,7 @@ Monitor your insulin and glucose everyday.
 <br></br>
 
 <Link href="/moodjournal">
-      <div className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 " style={{backgroundColor: 'var(--Green, #4caf50)' }}>
+      <div className="rounded-3xl relative flex flex-col w-full md:max-w-[800px] md:h-[600px] p-5 " style={{backgroundColor: 'var(--Green, #4caf50)' }}>
         
         <div>
           <p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
@@ -125,9 +122,8 @@ Monitor your insulin and glucose everyday.
                <NextImage
         src = {mood}
         alt="mood journal"
-        width={43.3}
-        height={ 111.7 }
-        className="absolute top-0 right-0  ml-16 flex-shrink: 0"
+        height={ 105 }
+        className="absolute bottom-0 right-4 shrink-0"
       />
         </div>
       </div>

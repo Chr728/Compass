@@ -42,14 +42,13 @@ if (!user) {
                   Appointments
                 </p>
                 <p className="text-[14px] text-white pr-20 font-IBM Plex Sans  text-start">
-                Reminders for those important events.
+                Reminders for important events.
                 </p>
                 <NextImage
         src = {appointments}
         alt="appointments"
-        width={59}
-        height={ 121 }
-        className="absolute   inset-y-0 right-0  flex-shrink: 0"
+        height={ 100 }
+        className="absolute inset-y-0 right-4 shrink-0"
       />
               
               </div>
@@ -74,7 +73,7 @@ if (!user) {
         alt="medications"
         width={88}
         height={ 106 }
-        className="absolute  inset-y-0  right-0 flex-shrink: 0"
+        className="absolute inset-y-0 right-4 shrink-0"
       />
               </div>
             </div>
