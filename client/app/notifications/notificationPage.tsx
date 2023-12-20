@@ -89,20 +89,6 @@ export default function NotificationPage() {
   useEffect(() => {
     async function fetchNotificationPreference() {
       try {
-        const userId = user?.uid || "";
-        const result = await getNotificationPreference();
-        logger.info("Retrieved notification preference of user:", result);
-        if (result && result.data) {
-          logger.info(result.data.activityReminders);
-          setActivityReminders(result.data.activityReminders);
-          setMedicationReminders(result.data.medicationReminders);
-          setAppointmentReminders(result.data.appointmentReminders);
-          setFoodIntakeReminders(result.data.foodIntakeReminders);
-          setBloodGlucoseReminders(result.data.glucoseMeasurementReminders);
-          setInsulinInjectionReminders(result.data.insulinDosageReminders);
-          logger.info("Notification preference information all set!");
-        }
-
         // Get current notification permissions
         if ("Notification" in window) {
           const currentPermission = Notification.permission;
@@ -136,6 +122,21 @@ export default function NotificationPage() {
               setErrorAlert(true);
             }
           } else {
+            // Retrieve user current values
+            const userId = user?.uid || "";
+            const result = await getNotificationPreference();
+            logger.info("Retrieved notification preference of user:", result);
+            if (result && result.data) {
+              logger.info(result.data.activityReminders);
+              setActivityReminders(result.data.activityReminders);
+              setMedicationReminders(result.data.medicationReminders);
+              setAppointmentReminders(result.data.appointmentReminders);
+              setFoodIntakeReminders(result.data.foodIntakeReminders);
+              setBloodGlucoseReminders(result.data.glucoseMeasurementReminders);
+              setInsulinInjectionReminders(result.data.insulinDosageReminders);
+              logger.info("Notification preference information all set!");
+            }
+
             setSubscriptionReminders(true);
           }
         }

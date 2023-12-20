@@ -206,17 +206,19 @@ describe("AlertComponent", () => {
     // Mock the notification object to have default permission and return granted when permission is requested
     Object.defineProperty(window, "Notification", {
       value: {
-        permission: "default",
+        permission: "granted",
         requestPermission: jest.fn().mockImplementation(() => {
           return Promise.resolve("granted"); // Change the resolved value as needed
         }),
       },
       writable: true,
     });
+    const toggleButtonSubscription =
+      screen.getByLabelText("SubscriptionSwitch");
+    fireEvent.click(toggleButtonSubscription);
 
-    const saveButton = screen.getByText("Save");
-    fireEvent.click(saveButton);
-
+    const button = screen.getByText("Save");
+    fireEvent.click(button);
     await waitFor(() => {
       expect(updateNotificationPreference).toHaveBeenCalled();
     });
@@ -239,13 +241,17 @@ describe("AlertComponent", () => {
     // Mock the notification object to have default permission and return granted when permission is requested
     Object.defineProperty(window, "Notification", {
       value: {
-        permission: "default",
+        permission: "granted",
         requestPermission: jest.fn().mockImplementation(() => {
           return Promise.resolve("granted"); // Change the resolved value as needed
         }),
       },
       writable: true,
     });
+
+    const toggleButtonSubscription =
+      screen.getByLabelText("SubscriptionSwitch");
+    fireEvent.click(toggleButtonSubscription);
 
     const saveButton = screen.getByText("Save");
     fireEvent.click(saveButton);
@@ -266,79 +272,126 @@ describe("AlertComponent", () => {
 });
 
 describe("Notification Page useEffect", () => {
-  test("fetchNotificationPreference fetches and sets preferences when notification permission is default or denied", async () => {
+  test("fetchNotificationPreference updates and sets preferences to false when notification permission is default or denied", async () => {
     // Mock the Notification API in the window object
     Object.defineProperty(window, "Notification", {
       value: {
         permission: "default",
+        requestPermission: jest.fn().mockImplementation(() => {
+          return Promise.resolve("default"); // Change the resolved value as needed
+        }),
       },
       writable: true,
     });
 
     const fakeData = {
       data: {
-        activityReminders: true,
+        activityReminders: false,
         medicationReminders: false,
-        appointmentReminders: true,
-        foodIntakeReminders: true,
-        glucoseMeasurementReminders: true,
-        insulinDosageReminders: true,
+        appointmentReminders: false,
+        foodIntakeReminders: false,
+        glucoseMeasurementReminders: false,
+        insulinDosageReminders: false,
       },
     };
-    getNotificationPreference.mockResolvedValue(fakeData);
+    updateNotificationPreference.mockResolvedValue(fakeData);
 
     await act(async () => {
       render(<NotificationPage />);
     });
 
-    // Assert that getNotificationPreference was called\
-    expect(getNotificationPreference).toHaveBeenCalled();
-
-    // Expect subscription reminder state to be unchecked
     const toggleButtonSubscription =
       screen.getByLabelText("SubscriptionSwitch");
+    const toggleButtonActvity = screen.getByLabelText("ActvitySwitch");
+    const toggleButtonMedication = screen.getByLabelText("MedicationSwitch");
+    const toggleButtonAppointment = screen.getByLabelText("AppointmentSwitch");
+    const toggleButtonFoodIntake = screen.getByLabelText("FoodIntakeSwitch");
+    const toggleButtonBloodGlucose =
+      screen.getByLabelText("BloodGlucoseSwitch");
+    const toggleButtonInsulinDosage = screen.getByLabelText(
+      "InsulinInjectionSwitch"
+    );
     expect(toggleButtonSubscription).not.toBeChecked();
+    expect(toggleButtonActvity).not.toBeChecked();
+    expect(toggleButtonMedication).not.toBeChecked();
+    expect(toggleButtonAppointment).not.toBeChecked();
+    expect(toggleButtonFoodIntake).not.toBeChecked();
+    expect(toggleButtonBloodGlucose).not.toBeChecked();
+    expect(toggleButtonInsulinDosage).not.toBeChecked();
+
+    // Assert that getNotificationPreference was called\
+    expect(updateNotificationPreference).toHaveBeenCalled();
   });
 
-  test("fetchNotificationPreference fetches and sets preferences when notification permission is default or denied", async () => {
+  test("fetchNotificationPreference update function fails when notification permission is default or denied", async () => {
+    // Mock the Notification API in the window object
+    Object.defineProperty(window, "Notification", {
+      value: {
+        permission: "default",
+        requestPermission: jest.fn().mockImplementation(() => {
+          return Promise.resolve("default"); // Change the resolved value as needed
+        }),
+      },
+      writable: true,
+    });
+
+    updateNotificationPreference.mockResolvedValue(new Error("Failed"));
+
+    await act(async () => {
+      render(<NotificationPage />);
+    });
+
+    const toggleButtonSubscription =
+      screen.getByLabelText("SubscriptionSwitch");
+    const toggleButtonActvity = screen.getByLabelText("ActvitySwitch");
+    const toggleButtonMedication = screen.getByLabelText("MedicationSwitch");
+    const toggleButtonAppointment = screen.getByLabelText("AppointmentSwitch");
+    const toggleButtonFoodIntake = screen.getByLabelText("FoodIntakeSwitch");
+    const toggleButtonBloodGlucose =
+      screen.getByLabelText("BloodGlucoseSwitch");
+    const toggleButtonInsulinDosage = screen.getByLabelText(
+      "InsulinInjectionSwitch"
+    );
+    expect(toggleButtonSubscription).not.toBeChecked();
+    expect(toggleButtonActvity).not.toBeChecked();
+    expect(toggleButtonMedication).not.toBeChecked();
+    expect(toggleButtonAppointment).not.toBeChecked();
+    expect(toggleButtonFoodIntake).not.toBeChecked();
+    expect(toggleButtonBloodGlucose).not.toBeChecked();
+    expect(toggleButtonInsulinDosage).not.toBeChecked();
+
+    // Assert that getNotificationPreference was called\
+    expect(updateNotificationPreference).toHaveBeenCalled();
+  });
+
+  test("fetchNotificationPreference fetches and sets user preference when notification permission is set to granted", async () => {
     // Mock the Notification API in the window object
     Object.defineProperty(window, "Notification", {
       value: {
         permission: "granted",
+        requestPermission: jest.fn().mockImplementation(() => {
+          return Promise.resolve("granted"); // Change the resolved value as needed
+        }),
       },
       writable: true,
     });
-
-    const fakeData = {
-      data: {
-        activityReminders: true,
-        medicationReminders: false,
-        appointmentReminders: true,
-        foodIntakeReminders: true,
-        glucoseMeasurementReminders: true,
-        insulinDosageReminders: true,
-      },
-    };
-    getNotificationPreference.mockResolvedValue(fakeData);
+    getNotificationPreference.mockRejectedValueOnce();
 
     await act(async () => {
       render(<NotificationPage />);
     });
 
-    // Assert that getNotificationPreference was called\
+    // Assert that getNotificationPreference was called
     expect(getNotificationPreference).toHaveBeenCalled();
-
-    // Expect subscription reminder state to be unchecked
-    const toggleButtonSubscription =
-      screen.getByLabelText("SubscriptionSwitch");
-    expect(toggleButtonSubscription).toBeChecked();
   });
-
-  test("handles error while fetching notification preferences", async () => {
+  test("fetchNotificationPreference fetches and sets user preference when notification permission is set to granted", async () => {
     // Mock the Notification API in the window object
     Object.defineProperty(window, "Notification", {
       value: {
-        permission: "default",
+        permission: "granted",
+        requestPermission: jest.fn().mockImplementation(() => {
+          return Promise.resolve("granted"); // Change the resolved value as needed
+        }),
       },
       writable: true,
     });
