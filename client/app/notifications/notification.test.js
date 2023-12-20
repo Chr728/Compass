@@ -8,6 +8,7 @@ import {
   createNotificationPreference,
 } from "../http/notificationPreferenceAPI";
 import { act } from "react-dom/test-utils";
+import { useProp } from "../contexts/PropContext";
 
 //Mock useRouter from next/navigation
 jest.mock("next/navigation", () => ({
@@ -50,6 +51,14 @@ jest.mock("../http/notificationPreferenceAPI", () => {
     createNotificationPreference: jest.fn(),
   };
 });
+
+// Mocking useProp hook
+jest.mock("../contexts/PropContext", () => ({
+  __esModule: true,
+  useProp: jest.fn(() => ({
+    handlePopUp: jest.fn(),
+  })),
+}));
 
 describe("Notification Settings Page", () => {
   //Test to check if page is rendered correctly with proper text and button
@@ -102,12 +111,12 @@ describe("Notification Settings Page", () => {
       "InsulinInjectionSwitch"
     );
     expect(toggleButtonSubscription).not.toBeChecked();
-    expect(toggleButtonActvity).toBeChecked();
-    expect(toggleButtonMedication).toBeChecked();
-    expect(toggleButtonAppointment).toBeChecked();
-    expect(toggleButtonFoodIntake).toBeChecked();
-    expect(toggleButtonBloodGlucose).toBeChecked();
-    expect(toggleButtonInsulinDosage).toBeChecked();
+    expect(toggleButtonActvity).not.toBeChecked();
+    expect(toggleButtonMedication).not.toBeChecked();
+    expect(toggleButtonAppointment).not.toBeChecked();
+    expect(toggleButtonFoodIntake).not.toBeChecked();
+    expect(toggleButtonBloodGlucose).not.toBeChecked();
+    expect(toggleButtonInsulinDosage).not.toBeChecked();
     fireEvent.click(toggleButtonSubscription);
     fireEvent.click(toggleButtonActvity);
     fireEvent.click(toggleButtonMedication);
@@ -116,19 +125,60 @@ describe("Notification Settings Page", () => {
     fireEvent.click(toggleButtonBloodGlucose);
     fireEvent.click(toggleButtonInsulinDosage);
     expect(toggleButtonSubscription).toBeChecked();
-    expect(toggleButtonActvity).not.toBeChecked();
-    expect(toggleButtonMedication).not.toBeChecked();
-    expect(toggleButtonAppointment).not.toBeChecked();
-    expect(toggleButtonFoodIntake).not.toBeChecked();
-    expect(toggleButtonBloodGlucose).not.toBeChecked();
-    expect(toggleButtonInsulinDosage).not.toBeChecked();
+    expect(toggleButtonActvity).toBeChecked();
+    expect(toggleButtonMedication).toBeChecked();
+    expect(toggleButtonAppointment).toBeChecked();
+    expect(toggleButtonFoodIntake).toBeChecked();
+    expect(toggleButtonBloodGlucose).toBeChecked();
+    expect(toggleButtonInsulinDosage).toBeChecked();
   });
 
-  test("Calls router's push method on button click", () => {
+  test("Display's error message if notification permissions is not granted in browser when trying to save preferences for user", () => {
+    // Mock handlePopUp function
+    const mockHandlePopUp = jest.fn();
+    useProp.mockReturnValue({ handlePopUp: mockHandlePopUp });
+    // Mock the notification object to have default permission and return default when permission is requested
+    Object.defineProperty(window, "Notification", {
+      value: {
+        permission: "default",
+        requestPermission: jest.fn().mockImplementation(() => {
+          return Promise.resolve("default"); // Change the resolved value as needed
+        }),
+      },
+      writable: true,
+    });
     render(<NotificationPage />);
     const button = screen.getByText("Save");
     fireEvent.click(button);
-    expect(mockRouter).toHaveBeenCalled();
+    // Expect that handlePopUp was called with specific parameters
+    expect(mockHandlePopUp).toHaveBeenCalledWith(
+      "error",
+      "Please enable browser notifications before changing any of the preference settings"
+    );
+    expect(mockRouter).not.toHaveBeenCalled();
+  });
+
+  test("Calls router's push method on button click", async () => {
+    render(<NotificationPage />);
+    // Mock the notification object to have default permission and return granted when permission is requested
+    Object.defineProperty(window, "Notification", {
+      value: {
+        permission: "default",
+        requestPermission: jest.fn().mockImplementation(() => {
+          return Promise.resolve("granted"); // Change the resolved value as needed
+        }),
+      },
+      writable: true,
+    });
+    const toggleButtonSubscription =
+      screen.getByLabelText("SubscriptionSwitch");
+    fireEvent.click(toggleButtonSubscription);
+
+    const button = screen.getByText("Save");
+    fireEvent.click(button);
+    await waitFor(() => {
+      expect(updateNotificationPreference).toHaveBeenCalled();
+    });
   });
 
   test("Routes to settings page on button click", () => {
