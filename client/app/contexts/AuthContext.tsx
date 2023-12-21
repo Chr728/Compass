@@ -79,6 +79,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       handlePopUp('error', 'Error signing out:' + error.message);
     }
   };
+  console.log('token ',auth.currentUser?.getIdToken())
 
   const signUp = (values: createUserAttributes) => {
     handleLoading(true);
