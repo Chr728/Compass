@@ -118,7 +118,7 @@ export const createActivityJournal = async (req: Request, res: Response, next:Ne
         }
     }
 
-export const updateActivityJournal = async (req: Request, res: Response) => {
+export const updateActivityJournal = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const activityJournalId = req.params.activity_journal_id;
         const activityJournal = await db.ActivityJournal.findOne({
@@ -128,10 +128,11 @@ export const updateActivityJournal = async (req: Request, res: Response) => {
         });
 
         if(!activityJournal) {
-            return res.status(404).json({
-                status: "NOT_FOUND",
-                message: "Activity Journal not found"
-            });
+            // return res.status(404).json({
+            //     status: "NOT_FOUND",
+            //     message: "Activity Journal not found"
+            // });
+            throw new ErrorHandler(404, 'NOT_FOUND',"Activity Journal not found")
         }
 
         const { date, time, activity, duration, notes } = req.body;
@@ -162,14 +163,20 @@ export const updateActivityJournal = async (req: Request, res: Response) => {
 
     } catch (error) {
         Logger.error(`Error occurred while updating activity journal: ${error}`);
-        return res.status(400).json({
-            status: 'ERROR',
-            message: `Error updating activity journal: ${error}`,
-        });
+        // return res.status(400).json({
+        //     status: 'ERROR',
+        //     message: `Error updating activity journal: ${error}`,
+        // });
+        if (error instanceof ErrorHandler) {
+            next(error);
+        }
+        else {
+            next(new ErrorHandler(400, 'ERROR',`Error updating activity journal: ${error}`));
+        }
     }
 }
 
-export const deleteActivityJournal = async (req: Request, res: Response) => {
+export const deleteActivityJournal = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const activityJournalId = req.params.activity_journal_id;
         const existingActivityJournal = await db.ActivityJournal.findOne({
@@ -179,10 +186,11 @@ export const deleteActivityJournal = async (req: Request, res: Response) => {
         });
 
         if (!existingActivityJournal) {
-            return res.status(404).json({
-                status: 'NOT_FOUND',
-                message: 'Activity journal entry not found',
-            });
+            // return res.status(404).json({
+            //     status: 'NOT_FOUND',
+            //     message: 'Activity journal entry not found',
+            // });
+            throw new ErrorHandler(404, 'NOT_FOUND',"Activity journal entry not found")
         }
 
         await db.ActivityJournal.destroy({
@@ -198,9 +206,15 @@ export const deleteActivityJournal = async (req: Request, res: Response) => {
 
     } catch (error) {
         Logger.error(`Error occurred while deleting activity journal: ${error}`);
-        return res.status(400).json({
-            status: 'ERROR',
-            message: `Error deleting activity journal: ${error}`,
-        });
+        // return res.status(400).json({
+        //     status: 'ERROR',
+        //     message: `Error deleting activity journal: ${error}`,
+        // });
+        if (error instanceof ErrorHandler) {
+            next(error);
+        }
+        else {
+            next(new ErrorHandler(400, 'ERROR',`Error deleting activity journal: ${error}`));
+        }
     }
 }
