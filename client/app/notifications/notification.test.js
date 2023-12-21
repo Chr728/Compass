@@ -375,7 +375,20 @@ describe("Notification Page useEffect", () => {
       },
       writable: true,
     });
-    getNotificationPreference.mockRejectedValueOnce();
+
+    // Mock response data
+    const mockNotificationData = {
+      data: {
+        activityReminders: false,
+        medicationReminders: true,
+        appointmentReminders: false,
+        foodIntakeReminders: true,
+        glucoseMeasurementReminders: false,
+        insulinDosageReminders: true,
+      },
+    };
+
+    getNotificationPreference.mockResolvedValue(mockNotificationData);
 
     await act(async () => {
       render(<NotificationPage />);
@@ -383,6 +396,21 @@ describe("Notification Page useEffect", () => {
 
     // Assert that getNotificationPreference was called
     expect(getNotificationPreference).toHaveBeenCalled();
+    const toggleButtonActvity = screen.getByLabelText("ActvitySwitch");
+    const toggleButtonMedication = screen.getByLabelText("MedicationSwitch");
+    const toggleButtonAppointment = screen.getByLabelText("AppointmentSwitch");
+    const toggleButtonFoodIntake = screen.getByLabelText("FoodIntakeSwitch");
+    const toggleButtonBloodGlucose =
+      screen.getByLabelText("BloodGlucoseSwitch");
+    const toggleButtonInsulinDosage = screen.getByLabelText(
+      "InsulinInjectionSwitch"
+    );
+    expect(toggleButtonActvity).not.toBeChecked();
+    expect(toggleButtonMedication).toBeChecked();
+    expect(toggleButtonAppointment).not.toBeChecked();
+    expect(toggleButtonFoodIntake).toBeChecked();
+    expect(toggleButtonBloodGlucose).not.toBeChecked();
+    expect(toggleButtonInsulinDosage).toBeChecked();
   });
   test("fetchNotificationPreference fetches and sets user preference when notification permission is set to granted", async () => {
     // Mock the Notification API in the window object
