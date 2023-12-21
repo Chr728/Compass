@@ -17,7 +17,6 @@ import medicationRoutes from './routes/medicationRoutes';
 import Morgan from './middlewares/morgan';
 import { Logger } from './middlewares/logger';
 import decodeToken from './middlewares/decodeToken';
-import dropAndSyncDB from "./utils/clearAndSyncDB";
 require('dotenv').config({
   path: './../.env',
 });
@@ -58,10 +57,6 @@ if (isDevelopment) {
     Logger.info('Database Synchronized');
   });
 }
-
-dropAndSyncDB().then(() => {
-    Logger.info('Cleared and Synchronized Database');
-});
 
 if (!isTest) {
   app.listen(process.env.PORT, () => {
