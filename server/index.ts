@@ -24,6 +24,8 @@ require('dotenv').config({
 const app = express();
 
 const isProduction = process.env.NODE_ENV === 'production';
+const isTest = process.env.NODE_ENV === 'test';
+const isDevelopment = process.env.NODE_ENV === 'development';
 
 app.use(cors());
 app.use(express.json());
@@ -50,22 +52,18 @@ app.get('/', (req, res) => {
 });
 
 
-db.sequelize.authenticate().then(() => {
-  Logger.info("Database connected.");
-}).catch((err: any) => {
-  Logger.error(err)
-})
-
-if (!isProduction) {
+if (isDevelopment) {
   db.sequelize.sync({alter: true}).then(() => {
     Logger.info('Database Synchronized');
   });
 }
 
+if (!isTest) {
   app.listen(process.env.PORT, () => {
     Logger.info(
-      `Server listening on port ${process.env.PORT || 8000}`
+        `Server listening on port ${process.env.PORT || 8000}`
     );
   });
+}
 
 export default app;
