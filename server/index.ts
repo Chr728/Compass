@@ -49,7 +49,7 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-//Connection to postgreSQL
+
 db.sequelize.authenticate().then(() => {
   Logger.info("Database connected.");
 }).catch((err: any) => {

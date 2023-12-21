@@ -11,8 +11,15 @@ const db: any = {};
 
 let sequelize: any;
 if (config.use_env_variable) {
-  config.logging= false;
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
+  sequelize = new Sequelize(process.env[config.use_env_variable], {
+      logging: false,
+      dialectOptions: {
+          ssl: {
+              require: true,
+              rejectUnauthorized: false,
+          }
+      }
+  });
 } else {
   config.logging= false;
   sequelize = new Sequelize(
