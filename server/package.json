@@ -6,7 +6,8 @@
     "dev": "nodemon --exec ts-node index.ts",
     "build": "tsc",
     "prod": "NODE_ENV=production node dist/index.js",
-    "migrate": "npx sequelize-cli db:migrate",
+    "migrate:dev": "npx sequelize-cli db:migrate",
+    "migrate:prod": "NODE_ENV=production npx sequelize-cli db:migrate",
     "test": "cross-env NODE_ENV=test jest --coverage --runInBand --forceExit"
   },
   "author": "Compass",
