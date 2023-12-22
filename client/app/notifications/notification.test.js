@@ -60,6 +60,12 @@ jest.mock("../contexts/PropContext", () => ({
   })),
 }));
 
+// Mock logger
+const logger = require("../../logger");
+jest.mock("../../logger", () => ({
+  error: jest.fn(),
+}));
+
 describe("Notification Settings Page", () => {
   //Test to check if page is rendered correctly with proper text and button
   test("Renders correct content and button", async () => {
@@ -335,7 +341,20 @@ describe("Notification Page useEffect", () => {
       writable: true,
     });
 
-    updateNotificationPreference.mockResolvedValue(new Error("Failed"));
+    // Mock error
+    const mockError = new Error("Test error message");
+    const setErrorAlert = jest.fn();
+
+    const currentUser = {
+      uid: "testUID",
+      getIdToken: jest.fn().mockResolvedValue("testToken"),
+    };
+
+    // Simulating an error in fetch by rejecting the promise
+    global.fetch = jest.fn().mockRejectedValue(mockError);
+    process.env.NEXT_PUBLIC_API_URL = "https://example.com";
+
+    updateNotificationPreference.mockRejectedValue(mockError);
 
     await act(async () => {
       render(<NotificationPage />);
@@ -362,6 +381,11 @@ describe("Notification Page useEffect", () => {
 
     // Assert that getNotificationPreference was called\
     expect(updateNotificationPreference).toHaveBeenCalled();
+
+    expect(logger.error).toHaveBeenCalledWith(
+      "Error updating notification preference for user:",
+      mockError
+    );
   });
 
   test("fetchNotificationPreference fetches and sets user preference when notification permission is set to granted", async () => {
