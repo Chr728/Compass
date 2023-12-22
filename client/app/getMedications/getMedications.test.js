@@ -1,13 +1,8 @@
 import {render, screen,act} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import GetMedicationsPage from './getMedicationsPage';
-import {getMedications} from '../http/medicationAPI';
 import userEvent from '@testing-library/user-event';
 import { deleteMedication} from '../http/activityJournalAPI'; 
-import Swal from 'sweetalert2';
-
-import { useRouter } from "next/router";
-import { useUser } from '../contexts/UserContext';
 
 beforeEach(async () => {
     await act(async () => {
@@ -72,24 +67,20 @@ jest.mock('../http/medicationAPI', () => {
 });
    
 
-test("Add an entry button  functions correctly", async () => {
-    setTimeout(() => {
-    const addButton = screen.getAllByRole('button')[1];
-    userEvent.click(addButton);
-    mockRouter;
-        expect(mockRouter).toHaveBeenCalledWith('/createMedication') 
-    }, 1000);    
-})
-
-
-
+    test("Add an entry button functions correctly", async () => {
+        setTimeout(() => {
+        const addButton = screen.getAllByRole('button')[1];
+        userEvent.click(addButton);
+        mockRouter;
+            expect(mockRouter).toHaveBeenCalledWith('/createMedication') 
+        }, 1000);    
+    })
 
     test("Get medications list is displayed correctly", async () => {
         setTimeout(() => {
             const name = screen.findByText('advil');
             const dosage = screen.findByText('60');
             const route = screen.findByText('Rectal');
- 
 
             expect(name).toBeInTheDocument();
             expect(dosage).toBeInTheDocument();
@@ -98,12 +89,7 @@ test("Add an entry button  functions correctly", async () => {
        
     })
 
-   
-
-    
-     // checks the texts
-     test("Message displayed", async () => {
+    test("Message displayed", async () => {
         const message = screen.getByText(/Keep track of all medications you take and follow the progress through the time./i);
         expect(message).toBeInTheDocument();
     })
-
