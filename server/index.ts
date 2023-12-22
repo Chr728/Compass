@@ -47,6 +47,10 @@ app.use('/api/subscription', subscriptionRoutes);
 app.use('/api/reminders', reminderRoutes);
 app.use('/api/medication', medicationRoutes);
 
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+
 if (isDevelopment) {
   db.sequelize.sync({alter: true}).then(() => {
     Logger.info('Database Synchronized');
