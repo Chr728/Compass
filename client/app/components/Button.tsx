@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { CSSProperties, MouseEventHandler } from "react";
+import Image from "next/image";
 
 type ButtonProps = {
   type: "button" | "submit" | "reset" | undefined;
@@ -8,6 +9,7 @@ type ButtonProps = {
   style?: CSSProperties;
   onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   disabled?: boolean;
+  isSubmitting?: boolean;
   id?: string;
 };
 
@@ -17,18 +19,35 @@ export default function Button({
   style,
   onClick,
   disabled,
+  isSubmitting,
   id,
 }: ButtonProps) {
+  const submittedButtonStyle: CSSProperties = {
+    opacity: isSubmitting ? 0.7 : 1,
+    ...style,
+  };
   return (
     <button
       className="bg-blue text-[16px] text-white font-sans font-medium rounded-md h-[56px] shadow-[0px_4px_8px_0px_rgba(44,39,56,0.08),0px_2px_4px_0px_rgba(44,39,56,0.08)]"
       type={type}
-      style={style}
+      style={submittedButtonStyle}
       onClick={onClick}
-      disabled={disabled}
+      disabled={isSubmitting} 
       id={id}
     >
-      {text}
+      {isSubmitting ?
+        <div className="flex items-center">
+          <Image
+            src="/icons/blueProgress.svg"
+            alt="Progress Indicator"
+            width={10}
+            height={10}
+            style={{ width: 'auto', height: 'auto', margin: '0 12px' }}
+          />
+           <span style={{ verticalAlign: 'middle' }}>Submitting</span>
+          </div>
+        :
+        text}
     </button>
   );
 }
