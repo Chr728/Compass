@@ -336,7 +336,7 @@ return (
             !formik.values.servingNumber // Check if Number of Servings is missing or empty
           }
           style={{ width: '140px', textAlign: 'center' }}
-          onClick={() => router.push("/getFoodJournals")}
+          onClick={() => router.push(`/getFoodJournals/${foodJournal}`)}
         />
         </div>
       </div>
