@@ -1,12 +1,12 @@
 'use client';
-import { useState, useEffect } from 'react';
-import { useAuth } from '../contexts/AuthContext';
 import { useUser } from '@/app/contexts/UserContext';
-import { useRouter } from 'next/navigation';
-import Header from '../components/Header';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import Button from '../components/Button';
-import Menu from '../components/Menu';
+import Header from '../components/Header';
+import SingleEntry from '../components/SingleEntry';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Profile() {
   const logger = require('../../logger');
@@ -38,90 +38,12 @@ export default function Profile() {
           className="rounded-2xl  mt-6 mb-10 mr-28 bg-white flex flex-col m-auto w-full md:max-w-[800px] md:min-h-[600px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
         >
           <div className="mt-3 relative">
-          <div>
-            <p
-                className="text-lg ml-0 font-sans text-darkgrey  font-bold text-[16px]"
-                style={{display: 'inline'}}
-            >
-              First Name :{' '}
-            </p>
-            <p
-                className="text-md ml-2 text-darkgrey"
-                style={{display: 'inline'}}
-            >
-              {profile.firstName}
-            </p>
-            <br></br>
-            <p
-                className="text-lg ml-0 font-sans text-darkgrey  font-bold text-[16px]"
-                style={{display: 'inline'}}
-            >
-              Last Name :{' '}
-            </p>
-            <p
-                className="text-md ml-2 text-darkgrey"
-                style={{display: 'inline'}}
-            >
-              {profile.lastName}
-            </p>
-            <br></br>
-            <p
-                className="text-lg ml-0 font-sans text-darkgrey  font-bold text-[16px]"
-                style={{display: 'inline'}}
-            >
-              Email :{' '}
-            </p>
-            <p
-                className="text-md ml-2 text-darkgrey"
-                style={{display: 'inline'}}
-            >
-              {profile.email}
-            </p>
-            <br></br>
-            <p
-                className="text-lg ml-0 font-sans text-darkgrey  font-bold text-[16px]"
-                style={{display: 'inline'}}
-            >
-              Phone number :{' '}
-            </p>
-            <p
-                className="text-md ml-2 text-darkgrey"
-                style={{display: 'inline'}}
-            >
-              {profile.phoneNumber}
-            </p>
-            <br></br>
-
-            <p
-                className="text-lg ml-0 font-sans text-darkgrey font-bold text-[16px]"
-                style={{display: 'inline'}}
-            >
-              Birth Date :{' '}
-            </p>
-            <p
-                className="text-md ml-2 text-darkgrey"
-                style={{display: 'inline'}}
-            >
-              {profile.birthDate
-                  ? new Date(profile.birthDate).toISOString().split('T')[0]
-                  : ''}
-            </p>
-
-            <br></br>
-            <p
-                className="text-lg ml-0 font-sans text-darkgrey  font-bold text-[16px]"
-                style={{display: 'inline'}}
-            >
-              Sex :{' '}
-            </p>
-            <p
-                className="text-md ml-2 text-darkgrey"
-                style={{display: 'inline'}}
-            >
-              {profile.sex}
-            </p>
-            <br></br>
-          </div>
+          <SingleEntry label={ 'First Name :' } value={profile.firstName}></SingleEntry>
+          <SingleEntry label={ 'Last Name :' } value={profile.lastName}></SingleEntry>
+          <SingleEntry label={ 'Email :' } value={profile.email}></SingleEntry>
+          <SingleEntry label={ 'Phone number :' } value={profile.phoneNumber}></SingleEntry>
+          <SingleEntry label={ 'Birth Date :' } value={profile.birthDate ? new Date(profile.birthDate).toISOString().split('T')[0] : ''}></SingleEntry>
+          <SingleEntry label={ 'Sex :' } value={profile.sex}></SingleEntry>   
         </div>
 
         <div className="flex justify-center mt-6">

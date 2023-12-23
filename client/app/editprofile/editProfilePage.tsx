@@ -1,11 +1,12 @@
 'use client';
+import FormLabel from '@/app/components/FormLabel';
+import { useFormik } from 'formik';
 import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import Button from '../components/Button';
 import Input from '../components/Input';
-import Link from 'next/link';
-import { useFormik } from 'formik';
-import { useRouter } from 'next/navigation';
-import {useUser} from '../contexts/UserContext';
+import { useUser } from '../contexts/UserContext';
 
 export default function EditProfile() {
     const router = useRouter();
@@ -76,13 +77,7 @@ export default function EditProfile() {
             onSubmit={formik.handleSubmit}
         >
           <div>
-            <label
-              htmlFor="fname"
-              className="font-sans font-medium text-grey text-[16px]"
-            >
-              First Name
-            </label>
-            <br />
+            <FormLabel htmlFor={ 'fname' } label={ 'First Name' }></FormLabel>
             <Input
               name="fname"
               id="fname"
@@ -100,13 +95,7 @@ export default function EditProfile() {
           </div>
 
           <div className="mt-4">
-            <label
-              htmlFor="lname"
-              className="font-sans font-medium text-grey text-[16px]"
-            >
-              Last Name
-            </label>
-            <br />
+            <FormLabel htmlFor={ 'lname' } label={ 'Last Name' }></FormLabel>
             <Input
               name="lname"
               id="lname"
@@ -124,13 +113,7 @@ export default function EditProfile() {
           </div>
 
           <div className="mt-4 mb-8">
-              <label
-                htmlFor="phone"
-                className="font-sans font-medium text-grey text-[16px]"
-              >
-                Phone Number
-              </label>
-              <br />
+          <FormLabel htmlFor={ 'phone' } label={ 'Phone Number' }></FormLabel>
               <Input
                 name="phone"
                 id="phone"

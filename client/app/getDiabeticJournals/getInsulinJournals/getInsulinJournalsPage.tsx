@@ -1,19 +1,14 @@
 'use client';
-import Image from 'next/image';
-import Button from '../../components/Button';
-import Input from '../../components/Input';
-import Link from 'next/link';
-import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { deleteInsulinJournal, getInsulinJournal, getInsulinJournals} from '../../http/diabeticJournalAPI'; 
-import { useAuth } from '../../contexts/AuthContext';
-import { useUser } from '../../contexts/UserContext';
 import { useEffect, useState } from 'react';
-import { MdDeleteForever, MdInfoOutline, MdKeyboardArrowDown } from 'react-icons/md';
-import Header from '../../components/Header';
-import Menu from '../../components/Menu';
-import { formatDate, formatMilitaryTime } from '../../helpers/utils/datetimeformat';
+import { MdDeleteForever, MdKeyboardArrowDown } from 'react-icons/md';
 import Swal from 'sweetalert2';
+import Button from '../../components/Button';
+import { useAuth } from '../../contexts/AuthContext';
+import { useProp } from '../../contexts/PropContext';
+import { useUser } from '../../contexts/UserContext';
+import { formatDate, formatMilitaryTime } from '../../helpers/utils/datetimeformat';
+import { deleteInsulinJournal, getInsulinJournals } from '../../http/diabeticJournalAPI';
 
 export default function GetInsulinJournalsPage() {
   const logger = require('../../../logger');
@@ -21,7 +16,8 @@ export default function GetInsulinJournalsPage() {
   const { user } = useAuth();
   const { userInfo } = useUser();
   const [insulin, setinsulin] = useState<any>(null);
-  
+    const { handlePopUp} = useProp();
+
   useEffect(() => {
     if (!userInfo) {
       logger.warn('User not found.')
@@ -33,12 +29,12 @@ export default function GetInsulinJournalsPage() {
   useEffect(() => {
     async function fetchInsulinJournals() {
       try {
-        const userId = user?.uid || '';
         const result = await getInsulinJournals();    
         logger.info('All Insulin journals entry retrieved:', result);
         setinsulin(result.data);
-      } catch (error) {
-        logger.error('Error retrieving insulin journal entry:', error);
+      } catch ( error ) {
+      handlePopUp('error', "Error retrieving insulin journal entry:");
+
       }
     }
     setTimeout(() => {

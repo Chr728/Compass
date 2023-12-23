@@ -1,11 +1,8 @@
-import {render, screen,act} from '@testing-library/react';
 import '@testing-library/jest-dom';
-import GetGlucoseJournalsPage from './getGlucoseJournalsPage';
-import {getGlucoseJournals} from '../../http/diabeticJournalAPI';
-import { deleteGlucoseJournal} from '../../http/diabeticJournalAPI'; 
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { useRouter } from "next/router";
-import { useUser } from '../../contexts/UserContext';
+import GetGlucoseJournalsPage from './getGlucoseJournalsPage';
+
 
 
 beforeEach(async () => {

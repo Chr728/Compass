@@ -17,7 +17,7 @@ const config: Config = {
       slateblue: "#7c9cbf",
       white: "#ffffff",
       lightgrey: "#dbe2ea",
-      eggshell: "#ebf4f8",
+      eggshell: "#ffffff",
     },
     fontFamily: {
       sans: ["IBM Plex Sans", "sans-serif"],

@@ -1,18 +1,16 @@
 'use client';
-import Image from 'next/image';
-import Button from '../../../../components/Button';
-import Input from '../../../../components/Input';
-import Link from 'next/link';
-import { useFormik } from 'formik';
-import { useRouter } from 'next/navigation';
-import { createGlucoseJournal, getGlucoseJournal, getGlucoseJournals, updateGlucoseJournal } from '../../../../http/diabeticJournalAPI'; 
-import { useAuth } from '../../../../contexts/AuthContext';
-import { useUser } from '../../../../contexts/UserContext';
-import { useEffect, useState } from 'react';
+import FormLabel from '@/app/components/FormLabel';
 import Header from '@/app/components/Header';
-import Menu from '@/app/components/Menu';
 import { formatDateYearMonthDate } from '@/app/helpers/utils/datetimeformat';
 import Custom403 from '@/app/pages/403';
+import { useFormik } from 'formik';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import Button from '../../../../components/Button';
+import Input from '../../../../components/Input';
+import { useAuth } from '../../../../contexts/AuthContext';
+import { useProp } from '../../../../contexts/PropContext';
+import { getGlucoseJournal, updateGlucoseJournal } from '../../../../http/diabeticJournalAPI';
 
 
 export default function EditGlucoseJournal({params: { glucoseJournal } } : { params: { glucoseJournal: string } }) {
@@ -20,16 +18,16 @@ export default function EditGlucoseJournal({params: { glucoseJournal } } : { par
   const { user } = useAuth();
   const router = useRouter();
   const [glucose, setglucose] = useState<any>(null);
-  const { userInfo } = useUser();
-  
+  const { handlePopUp} = useProp();
+
   async function fetchGlucoseJournal() {
     try {
-      const userId = user?.uid || '';
       const result = await getGlucoseJournal(glucoseJournal);
       logger.info('Glucose journal entry retrieved:', result);
       setglucose(result.data);
     } catch (error) {
-      logger.error('Error retrieving glucose journal entry:', error);
+      handlePopUp('error', "Error retrieving glucose journal entry:");
+
     }
   }
   
@@ -72,7 +70,8 @@ export default function EditGlucoseJournal({params: { glucoseJournal } } : { par
         const result = await updateGlucoseJournal(glucoseJournal, data); 
         logger.info('Glucose journal entry updated:', result);
       } catch (error) {
-        logger.error('Error updating glucose journal entry:', error);
+        handlePopUp('error', "Error updating glucose journal entry:");
+
       }
     },
   });
@@ -102,15 +101,8 @@ return (
     className="rounded-3xl bg-white flex flex-col mb-8 w-full md:max-w-[800px] md:min-h-[550px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
     onSubmit={formik.handleSubmit}
   >
-    <div className="mt-3 mb-3">
-      <label
-        htmlFor="date"
-        className="font-sans font-medium text-grey text-[16px]"
-      >
-        Date
-      </label>
-      <span className="text-red text-[20px]"> *</span>
-      <br />
+      <div className="mt-3 mb-3">
+      <FormLabel htmlFor={ 'date' } label={'Date'}></FormLabel> 
       <Input 
   name="date"
   id="date"
@@ -125,15 +117,8 @@ return (
       <p className="text-red text-[14px]">This field can't be left empty.</p>
     )}      </div>
 
-   <div className="mt-3">
-        <label
-          htmlFor="mealTime"
-          className="font-sans font-medium text-grey text-[16px]"
-        >
-          Meal Time
-        </label>
-        <span className="text-red text-[20px]"> *</span>
-        <br />
+      <div className="mt-3">
+      <FormLabel htmlFor={ 'mealTime' } label={'Meal Time'}></FormLabel>         
         <select
             className="text-darkgrey"
           
@@ -197,14 +182,7 @@ return (
 
     <div className="flex">
 <div className="mt-3">
-  <label
-    htmlFor="bloodGlucose"
-    className="font-sans font-medium text-grey text-[16px]"
-  >
-    Blood Glucose
-  </label>
-  <span className="text-red text-[20px]"> *</span>
-  <br />
+<FormLabel htmlFor={ 'bloodGlucose' } label={'Blood Glucose'}></FormLabel>                   
   <Input
     name="bloodGlucose"
     id="bloodGlucose"
@@ -234,14 +212,7 @@ style={{
   marginLeft: '2px;'
 }}
 >
-  <label
-    htmlFor="unit"
-    className="font-sans font-medium text-grey text-[16px]"
-  >
-    Unit
-  </label>
-  <span className="text-red text-[20px]"> *</span>
-  <br />
+<FormLabel htmlFor={ 'unit' } label={'Unit'}></FormLabel>                   
   <select
     className="text-darkgrey"
     name="unit"
