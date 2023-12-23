@@ -1,18 +1,16 @@
 'use client';
-import Image from 'next/image';
-import Button from '../../../../components/Button';
-import Input from '../../../../components/Input';
-import Link from 'next/link';
+import FormLabel from '@/app/components/FormLabel';
+import Header from '@/app/components/Header';
+import { formatDateYearMonthDate } from '@/app/helpers/utils/datetimeformat';
+import Custom403 from '@/app/pages/403';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { createInsulinJournal, getInsulinJournal, getInsulinJournals, updateInsulinJournal } from '../../../../http/diabeticJournalAPI'; 
-import { useAuth } from '../../../../contexts/AuthContext';
-import { useUser } from '../../../../contexts/UserContext';
 import { useEffect, useState } from 'react';
-import Header from '@/app/components/Header';
-import Menu from '@/app/components/Menu';
-import Custom403 from '@/app/pages/403';
-import { formatDateYearMonthDate } from '@/app/helpers/utils/datetimeformat';
+import Button from '../../../../components/Button';
+import Input from '../../../../components/Input';
+import { useAuth } from '../../../../contexts/AuthContext';
+import { useProp } from '../../../../contexts/PropContext';
+import { getInsulinJournal, updateInsulinJournal } from '../../../../http/diabeticJournalAPI';
 
 
 
@@ -22,16 +20,16 @@ export default function EditInsulinJournal({params: { insulinJournal } } : { par
   const { user } = useAuth();
   const router = useRouter();
   const [insulin, setinsulin] = useState<any>(null);
-  const { userInfo } = useUser();
+  const { handlePopUp} = useProp();
 
   async function fetchInsulinJournal() {
     try {
-      const userId = user?.uid || '';
       const result = await getInsulinJournal(insulinJournal);
       logger.info('Insulin journal entry retrieved:', result);
       setinsulin(result.data);
     } catch (error) {
-      logger.error('Error retrieving Insulin journal entry:', error);
+      handlePopUp('error', "Error retrieving Insulin journal entry:");
+
     }
   }
 
@@ -77,7 +75,8 @@ export default function EditInsulinJournal({params: { insulinJournal } } : { par
         const result = await updateInsulinJournal(insulinJournal, data); 
         logger.info('Insulin journal entry updated:', result);
       } catch (error) {
-        logger.error('Error updating Insulin journal entry:', error);
+        handlePopUp('error', "Error updating Insulin journal entry:");
+
       }
     },
   });
@@ -108,15 +107,8 @@ return (
     className="rounded-3xl bg-white flex flex-col mb-8 w-full md:max-w-[800px] md:min-h-[550px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
     onSubmit={formik.handleSubmit}
   >
-    <div className="mt-3 mb-3">
-      <label
-        htmlFor="date"
-        className="font-sans font-medium text-grey text-[16px]"
-      >
-        Date
-      </label>
-      <span className="text-red text-[20px]"> *</span>
-      <br />
+      <div className="mt-3 mb-3">
+      <FormLabel htmlFor={ 'date' } label={'Date'}></FormLabel>                 
       <Input 
   name="date"
   id="date"
@@ -131,15 +123,8 @@ return (
       <p className="text-red text-[14px]">This field can't be left empty.</p>
     )}      </div>
 
-    <div className="mt-3">
-      <label
-        htmlFor="time"
-        className="font-sans font-medium text-grey text-[16px]"
-      >
-        Time
-      </label>
-      <span className="text-red text-[20px]"> *</span>
-      <br />
+      <div className="mt-3">
+      <FormLabel htmlFor={ 'time' } label={'Time'}></FormLabel>                 
       <Input
   name="time"
   id="time"
@@ -155,18 +140,10 @@ return (
     </div>
 
     <div className="flex">
-<div className="mt-3">
-  <label
-    htmlFor="typeOfInsulin"
-    className="font-sans font-medium text-grey text-[16px]"
-  >
-   Type of Insulin
-  </label>
-  <span className="text-red text-[20px]"> *</span>
-  <br />
+    <div className="mt-3">
+      <FormLabel htmlFor={ 'typeOfInsulin' } label={'Type of Insulin'}></FormLabel>                           
        <select
-            className="text-darkgrey"
-          
+        className="text-darkgrey"          
       name="typeOfInsulin"
             id="typeOfInsulin"
       style={{
@@ -235,15 +212,8 @@ return (
 </div>
 </div>
 
-    <div className="mt-3">
-      <label
-        htmlFor="unit"
-        className="font-sans font-medium text-grey text-[16px]"
-      >
-       Units Given
-      </label>
-      <span className="text-red text-[20px]"> *</span>
-      <br />
+      <div className="mt-3">
+      <FormLabel htmlFor={ 'unit' } label={'Units Given'}></FormLabel>                           
       <Input
         name="unit"
         id="unit"
@@ -271,15 +241,8 @@ return (
 
     
    <div className="flex">
-<div className="mt-3">
-  <label
-    htmlFor="bodySite"
-    className="font-sans font-medium text-grey text-[16px]"
-  >
-   Body Site
-  </label>
-  <span className="text-red text-[20px]"> *</span>
-  <br />
+        <div className="mt-3">
+      <FormLabel htmlFor={ 'bodySite' } label={'Body Site'}></FormLabel>                          
        <select
             className="text-darkgrey"
           

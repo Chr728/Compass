@@ -1,11 +1,12 @@
 'use client';
-import Button from '../components/Button';
-import Input from '../components/Input';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { createSpeedDial } from '../http/speedDialAPI'; 
+import Button from '../components/Button';
+import FormLabel from '../components/FormLabel';
 import Header from '../components/Header';
+import Input from '../components/Input';
 import { useAuth } from '../contexts/AuthContext';
+import { createSpeedDial } from '../http/speedDialAPI';
 
 export default function CreateContactPage() {
   const logger = require('../../logger');
@@ -70,15 +71,8 @@ export default function CreateContactPage() {
       onSubmit={formik.handleSubmit}
       >
       
-  <div className="mt-3">
-    <label
-      htmlFor="contactName"
-      className="font-sans font-medium text-grey text-[16px]"
-    >
-      Contact Name
-    </label>
-    <span className="text-red text-[20px]"> *</span>
-    <br />
+        <div className="mt-3">
+    <FormLabel htmlFor={ 'contactName' } label={'Contact Name'}></FormLabel>
     <Input
       name="contactName"
       id="contactName"
@@ -95,15 +89,8 @@ export default function CreateContactPage() {
     )}
   </div>
 
-  <div className="mt-3">
-    <label
-      htmlFor="phone"
-      className="font-sans font-medium text-grey text-[16px]"
-    >
-      Phone Number
-    </label>
-    <span className="text-red text-[20px]"> *</span>
-    <br />
+    <div className="mt-3">
+    <FormLabel htmlFor={ 'phone' } label={'Phone Number'}></FormLabel>
     <Input
       name="phone"
       id="phone"

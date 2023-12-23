@@ -1,13 +1,14 @@
 'use client';
-import { useEffect, useState } from 'react';
-import Button from '../../components/Button';
-import Input from '../../components/Input';
+import FormLabel from '@/app/components/FormLabel';
+import Custom403 from '@/app/pages/403';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { updateSpeedDial, getSpeedDial } from '../../http/speedDialAPI'; 
+import { useEffect, useState } from 'react';
+import Button from '../../components/Button';
 import Header from '../../components/Header';
+import Input from '../../components/Input';
 import { useAuth } from '../../contexts/AuthContext';
-import Custom403 from '@/app/pages/403';
+import { getSpeedDial, updateSpeedDial } from '../../http/speedDialAPI';
 
 
 export default function UpdateContactPage( {params: { updateContacts } } : { params: { updateContacts: string }} ) {
@@ -109,15 +110,8 @@ export default function UpdateContactPage( {params: { updateContacts } } : { par
       onSubmit={formik.handleSubmit}
       >
       
-  <div className="mt-3">
-    <label
-      htmlFor="contactName"
-      className="font-sans font-medium text-grey text-[16px]"
-    >
-      Contact Name
-    </label>
-    <span className="text-red text-[20px]"> *</span>
-    <br />
+    <div className="mt-3">
+    <FormLabel htmlFor={ 'contactName' } label={'Contact Name'}></FormLabel>
     <Input
       name="contactName"
       id="contactName"
@@ -135,14 +129,7 @@ export default function UpdateContactPage( {params: { updateContacts } } : { par
   </div>
 
   <div className="mt-3">
-    <label
-      htmlFor="phone"
-      className="font-sans font-medium text-grey text-[16px]"
-    >
-      Phone Number
-    </label>
-    <span className="text-red text-[20px]"> *</span>
-    <br />
+  <FormLabel htmlFor={ 'phone' } label={'Phone Number'}></FormLabel>
     <Input
       name="phone"
       id="phone"

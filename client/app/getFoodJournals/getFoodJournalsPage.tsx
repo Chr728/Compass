@@ -1,18 +1,15 @@
 'use client';
-import Image from 'next/image';
-import Button from '../components/Button';
-import Input from '../components/Input';
-import Link from 'next/link';
-import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { deleteFoodIntakeJournal, getFoodIntakeJournal, getFoodIntakeJournals} from '../http/foodJournalAPI'; 
-import { useAuth } from '../contexts/AuthContext';
-import { useUser } from '../contexts/UserContext';
 import { useEffect, useState } from 'react';
-import { MdDeleteForever, MdInfoOutline, MdKeyboardArrowDown } from 'react-icons/md';
-import Header from '../components/Header';
-import { formatDate, formatMilitaryTime } from '../helpers/utils/datetimeformat';
+import { MdDeleteForever, MdKeyboardArrowDown } from 'react-icons/md';
 import Swal from 'sweetalert2';
+import Button from '../components/Button';
+import Header from '../components/Header';
+import { useAuth } from '../contexts/AuthContext';
+import { useProp } from '../contexts/PropContext';
+import { useUser } from '../contexts/UserContext';
+import { formatDate, formatMilitaryTime } from '../helpers/utils/datetimeformat';
+import { deleteFoodIntakeJournal, getFoodIntakeJournals } from '../http/foodJournalAPI';
 
 
 export default function GetFoodJournalsPage() {
@@ -21,7 +18,8 @@ export default function GetFoodJournalsPage() {
   const { user } = useAuth();
   const { userInfo } = useUser();
   const [food, setfood] = useState<any>(null);
-  
+      const { handlePopUp} = useProp();
+
   useEffect(() => {
     if (!userInfo) {
       logger.warn('User not found.');
@@ -37,8 +35,9 @@ export default function GetFoodJournalsPage() {
         const result = await getFoodIntakeJournals();    
         logger.info('All Food journals entry retrieved:', result);
         setfood(result.data);
-      } catch (error) {
-        logger.error('Error retrieving food journal entry:', error);
+      } catch ( error ) {
+      handlePopUp('error', "Error retrieving food journal entry:");
+
       }
     }
     setTimeout(() => {

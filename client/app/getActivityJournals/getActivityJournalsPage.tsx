@@ -1,19 +1,15 @@
 'use client';
-import Image from 'next/image';
-import Button from '../components/Button';
-import Input from '../components/Input';
-import Link from 'next/link';
-import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { deleteActivityJournal, getActivityJournal, getActivityJournals} from '../http/activityJournalAPI'; 
-import { useAuth } from '../contexts/AuthContext';
-import { useUser } from '../contexts/UserContext';
 import { useEffect, useState } from 'react';
-import { MdDeleteForever, MdInfoOutline, MdKeyboardArrowDown } from 'react-icons/md';
-import Header from '../components/Header';
-import Menu from '../components/Menu';
-import { formatDate } from '../helpers/utils/datetimeformat';
+import { MdDeleteForever, MdKeyboardArrowDown } from 'react-icons/md';
 import Swal from 'sweetalert2';
+import Button from '../components/Button';
+import Header from '../components/Header';
+import { useAuth } from '../contexts/AuthContext';
+import { useProp } from '../contexts/PropContext';
+import { useUser } from '../contexts/UserContext';
+import { formatDate } from '../helpers/utils/datetimeformat';
+import { deleteActivityJournal, getActivityJournals } from '../http/activityJournalAPI';
 
 export default function GetActivityJournalsPage() {
   const logger = require('../../logger');
@@ -21,7 +17,8 @@ export default function GetActivityJournalsPage() {
   const { user } = useAuth();
   const { userInfo } = useUser();
   const [activity, setactivity] = useState<any>(null);
-  
+      const { handlePopUp} = useProp();
+
   useEffect(() => {
     if (!userInfo) {
       logger.warn('User not found.')
@@ -33,12 +30,11 @@ export default function GetActivityJournalsPage() {
   useEffect(() => {
     async function fetchActivityJournals() {
       try {
-        const userId = user?.uid || '';
         const result = await getActivityJournals();    
         logger.info('All Activity journals entry retrieved:', result);
         setactivity(result.data);
-      } catch (error) {
-        logger.error('Error retrieving activity journal entry:', error);
+      } catch ( error ) {
+        handlePopUp('error', "Error retrieving activity journal entry:");
       }
     }
     setTimeout(() => {
