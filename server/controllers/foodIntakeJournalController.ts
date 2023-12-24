@@ -1,10 +1,11 @@
-import { Request, Response } from "express";
-import { Logger } from "../middlewares/logger";
-import db from "../models";
-import {foodIntakeJournalValidator} from '../utils/databaseValidators';
+import { Request, Response, NextFunction } from 'express';
+import { Logger } from '../middlewares/logger';
+import db from '../models';
+import { foodIntakeJournalValidator } from '../utils/databaseValidators';
+import { ErrorHandler } from '../middlewares/errorMiddleware';
 
 // Create one food intake Journal for a user
-export const createFoodIntakeJournal = async (req: Request,res: Response) => {
+export const createFoodIntakeJournal = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userId = req.params.uid;
         const user = await db.User.findOne({
@@ -13,11 +14,8 @@ export const createFoodIntakeJournal = async (req: Request,res: Response) => {
             }
         });
 
-        if(!user) {
-            return res.status(404).json({
-                status: 'ERROR',
-                message: 'User not found, invalid user uid.',
-              });
+        if (!user) {
+            throw new ErrorHandler(404, 'NOT_FOUND', 'User not found, invalid user uid.');
         }
 
         const { date, time, foodName, mealType, servingNumber, notes } = req.body;
@@ -37,17 +35,18 @@ export const createFoodIntakeJournal = async (req: Request,res: Response) => {
             data: foodIntakeJournal
         });
     } catch (error) {
-            Logger.error(`Error occurred while creating food intake journal: ${error}`);
-                return res.status(400).json({
-                status: 'ERROR',
-                message: `Error creating food intake journal: ${error}`,
-            });
+        Logger.error(`Error occurred while creating food intake journal: ${error}`);
+        if (error instanceof ErrorHandler) {
+            next(error);
+        } else {
+            next(new ErrorHandler(400, 'ERROR', `Error creating food intake journal: ${error}`));
         }
+    }
 };
 
 // Retrieve all food intake Journals for a user
-export const getFoodIntakeJournals = async (req: Request,res: Response) => {
-    try{
+export const getFoodIntakeJournals = async (req: Request, res: Response, next: NextFunction) => {
+    try {
         const userId = req.params.uid;
         const user = await db.User.findOne({
             where: {
@@ -55,11 +54,8 @@ export const getFoodIntakeJournals = async (req: Request,res: Response) => {
             }
         });
 
-        if(!user) {
-            return res.status(404).json({
-                status: 'ERROR',
-                message: 'User not found, invalid user uid.',
-              });
+        if (!user) {
+            throw new ErrorHandler(404, 'NOT_FOUND', 'User not found, invalid user uid.');
         }
 
         const foodIntakeJournals = await db.FoodIntakeJournal.findAll({
@@ -74,49 +70,16 @@ export const getFoodIntakeJournals = async (req: Request,res: Response) => {
         });
     } catch (error) {
         Logger.error(`Error occurred while fetching food intake journals: ${error}`);
-        return res.status(400).json({
-            status: 'ERROR',
-            message: `Error fetching food intake journals: ${error}`,
-        });
+        if (error instanceof ErrorHandler) {
+            next(error);
+        } else {
+            next(new ErrorHandler(400, 'ERROR', `Error fetching food intake journals: ${error}`));
+        }
     }
 };
 
 // Retrieve one specific food intake Journal for a user
-export const getFoodIntakeJournal = async (req: Request,res: Response
-) => {
-    try{
-        const journalId = req.params.id;
-        const foodIntakeJournal = await db.FoodIntakeJournal.findOne({
-            where: {
-                id: journalId
-            }
-        });
-
-        if(!foodIntakeJournal) {
-            return res.status(404).json({
-                status: 'ERROR',
-                message: 'Food intake journal not found, invalid journal id.',
-              });
-        }
-
-        return res.status(200).json({
-            status: 'SUCCESS',
-            data: foodIntakeJournal
-        });
-    } catch (error) {
-        Logger.error(`Error occurred while fetching food intake journals: ${error}`);
-        return res.status(400).json({
-            status: 'ERROR',
-            message: `Error fetching food intake journals: ${error}`,
-        });
-    }
-};
-
-// Update one food intake Journal of a user
-export const updateFoodIntakeJournal = async (
-    req: Request,
-    res: Response
-) => {
+export const getFoodIntakeJournal = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const journalId = req.params.id;
         const foodIntakeJournal = await db.FoodIntakeJournal.findOne({
@@ -125,11 +88,36 @@ export const updateFoodIntakeJournal = async (
             }
         });
 
-        if(!foodIntakeJournal) {
-            return res.status(404).json({
-                status: 'ERROR',
-                message: 'Food intake journal not found, invalid journal id.',
-            });
+        if (!foodIntakeJournal) {
+            throw new ErrorHandler(404, 'NOT_FOUND', 'Food intake journal not found, invalid journal id.');
+        }
+
+        return res.status(200).json({
+            status: 'SUCCESS',
+            data: foodIntakeJournal
+        });
+    } catch (error) {
+        Logger.error(`Error occurred while fetching food intake journal: ${error}`);
+        if (error instanceof ErrorHandler) {
+            next(error);
+        } else {
+            next(new ErrorHandler(400, 'ERROR', `Error fetching food intake journal: ${error}`));
+        }
+    }
+};
+
+// Update one food intake Journal of a user
+export const updateFoodIntakeJournal = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const journalId = req.params.id;
+        const foodIntakeJournal = await db.FoodIntakeJournal.findOne({
+            where: {
+                id: journalId
+            }
+        });
+
+        if (!foodIntakeJournal) {
+            throw new ErrorHandler(404, 'NOT_FOUND', 'Food intake journal not found, invalid journal id.');
         }
 
         const { date, time, foodName, mealType, servingNumber, notes } = req.body;
@@ -146,7 +134,7 @@ export const updateFoodIntakeJournal = async (
             where: {
                 id: journalId
             }
-        })
+        });
 
         const updatedFoodIntakeJournal = await db.FoodIntakeJournal.findOne({
             where: {
@@ -158,22 +146,18 @@ export const updateFoodIntakeJournal = async (
             status: 'SUCCESS',
             data: updatedFoodIntakeJournal
         });
-
     } catch (error) {
-        Logger.error(`Error occurred while updating food intake journals: ${error}`);
-        return res.status(400).json({
-            status: 'ERROR',
-            message: `Error updating food intake journals: ${error}`,
-        });
+        Logger.error(`Error occurred while updating food intake journal: ${error}`);
+        if (error instanceof ErrorHandler) {
+            next(error);
+        } else {
+            next(new ErrorHandler(400, 'ERROR', `Error updating food intake journal: ${error}`));
+        }
     }
-
 };
 
 // Delete one food intake Journal of a user
-export const deleteFoodIntakeJournal = async (
-    req: Request,
-    res: Response
-) => {
+export const deleteFoodIntakeJournal = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const journalId = req.params.id;
         const foodIntakeJournal = await db.FoodIntakeJournal.findOne({
@@ -183,10 +167,7 @@ export const deleteFoodIntakeJournal = async (
         });
 
         if (!foodIntakeJournal) {
-            return res.status(404).json({
-                status: 'NOT_FOUND',
-                message: 'Food journal entry not found',
-            });
+            throw new ErrorHandler(404, 'NOT_FOUND', 'Food journal entry not found');
         }
 
         await db.FoodIntakeJournal.destroy({
@@ -199,12 +180,12 @@ export const deleteFoodIntakeJournal = async (
             status: 'SUCCESS',
             message: 'Food journal entry deleted successfully',
         });
-
     } catch (error) {
-        Logger.error(`Error occurred while deleting food intake journals: ${error}`);
-        return res.status(400).json({
-            status: 'ERROR',
-            message: `Error deleting food intake journals: ${error}`,
-        });
+        Logger.error(`Error occurred while deleting food intake journal: ${error}`);
+        if (error instanceof ErrorHandler) {
+            next(error);
+        } else {
+            next(new ErrorHandler(400, 'ERROR', `Error deleting food intake journal: ${error}`));
+        }
     }
 };
