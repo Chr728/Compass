@@ -2,9 +2,12 @@ import request from 'supertest';
 import app from '../index';
 import db from '../models/index';
 import admin from 'firebase-admin';
+import { startServer, stopServer } from '../utils/journalsTestHelper';
 
 let server: any;
 const port = process.env.PORT;
+
+
 
 const appointment = [
   {
@@ -60,16 +63,6 @@ const mockedDecodedToken = {
   iss: '',
   sub: '',
 };
-
-function startServer() {
-  server = app.listen(port);
-}
-
-function stopServer() {
-  if (server) {
-    server.close();
-  }
-}
 
 beforeAll(() => {
   startServer(); // Start the server before running tests

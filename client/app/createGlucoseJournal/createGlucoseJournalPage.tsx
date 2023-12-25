@@ -1,21 +1,20 @@
 'use client';
-import Image from 'next/image';
-import Button from '../components/Button';
-import Input from '../components/Input';
-import Link from 'next/link';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { createGlucoseJournal } from '../http/diabeticJournalAPI'; 
-import { useAuth } from '../contexts/AuthContext';
-import { useUser } from '../contexts/UserContext';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import Button from '../components/Button';
+import FormLabel from '../components/FormLabel';
 import Header from '../components/Header';
+import Input from '../components/Input';
+import { useProp } from '../contexts/PropContext';
+import { useUser } from '../contexts/UserContext';
+import { createGlucoseJournal } from '../http/diabeticJournalAPI';
 
 export default function CreateGlucoseJournalPage() {
   const logger = require('../../logger');
   const router = useRouter();
-  const { user } = useAuth();
   const { userInfo } = useUser();
+  const { handlePopUp} = useProp();
 
   useEffect(() => {
     if (!userInfo) {
@@ -35,7 +34,6 @@ export default function CreateGlucoseJournalPage() {
 
     onSubmit: async (values) => {
       try {
-        const userId = user?.uid || '';
         const data = {
           date: values.date,
           mealTime: values.mealTime,
@@ -47,7 +45,7 @@ export default function CreateGlucoseJournalPage() {
         logger.info('glucose journal entry created:', result);
         router.push('/getDiabeticJournals');
       } catch (error) {
-        logger.error('Error creating glucose journal entry:', error);
+         handlePopUp('error', "Error creating glucose journal entry:");
       }
     },
   });
@@ -64,15 +62,8 @@ export default function CreateGlucoseJournalPage() {
       className="rounded-3xl bg-white flex flex-col mb-8 w-full md:max-w-[800px] md:min-h-[550px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
       onSubmit={formik.handleSubmit}
     >
-      <div className="mt-3 mb-3">
-        <label
-          htmlFor="date"
-          className="font-sans font-medium text-grey text-[16px]"
-        >
-          Date
-        </label>
-        <span className="text-red text-[20px]"> *</span>
-        <br />
+        <div className="mt-3 mb-3">
+        <FormLabel htmlFor={ 'date' } label={'Date'}></FormLabel>  
         <Input 
     name="date"
     id="date"
@@ -87,18 +78,10 @@ export default function CreateGlucoseJournalPage() {
         <p className="text-red text-[14px]">This field can't be left empty.</p>
       )}      </div>
 
-      <div className="mt-3">
-        <label
-          htmlFor="mealTime"
-          className="font-sans font-medium text-grey text-[16px]"
-        >
-          Meal Time
-        </label>
-        <span className="text-red text-[20px]"> *</span>
-        <br />
+        <div className="mt-3">
+        <FormLabel htmlFor={ 'mealTime' } label={'Meal Time'}></FormLabel>  
         <select
-            className="text-darkgrey"
-          
+            className="text-darkgrey"    
       name="mealTime"
             id="mealTime"
       style={{
@@ -158,15 +141,8 @@ export default function CreateGlucoseJournalPage() {
       )}      
       </div>
 <div className="flex">
-  <div className="mt-3">
-    <label
-      htmlFor="bloodGlucose"
-      className="font-sans font-medium text-grey text-[16px]"
-    >
-     Blood Glucose
-    </label>
-    <span className="text-red text-[20px]"> *</span>
-    <br />
+    <div className="mt-3">
+    <FormLabel htmlFor={ 'bloodGlucose' } label={'Blood Glucose'}></FormLabel>          
     <Input
       name="bloodGlucose"
       id="bloodGlucose"
@@ -198,14 +174,7 @@ export default function CreateGlucoseJournalPage() {
     marginLeft :'-2%'
   }}
   >
-    <label
-      htmlFor="unit"
-      className="font-sans font-medium text-grey text-[16px]"
-    >
-      Unit
-    </label>
-    <span className="text-red text-[20px]"> *</span>
-    <br />
+      <FormLabel htmlFor={ 'unit' } label={'Unit'}></FormLabel>          
     <select
       className="text-darkgrey"
       name="unit"
@@ -248,7 +217,7 @@ export default function CreateGlucoseJournalPage() {
   </div>
 </div>
 
-      <div className="mt-3">
+  <div className="mt-3">       
                 <label
                   htmlFor="notes"
                   className="font-sans font-medium text-grey text-[16px]"

@@ -2,7 +2,6 @@ import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import CreateInsulinJournalPage from './createInsulinJournalPage';
-import {creatInsulinJournal} from '../http/diabeticJournalAPI';
 
 
 const fakeUser = {

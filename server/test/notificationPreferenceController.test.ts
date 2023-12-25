@@ -2,20 +2,7 @@ import request from 'supertest';
 import app from '../index';
 import db from '../models/index';
 import admin from 'firebase-admin';
-
-let server: any;
-const port = process.env.PORT;
-
-const user = {
-  id: 10,
-  uid: 'testuid',
-  email: 'test@gmail.com',
-  firstName: 'John',
-  lastName: 'Doe',
-  phoneNumber: '5147894561',
-  birthDate: '1990-12-31T00:00:00.000Z',
-  sex: 'male',
-};
+import { user, startServer, stopServer } from '../utils/journalsTestHelper';
 
 const notificationPreference = {
   id: 1,
@@ -52,16 +39,6 @@ const mockedDecodedToken = {
   iss: '',
   sub: '',
 };
-
-function startServer() {
-  server = app.listen(port);
-}
-
-function stopServer() {
-  if (server) {
-    server.close();
-  }
-}
 
 beforeAll(() => {
   startServer();
@@ -218,7 +195,7 @@ describe('Testing the update notificationPreference controller', () => {
       .mockResolvedValueOnce(updatedNotificationPreference);
     const res = await request(app)
       .put(`/api/notifications/${user.uid}`)
-        .send(validInput) // Send valid input
+      .send(validInput) // Send valid input
       .set({ Authorization: 'Bearer token' });
     expect(db.NotificationPreference.update).toBeCalledTimes(1);
     expect(db.NotificationPreference.findOne).toBeCalledTimes(1);
@@ -231,7 +208,7 @@ describe('Testing the update notificationPreference controller', () => {
     jest.spyOn(db.NotificationPreference, 'update').mockResolvedValueOnce(null);
     const res = await request(app)
       .put(`/api/notifications/${user.uid}`)
-        .send(validInput) // Send valid input
+      .send(validInput) // Send valid input
       .set({ Authorization: 'Bearer token' });
     expect(db.NotificationPreference.update).toBeCalledTimes(1);
     expect(res.status).toBe(404);
@@ -245,13 +222,13 @@ describe('Testing the update notificationPreference controller', () => {
     // Provide valid input for the validator
 
     jest
-        .spyOn(db.NotificationPreference, 'update')
-        .mockRejectedValue(new Error('query error'));
+      .spyOn(db.NotificationPreference, 'update')
+      .mockRejectedValue(new Error('query error'));
 
     const res = await request(app)
-        .put(`/api/notifications/${user.uid}`)
-        .send(validInput) // Send valid input
-        .set({ Authorization: 'Bearer token' });
+      .put(`/api/notifications/${user.uid}`)
+      .send(validInput) // Send valid input
+      .set({ Authorization: 'Bearer token' });
 
     expect(db.NotificationPreference.update).toBeCalledTimes(1);
     expect(res.status).toBe(400);

@@ -1,21 +1,20 @@
 'use client';
-import Image from 'next/image';
-import Button from '../components/Button';
-import Input from '../components/Input';
-import Link from 'next/link';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { createInsulinJournal } from '../http/diabeticJournalAPI'; 
-import { useAuth } from '../contexts/AuthContext';
-import { useUser } from '../contexts/UserContext';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import Button from '../components/Button';
+import FormLabel from '../components/FormLabel';
 import Header from '../components/Header';
+import Input from '../components/Input';
+import { useProp } from '../contexts/PropContext';
+import { useUser } from '../contexts/UserContext';
+import { createInsulinJournal } from '../http/diabeticJournalAPI';
 
 export default function CreateInsulinJournalPage() {
   const logger = require('../../logger');
   const router = useRouter();
-  const { user } = useAuth();
   const { userInfo } = useUser();
+    const { handlePopUp} = useProp();
 
   useEffect(() => {
     if (!userInfo) {
@@ -23,7 +22,6 @@ export default function CreateInsulinJournalPage() {
     } 
   }, [userInfo, router]);
 
-  
   const formik = useFormik({
     initialValues: {
       date: '', // Initialize the form fields with empty values
@@ -36,7 +34,6 @@ export default function CreateInsulinJournalPage() {
 
     onSubmit: async (values) => {
       try {
-        const userId = user?.uid || '';
         const data = {
           date: values.date,
            time: values.time,
@@ -49,7 +46,8 @@ export default function CreateInsulinJournalPage() {
         logger.info('Insulin journal entry created:', result);
         router.push('/getDiabeticJournals');
       } catch (error) {
-        logger.error('Error creating Insulin journal entry:', error);
+        handlePopUp('error', "Error creating Insulin journal entry:");
+
       }
     },
   });
@@ -61,20 +59,13 @@ export default function CreateInsulinJournalPage() {
               <button onClick={() => router.push('/getDiabeticJournals')}>
               <Header headerText="Create Insulin Dosage"></Header>
               </button>
-              </span>
-      <form
+</span>  
+    <form
       className="rounded-3xl bg-white flex flex-col mb-8 w-full md:max-w-[800px] md:min-h-[550px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
       onSubmit={formik.handleSubmit}
     >
-      <div className="mt-3 mb-3">
-        <label
-          htmlFor="date"
-          className="font-sans font-medium text-grey text-[16px]"
-        >
-          Date
-        </label>
-        <span className="text-red text-[20px]"> *</span>
-        <br />
+        <div className="mt-3 mb-3">
+          <FormLabel htmlFor={ 'date' } label={'Date'}></FormLabel>          
         <Input 
     name="date"
     id="date"
@@ -89,15 +80,8 @@ export default function CreateInsulinJournalPage() {
         <p className="text-red text-[14px]">This field can't be left empty.</p>
       )}      </div>
 
-      <div className="mt-3">
-        <label
-          htmlFor="time"
-          className="font-sans font-medium text-grey text-[16px]"
-        >
-         Time
-        </label>
-        <span className="text-red text-[20px]"> *</span>
-        <br />
+        <div className="mt-3">
+        <FormLabel htmlFor={ 'time' } label={'Time'}></FormLabel>          
         <Input
     name="time"
     id="time"
@@ -111,18 +95,9 @@ export default function CreateInsulinJournalPage() {
         <p className="text-red text-[14px]">This field can't be left empty.</p>
       )}      
         </div>
-        
-
     <div className="flex">
-<div className="mt-3">
-  <label
-    htmlFor="typeOfInsulin"
-    className="font-sans font-medium text-grey text-[16px]"
-  >
-   Type of Insulin
-  </label>
-  <span className="text-red text-[20px]"> *</span>
-  <br />
+  <div className="mt-3">
+          <FormLabel htmlFor={ 'typeOfInsulin' } label={'Type of Insulin'}></FormLabel>          
        <select
             className="text-darkgrey"
           
@@ -195,15 +170,8 @@ export default function CreateInsulinJournalPage() {
 </div>
 </div>
 
-    <div className="mt-3">
-      <label
-        htmlFor="unit"
-        className="font-sans font-medium text-grey text-[16px]"
-      >
-       Units Given
-      </label>
-      <span className="text-red text-[20px]"> *</span>
-      <br />
+<div className="mt-3">
+<FormLabel htmlFor={ 'unit' } label={'Units Given'}></FormLabel>                    
       <Input
         name="unit"
         id="unit"
@@ -230,16 +198,9 @@ export default function CreateInsulinJournalPage() {
     </div>
 
     
-   <div className="flex">
-<div className="mt-3">
-  <label
-    htmlFor="bodySite"
-    className="font-sans font-medium text-grey text-[16px]"
-  >
-   Body Site
-  </label>
-  <span className="text-red text-[20px]"> *</span>
-  <br />
+  <div className="flex">
+          <div className="mt-3">
+ <FormLabel htmlFor={ 'bodySite' } label={'Body Site'}></FormLabel>                               
        <select
             className="text-darkgrey"
           
@@ -313,7 +274,7 @@ export default function CreateInsulinJournalPage() {
   )}
 </div>
 </div>
-    <div className="mt-3">
+  <div className="mt-3">        
               <label
                 htmlFor="notes"
                 className="font-sans font-medium text-grey text-[16px]"
@@ -338,9 +299,8 @@ export default function CreateInsulinJournalPage() {
           text="Cancel"
           style={{ width: '140px', backgroundColor: 'var(--Red, #FF7171)' }}
           onClick={() => router.push("/getDiabeticJournals")}
-        />
-
-
+            />
+            
         <Button
           type="submit"
           text="Submit"

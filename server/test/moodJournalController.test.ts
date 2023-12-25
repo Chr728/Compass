@@ -1,37 +1,35 @@
 import request from 'supertest';
 import app from '../index';
 import db from '../models';
-import admin from 'firebase-admin';
+import {
+  user,
+  startServer,
+  stopServer,
+  mockCreate,
+  mockDestroy,
+  mockFindAll,
+  mockFindOne,
+  mockTokenVerification,
+  mockUpdate,
+  mockRejectedValueOnce,
+} from '../utils/journalsTestHelper';
 
-let server: any;
-const port = process.env.PORT;
-
-const user = {
-  id: 10,
-  uid: 'testuid',
-  email: 'test@gmail.com',
-  firstName: 'John',
-  lastName: 'Doe',
-  phoneNumber: '5147894561',
-  birthDate: '1990-12-31T00:00:00.000Z',
-  sex: 'male',
-};
 
 const moodJournal = {
   id: 1,
   uid: 'testuid',
   howAreYou: 'Good',
   stressSignals: {
-    tired: "rarely",
-    sleep: "sometimes",
-    hunger: "sometimes",
-    overeating: "rarely",
-    depressed: "often",
-    pressure: "rarely",
-    anxiety: "rarely",
-    attention: "never",
-    anger: "never",
-    headache: "sometimes"
+    tired: 'rarely',
+    sleep: 'sometimes',
+    hunger: 'sometimes',
+    overeating: 'rarely',
+    depressed: 'often',
+    pressure: 'rarely',
+    anxiety: 'rarely',
+    attention: 'never',
+    anger: 'never',
+    headache: 'sometimes',
   },
   date: '2023-10-08T10:00:00Z',
   notes: 'Sample mood entry',
@@ -41,16 +39,16 @@ const updateMoodJournal = {
   uid: 'testuid',
   howAreYou: 'Horrible',
   stressSignals: {
-    tired: "rarely",
-    sleep: "sometimes",
-    hunger: "sometimes",
-    overeating: "rarely",
-    depressed: "often",
-    pressure: "rarely",
-    anxiety: "rarely",
-    attention: "never",
-    anger: "never",
-    headache: "sometimes"
+    tired: 'rarely',
+    sleep: 'sometimes',
+    hunger: 'sometimes',
+    overeating: 'rarely',
+    depressed: 'often',
+    pressure: 'rarely',
+    anxiety: 'rarely',
+    attention: 'never',
+    anger: 'never',
+    headache: 'sometimes',
   },
   date: '2023-10-08T10:00:00Z',
   notes: 'Updated Sample mood entry',
@@ -70,16 +68,6 @@ const mockedDecodedToken = {
   sub: '',
 };
 
-function startServer() {
-  server = app.listen(port);
-}
-
-function stopServer() {
-  if (server) {
-    server.close();
-  }
-}
-
 describe('Mood Journal Controllern Tests', () => {
   beforeAll(() => {
     startServer();
@@ -90,10 +78,8 @@ describe('Mood Journal Controllern Tests', () => {
   });
 
   beforeEach(() => {
-    jest
-      .spyOn(admin.auth(), 'verifyIdToken')
-      .mockResolvedValue(mockedDecodedToken);
-    jest.spyOn(db.User, 'findOne').mockResolvedValue(user);
+    mockTokenVerification(mockedDecodedToken);
+    mockFindOne(db.User, user);
   });
 
   afterEach(() => {
@@ -101,7 +87,7 @@ describe('Mood Journal Controllern Tests', () => {
   });
 
   it('should get mood journals for a user', async () => {
-    jest.spyOn(db.MoodJournal, 'findAll').mockResolvedValueOnce([moodJournal]);
+    mockFindAll(db.MoodJournal, [moodJournal]);
 
     const res = await request(app)
       .get(`/api/journals/mood/user/${user.uid}`)
@@ -115,7 +101,7 @@ describe('Mood Journal Controllern Tests', () => {
   });
 
   it('should get a mood journal for a user', async () => {
-    jest.spyOn(db.MoodJournal, 'findOne').mockResolvedValueOnce(moodJournal);
+    mockFindOne(db.MoodJournal, moodJournal);
 
     const res = await request(app)
       .get(`/api/journals/mood/${moodJournal.id}`)
@@ -128,7 +114,7 @@ describe('Mood Journal Controllern Tests', () => {
   });
 
   it('should create a mood journal for a user', async () => {
-    jest.spyOn(db.MoodJournal, 'create').mockResolvedValueOnce(moodJournal);
+    mockCreate(db.MoodJournal, moodJournal);
 
     const res = await request(app)
       .post(`/api/journals/mood/user/${user.uid}`)
@@ -143,14 +129,9 @@ describe('Mood Journal Controllern Tests', () => {
   });
 
   it('should update a mood journal for a user', async () => {
-    jest.spyOn(db.MoodJournal, 'findOne').mockResolvedValueOnce(moodJournal);
-    jest
-      .spyOn(db.MoodJournal, 'update')
-      .mockResolvedValueOnce([1, [updateMoodJournal]]);
-
-    jest
-      .spyOn(db.MoodJournal, 'findOne')
-      .mockResolvedValueOnce(updateMoodJournal);
+    mockFindOne(db.MoodJournal, moodJournal);
+    mockUpdate(db.MoodJournal, updateMoodJournal);
+    mockFindOne(db.MoodJournal, updateMoodJournal);
 
     const res = await request(app)
       .put(`/api/journals/mood/${moodJournal.id}`)
@@ -165,10 +146,8 @@ describe('Mood Journal Controllern Tests', () => {
   });
 
   it('should delete a mood journal for a user', async () => {
-    jest.spyOn(db.MoodJournal, 'findOne').mockResolvedValueOnce(moodJournal);
-    jest
-      .spyOn(db.MoodJournal, 'destroy')
-      .mockResolvedValueOnce([1, [moodJournal]]);
+    mockFindOne(db.MoodJournal, moodJournal);
+    mockDestroy(db.MoodJournal, moodJournal);
 
     const res = await request(app)
       .delete(`/api/journals/mood/${moodJournal.id}`)
@@ -181,7 +160,7 @@ describe('Mood Journal Controllern Tests', () => {
   });
 
   it('should handle mood journal not found error', async () => {
-    jest.spyOn(db.MoodJournal, 'findOne').mockResolvedValueOnce(null);
+    mockFindOne(db.MoodJournal, null);
 
     const res = await request(app)
       .get(`/api/journals/mood/${moodJournal.id}`)
@@ -194,7 +173,7 @@ describe('Mood Journal Controllern Tests', () => {
   });
 
   it('should handle mood journal not found error when updating', async () => {
-    jest.spyOn(db.MoodJournal, 'findOne').mockResolvedValueOnce(null);
+    mockFindOne(db.MoodJournal, null);
 
     const res = await request(app)
       .put(`/api/journals/mood/${moodJournal.id}`)
@@ -208,7 +187,7 @@ describe('Mood Journal Controllern Tests', () => {
   });
 
   it('should handle mood journal not found error when deleting', async () => {
-    jest.spyOn(db.MoodJournal, 'findOne').mockResolvedValueOnce(null);
+    mockFindOne(db.MoodJournal, null);
 
     const res = await request(app)
       .delete(`/api/journals/mood/${moodJournal.id}`)
@@ -221,7 +200,7 @@ describe('Mood Journal Controllern Tests', () => {
   });
 
   it('should handle error when getting mood journals', async () => {
-    jest.spyOn(db.MoodJournal, 'findAll').mockRejectedValueOnce(new Error());
+    mockRejectedValueOnce('findAll', db.MoodJournal, new Error());
 
     const res = await request(app)
       .get(`/api/journals/mood/user/${user.uid}`)
@@ -235,7 +214,7 @@ describe('Mood Journal Controllern Tests', () => {
   });
 
   it('should handle error when getting mood journal', async () => {
-    jest.spyOn(db.MoodJournal, 'findOne').mockRejectedValueOnce(new Error());
+    mockRejectedValueOnce('findOne', db.MoodJournal, new Error());
 
     const res = await request(app)
       .get(`/api/journals/mood/${moodJournal.id}`)
@@ -248,7 +227,7 @@ describe('Mood Journal Controllern Tests', () => {
   });
 
   it('should handle error when creating mood journal', async () => {
-    jest.spyOn(db.MoodJournal, 'create').mockRejectedValueOnce(new Error());
+    mockRejectedValueOnce('create', db.MoodJournal, new Error());
 
     const res = await request(app)
       .post(`/api/journals/mood/user/${user.uid}`)
@@ -263,8 +242,8 @@ describe('Mood Journal Controllern Tests', () => {
   });
 
   it('should handle error when updating mood journal', async () => {
-    jest.spyOn(db.MoodJournal, 'findOne').mockResolvedValueOnce(moodJournal);
-    jest.spyOn(db.MoodJournal, 'update').mockRejectedValueOnce(new Error());
+    mockFindOne(db.MoodJournal, moodJournal);
+    mockRejectedValueOnce('update', db.MoodJournal, new Error());
 
     const res = await request(app)
       .put(`/api/journals/mood/${moodJournal.id}`)
@@ -277,8 +256,8 @@ describe('Mood Journal Controllern Tests', () => {
   });
 
   it('should handle error when deleting mood journal', async () => {
-    jest.spyOn(db.MoodJournal, 'findOne').mockResolvedValueOnce(moodJournal);
-    jest.spyOn(db.MoodJournal, 'destroy').mockRejectedValueOnce(new Error());
+    mockFindOne(db.MoodJournal, moodJournal);
+    mockRejectedValueOnce('destroy', db.MoodJournal, new Error());
 
     const res = await request(app)
       .delete(`/api/journals/mood/${moodJournal.id}`)
@@ -292,7 +271,7 @@ describe('Mood Journal Controllern Tests', () => {
   });
 
   it('should handle user not found error for create', async () => {
-    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(null);
+    mockFindOne(db.User, null);
 
     const res = await request(app)
       .post(`/api/journals/mood/user/${user.uid}`)
@@ -306,7 +285,7 @@ describe('Mood Journal Controllern Tests', () => {
   });
 
   it('should handle user not found error for getAllActivityJournals', async () => {
-    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(null);
+    mockFindOne(db.User, null);
 
     const res = await request(app)
       .get(`/api/journals/mood/user/${user.uid}`)

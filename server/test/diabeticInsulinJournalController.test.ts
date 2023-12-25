@@ -1,21 +1,22 @@
 import request from 'supertest';
 import app from '../index';
 import db from '../models';
-import admin from 'firebase-admin';
+import {
+  user,
+  startServer,
+  stopServer,
+  mockCreate,
+  mockDestroy,
+  mockFindAll,
+  mockFindOne,
+  mockTokenVerification,
+  mockUpdate,
+  mockRejectedValueOnce,
+} from '../utils/journalsTestHelper';
 
 let server: any;
 const port = process.env.PORT;
 
-const user = {
-  id: 10,
-  uid: 'testuid',
-  email: 'test@gmail.com',
-  firstName: 'John',
-  lastName: 'Doe',
-  phoneNumber: '5147894561',
-  birthDate: '1990-12-31T00:00:00.000Z',
-  sex: 'male',
-};
 
 const insulinJournal = {
   id: 1,
@@ -23,7 +24,18 @@ const insulinJournal = {
   date: '2020-12-31T00:00:00.000Z',
   time: '2020-12-31T00:00:00.000Z',
   typeOfInsulin: 'testTypeOfInsulin',
-  unit: 'testUnit',
+  unit: 10,
+  bodySite: 'testBodySite',
+  notes: 'testNotes',
+};
+
+const invalidInsulinJournal = {
+  id: 1,
+  uid: 'testuid',
+  date: '2020-12-31T00:00:00.000Z',
+  time: '2020-12-31T00:00:00.000Z',
+  typeOfInsulin: 'testTypeOfInsulin',
+  unit: '10',
   bodySite: 'testBodySite',
   notes: 'testNotes',
 };
@@ -34,7 +46,7 @@ const updatedInsulinJournal = {
   date: '2020-12-31T00:00:00.000Z',
   time: '2020-12-31T00:00:00.000Z',
   typeOfInsulin: 'Humalog',
-  unit: '10',
+  unit: 12,
   bodySite: 'L Buttock',
   notes: 'testNotes',
 };
@@ -53,16 +65,6 @@ const mockedDecodedToken = {
   sub: '',
 };
 
-function startServer() {
-  server = app.listen(port);
-}
-
-function stopServer() {
-  if (server) {
-    server.close();
-  }
-}
-
 beforeAll(() => {
   startServer();
 });
@@ -72,9 +74,7 @@ afterAll(() => {
 });
 
 beforeEach(() => {
-  jest
-    .spyOn(admin.auth(), 'verifyIdToken')
-    .mockResolvedValue(mockedDecodedToken);
+  mockTokenVerification(mockedDecodedToken);
 });
 
 afterEach(() => {
@@ -83,10 +83,9 @@ afterEach(() => {
 
 describe('Testing the create insulin journal controller', () => {
   it('test to create a insulin journal', async () => {
-    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(user);
-    jest
-      .spyOn(db.InsulinDosage, 'create')
-      .mockResolvedValueOnce(insulinJournal);
+    mockFindOne(db.User, user);
+    mockCreate(db.InsulinDosage, insulinJournal);
+
     const res = await request(app)
       .post(`/api/journals/diabetic/insulin/user/${user.uid}`)
       .send(insulinJournal)
@@ -99,10 +98,9 @@ describe('Testing the create insulin journal controller', () => {
   });
 
   it('test the error if the user uid passed is invalid', async () => {
-    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(null);
-    jest
-      .spyOn(db.InsulinDosage, 'create')
-      .mockResolvedValueOnce(insulinJournal);
+    mockFindOne(db.User, null);
+    mockCreate(db.InsulinDosage, insulinJournal);
+
     const res = await request(app)
       .post(`/api/journals/diabetic/insulin/user/${user.uid}`)
       .send(insulinJournal)
@@ -115,31 +113,36 @@ describe('Testing the create insulin journal controller', () => {
   });
 
   it('test the error if request is not made properly', async () => {
-    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(user);
-    jest
-      .spyOn(db.InsulinDosage, 'create')
-      .mockRejectedValue(new Error('query error'));
+    mockFindOne(db.User, user);
+    mockRejectedValueOnce('create', db.InsulinDosage, new Error('query error'));
+
     const res = await request(app)
       .post(`/api/journals/diabetic/insulin/user/${user.uid}`)
-      .send('')
+      .send(insulinJournal)
       .set({ Authorization: 'Bearer token' });
     expect(db.InsulinDosage.create).toHaveBeenCalledTimes(1);
+    expect(res.status).toBe(400);
+    expect(res.body.status).toBe('ERROR');
+  });
+
+  it('test the error if the data is invalid', async () => {
+    mockFindOne(db.User, user);
+    mockRejectedValueOnce('create', db.InsulinDosage, insulinJournal);
+
+    const res = await request(app)
+      .post(`/api/journals/diabetic/insulin/user/${user.uid}`)
+      .send(invalidInsulinJournal)
+      .set({ Authorization: 'Bearer token' });
+    expect(db.InsulinDosage.create).toHaveBeenCalledTimes(0);
     expect(res.status).toBe(400);
     expect(res.body.status).toBe('ERROR');
   });
 });
 describe('Testing the update insulin journal controller', () => {
   it('should update a insulin journal for a user', async () => {
-    jest
-      .spyOn(db.InsulinDosage, 'findOne')
-      .mockResolvedValueOnce(insulinJournal);
-    jest
-      .spyOn(db.InsulinDosage, 'update')
-      .mockResolvedValueOnce([1, [updatedInsulinJournal]]);
-
-    jest
-      .spyOn(db.InsulinDosage, 'findOne')
-      .mockResolvedValueOnce(updatedInsulinJournal);
+    mockFindOne(db.InsulinDosage, insulinJournal);
+    mockUpdate(db.InsulinDosage, updatedInsulinJournal);
+    mockFindOne(db.InsulinDosage, updatedInsulinJournal);
 
     const res = await request(app)
       .put(`/api/journals/diabetic/insulin/${insulinJournal.id}`)
@@ -154,8 +157,9 @@ describe('Testing the update insulin journal controller', () => {
   });
 
   it('should return an error if the journal is not found ', async () => {
-    jest.spyOn(db.InsulinDosage, 'findOne').mockResolvedValueOnce(null);
-    jest.spyOn(db.InsulinDosage, 'update').mockResolvedValueOnce([1]);
+    mockFindOne(db.InsulinDosage, null);
+    mockUpdate(db.InsulinDosage, [1]);
+
     const res = await request(app)
       .put(`/api/journals/diabetic/insulin/${insulinJournal.id}`)
       .send(insulinJournal)
@@ -169,12 +173,9 @@ describe('Testing the update insulin journal controller', () => {
   });
 
   it('should return an error updating the journal', async () => {
-    jest
-      .spyOn(db.InsulinDosage, 'findOne')
-      .mockResolvedValueOnce(insulinJournal);
-    jest
-      .spyOn(db.InsulinDosage, 'update')
-      .mockRejectedValue(new Error('query error'));
+    mockFindOne(db.InsulinDosage, insulinJournal);
+    mockRejectedValueOnce('update', db.InsulinDosage, new Error('query error'));
+
     const res = await request(app)
       .put(`/api/journals/diabetic/insulin/${insulinJournal.id}`)
       .send(insulinJournal)
@@ -185,15 +186,26 @@ describe('Testing the update insulin journal controller', () => {
     expect(res.status).toBe(400);
     expect(res.body.status).toBe('ERROR');
   });
+
+  it('should return an error if the data is invalid when updating the journal', async () => {
+    mockFindOne(db.InsulinDosage, insulinJournal);
+    mockRejectedValueOnce('update', db.InsulinDosage, updatedInsulinJournal);
+
+    const res = await request(app)
+      .put(`/api/journals/diabetic/insulin/${insulinJournal.id}`)
+      .send(invalidInsulinJournal)
+      .set({ Authorization: 'Bearer token' });
+
+    expect(db.InsulinDosage.findOne).toHaveBeenCalledTimes(1);
+    expect(db.InsulinDosage.update).toHaveBeenCalledTimes(0);
+    expect(res.status).toBe(400);
+    expect(res.body.status).toBe('ERROR');
+  });
 });
 describe('Testing the delete insulin journal controller', () => {
   it('should delete a insulin journal for a user', async () => {
-    jest
-      .spyOn(db.InsulinDosage, 'findOne')
-      .mockResolvedValueOnce(insulinJournal);
-    jest
-      .spyOn(db.InsulinDosage, 'destroy')
-      .mockResolvedValueOnce([1, [insulinJournal]]);
+    mockFindOne(db.InsulinDosage, insulinJournal);
+    mockDestroy(db.InsulinDosage, insulinJournal);
 
     const res = await request(app)
       .delete(`/api/journals/diabetic/insulin/${insulinJournal.id}`)
@@ -205,8 +217,9 @@ describe('Testing the delete insulin journal controller', () => {
   });
 
   it('should return an error if the journal is not found ', async () => {
-    jest.spyOn(db.InsulinDosage, 'findOne').mockResolvedValueOnce(null);
-    jest.spyOn(db.InsulinDosage, 'destroy').mockResolvedValueOnce(1);
+    mockFindOne(db.InsulinDosage, null);
+    mockDestroy(db.InsulinDosage, 1);
+
     const res = await request(app)
       .delete(`/api/journals/diabetic/insulin/${insulinJournal.id}`)
       .set({ Authorization: 'Bearer token' });
@@ -219,12 +232,13 @@ describe('Testing the delete insulin journal controller', () => {
   });
 
   it('should return an error deleting the journal', async () => {
-    jest
-      .spyOn(db.InsulinDosage, 'findOne')
-      .mockResolvedValueOnce(insulinJournal);
-    jest
-      .spyOn(db.InsulinDosage, 'destroy')
-      .mockRejectedValue(new Error('query error'));
+    mockFindOne(db.InsulinDosage, insulinJournal);
+    mockRejectedValueOnce(
+      'destroy',
+      db.InsulinDosage,
+      new Error('query error')
+    );
+
     const res = await request(app)
       .delete(`/api/journals/diabetic/insulin/${insulinJournal.id}`)
       .set({ Authorization: 'Bearer token' });
@@ -237,9 +251,7 @@ describe('Testing the delete insulin journal controller', () => {
 });
 describe('Testing the get insulin journal controller', () => {
   it('should get a insulin journal for a user', async () => {
-    jest
-      .spyOn(db.InsulinDosage, 'findOne')
-      .mockResolvedValueOnce(insulinJournal);
+    mockFindOne(db.InsulinDosage, insulinJournal);
 
     const res = await request(app)
       .get(`/api/journals/diabetic/insulin/${insulinJournal.id}`)
@@ -252,7 +264,8 @@ describe('Testing the get insulin journal controller', () => {
   });
 
   it('should return an error if the journal is not found ', async () => {
-    jest.spyOn(db.InsulinDosage, 'findOne').mockResolvedValueOnce(null);
+    mockFindOne(db.InsulinDosage, null);
+
     const res = await request(app)
       .get(`/api/journals/diabetic/insulin/${insulinJournal.id}`)
       .set({ Authorization: 'Bearer token' });
@@ -264,9 +277,12 @@ describe('Testing the get insulin journal controller', () => {
   });
 
   it('should return an error getting the journal', async () => {
-    jest
-      .spyOn(db.InsulinDosage, 'findOne')
-      .mockRejectedValue(new Error('query error'));
+    mockRejectedValueOnce(
+      'findOne',
+      db.InsulinDosage,
+      new Error('query error')
+    );
+
     const res = await request(app)
       .get(`/api/journals/diabetic/insulin/${insulinJournal.id}`)
       .set({ Authorization: 'Bearer token' });
@@ -278,10 +294,8 @@ describe('Testing the get insulin journal controller', () => {
 });
 describe('Testing the get insulin journals controller', () => {
   it('should get all insulin journals for a user', async () => {
-    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(user);
-    jest
-      .spyOn(db.InsulinDosage, 'findAll')
-      .mockResolvedValueOnce([insulinJournal]);
+    mockFindOne(db.User, user);
+    mockFindAll(db.InsulinDosage, [insulinJournal]);
 
     const res = await request(app)
       .get(`/api/journals/diabetic/insulin/user/${user.uid}`)
@@ -295,7 +309,8 @@ describe('Testing the get insulin journals controller', () => {
   });
 
   it('should return an error if the user is not found ', async () => {
-    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(null);
+    mockFindOne(db.User, null);
+
     const res = await request(app)
       .get(`/api/journals/diabetic/insulin/user/${user.uid}`)
       .set({ Authorization: 'Bearer token' });
@@ -307,10 +322,13 @@ describe('Testing the get insulin journals controller', () => {
   });
 
   it('should return an error getting the journals', async () => {
-    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(user);
-    jest
-      .spyOn(db.InsulinDosage, 'findAll')
-      .mockRejectedValue(new Error('query error'));
+    mockFindOne(db.User, user);
+    mockRejectedValueOnce(
+      'findAll',
+      db.InsulinDosage,
+      new Error('query error')
+    );
+
     const res = await request(app)
       .get(`/api/journals/diabetic/insulin/user/${user.uid}`)
       .set({ Authorization: 'Bearer token' });

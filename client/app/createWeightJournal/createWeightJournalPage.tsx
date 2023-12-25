@@ -1,22 +1,20 @@
 'use client';
-import Image from 'next/image';
-import Button from '../components/Button';
-import Input from '../components/Input';
-import Link from 'next/link';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { createWeightJournal } from '../http/weightJournalAPI'; // Replace '../api/yourApiFile' with the correct path
-import { useAuth } from '../contexts/AuthContext';
-import { useUser } from '../contexts/UserContext';
-import { useEffect, useState } from 'react';
+import Button from '../components/Button';
+import FormLabel from '../components/FormLabel';
 import Header from '../components/Header';
-import Menu from '../components/Menu';
+import Input from '../components/Input';
+import { useAuth } from '../contexts/AuthContext';
+import { useProp } from '../contexts/PropContext';
+import { createWeightJournal } from '../http/weightJournalAPI'; // Replace '../api/yourApiFile' with the correct path
 
 export default function CreateWeightJournalPage() {
   const logger = require('../../logger');
   const router = useRouter();
   const { user } = useAuth();
-  
+  const { handlePopUp} = useProp();
+
   const formik = useFormik({
     initialValues: {
       date: '', // Initialize the form fields with empty values
@@ -43,7 +41,7 @@ export default function CreateWeightJournalPage() {
         logger.info('Weight journal entry created:', result);
         router.push('/getWeightJournals');
       } catch (error) {
-        logger.error('Error creating weight journal entry:', error);
+        handlePopUp('error', "Error creating weight journal entry:");
       }
     },
   });
@@ -60,15 +58,8 @@ export default function CreateWeightJournalPage() {
       className="rounded-3xl bg-white flex flex-col mb-8 w-full md:max-w-[800px] md:min-h-[550px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
       onSubmit={formik.handleSubmit}
     >
-      <div className="mt-3 mb-3">
-        <label
-          htmlFor="date"
-          className="font-sans font-medium text-grey text-[16px]"
-        >
-          Date
-        </label>
-        <span className="text-red text-[20px]"> *</span>
-        <br />
+        <div className="mt-3 mb-3">
+        <FormLabel htmlFor={ 'date' } label={'Date'}></FormLabel>                               
         <Input 
     name="date"
     id="date"
@@ -83,15 +74,8 @@ export default function CreateWeightJournalPage() {
         <p className="text-red text-[14px]">This field can't be left empty.</p>
       )}      </div>
 
-      <div className="mt-3">
-        <label
-          htmlFor="time"
-          className="font-sans font-medium text-grey text-[16px]"
-        >
-          Time
-        </label>
-        <span className="text-red text-[20px]"> *</span>
-        <br />
+        <div className="mt-3">
+        <FormLabel htmlFor={ 'time' } label={'Time'}></FormLabel>                               
         <Input
     name="time"
     id="time"
@@ -107,15 +91,8 @@ export default function CreateWeightJournalPage() {
       </div>
 
       <div className="flex">
-  <div className="mt-3">
-    <label
-      htmlFor="weight"
-      className="font-sans font-medium text-grey text-[16px]"
-    >
-      Weight
-    </label>
-    <span className="text-red text-[20px]"> *</span>
-    <br />
+          <div className="mt-3">
+        <FormLabel htmlFor={ 'weight' } label={'Weight'}></FormLabel>                               
     <Input
       name="weight"
       id="weight"
@@ -146,14 +123,7 @@ export default function CreateWeightJournalPage() {
     width: '50%',
   }}
   >
-    <label
-      htmlFor="unit"
-      className="font-sans font-medium text-grey text-[16px]"
-    >
-      Unit
-    </label>
-    <span className="text-red text-[20px]"> *</span>
-    <br />
+    <FormLabel htmlFor={ 'unit' } label={'Unit'}></FormLabel>                                     
     <select
       className="text-darkgrey"
       name="unit"
@@ -192,15 +162,8 @@ export default function CreateWeightJournalPage() {
 </div>
 
 
-      <div className="mt-3">
-        <label
-          htmlFor="height"
-          className="font-sans font-medium text-grey text-[16px]"
-        >
-          Height (in centimeters)
-        </label>
-        <span className="text-red text-[20px]"> *</span>
-        <br />
+        <div className="mt-3">
+    <FormLabel htmlFor={ 'height' } label={'Height (in centimeters)'}></FormLabel>                                     
         <Input
           name="height"
           id="height"

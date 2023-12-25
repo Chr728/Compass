@@ -12,6 +12,7 @@ import Input from '@/app/components/Input';
 import Image from 'next/image';
 import Link from 'next/link';
 import Header from '@/app/components/Header';
+import {useProp} from '../../../contexts/PropContext';  
 
 export default function UpdateMoodEntry( {params: { updateEntryId } } : { params: { updateEntryId: string }} ) {
     const logger = require('../../../../logger');
@@ -19,6 +20,7 @@ export default function UpdateMoodEntry( {params: { updateEntryId } } : { params
     const router = useRouter();
     const [data, setData] = useState<any>();
     const [selectedMood, setSelectedMood] = useState<string>('');
+  const { handlePopUp} = useProp();
 
     async function updateMoodEntry() {
         try {  
@@ -30,7 +32,8 @@ export default function UpdateMoodEntry( {params: { updateEntryId } } : { params
            }
            setData(updatedMoodData);
         } catch (error) {
-            logger.error('Error fetching mood data');
+           handlePopUp('error', "Error fetching mood data");
+
         }
     }
 

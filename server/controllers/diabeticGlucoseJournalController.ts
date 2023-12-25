@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { Logger } from '../middlewares/logger';
 import db from '../models';
+import {diabeticGlucoseJournalValidator} from '../utils/databaseValidators';
+
 
 export const getGlucoseJournals = async (req: Request, res: Response) => {
   try {
@@ -78,6 +80,7 @@ export const createGlucoseJournal = async (req: Request, res: Response) => {
       });
     }
     const { date, mealTime, bloodGlucose, unit, notes } = req.body;
+    diabeticGlucoseJournalValidator(req.body)
     const glucoseJournal = await db.GlucoseMeasurement.create({
       uid: req.params.uid,
       date,
@@ -115,6 +118,7 @@ export const updateGlucoseJournal = async (req: Request, res: Response) => {
     }
 
     const { date, mealTime, bloodGlucose, unit, notes } = req.body;
+    diabeticGlucoseJournalValidator(req.body);
     await db.GlucoseMeasurement.update(
       {
         date,

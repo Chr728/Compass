@@ -1,21 +1,20 @@
 import request from 'supertest';
 import app from '../index';
 import db from '../models/index';
-import admin from 'firebase-admin';
+import {
+  user,
+  startServer,
+  stopServer,
+  mockCreate,
+  mockDestroy,
+  mockFindAll,
+  mockFindOne,
+  mockTokenVerification,
+  mockUpdate,
+  mockRejectedValueOnce,
+} from '../utils/journalsTestHelper';
 
-let server: any;
 const port = process.env.PORT;
-
-const user = {
-  id: 1,
-  uid: 'uid',
-  email: 'test@gmail.com',
-  firstName: 'John',
-  lastName: 'Doe',
-  phoneNumber: '5149826382',
-  birthDate: '2000-10-12',
-  sex: 'male',
-};
 
 const foodIntakeJournals = [
   {
@@ -51,6 +50,17 @@ const createFoodIntakeJournal = {
   notes: 'notes1',
 };
 
+const invalidFoodIntakeJournal = {
+  id: 1,
+  uid: 'foodIntakeUid',
+  date: '2023-10-19',
+  time: '13:00:00',
+  foodName: 'steak',
+  mealType: 'mealType1',
+  servingNumber: 'servingNumber',
+  notes: 'notes1',
+};
+
 const updatedFoodIntakeJournal = {
   id: 1,
   uid: 'foodIntakeUid',
@@ -76,16 +86,6 @@ const mockedDecodedToken = {
   sub: '',
 };
 
-function startServer() {
-  server = app.listen(port);
-}
-
-function stopServer() {
-  if (server) {
-    server.close();
-  }
-}
-
 beforeAll(() => {
   startServer(); // Start the server before running tests
 });
@@ -95,9 +95,7 @@ afterAll(() => {
 });
 
 beforeEach(() => {
-  jest
-    .spyOn(admin.auth(), 'verifyIdToken')
-    .mockResolvedValue(mockedDecodedToken);
+  mockTokenVerification(mockedDecodedToken);
 });
 
 afterEach(() => {
@@ -106,10 +104,9 @@ afterEach(() => {
 
 describe('Testing the create food intake journal controller', () => {
   it('test to create appointment', async () => {
-    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(user);
-    jest
-      .spyOn(db.FoodIntakeJournal, 'create')
-      .mockResolvedValueOnce(createFoodIntakeJournal);
+    mockFindOne(db.User, user);
+    mockCreate(db.FoodIntakeJournal, createFoodIntakeJournal);
+
     const res = await request(app)
       .post('/api/journals/foodIntake/user/uid')
       .send(createFoodIntakeJournal)
@@ -122,10 +119,9 @@ describe('Testing the create food intake journal controller', () => {
   });
 
   it('test the error if the user uid passed is invalid', async () => {
-    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(null);
-    jest
-      .spyOn(db.FoodIntakeJournal, 'create')
-      .mockResolvedValueOnce(createFoodIntakeJournal);
+    mockFindOne(db.User, null);
+    mockCreate(db.FoodIntakeJournal, createFoodIntakeJournal);
+
     const res = await request(app)
       .post('/api/journals/foodIntake/user/uid')
       .send(createFoodIntakeJournal)
@@ -138,15 +134,31 @@ describe('Testing the create food intake journal controller', () => {
   });
 
   it('test the error if request is not made properly', async () => {
-    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(user);
-    jest
-      .spyOn(db.FoodIntakeJournal, 'create')
-      .mockRejectedValue(new Error('query error'));
+    mockFindOne(db.User, user);
+    mockRejectedValueOnce(
+      'create',
+      db.FoodIntakeJournal,
+      new Error('query error')
+    );
+
     const res = await request(app)
       .post('/api/journals/foodIntake/user/uid')
-      .send('')
+      .send(createFoodIntakeJournal)
       .set({ Authorization: 'Bearer token' });
     expect(db.FoodIntakeJournal.create).toHaveBeenCalledTimes(1);
+    expect(res.status).toBe(400);
+    expect(res.body.status).toBe('ERROR');
+  });
+
+  it('test the error if the data received is invalid', async () => {
+    mockFindOne(db.User, user);
+    mockRejectedValueOnce('create', db.FoodIntakeJournal, null);
+
+    const res = await request(app)
+      .post('/api/journals/foodIntake/user/uid')
+      .send(invalidFoodIntakeJournal)
+      .set({ Authorization: 'Bearer token' });
+    expect(db.FoodIntakeJournal.create).toHaveBeenCalledTimes(0);
     expect(res.status).toBe(400);
     expect(res.body.status).toBe('ERROR');
   });
@@ -154,10 +166,9 @@ describe('Testing the create food intake journal controller', () => {
 
 describe('Testing the get all food intake journals controller', () => {
   it('test to create appointment', async () => {
-    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(user);
-    jest
-      .spyOn(db.FoodIntakeJournal, 'findAll')
-      .mockResolvedValueOnce(foodIntakeJournals);
+    mockFindOne(db.User, user);
+    mockFindAll(db.FoodIntakeJournal, foodIntakeJournals);
+
     const res = await request(app)
       .get('/api/journals/foodIntake/user/uid')
       .send('')
@@ -170,10 +181,9 @@ describe('Testing the get all food intake journals controller', () => {
   });
 
   it('test the error if the user uid passed is invalid', async () => {
-    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(null);
-    jest
-      .spyOn(db.FoodIntakeJournal, 'findAll')
-      .mockResolvedValueOnce(foodIntakeJournals);
+    mockFindOne(db.User, null);
+    mockFindAll(db.FoodIntakeJournal, foodIntakeJournals);
+
     const res = await request(app)
       .get('/api/journals/foodIntake/user/uid')
       .send('')
@@ -186,10 +196,13 @@ describe('Testing the get all food intake journals controller', () => {
   });
 
   it('should catch the error', async () => {
-    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(user);
-    jest
-      .spyOn(db.FoodIntakeJournal, 'findAll')
-      .mockRejectedValue(new Error('query error'));
+    mockFindOne(db.User, user);
+    mockRejectedValueOnce(
+      'findAll',
+      db.FoodIntakeJournal,
+      new Error('query error')
+    );
+
     const res = await request(app)
       .get('/api/journals/foodIntake/user/uid')
       .send('')
@@ -203,9 +216,8 @@ describe('Testing the get all food intake journals controller', () => {
 
 describe('Testing the get one food intake journals controller', () => {
   it('test to create appointment', async () => {
-    jest
-      .spyOn(db.FoodIntakeJournal, 'findOne')
-      .mockResolvedValueOnce(foodIntakeJournals[0]);
+    mockFindOne(db.FoodIntakeJournal, foodIntakeJournals[0]);
+
     const res = await request(app)
       .get(`/api/journals/foodIntake/1`)
       .send('')
@@ -217,7 +229,8 @@ describe('Testing the get one food intake journals controller', () => {
   });
 
   it('test the error if the journal id passed is invalid', async () => {
-    jest.spyOn(db.FoodIntakeJournal, 'findOne').mockResolvedValueOnce(null);
+    mockFindOne(db.FoodIntakeJournal, null);
+
     const res = await request(app)
       .get('/api/journals/foodIntake/1')
       .send('')
@@ -231,9 +244,12 @@ describe('Testing the get one food intake journals controller', () => {
   });
 
   it('should catch the error', async () => {
-    jest
-      .spyOn(db.FoodIntakeJournal, 'findOne')
-      .mockRejectedValue(new Error('query error'));
+    mockRejectedValueOnce(
+      'findOne',
+      db.FoodIntakeJournal,
+      new Error('query error')
+    );
+
     const res = await request(app)
       .get('/api/journals/foodIntake/1')
       .send('')
@@ -246,16 +262,9 @@ describe('Testing the get one food intake journals controller', () => {
 
 describe('Testing the update food intake journal controller', () => {
   it('should update a food intake journal for a user', async () => {
-    jest
-      .spyOn(db.FoodIntakeJournal, 'findOne')
-      .mockResolvedValueOnce(foodIntakeJournals[0]);
-    jest
-      .spyOn(db.FoodIntakeJournal, 'update')
-      .mockResolvedValueOnce([1, [updatedFoodIntakeJournal]]);
-
-    jest
-      .spyOn(db.FoodIntakeJournal, 'findOne')
-      .mockResolvedValueOnce(updatedFoodIntakeJournal);
+    mockFindOne(db.FoodIntakeJournal, foodIntakeJournals[0]);
+    mockUpdate(db.FoodIntakeJournal, updatedFoodIntakeJournal);
+    mockFindOne(db.FoodIntakeJournal, updatedFoodIntakeJournal);
 
     const res = await request(app)
       .put(`/api/journals/foodIntake/${foodIntakeJournals[0].id}`)
@@ -270,8 +279,9 @@ describe('Testing the update food intake journal controller', () => {
   });
 
   it('should return an error if the user is not found ', async () => {
-    jest.spyOn(db.FoodIntakeJournal, 'findOne').mockResolvedValueOnce(null);
-    jest.spyOn(db.FoodIntakeJournal, 'update').mockResolvedValueOnce([1]);
+    mockFindOne(db.FoodIntakeJournal, null);
+    mockUpdate(db.FoodIntakeJournal, [1]);
+
     const res = await request(app)
       .put('/api/journals/foodIntake/1')
       .send(foodIntakeJournals[0])
@@ -287,14 +297,15 @@ describe('Testing the update food intake journal controller', () => {
   });
 
   it('should return an error if the journal id is invalid', async () => {
-    jest.spyOn(db.FoodIntakeJournal, 'findOne').mockResolvedValueOnce(null);
-    jest.spyOn(db.FoodIntakeJournal, 'update').mockResolvedValueOnce([1]);
+    mockFindOne(db.FoodIntakeJournal, null);
+    mockUpdate(db.FoodIntakeJournal, [1]);
+
     const res = await request(app)
       .put('/api/journals/foodIntake/1')
       .send(foodIntakeJournals[0])
       .set({ Authorization: 'Bearer token' });
 
-    // expect(db.FoodIntakeJournal.findOne).toHaveBeenCalledTimes(2);
+    expect(db.FoodIntakeJournal.findOne).toHaveBeenCalledTimes(1);
     expect(db.FoodIntakeJournal.update).toHaveBeenCalledTimes(0);
     expect(res.status).toBe(404);
     expect(res.body.status).toBe('ERROR');
@@ -304,12 +315,13 @@ describe('Testing the update food intake journal controller', () => {
   });
 
   it('should return an error updating the journal', async () => {
-    jest
-      .spyOn(db.FoodIntakeJournal, 'findOne')
-      .mockResolvedValueOnce(foodIntakeJournals[0]);
-    jest
-      .spyOn(db.FoodIntakeJournal, 'update')
-      .mockRejectedValue(new Error('query error'));
+    mockFindOne(db.FoodIntakeJournal, foodIntakeJournals[0]);
+    mockRejectedValueOnce(
+      'update',
+      db.FoodIntakeJournal,
+      new Error('query error')
+    );
+
     const res = await request(app)
       .put('/api/journals/foodIntake/1')
       .send(foodIntakeJournals[0])
@@ -320,16 +332,31 @@ describe('Testing the update food intake journal controller', () => {
     expect(res.status).toBe(400);
     expect(res.body.status).toBe('ERROR');
   });
+
+  it('should return an error updating the journal if the data is invalid', async () => {
+    mockFindOne(db.FoodIntakeJournal, foodIntakeJournals[0]);
+    mockRejectedValueOnce(
+      'update',
+      db.FoodIntakeJournal,
+      new Error('query error')
+    );
+
+    const res = await request(app)
+      .put('/api/journals/foodIntake/1')
+      .send(invalidFoodIntakeJournal)
+      .set({ Authorization: 'Bearer token' });
+
+    expect(db.FoodIntakeJournal.findOne).toHaveBeenCalledTimes(1);
+    expect(db.FoodIntakeJournal.update).toHaveBeenCalledTimes(0);
+    expect(res.status).toBe(400);
+    expect(res.body.status).toBe('ERROR');
+  });
 });
 
 describe('Testing the delete food intake journal controller', () => {
   it('should delete a food intake journal for a user', async () => {
-    jest
-      .spyOn(db.FoodIntakeJournal, 'findOne')
-      .mockResolvedValueOnce(foodIntakeJournals[0]);
-    jest
-      .spyOn(db.FoodIntakeJournal, 'destroy')
-      .mockResolvedValueOnce([1, [foodIntakeJournals[0]]]);
+    mockFindOne(db.FoodIntakeJournal, foodIntakeJournals[0]);
+    mockDestroy(db.FoodIntakeJournal, foodIntakeJournals[0]);
 
     const res = await request(app)
       .delete(`/api/journals/foodIntake/${foodIntakeJournals[0].id}`)
@@ -342,8 +369,9 @@ describe('Testing the delete food intake journal controller', () => {
   });
 
   it('should return an error if the journal id is not found', async () => {
-    jest.spyOn(db.FoodIntakeJournal, 'findOne').mockResolvedValueOnce(null);
-    jest.spyOn(db.FoodIntakeJournal, 'destroy').mockResolvedValueOnce([0]);
+    mockFindOne(db.FoodIntakeJournal, null);
+    mockDestroy(db.FoodIntakeJournal, [0]);
+
     const res = await request(app)
       .delete('/api/journals/foodIntake/1')
       .set({ Authorization: 'Bearer token' });
@@ -356,12 +384,13 @@ describe('Testing the delete food intake journal controller', () => {
   });
 
   it('should return an error deleting the journal', async () => {
-    jest
-      .spyOn(db.FoodIntakeJournal, 'findOne')
-      .mockResolvedValueOnce(foodIntakeJournals[0]);
-    jest
-      .spyOn(db.FoodIntakeJournal, 'destroy')
-      .mockRejectedValue(new Error('query error'));
+    mockFindOne(db.FoodIntakeJournal, foodIntakeJournals[0]);
+    mockRejectedValueOnce(
+      'destroy',
+      db.FoodIntakeJournal,
+      new Error('query error')
+    );
+
     const res = await request(app)
       .delete('/api/journals/foodIntake/1')
       .set({ Authorization: 'Bearer token' });

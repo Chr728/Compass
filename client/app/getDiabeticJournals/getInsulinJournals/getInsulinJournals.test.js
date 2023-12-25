@@ -1,12 +1,7 @@
-import {render, screen,act} from '@testing-library/react';
 import '@testing-library/jest-dom';
-import GetInsulinJournalsPage from './getInsulinJournalsPage';
-import {getInsulinJournals} from '../../http/diabeticJournalAPI';
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { deleteInsulinJournal} from '../../http/diabeticJournalAPI'; 
-
-import { useRouter } from "next/router";
-import { useUser } from '../../contexts/UserContext';
+import GetInsulinJournalsPage from './getInsulinJournalsPage';
 
 beforeEach(async () => {
     await act(async () => {
