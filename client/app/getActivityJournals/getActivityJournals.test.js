@@ -1,12 +1,7 @@
-import {render, screen,act} from '@testing-library/react';
 import '@testing-library/jest-dom';
-import GetActivityJournalsPage from './getActivityJournalsPage';
-import {getActivityJournals} from '../http/activityJournalAPI';
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { deleteActivityJournal} from '../http/activityJournalAPI'; 
-
-import { useRouter } from "next/router";
-import { useUser } from '../contexts/UserContext';
+import GetActivityJournalsPage from './getActivityJournalsPage';
 
 beforeEach(async () => {
     await act(async () => {

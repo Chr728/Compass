@@ -53,16 +53,6 @@ const mockedDecodedToken = {
   sub: "",
 };
 
-function startServer() {
-  server = app.listen(port);
-}
-
-function stopServer() {
-  if (server) {
-    server.close();
-  }
-}
-
 beforeAll(() => {
   startServer();
 });
