@@ -2,6 +2,7 @@ import request from "supertest";
 import app from "../index";
 import db from "../models/index";
 import admin from "firebase-admin";
+import { startServer, stopServer } from "../utils/journalsTestHelper";
 
 let server: any;
 const port = process.env.SERVER_DEV_PORT;

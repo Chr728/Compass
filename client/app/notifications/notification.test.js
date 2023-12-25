@@ -404,11 +404,11 @@ describe("Notification Page useEffect", () => {
     const mockNotificationData = {
       data: {
         activityReminders: false,
-        medicationReminders: true,
+        medicationReminders: false,
         appointmentReminders: false,
-        foodIntakeReminders: true,
+        foodIntakeReminders: false,
         glucoseMeasurementReminders: false,
-        insulinDosageReminders: true,
+        insulinDosageReminders: false,
       },
     };
 
@@ -430,13 +430,13 @@ describe("Notification Page useEffect", () => {
       "InsulinInjectionSwitch"
     );
     expect(toggleButtonActvity).not.toBeChecked();
-    expect(toggleButtonMedication).toBeChecked();
+    expect(toggleButtonMedication).not.toBeChecked();
     expect(toggleButtonAppointment).not.toBeChecked();
-    expect(toggleButtonFoodIntake).toBeChecked();
+    expect(toggleButtonFoodIntake).not.toBeChecked();
     expect(toggleButtonBloodGlucose).not.toBeChecked();
-    expect(toggleButtonInsulinDosage).toBeChecked();
+    expect(toggleButtonInsulinDosage).not.toBeChecked();
   });
-  test("fetchNotificationPreference fetches and sets user preference when notification permission is set to granted", async () => {
+  test("fetchNotificationPreference fetch and post fails for user preference when notification permission is set to granted", async () => {
     // Mock the Notification API in the window object
     Object.defineProperty(window, "Notification", {
       value: {

@@ -123,6 +123,7 @@ export default function NotificationPage() {
             }
           } else {
             // Retrieve user current values
+            setSubscriptionReminders(true);
             const userId = user?.uid || "";
             const result = await getNotificationPreference();
             logger.info("Retrieved notification preference of user:", result);
@@ -136,8 +137,6 @@ export default function NotificationPage() {
               setInsulinInjectionReminders(result.data.insulinDosageReminders);
               logger.info("Notification preference information all set!");
             }
-
-            setSubscriptionReminders(true);
           }
         }
       } catch (error) {
