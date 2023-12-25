@@ -2,18 +2,10 @@ import request from 'supertest';
 import app from '../index';
 import db from '../models/index';
 import admin from 'firebase-admin';
-import { startServer, stopServer } from '../utils/journalsTestHelper';
+import { user, startServer, stopServer } from '../utils/journalsTestHelper';
 
-const user = {
-  id: 1,
-  uid: 'uid',
-  email: 'test@gmail.com',
-  firstName: 'John',
-  lastName: 'Doe',
-  phoneNumber: '5149826382',
-  birthDate: '2000-10-12',
-  sex: 'male',
-};
+let server: any;
+const port = process.env.PORT;
 
 const medications = [
   {

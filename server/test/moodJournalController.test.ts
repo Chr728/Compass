@@ -14,6 +14,7 @@ import {
   mockRejectedValueOnce,
 } from '../utils/journalsTestHelper';
 
+
 const moodJournal = {
   id: 1,
   uid: 'testuid',

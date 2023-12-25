@@ -4,6 +4,11 @@ import db from '../models/index';
 import admin from 'firebase-admin';
 import { startServer, stopServer } from '../utils/journalsTestHelper';
 
+let server: any;
+const port = process.env.PORT;
+
+
+
 const appointment = [
   {
     id: 1,

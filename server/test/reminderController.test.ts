@@ -6,6 +6,8 @@ import moment = require('moment-timezone');
 const webPush = require('web-push');
 import { user, startServer, stopServer } from '../utils/journalsTestHelper';
 
+let server: any;
+const port = process.env.PORT;
 const publicKey = process.env.VAPID_PUBLIC_KEY;
 const privateKey = process.env.VAPID_PRIVATE_KEY;
 webPush.setVapidDetails('mailto:test@gmail.com', publicKey, privateKey);

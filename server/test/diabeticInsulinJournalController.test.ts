@@ -14,6 +14,10 @@ import {
   mockRejectedValueOnce,
 } from '../utils/journalsTestHelper';
 
+let server: any;
+const port = process.env.PORT;
+
+
 const insulinJournal = {
   id: 1,
   uid: 'testuid',

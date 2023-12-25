@@ -14,6 +14,7 @@ import {
   mockRejectedValueOnce,
 } from '../utils/journalsTestHelper';
 
+
 const invalidUser = {
   email: 'test@gmail.com',
   firstName: 'John',
