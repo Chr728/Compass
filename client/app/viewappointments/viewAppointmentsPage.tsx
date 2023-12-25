@@ -16,6 +16,7 @@ import { formatDate, formatMilitaryTime } from '../helpers/utils/datetimeformat'
 import { useAuth } from '../contexts/AuthContext';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import Swal from 'sweetalert2';
+import Header from '../components/Header';
 
 export default function ViewAppointmentsPage() {
     const logger = require('../../logger');
@@ -77,25 +78,12 @@ export default function ViewAppointmentsPage() {
   
   return (
     <div className="bg-eggshell min-h-screen flex flex-col w-full">
-        <span 
-        className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4"
-        >
-            <Link href="">
-            <Image
-                src="/icons/LeftArrow.svg"
-                alt="LeftArrow icon"
-                width={10}
-                height={10}
-                className="mr-4 md:hidden"
-                style={{ width: 'auto', height: 'auto' }}
-                onClick={() => router.push('/health')}
-            />
-            </Link>
-            Appointments
-        </span>
-      {/* the text color for the text below has to be black but that is not working for some reason, so I've put grey for now. */}
+          <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-2">
+              <button onClick={() => router.push('/health')} />
+              <Header headerText="Appointments"></Header>
+          </span>
         <p 
-            className="text-grey font-sans text-[16px] ml-4 mt-2">
+            className="text-grey font-sans text-[16px] mx-8">
             Keep track of appointments you've set.
         </p>
         <div 
