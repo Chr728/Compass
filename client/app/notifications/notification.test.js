@@ -64,6 +64,7 @@ jest.mock("../contexts/PropContext", () => ({
 const logger = require("../../logger");
 jest.mock("../../logger", () => ({
   error: jest.fn(),
+  info: jest.fn(),
 }));
 
 describe("Notification Settings Page", () => {
@@ -325,7 +326,7 @@ describe("Notification Page useEffect", () => {
     expect(toggleButtonBloodGlucose).not.toBeChecked();
     expect(toggleButtonInsulinDosage).not.toBeChecked();
 
-    // Assert that getNotificationPreference was called\
+    // Assert that updateNotificationPreference was called\
     expect(updateNotificationPreference).toHaveBeenCalled();
   });
 
@@ -379,7 +380,7 @@ describe("Notification Page useEffect", () => {
     expect(toggleButtonBloodGlucose).not.toBeChecked();
     expect(toggleButtonInsulinDosage).not.toBeChecked();
 
-    // Assert that getNotificationPreference was called\
+    // Assert that updateNotificationPreference was called
     expect(updateNotificationPreference).toHaveBeenCalled();
 
     expect(logger.error).toHaveBeenCalledWith(
@@ -403,15 +404,16 @@ describe("Notification Page useEffect", () => {
     // Mock response data
     const mockNotificationData = {
       data: {
-        activityReminders: false,
-        medicationReminders: false,
-        appointmentReminders: false,
-        foodIntakeReminders: false,
-        glucoseMeasurementReminders: false,
-        insulinDosageReminders: false,
+        activityReminders: true,
+        medicationReminders: true,
+        appointmentReminders: true,
+        foodIntakeReminders: true,
+        glucoseMeasurementReminders: true,
+        insulinDosageReminders: true,
       },
     };
 
+    // Mock the getNotificationPreference function to return the mock data
     getNotificationPreference.mockResolvedValue(mockNotificationData);
 
     await act(async () => {
@@ -419,23 +421,38 @@ describe("Notification Page useEffect", () => {
     });
 
     // Assert that getNotificationPreference was called
-    expect(getNotificationPreference).toHaveBeenCalled();
-    const toggleButtonActvity = screen.getByLabelText("ActvitySwitch");
-    const toggleButtonMedication = screen.getByLabelText("MedicationSwitch");
-    const toggleButtonAppointment = screen.getByLabelText("AppointmentSwitch");
-    const toggleButtonFoodIntake = screen.getByLabelText("FoodIntakeSwitch");
-    const toggleButtonBloodGlucose =
-      screen.getByLabelText("BloodGlucoseSwitch");
-    const toggleButtonInsulinDosage = screen.getByLabelText(
-      "InsulinInjectionSwitch"
+    await waitFor(() => {
+      expect(getNotificationPreference).toHaveBeenCalled();
+    });
+
+    expect(logger.info).toHaveBeenCalledWith(
+      "Notification preference information all set!"
     );
-    expect(toggleButtonActvity).not.toBeChecked();
-    expect(toggleButtonMedication).not.toBeChecked();
-    expect(toggleButtonAppointment).not.toBeChecked();
-    expect(toggleButtonFoodIntake).not.toBeChecked();
-    expect(toggleButtonBloodGlucose).not.toBeChecked();
-    expect(toggleButtonInsulinDosage).not.toBeChecked();
+
+    await waitFor(() => {
+      // Check if the toggles are checked based on the mock data
+      const toggleButtonSubscription =
+        screen.getByLabelText("SubscriptionSwitch");
+      const toggleButtonActvity = screen.getByLabelText("ActvitySwitch");
+      const toggleButtonMedication = screen.getByLabelText("MedicationSwitch");
+      const toggleButtonAppointment =
+        screen.getByLabelText("AppointmentSwitch");
+      const toggleButtonFoodIntake = screen.getByLabelText("FoodIntakeSwitch");
+      const toggleButtonBloodGlucose =
+        screen.getByLabelText("BloodGlucoseSwitch");
+      const toggleButtonInsulinDosage = screen.getByLabelText(
+        "InsulinInjectionSwitch"
+      );
+      expect(toggleButtonSubscription).toBeChecked();
+      expect(toggleButtonActvity).toBeChecked();
+      expect(toggleButtonMedication).toBeChecked();
+      expect(toggleButtonAppointment).toBeChecked();
+      expect(toggleButtonFoodIntake).toBeChecked();
+      expect(toggleButtonBloodGlucose).toBeChecked();
+      expect(toggleButtonInsulinDosage).toBeChecked();
+    });
   });
+
   test("fetchNotificationPreference fetch and post fails for user preference when notification permission is set to granted", async () => {
     // Mock the Notification API in the window object
     Object.defineProperty(window, "Notification", {
