@@ -80,7 +80,6 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
         handleLoading(false);
       }
     };
-
     if (user) {
       // setTimeout(() => {
         (async () => {

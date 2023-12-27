@@ -51,8 +51,10 @@ export default function AddMoodEntry() {
                 date: values.date,
                 notes: values.notes
               }
-              await createMoodJournal(moodData);
-              router.push('/moodjournal')
+              await createMoodJournal(moodData)
+              .then(result => {
+                router.push('/moodjournal')
+              })
           },
 
           validate: async (values) => {

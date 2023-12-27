@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Button from '../components/Button';
 import Input from '../components/Input';
 import Link from 'next/link';
-import {useAuth} from '@/app/contexts/AuthContext';
+import { useAuth } from '@/app/contexts/AuthContext';
 
 export default function Register() {
   const logger = require('../../logger');
