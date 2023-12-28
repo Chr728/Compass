@@ -381,7 +381,12 @@ export default function Register() {
                 {formik.errors.sex}
               </p>
             )}
-            <Button type="submit" text="Finish" style={{ width: '140px', alignSelf: 'center', marginTop: '14px' }} />
+        <Button
+          type="submit"
+          text="Finish"
+          isSubmitting={formik.isSubmitting}
+          style={{ width: '140px', alignSelf: 'center', marginTop: '14px' }}
+        />
       </form>
     </div>
   );
