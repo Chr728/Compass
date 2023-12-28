@@ -33,8 +33,10 @@ export default function CreateFoodJournalPage() {
           servingNumber: values.servingNumber,
           notes: values.notes,
         };
-        const result = await createFoodIntakeJournal(data); 
-        router.push('/getFoodJournals');
+        const result = await createFoodIntakeJournal(data)
+        .then(result => {
+          router.push('/getFoodJournals');
+        })
       } catch (error) {
        handlePopUp('error', "Error creating food journal entry:");
       }

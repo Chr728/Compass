@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Button from '../components/Button';
 import Input from '../components/Input';
 import Link from 'next/link';
-import {useAuth} from '@/app/contexts/AuthContext';
+import { useAuth } from '@/app/contexts/AuthContext';
 
 export default function Register() {
   const logger = require('../../logger');
@@ -381,7 +381,12 @@ export default function Register() {
                 {formik.errors.sex}
               </p>
             )}
-            <Button type="submit" text="Finish" style={{ width: '140px', alignSelf: 'center', marginTop: '14px' }} />
+        <Button
+          type="submit"
+          text="Finish"
+          isSubmitting={formik.isSubmitting}
+          style={{ width: '140px', alignSelf: 'center', marginTop: '14px' }}
+        />
       </form>
     </div>
   );
