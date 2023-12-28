@@ -1,7 +1,7 @@
 import { auth } from '../config/firebase';
 const logger = require('../../logger');
 
-export async function getUser() {
+export async function getUser(retries = 3): Promise<any> {
     const url = process.env.NEXT_PUBLIC_API_URL
     try {
         const currentUser = auth.currentUser;
@@ -30,8 +30,13 @@ export async function getUser() {
         const userData = await response.json();
         return userData.data;
     } catch (error:any) {
-        logger.error('Error fetching user profile:', error);
-        throw new Error('Error fetching user profile');
+        if (retries > 1) {
+            await new Promise(resolve => setTimeout(resolve, 1000)); // wait for 1 second
+            return getUser(retries - 1); // retry
+        } else {
+            logger.error('Error fetching user profile:', error);
+            throw new Error('Error fetching user profile');
+        }
     }
 }
 

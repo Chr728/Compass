@@ -57,8 +57,11 @@ export default function UpdateAppointment(  {params: { appointment } } : { param
               time: values.time,
               notes: values.notes
             }
-            await updateAppointment(appointment, data);
-            router.push('/viewappointments');
+            await updateAppointment(appointment, data)
+            .then(result => {
+              router.push('/viewappointments');
+            })  
+            
           },
           validate: (values) => {
             let errors:{

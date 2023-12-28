@@ -40,9 +40,7 @@ export default function Contacts() {
         logger.error('Error retrieving speed dial entries:', error);
       }
     }
-    setTimeout(() => {
       fetchContacts();
-    }, 1000);
   }, [user]);
 
   // check if the contact picker API is supported
