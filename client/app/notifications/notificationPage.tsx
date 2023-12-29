@@ -190,10 +190,12 @@ export default function NotificationPage() {
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
-      <button onClick={() => router.push("/settings")}>
-        <Header headerText="Push Notifications"></Header>
-      </button>
-      <div style={{ marginTop: 10 }}>
+      <div>
+        <button onClick={() => router.push("/settings")}>
+          <Header headerText="Push Notifications" />
+        </button>
+      </div>
+      <div>
         {/* Success Alert */}
         {successAlert && (
           <Alert
@@ -220,7 +222,7 @@ export default function NotificationPage() {
           </Alert>
         )}
       </div>
-      <div className="rounded-3xl bg-white flex flex-col m-auto w-full sm:max-w-[800px] h-[600px] p-8 mt-10 shadow-sm ">
+      <div className="rounded-3xl bg-white flex flex-col m-auto w-full md:max-w-[800px] md:h-[600px] p-8 mt-2">
         <div className="m-4">
           <Switch
             checked={checkedSubscriptionReminders}
@@ -299,6 +301,11 @@ export default function NotificationPage() {
             onClick={onSubmit}
           />
         </div>
+      </div>
+      <div className="md:hidden">
+        <br></br>
+        <br></br>
+        <br></br>
       </div>
     </div>
   );
