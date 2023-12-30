@@ -196,6 +196,6 @@ describe("subscribeToPushNotifications", () => {
     );
 
     // Expect that setSubscriptionReminders was called with specific parameters
-    expect(mockSetSubscriptionReminders).toHaveBeenCalledWith(false);
+    expect(mockSetSubscriptionReminders).toHaveBeenCalledWith(true);
   });
 });
