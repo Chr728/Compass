@@ -1,8 +1,8 @@
 "use client";
 import { useRouter } from "next/navigation";
-import Button from "../components/Button";
-import Header from "../components/Header";
-import { useUser } from "../contexts/UserContext";
+import Button from "../../components/Button";
+import Header from "../../components/Header";
+import { useUser } from "../../contexts/UserContext";
 
 export default function PillIdentifierPage() {
 	const logger = require("../../logger");
