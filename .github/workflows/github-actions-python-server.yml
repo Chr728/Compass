@@ -3,6 +3,9 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      PYTHON_PORT: ${{ secrets.PORT }}
+      PYTHON_HOST: ${{ secrets.PORT }}
 
     steps:
       - uses: actions/checkout@v2
