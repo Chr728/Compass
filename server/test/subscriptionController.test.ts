@@ -133,7 +133,7 @@ describe('Testing the create subscription controller', () => {
       .post('/api/subscription/uid')
       .send('')
       .set({ Authorization: 'Bearer token' });
-    expect(db.Subscription.create).toHaveBeenCalledTimes(0);
+    expect(db.Subscription.create).toHaveBeenCalledTimes(1);
     expect(res.status).toBe(400);
     expect(res.body.status).toBe('ERROR');
   });

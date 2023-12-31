@@ -29,9 +29,6 @@ const user = {
   sex: 'male',
 };
 
-let server: any;
-const port = process.env.PORT;
-
 const activityJournal = {
   id: 1,
   uid: 'testuid',
