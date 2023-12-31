@@ -1,0 +1,13 @@
+name: Python Server Tests
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: cd pythonServer && pip install -r requirements.txt
+
+      - name: Run Python Server Tests
+        run: cd pythonServer && cd app && pytest --cov-report term-missing --cov=app
