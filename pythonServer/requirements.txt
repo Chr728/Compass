@@ -3,3 +3,5 @@ uvicorn
 pytest
 starlette
 httpx
+pytest-cov
+python-dotenv
