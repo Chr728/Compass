@@ -17,7 +17,7 @@ export default function PillIdentifierPage() {
 	const startCamera = async () => {
 		try {
 			const videoConstraints: MediaStreamConstraints = {
-				video: { facingMode: "environment" }, // or 'user' for front camera
+				video: { facingMode: "environment" },
 			};
 
 			const mediaStream = await navigator.mediaDevices.getUserMedia(
@@ -29,14 +29,13 @@ export default function PillIdentifierPage() {
 			}
 
 			setStream(mediaStream);
-			setCameraActive(true); // Set the state to indicate that the camera is active
+			setCameraActive(true);
 		} catch (error) {
 			console.error("Error accessing camera:", error);
 		}
 	};
 
 	const stopCamera = () => {
-		// Stop the camera and set the state to indicate that the camera is not active
 		if (stream) {
 			stream.getTracks().forEach((track) => track.stop());
 			setCameraActive(false);
@@ -60,7 +59,6 @@ export default function PillIdentifierPage() {
 					canvas.height
 				);
 
-				// Retrieve the base64-encoded image
 				const imageData = canvas.toDataURL("image/png");
 				console.log(imageData);
 
