@@ -108,14 +108,14 @@ export default function CreateMedicationPage() {
 
 	return (
 		<div className="bg-eggshell min-h-screen flex flex-col">
-			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
+			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4">
 				<button onClick={() => router.push("/getMedications")}>
 					<Header headerText="Add Other Medications"></Header>
 				</button>
 			</span>
 
 			<form
-				className="rounded-3xl bg-white flex flex-col mb-8 w-full md:max-w-[800px] md:min-h-[550px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
+				className="rounded-3xl bg-white flex flex-col mb-8 w-full md:max-w-[800px] md:min-h-[550px] p-4 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
 				onSubmit={formik.handleSubmit}>
 				<div className="self-end -mt-4">
 					<p className="text-red text-[20px]">
@@ -190,8 +190,8 @@ export default function CreateMedicationPage() {
 				</div>
 
 				<div className="flex">
-					<FormLabel htmlFor={"dosage"} label={"Dosage"}></FormLabel>
 					<div className="mt-3">
+						<FormLabel htmlFor={"dosage"} label={"Dosage"}></FormLabel>
 						<Input
 							name="dosage"
 							id="dosage"
@@ -351,14 +351,14 @@ export default function CreateMedicationPage() {
 						name="notes"
 						id="notes"
 						value={formik.values.notes}
-						className="w-full border border-solid border-lightgrey text-darkgrey rounded-md shadow-[0_4px_8px_0_rgba(44,39,56,0.04)]"
+						className="w-full mb-2 border border-solid border-lightgrey text-darkgrey rounded-md shadow-[0_4px_8px_0_rgba(44,39,56,0.04)]"
 						rows={4}
 						onChange={formik.handleChange}
 						onBlur={formik.handleBlur}
 					/>
 				</div>
 
-				<div className="mx-auto space-x-2 mb-8">
+				<div className="mx-auto space-x-2 mb-14">
 					<Button
 						type="button"
 						text="Cancel"
