@@ -4,8 +4,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      PYTHON_PORT: ${{ secrets.PORT }}
-      PYTHON_HOST: ${{ secrets.PORT }}
+      PYTHON_PORT: ${{ secrets.PYTHON_PORT }}
+      PYTHON_HOST: ${{ secrets.PYTHON_HOST }}
 
     steps:
       - uses: actions/checkout@v2
