@@ -140,7 +140,6 @@ export default function PillIdentifierPage() {
 					</li>
 					<li>The app provides you a score of the closest match.</li>
 					<li>Take pictures against a clear background.</li>
-					<li>Capsules are not yet supported</li>
 				</ul>
 			</div>
 			<div className="text-center text-darkgrey">
