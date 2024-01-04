@@ -1,5 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 import uvicorn
 import os
 from dotenv import load_dotenv
@@ -15,6 +16,17 @@ app = FastAPI()
 @app.get("/", status_code=200)
 async def read_root():
     return {'message': 'Hello World'}
+
+@app.post("/PillAI")
+async def pill_predict(file: UploadFile = File(...)):
+    extension = file.filename.split(".")[-1] in ("jpg", "jpeg", "png")
+    if not extension:
+        item = {"message": "Image format must jpg, jpeg or png!"}
+        return JSONResponse(status_code=404, content=item)
+    
+    # here should insert the predict progress
+    item = {"prediction": "your prediction", "filename": file.filename}
+    return JSONResponse(status_code=200, content=item)
 
 origins = ["*"]    
 app.add_middleware(

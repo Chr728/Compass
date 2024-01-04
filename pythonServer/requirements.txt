@@ -5,3 +5,4 @@ starlette
 httpx
 pytest-cov
 python-dotenv
+python-multipart
