@@ -129,7 +129,7 @@ describe('Testing the create food intake journal controller', () => {
     expect(db.User.findOne).toHaveBeenCalledTimes(1);
     expect(db.FoodIntakeJournal.create).toHaveBeenCalledTimes(0);
     expect(res.status).toBe(404);
-    expect(res.body.status).toBe('ERROR');
+    expect(res.body.status).toBe('NOT_FOUND');
     expect(res.body.message).toBe('User not found, invalid user uid.');
   });
 
@@ -191,7 +191,7 @@ describe('Testing the get all food intake journals controller', () => {
     expect(db.User.findOne).toHaveBeenCalledTimes(1);
     expect(db.FoodIntakeJournal.findAll).toHaveBeenCalledTimes(0);
     expect(res.status).toBe(404);
-    expect(res.body.status).toBe('ERROR');
+    expect(res.body.status).toBe('NOT_FOUND');
     expect(res.body.message).toBe('User not found, invalid user uid.');
   });
 
@@ -237,7 +237,7 @@ describe('Testing the get one food intake journals controller', () => {
       .set({ Authorization: 'Bearer token' });
     expect(db.FoodIntakeJournal.findOne).toHaveBeenCalledTimes(1);
     expect(res.status).toBe(404);
-    expect(res.body.status).toBe('ERROR');
+    expect(res.body.status).toBe('NOT_FOUND');
     expect(res.body.message).toBe(
       'Food intake journal not found, invalid journal id.'
     );
@@ -290,7 +290,7 @@ describe('Testing the update food intake journal controller', () => {
     expect(db.FoodIntakeJournal.findOne).toHaveBeenCalledTimes(1);
     expect(db.FoodIntakeJournal.update).toHaveBeenCalledTimes(0);
     expect(res.status).toBe(404);
-    expect(res.body.status).toBe('ERROR');
+    expect(res.body.status).toBe('NOT_FOUND');
     expect(res.body.message).toBe(
       'Food intake journal not found, invalid journal id.'
     );
@@ -308,7 +308,7 @@ describe('Testing the update food intake journal controller', () => {
     expect(db.FoodIntakeJournal.findOne).toHaveBeenCalledTimes(1);
     expect(db.FoodIntakeJournal.update).toHaveBeenCalledTimes(0);
     expect(res.status).toBe(404);
-    expect(res.body.status).toBe('ERROR');
+    expect(res.body.status).toBe('NOT_FOUND');
     expect(res.body.message).toBe(
       'Food intake journal not found, invalid journal id.'
     );

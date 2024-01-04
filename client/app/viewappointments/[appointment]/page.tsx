@@ -40,7 +40,7 @@ if (!user) {
 }
 
   return (
-    data && <div className="bg-eggshell min-h-screen flex flex-col appointment">
+    data && <div className="bg-eggshell min-h-screen flex flex-col appointment mb-[60px]">
       <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4">
         <Link href="/viewappointments">
           <Image
@@ -54,7 +54,7 @@ if (!user) {
         </Link>
         View Appointment
       </span>
-      <div className="min-h-[600px] rounded-3xl bg-white flex flex-col  mt-4 w-full p-8 
+      <div className="min-h-[500px] rounded-3xl bg-white flex flex-col  mt-4 w-full p-8 
                     shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]">
         <div>
           <SingleEntry label={ 'Date:' } value={ formatDate( data.date ) }></SingleEntry>

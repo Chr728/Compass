@@ -40,7 +40,7 @@ export default function GetMedicationsPage() {
 		}
 		setTimeout(() => {
 			fetchMedications();
-		}, 1000);
+		}, 500);
 	}, [user]);
 
 	async function deleteMedications(medicationId: string) {

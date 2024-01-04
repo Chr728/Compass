@@ -53,7 +53,7 @@ export const subscribeToPushNotifications = async (
         "error",
         "To turn off notifications, please change your settings in your browser!"
       );
-      setSubscriptionReminders(false);
+      setSubscriptionReminders(true);
     }
   }
 };
