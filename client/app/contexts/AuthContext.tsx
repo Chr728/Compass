@@ -79,7 +79,6 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       handlePopUp('error', 'Error signing out:' + error.message);
     }
   };
-
   const signUp = (values: createUserAttributes) => {
     handleLoading(true);
     createUserWithEmailAndPassword(auth, values.email, values.password)
