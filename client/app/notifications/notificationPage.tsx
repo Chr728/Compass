@@ -25,18 +25,19 @@ export default function NotificationPage() {
   const [successAlert, setSuccessAlert] = useState(false);
   const [errorAlert, setErrorAlert] = useState(false);
 
-  const [checkedActivityReminders, setActivityReminders] = React.useState(true);
+  const [checkedActivityReminders, setActivityReminders] =
+    React.useState(false);
   const [checkedMedicationReminders, setMedicationReminders] =
-    React.useState(true);
+    React.useState(false);
   const [checkedAppointmentReminders, setAppointmentReminders] =
-    React.useState(true);
+    React.useState(false);
   const [checkedFoodIntakeReminders, setFoodIntakeReminders] =
-    React.useState(true);
+    React.useState(false);
   const [checkedBloodGlucoseReminders, setBloodGlucoseReminders] =
-    React.useState(true);
+    React.useState(false);
 
   const [checkedInsulinInjectionReminders, setInsulinInjectionReminders] =
-    React.useState(true);
+    React.useState(false);
 
   const [checkedSubscriptionReminders, setSubscriptionReminders] =
     React.useState(false);
@@ -88,20 +89,6 @@ export default function NotificationPage() {
   useEffect(() => {
     async function fetchNotificationPreference() {
       try {
-        const userId = user?.uid || "";
-        const result = await getNotificationPreference();
-        logger.info("Retrieved notification preference of user:", result);
-        if (result && result.data) {
-          logger.info(result.data.activityReminders);
-          setActivityReminders(result.data.activityReminders);
-          setMedicationReminders(result.data.medicationReminders);
-          setAppointmentReminders(result.data.appointmentReminders);
-          setFoodIntakeReminders(result.data.foodIntakeReminders);
-          setBloodGlucoseReminders(result.data.glucoseMeasurementReminders);
-          setInsulinInjectionReminders(result.data.insulinDosageReminders);
-          logger.info("Notification preference information all set!");
-        }
-
         // Get current notification permissions
         if ("Notification" in window) {
           const currentPermission = Notification.permission;
@@ -109,9 +96,47 @@ export default function NotificationPage() {
             currentPermission === "default" ||
             currentPermission === "denied"
           ) {
-            setSubscriptionReminders(false);
+            // Reset all values to false if subscription is set to false and update the user's information in the database
+            try {
+              setSubscriptionReminders(false);
+              setActivityReminders(false);
+              setMedicationReminders(false);
+              setAppointmentReminders(false);
+              setFoodIntakeReminders(false);
+              setBloodGlucoseReminders(false);
+              setInsulinInjectionReminders(false);
+              const data = {
+                activityReminders: checkedActivityReminders,
+                medicationReminders: checkedMedicationReminders,
+                appointmentReminders: checkedAppointmentReminders,
+                foodIntakeReminders: checkedFoodIntakeReminders,
+                glucoseMeasurementReminders: checkedBloodGlucoseReminders,
+                insulinDosageReminders: checkedInsulinInjectionReminders,
+              };
+              const result = await updateNotificationPreference(data);
+            } catch (error) {
+              logger.error(
+                "Error updating notification preference for user:",
+                error
+              );
+              setErrorAlert(true);
+            }
           } else {
+            // Retrieve user current values
             setSubscriptionReminders(true);
+            const userId = user?.uid || "";
+            const result = await getNotificationPreference();
+            logger.info("Retrieved notification preference of user:", result);
+            if (result && result.data) {
+              logger.info(result.data.activityReminders);
+              setActivityReminders(result.data.activityReminders);
+              setMedicationReminders(result.data.medicationReminders);
+              setAppointmentReminders(result.data.appointmentReminders);
+              setFoodIntakeReminders(result.data.foodIntakeReminders);
+              setBloodGlucoseReminders(result.data.glucoseMeasurementReminders);
+              setInsulinInjectionReminders(result.data.insulinDosageReminders);
+              logger.info("Notification preference information all set!");
+            }
           }
         }
       } catch (error) {
@@ -131,16 +156,32 @@ export default function NotificationPage() {
 
   const onSubmit = async () => {
     try {
-      const data = {
-        activityReminders: checkedActivityReminders,
-        medicationReminders: checkedMedicationReminders,
-        appointmentReminders: checkedAppointmentReminders,
-        foodIntakeReminders: checkedFoodIntakeReminders,
-        glucoseMeasurementReminders: checkedBloodGlucoseReminders,
-        insulinDosageReminders: checkedInsulinInjectionReminders,
-      };
-      const result = await updateNotificationPreference(data);
-      setSuccessAlert(true);
+      // Check if user is subscribed to push notifications first
+      const currentPermission = Notification.permission;
+      if (currentPermission === "default" || currentPermission === "denied") {
+        setSubscriptionReminders(false);
+        setActivityReminders(false);
+        setMedicationReminders(false);
+        setAppointmentReminders(false);
+        setFoodIntakeReminders(false);
+        setBloodGlucoseReminders(false);
+        setInsulinInjectionReminders(false);
+        handlePopUp(
+          "error",
+          "Please enable browser notifications before changing any of the preference settings"
+        );
+      } else {
+        const data = {
+          activityReminders: checkedActivityReminders,
+          medicationReminders: checkedMedicationReminders,
+          appointmentReminders: checkedAppointmentReminders,
+          foodIntakeReminders: checkedFoodIntakeReminders,
+          glucoseMeasurementReminders: checkedBloodGlucoseReminders,
+          insulinDosageReminders: checkedInsulinInjectionReminders,
+        };
+        const result = await updateNotificationPreference(data);
+        setSuccessAlert(true);
+      }
     } catch (error) {
       logger.error("Error updating notification preference for user:", error);
       setErrorAlert(true);
@@ -149,10 +190,12 @@ export default function NotificationPage() {
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
-      <button onClick={() => router.push("/settings")}>
-        <Header headerText="Push Notifications"></Header>
-      </button>
-      <div style={{ marginTop: 10 }}>
+      <div>
+        <button onClick={() => router.push("/settings")}>
+          <Header headerText="Push Notifications" />
+        </button>
+      </div>
+      <div>
         {/* Success Alert */}
         {successAlert && (
           <Alert
@@ -179,7 +222,7 @@ export default function NotificationPage() {
           </Alert>
         )}
       </div>
-      <div className="rounded-3xl bg-white flex flex-col m-auto w-full sm:max-w-[800px] h-[600px] p-8 mt-10 shadow-sm ">
+      <div className="rounded-3xl bg-white flex flex-col m-auto w-full md:max-w-[800px] md:h-[600px] p-8 mt-2">
         <div className="m-4">
           <Switch
             checked={checkedSubscriptionReminders}
@@ -258,6 +301,11 @@ export default function NotificationPage() {
             onClick={onSubmit}
           />
         </div>
+      </div>
+      <div className="md:hidden">
+        <br></br>
+        <br></br>
+        <br></br>
       </div>
     </div>
   );

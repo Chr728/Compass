@@ -1,68 +1,49 @@
-import { Request, Response } from "express";
-import { Logger } from "../middlewares/logger";
-import db from "../models";
-import {notificationPreferenceValidator} from '../utils/databaseValidators';
+import { Request, Response, NextFunction } from 'express';
+import { Logger } from '../middlewares/logger';
+import db from '../models';
+import { notificationPreferenceValidator } from '../utils/databaseValidators';
+import { ErrorHandler } from '../middlewares/errorMiddleware';
 
-// Create the notification preferences for a given user
-export const createNotificationPreference = async (
-  req: Request,
-  res: Response
-) => {
+export const createNotificationPreference = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const uid = req.params.uid;
-    const [
+    const user = await db.User.findOne({ where: { uid } });
+    if (!user) {
+      throw new ErrorHandler(404, 'ERROR', 'User not found, invalid user uid.');
+    }
+
+    const { activityReminders, medicationReminders, appointmentReminders, foodIntakeReminders, insulinDosageReminders, glucoseMeasurementReminders } = req.body;
+    notificationPreferenceValidator(req.body);
+    const createNotificationPreference = await db.NotificationPreference.create({
+      uid,
       activityReminders,
       medicationReminders,
       appointmentReminders,
       foodIntakeReminders,
       insulinDosageReminders,
       glucoseMeasurementReminders,
-    ] = [true, true, true, true, true, true];
-    const createNotificationPreference = await db.NotificationPreference.create(
-      {
-        uid,
-        activityReminders,
-        medicationReminders,
-        appointmentReminders,
-        foodIntakeReminders,
-        insulinDosageReminders,
-        glucoseMeasurementReminders,
-      }
-    );
+    });
 
     res.status(201).json({
       status: `SUCCESS`,
       data: createNotificationPreference,
     });
   } catch (err) {
-    Logger.error(
-      `Error occurred while creating notification preference: ${err}`
-    );
-    res.status(400).json({
-      status: `ERROR`,
-      message: `Error creating notification preference : ${err}`,
-    });
+    Logger.error(`Error occurred while creating notification preference: ${err}`);
+    if (err instanceof ErrorHandler) {
+      next(err);
+    } else {
+      next(new ErrorHandler(400, 'ERROR', `Error creating notification preference: ${err}`));
+    }
   }
 };
 
-// Retrieve notification preferences for a given user
-export const getNotificationPreference = async (
-  req: Request,
-  res: Response
-) => {
+export const getNotificationPreference = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const uid = req.params.uid;
-    const notificationPreference = await db.NotificationPreference.findOne({
-      where: {
-        uid: uid,
-      },
-    });
-
+    const notificationPreference = await db.NotificationPreference.findOne({ where: { uid } });
     if (!notificationPreference) {
-      return res.status(404).json({
-        status: "ERROR",
-        message: `Notification preference not found, invalid user id.`,
-      });
+      throw new ErrorHandler(404, 'ERROR', `Notification preference not found, invalid user id.`);
     }
 
     res.status(200).json({
@@ -70,97 +51,55 @@ export const getNotificationPreference = async (
       data: notificationPreference,
     });
   } catch (err) {
-    Logger.error(
-      `Error occurred while fetching notification preference: ${err}`
-    );
-    res.status(400).json({
-      status: `ERROR`,
-      message: `Error getting notification preference : ${err}`,
-    });
+    Logger.error(`Error occurred while fetching notification preference: ${err}`);
+    if (err instanceof ErrorHandler) {
+      next(err);
+    } else {
+      next(new ErrorHandler(400, 'ERROR', `Error getting notification preference: ${err}`));
+    }
   }
 };
 
-// Update notification preferences
-export const updateNotificationPreference = async (
-  req: Request,
-  res: Response
-) => {
+export const updateNotificationPreference = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const uid = req.params.uid;
-    const {
+    const { activityReminders, medicationReminders, appointmentReminders, foodIntakeReminders, insulinDosageReminders, glucoseMeasurementReminders } = req.body;
+    notificationPreferenceValidator(req.body);
+    const updatedNotificationPreference = await db.NotificationPreference.update({
       activityReminders,
       medicationReminders,
       appointmentReminders,
       foodIntakeReminders,
       insulinDosageReminders,
       glucoseMeasurementReminders,
-    } = req.body;
-    notificationPreferenceValidator(req.body)
-    const updatedNotificationPreference =
-      await db.NotificationPreference.update(
-        {
-          activityReminders,
-          medicationReminders,
-          appointmentReminders,
-          foodIntakeReminders,
-          insulinDosageReminders,
-          glucoseMeasurementReminders,
-        },
-        {
-          where: {
-            uid: uid,
-          },
-        }
-      );
+    }, { where: { uid } });
 
     if (!updatedNotificationPreference) {
-      return res.status(404).json({
-        status: "ERROR",
-        message: "Notification preference not found, invalid user id.",
-      });
+      throw new ErrorHandler(404, 'ERROR', 'Notification preference not found, invalid user id.');
     }
 
-    const latestNotificationPreference =
-      await db.NotificationPreference.findOne({
-        where: {
-          uid: uid,
-        },
-      });
-
+    const latestNotificationPreference = await db.NotificationPreference.findOne({ where: { uid } });
     res.status(200).json({
       status: "SUCCESS",
       message: "Notification preference was updated successfully",
       data: latestNotificationPreference,
     });
   } catch (err) {
-    Logger.error(
-      `Error occurred while updating notification preference: ${err}`
-    );
-    res.status(400).json({
-      status: `ERROR`,
-      message: `Error updating notification preference : ${err}`,
-    });
+    Logger.error(`Error occurred while updating notification preference: ${err}`);
+    if (err instanceof ErrorHandler) {
+      next(err);
+    } else {
+      next(new ErrorHandler(400, 'ERROR', `Error updating notification preference: ${err}`));
+    }
   }
 };
 
-// Function to delete notification preference of the user
-export const deleteNotificationPreference = async (
-  req: Request,
-  res: Response
-) => {
+export const deleteNotificationPreference = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const uid = req.params.uid;
-    const deleteNotificationPreference =
-      await db.NotificationPreference.destroy({
-        where: {
-          uid: uid,
-        },
-      });
+    const deleteNotificationPreference = await db.NotificationPreference.destroy({ where: { uid } });
     if (!deleteNotificationPreference) {
-      return res.status(404).json({
-        status: "ERROR",
-        message: "Notification preference not found, invalid user id.",
-      });
+      throw new ErrorHandler(404, 'ERROR', 'Notification preference not found, invalid user id.');
     }
 
     res.status(200).json({
@@ -168,12 +107,11 @@ export const deleteNotificationPreference = async (
       data: `Successfully deleted notification preference.`,
     });
   } catch (err) {
-    Logger.error(
-      `Error occurred while deleting notification preference: ${err}`
-    );
-    res.status(400).json({
-      status: "ERROR",
-      message: `Error deleting notification preference: ${err}`,
-    });
+    Logger.error(`Error occurred while deleting notification preference: ${err}`);
+    if (err instanceof ErrorHandler) {
+      next(err);
+    } else {
+      next(new ErrorHandler(400, 'ERROR', `Error deleting notification preference: ${err}`));
+    }
   }
 };

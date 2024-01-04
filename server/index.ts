@@ -17,6 +17,7 @@ import medicationRoutes from './routes/medicationRoutes';
 import Morgan from './middlewares/morgan';
 import { Logger } from './middlewares/logger';
 import decodeToken from './middlewares/decodeToken';
+import {handleError} from './middlewares/errorMiddleware';
 require('dotenv').config({
   path: './../.env',
 });
@@ -31,7 +32,6 @@ app.use(cors());
 app.use(express.json());
 app.use(Morgan);
 app.use(decodeToken);
-
 app.use('/api/journals/weight', weightJournalRoutes);
 app.use('/api/journals/mood', moodJournalRoutes);
 app.use('/api/journals/diabetic/glucose', diabeticGlucoseJournalRoutes);
@@ -44,13 +44,13 @@ app.use('/api/notifications', notificationRoutes);
 app.use('/api/journals/foodIntake', foodIntakeJournalRoutes);
 app.use('/api/reminders', reminderRoutes);
 app.use('/api/subscription', subscriptionRoutes);
-app.use('/api/reminders', reminderRoutes);
 app.use('/api/medication', medicationRoutes);
-
+app.use(handleError);
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
+//Connection to postgreSQL
 if (isDevelopment) {
   db.sequelize.sync({alter: true}).then(() => {
     Logger.info('Database Synchronized');

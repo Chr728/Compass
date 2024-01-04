@@ -10,13 +10,6 @@ export async function createNotificationPreference(): Promise<any> {
     }
     const uid = currentUser.uid;
     const token = await currentUser.getIdToken();
-    const dataToBeStringified = {
-      uid: uid,
-      activityReminders: true,
-      medicationReminders: true,
-      appointmentReminders: true,
-      foodIntakeReminders: true,
-    };
 
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/notifications/${uid}`,
@@ -26,7 +19,6 @@ export async function createNotificationPreference(): Promise<any> {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(dataToBeStringified),
       }
     );
     logger.info(`Notification preference created successfully for user ${uid}`);

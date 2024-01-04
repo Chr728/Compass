@@ -1,9 +1,10 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { Logger } from '../middlewares/logger';
 import db from '../models';
-import {moodJournalValidator} from '../utils/databaseValidators';
+import { moodJournalValidator } from '../utils/databaseValidators';
+import { ErrorHandler } from '../middlewares/errorMiddleware';
 
-export const getMoodJournals = async (req: Request, res: Response) => {
+export const getMoodJournals = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = await db.User.findOne({
       where: {
@@ -12,10 +13,7 @@ export const getMoodJournals = async (req: Request, res: Response) => {
     });
 
     if (!user) {
-      return res.status(404).json({
-        status: 'NOT_FOUND',
-        message: 'User not found',
-      });
+      throw new ErrorHandler(404, 'NOT_FOUND', 'User not found');
     }
 
     const moodJournals = await db.MoodJournal.findAll({
@@ -30,14 +28,15 @@ export const getMoodJournals = async (req: Request, res: Response) => {
     });
   } catch (error) {
     Logger.error(`Error occurred while fetching mood journals: ${error}`);
-    return res.status(400).json({
-      status: 'ERROR',
-      message: `Error fetching mood journals: ${error}`,
-    });
+    if (error instanceof ErrorHandler) {
+      next(error);
+    } else {
+      next(new ErrorHandler(400, 'ERROR', `Error fetching mood journals: ${error}`));
+    }
   }
 };
 
-export const getMoodJournal = async (req: Request, res: Response) => {
+export const getMoodJournal = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const moodJournalId = req.params.mood_journal_id;
     const moodJournal = await db.MoodJournal.findOne({
@@ -47,10 +46,7 @@ export const getMoodJournal = async (req: Request, res: Response) => {
     });
 
     if (!moodJournal) {
-      return res.status(404).json({
-        status: 'NOT_FOUND',
-        message: 'Mood Journal not found',
-      });
+      throw new ErrorHandler(404, 'NOT_FOUND', 'Mood Journal not found');
     }
 
     return res.status(200).json({
@@ -59,14 +55,15 @@ export const getMoodJournal = async (req: Request, res: Response) => {
     });
   } catch (error) {
     Logger.error(`Error occurred while fetching mood journal: ${error}`);
-    return res.status(400).json({
-      status: 'ERROR',
-      message: `Error fetching mood journal: ${error}`,
-    });
+    if (error instanceof ErrorHandler) {
+      next(error);
+    } else {
+      next(new ErrorHandler(400, 'ERROR', `Error fetching mood journal: ${error}`));
+    }
   }
 };
 
-export const createMoodJournal = async (req: Request, res: Response) => {
+export const createMoodJournal = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = await db.User.findOne({
       where: {
@@ -75,16 +72,11 @@ export const createMoodJournal = async (req: Request, res: Response) => {
     });
 
     if (!user) {
-      return res.status(404).json({
-        status: 'NOT_FOUND',
-        message: 'User not found',
-      });
+      throw new ErrorHandler(404, 'NOT_FOUND', 'User not found');
     }
 
     const { howAreYou, stressSignals, date, notes } = req.body;
-    moodJournalValidator({ howAreYou, stressSignals, date, notes })
-
-
+    moodJournalValidator({ howAreYou, stressSignals, date, notes });
 
     const stressSignalsString = JSON.stringify(stressSignals);
 
@@ -102,14 +94,15 @@ export const createMoodJournal = async (req: Request, res: Response) => {
     });
   } catch (error) {
     Logger.error(`Error occurred while creating mood journal: ${error}`);
-    return res.status(400).json({
-      status: 'ERROR',
-      message: `Error creating mood journal: ${error}`,
-    });
+    if (error instanceof ErrorHandler) {
+      next(error);
+    } else {
+      next(new ErrorHandler(400, 'ERROR', `Error creating mood journal: ${error}`));
+    }
   }
 };
 
-export const updateMoodJournal = async (req: Request, res: Response) => {
+export const updateMoodJournal = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const moodJournalId = req.params.mood_journal_id;
     const moodJournal = await db.MoodJournal.findOne({
@@ -119,29 +112,26 @@ export const updateMoodJournal = async (req: Request, res: Response) => {
     });
 
     if (!moodJournal) {
-      return res.status(404).json({
-        status: 'NOT_FOUND',
-        message: 'Mood Journal not found',
-      });
+      throw new ErrorHandler(404, 'NOT_FOUND', 'Mood Journal not found');
     }
 
     const { howAreYou, stressSignals, date, notes } = req.body;
-    moodJournalValidator({ howAreYou, stressSignals, date, notes })
+    moodJournalValidator({ howAreYou, stressSignals, date, notes });
 
     const stressSignalsString = JSON.stringify(stressSignals);
 
     await db.MoodJournal.update(
-      {
-        howAreYou,
-        stressSignals: stressSignalsString,
-        date,
-        notes,
-      },
-      {
-        where: {
-          id: moodJournalId,
+        {
+          howAreYou,
+          stressSignals: stressSignalsString,
+          date,
+          notes,
         },
-      }
+        {
+          where: {
+            id: moodJournalId,
+          },
+        }
     );
 
     return res.status(200).json({
@@ -154,14 +144,15 @@ export const updateMoodJournal = async (req: Request, res: Response) => {
     });
   } catch (error) {
     Logger.error(`Error occurred while updating mood journal: ${error}`);
-    return res.status(400).json({
-      status: 'ERROR',
-      message: `Error updating mood journal: ${error}`,
-    });
+    if (error instanceof ErrorHandler) {
+      next(error);
+    } else {
+      next(new ErrorHandler(400, 'ERROR', `Error updating mood journal: ${error}`));
+    }
   }
 };
 
-export const deleteMoodJournal = async (req: Request, res: Response) => {
+export const deleteMoodJournal = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const moodJournalId = req.params.mood_journal_id;
     const moodJournal = await db.MoodJournal.findOne({
@@ -171,10 +162,7 @@ export const deleteMoodJournal = async (req: Request, res: Response) => {
     });
 
     if (!moodJournal) {
-      return res.status(404).json({
-        status: 'NOT_FOUND',
-        message: 'Mood Journal not found',
-      });
+      throw new ErrorHandler(404, 'NOT_FOUND', 'Mood Journal not found');
     }
 
     await db.MoodJournal.destroy({
@@ -189,9 +177,10 @@ export const deleteMoodJournal = async (req: Request, res: Response) => {
     });
   } catch (error) {
     Logger.error(`Error occurred while deleting mood journal: ${error}`);
-    return res.status(400).json({
-      status: 'ERROR',
-      message: `Error deleting mood journal: ${error}`,
-    });
+    if (error instanceof ErrorHandler) {
+      next(error);
+    } else {
+      next(new ErrorHandler(400, 'ERROR', `Error deleting mood journal: ${error}`));
+    }
   }
 };
