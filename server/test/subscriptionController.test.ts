@@ -117,7 +117,7 @@ describe('Testing the create subscription controller', () => {
     expect(db.User.findOne).toHaveBeenCalledTimes(1);
     expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
     expect(db.Subscription.create).toHaveBeenCalledTimes(0);
-    expect(res.status).toBe(404);
+    expect(res.status).toBe(400);
     expect(res.body.status).toBe('ERROR');
     expect(res.body.message).toBe(
       'The user already has one subscription, please update instead!'

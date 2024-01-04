@@ -1,9 +1,10 @@
-import { Request, Response } from "express";
-import { Logger } from "../middlewares/logger";
-import db from "../models";
-import {medicationValidator} from '../utils/databaseValidators';
+import { Request, Response, NextFunction } from 'express';
+import { Logger } from '../middlewares/logger';
+import db from '../models';
+import { medicationValidator } from '../utils/databaseValidators';
+import { ErrorHandler } from '../middlewares/errorMiddleware';
 
-export const createMedication = async (req: Request,res: Response) => {
+export const createMedication = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userId = req.params.uid;
         const user = await db.User.findOne({
@@ -12,11 +13,8 @@ export const createMedication = async (req: Request,res: Response) => {
             }
         });
 
-        if(!user) {
-            return res.status(404).json({
-                status: 'ERROR',
-                message: 'User not found, invalid user uid.',
-              });
+        if (!user) {
+            throw new ErrorHandler(404, 'ERROR', 'User not found, invalid user uid.');
         }
 
         const { medicationName, dateStarted, time, dosage, unit, frequency, route, notes } = req.body;
@@ -38,16 +36,17 @@ export const createMedication = async (req: Request,res: Response) => {
             data: medication
         });
     } catch (error) {
-            Logger.error(`Error occurred while creating medication: ${error}`);
-                return res.status(400).json({
-                status: 'ERROR',
-                message: `Error creating medication: ${error}`,
-            });
+        Logger.error(`Error occurred while creating medication: ${error}`);
+        if (error instanceof ErrorHandler) {
+            next(error);
+        } else {
+            next(new ErrorHandler(400, 'ERROR', `Error creating medication: ${error}`));
         }
+    }
 };
 
-export const getMedications = async (req: Request,res: Response) => {
-    try{
+export const getMedications = async (req: Request, res: Response, next: NextFunction) => {
+    try {
         const userId = req.params.uid;
         const user = await db.User.findOne({
             where: {
@@ -55,14 +54,11 @@ export const getMedications = async (req: Request,res: Response) => {
             }
         });
 
-        if(!user) {
-            return res.status(404).json({
-                status: 'ERROR',
-                message: 'User not found, invalid user uid.',
-              });
+        if (!user) {
+            throw new ErrorHandler(404, 'ERROR', 'User not found, invalid user uid.');
         }
 
-        const medication = await db.Medication.findAll({
+        const medications = await db.Medication.findAll({
             where: {
                 uid: userId
             }
@@ -70,47 +66,19 @@ export const getMedications = async (req: Request,res: Response) => {
 
         return res.status(200).json({
             status: 'SUCCESS',
-            data: medication
+            data: medications
         });
     } catch (error) {
         Logger.error(`Error occurred while fetching medications: ${error}`);
-        return res.status(400).json({
-            status: 'ERROR',
-            message: `Error fetching medications: ${error}`,
-        });
-    }
-};
-
-export const getMedication = async (req: Request,res: Response) => {
-    try{
-        const medicationId = req.params.id;
-        const medication = await db.Medication.findOne({
-            where: {
-                id: medicationId
-            }
-        });
-
-        if(!medication) {
-            return res.status(404).json({
-                status: 'ERROR',
-                message: 'Medication not found, invalid medication id.',
-              });
+        if (error instanceof ErrorHandler) {
+            next(error);
+        } else {
+            next(new ErrorHandler(400, 'ERROR', `Error fetching medications: ${error}`));
         }
-
-        return res.status(200).json({
-            status: 'SUCCESS',
-            data: medication
-        });
-    } catch (error) {
-        Logger.error(`Error occurred while fetching medication: ${error}`);
-        return res.status(400).json({
-            status: 'ERROR',
-            message: `Error fetching medication: ${error}`,
-        });
     }
 };
 
-export const updateMedication = async (req: Request,res: Response) => {
+export const getMedication = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const medicationId = req.params.id;
         const medication = await db.Medication.findOne({
@@ -119,11 +87,35 @@ export const updateMedication = async (req: Request,res: Response) => {
             }
         });
 
-        if(!medication) {
-            return res.status(404).json({
-                status: 'ERROR',
-                message: 'Medication not found, invalid medication id.',
-              });
+        if (!medication) {
+            throw new ErrorHandler(404, 'ERROR', 'Medication not found, invalid medication id.');
+        }
+
+        return res.status(200).json({
+            status: 'SUCCESS',
+            data: medication
+        });
+    } catch (error) {
+        Logger.error(`Error occurred while fetching medication: ${error}`);
+        if (error instanceof ErrorHandler) {
+            next(error);
+        } else {
+            next(new ErrorHandler(400, 'ERROR', `Error fetching medication: ${error}`));
+        }
+    }
+};
+
+export const updateMedication = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const medicationId = req.params.id;
+        const medication = await db.Medication.findOne({
+            where: {
+                id: medicationId
+            }
+        });
+
+        if (!medication) {
+            throw new ErrorHandler(404, 'ERROR', 'Medication not found, invalid medication id.');
         }
 
         const { medicationName, dateStarted, time, dosage, unit, frequency, route, notes } = req.body;
@@ -141,7 +133,7 @@ export const updateMedication = async (req: Request,res: Response) => {
             where: {
                 id: medicationId
             }
-        })
+        });
 
         const updatedMedication = await db.Medication.findOne({
             where: {
@@ -153,17 +145,17 @@ export const updateMedication = async (req: Request,res: Response) => {
             status: 'SUCCESS',
             data: updatedMedication
         });
-
     } catch (error) {
         Logger.error(`Error occurred while updating medication: ${error}`);
-        return res.status(400).json({
-            status: 'ERROR',
-            message: `Error updating medications: ${error}`,
-        });
+        if (error instanceof ErrorHandler) {
+            next(error);
+        } else {
+            next(new ErrorHandler(400, 'ERROR', `Error updating medication: ${error}`));
+        }
     }
 };
 
-export const deleteMedication = async (req: Request,res: Response) => {
+export const deleteMedication = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const medicationId = req.params.id;
         const medication = await db.Medication.findOne({
@@ -172,11 +164,8 @@ export const deleteMedication = async (req: Request,res: Response) => {
             }
         });
 
-        if(!medication) {
-            return res.status(404).json({
-                status: 'ERROR',
-                message: 'Medication not found, invalid medication id.',
-              });
+        if (!medication) {
+            throw new ErrorHandler(404, 'ERROR', 'Medication not found, invalid medication id.');
         }
         await db.Medication.destroy({
             where: {
@@ -188,12 +177,12 @@ export const deleteMedication = async (req: Request,res: Response) => {
             status: 'SUCCESS',
             message: 'Medication entry deleted successfully',
         });
-
     } catch (error) {
         Logger.error(`Error occurred while deleting medication record: ${error}`);
-        return res.status(400).json({
-            status: 'ERROR',
-            message: `Error deleting medication record: ${error}`,
-        });
+        if (error instanceof ErrorHandler) {
+            next(error);
+        } else {
+            next(new ErrorHandler(400, 'ERROR', `Error deleting medication record: ${error}`));
+        }
     }
 };

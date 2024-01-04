@@ -1,10 +1,10 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { Logger } from '../middlewares/logger';
 import db from '../models';
-import {diabeticGlucoseJournalValidator} from '../utils/databaseValidators';
+import { diabeticGlucoseJournalValidator } from '../utils/databaseValidators';
+import { ErrorHandler } from '../middlewares/errorMiddleware';
 
-
-export const getGlucoseJournals = async (req: Request, res: Response) => {
+export const getGlucoseJournals = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = await db.User.findOne({
       where: {
@@ -13,10 +13,7 @@ export const getGlucoseJournals = async (req: Request, res: Response) => {
     });
 
     if (!user) {
-      return res.status(404).json({
-        status: 'NOT_FOUND',
-        message: 'User not found',
-      });
+      throw new ErrorHandler(404, 'NOT_FOUND', 'User not found');
     }
 
     const glucoseJournals = await db.GlucoseMeasurement.findAll({
@@ -31,13 +28,15 @@ export const getGlucoseJournals = async (req: Request, res: Response) => {
     });
   } catch (error) {
     Logger.error(`Error occurred while fetching glucose journals: ${error}`);
-    return res.status(400).json({
-      status: 'ERROR',
-      message: `Error fetching glucose journals: ${error}`,
-    });
+    if (error instanceof ErrorHandler) {
+      next(error);
+    } else {
+      next(new ErrorHandler(400, 'ERROR', `Error fetching glucose journals: ${error}`));
+    }
   }
 };
-export const getGlucoseJournal = async (req: Request, res: Response) => {
+
+export const getGlucoseJournal = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const glucoseJournalId = req.params.id;
     const glucoseJournal = await db.GlucoseMeasurement.findOne({
@@ -47,10 +46,7 @@ export const getGlucoseJournal = async (req: Request, res: Response) => {
     });
 
     if (!glucoseJournal) {
-      return res.status(404).json({
-        status: 'NOT_FOUND',
-        message: 'Glucose Journal not found',
-      });
+      throw new ErrorHandler(404, 'NOT_FOUND', 'Glucose Journal not found');
     }
 
     return res.status(200).json({
@@ -59,13 +55,15 @@ export const getGlucoseJournal = async (req: Request, res: Response) => {
     });
   } catch (error) {
     Logger.error(`Error occurred while fetching glucose journal: ${error}`);
-    return res.status(400).json({
-      status: 'ERROR',
-      message: `Error fetching glucose journal: ${error}`,
-    });
+    if (error instanceof ErrorHandler) {
+      next(error);
+    } else {
+      next(new ErrorHandler(400, 'ERROR', `Error fetching glucose journal: ${error}`));
+    }
   }
 };
-export const createGlucoseJournal = async (req: Request, res: Response) => {
+
+export const createGlucoseJournal = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = await db.User.findOne({
       where: {
@@ -74,13 +72,11 @@ export const createGlucoseJournal = async (req: Request, res: Response) => {
     });
 
     if (!user) {
-      return res.status(404).json({
-        status: 'NOT_FOUND',
-        message: 'User not found',
-      });
+      throw new ErrorHandler(404, 'NOT_FOUND', 'User not found');
     }
+
     const { date, mealTime, bloodGlucose, unit, notes } = req.body;
-    diabeticGlucoseJournalValidator(req.body)
+    diabeticGlucoseJournalValidator(req.body);
     const glucoseJournal = await db.GlucoseMeasurement.create({
       uid: req.params.uid,
       date,
@@ -89,19 +85,22 @@ export const createGlucoseJournal = async (req: Request, res: Response) => {
       unit,
       notes,
     });
+
     return res.status(201).json({
       status: 'SUCCESS',
       data: glucoseJournal,
     });
   } catch (error) {
     Logger.error(`Error occurred while creating glucose journal: ${error}`);
-    return res.status(400).json({
-      status: 'ERROR',
-      message: `Error creating glucose journal: ${error}`,
-    });
+    if (error instanceof ErrorHandler) {
+      next(error);
+    } else {
+      next(new ErrorHandler(400, 'ERROR', `Error creating glucose journal: ${error}`));
+    }
   }
 };
-export const updateGlucoseJournal = async (req: Request, res: Response) => {
+
+export const updateGlucoseJournal = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const glucoseJournalId = req.params.id;
     const glucoseJournal = await db.GlucoseMeasurement.findOne({
@@ -111,33 +110,18 @@ export const updateGlucoseJournal = async (req: Request, res: Response) => {
     });
 
     if (!glucoseJournal) {
-      return res.status(404).json({
-        status: 'NOT_FOUND',
-        message: 'Glucose Journal not found',
-      });
+      throw new ErrorHandler(404, 'NOT_FOUND', 'Glucose Journal not found');
     }
 
     const { date, mealTime, bloodGlucose, unit, notes } = req.body;
     diabeticGlucoseJournalValidator(req.body);
     await db.GlucoseMeasurement.update(
-      {
-        date,
-        mealTime,
-        bloodGlucose,
-        unit,
-        notes,
-      },
-      {
-        where: {
-          id: glucoseJournalId,
-        },
-      }
+        { date, mealTime, bloodGlucose, unit, notes },
+        { where: { id: glucoseJournalId } }
     );
 
     const updatedGlucoseJournal = await db.GlucoseMeasurement.findOne({
-      where: {
-        id: glucoseJournalId,
-      },
+      where: { id: glucoseJournalId },
     });
 
     return res.status(200).json({
@@ -146,33 +130,26 @@ export const updateGlucoseJournal = async (req: Request, res: Response) => {
     });
   } catch (error) {
     Logger.error(`Error occurred while updating glucose journal: ${error}`);
-    return res.status(400).json({
-      status: 'ERROR',
-      message: `Error updating glucose journal: ${error}`,
-    });
+    if (error instanceof ErrorHandler) {
+      next(error);
+    } else {
+      next(new ErrorHandler(400, 'ERROR', `Error updating glucose journal: ${error}`));
+    }
   }
 };
-export const deleteGlucoseJournal = async (req: Request, res: Response) => {
+
+export const deleteGlucoseJournal = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const glucoseJournalId = req.params.id;
     const glucoseJournal = await db.GlucoseMeasurement.findOne({
-      where: {
-        id: glucoseJournalId,
-      },
+      where: { id: glucoseJournalId },
     });
 
     if (!glucoseJournal) {
-      return res.status(404).json({
-        status: 'NOT_FOUND',
-        message: 'Glucose Journal not found',
-      });
+      throw new ErrorHandler(404, 'NOT_FOUND', 'Glucose Journal not found');
     }
 
-    await db.GlucoseMeasurement.destroy({
-      where: {
-        id: glucoseJournalId,
-      },
-    });
+    await db.GlucoseMeasurement.destroy({ where: { id: glucoseJournalId } });
 
     return res.status(200).json({
       status: 'SUCCESS',
@@ -180,9 +157,10 @@ export const deleteGlucoseJournal = async (req: Request, res: Response) => {
     });
   } catch (error) {
     Logger.error(`Error occurred while deleting glucose journal: ${error}`);
-    return res.status(400).json({
-      status: 'ERROR',
-      message: `Error deleting glucose journal: ${error}`,
-    });
+    if (error instanceof ErrorHandler) {
+      next(error);
+    } else {
+      next(new ErrorHandler(400, 'ERROR', `Error deleting glucose journal: ${error}`));
+    }
   }
 };
