@@ -1,10 +1,10 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { Logger } from '../middlewares/logger';
 import db from '../models';
 import { appointmentValidator } from '../utils/databaseValidators';
+import { ErrorHandler } from '../middlewares/errorMiddleware';
 
-//Retrieve all appoinments for a given user
-export const getAppointments = async (req: Request, res: Response) => {
+export const getAppointments = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const uid = req.params.uid;
     const userAppointments = await db.Appointment.findAll({
@@ -19,15 +19,15 @@ export const getAppointments = async (req: Request, res: Response) => {
     });
   } catch (err) {
     Logger.error(`Error occurred while fetching appointment for user: ${err}`);
-    res.status(400).json({
-      status: `ERROR`,
-      message: `Error getting appointments of user : ${err}`,
-    });
+    if (err instanceof ErrorHandler) {
+      next(err);
+    } else {
+      next(new ErrorHandler(400, 'ERROR', `Error getting appointments of user: ${err}`));
+    }
   }
 };
 
-//Create appointment for a user
-export const createAppointment = async (req: Request, res: Response) => {
+export const createAppointment = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const uid = req.params.uid;
     const { appointmentWith, reason, date, time, notes } = req.body;
@@ -46,14 +46,15 @@ export const createAppointment = async (req: Request, res: Response) => {
     });
   } catch (err) {
     Logger.error(`Error occurred while creating appointment: ${err}`);
-    res.status(400).json({
-      status: `ERROR`,
-      message: `Error creating appointment record: ${err}`,
-    });
+    if (err instanceof ErrorHandler) {
+      next(err);
+    } else {
+      next(new ErrorHandler(400, 'ERROR', `Error creating appointment record: ${err}`));
+    }
   }
 };
 
-export const getAppointment = async (req: Request, res: Response) => {
+export const getAppointment = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const appointmentId = req.params.id;
     const appointment = await db.Appointment.findOne({
@@ -63,10 +64,7 @@ export const getAppointment = async (req: Request, res: Response) => {
     });
 
     if (!appointment) {
-      return res.status(404).json({
-        status: 'ERROR',
-        message: `Appointment not found, invalid appointment id.`,
-      });
+      throw new ErrorHandler(404, 'ERROR', `Appointment not found, invalid appointment id.`);
     }
 
     res.status(200).json({
@@ -75,14 +73,15 @@ export const getAppointment = async (req: Request, res: Response) => {
     });
   } catch (err) {
     Logger.error(`Error occurred while fetching appointment: ${err}`);
-    res.status(400).json({
-      status: `ERROR`,
-      message: `Error getting appointment : ${err}`,
-    });
+    if (err instanceof ErrorHandler) {
+      next(err);
+    } else {
+      next(new ErrorHandler(400, 'ERROR', `Error getting appointment: ${err}`));
+    }
   }
 };
 
-export const deleteAppointment = async (req: Request, res: Response) => {
+export const deleteAppointment = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const appointmentId = req.params.id;
     const deletedAppointment = await db.Appointment.destroy({
@@ -92,10 +91,7 @@ export const deleteAppointment = async (req: Request, res: Response) => {
     });
 
     if (!deletedAppointment) {
-      return res.status(404).json({
-        status: 'ERROR',
-        message: 'Appointment not found, invalid appointment id.',
-      });
+      throw new ErrorHandler(404, 'ERROR', 'Appointment not found, invalid appointment id.');
     }
 
     res.status(200).json({
@@ -104,32 +100,30 @@ export const deleteAppointment = async (req: Request, res: Response) => {
     });
   } catch (err) {
     Logger.error(`Error occurred while deleting appointment: ${err}`);
-    res.status(400).json({
-      status: 'ERROR',
-      message: `Error deleting appointment record: ${err}`,
-    });
+    if (err instanceof ErrorHandler) {
+      next(err);
+    } else {
+      next(new ErrorHandler(400, 'ERROR', `Error deleting appointment record: ${err}`));
+    }
   }
 };
 
-export const updateAppointments = async (req: Request, res: Response) => {
+export const updateAppointments = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const appointmentId = req.params.id;
     const { appointmentWith, reason, date, time, notes } = req.body;
 
     const updatedAppointment = await db.Appointment.update(
-      { appointmentWith, reason, date, time, notes },
-      {
-        where: {
-          id: appointmentId,
-        },
-      }
+        { appointmentWith, reason, date, time, notes },
+        {
+          where: {
+            id: appointmentId,
+          },
+        }
     );
 
     if (!updatedAppointment) {
-      return res.status(404).json({
-        status: 'ERROR',
-        message: 'Appointment not found, invalid appointment id.',
-      });
+      throw new ErrorHandler(404, 'ERROR', 'Appointment not found, invalid appointment id.');
     }
 
     const latestAppointment = await db.Appointment.findOne({
@@ -138,16 +132,17 @@ export const updateAppointments = async (req: Request, res: Response) => {
       },
     });
 
-    return res.status(200).json({
+    res.status(200).json({
       status: 'SUCCESS',
-      message: 'appointment was updated successfully',
+      message: 'Appointment was updated successfully',
       data: latestAppointment,
     });
   } catch (error) {
     Logger.error(`Error occurred while updating appointment: ${error}`);
-    return res.status(400).json({
-      status: 'ERROR',
-      message: `Error updating appointment: ${error}`,
-    });
+    if (error instanceof ErrorHandler) {
+      next(error);
+    } else {
+      next(new ErrorHandler(400, 'ERROR', `Error updating appointment: ${error}`));
+    }
   }
 };

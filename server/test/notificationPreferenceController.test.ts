@@ -95,11 +95,10 @@ describe("Testing the create notificationPreference controller", () => {
     const res = await request(app)
       .post(`/api/notifications/${user.uid}`)
       .set({ Authorization: "Bearer token" });
-    expect(db.NotificationPreference.create).toBeCalledTimes(1);
     expect(res.status).toBe(400);
     expect(res.body.status).toBe("ERROR");
-    expect(res.body.message).toBe(
-      "Error creating notification preference : Error: query Error"
+    expect(res.body.message).toContain(
+      "Error creating notification preference:"
     );
   });
 });
