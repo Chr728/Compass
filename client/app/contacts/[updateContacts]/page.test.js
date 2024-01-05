@@ -1,9 +1,11 @@
 import {fireEvent, render, screen, waitFor} from '@testing-library/react';
-import act from '@testing-library/react';
+import {act} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import UpdateContactPage from './page';
-import {getSpeedDial, updateSpeedDial} from '../../http/speedDialAPI';
+import { getSpeedDial, updateSpeedDial } from '../../http/speedDialAPI';
+import { useAuth } from '../../contexts/AuthContext';
+
 
 const mockRouter = jest.fn();
 jest.mock("next/navigation", () => ({
@@ -14,20 +16,16 @@ jest.mock("next/navigation", () => ({
     }
 }));
 
-
 const userData = {
   uid: '1',
 } 
-jest.mock("../../contexts/AuthContext", () => {
-  return {
-    useAuth: () =>{
-      return {
-          user: userData
-      }
-    }
-  };
-});
 
+jest.mock('../../http/speedDialAPI.ts', () => {
+  return {
+      getSpeedDial: jest.fn(),
+      updateSpeedDial: jest.fn()
+  }
+});
 
 jest.mock('../../http/speedDialAPI.ts', () => {
     return {
@@ -58,9 +56,18 @@ jest.mock("../../contexts/UserContext", () => {
     };
   });
 
-  
+  jest.mock("../../contexts/AuthContext", () =>{
+    return {
+        useAuth: jest.fn(),
+    }
+})  
 
-test("Form submits correctly", async () =>{
+test("Form submits correctly", async () => {
+    useAuth.mockImplementation(() => {
+      return {
+        user: userData,
+      };
+    });
     const updateSpeedDial = jest.fn();
     render(<UpdateContactPage params={{ updateContacts:'1'}}/>);
     await getSpeedDial();
@@ -74,9 +81,15 @@ test("Form submits correctly", async () =>{
     userEvent.click(submitButton);
     setTimeout(() => {
       expect(updateSpeedDial).toHaveBeenCalledTimes(1);
-    }, 1000);})
+    }, 1000);
+})
 
-test("Cancel button works correctly", async () =>{
+test("Cancel button works correctly", async () => {
+  useAuth.mockImplementation(() => {
+    return {
+    user: userData,
+    };
+  });
   render(<UpdateContactPage params={{ updateContacts:'1'}}/>);
     await getSpeedDial();
     const cancelButton = screen.getAllByRole('button')[1];
@@ -85,3 +98,14 @@ test("Cancel button works correctly", async () =>{
     expect(mockRouter).toHaveBeenCalled();
 })
 
+test("Error page is shown when the user is not logged in", async () => {
+  useAuth.mockImplementation(() => {
+      return {
+      user: null,
+      };
+  });
+
+  render(<UpdateContactPage params={{ updateContacts:'1'}} />);
+  const errorMessage = await screen.findByText("Error 403 - Access Forbidden");
+  expect(errorMessage).toBeInTheDocument();
+})

@@ -1,6 +1,7 @@
 import {render, screen, waitFor} from '@testing-library/react';
 import '@testing-library/jest-dom';
-import Contacts from './ContactsPage'
+import Contacts from './ContactsPage';
+import ContactsView from './page';
 import { useAuth } from '../contexts/AuthContext';
 import { useUser } from '../contexts/UserContext';
 
@@ -28,7 +29,7 @@ jest.mock("../contexts/UserContext", () =>{
     }
 })
 
-describe("Food journal page shown only to logged in users", () =>{
+describe("Contacts page shown only to logged in users", () =>{
 
     it("Error page is shown", async () => {
         useAuth.mockImplementation(() => {
@@ -37,7 +38,7 @@ describe("Food journal page shown only to logged in users", () =>{
             };
         });
         
-        render(<Contacts />);
+        render(<ContactsView />);
         const errorMessage = await screen.findByText("Error 403 - Access Forbidden");
         expect(errorMessage).toBeInTheDocument();
     })
@@ -56,7 +57,7 @@ describe("Food journal page shown only to logged in users", () =>{
             };
         });
 
-        render(<Contacts/>);
+        render(<ContactsView />);
         const errorMessage = screen.queryByText("Error 403 - Access Forbidden");
         expect(errorMessage).not.toBeInTheDocument();
         })

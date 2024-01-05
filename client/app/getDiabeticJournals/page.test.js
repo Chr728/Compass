@@ -1,8 +1,6 @@
-import {render, screen, waitFor} from '@testing-library/react';
+import {render, screen} from '@testing-library/react';
 import '@testing-library/jest-dom';
-import GetGlucoseJournals from './getGlucoseJournals/page'
-import GetInsulinJournals from './getInsulinJournals/page'
-
+import GetDiabeticJournals from './page'
 import { useAuth } from '../contexts/AuthContext';
 import { useUser } from '../contexts/UserContext';
 
@@ -39,7 +37,7 @@ describe("Insulin and Glucose journals page shown only to logged in users", () =
             };
         });
         
-        render(<GetGlucoseJournals />, <GetInsulinJournals />);
+        render(<GetDiabeticJournals />);
         const errorMessage = await screen.findByText("Error 403 - Access Forbidden");
         expect(errorMessage).toBeInTheDocument();
     })
@@ -58,7 +56,7 @@ describe("Insulin and Glucose journals page shown only to logged in users", () =
             };
         });
 
-             render(<GetGlucoseJournals />, <GetInsulinJournals />);
+        render(<GetDiabeticJournals />);
 
         const errorMessage = screen.queryByText("Error 403 - Access Forbidden");
         expect(errorMessage).not.toBeInTheDocument();
