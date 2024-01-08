@@ -1,7 +1,8 @@
 import '@testing-library/jest-dom';
-import { act, render, screen } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import GetActivityJournalsPage from './getActivityJournalsPage';
+import { getActivityJournals } from '../http/activityJournalAPI';
 
 beforeEach(async () => {
     await act(async () => {
@@ -37,22 +38,22 @@ jest.mock("../contexts/UserContext", () => {
 
 jest.mock('../http/activityJournalAPI', () => {
     return {
-        getActivityJournals: () => {
-            return {
-                
-                    success: "SUCCESS",
-                    data: [
-                        {
-                            uid: '1',
-                            date: '2014-01-01',
-                            time: '08:36',
-                            activity: 'running',
-                            duration: 60,
-                            Notes : 'I am feeling good today'
+        getActivityJournals: jest.fn().mockResolvedValue(
+            {
+                success: "SUCCESS",
+                data: [
+                    {
+                        uid: '1',
+                        date: '2014-01-01',
+                        time: '08:36',
+                        activity: 'running',
+                        duration: 60,
+                        Notes : 'I am feeling good today'
                     }
                 ]
             }
-        },
+        ),
+           
         deleteActivityJournal: async (activityJournalId) => {
             return {
                 status: "SUCCESS",
@@ -63,6 +64,15 @@ jest.mock('../http/activityJournalAPI', () => {
 });
    
 
+test("Fetches activity journals correctly", async() => {
+    await act(async () => {
+        jest.advanceTimersByTime(500);
+    });
+    await waitFor(() => {
+        expect(getActivityJournals).toHaveBeenCalled();
+    }); 
+})
+
 test("Add an entry button  functions correctly", async () => {
     setTimeout(() => {
     const addButton = screen.getAllByRole('button')[1];
@@ -71,7 +81,6 @@ test("Add an entry button  functions correctly", async () => {
         expect(mockRouter).toHaveBeenCalledWith('/createActivityJournal') 
     }, 1000);    
 })
-
 
 
 

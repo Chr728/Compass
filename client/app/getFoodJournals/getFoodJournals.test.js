@@ -1,7 +1,8 @@
 import '@testing-library/jest-dom';
-import { act, render, screen } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import GetFoodJournalsPage from './getFoodJournalsPage';
+import { getFoodIntakeJournals } from '../http/foodJournalAPI';
 
 
 beforeEach(async () => {
@@ -38,24 +39,23 @@ jest.mock("../contexts/UserContext", () => {
 
 jest.mock('../http/foodJournalAPI', () => {
     return {
-        getFoodIntakeJournals: () => {
-            return {
-                
-                    success: "SUCCESS",
-                    data: [
-                        {
-                            uid: '1',
-                            date: '2014-01-01',
-                            time: '8:36',
-                            foodName: 'pasta',
-                            servingNumber: 2,
-                            mealType:'Lunch',
-                            Notes : 'I am feeling good today'
+        getFoodIntakeJournals: jest.fn().mockResolvedValue(
+            {
+                success: "SUCCESS",
+                data: [
+                    {
+                        uid: '1',
+                        date: '2014-01-01',
+                        time: '8:36',
+                        foodName: 'pasta',
+                        servingNumber: 2,
+                        mealType:'Lunch',
+                        Notes : 'I am feeling good today'
                     }
                 ]
             }
-        },
-
+        ),
+    
         deleteFoodJournal: async (foodJournalId) => {
             return {
                 status: "SUCCESS",
@@ -65,7 +65,15 @@ jest.mock('../http/foodJournalAPI', () => {
     }
 });
    
-
+    test("Fetches food journals correctly", async() => {
+        await act(async () => {
+            jest.advanceTimersByTime(500);
+        });
+        await waitFor(() => {
+            expect(getFoodIntakeJournals).toHaveBeenCalled();
+        }); 
+       
+    })
 
 
 test("Add an entry button  functions correctly", async() => {
@@ -89,9 +97,6 @@ test("Add an entry button  functions correctly", async() => {
         }, 1000);    
     })
 
-   
-
-    
      // checks the texts
      test("Message displayed", async () => {
         const message = screen.getByText(/Keep track of what you eat each day./i);
@@ -102,4 +107,14 @@ test("Add an entry button  functions correctly", async() => {
      test("Message displayed", async () => {
         const message = screen.getByText(/Remember, eating healthy is all about eating the right foods in the right amounts./i);
         expect(message).toBeInTheDocument();
+     })
+    
+
+    test("Back button functions correctly", async() => {
+        const backButton = screen.getAllByRole("button")[0];
+        userEvent.click(backButton);
+        await waitFor(() => {
+            expect(mockRouter).toHaveBeenCalledWith('/journals');
+        }); 
     })
+    

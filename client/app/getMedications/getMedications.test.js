@@ -1,8 +1,8 @@
-import {render, screen,act} from '@testing-library/react';
+import {render, screen, act, waitFor} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import GetMedicationsPage from './getMedicationsPage';
 import userEvent from '@testing-library/user-event';
-import { deleteMedication} from '../http/activityJournalAPI'; 
+import { getMedications } from '../http/medicationAPI';
 
 beforeEach(async () => {
     await act(async () => {
@@ -38,25 +38,25 @@ jest.mock("../contexts/UserContext", () => {
 
 jest.mock('../http/medicationAPI', () => {
     return {
-        getMedications: () => {
-            return {
-                
-                    success: "SUCCESS",
-                    data: [
-                        {
-                            uid: '1',
-                            medicationName: 'Advil',
-                            dateStarted: '2014-01-01',
-                            time: '08:36',
-                            dosage: 60,
-                            unit: 'milligram (mg)',
-                            frequency: 'Six times a day',
-                            route: 'Rectal',
-                            Notes : 'Test medication'
+        getMedications: jest.fn().mockResolvedValue(
+            {
+                success: "SUCCESS",
+                data: [
+                    {
+                        uid: '1',
+                        medicationName: 'Advil',
+                        dateStarted: '2014-01-01',
+                        time: '08:36',
+                        dosage: 60,
+                        unit: 'milligram (mg)',
+                        frequency: 'Six times a day',
+                        route: 'Rectal',
+                        Notes : 'Test medication'
                     }
                 ]
             }
-        },
+        ),
+
         deleteMedication: async (medicationId) => {
             return {
                 status: "SUCCESS",
@@ -65,6 +65,16 @@ jest.mock('../http/medicationAPI', () => {
         },
     }
 });
+
+
+    test("Fetches medications correctly", async () => {
+        await act(async () => {
+            jest.advanceTimersByTime(500);
+        });
+        await waitFor(() => {
+            expect(getMedications).toHaveBeenCalled();
+        }); 
+    })
    
 
     test("Add an entry button functions correctly", async () => {
