@@ -2,9 +2,11 @@ import request from 'supertest';
 import app from '../index';
 import db from '../models/index';
 import admin from 'firebase-admin';
+import { startServer, stopServer } from '../utils/journalsTestHelper';
 
 let server: any;
-const port = process.env.SERVER_DEV_PORT;
+const port = process.env.PORT;
+
 
 const user = {
   id: 1,
@@ -54,16 +56,6 @@ const mockedDecodedToken = {
   iss: '',
   sub: '',
 };
-
-function startServer() {
-  server = app.listen(port);
-}
-
-function stopServer() {
-  if (server) {
-    server.close();
-  }
-}
 
 beforeAll(() => {
   startServer(); // Start the server before running tests
@@ -125,7 +117,7 @@ describe('Testing the create subscription controller', () => {
     expect(db.User.findOne).toHaveBeenCalledTimes(1);
     expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
     expect(db.Subscription.create).toHaveBeenCalledTimes(0);
-    expect(res.status).toBe(404);
+    expect(res.status).toBe(400);
     expect(res.body.status).toBe('ERROR');
     expect(res.body.message).toBe(
       'The user already has one subscription, please update instead!'

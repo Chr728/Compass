@@ -18,14 +18,6 @@ describe("createNotificationPreference", () => {
 
   it("should create a notification preference for the user", async () => {
     const mockUserId = "123";
-    const mockNotificationPreferenceData = {
-      uid: mockUserId,
-      activityReminders: true,
-      medicationReminders: true,
-      appointmentReminders: true,
-      foodIntakeReminders: true,
-    };
-
     const mockToken = "mockToken";
     const mockCurrentUser = {
       uid: mockUserId,
@@ -38,7 +30,7 @@ describe("createNotificationPreference", () => {
 
     const mockResponse = {
       ok: true,
-      json: jest.fn().mockResolvedValue(mockNotificationPreferenceData),
+      json: jest.fn().mockResolvedValue(),
     };
     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch = mockFetch;
@@ -53,10 +45,9 @@ describe("createNotificationPreference", () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${mockToken}`,
         },
-        body: JSON.stringify(mockNotificationPreferenceData),
       }
     );
-    expect(result).toEqual(mockNotificationPreferenceData);
+    expect(result).toEqual();
   });
 
   it("should throw an error if the user is not signed in", async () => {

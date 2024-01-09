@@ -42,9 +42,11 @@ export default function CreateInsulinJournalPage() {
           bodySite: values.bodySite,
           notes: values.notes,
         };
-        const result = await createInsulinJournal(data); 
+        const result = await createInsulinJournal(data)
+        .then(result => {
+          router.push('/getDiabeticJournals');
+        })
         logger.info('Insulin journal entry created:', result);
-        router.push('/getDiabeticJournals');
       } catch (error) {
         handlePopUp('error', "Error creating Insulin journal entry:");
 

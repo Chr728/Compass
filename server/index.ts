@@ -17,17 +17,21 @@ import medicationRoutes from './routes/medicationRoutes';
 import Morgan from './middlewares/morgan';
 import { Logger } from './middlewares/logger';
 import decodeToken from './middlewares/decodeToken';
+import {handleError} from './middlewares/errorMiddleware';
 require('dotenv').config({
   path: './../.env',
 });
 
 const app = express();
 
+const isProduction = process.env.NODE_ENV === 'production';
+const isTest = process.env.NODE_ENV === 'test';
+const isDevelopment = process.env.NODE_ENV === 'development';
+
 app.use(cors());
 app.use(express.json());
 app.use(Morgan);
 app.use(decodeToken);
-
 app.use('/api/journals/weight', weightJournalRoutes);
 app.use('/api/journals/mood', moodJournalRoutes);
 app.use('/api/journals/diabetic/glucose', diabeticGlucoseJournalRoutes);
@@ -40,22 +44,23 @@ app.use('/api/notifications', notificationRoutes);
 app.use('/api/journals/foodIntake', foodIntakeJournalRoutes);
 app.use('/api/reminders', reminderRoutes);
 app.use('/api/subscription', subscriptionRoutes);
-app.use('/api/reminders', reminderRoutes);
 app.use('/api/medication', medicationRoutes);
-
+app.use(handleError);
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
 //Connection to postgreSQL
-if (process.env.NODE_ENV !== 'test') {
-  db.sequelize.sync({ alter: true }).then(() => {
+if (isDevelopment) {
+  db.sequelize.sync({alter: true}).then(() => {
     Logger.info('Database Synchronized');
   });
+}
 
-  app.listen(process.env.SERVER_DEV_PORT, () => {
+if (!isTest) {
+  app.listen(process.env.PORT, () => {
     Logger.info(
-      `Server listening on port ${process.env.SERVER_DEV_PORT || 8000}`
+        `Server listening on port ${process.env.PORT || 8000}`
     );
   });
 }

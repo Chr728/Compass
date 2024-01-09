@@ -1,0 +1,36 @@
+name: Server Deploy
+on:
+  push:
+    branches:
+      - production
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      PORT: ${{ secrets.PORT }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      FIREBASE_SA: ${{ secrets.FIREBASE_SA }}
+      VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+      VAPID_PUBLIC_KEY: ${{ secrets.VAPID_PUBLIC_KEY }}
+      HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: cd server && npm install
+
+      - name: Login to Heroku Container Registry
+        run: HEROKU_API_KEY=$HEROKU_API_KEY heroku container:login
+
+      - name: Build Docker Image
+        run: docker compose -f docker-compose-prod.yml build
+
+      - name: Tag Docker Image
+        run: docker tag compass_production_image registry.heroku.com/$HEROKU_APP_NAME/web:latest
+
+      - name: Push Docker Image
+        run: docker push registry.heroku.com/$HEROKU_APP_NAME/web:latest
+
+      - name: Release Docker Image
+        run: HEROKU_API_KEY=$HEROKU_API_KEY heroku container:release web -a $HEROKU_APP_NAME

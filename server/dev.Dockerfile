@@ -1,6 +1,6 @@
 FROM node:18-bullseye-slim
 
-ARG SERVER_DEV_PORT
+ARG PORT
 
 WORKDIR /app/server
 
@@ -9,6 +9,6 @@ COPY tsconfig.json ./
 
 RUN npm install
 
-EXPOSE ${SERVER_DEV_PORT}
+EXPOSE ${PORT}
 
 CMD ["npm", "run", "dev"]

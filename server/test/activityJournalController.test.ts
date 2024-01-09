@@ -1,7 +1,19 @@
 import request from 'supertest';
 import app from '../index';
 import db from '../models';
+import {
+  startServer,
+  stopServer,
+  mockCreate,
+  mockDestroy,
+  mockFindAll,
+  mockFindOne,
+  mockTokenVerification,
+  mockUpdate,
+  mockRejectedValueOnce,
+} from '../utils/journalsTestHelper';
 import admin from 'firebase-admin';
+import {ErrorHandler} from '../middlewares/errorMiddleware';
 
 let server: any;
 const port = process.env.SERVER_DEV_PORT;
@@ -33,7 +45,7 @@ const invalidActivityJournal = {
   date: '2023-09-30',
   time: '12:00:00',
   activity: 'running',
-  duration: "175",
+  duration: '175',
   notes: 'Sample activity entry',
 };
 
@@ -59,16 +71,6 @@ const mockedDecodedToken = {
   sub: '',
 };
 
-function startServer() {
-  server = app.listen(port);
-}
-
-function stopServer() {
-  if (server) {
-    server.close();
-  }
-}
-
 describe('activity Journal Controller Tests', () => {
   beforeAll(() => {
     startServer();
@@ -79,10 +81,8 @@ describe('activity Journal Controller Tests', () => {
   });
 
   beforeEach(() => {
-    jest
-      .spyOn(admin.auth(), 'verifyIdToken')
-      .mockResolvedValue(mockedDecodedToken);
-    jest.spyOn(db.User, 'findOne').mockResolvedValue(user);
+    mockTokenVerification(mockedDecodedToken);
+    mockFindOne(db.User, user);
   });
 
   afterEach(() => {
@@ -90,9 +90,7 @@ describe('activity Journal Controller Tests', () => {
   });
 
   it('should get activity journals for a user', async () => {
-    jest
-      .spyOn(db.ActivityJournal, 'findAll')
-      .mockResolvedValueOnce([activityJournal]);
+    mockFindAll(db.ActivityJournal, [activityJournal]);
 
     const res = await request(app)
       .get(`/api/journals/activity/user/${user.uid}`)
@@ -106,9 +104,7 @@ describe('activity Journal Controller Tests', () => {
   });
 
   it('should get a activity journal for a user', async () => {
-    jest
-      .spyOn(db.ActivityJournal, 'findOne')
-      .mockResolvedValueOnce(activityJournal);
+    mockFindOne(db.ActivityJournal, activityJournal);
 
     const res = await request(app)
       .get(`/api/journals/activity/${activityJournal.id}`)
@@ -121,9 +117,7 @@ describe('activity Journal Controller Tests', () => {
   });
 
   it('should create a activity journal for a user', async () => {
-    jest
-      .spyOn(db.ActivityJournal, 'create')
-      .mockResolvedValueOnce(activityJournal);
+    mockCreate(db.ActivityJournal, activityJournal);
 
     const res = await request(app)
       .post(`/api/journals/activity/user/${user.uid}`)
@@ -138,22 +132,14 @@ describe('activity Journal Controller Tests', () => {
   });
 
   it('should update a activity journal for a user', async () => {
-    jest
-      .spyOn(db.ActivityJournal, 'findOne')
-      .mockResolvedValueOnce(activityJournal);
-    jest
-      .spyOn(db.ActivityJournal, 'update')
-      .mockResolvedValueOnce([1, [updatedActivityJournal]]);
-
-    jest
-      .spyOn(db.ActivityJournal, 'findOne')
-      .mockResolvedValueOnce(updatedActivityJournal);
+    mockFindOne(db.ActivityJournal, activityJournal);
+    mockUpdate(db.ActivityJournal, updatedActivityJournal);
+    mockFindOne(db.ActivityJournal, updatedActivityJournal);
 
     const res = await request(app)
       .put(`/api/journals/activity/${activityJournal.id}`)
       .send(updatedActivityJournal)
       .set({ Authorization: 'Bearer token' });
-    
 
     expect(db.ActivityJournal.findOne).toBeCalledTimes(2);
     expect(db.ActivityJournal.update).toBeCalledTimes(1);
@@ -163,12 +149,8 @@ describe('activity Journal Controller Tests', () => {
   });
 
   it('should delete a activity journal for a user', async () => {
-    jest
-      .spyOn(db.ActivityJournal, 'findOne')
-      .mockResolvedValueOnce(activityJournal);
-    jest
-      .spyOn(db.ActivityJournal, 'destroy')
-      .mockResolvedValueOnce([1, [activityJournal]]);
+    mockFindOne(db.ActivityJournal, activityJournal);
+    mockDestroy(db.ActivityJournal, activityJournal);
 
     const res = await request(app)
       .delete(`/api/journals/activity/${activityJournal.id}`)
@@ -183,7 +165,7 @@ describe('activity Journal Controller Tests', () => {
   });
 
   it('should handle activity journal not found error', async () => {
-    jest.spyOn(db.ActivityJournal, 'findOne').mockResolvedValueOnce(null);
+    mockFindOne(db.ActivityJournal, null);
 
     const res = await request(app)
       .get(`/api/journals/activity/${activityJournal.id}`)
@@ -196,7 +178,7 @@ describe('activity Journal Controller Tests', () => {
   });
 
   it('should handle activity journal not found error when updating', async () => {
-    jest.spyOn(db.ActivityJournal, 'findOne').mockResolvedValueOnce(null);
+    mockFindOne(db.ActivityJournal, null);
 
     const res = await request(app)
       .put(`/api/journals/activity/${activityJournal.id}`)
@@ -210,7 +192,7 @@ describe('activity Journal Controller Tests', () => {
   });
 
   it('should handle activity journal not found error when deleting', async () => {
-    jest.spyOn(db.ActivityJournal, 'findOne').mockResolvedValueOnce(null);
+    mockFindOne(db.ActivityJournal, null);
 
     const res = await request(app)
       .delete(`/api/journals/activity/${activityJournal.id}`)
@@ -223,7 +205,7 @@ describe('activity Journal Controller Tests', () => {
   });
 
   it('should handle error when getting activity journals', async () => {
-    jest.spyOn(db.ActivityJournal, 'findAll').mockRejectedValueOnce('error');
+    mockRejectedValueOnce('findAll', db.ActivityJournal, 'error');
 
     const res = await request(app)
       .get(`/api/journals/activity/user/${user.uid}`)
@@ -237,7 +219,7 @@ describe('activity Journal Controller Tests', () => {
   });
 
   it('should handle error when getting activity journal', async () => {
-    jest.spyOn(db.ActivityJournal, 'findOne').mockRejectedValueOnce('error');
+    mockRejectedValueOnce('findOne', db.ActivityJournal, 'error');
 
     const res = await request(app)
       .get(`/api/journals/activity/${activityJournal.id}`)
@@ -250,7 +232,7 @@ describe('activity Journal Controller Tests', () => {
   });
 
   it('should handle error when creating activity journal', async () => {
-    jest.spyOn(db.ActivityJournal, 'create').mockRejectedValueOnce('error');
+    jest.spyOn(db.ActivityJournal, 'create').mockRejectedValueOnce(new ErrorHandler(400,'ERROR','Error creating activity journal: error'));
 
     const res = await request(app)
       .post(`/api/journals/activity/user/${user.uid}`)
@@ -265,7 +247,7 @@ describe('activity Journal Controller Tests', () => {
   });
 
   it('should handle error when updating activity journal', async () => {
-    jest.spyOn(db.ActivityJournal, 'findOne').mockRejectedValueOnce('error');
+    mockRejectedValueOnce('findOne', db.ActivityJournal, 'error');
 
     const res = await request(app)
       .put(`/api/journals/activity/${activityJournal.id}`)
@@ -279,7 +261,7 @@ describe('activity Journal Controller Tests', () => {
   });
 
   it('should handle error when deleting activity journal', async () => {
-    jest.spyOn(db.ActivityJournal, 'findOne').mockRejectedValueOnce('error');
+    mockRejectedValueOnce('findOne', db.ActivityJournal, 'error');
 
     const res = await request(app)
       .delete(`/api/journals/activity/${activityJournal.id}`)
@@ -292,8 +274,7 @@ describe('activity Journal Controller Tests', () => {
   });
 
   it('should handle user not found error for create', async () => {
-    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(null);
-
+    mockFindOne(db.User, null);
     const res = await request(app)
       .post(`/api/journals/activity/user/${user.uid}`)
       .set({ Authorization: 'Bearer token' });
@@ -305,7 +286,7 @@ describe('activity Journal Controller Tests', () => {
   });
 
   it('should handle user not found error for getAllActivityJournals', async () => {
-    jest.spyOn(db.User, 'findOne').mockResolvedValueOnce(null);
+    mockFindOne(db.User, null);
 
     const res = await request(app)
       .get(`/api/journals/activity/user/${user.uid}`)
@@ -318,9 +299,7 @@ describe('activity Journal Controller Tests', () => {
   });
 
   it('should throw error for invalid data when creating a activity journal for a user', async () => {
-    jest
-      .spyOn(db.ActivityJournal, 'create')
-      .mockResolvedValueOnce(activityJournal);
+    mockCreate(db.ActivityJournal, activityJournal);
 
     const res = await request(app)
       .post(`/api/journals/activity/user/${user.uid}`)
@@ -333,22 +312,14 @@ describe('activity Journal Controller Tests', () => {
   });
 
   it('should throw error for invalid data when updating a activity journal for a user', async () => {
-    jest
-      .spyOn(db.ActivityJournal, 'findOne')
-      .mockResolvedValueOnce(activityJournal);
-    jest
-      .spyOn(db.ActivityJournal, 'update')
-      .mockResolvedValueOnce([1, [updatedActivityJournal]]);
-
-    jest
-      .spyOn(db.ActivityJournal, 'findOne')
-      .mockResolvedValueOnce(updatedActivityJournal);
+    mockFindOne(db.ActivityJournal, activityJournal);
+    mockUpdate(db.ActivityJournal, updatedActivityJournal);
+    mockFindOne(db.ActivityJournal, updatedActivityJournal);
 
     const res = await request(app)
       .put(`/api/journals/activity/${activityJournal.id}`)
       .send(invalidActivityJournal)
       .set({ Authorization: 'Bearer token' });
-    
 
     expect(db.ActivityJournal.findOne).toBeCalledTimes(1);
     expect(db.ActivityJournal.update).toBeCalledTimes(0);

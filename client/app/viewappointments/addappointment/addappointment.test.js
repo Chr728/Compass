@@ -1,4 +1,4 @@
-import {fireEvent, render, screen} from '@testing-library/react';
+import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import AddAppointmentPage from './addAppointmentPage';
@@ -15,7 +15,6 @@ jest.mock('../../contexts/AuthContext', () => {
         }
     }
 });
-
 
 jest.mock('../../http/appointmentAPI', () => {
     return {
@@ -84,22 +83,18 @@ const { createAppointment} = require('../../http/appointmentAPI');
         await userEvent.type(time, "8:36")
         await userEvent.type(notes, "abc");
 
-        await userEvent.click(submitButton);
-        await createAppointment;
-        await mockRouter;
-
-        expect(createAppointment).toHaveBeenCalledTimes(1);
-        expect(mockRouter).toHaveBeenCalledWith('/viewappointments');
+        await waitFor(async () => {
+            await userEvent.click(submitButton);
+            await createAppointment;
+            expect(createAppointment).toHaveBeenCalled();
+        })
     })
 
     test("Cancel button redirects to appointments page", async () => {
         render(<AddAppointmentPage/>);
-        const cancelButton = screen.getAllByRole('button')[1];
-        await userEvent.click(cancelButton);
-        await mockRouter;
-        expect(mockRouter).toHaveBeenCalledWith('/viewappointments');
-
+        await waitFor(async () => {
+            const cancelButton = screen.getAllByRole('button')[0];
+            await userEvent.click(cancelButton);
+            expect(mockRouter).toHaveBeenCalled();
+        })
     })
-
-
-

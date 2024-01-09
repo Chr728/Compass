@@ -37,9 +37,11 @@ export default function CreateWeightJournalPage() {
           unit: values.unit,
           notes: values.notes,
         };
-        const result = await createWeightJournal(data); 
+        const result = await createWeightJournal(data)
+        .then(result => {
+          router.push('/getWeightJournals');
+        })
         logger.info('Weight journal entry created:', result);
-        router.push('/getWeightJournals');
       } catch (error) {
         handlePopUp('error', "Error creating weight journal entry:");
       }

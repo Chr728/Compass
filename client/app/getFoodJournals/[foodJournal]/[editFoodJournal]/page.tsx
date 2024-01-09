@@ -73,9 +73,11 @@ export default function EditFoodJournal({params: { foodJournal } } : { params: {
           servingNumber: values.servingNumber,
           notes: values.notes,
         };
-        const result = await updateFoodIntakeJournal(foodJournal, data); 
+        const result = await updateFoodIntakeJournal(foodJournal, data)
+        .then(result => {
+          router.push(`/getFoodJournals/${foodJournal}`)
+        })
         logger.info('Food journal entry updated:', result);
-        router.push(`/getFoodJournals/${foodJournal}`)
       } catch (error) {
         handlePopUp('error', "Error updating Food journal entry:");
 
@@ -300,7 +302,7 @@ return (
             !formik.values.servingNumber // Check if Number of Servings is missing or empty
           }
           style={{ width: '140px', textAlign: 'center' }}
-          onClick={() => router.push("/getFoodJournals")}
+          onClick={() => router.push(`/getFoodJournals/${foodJournal}`)}
         />
         </div>
       </div>
