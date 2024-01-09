@@ -5,8 +5,6 @@ client/functions/node_modules
 client/node_modules
 client/serviceAccountKey.json
 client/functions/serviceAccountKey.json
-
-
 *.env
 */coverage
 */.idea
