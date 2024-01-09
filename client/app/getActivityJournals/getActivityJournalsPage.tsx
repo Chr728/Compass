@@ -44,7 +44,7 @@ export default function GetActivityJournalsPage() {
 		}
 		setTimeout(() => {
 			fetchActivityJournals();
-		}, 500);
+		}, 1000);
 	}, [user]);
 
 	async function deleteActivityJournals(activityJournalId: string) {
