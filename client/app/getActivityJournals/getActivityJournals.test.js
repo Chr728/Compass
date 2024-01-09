@@ -3,12 +3,9 @@ import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import GetActivityJournalsPage from './getActivityJournalsPage';
 import { getActivityJournals } from '../http/activityJournalAPI';
+import { useUser } from '../contexts/UserContext';
+import 'jest-environment-jsdom';
 
-beforeEach(async () => {
-    await act(async () => {
-        render(<GetActivityJournalsPage/>);
-      });
-})
 
 const mockRouter= jest.fn();
 jest.mock("next/navigation", () => ({
@@ -25,13 +22,7 @@ const userData = {
 
 jest.mock("../contexts/UserContext", () => {
     return {
-      useUser: () =>{
-        return {
-            userInfo: {
-                uid: '1',
-            }
-        }
-      }
+      useUser: jest.fn(),
     };
   });
 
@@ -63,46 +54,71 @@ jest.mock('../http/activityJournalAPI', () => {
     }
 });
    
+describe("User is logged in", () => {
+    beforeEach(async() => {
+        useUser.mockImplementation(() => {
+            return {
+                userInfo: {
+                    uid: '1',
+                }
+            };
+        });
 
-test("Fetches activity journals correctly", async() => {
-    await act(async () => {
-        jest.advanceTimersByTime(500);
-    });
-    await waitFor(() => {
-        expect(getActivityJournals).toHaveBeenCalled();
-    }); 
-})
+        await act(async () => {
+            render(<GetActivityJournalsPage/>);
+          });
+    })
 
-test("Add an entry button  functions correctly", async () => {
-    setTimeout(() => {
-    const addButton = screen.getAllByRole('button')[1];
-    userEvent.click(addButton);
-    mockRouter;
-        expect(mockRouter).toHaveBeenCalledWith('/createActivityJournal') 
-    }, 1000);    
-})
+    afterEach( () => {
+        jest.resetAllMocks();
+    })
 
 
-
+    test("Fetches activity journals correctly", async() => {
+        await act(async () => {
+            jest.advanceTimersByTime(500);
+        });
+        await waitFor(() => {
+            expect(getActivityJournals).toHaveBeenCalled();
+        }); 
+    })
+    
+    test("Add an entry button  functions correctly", async () => {
+        setTimeout(() => {
+            const addButton = screen.getAllByRole('button')[1];
+            userEvent.click(addButton);
+            mockRouter;
+            expect(mockRouter).toHaveBeenCalledWith('/createActivityJournal') 
+        }, 1000);  
+         
+    })
+    
     test("Get Activity Journals list is displayed correctly", async () => {
         setTimeout(() => {
             const date = screen.findByText('Jan 1, 2014');
             const activity = screen.findByText('running');
             const height = screen.findByText('60');
-
+    
             expect(date).toBeInTheDocument();
             expect(activity).toBeInTheDocument();
             expect(height).toBeInTheDocument();
         }, 1000);   
-       
+        
     })
-
-   
-
     
-     // checks the texts
-     test("Message displayed", async () => {
+    // checks the texts
+    test("Message displayed", async () => {
         const message = screen.getByText(/Manage your daily activities to help you stay fit. People with active lifestyles are often happier and healthier./i);
         expect(message).toBeInTheDocument();
     })
+    
+    test("Back button functions correctly", async () => {
+        const backButton = screen.getAllByRole('button')[0];
+        await userEvent.click(backButton);
+        await waitFor(() => {
+            expect(mockRouter).toHaveBeenCalledWith('/journals')
+        })
+        
+    })
+})
 

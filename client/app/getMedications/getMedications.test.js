@@ -19,10 +19,6 @@ jest.mock("next/navigation", () => ({
     }
 }));
 
-const userData = {
-    uid: '1',
-}
-
 jest.mock("../contexts/UserContext", () => {
     return {
       useUser: () =>{
@@ -87,10 +83,10 @@ jest.mock('../http/medicationAPI', () => {
     })
 
     test("Get medications list is displayed correctly", async () => {
-        setTimeout(() => {
-            const name = screen.findByText('advil');
-            const dosage = screen.findByText('60');
-            const route = screen.findByText('Rectal');
+        setTimeout(async() => {
+            const name = await screen.findByText('advil');
+            const dosage = await screen.findByText('60');
+            const route = await screen.findByText('Rectal');
 
             expect(name).toBeInTheDocument();
             expect(dosage).toBeInTheDocument();
@@ -103,3 +99,13 @@ jest.mock('../http/medicationAPI', () => {
         const message = screen.getByText(/Keep track of all medications you take and follow the progress through the time./i);
         expect(message).toBeInTheDocument();
     })
+
+  
+test("Back button functions correctly", async () => {
+        const backButton = screen.getAllByRole("button")[0];
+        userEvent.click(backButton);
+        await waitFor(() => {
+            expect(mockRouter).toHaveBeenCalledWith('/health')
+        })
+    })
+

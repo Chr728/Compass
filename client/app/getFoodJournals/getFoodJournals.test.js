@@ -76,13 +76,12 @@ jest.mock('../http/foodJournalAPI', () => {
     })
 
 
-test("Add an entry button  functions correctly", async() => {
-    setTimeout(() => {
+test("Add an entry button functions correctly", async () => {
+    setTimeout(() => { 
         const addButton = screen.getAllByRole('button')[1];
         userEvent.click(addButton);
-        mockRouter;
-        expect(mockRouter).toHaveBeenCalledWith('/createFoodJournal')
-    },1000);
+        expect(mockRouter).toHaveBeenCalledWith('/createFoodJournal');
+    }, 1000)     
 })
 
 
