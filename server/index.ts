@@ -28,7 +28,10 @@ const isProduction = process.env.NODE_ENV === 'production';
 const isTest = process.env.NODE_ENV === 'test';
 const isDevelopment = process.env.NODE_ENV === 'development';
 
-app.use(cors());
+app.use(cors({
+  origin: ["https://compass-staging.vercel.app/", "https://compass-orcin.vercel.app/"],
+  methods: ["GET", "POST", "PUT", "DELETE"]
+}));
 app.use(express.json());
 app.use(Morgan);
 app.use(decodeToken);

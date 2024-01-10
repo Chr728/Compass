@@ -19,6 +19,7 @@ export async function sendUserReminders(): Promise<any> {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
+          "Access-Control-Allow-Origin": "*",
         },
       }
     );

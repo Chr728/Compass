@@ -360,7 +360,7 @@ function runTaskEvery30Minutes() {
 // Schedule the task to run every 30 minutes
 setInterval(() => {
   runTaskEvery30Minutes();
-}, 30 * 60 * 1000); // 30 minutes in milliseconds
+}, 1 * 60 * 1000); // 30 minutes in milliseconds
 
 // Event listener for push notifications
 self.addEventListener("push", (event) => {
