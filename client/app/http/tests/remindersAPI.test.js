@@ -39,6 +39,8 @@ describe("sendUserReminders", () => {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${mockToken}`,
+          "Access-Control-Allow-Origin":
+            "https://compass-pxp2d4kpk-janong24.vercel.app/",
         },
       }
     );
