@@ -22,7 +22,6 @@ export async function sendUserReminders(): Promise<any> {
           "Access-Control-Allow-Origin": "*",
         },
         mode:"cors",
-        credentials:"include",
       }
     );
     logger.info(`Reminder notifications sent successfully for user ${uid}`);
