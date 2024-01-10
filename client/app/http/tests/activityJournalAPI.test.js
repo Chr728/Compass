@@ -242,8 +242,7 @@ describe("createActivityJournal", () => {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${mockToken}`,
 				},
-				// body: '"123"',
-				body: JSON.stringify(mockActivityJournalData),
+				body: '"123"',
 			}
 		);
 		expect(result).toEqual(mockActivityJournalData);
