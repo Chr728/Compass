@@ -6,3 +6,8 @@ httpx
 pytest-cov
 python-dotenv
 python-multipart
+opencv-python
+torch
+transformers
+tensorflow
+numpy
