@@ -57,9 +57,7 @@ def test_pill_predict():
     test_file = './test_files/0.jpg'
     files = {'file': ('0.jpg', open(test_file, 'rb'))}
     response = client.post('/PillAI', files=files)
-    print(f"Response status code: {response.status_code}")
     print(f"Response JSON: {response.json()}")
-    print(f"Files used: {files}")
     assert response.status_code == 200
     assert response.json() == sample_output
 

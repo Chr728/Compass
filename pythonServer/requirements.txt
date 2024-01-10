@@ -11,3 +11,4 @@ torch
 transformers
 tensorflow
 numpy
+pillow
