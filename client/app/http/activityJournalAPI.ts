@@ -14,7 +14,7 @@ export async function getActivityJournals(userId: string): Promise<any> {
 
 		const response = await fetch(
 			// `${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/user/${id}`,
-			`${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/${userId}`,
+			`${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/user/${userId}`,
 
 			{
 				method: "GET",
@@ -92,7 +92,7 @@ export async function createActivityJournal(
 
 		const response = await fetch(
 			// `${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/user/${id}`,
-			`${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/${userId}`,
+			`${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/user/${userId}`,
 
 			{
 				method: "POST",
