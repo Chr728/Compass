@@ -2,20 +2,18 @@ import { auth } from "../config/firebase";
 const logger = require("../../logger");
 
 // Function to make a GET request to retrieve all activity journals for a user
-export async function getActivityJournals(userId: string): Promise<any> {
+export async function getActivityJournals(): Promise<any> {
 	try {
 		const currentUser = auth.currentUser;
 		if (!currentUser) {
 			logger.error("No user is currently signed in.");
 			throw new Error("No user is currently signed in.");
 		}
-		// const id = currentUser.uid;
+		const id = currentUser.uid;
 		const token = await currentUser.getIdToken();
 
 		const response = await fetch(
-			// `${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/user/${id}`,
-			`${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/user/${userId}`,
-
+			`${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/user/${id}`,
 			{
 				method: "GET",
 				headers: {
@@ -24,9 +22,7 @@ export async function getActivityJournals(userId: string): Promise<any> {
 				},
 			}
 		);
-		logger.info(
-			`Activity journals fetched successfully for user ${userId}`
-		);
+		logger.info(`Activity journals fetched successfully for user ${id}`);
 		if (!response.ok) {
 			logger.error("Failed to retrieve activity journals for user");
 			throw new Error(`Failed to retrieve activity journals for user`);
@@ -78,7 +74,6 @@ export async function getActivityJournal(
 
 // Function to make a POST request to create a new activity journal entry
 export async function createActivityJournal(
-	userId: string,
 	activityJournalData: any
 ): Promise<any> {
 	try {
@@ -87,13 +82,11 @@ export async function createActivityJournal(
 			logger.error("No user is currently signed in.");
 			throw new Error("No user is currently signed in.");
 		}
-		// const id = currentUser.uid;
+		const id = currentUser.uid;
 		const token = await currentUser.getIdToken();
 
 		const response = await fetch(
-			// `${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/user/${id}`,
-			`${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/user/${userId}`,
-
+			`${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/user/${id}`,
 			{
 				method: "POST",
 				headers: {
@@ -104,7 +97,7 @@ export async function createActivityJournal(
 			}
 		);
 		logger.info(
-			`Activity journal entry created successfully for user ${userId}`
+			`Activity journal entry created successfully for user ${id}`
 		);
 		if (!response.ok) {
 			logger.error("Failed to create activity journal entry");

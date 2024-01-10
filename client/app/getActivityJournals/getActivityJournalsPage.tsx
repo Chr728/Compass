@@ -32,8 +32,7 @@ export default function GetActivityJournalsPage() {
 	useEffect(() => {
 		async function fetchActivityJournals() {
 			try {
-				const userId = user?.uid || "";
-				const result = await getActivityJournals(userId);
+				const result = await getActivityJournals();
 				logger.info("All Activity journals entry retrieved:", result);
 				setactivity(result.data);
 			} catch (error) {
