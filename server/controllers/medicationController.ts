@@ -3,6 +3,8 @@ import { Logger } from '../middlewares/logger';
 import db from '../models';
 import { medicationValidator } from '../utils/databaseValidators';
 import { ErrorHandler } from '../middlewares/errorMiddleware';
+const multer = require("multer");
+const path = require("path")
 
 export const createMedication = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -186,3 +188,25 @@ export const deleteMedication = async (req: Request, res: Response, next: NextFu
         }
     }
 };
+
+//Storage function to store images in filesystem
+const storage = multer({
+    destination: (req: any,file: any,cb: (arg0: null, arg1: string) => void) => {
+        cb(null, "medicationImages/")
+    },
+    filename: (req: { params: { id: string; }; },file: { originalname: any; },cb: (arg0: null, arg1: string) => void) => {
+        cb(null, req.params.id + "_" + path.extname(file.originalname));
+    }
+})
+
+//Upload image function
+const upload = multer({
+    storage: storage,
+    limits : {fileSize: 5000000 },
+    fileFilter : (req: any, file: { mimetype: any; },cb: (arg0: null, arg1: boolean) => any) => {
+        const filetype = file.mimetype
+        if (filetype == "image/png" || filetype == "image/jpeg"){
+            return cb(null,true)
+        }
+    }
+})
