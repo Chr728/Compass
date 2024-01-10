@@ -39,7 +39,7 @@ describe("getActivityJournals", () => {
 		const result = await getActivityJournals(mockUserId);
 
 		expect(mockFetch).toHaveBeenCalledWith(
-			`${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/${mockUserId}`,
+			`${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/user/${mockUserId}`,
 			{
 				method: "GET",
 				headers: {
@@ -235,7 +235,7 @@ describe("createActivityJournal", () => {
 		);
 
 		expect(mockFetch).toHaveBeenCalledWith(
-			`${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/${mockUserId}`,
+			`${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/user/${mockUserId}`,
 			{
 				method: "POST",
 				headers: {
