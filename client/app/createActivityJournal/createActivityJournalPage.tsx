@@ -23,26 +23,22 @@ export default function CreateActivityJournalPage() {
 		},
 
 		onSubmit: async (values) => {
-			// try {
-			const data = {
-				date: values.date,
-				time: values.time,
-				activity: values.activity,
-				duration: values.duration,
-				notes: values.notes,
-			};
-			// const result = await createActivityJournal(data)
-			// .then(result => {
-			//   router.push('/getActivityJournals');
-			// })
-			await createActivityJournal(data).then((result) => {
-				router.push("/getActivityJournals");
-			});
-			// const result = await createActivityJournal(data);
-			// router.push("/getActivityJournals");
-			// } catch (error) {
-			// 	handlePopUp("error", "Error creating activity journal entry:");
-			// }
+			try {
+				const data = {
+					date: values.date,
+					time: values.time,
+					activity: values.activity,
+					duration: values.duration,
+					notes: values.notes,
+				};
+				const result = await createActivityJournal(data).then(
+					(result) => {
+						router.push("/getActivityJournals");
+					}
+				);
+			} catch (error) {
+				handlePopUp("error", "Error creating activity journal entry:");
+			}
 		},
 	});
 

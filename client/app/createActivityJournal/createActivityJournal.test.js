@@ -1,6 +1,8 @@
 import "@testing-library/jest-dom";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { auth } from "../config/firebase";
+import { createActivityJournal } from "../http/activityJournalAPI";
 import CreateActivityJournalPage from "./createActivityJournalPage";
 
 const mockRouter = jest.fn();
@@ -27,12 +29,6 @@ jest.mock("../contexts/AuthContext", () => {
 	};
 });
 
-jest.mock("../http/activityJournalAPI", () => {
-	return {
-		createActivityJournal: jest.fn(),
-	};
-});
-
 describe("Activity Journal tests", () => {
 	beforeEach(() => {
 		global.fetch = jest.fn();
@@ -42,79 +38,16 @@ describe("Activity Journal tests", () => {
 		jest.resetAllMocks();
 	});
 
-	// it("activity journal entry is created on submitting", async () => {
-	// 	const mockUserId = "11";
-	// 	render(<CreateActivityJournalPage />);
-
-	// 	const submitButton = screen.getByRole("button", { name: /Submit/i });
-	// 	const date = screen.getByLabelText("Date");
-	// 	const time = screen.getByLabelText("Time");
-	// 	const activity = screen.getByLabelText("Activity");
-	// 	const duration = screen.getByLabelText("Duration (in minutes)");
-	// 	const notes = screen.getByLabelText("Notes");
-
-	// 	await userEvent.type(date, "2023-09-09");
-	// 	await userEvent.type(time, "8:36");
-	// 	await userEvent.type(activity, "85");
-	// 	await userEvent.type(duration, "1.70");
-	// 	await userEvent.type(notes, "abc");
-
-	// 	const mockActivityJournalData = {
-	// 		date: date.value,
-	// 		time: time.value,
-	// 		activity: activity.value,
-	// 		duration: duration.value,
-	// 		notes: notes.value,
-	// 	};
-
-	// 	await userEvent.click(submitButton);
-
-	// 	const mockToken = "mockToken";
-	// 	const mockCurrentUser = {
-	// 		uid: mockUserId,
-	// 		getIdToken: jest.fn().mockResolvedValue(mockToken),
-	// 	};
-
-	// 	Object.defineProperty(auth, "currentUser", {
-	// 		get: jest.fn().mockReturnValue(mockCurrentUser),
-	// 	});
-
-	// 	const mockResponse = {
-	// 		ok: true,
-	// 		json: jest.fn().mockResolvedValue(mockActivityJournalData),
-	// 	};
-	// 	const mockFetch = jest.fn().mockResolvedValue(mockResponse);
-	// 	global.fetch = mockFetch;
-
-	// 	const result = await createActivityJournal(
-	// 		mockUserId,
-	// 		mockActivityJournalData
-	// 	);
-
-	// 	expect(mockFetch).toHaveBeenCalledWith(
-	// 		`${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/${mockUserId}`,
-	// 		{
-	// 			method: "POST",
-	// 			headers: {
-	// 				"Content-Type": "application/json",
-	// 				Authorization: `Bearer ${mockToken}`,
-	// 			},
-	// 			body: '"11"',
-	// 		}
-	// 	);
-	// 	expect(result).toEqual(mockActivityJournalData);
-	// });
-
-	const { createActivityJournal } = require("../http/activityJournalAPI");
-
-	test("Submit button calls createAppointment function", async () => {
+	it("activity journal entry is created on submitting", async () => {
+		const mockUserId = "11";
 		render(<CreateActivityJournalPage />);
+
+		const submitButton = screen.getByRole("button", { name: /Submit/i });
 		const date = screen.getByLabelText("Date");
 		const time = screen.getByLabelText("Time");
 		const activity = screen.getByLabelText("Activity");
 		const duration = screen.getByLabelText("Duration (in minutes)");
 		const notes = screen.getByLabelText("Notes");
-		const submitButton = screen.getAllByRole("button")[2];
 
 		await userEvent.type(date, "2023-09-09");
 		await userEvent.type(time, "8:36");
@@ -122,11 +55,50 @@ describe("Activity Journal tests", () => {
 		await userEvent.type(duration, "1.70");
 		await userEvent.type(notes, "abc");
 
-		await waitFor(async () => {
-			await userEvent.click(submitButton);
-			await createActivityJournal;
-			expect(createActivityJournal).toHaveBeenCalled();
+		const mockActivityJournalData = {
+			date: date.value,
+			time: time.value,
+			activity: activity.value,
+			duration: duration.value,
+			notes: notes.value,
+		};
+
+		await userEvent.click(submitButton);
+
+		const mockToken = "mockToken";
+		const mockCurrentUser = {
+			uid: mockUserId,
+			getIdToken: jest.fn().mockResolvedValue(mockToken),
+		};
+
+		Object.defineProperty(auth, "currentUser", {
+			get: jest.fn().mockReturnValue(mockCurrentUser),
 		});
+
+		const mockResponse = {
+			ok: true,
+			json: jest.fn().mockResolvedValue(mockActivityJournalData),
+		};
+		const mockFetch = jest.fn().mockResolvedValue(mockResponse);
+		global.fetch = mockFetch;
+
+		const result = await createActivityJournal(
+			mockUserId,
+			mockActivityJournalData
+		);
+
+		expect(mockFetch).toHaveBeenCalledWith(
+			`${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/user/${mockUserId}`,
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${mockToken}`,
+				},
+				body: '"11"',
+			}
+		);
+		expect(result).toEqual(mockActivityJournalData);
 	});
 
 	it("All fields are displayed to the user", () => {
