@@ -41,6 +41,8 @@ describe("sendUserReminders", () => {
           Authorization: `Bearer ${mockToken}`,
           "Access-Control-Allow-Origin": "*",
         },
+        mode:"cors",
+        credentials:"include",
       }
     );
     expect(mockResponse.json).toHaveBeenCalled();
