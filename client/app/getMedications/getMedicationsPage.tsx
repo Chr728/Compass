@@ -80,8 +80,7 @@ export default function GetMedicationsPage() {
 				Keep track of all medications you take and follow the progress
 				through the time.
 			</p>
-			<br></br>
-
+			<br />
 			{medication && (
 				<div className="rounded-3xl bg-white flex flex-col mt-4 mb-44 w-full md:max-w-[800px] md:min-h-[550px] p-4 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]">
 					<div className="flex justify-between items-center">
