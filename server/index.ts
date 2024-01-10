@@ -34,9 +34,6 @@ app.use(cors({
 app.use(express.json());
 app.use(Morgan);
 app.use(decodeToken);
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*")
-}) 
 app.use('/api/journals/weight', weightJournalRoutes);
 app.use('/api/journals/mood', moodJournalRoutes);
 app.use('/api/journals/diabetic/glucose', diabeticGlucoseJournalRoutes);
