@@ -32,13 +32,6 @@ app.use(cors());
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   next();
-
-  // Allow preflight requests
-  if (req.method === "OPTIONS") {
-    res.status(200).send();
-  } else {
-    next();
-  }
 });
 app.use(express.json());
 app.use(Morgan);

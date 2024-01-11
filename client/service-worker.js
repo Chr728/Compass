@@ -337,6 +337,7 @@ self.addEventListener("message", (event) => {
 function runTaskEvery30Minutes() {
   // This function will run every 30 minutes
   console.log("Push Notification Task!");
+  console.log("Service worker origin during fetch:", self.origin);
   sendUserReminders();
 }
 
