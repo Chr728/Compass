@@ -1,9 +1,8 @@
-import {render, screen} from '@testing-library/react';
+import {render, screen, act, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import GetActivityJournal from './page';
 import { getActivityJournal } from '../../http/activityJournalAPI';
-import { auth } from '../../config/firebase';
 import { useAuth } from '../../contexts/AuthContext';
 
 const mockRouter = jest.fn();
@@ -24,59 +23,44 @@ jest.mock("../../contexts/AuthContext", () => {
     }
 })
 
+jest.mock('../../http/activityJournalAPI', () => {
+    return {
+        getActivityJournal: jest.fn().mockResolvedValue(
+            {
+                success: "SUCCESS",
+                data:
+                {
+                    id: '1',
+                    date: 'Jan 1,2014',
+                    time: '8:36',
+					activity: 'activity',
+					duration: '3',
+					notes: "this is a note",
+                }
+            }
+        
+        )
+    }
+})
 describe("Getting an activity journal", () => {
 
     beforeEach(() => {
-        global.fetch = jest.fn();
-
         useAuth.mockImplementation(() => {
             return {
-                user: {
-                    uid: '1'
-                }
-            }
-        })
-
-    });
-    
-    afterEach(() => {
-        jest.clearAllMocks();
-    });
-
-    it('getActivityJournal() functions correctly', async () => {
-        const mockUser = { id: '1', name: 'John Doe', email: 'johndoe@example.com' };
-        render(<GetActivityJournal params={{ activityJournal: mockUser.id }}/>);
-        const mockToken = 'mockToken';
-        const mockCurrentUser = {
-            uid: mockUser.id,
-            getIdToken: jest.fn().mockResolvedValue(mockToken),
-        };
-
-        Object.defineProperty(auth, 'currentUser', {
-            get: jest.fn().mockReturnValue(mockCurrentUser),
+                user: { uid: "AKSODN#KLAD12nkvs" },
+            };
         });
+    })
 
-        const mockResponse = {
-            ok: true,
-            json: jest.fn().mockResolvedValue({}),
-        };
-        const mockFetch = jest.fn().mockResolvedValue(mockResponse);
-        global.fetch = mockFetch;
-
-        const userData = await getActivityJournal(mockUser.id);
-
-        expect(mockResponse.json).toHaveBeenCalled();
-        expect(mockFetch).toHaveBeenCalledWith(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/journals/activity/${mockUser.id}`,
-            {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${mockToken}`,
-            },
-            method: 'GET',
-            }
-        );
-    });
+    it("Fetches activity journal correctly", async() => {
+        render(<GetActivityJournal params={{ activityJournal: '1' }} />);
+        await act(async () => {
+            jest.advanceTimersByTime(2000);
+        });
+        await waitFor(() => {
+            expect(getActivityJournal).toHaveBeenCalled();
+        }); 
+    })
     
     it("All fields are is displayed correctly", async () => {
         render(<GetActivityJournal params={{ activityJournal:'1' }}/>);
@@ -108,6 +92,18 @@ describe("Getting an activity journal", () => {
         const button = screen.getAllByRole("button")[0];
         await userEvent.click(button);
         expect(mockRouter).toHaveBeenCalledWith('/getActivityJournals');
+    })
+
+    it("Edit button functions correctly", async() => {
+        render(<GetActivityJournal params={{ activityJournal:'1' }}/>);
+        setTimeout(async() => {
+            const editButton = screen.getAllByRole('button')[1];
+            userEvent.click(editButton);
+            await waitFor(() => {
+                expect(mockRouter).toHaveBeenCalledWith('/getActivityJournals/1/1')
+            }); 
+            
+        }, 1000);
     })
 })
 

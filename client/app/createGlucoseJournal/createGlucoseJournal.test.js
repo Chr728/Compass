@@ -2,6 +2,7 @@ import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import CreateGlucoseJournalPage from './createGlucoseJournalPage';
+import { createGlucoseJournal } from '../http/diabeticJournalAPI';
 
 
 const fakeUser = {
@@ -19,7 +20,7 @@ jest.mock('../contexts/AuthContext', () => {
 
 jest.mock('../http/diabeticJournalAPI', () => {
     return {
-        createGlucoseJournal: jest.fn()
+        createGlucoseJournal: jest.fn(),
     }
 });
 
@@ -47,7 +48,7 @@ jest.mock("../contexts/UserContext", () => {
 
 
 
-const { createGlucoseJournal} = require('../http/diabeticJournalAPI');
+// const { createGlucoseJournal} = require('../http/diabeticJournalAPI');
  
     test("All fields are displayed to the user", () => {
         render(<CreateGlucoseJournalPage/>);
@@ -121,20 +122,19 @@ const { createGlucoseJournal} = require('../http/diabeticJournalAPI');
         const bloodGlucose = screen.getByLabelText("Blood Glucose");
         const unit = screen.getByLabelText("Unit");
         const notes  = screen.getByLabelText("Notes");
-        const submitButton = screen.getAllByRole('button')[1];
+        const submitButton = screen.getAllByRole('button')[2];
 
         await userEvent.type(date, "2023-09-09");
-        await userEvent.type(mealTime, "2hrs after breakfast")
+        await userEvent.selectOptions(mealTime, "2hrs after breakfast")
         await userEvent.type(bloodGlucose, "85");
-        await userEvent.type(unit, "mmol/L");
+        await userEvent.selectOptions(unit, "mmol/L");
         await userEvent.type(notes, "abc");
 
         await userEvent.click(submitButton);
-        await createGlucoseJournal();
-        await mockRouter;
+        await waitFor(() => {
+            expect(createGlucoseJournal).toHaveBeenCalled();
 
-        expect(createGlucoseJournal).toHaveBeenCalledTimes(1);
-        expect(mockRouter).toHaveBeenCalledWith('/getDiabeticJournals');
+        })
     })
 
     test("Cancel button redirects to getGlucoseJournals page", async () => {

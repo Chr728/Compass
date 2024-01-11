@@ -2,6 +2,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import Contacts from './ContactsPage';
 import { useAuth } from "../contexts/AuthContext";
+import userEvent from '@testing-library/user-event';
 
 const mockRouter= jest.fn();
 
@@ -34,6 +35,20 @@ describe("Contacts Menu Test", () => {
             expect(subheading).toBeInTheDocument();
 
         }) 
+    })
+
+    it("Back button redirects to home page", async () => {
+        useAuth.mockImplementation(() => {
+            return {
+              user: { uid: "AKSODN#KLAD12nkvs" },
+            };
+          });
+        render(<Contacts />);
+        const backButton = screen.getAllByRole('button')[0];
+        userEvent.click(backButton);
+        await waitFor(() => {
+            expect(mockRouter).toHaveBeenCalledWith('/tpage');
+        });
     })
 
     it("User not logged in", async () => {

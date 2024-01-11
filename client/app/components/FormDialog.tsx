@@ -53,7 +53,7 @@ export default function FormDialog({ label, title, description, onSubmit }: Form
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Subscribe</Button>
+          <Button onClick={handleSubmit}>Subscribe</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>
