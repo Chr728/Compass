@@ -39,7 +39,9 @@ describe("sendUserReminders", () => {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${mockToken}`,
+          "Access-Control-Allow-Origin": "*",
         },
+        mode:"cors",
       }
     );
     expect(mockResponse.json).toHaveBeenCalled();

@@ -32,30 +32,13 @@ clientsClaim();
 // https://developers.google.com/web/tools/workbox/guides/precache-files/workbox-build#add_an_injection_point
 const WB_MANIFEST = self.__WB_MANIFEST;
 // Precache fallback route and image
-WB_MANIFEST.push({
-  url: "/~offline",
-});
-precacheAndRoute(WB_MANIFEST);
+//precacheAndRoute(WB_MANIFEST);
 
 cleanupOutdatedCaches();
 registerRoute(
   "/",
   new NetworkFirst({
     cacheName: "start-url",
-    plugins: [
-      new ExpirationPlugin({
-        maxEntries: 1,
-        maxAgeSeconds: 86400,
-        purgeOnQuotaError: !0,
-      }),
-    ],
-  }),
-  "GET"
-);
-registerRoute(
-  "/~offline",
-  new NetworkFirst({
-    cacheName: "offline-fallback",
     plugins: [
       new ExpirationPlugin({
         maxEntries: 1,
@@ -360,7 +343,7 @@ function runTaskEvery30Minutes() {
 // Schedule the task to run every 30 minutes
 setInterval(() => {
   runTaskEvery30Minutes();
-}, 30 * 60 * 1000); // 30 minutes in milliseconds
+}, 1 * 60 * 1000); // 30 minutes in milliseconds
 
 // Event listener for push notifications
 self.addEventListener("push", (event) => {

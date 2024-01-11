@@ -4,21 +4,20 @@ import userEvent from '@testing-library/user-event';
 import GetActivityJournalsPage from './getActivityJournalsPage';
 import { getActivityJournals } from '../http/activityJournalAPI';
 import { useUser } from '../contexts/UserContext';
-import 'jest-environment-jsdom';
 
 
-const mockRouter= jest.fn();
+const mockRouter = jest.fn();
 jest.mock("next/navigation", () => ({
-    useRouter: () => {
-        return {
-            push: mockRouter
-        }
-    }
+	useRouter: () => {
+		return {
+			push: mockRouter,
+		};
+	},
 }));
 
 const userData = {
-    uid: '1',
-}
+	uid: "1",
+};
 
 jest.mock("../contexts/UserContext", () => {
     return {
@@ -121,4 +120,5 @@ describe("User is logged in", () => {
         
     })
 })
+
 
