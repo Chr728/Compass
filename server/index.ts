@@ -28,14 +28,7 @@ const isProduction = process.env.NODE_ENV === "production";
 const isTest = process.env.NODE_ENV === "test";
 const isDevelopment = process.env.NODE_ENV === "development";
 
-app.use(
-  cors({
-    origin: [
-      "https://compass-staging.vercel.app/",
-      "https://compass-orcin.vercel.app/",
-    ],
-  })
-);
+app.use(cors());
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   next();
