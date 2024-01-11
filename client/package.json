@@ -10,6 +10,7 @@
     "test": "jest --coverage --runInBand  --forceExit"
   },
   "dependencies": {
+    "@ducanh2912/next-pwa": "^10.1.0",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.14.10",
@@ -45,7 +46,6 @@
     "@babel/core": "^7.22.15",
     "@babel/preset-env": "^7.22.15",
     "@babel/preset-react": "^7.22.15",
-    "@ducanh2912/next-pwa": "^9.7.2",
     "@testing-library/dom": "^9.3.1",
     "@testing-library/jest-dom": "^6.1.2",
     "@testing-library/react": "^14.0.0",
