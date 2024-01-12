@@ -7,12 +7,12 @@ import e = require("express");
 const webPush = require("web-push");
 
 export const sendUserReminders = async (req: Request, res: Response) => {
-  res.status(200).json("Test");
   // const publicKey = process.env.VAPID_PUBLIC_KEY;
   // const privateKey = process.env.VAPID_PRIVATE_KEY;
 
   // Set vapid keys
   // webPush.setVapidDetails('mailto:test@gmail.com', publicKey, privateKey);
+  console.log("testing function entered :)");
 
   try {
     const userUID = req.params.uid;
