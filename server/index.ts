@@ -18,7 +18,7 @@ import Morgan from "./middlewares/morgan";
 import { Logger } from "./middlewares/logger";
 import decodeToken from "./middlewares/decodeToken";
 import { handleError } from "./middlewares/errorMiddleware";
-const webPush = require('web-push');
+const webPush = require("web-push");
 require("dotenv").config({
   path: "./../.env",
 });
@@ -33,13 +33,18 @@ const publicKey = process.env.VAPID_PUBLIC_KEY;
 const privateKey = process.env.VAPID_PRIVATE_KEY;
 
 // Set vapid keys
-webPush.setVapidDetails('mailto:test@gmail.com', publicKey, privateKey);
+webPush.setVapidDetails("mailto:test@gmail.com", publicKey, privateKey);
 
 app.use(cors());
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   next();
 });
+app.get("/api/reminders", cors(), (req, res) => {
+  res.json({ message: "Hello, CORS is enabled for this route!" });
+});
+app.options("/api/reminders/:uid", cors());
+
 app.use(express.json());
 app.use(Morgan);
 app.use(decodeToken);
