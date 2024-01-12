@@ -5,6 +5,7 @@ import { medicationValidator } from '../utils/databaseValidators';
 import { ErrorHandler } from '../middlewares/errorMiddleware';
 const multer = require("multer");
 const path = require("path")
+const uuid = require("uuid")
 
 export const createMedication = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -18,8 +19,14 @@ export const createMedication = async (req: Request, res: Response, next: NextFu
         if (!user) {
             throw new ErrorHandler(404, 'ERROR', 'User not found, invalid user uid.');
         }
-
+        let medImagePath;
         const { medicationName, dateStarted, time, dosage, unit, frequency, route, notes } = req.body;
+        if (!req.file){
+            throw new ErrorHandler(404, 'ERROR', 'Please upload image');
+        }
+        else{
+            medImagePath = req.file.path
+        }
         medicationValidator(req.body);
         const medication = await db.Medication.create({
             uid: userId,
@@ -31,6 +38,7 @@ export const createMedication = async (req: Request, res: Response, next: NextFu
             frequency,
             route,
             notes,
+            image:medImagePath
         });
 
         return res.status(201).json({
@@ -121,6 +129,13 @@ export const updateMedication = async (req: Request, res: Response, next: NextFu
         }
 
         const { medicationName, dateStarted, time, dosage, unit, frequency, route, notes } = req.body;
+        let medImagePath;
+        if (!req.file){
+            throw new ErrorHandler(404, 'ERROR', 'Please upload image');
+        }
+        else{
+            medImagePath = req.file.path
+        }
         medicationValidator(req.body);
         await db.Medication.update({
             medicationName,
@@ -131,6 +146,7 @@ export const updateMedication = async (req: Request, res: Response, next: NextFu
             frequency,
             route,
             notes,
+            image:medImagePath
         }, {
             where: {
                 id: medicationId
@@ -190,23 +206,16 @@ export const deleteMedication = async (req: Request, res: Response, next: NextFu
 };
 
 //Storage function to store images in filesystem
-const storage = multer({
-    destination: (req: any,file: any,cb: (arg0: null, arg1: string) => void) => {
-        cb(null, "medicationImages/")
+const storage = multer.diskStorage({
+    destination: (req:any,file:any,cb:any) => {
+        cb(null, "./medicationImages")
     },
-    filename: (req: { params: { id: string; }; },file: { originalname: any; },cb: (arg0: null, arg1: string) => void) => {
-        cb(null, req.params.id + "_" + path.extname(file.originalname));
+    filename: (req:any,file:any,cb:any) => {
+        cb(null, uuid.v4() + "_" + path.basename(file.originalname));
     }
 })
 
 //Upload image function
-const upload = multer({
+export const upload = multer({
     storage: storage,
-    limits : {fileSize: 5000000 },
-    fileFilter : (req: any, file: { mimetype: any; },cb: (arg0: null, arg1: boolean) => any) => {
-        const filetype = file.mimetype
-        if (filetype == "image/png" || filetype == "image/jpeg"){
-            return cb(null,true)
-        }
-    }
 })

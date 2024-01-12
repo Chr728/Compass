@@ -16,6 +16,7 @@
   "devDependencies": {
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.5",
+    "@types/multer": "^1.4.11",
     "@types/supertest": "^2.0.12",
     "cross-env": "^7.0.3",
     "nodemon": "^3.0.1",
@@ -43,6 +44,7 @@
     "sequelize": "^6.33.0",
     "sequelize-mock": "^0.10.2",
     "supertest": "^6.3.3",
+    "uuid": "^9.0.1",
     "web-push": "^3.6.6",
     "winston": "^3.10.0",
     "winston-daily-rotate-file": "^4.7.1"

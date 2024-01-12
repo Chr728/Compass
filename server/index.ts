@@ -45,6 +45,7 @@ app.use('/api/journals/foodIntake', foodIntakeJournalRoutes);
 app.use('/api/reminders', reminderRoutes);
 app.use('/api/subscription', subscriptionRoutes);
 app.use('/api/medication', medicationRoutes);
+app.use("/medicationImages", express.static("./medicationImages"))
 app.use(handleError);
 app.get('/', (req, res) => {
   res.send('Hello World!');

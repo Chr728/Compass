@@ -6,6 +6,7 @@ import {
   getMedication,
   updateMedication,
   deleteMedication,
+  upload,
 } from '../controllers/medicationController';
 
 const router = Router();
@@ -13,12 +14,12 @@ const router = Router();
 router
   .route('/user/:uid')
   .get(enforceAuthorization, getMedications)
-  .post(enforceAuthorization, createMedication);
-
+  .post(enforceAuthorization, upload.single("image"), createMedication);
+  
 router
   .route('/:id')
   .get(getMedication)
-  .put(updateMedication)
+  .put(upload.single("image"), updateMedication)
   .delete(deleteMedication);
 
 export default router;
