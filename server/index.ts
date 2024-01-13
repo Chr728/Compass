@@ -29,10 +29,6 @@ const isTest = process.env.NODE_ENV === "test";
 const isDevelopment = process.env.NODE_ENV === "development";
 
 app.use(cors());
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  next();
-});
 app.use(express.json());
 app.use(Morgan);
 app.use(decodeToken);
