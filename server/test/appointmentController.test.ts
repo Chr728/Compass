@@ -183,7 +183,7 @@ describe('Testing the get all appointments Controller', () => {
     expect(res.status).toBe(400);
     expect(res.body.status).toBe('ERROR');
     expect(res.body.message).toBe(
-      'Error getting appointments of user : Error: query Error'
+      'Error getting appointments of user: Error: query Error'
     );
   });
 });

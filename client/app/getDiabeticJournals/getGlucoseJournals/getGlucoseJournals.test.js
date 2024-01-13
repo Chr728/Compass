@@ -1,7 +1,8 @@
 import '@testing-library/jest-dom';
-import { act, render, screen } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import GetGlucoseJournalsPage from './getGlucoseJournalsPage';
+import { getGlucoseJournals } from '../../http/diabeticJournalAPI';
 
 
 
@@ -39,22 +40,21 @@ jest.mock("../../contexts/UserContext", () => {
 
 jest.mock('../../http/diabeticJournalAPI', () => {
     return {
-        getGlucoseJournals: () => {
-            return {
-                
-                    success: "SUCCESS",
-                    data: [
-                        {
-                            uid: '1',
-                            date: '2014-01-01',
-                            mealTime: 'Before lunch',
-                            bloodGlucose: 23,
-                            unit:'mg/dL',
-                            Notes : 'I am feeling good today'
+        getGlucoseJournals: jest.fn().mockResolvedValue(
+            {
+                success: "SUCCESS",
+                data: [
+                    {
+                        uid: '1',
+                        date: '2014-01-01',
+                        mealTime: 'Before lunch',
+                        bloodGlucose: 23,
+                        unit:'mg/dL',
+                        Notes : 'I am feeling good today'
                     }
                 ]
             }
-        },
+        ),
 
         deleteGlucoseJournal: async (glucoseJournalId) => {
             return {
@@ -66,16 +66,23 @@ jest.mock('../../http/diabeticJournalAPI', () => {
 });
    
 
+    test("Fetches glucose journals correctly", async () => {
+        await act(async () => {
+            jest.advanceTimersByTime(500);
+        });
+        await waitFor(() => {
+            expect(getGlucoseJournals).toHaveBeenCalled();
+        }); 
+    })
 
-
-test("Add an entry button  functions correctly", async() => { 
-    setTimeout(() => {
-        const addButton = screen.getAllByRole('button')[1];
-        userEvent.click(addButton);
-        mockRouter;
-        expect(mockRouter).toHaveBeenCalledWith('/createGlucoseJournal')
-    }, 1000);    
-})
+    test("Add an entry button  functions correctly", async() => { 
+        setTimeout(() => {
+            const addButton = screen.getAllByRole('button')[1];
+            userEvent.click(addButton);
+            mockRouter;
+            expect(mockRouter).toHaveBeenCalledWith('/createGlucoseJournal')
+        }, 1000);    
+    })
 
 
 

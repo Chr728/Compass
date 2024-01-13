@@ -2,7 +2,6 @@ import request from 'supertest';
 import app from '../index';
 import db from '../models';
 import {
-  user,
   startServer,
   stopServer,
   mockCreate,
@@ -13,9 +12,22 @@ import {
   mockUpdate,
   mockRejectedValueOnce,
 } from '../utils/journalsTestHelper';
+import admin from 'firebase-admin';
+import {ErrorHandler} from '../middlewares/errorMiddleware';
 
 let server: any;
-const port = process.env.PORT;
+const port = process.env.SERVER_DEV_PORT;
+
+const user = {
+  id: 10,
+  uid: 'testuid',
+  email: 'test@gmail.com',
+  firstName: 'John',
+  lastName: 'Doe',
+  phoneNumber: '5147894561',
+  birthDate: '1990-12-31T00:00:00.000Z',
+  sex: 'male',
+};
 
 const activityJournal = {
   id: 1,
@@ -220,7 +232,7 @@ describe('activity Journal Controller Tests', () => {
   });
 
   it('should handle error when creating activity journal', async () => {
-    mockRejectedValueOnce('create', db.ActivityJournal, 'error');
+    jest.spyOn(db.ActivityJournal, 'create').mockRejectedValueOnce(new ErrorHandler(400,'ERROR','Error creating activity journal: error'));
 
     const res = await request(app)
       .post(`/api/journals/activity/user/${user.uid}`)

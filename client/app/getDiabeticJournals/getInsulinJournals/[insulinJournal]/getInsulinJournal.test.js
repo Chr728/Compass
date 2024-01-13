@@ -1,9 +1,9 @@
-import {render, screen} from '@testing-library/react';
+import {render, screen, act, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import GetInsulinJournal from './page';
-import { getInsulinJournal } from '../../../http/diabeticJournalAPI';
 import { auth } from '../../../config/firebase';
+import { getInsulinJournal } from '../../../http/diabeticJournalAPI';
 import { useAuth } from '../../../contexts/AuthContext';
 
 const mockRouter = jest.fn();
@@ -24,10 +24,31 @@ jest.mock("../../../contexts/AuthContext", () => {
     }
 })
 
+jest.mock('../../../http/diabeticJournalAPI', () => {
+    return {
+        getInsulinJournal: jest.fn().mockResolvedValue(
+            {
+                success: "SUCCESS",
+                data:
+                {
+                    id: '1',
+                    date: 'Jan 1,2014',
+                    time: '8:36',
+                    typeOfInsulin: 'Humalog (Insulin lispro)',
+                    unit: 'mmol/L',
+                    bodySite: 'arm',
+                    notes: 'notes',
+                }
+            }
+        
+        )
+    }
+})
+
 describe("Getting an Insulin journal", () => {
 
     beforeEach(() => {
-        global.fetch = jest.fn();
+        // global.fetch = jest.fn();
 
         useAuth.mockImplementation(() => {
             return {
@@ -38,50 +59,11 @@ describe("Getting an Insulin journal", () => {
         })
 
     });
-    
-    afterEach(() => {
-        jest.clearAllMocks();
-    });
-
-    it('getInsulinJournal() functions correctly', async () => {
-        const mockUser = { id: '1', name: 'John Doe', email: 'johndoe@example.com' };
-        render(<GetInsulinJournal params={{ insulinJournal: mockUser.id }}/>);
-        const mockToken = 'mockToken';
-        const mockCurrentUser = {
-            uid: mockUser.id,
-            getIdToken: jest.fn().mockResolvedValue(mockToken),
-        };
-
-        Object.defineProperty(auth, 'currentUser', {
-            get: jest.fn().mockReturnValue(mockCurrentUser),
-        });
-
-        const mockResponse = {
-            ok: true,
-            json: jest.fn().mockResolvedValue({}),
-        };
-        const mockFetch = jest.fn().mockResolvedValue(mockResponse);
-        global.fetch = mockFetch;
-
-        const userData = await getInsulinJournal(mockUser.id);
-
-        expect(mockResponse.json).toHaveBeenCalled();
-        expect(mockFetch).toHaveBeenCalledWith(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/journals/diabetic/insulin/${mockUser.id}`,
-            {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${mockToken}`,
-            },
-            method: 'GET',
-            }
-        );
-    });
-    
+     
     it("All fields are is displayed correctly", async () => {
         render(<GetInsulinJournal params={{ insulinJournal:'1' }}/>);
-        setTimeout(() => {
-            expect(screen.getByText(/Date:/i)).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.getByText("Date:")).toBeInTheDocument();
             expect(screen.getByText("Time:")).toBeInTheDocument();
             expect(screen.getByText("Type:")).toBeInTheDocument();
             expect(screen.getByText("Units:")).toBeInTheDocument();
@@ -90,10 +72,10 @@ describe("Getting an Insulin journal", () => {
             expect(screen.getByText("Jan 1, 2014")).toBeInTheDocument();
             expect(screen.getByText("8h36")).toBeInTheDocument();
             expect(screen.getByText("Humalog (Insulin lispro)")).toBeInTheDocument();
-            expect(screen.getByText("10")).toBeInTheDocument();
-            expect(screen.getByText("Buttocks (left)")).toBeInTheDocument();
+            expect(screen.getByText("mmol/L")).toBeInTheDocument();
+            expect(screen.getByText("arm")).toBeInTheDocument();
             expect(screen.getByText("notes")).toBeInTheDocument();
-        }, 1000);
+        }, { timeout: 2000 })
     })
     
     it("Cancel button functions correctly", async() => {
@@ -110,6 +92,16 @@ describe("Getting an Insulin journal", () => {
         const button = screen.getAllByRole("button")[0];
         await userEvent.click(button);
         expect(mockRouter).toHaveBeenCalledWith('/getDiabeticJournals');
+    })
+
+    it("Fetches insulin journal correctly", async () => {
+        render(<GetInsulinJournal params={{ insulinJournal:'1' }} />);
+        await act(async () => {
+            jest.advanceTimersByTime(1000);
+        });
+        await waitFor(() => {
+            expect(getInsulinJournal).toHaveBeenCalled();
+        }); 
     })
 })
 

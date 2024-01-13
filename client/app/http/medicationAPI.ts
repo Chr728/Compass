@@ -22,8 +22,8 @@ export async function getMedications(): Promise<any> {
         },
       }
     );
-    logger.info(`medication entries fetched successfully for user ${id}`)
     if (response.ok) {
+      logger.info(`medication entries fetched successfully for user ${id}`)
       const data = await response.json();
       return data;
     } else {
