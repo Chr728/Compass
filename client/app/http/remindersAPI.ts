@@ -15,7 +15,7 @@ export async function sendUserReminders(): Promise<any> {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/reminders/${uid}`,
       {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
