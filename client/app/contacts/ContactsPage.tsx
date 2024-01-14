@@ -73,9 +73,7 @@ export default function Contacts() {
         console.log(contactInfo);
         await createSpeedDial(contactInfo)
         .then(result => {
-          setTimeout(() => {
-            router.refresh();
-          }, 1000);
+          setContacts(prevContacts => [...prevContacts, result.data]);
           handlePopUp("success", "Contact added successfully.");
         })
       } else{
