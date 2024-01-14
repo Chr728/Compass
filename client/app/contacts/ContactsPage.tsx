@@ -73,7 +73,10 @@ export default function Contacts() {
         console.log(contactInfo);
         await createSpeedDial(contactInfo)
         .then(result => {
-          router.refresh();
+          setTimeout(() => {
+            router.refresh();
+          }, 1000);
+          handlePopUp("success", "Contact added successfully.");
         })
       } else{
         // Reject the contact if the phone number is not 10 digits and throw an error
