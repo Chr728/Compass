@@ -65,13 +65,15 @@ export default function Contacts() {
       });
       // Remove any non-digit characters from the phone number
       const phoneNumber = contact[0].tel[0].replace(/\D/g, '');
-      if (phoneNumber.length !== 10) {
-        // Reject the contact if the phone number is not 10 digits and throw an error
-        throw new Error('Phone number must be 10 digits');
-        handlePopUp("error", "Phone number must be 10 digits.");
-      }
       const contactInfo = `${contact[0].name[0]}, ${phoneNumber}`;
-      createSpeedDial(contactInfo);
+      if (phoneNumber.length == 10) {
+        console.log(contactInfo);
+        createSpeedDial(contactInfo);
+      } else{
+        // Reject the contact if the phone number is not 10 digits and throw an error
+        handlePopUp("error", "Phone number must be 10 digits.");
+        throw new Error('Phone number must be 10 digits');
+      }
       return contactInfo;
     }
   }
