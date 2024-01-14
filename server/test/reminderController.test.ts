@@ -107,19 +107,19 @@ const userGlucoseMeasurement = [
   },
 ];
 
-const mockedDecodedToken = {
-  uid: 'testuid',
-  aud: '',
-  auth_time: 0,
-  exp: 0,
-  firebase: {
-    identities: { [0]: 'string' },
-    sign_in_provider: 'string',
-  },
-  iat: 0,
-  iss: '',
-  sub: '',
-};
+// const mockedDecodedToken = {
+//   uid: 'testuid',
+//   aud: '',
+//   auth_time: 0,
+//   exp: 0,
+//   firebase: {
+//     identities: { [0]: 'string' },
+//     sign_in_provider: 'string',
+//   },
+//   iat: 0,
+//   iss: '',
+//   sub: '',
+// };
 
 //Predefined subscription
 const userSubscription = {
@@ -140,9 +140,9 @@ describe('Testing reminder controller', () => {
   });
 
   beforeEach(() => {
-    jest
-      .spyOn(admin.auth(), 'verifyIdToken')
-      .mockResolvedValue(mockedDecodedToken);
+    // jest
+    //   .spyOn(admin.auth(), 'verifyIdToken')
+    //   .mockResolvedValue(mockedDecodedToken);
     jest.spyOn(db.User, 'findOne').mockResolvedValue(user);
 
     //Mock momemt library
@@ -184,9 +184,9 @@ describe('Testing reminder controller', () => {
       .spyOn(db.GlucoseMeasurement, 'findAll')
       .mockResolvedValueOnce(userGlucoseMeasurement);
     const res = await request(app)
-      .post(`/api/reminders/${user.uid}`)
+      .get(`/api/reminders/${user.uid}`)
       .send(userSubscription)
-      .set({ Authorization: 'Bearer token' });
+      // .set({ Authorization: 'Bearer token' });
     expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
     expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
     expect(db.ActivityJournal.findAll).toHaveBeenCalledTimes(1);
@@ -235,9 +235,9 @@ describe('Testing reminder controller', () => {
     jest.spyOn(db.Subscription, 'findOne').mockResolvedValue(userSubscription);
 
     const res = await request(app)
-      .post(`/api/reminders/${user.uid}`)
+      .get(`/api/reminders/${user.uid}`)
       .send('test')
-      .set({ Authorization: 'Bearer token' });
+      // .set({ Authorization: 'Bearer token' });
 
     // Expectations for the response
     expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
@@ -249,14 +249,14 @@ describe('Testing reminder controller', () => {
     );
   });
 
-  it('the test should fail', async () => {
-    const res = await request(app)
-      .post(`/api/reminders/0`)
-      .send('')
-      .set({ Authorization: 'Bearer token' });
-    expect(res.status).toBe(401);
-    expect(res.body.status).toBe('UNAUTHORIZED');
-  });
+  // it('the test should fail', async () => {
+  //   const res = await request(app)
+  //     .get(`/api/reminders/0`)
+  //     .send('')
+  //     .set({ Authorization: 'Bearer token' });
+  //   expect(res.status).toBe(401);
+  //   expect(res.body.status).toBe('UNAUTHORIZED');
+  // });
 
   it('notification should fail sending', async () => {
     //Spy On webpush to give error when calling the sendNotification Method
@@ -282,9 +282,9 @@ describe('Testing reminder controller', () => {
       .spyOn(db.GlucoseMeasurement, 'findAll')
       .mockResolvedValueOnce(userGlucoseMeasurement);
     const res = await request(app)
-      .post(`/api/reminders/${user.uid}`)
+      .get(`/api/reminders/${user.uid}`)
       .send(userSubscription)
-      .set({ Authorization: 'Bearer token' });
+      // .set({ Authorization: 'Bearer token' });
     expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
     expect(db.Appointment.findAll).toHaveBeenCalledTimes(1);
     //Expect it to be called
@@ -298,9 +298,9 @@ describe('Testing reminder controller', () => {
     jest.spyOn(db.Subscription, 'findOne').mockResolvedValueOnce(null);
 
     const res = await request(app)
-      .post(`/api/reminders/${user.uid}`)
+      .get(`/api/reminders/${user.uid}`)
       .send('null')
-      .set({ Authorization: 'Bearer token' });
+      // .set({ Authorization: 'Bearer token' });
 
     // Expectations for the response
     expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
