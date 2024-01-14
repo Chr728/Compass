@@ -65,7 +65,10 @@ export default function Contacts() {
       });
       // Remove any non-digit characters from the phone number
       const phoneNumber = contact[0].tel[0].replace(/\D/g, '');
-      const contactInfo = `${contact[0].name[0]}, ${phoneNumber}`;
+      const contactInfo = {
+        contactName: contact[0].name[0],
+        contactNumber: phoneNumber,
+      };
       if (phoneNumber.length == 10) {
         console.log(contactInfo);
         createSpeedDial(contactInfo);
