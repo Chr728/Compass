@@ -71,7 +71,10 @@ export default function Contacts() {
       };
       if (phoneNumber.length == 10) {
         console.log(contactInfo);
-        createSpeedDial(contactInfo);
+        await createSpeedDial(contactInfo)
+        .then(result => {
+          router.push('/contacts');
+        })
       } else{
         // Reject the contact if the phone number is not 10 digits and throw an error
         handlePopUp("error", "Phone number must be 10 digits.");
