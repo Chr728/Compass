@@ -1,7 +1,8 @@
 import '@testing-library/jest-dom';
-import { act, render, screen } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import GetInsulinJournalsPage from './getInsulinJournalsPage';
+import { getInsulinJournals } from '../../http/diabeticJournalAPI';
 
 beforeEach(async () => {
     await act(async () => {
@@ -37,23 +38,22 @@ jest.mock("../../contexts/UserContext", () => {
 
 jest.mock('../../http/diabeticJournalAPI', () => {
     return {
-        getInsulinJournals: () => {
-            return {
-                
-                    success: "SUCCESS",
-                    data: [
-                        {
-                            uid: '1',
-                            date: '2014-01-01',
-                            time: '8:36',
-                            typeOfInsulin: 'Humalog (Insulin lispro)',
-                            unit: 60,
-                            bodySite: 'Lower Back (left)',
-                            Notes : 'I am feeling good today'
+        getInsulinJournals: jest.fn().mockResolvedValue(
+            {
+                success: "SUCCESS",
+                data: [
+                    {
+                        uid: '1',
+                        date: '2014-01-01',
+                        time: '8:36',
+                        typeOfInsulin: 'Humalog (Insulin lispro)',
+                        unit: 60,
+                        bodySite: 'Lower Back (left)',
+                        Notes : 'I am feeling good today'
                     }
                 ]
             }
-        },
+        ),
         deleteInsulinJournal: async (insulinJournalId) => {
             return {
                 status: "SUCCESS",
@@ -63,6 +63,14 @@ jest.mock('../../http/diabeticJournalAPI', () => {
     }
 });
    
+test("Fetches insulin journals correctly", async () => {
+    await act(async () => {
+        jest.advanceTimersByTime(500);
+    });
+    await waitFor(() => {
+        expect(getInsulinJournals).toHaveBeenCalled();
+    }); 
+})
 
 test("Add an entry button  functions correctly", async() => {
     setTimeout(() => {

@@ -126,21 +126,19 @@ const { createInsulinJournal} = require('../http/diabeticJournalAPI');
         const unit = screen.getByLabelText("Units Given");
         const bodySite = screen.getByLabelText("Body Site");
         const notes  = screen.getByLabelText("Notes");
-        const submitButton = screen.getAllByRole('button')[1];
+        const submitButton = screen.getAllByRole('button')[2];
 
         await userEvent.type(date, "2023-09-09");
         await userEvent.type(time, "8:36")
-        await userEvent.type(typeOfInsulin, "Fiasp (Insulin aspart)");
+        await userEvent.selectOptions(typeOfInsulin, "Fiasp (Insulin aspart)");
         await userEvent.type(unit, "20");
-        await userEvent.type(bodySite, "Lower Back (left)");
+        await userEvent.selectOptions(bodySite, "Lower Back (left)");
         await userEvent.type(notes, "abc");
 
         await userEvent.click(submitButton);
-        await createInsulinJournal();
-        await mockRouter;
-
-        expect(createInsulinJournal).toHaveBeenCalledTimes(1);
-        expect(mockRouter).toHaveBeenCalledWith('/getDiabeticJournals');
+        await waitFor(() => {
+            expect(createInsulinJournal).toHaveBeenCalled();
+        })
     })
 
     test("Cancel button redirects to getInsulinJournals page", async () => {

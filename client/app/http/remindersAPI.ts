@@ -6,7 +6,7 @@ export async function sendUserReminders(): Promise<any> {
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
-      logger.error("No user is currently signed in.")
+      logger.error("No user is currently signed in.");
       throw new Error("No user is currently signed in.");
     }
     const uid = currentUser.uid;

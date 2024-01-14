@@ -1,8 +1,8 @@
 import '@testing-library/jest-dom';
-import {render, screen, act, cleanup} from '@testing-library/react';
+import {render, screen, act, cleanup, waitFor} from '@testing-library/react';
 import GetWeightJournalsPage from './getWeightJournalsPage';
 import userEvent from '@testing-library/user-event';
-
+import { getWeightJournals } from '../http/weightJournalAPI';
 
 beforeEach(async () => {
     await act(async () => {
@@ -40,23 +40,22 @@ jest.mock("../contexts/UserContext", () => {
 
 jest.mock('../http/weightJournalAPI', () => {
     return {
-        getWeightJournals: () => {
-            return {
-                
-                    success: "SUCCESS",
-                    data: [
-                        {
-                            uid: '1',
-                            date: '2014-01-01',
-                            time: '8:36',
-                            weight: '75.5',
-                            height: 1.65,
-                            unit:'kg',
-                            Notes : 'I am feeling good today'
+        getWeightJournals: jest.fn().mockResolvedValue(
+            {
+                success: "SUCCESS",
+                data: [
+                    {
+                        uid: '1',
+                        date: '2014-01-01',
+                        time: '8:36',
+                        weight: '75.5',
+                        height: 1.65,
+                        unit:'kg',
+                        Notes : 'I am feeling good today'
                     }
                 ]
             }
-        },
+        ),
 
         deleteWeightJournal: async (weightJournalId) => {
             return {
@@ -68,6 +67,14 @@ jest.mock('../http/weightJournalAPI', () => {
 });
    
 
+test("Fetches weight entries correctly", async () => {
+    await act(async () => {
+        jest.advanceTimersByTime(500);
+    });
+    await waitFor(() => {
+        expect(getWeightJournals).toHaveBeenCalled();
+    }); 
+})
 
 
 test("Add an entry button  functions correctly", async() => {
