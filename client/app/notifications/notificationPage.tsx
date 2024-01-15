@@ -96,60 +96,55 @@ export default function NotificationPage() {
         glucoseMeasurementReminders: false,
         insulinDosageReminders: false,
       };
-      try {
-        // Get current notification permissions
-        if ("Notification" in window) {
-          const currentPermission = Notification.permission;
-          if (
-            currentPermission === "default" ||
-            currentPermission === "denied"
-          ) {
-            // Reset all values to false if subscription is set to false and update the user's information in the database
-            try {
-              // Attempt to get current information
-              const existingPreferences = await getNotificationPreference();
+      // Get current notification permissions
+      if ("Notification" in window) {
+        const currentPermission = Notification.permission;
+        if (currentPermission === "default" || currentPermission === "denied") {
+          // Reset all values to false if subscription is set to false and update the user's information in the database
+          try {
+            // Attempt to get current information
+            const existingPreferences = await getNotificationPreference();
 
-              // Set all to false
-              if (existingPreferences && existingPreferences.data) {
-                try {
-                  setSubscriptionReminders(false);
-                  setActivityReminders(false);
-                  setMedicationReminders(false);
-                  setAppointmentReminders(false);
-                  setFoodIntakeReminders(false);
-                  setBloodGlucoseReminders(false);
-                  setInsulinInjectionReminders(false);
-                  const updatedData = {
-                    activityReminders: checkedActivityReminders,
-                    medicationReminders: checkedMedicationReminders,
-                    appointmentReminders: checkedAppointmentReminders,
-                    foodIntakeReminders: checkedFoodIntakeReminders,
-                    glucoseMeasurementReminders: checkedBloodGlucoseReminders,
-                    insulinDosageReminders: checkedInsulinInjectionReminders,
-                  };
-
-                  const result = await updateNotificationPreference(
-                    updatedData
-                  );
-                } catch (error) {
-                  logger.error(
-                    "Error updating notification preference for user:",
-                    error
-                  );
-                  setErrorAlert(true);
-                }
-              }
-            } catch (error) {
+            // Set all to false
+            if (existingPreferences && existingPreferences.data) {
               try {
-                const createdResult = await createNotificationPreference(data);
+                setSubscriptionReminders(false);
+                setActivityReminders(false);
+                setMedicationReminders(false);
+                setAppointmentReminders(false);
+                setFoodIntakeReminders(false);
+                setBloodGlucoseReminders(false);
+                setInsulinInjectionReminders(false);
+                const updatedData = {
+                  activityReminders: checkedActivityReminders,
+                  medicationReminders: checkedMedicationReminders,
+                  appointmentReminders: checkedAppointmentReminders,
+                  foodIntakeReminders: checkedFoodIntakeReminders,
+                  glucoseMeasurementReminders: checkedBloodGlucoseReminders,
+                  insulinDosageReminders: checkedInsulinInjectionReminders,
+                };
+
+                const result = await updateNotificationPreference(updatedData);
               } catch (error) {
-                console.error(
-                  "Error creating notification preference of user:",
+                logger.error(
+                  "Error updating notification preference for user:",
                   error
                 );
+                setErrorAlert(true);
               }
             }
-          } else {
+          } catch (error) {
+            try {
+              const createdResult = await createNotificationPreference(data);
+            } catch (error) {
+              logger.error(
+                "Error creating notification preference for user:",
+                error
+              );
+            }
+          }
+        } else {
+          try {
             // Retrieve user current values
             setSubscriptionReminders(true);
             const userId = user?.uid || "";
@@ -165,17 +160,17 @@ export default function NotificationPage() {
               setInsulinInjectionReminders(result.data.insulinDosageReminders);
               logger.info("Notification preference information all set!");
             }
+          } catch (error) {
+            // Notification preference doesn't exist, create it
+            try {
+              const createdResult = await createNotificationPreference(data); // Assuming createNotificationPreference handles creation
+            } catch (error) {
+              logger.error(
+                "Error creating notification preference of user:",
+                error
+              );
+            }
           }
-        }
-      } catch (error) {
-        // Notification preference doesn't exist, create it
-        try {
-          const createdResult = await createNotificationPreference(data); // Assuming createNotificationPreference handles creation
-        } catch (error) {
-          console.error(
-            "Error creating notification preference of user:",
-            error
-          );
         }
       }
     }
