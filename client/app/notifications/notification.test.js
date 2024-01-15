@@ -437,6 +437,17 @@ describe("Notification Page useEffect", () => {
     global.fetch = jest.fn().mockRejectedValue(mockError);
     process.env.NEXT_PUBLIC_API_URL = "https://example.com";
 
+    const fakeData = {
+      data: {
+        activityReminders: false,
+        medicationReminders: false,
+        appointmentReminders: false,
+        foodIntakeReminders: false,
+        glucoseMeasurementReminders: false,
+        insulinDosageReminders: false,
+      },
+    };
+    getNotificationPreference.mockResolvedValue(fakeData);
     updateNotificationPreference.mockRejectedValue(mockError);
 
     await act(async () => {
