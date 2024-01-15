@@ -6,6 +6,7 @@ import { ErrorHandler } from '../middlewares/errorMiddleware';
 const multer = require("multer");
 const path = require("path")
 const uuid = require("uuid")
+import fs = require("fs")
 
 export const createMedication = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -21,12 +22,12 @@ export const createMedication = async (req: Request, res: Response, next: NextFu
         }
         let medImagePath;
         const { medicationName, dateStarted, time, dosage, unit, frequency, route, notes } = req.body;
-        if (!req.file){
-            throw new ErrorHandler(404, 'ERROR', 'Please upload image');
-        }
-        else{
-            medImagePath = req.file.path
-        }
+        // if (!req.file){
+        //     throw new ErrorHandler(404, 'ERROR', 'Please upload image');
+        // }
+        // else{
+        //     medImagePath = req.file.path
+        // }
         medicationValidator(req.body);
         const medication = await db.Medication.create({
             uid: userId,
@@ -38,7 +39,6 @@ export const createMedication = async (req: Request, res: Response, next: NextFu
             frequency,
             route,
             notes,
-            image:medImagePath
         });
 
         return res.status(201).json({
@@ -129,13 +129,13 @@ export const updateMedication = async (req: Request, res: Response, next: NextFu
         }
 
         const { medicationName, dateStarted, time, dosage, unit, frequency, route, notes } = req.body;
-        let medImagePath;
-        if (!req.file){
-            throw new ErrorHandler(404, 'ERROR', 'Please upload image');
-        }
-        else{
-            medImagePath = req.file.path
-        }
+        // let medImagePath;
+        // if (!req.file){
+        //     throw new ErrorHandler(404, 'ERROR', 'Please upload image');
+        // }
+        // else{
+        //     medImagePath = req.file.path
+        // }
         medicationValidator(req.body);
         await db.Medication.update({
             medicationName,
@@ -146,7 +146,6 @@ export const updateMedication = async (req: Request, res: Response, next: NextFu
             frequency,
             route,
             notes,
-            image:medImagePath
         }, {
             where: {
                 id: medicationId
@@ -205,13 +204,101 @@ export const deleteMedication = async (req: Request, res: Response, next: NextFu
     }
 };
 
+export const createImage = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const medicationId = req.params.id;
+        const medication = await db.Medication.findOne({
+            where: {
+                id: medicationId
+            }
+        });
+
+        if (!medication) {
+            throw new ErrorHandler(404, 'ERROR', 'Medication not found, invalid medication id.');
+        }
+
+        let medImagePath;
+        if (!req.file){
+            throw new ErrorHandler(404, 'ERROR', 'Please upload image');
+        }
+        else{
+            medImagePath = req.file.path
+        }
+        await db.Medication.update({
+            image:medImagePath
+        }, {
+            where: {
+                id: medicationId
+            }
+        });
+
+        return res.status(200).json({
+            message: "Medication image uploaded successfully"
+        });
+    } catch (error) {
+        Logger.error(`Error occurred while updating medication: ${error}`);
+        if (error instanceof ErrorHandler) {
+            next(error);
+        } else {
+            next(new ErrorHandler(400, 'ERROR', `Error updating medication: ${error}`));
+        }
+    }
+}
+
+export const updateImage = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const medicationId = req.params.id;
+        const medication = await db.Medication.findOne({
+            where: {
+                id: medicationId
+            }
+        });
+
+        if (!medication) {
+            throw new ErrorHandler(404, 'ERROR', 'Medication not found, invalid medication id.');
+        }
+        
+        fs.unlink(medication.image, (error: any) => {
+            if (error) {
+                throw new ErrorHandler(404, 'ERROR', 'Old Medication Image not found');
+            }
+        })
+
+        let medImagePath;
+        if (!req.file){
+            throw new ErrorHandler(404, 'ERROR', 'Please upload image');
+        }
+        else{
+            medImagePath = req.file.path
+        }
+        await db.Medication.update({
+            image:medImagePath
+        }, {
+            where: {
+                id: medicationId
+            }
+        });
+
+        return res.status(200).json({
+            message: "Medication image uploaded successfully"
+        });
+    } catch (error) {
+        Logger.error(`Error occurred while updating medication: ${error}`);
+        if (error instanceof ErrorHandler) {
+            next(error);
+        } else {
+            next(new ErrorHandler(400, 'ERROR', `Error updating medication: ${error}`));
+        }
+    }
+}
+
 //Storage function to store images in filesystem
 const storage = multer.diskStorage({
     destination: (req:any,file:any,cb:any) => {
         cb(null, "./medicationImages")
     },
     filename: (req:any,file:any,cb:any) => {
-        cb(null, uuid.v4() + "_" + path.basename(file.originalname));
+        cb(null, req.params.id + "_" + path.basename(file.originalname));
     }
 })
 
