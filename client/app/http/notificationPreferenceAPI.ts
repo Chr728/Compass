@@ -2,7 +2,9 @@ import { auth } from "../config/firebase";
 const logger = require("pino")();
 
 // Function to create a notification preference of a user
-export async function createNotificationPreference(): Promise<any> {
+export async function createNotificationPreference(
+  preference: any
+): Promise<any> {
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
@@ -19,6 +21,7 @@ export async function createNotificationPreference(): Promise<any> {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
+        body: JSON.stringify(preference),
       }
     );
     logger.info(`Notification preference created successfully for user ${uid}`);

@@ -9,6 +9,7 @@ import {
 } from "../http/notificationPreferenceAPI";
 import { act } from "react-dom/test-utils";
 import { useProp } from "../contexts/PropContext";
+import { create } from "domain";
 
 //Mock useRouter from next/navigation
 jest.mock("next/navigation", () => ({
@@ -165,30 +166,6 @@ describe("Notification Settings Page", () => {
     expect(mockRouter).toHaveBeenCalled();
   });
 
-  test("Calls router's push method on button click", async () => {
-    render(<NotificationPage />);
-    // Mock the notification object to have default permission and return granted when permission is requested
-    Object.defineProperty(window, "Notification", {
-      value: {
-        permission: "default",
-        requestPermission: jest.fn().mockImplementation(() => {
-          return Promise.resolve("granted"); // Change the resolved value as needed
-        }),
-      },
-      writable: true,
-    });
-    const toggleButtonSubscription =
-      screen.getByLabelText("SubscriptionSwitch");
-    fireEvent.click(toggleButtonSubscription);
-
-    const button = screen.getByText("Save");
-    fireEvent.click(button);
-    await waitFor(() => {
-      expect(updateNotificationPreference).toHaveBeenCalled();
-    });
-    expect(mockRouter).toHaveBeenCalled();
-  });
-
   test("Routes to settings page on button click", () => {
     const mockPush = jest.fn();
     useRouter.mockImplementation(() => ({
@@ -279,7 +256,7 @@ describe("AlertComponent", () => {
 });
 
 describe("Notification Page useEffect", () => {
-  test("fetchNotificationPreference updates and sets preferences to false when notification permission is default or denied", async () => {
+  test("fetchNotificationPreference GET request succeeds and updates preference when notification permission is default or denied", async () => {
     // Mock the Notification API in the window object
     Object.defineProperty(window, "Notification", {
       value: {
@@ -301,10 +278,15 @@ describe("Notification Page useEffect", () => {
         insulinDosageReminders: false,
       },
     };
+    getNotificationPreference.mockResolvedValue(fakeData);
     updateNotificationPreference.mockResolvedValue(fakeData);
 
     await act(async () => {
       render(<NotificationPage />);
+    });
+
+    await waitFor(() => {
+      expect(getNotificationPreference).toHaveBeenCalled();
     });
 
     const toggleButtonSubscription =
@@ -326,8 +308,109 @@ describe("Notification Page useEffect", () => {
     expect(toggleButtonBloodGlucose).not.toBeChecked();
     expect(toggleButtonInsulinDosage).not.toBeChecked();
 
-    // Assert that updateNotificationPreference was called\
-    expect(updateNotificationPreference).toHaveBeenCalled();
+    // Assert that updateNotificationPreference was called
+    await waitFor(() => {
+      expect(updateNotificationPreference).toHaveBeenCalled();
+    });
+  });
+
+  test("fetchNotificationPreference GET request fails and creates preferences for user when notification permission is default or denied", async () => {
+    // Mock the Notification API in the window object
+    Object.defineProperty(window, "Notification", {
+      value: {
+        permission: "default",
+        requestPermission: jest.fn().mockImplementation(() => {
+          return Promise.resolve("default"); // Change the resolved value as needed
+        }),
+      },
+      writable: true,
+    });
+
+    const fakeData = {
+      data: {
+        activityReminders: false,
+        medicationReminders: false,
+        appointmentReminders: false,
+        foodIntakeReminders: false,
+        glucoseMeasurementReminders: false,
+        insulinDosageReminders: false,
+      },
+    };
+
+    createNotificationPreference.mockResolvedValue(fakeData);
+
+    // Mock error
+    const mockError = new Error("Test error message");
+
+    // Simulating an error in fetch by rejecting the promise
+    global.fetch = jest.fn().mockRejectedValue(mockError);
+    process.env.NEXT_PUBLIC_API_URL = "https://example.com";
+
+    // Mock rejected value for getNotificationPreference
+    getNotificationPreference.mockRejectedValue(mockError);
+
+    // Render page
+    await act(async () => {
+      render(<NotificationPage />);
+    });
+
+    // Assert that getNotificationPreference and createNotificationPreference was called
+
+    await waitFor(() => {
+      expect(getNotificationPreference).toHaveBeenCalled();
+      expect(createNotificationPreference).toHaveBeenCalled();
+    });
+  });
+
+  test("fetchNotificationPreference GET request fails and creates request fails when preferences for user when notification permission is default or denied", async () => {
+    // Mock the Notification API in the window object
+    Object.defineProperty(window, "Notification", {
+      value: {
+        permission: "default",
+        requestPermission: jest.fn().mockImplementation(() => {
+          return Promise.resolve("default"); // Change the resolved value as needed
+        }),
+      },
+      writable: true,
+    });
+
+    const fakeData = {
+      data: {
+        activityReminders: false,
+        medicationReminders: false,
+        appointmentReminders: false,
+        foodIntakeReminders: false,
+        glucoseMeasurementReminders: false,
+        insulinDosageReminders: false,
+      },
+    };
+
+    // Mock error
+    const mockError = new Error("Test error message");
+
+    // Simulating an error in fetch by rejecting the promise
+    global.fetch = jest.fn().mockRejectedValue(mockError);
+    process.env.NEXT_PUBLIC_API_URL = "https://example.com";
+
+    // Mock rejected value for getNotificationPreference and createNotificationPreference
+    getNotificationPreference.mockRejectedValue(mockError);
+    createNotificationPreference.mockRejectedValue(mockError);
+
+    // Render page
+    await act(async () => {
+      render(<NotificationPage />);
+    });
+
+    // Assert that getNotificationPreference and createNotificationPreference was called
+    await waitFor(() => {
+      expect(getNotificationPreference).toHaveBeenCalled();
+      expect(createNotificationPreference).toHaveBeenCalled();
+    });
+
+    expect(logger.error).toHaveBeenCalledWith(
+      "Error creating notification preference for user:",
+      mockError
+    );
   });
 
   test("fetchNotificationPreference update function fails when notification permission is default or denied", async () => {
@@ -344,7 +427,6 @@ describe("Notification Page useEffect", () => {
 
     // Mock error
     const mockError = new Error("Test error message");
-    const setErrorAlert = jest.fn();
 
     const currentUser = {
       uid: "testUID",
@@ -355,6 +437,17 @@ describe("Notification Page useEffect", () => {
     global.fetch = jest.fn().mockRejectedValue(mockError);
     process.env.NEXT_PUBLIC_API_URL = "https://example.com";
 
+    const fakeData = {
+      data: {
+        activityReminders: false,
+        medicationReminders: false,
+        appointmentReminders: false,
+        foodIntakeReminders: false,
+        glucoseMeasurementReminders: false,
+        insulinDosageReminders: false,
+      },
+    };
+    getNotificationPreference.mockResolvedValue(fakeData);
     updateNotificationPreference.mockRejectedValue(mockError);
 
     await act(async () => {
