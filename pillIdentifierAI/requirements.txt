@@ -1,0 +1,8 @@
+keras==2.15.0
+matplotlib==3.8.0
+numba==0.58.1
+numpy==1.26.3
+opencv_python==4.8.1.78
+scikit_learn==1.3.2
+tensorflow==2.15.0
+tensorflow_intel==2.15.0
