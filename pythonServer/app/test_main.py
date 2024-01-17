@@ -40,7 +40,7 @@ def test_test():
     files = {'file': ('0.jpg', open(test_file, 'rb'))}
     response = client.post('/PillAI', files=files)
     assert response.status_code == 500
-    assert response.json() == {'detail': 'Error: new Exception'}
+    assert response.json() == {'detail': 'Error: HTTPException'}
     main.predict=original_predict
 
 
