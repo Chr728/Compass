@@ -3,6 +3,6 @@ import enforceAuthorization from '../middlewares/enforceAuthorization';
 import { Router } from 'express';
 const router = Router();
 
-router.route('/:uid').post(enforceAuthorization, sendUserReminders);
+router.route('/:uid').get(sendUserReminders);
 
 export default router;

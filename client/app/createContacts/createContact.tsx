@@ -26,6 +26,7 @@ export default function CreateContactPage() {
           contactName: values.contactName,
           contactNumber: values.phone,
         };
+        console.log(data);
         await createSpeedDial(data)
           .then(result => {
             router.push('/contacts');
