@@ -218,11 +218,11 @@ export const createImage = async (req: Request, res: Response, next: NextFunctio
         }
 
         let medImagePath;
-        if (!req.file){
+        if (!(req as any).file){
             throw new ErrorHandler(404, 'ERROR', 'Please upload image');
         }
         else{
-            medImagePath = req.file.path
+            medImagePath = (req as any).file.path
         }
         await db.Medication.update({
             image:medImagePath
@@ -265,11 +265,11 @@ export const updateImage = async (req: Request, res: Response, next: NextFunctio
         })
 
         let medImagePath;
-        if (!req.file){
+        if (!(req as any).file){
             throw new ErrorHandler(404, 'ERROR', 'Please upload image');
         }
         else{
-            medImagePath = req.file.path
+            medImagePath = (req as any).file.path
         }
         await db.Medication.update({
             image:medImagePath
