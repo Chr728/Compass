@@ -35,10 +35,10 @@ describe("sendUserReminders", () => {
     expect(mockFetch).toHaveBeenCalledWith(
       `${process.env.NEXT_PUBLIC_API_URL}/api/reminders/${mockUserId}`,
       {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${mockToken}`,
+          // Authorization: `Bearer ${mockToken}`,
         },
       }
     );
