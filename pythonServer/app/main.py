@@ -13,7 +13,6 @@ from torchvision.transforms import ToTensor
 import io
 from sklearn.preprocessing import LabelEncoder
 
-
 load_dotenv()
 
 PYTHON_PORT = int(os.getenv("PYTHON_PORT"))
@@ -41,7 +40,8 @@ config = pretrained_model.config
 config.num_labels = 2112  # Change this to the appropriate number of classes
 model = ViTForImageClassification(config)
 model.vit = pretrained_model
-model.load_state_dict(torch.load('../../pillIdentifierAI/saved_model/model_weights.pth'))
+model.load_state_dict(torch.load('../../pillIdentifierAI/saved_model/model_weights.pth', map_location=torch.device('cpu')))
+
 model.eval()
 
 def preprocess_image(contents):
