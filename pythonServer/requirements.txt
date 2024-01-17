@@ -13,5 +13,4 @@ tensorflow
 numpy
 pillow
 torchvision
-io
 sklearn
