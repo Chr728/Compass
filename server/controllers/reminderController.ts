@@ -1,17 +1,17 @@
-require('dotenv').config();
-import { Request, Response } from 'express';
-import { Logger } from '../middlewares/logger';
-import db from '../models';
-import moment = require('moment-timezone');
-import e = require('express');
-const webPush = require('web-push');
+require("dotenv").config();
+import { Request, Response } from "express";
+import { Logger } from "../middlewares/logger";
+import db from "../models";
+import moment = require("moment-timezone");
+import e = require("express");
+const webPush = require("web-push");
 
 export const sendUserReminders = async (req: Request, res: Response) => {
   const publicKey = process.env.VAPID_PUBLIC_KEY;
   const privateKey = process.env.VAPID_PRIVATE_KEY;
 
   // Set vapid keys
-  webPush.setVapidDetails('mailto:test@gmail.com', publicKey, privateKey);
+  webPush.setVapidDetails("mailto:test@gmail.com", publicKey, privateKey);
 
   try {
     const userUID = req.params.uid;
@@ -26,7 +26,7 @@ export const sendUserReminders = async (req: Request, res: Response) => {
 
     if (!Usersubscription) {
       return res.status(404).json({
-        status: 'ERROR',
+        status: "ERROR",
         message: `No Subscription was found.`,
       });
     }
@@ -35,49 +35,49 @@ export const sendUserReminders = async (req: Request, res: Response) => {
     const subscription = Usersubscription.subscription;
 
     // Get the current time and date
-    const currentTime = moment.tz('America/Toronto').format('HH:mm:00');
-    const currentDate = moment.tz('America/Toronto').format('YYYY-MM-DD');
+    const currentTime = moment.tz("America/Toronto").format("HH:mm:00");
+    const currentDate = moment.tz("America/Toronto").format("YYYY-MM-DD");
 
     // Calculate the start time that is exactly 3 hours ahead of the current time for appointments
-    const startTimeAppointments = moment(currentTime, 'HH:mm:ss').add(
+    const startTimeAppointments = moment(currentTime, "HH:mm:ss").add(
       3,
-      'hours'
+      "hours"
     );
 
-    // Calculate the end time for appointments which is 30-minutes ahead of the start time
+    // Calculate the end time for appointments which is 10-minutes ahead of the start time
     const endTimeAppointments = startTimeAppointments
       .clone()
-      .add(30, 'minutes');
+      .add(10, "minutes");
 
-    // Calculate the start time and end time of the 30-minute period of notifications
-    const startTime = moment(currentTime, 'HH:mm:ss');
-    const endTime = startTime.clone().add(30, 'minutes');
+    // Calculate the start time and end time of the 10-minute period of notifications
+    const startTime = moment(currentTime, "HH:mm:ss");
+    const endTime = startTime.clone().add(10, "minutes");
 
     // Start time in minutes for comparison
     const startTimeMinutes =
-      parseInt(startTime.format('HH:mm:00').substring(0, 2), 10) * 60 +
-      parseInt(startTime.format('HH:mm:00').substring(3, 5), 10);
+      parseInt(startTime.format("HH:mm:00").substring(0, 2), 10) * 60 +
+      parseInt(startTime.format("HH:mm:00").substring(3, 5), 10);
 
     // 30 minutes after start time
-    const thirtyMinutesLater = startTimeMinutes + 30;
+    const thirtyMinutesLater = startTimeMinutes + 10;
 
     // Define time-string pairs for glucose journals and medication
     const timeStrings: [string, number][] = [
-      ['Before breakfast', 7 * 60],
-      ['30min after breakfast', 8 * 60 + 30],
-      ['2hrs after breakfast', 10 * 60],
-      ['Before lunch', 11 * 60],
-      ['30min after lunch', 12 * 60 + 30],
-      ['2hrs after lunch', 14 * 60],
-      ['Before dinner', 17 * 60],
-      ['30min after dinner', 18 * 60 + 30],
-      ['2hrs after dinner', 20 * 60],
-      ['Bedtime', 21 * 60],
-      ['Night', 22 * 60],
+      ["Before breakfast", 7 * 60],
+      ["30min after breakfast", 8 * 60 + 30],
+      ["2hrs after breakfast", 10 * 60],
+      ["Before lunch", 11 * 60],
+      ["30min after lunch", 12 * 60 + 30],
+      ["2hrs after lunch", 14 * 60],
+      ["Before dinner", 17 * 60],
+      ["30min after dinner", 18 * 60 + 30],
+      ["2hrs after dinner", 20 * 60],
+      ["Bedtime", 21 * 60],
+      ["Night", 22 * 60],
     ];
 
     // Find which string is associated to current time
-    let mealTime = 'nothing';
+    let mealTime = "nothing";
     for (const [text, time] of timeStrings) {
       if (time >= startTimeMinutes && time <= thirtyMinutesLater) {
         mealTime = text;
@@ -98,7 +98,7 @@ export const sendUserReminders = async (req: Request, res: Response) => {
     // Return if there's an error
     if (!userNotificationPreferences) {
       return res.status(404).json({
-        status: 'ERROR',
+        status: "ERROR",
         message: `Notification preference not found, invalid user id.`,
       });
     }
@@ -111,8 +111,8 @@ export const sendUserReminders = async (req: Request, res: Response) => {
           uid: userUID,
           date: currentDate,
           time: {
-            [db.Sequelize.Op.gte]: startTimeAppointments.format('HH:mm:00'),
-            [db.Sequelize.Op.lt]: endTimeAppointments.format('HH:mm:00'),
+            [db.Sequelize.Op.gte]: startTimeAppointments.format("HH:mm:00"),
+            [db.Sequelize.Op.lt]: endTimeAppointments.format("HH:mm:00"),
           },
         },
       });
@@ -139,8 +139,8 @@ export const sendUserReminders = async (req: Request, res: Response) => {
           uid: userUID,
           date: currentDate,
           time: {
-            [db.Sequelize.Op.gte]: startTime.format('HH:mm:00'),
-            [db.Sequelize.Op.lt]: endTime.format('HH:mm:00'),
+            [db.Sequelize.Op.gte]: startTime.format("HH:mm:00"),
+            [db.Sequelize.Op.lt]: endTime.format("HH:mm:00"),
           },
         },
       });
@@ -167,8 +167,8 @@ export const sendUserReminders = async (req: Request, res: Response) => {
           uid: userUID,
           date: currentDate,
           time: {
-            [db.Sequelize.Op.gte]: startTime.format('HH:mm:00'),
-            [db.Sequelize.Op.lt]: endTime.format('HH:mm:00'),
+            [db.Sequelize.Op.gte]: startTime.format("HH:mm:00"),
+            [db.Sequelize.Op.lt]: endTime.format("HH:mm:00"),
           },
         },
       });
@@ -226,8 +226,8 @@ export const sendUserReminders = async (req: Request, res: Response) => {
           uid: userUID,
           date: currentDate,
           time: {
-            [db.Sequelize.Op.gte]: startTime.format('HH:mm:00'),
-            [db.Sequelize.Op.lt]: endTime.format('HH:mm:00'),
+            [db.Sequelize.Op.gte]: startTime.format("HH:mm:00"),
+            [db.Sequelize.Op.lt]: endTime.format("HH:mm:00"),
           },
         },
       });
@@ -257,8 +257,8 @@ export const sendUserReminders = async (req: Request, res: Response) => {
         where: {
           uid: userUID,
           time: {
-            [db.Sequelize.Op.gte]: startTime.format('HH:mm:00'),
-            [db.Sequelize.Op.lt]: endTime.format('HH:mm:00'),
+            [db.Sequelize.Op.gte]: startTime.format("HH:mm:00"),
+            [db.Sequelize.Op.lt]: endTime.format("HH:mm:00"),
           },
         },
       });
