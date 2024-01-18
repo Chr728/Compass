@@ -4,16 +4,19 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import Button from "../components/Button";
 import Header from "../components/Header";
+import { sendImage } from "../http/pillIdentifierAPI";
 
 export default function PillIdentifierPage() {
 	const router = useRouter();
 
-	const [selectedImage, setSelectedImage] = useState<string | null>(null);
+	const [selectedImage, setSelectedImage] = useState<string | null | any>(null);
+	const [imageBinaryFile, setImageBinaryFile] = useState<any>(null);
 	const [isCameraActive, setCameraActive] = useState(false);
 	const videoRef = useRef<HTMLVideoElement>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const [stream, setStream] = useState<MediaStream | null>(null);
 	const [isImageCaptured, setImageCaptured] = useState(false);
+	
 	const startCamera = async () => {
 		try {
 			const videoConstraints: MediaStreamConstraints = {
@@ -42,7 +45,7 @@ export default function PillIdentifierPage() {
 		}
 	};
 
-	const captureImage = () => {
+	const captureImage = async () => {		
 		if (videoRef.current && canvasRef.current) {
 			const canvas = canvasRef.current;
 			const context = canvas.getContext("2d");
@@ -59,15 +62,38 @@ export default function PillIdentifierPage() {
 					canvas.height
 				);
 
-				const imageData = canvas.toDataURL("image/png");
+				const imageData = canvas.toDataURL("image/jpeg");
 				console.log(imageData);
 
+				const blob = dataURLtoBlob(imageData);
+
+				setImageBinaryFile(blob);
 				setSelectedImage(imageData);
 				setImageCaptured(true);
+				
 			}
 		}
 	};
-	const handleTakePicture = () => {
+
+	const dataURLtoBlob = (dataURL: string) => {
+		const parts = dataURL.split(';base64,');
+		const contentType = parts[0].split(':')[1];
+		const characters = atob(parts[1]);
+		const numbers = new Array(characters.length);
+	  
+		for (let i = 0; i < characters.length; i++) {
+			numbers[i] = characters.charCodeAt(i);
+		}
+	  
+		const arrayOfBytes = new Uint8Array(numbers);
+	  
+		return new Blob([arrayOfBytes], { type: contentType });
+	  };
+	  
+	  
+
+	const handleTakePicture = async () => {
+		console.log('handle take picture', selectedImage)
 		if (!isCameraActive) {
 			startCamera(); // Start the camera only if it's not already active
 			setImageCaptured(false);
@@ -75,12 +101,29 @@ export default function PillIdentifierPage() {
 			captureImage(); // Capture image if the camera is already active
 			stopCamera(); // Stop the camera after capturing the image
 		}
+
+		try {
+			setTimeout(async() => { 
+				if (selectedImage) {
+					const response = await sendImage(imageBinaryFile);
+					const body = await response.text();
+					console.log(body);
+				  }
+			}, 1000)
+			
+        } catch(error){
+            console.error("Error sending image to server:", error);
+        }
 	};
 
 	const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
+		debugger;
 		const file = event.target.files?.[0];
+		console.log('file', event.target.files)
 
 		if (file) {
+			console.log('upload binary', file)
+			setImageBinaryFile(file)
 			const reader = new FileReader();
 			reader.onloadend = () => {
 				const imageDataUrl = reader.result as string;
@@ -170,7 +213,7 @@ export default function PillIdentifierPage() {
 						}}
 						onClick={handleTakePicture}
 						className="bg-blue text-[16px] p-3  text-white font-sans font-medium rounded-md h-[46px] shadow-[0px_4px_8px_0px_rgba(44,39,56,0.08),0px_2px_4px_0px_rgba(44,39,56,0.08)]">
-						{isImageCaptured ? "Submit" : "Take a picture"}
+						{selectedImage ? "Submit" : "Take a picture"}
 					</button>
 					<canvas ref={canvasRef} style={{ display: "none" }} />
 				</div>
