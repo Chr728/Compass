@@ -117,12 +117,9 @@ export default function PillIdentifierPage() {
 	};
 
 	const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
-		debugger;
 		const file = event.target.files?.[0];
-		console.log('file', event.target.files)
 
 		if (file) {
-			console.log('upload binary', file)
 			setImageBinaryFile(file)
 			const reader = new FileReader();
 			reader.onloadend = () => {
