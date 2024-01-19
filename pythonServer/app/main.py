@@ -14,7 +14,7 @@ from sklearn.preprocessing import LabelEncoder
 
 load_dotenv()
 
-PYTHON_PORT = int(os.getenv("PYTHON_PORT"))
+PYTHON_PORT = int(os.getenv("PORT"))
 PYTHON_HOST = os.getenv("PYTHON_HOST")
 
 app = FastAPI()
