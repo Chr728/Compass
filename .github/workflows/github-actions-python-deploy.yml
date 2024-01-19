@@ -6,14 +6,14 @@ jobs:
     env:
       PYTHON_PORT: ${{ secrets.PYTHON_PORT }}
       PYTHON_HOST: ${{ secrets.PYTHON_HOST }}
-#     make sure good for py server
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-      HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
+      HEROKU_PYTHON_APP_NAME: ${{ secrets.HEROKU_PYTHON_APP_NAME }}
 
     steps:
       - uses: actions/checkout@v2
         with:
           lfs: 'true'
+
       - name: Login to Heroku Container Registry
         run: HEROKU_API_KEY=$HEROKU_API_KEY heroku container:login
 
@@ -21,10 +21,10 @@ jobs:
         run: docker compose -f docker-compose-ai.yml build
 
       - name: Tag Docker Image
-        run: docker tag compass_production_image registry.heroku.com/$HEROKU_APP_NAME/web:latest
+        run: docker tag compass_production_image registry.heroku.com/$HEROKU_PYTHON_APP_NAME/web:latest
 
       - name: Push Docker Image
-        run: docker push registry.heroku.com/$HEROKU_APP_NAME/web:latest
+        run: docker push registry.heroku.com/$HEROKU_PYTHON_APP_NAME/web:latest
 
       - name: Release Docker Image
-        run: HEROKU_API_KEY=$HEROKU_API_KEY heroku container:release web -a $HEROKU_APP_NAME
+        run: HEROKU_API_KEY=$HEROKU_API_KEY heroku container:release web -a $HEROKU_PYTHON_APP_NAME
