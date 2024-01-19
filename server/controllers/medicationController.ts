@@ -22,12 +22,6 @@ export const createMedication = async (req: Request, res: Response, next: NextFu
         }
         let medImagePath;
         const { medicationName, dateStarted, time, dosage, unit, frequency, route, notes } = req.body;
-        // if (!req.file){
-        //     throw new ErrorHandler(404, 'ERROR', 'Please upload image');
-        // }
-        // else{
-        //     medImagePath = req.file.path
-        // }
         medicationValidator(req.body);
         const medication = await db.Medication.create({
             uid: userId,
@@ -129,13 +123,6 @@ export const updateMedication = async (req: Request, res: Response, next: NextFu
         }
 
         const { medicationName, dateStarted, time, dosage, unit, frequency, route, notes } = req.body;
-        // let medImagePath;
-        // if (!req.file){
-        //     throw new ErrorHandler(404, 'ERROR', 'Please upload image');
-        // }
-        // else{
-        //     medImagePath = req.file.path
-        // }
         medicationValidator(req.body);
         await db.Medication.update({
             medicationName,
