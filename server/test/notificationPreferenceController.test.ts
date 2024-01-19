@@ -192,6 +192,7 @@ describe("should test the deleteNotificationPreference Controller", () => {
 });
 
 const validInput = {
+  permissionGranted: false,
   activityReminders: true,
   medicationReminders: true,
   appointmentReminders: true,
