@@ -4,7 +4,6 @@ from fastapi.responses import JSONResponse
 import uvicorn
 import os
 from dotenv import load_dotenv
-import cv2
 import torch
 import numpy as np
 from transformers import AutoImageProcessor, ViTForImageClassification, ViTModel, ViTImageProcessor
