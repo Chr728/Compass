@@ -8,7 +8,6 @@ import torch
 import numpy as np
 from transformers import AutoImageProcessor, ViTForImageClassification, ViTModel, ViTImageProcessor
 from PIL import Image
-from torchvision.transforms import ToTensor
 import io
 from sklearn.preprocessing import LabelEncoder
 

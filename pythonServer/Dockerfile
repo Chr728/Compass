@@ -1,6 +1,6 @@
 FROM python:3.9-slim
 
-ARG PYTHON_PORT
+ARG PORT
 ARG PYTHON_HOST
 
 WORKDIR /app
@@ -11,6 +11,6 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 
 COPY app/ .
 
-EXPOSE ${PYTHON_PORT}
+EXPOSE ${PORT}
 
 CMD ["python3", "main.py"]
