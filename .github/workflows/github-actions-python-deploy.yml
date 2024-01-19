@@ -21,7 +21,7 @@ jobs:
         run: docker compose -f docker-compose-ai.yml build
 
       - name: Tag Docker Image
-        run: docker tag compass_production_image registry.heroku.com/$HEROKU_PYTHON_APP_NAME/web:latest
+        run: docker tag python_server_ai_image registry.heroku.com/$HEROKU_PYTHON_APP_NAME/web:latest
 
       - name: Push Docker Image
         run: docker push registry.heroku.com/$HEROKU_PYTHON_APP_NAME/web:latest
