@@ -24,18 +24,29 @@ describe("createNotificationPreference", () => {
       getIdToken: jest.fn().mockResolvedValue(mockToken),
     };
 
+    const mockNotificationPreferencedata = {
+      activityReminders: false,
+      medicationReminders: false,
+      appointmentReminders: false,
+      foodIntakeReminders: false,
+      insulinDosageReminders: false,
+      glucoseMeasurementReminders: false,
+    };
+
     Object.defineProperty(auth, "currentUser", {
       get: jest.fn().mockReturnValue(mockCurrentUser),
     });
 
     const mockResponse = {
       ok: true,
-      json: jest.fn().mockResolvedValue(),
+      json: jest.fn().mockResolvedValue(mockNotificationPreferencedata),
     };
     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch = mockFetch;
 
-    const result = await createNotificationPreference();
+    const result = await createNotificationPreference(
+      mockNotificationPreferencedata
+    );
 
     expect(mockFetch).toHaveBeenCalledWith(
       `${process.env.NEXT_PUBLIC_API_URL}/api/notifications/${mockUserId}`,
@@ -45,9 +56,10 @@ describe("createNotificationPreference", () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${mockToken}`,
         },
+        body: JSON.stringify(mockNotificationPreferencedata),
       }
     );
-    expect(result).toEqual();
+    expect(result).toEqual(mockNotificationPreferencedata);
   });
 
   it("should throw an error if the user is not signed in", async () => {
@@ -74,6 +86,14 @@ describe("createNotificationPreference", () => {
       uid: mockUserId,
       getIdToken: jest.fn().mockResolvedValue(mockToken),
     };
+    const mockNotificationPreferencedata = {
+      activityReminders: false,
+      medicationReminders: false,
+      appointmentReminders: false,
+      foodIntakeReminders: false,
+      insulinDosageReminders: false,
+      glucoseMeasurementReminders: false,
+    };
 
     Object.defineProperty(auth, "currentUser", {
       get: jest.fn().mockReturnValue(mockCurrentUser),
@@ -81,12 +101,14 @@ describe("createNotificationPreference", () => {
 
     const mockResponse = {
       ok: false,
-      status: 500,
+      status: jest.fn().mockResolvedValue({}),
     };
     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch = mockFetch;
 
-    await expect(createNotificationPreference()).rejects.toThrow(
+    await expect(
+      createNotificationPreference(mockNotificationPreferencedata)
+    ).rejects.toThrow(
       `Failed to create notification preference for user. HTTP Status: ${mockResponse.status}`
     );
   });

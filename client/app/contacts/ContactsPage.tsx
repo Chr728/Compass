@@ -12,6 +12,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { MdDeleteForever, MdModeEdit } from 'react-icons/md';
+import { useProp } from "../contexts/PropContext";
 import Grid from '@mui/material/Grid';
 import Swal from 'sweetalert2';
 
@@ -21,6 +22,7 @@ export default function Contacts() {
   const { user } = useAuth();
   const [contacts, setContacts] = useState<any[]>([]); // [ { name: 'John Doe', phone: '123-456-7890' }
   const router = useRouter();
+  const { handlePopUp } = useProp();
   let supported = false;
 
   useEffect(() => {
@@ -61,8 +63,24 @@ export default function Contacts() {
       const contact = await navigator.contacts.select(['name', 'tel'], {
         multiple: false,
       });
-      const contactInfo = `${contact[0].name[0]}, ${contact[0].tel[0]}`;
-      createSpeedDial(contactInfo);
+      // Remove any non-digit characters from the phone number
+      const phoneNumber = contact[0].tel[0].replace(/\D/g, '');
+      const contactInfo = {
+        contactName: contact[0].name[0],
+        contactNumber: phoneNumber,
+      };
+      if (phoneNumber.length == 10) {
+        console.log(contactInfo);
+        await createSpeedDial(contactInfo)
+        .then(result => {
+          setContacts(prevContacts => [...prevContacts, result.data]);
+          handlePopUp("success", "Contact added successfully.");
+        })
+      } else{
+        // Reject the contact if the phone number is not 10 digits and throw an error
+        handlePopUp("error", "Phone number must be 10 digits.");
+        throw new Error('Phone number must be 10 digits');
+      }
       return contactInfo;
     }
   }
@@ -87,6 +105,15 @@ export default function Contacts() {
         });    
       }
   }); 
+  }
+
+  // formats a phone number to (xxx) xxx-xxxx
+  function formatPhoneNumber(phoneNumberString: string) {
+    const match = phoneNumberString.match(/^(\d{3})(\d{3})(\d{4})$/);
+    if (match) {
+      return '(' + match[1] + ') ' + match[2] + '-' + match[3];
+    }
+    return null;
   }
 
   if (!user) {
@@ -132,7 +159,7 @@ export default function Contacts() {
                 <Card>
                   <CardContent>
                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                      {data.contactNumber}
+                      {formatPhoneNumber(data.contactNumber)}
                     </Typography>
                     <Typography variant="h5" component="div">
                       {data.contactName.length > 8 ? `${data.contactName.substring(0, 8)}...` : data.contactName}

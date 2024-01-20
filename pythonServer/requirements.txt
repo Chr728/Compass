@@ -1,0 +1,16 @@
+fastapi
+uvicorn
+pytest
+starlette
+httpx
+pytest-cov
+python-dotenv
+python-multipart
+opencv-python
+torch
+transformers
+tensorflow
+numpy
+pillow
+torchvision
+scikit-learn
