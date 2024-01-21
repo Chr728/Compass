@@ -3,6 +3,7 @@ import app from '../index';
 import db from '../models/index';
 import admin from 'firebase-admin';
 import { user, startServer, stopServer } from '../utils/journalsTestHelper';
+const fs = require('fs');
 
 let server: any;
 const port = process.env.PORT;
@@ -58,6 +59,34 @@ const updatedMedication = {
   frequency: 'updatedFrequency',
   route: 'route',
   notes: 'notes',
+};
+
+const updatedMedicationImage = {
+  id: 1,
+  uid: 'medicationUid',
+  medicationName: 'some other med name',
+  dateStarted: '2002-02-22',
+  time: '14:30:00',
+  dosage: 15,
+  unit: 'millilitre (mL)',
+  frequency: 'updatedFrequency',
+  route: 'route',
+  notes: 'notes',
+  image:"medicationImages/1_tylenol.jpeg"
+};
+
+const updatedMedicationImage2 = {
+  id: 1,
+  uid: 'medicationUid',
+  medicationName: 'some other med name',
+  dateStarted: '2002-02-22',
+  time: '14:30:00',
+  dosage: 15,
+  unit: 'millilitre (mL)',
+  frequency: 'updatedFrequency',
+  route: 'route',
+  notes: 'notes',
+  image:"1_tylenol.jpeg"
 };
 
 const mockedDecodedToken = {
@@ -313,3 +342,102 @@ describe('should test the delete medication controller', () => {
     expect(res.body.status).toBe('ERROR');
   });
 });
+
+describe('should test the upload images', () => {
+  it('test to upload medication image', async () => {
+    jest.spyOn(db.Medication, 'findOne').mockResolvedValueOnce(medications[0]);
+    jest.spyOn(db.Medication, 'update').mockResolvedValueOnce(updatedMedicationImage);
+    const res = await request(app)
+      .put('/api/medication/uploadImage/1')
+      .attach("image","medicationImages/1_tylenol.jpeg")
+      .set({ Authorization: 'Bearer token' });
+    expect(db.Medication.update).toBeCalledTimes(1);
+    expect(db.Medication.findOne).toBeCalledTimes(1);
+    expect(res.status).toBe(200);
+    expect(res.body.message).toStrictEqual("Medication image uploaded successfully");
+  });
+
+  it('it should not upload medication', async () => {
+    jest.spyOn(db.Medication, 'findOne').mockResolvedValueOnce(medications[0]);
+    jest.spyOn(db.Medication, 'update')
+    const res = await request(app)
+      .put('/api/medication/uploadImage/1')
+      .set({ Authorization: 'Bearer token' });
+    expect(db.Medication.findOne).toBeCalledTimes(1);
+    expect(res.status).toBe(404);
+    expect(res.body.status).toBe('ERROR');
+  });
+
+  it('it should find medication', async () => {
+    jest.spyOn(db.Medication, 'findOne').mockResolvedValueOnce(null);
+    const res = await request(app)
+      .put('/api/medication/uploadImage/0')
+      .set({ Authorization: 'Bearer token' });
+    expect(db.Medication.findOne).toBeCalledTimes(1);
+    expect(res.status).toBe(404);
+    expect(res.body.status).toBe('ERROR');
+  });
+
+  it('it should fail uplaoding image', async () => {
+    const res = await request(app)
+      .put('/api/medication/uploadImage/0')
+      .set({ Authorization: 'Bearer token' });
+    expect(res.status).toBe(400);
+    expect(res.body.status).toBe('ERROR');
+  }); 
+
+  afterAll(() => {
+
+  })
+});
+
+
+describe('should test the updating image', () => {
+  it('test to upload medication image', async () => {
+    jest.spyOn(db.Medication, 'findOne').mockResolvedValueOnce(updatedMedicationImage);
+    jest.spyOn(db.Medication, 'update').mockResolvedValueOnce(updatedMedicationImage2);
+    const res = await request(app)
+      .put('/api/medication/updateImage/1')
+      .attach("image","medicationImages/1_tylenol.jpeg")
+      .set({ Authorization: 'Bearer token' });
+    expect(db.Medication.update).toBeCalledTimes(1);
+    expect(db.Medication.findOne).toBeCalledTimes(1);
+    expect(res.status).toBe(200);
+    expect(res.body.message).toStrictEqual("Medication image uploaded successfully");
+  });
+
+  it('it should not update medication image', async () => {
+    jest.spyOn(db.Medication, 'findOne').mockResolvedValueOnce(updatedMedicationImage);
+    jest.spyOn(db.Medication, 'update')
+    const res = await request(app)
+      .put('/api/medication/uploadImage/1')
+      .set({ Authorization: 'Bearer token' });
+    expect(db.Medication.findOne).toBeCalledTimes(1);
+    expect(res.status).toBe(404);
+    expect(res.body.status).toBe('ERROR');
+  });
+
+  it('it should not find medication', async () => {
+    jest.spyOn(db.Medication, 'findOne').mockResolvedValueOnce(null);
+    const res = await request(app)
+      .put('/api/medication/updateImage/0')
+      .set({ Authorization: 'Bearer token' });
+    expect(db.Medication.findOne).toBeCalledTimes(1);
+    expect(res.status).toBe(404);
+    expect(res.body.status).toBe('ERROR');
+  });
+
+  it('it should fail updating image', async () => {
+    const res = await request(app)
+      .put('/api/medication/uploadImage/0')
+      .set({ Authorization: 'Bearer token' });
+    expect(res.status).toBe(400);
+    expect(res.body.status).toBe('ERROR');
+  });
+  
+  afterAll(() => {
+    fs.renameSync("medicationImages/1_1_tylenol.jpeg", "medicationImages/1_tylenol.jpeg" )
+  })
+
+});
+
