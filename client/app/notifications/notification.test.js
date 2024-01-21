@@ -256,23 +256,6 @@ describe("AlertComponent", () => {
 });
 
 describe("Notification Page useEffect", () => {
-  let mockController;
-  let mockServiceWorker;
-  let mockRegistration;
-
-  beforeEach(() => {
-    mockController = {
-      postMessage: jest.fn(), // Mock the postMessage method
-    };
-
-    mockServiceWorker = {
-      controller: mockController,
-    };
-
-    mockRegistration = {
-      active: mockServiceWorker,
-    };
-  });
   test("fetchNotificationPreference GET request succeeds and updates preference when notification permission is default or denied", async () => {
     // Mock the Notification API in the window object
     Object.defineProperty(window, "Notification", {
@@ -287,7 +270,6 @@ describe("Notification Page useEffect", () => {
 
     const fakeData = {
       data: {
-        permissionGranted: false,
         activityReminders: false,
         medicationReminders: false,
         appointmentReminders: false,
@@ -346,7 +328,6 @@ describe("Notification Page useEffect", () => {
 
     const fakeData = {
       data: {
-        permissionGranted: false,
         activityReminders: false,
         medicationReminders: false,
         appointmentReminders: false,
@@ -395,7 +376,6 @@ describe("Notification Page useEffect", () => {
 
     const fakeData = {
       data: {
-        permissionGranted: false,
         activityReminders: false,
         medicationReminders: false,
         appointmentReminders: false,
@@ -459,7 +439,6 @@ describe("Notification Page useEffect", () => {
 
     const fakeData = {
       data: {
-        permissionGranted: false,
         activityReminders: false,
         medicationReminders: false,
         appointmentReminders: false,
@@ -504,16 +483,6 @@ describe("Notification Page useEffect", () => {
   });
 
   test("fetchNotificationPreference fetches and sets user preference when notification permission is set to granted", async () => {
-    // Mock the service worker to be available
-    Object.defineProperty(window.navigator, "serviceWorker", {
-      value: {
-        ready: Promise.resolve(),
-        getRegistration: jest.fn().mockResolvedValue(mockRegistration), // Mock the getRegistration method
-        controller: mockController, // Ensure the controller is available directly in navigator.serviceWorker
-      },
-      writable: true,
-    });
-
     // Mock the Notification API in the window object
     Object.defineProperty(window, "Notification", {
       value: {
@@ -528,7 +497,6 @@ describe("Notification Page useEffect", () => {
     // Mock response data
     const mockNotificationData = {
       data: {
-        permissionGranted: false,
         activityReminders: true,
         medicationReminders: true,
         appointmentReminders: true,
@@ -553,11 +521,6 @@ describe("Notification Page useEffect", () => {
     expect(logger.info).toHaveBeenCalledWith(
       "Notification preference information all set!"
     );
-
-    // Expect that postMessage was called with specific parameters
-    expect(mockController.postMessage).toHaveBeenCalledWith({
-      action: "subscribeToPush",
-    });
 
     await waitFor(() => {
       // Check if the toggles are checked based on the mock data

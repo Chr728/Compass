@@ -21,7 +21,6 @@ const user = {
 const notificationPreference = {
   id: 1,
   uid: "testuid",
-  permissionGranted: false,
   activityReminders: false,
   medicationReminders: false,
   appointmentReminders: false,
@@ -33,7 +32,6 @@ const notificationPreference = {
 const updatedNotificationPreference = {
   id: 2,
   uid: "testuid",
-  permissionGranted: false,
   activityReminders: false,
   medicationReminders: false,
   appointmentReminders: false,
@@ -192,7 +190,6 @@ describe("should test the deleteNotificationPreference Controller", () => {
 });
 
 const validInput = {
-  permissionGranted: false,
   activityReminders: true,
   medicationReminders: true,
   appointmentReminders: true,
