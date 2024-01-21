@@ -5,6 +5,7 @@ import { IntegerDataType, Model } from "sequelize";
 interface NotificationPreferenceAttributes {
   id: number;
   uid: string;
+  permissionGranted: boolean;
   activityReminders: boolean;
   medicationReminders: boolean;
   appointmentReminders: boolean;
@@ -22,6 +23,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
      */
     id!: number;
     uid!: string;
+    permissionGranted!: boolean;
     activityReminders!: boolean;
     medicationReminders!: boolean;
     appointmentReminders!: boolean;
@@ -47,6 +49,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
       uid: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      permissionGranted: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
       },
       activityReminders: {
         type: DataTypes.BOOLEAN,
