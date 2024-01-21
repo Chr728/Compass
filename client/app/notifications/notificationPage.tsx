@@ -89,7 +89,6 @@ export default function NotificationPage() {
   useEffect(() => {
     async function fetchNotificationPreference() {
       const data = {
-        permissionGranted: false,
         activityReminders: false,
         medicationReminders: false,
         appointmentReminders: false,
@@ -117,7 +116,6 @@ export default function NotificationPage() {
                 setBloodGlucoseReminders(false);
                 setInsulinInjectionReminders(false);
                 const updatedData = {
-                  permissionGranted: false,
                   activityReminders: checkedActivityReminders,
                   medicationReminders: checkedMedicationReminders,
                   appointmentReminders: checkedAppointmentReminders,
@@ -161,23 +159,6 @@ export default function NotificationPage() {
               setBloodGlucoseReminders(result.data.glucoseMeasurementReminders);
               setInsulinInjectionReminders(result.data.insulinDosageReminders);
               logger.info("Notification preference information all set!");
-
-              // Check if previous permission was not granted
-              if (result.data.permissionGranted === false) {
-                if (
-                  "serviceWorker" in navigator &&
-                  navigator.serviceWorker.controller
-                ) {
-                  // Create subscription object for users
-                  navigator.serviceWorker.controller.postMessage({
-                    action: "subscribeToPush",
-                  });
-
-                  // Update info in database
-                  result.data.permissionGranted = true;
-                  await updateNotificationPreference(result.data);
-                }
-              }
             }
           } catch (error) {
             // Notification preference doesn't exist, create it
@@ -214,7 +195,6 @@ export default function NotificationPage() {
         );
       } else {
         const data = {
-          permissionGranted: true,
           activityReminders: checkedActivityReminders,
           medicationReminders: checkedMedicationReminders,
           appointmentReminders: checkedAppointmentReminders,

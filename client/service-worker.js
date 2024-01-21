@@ -333,16 +333,17 @@ self.addEventListener("message", (event) => {
   }
 });
 
-// Function to run every 10 minutes
-function runTaskEvery10Minutes() {
+// Function to run every 30 minutes
+function runTaskEvery30Minutes() {
+  // This function will run every 30 minutes
   console.log("Push Notification Task!");
   sendUserReminders();
 }
 
-// Schedule the task to run every 10 minutes
+// Schedule the task to run every 30 minutes
 setInterval(() => {
-  runTaskEvery10Minutes();
-}, 10 * 60 * 1000); // 10 minutes in milliseconds
+  runTaskEvery30Minutes();
+}, 30 * 60 * 1000); // 30 minutes in milliseconds
 
 // Event listener for push notifications
 self.addEventListener("push", (event) => {
