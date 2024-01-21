@@ -15,10 +15,7 @@ jobs:
         run: | 
           cd pythonServer
           pip install -r requirements.txt
-
-      - name: Install Python Coverage Tool
-        run: | 
-          cd pythonServer
+#         deps for coverage report
           pip install pytest-cov
           pip install httpx
 
