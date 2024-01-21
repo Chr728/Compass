@@ -214,6 +214,7 @@ export default function NotificationPage() {
         );
       } else {
         const data = {
+          permissionGranted: true,
           activityReminders: checkedActivityReminders,
           medicationReminders: checkedMedicationReminders,
           appointmentReminders: checkedAppointmentReminders,
