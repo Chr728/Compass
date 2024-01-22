@@ -3,6 +3,8 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    with:
+      lfs: 'true'
     env:
       PORT: ${{ secrets.PORT }}
       PYTHON_HOST: ${{ secrets.PYTHON_HOST }}
