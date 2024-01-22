@@ -9,8 +9,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-        with:
-          lfs: 'true'
       - name: Install Dependencies
         run: cd pythonServer && pip install -r requirements.txt
 
