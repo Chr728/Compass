@@ -333,17 +333,6 @@ self.addEventListener("message", (event) => {
   }
 });
 
-// Function to run every 10 minutes
-function runTaskEvery10Minutes() {
-  console.log("Push Notification Task!");
-  sendUserReminders();
-}
-
-// Schedule the task to run every 10 minutes
-setInterval(() => {
-  runTaskEvery10Minutes();
-}, 10 * 60 * 1000); // 10 minutes in milliseconds
-
 // Event listener for push notifications
 self.addEventListener("push", (event) => {
   const options = {
@@ -352,4 +341,40 @@ self.addEventListener("push", (event) => {
   };
 
   event.waitUntil(self.registration.showNotification(options.title, options));
+});
+
+// Function to run every 10 minutes
+function runTaskEvery10Minutes() {
+  console.log("Push Notification Task!");
+  sendUserReminders();
+}
+
+// // Schedule the task to run every 10 minutes
+// setInterval(() => {
+//   runTaskEvery10Minutes();
+// }, 10 * 60 * 1000); // 10 minutes in milliseconds
+
+self.addEventListener("periodicsync", (event) => {
+  // Handle the periodic sync event
+  event.waitUntil(runTaskEvery10Minutes);
+});
+
+// Add the periodic sync registration code here
+self.addEventListener("activate", (event) => {
+  // Register periodic sync
+  if ("periodicSync" in self.registration) {
+    self.registration.periodicSync
+      .register("mySync", {
+        // options for periodic sync
+        minInterval: 10 * 60 * 1000, // 10 minutes in milliseconds
+      })
+      .then((periodicSyncReg) => {
+        // Success
+        console.log("Periodic Sync registered:", periodicSyncReg);
+      })
+      .catch((error) => {
+        // Handle errors
+        console.error("Error registering Periodic Sync:", error);
+      });
+  }
 });
