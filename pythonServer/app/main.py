@@ -38,7 +38,9 @@ config = pretrained_model.config
 config.num_labels = 2112  # Change this to the appropriate number of classes
 model = ViTForImageClassification(config)
 model.vit = pretrained_model
-model.load_state_dict(torch.load('model/model_weights.pth', map_location=torch.device('cpu')))
+
+if __name__ == "__main__":
+    model.load_state_dict(torch.load('model/model_weights.pth', map_location=torch.device('cpu')))
 
 model.eval()
 
