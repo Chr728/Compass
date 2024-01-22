@@ -359,22 +359,18 @@ self.addEventListener("periodicsync", (event) => {
   event.waitUntil(runTaskEvery10Minutes);
 });
 
-// Add the periodic sync registration code here
-self.addEventListener("activate", (event) => {
-  // Register periodic sync
-  if ("periodicSync" in self.registration) {
-    self.registration.periodicSync
-      .register("mySync", {
-        // options for periodic sync
-        minInterval: 10 * 60 * 1000, // 10 minutes in milliseconds
-      })
-      .then((periodicSyncReg) => {
-        // Success
-        console.log("Periodic Sync registered:", periodicSyncReg);
-      })
-      .catch((error) => {
-        // Handle errors
-        console.error("Error registering Periodic Sync:", error);
+self.addEventListener("activate", async (event) => {
+  if (self.registration.periodicSync)
+    try {
+      await registration.periodicSync.register("content-sync", {
+        // An interval of one day.
+        minInterval: 10 * 60 * 1000,
       });
+      console.log("periodic sync is here yipppeee");
+    } catch (error) {
+      console.log("Periodic sync cannot be used :", error);
+    }
+  else {
+    console.log("rip");
   }
 });
