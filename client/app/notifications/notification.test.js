@@ -583,6 +583,60 @@ describe("Notification Page useEffect", () => {
     });
   });
 
+  test("fetchNotificationPreference fetch fails and post succeeds for user preference when notification permission is set to granted", async () => {
+    // Mock the service worker to be available
+    Object.defineProperty(window.navigator, "serviceWorker", {
+      value: {
+        ready: Promise.resolve(),
+        getRegistration: jest.fn().mockResolvedValue(mockRegistration), // Mock the getRegistration method
+        controller: mockController, // Ensure the controller is available directly in navigator.serviceWorker
+      },
+      writable: true,
+    });
+
+    // Mock the Notification API in the window object
+    Object.defineProperty(window, "Notification", {
+      value: {
+        permission: "granted",
+        requestPermission: jest.fn().mockImplementation(() => {
+          return Promise.resolve("granted"); // Change the resolved value as needed
+        }),
+      },
+      writable: true,
+    });
+
+    // Mock response data
+    const mockNotificationData = {
+      data: {
+        permissionGranted: false,
+        activityReminders: true,
+        medicationReminders: true,
+        appointmentReminders: true,
+        foodIntakeReminders: true,
+        glucoseMeasurementReminders: true,
+        insulinDosageReminders: true,
+      },
+    };
+
+    getNotificationPreference.mockRejectedValueOnce(new Error("Failed"));
+    createNotificationPreference.mockResolvedValue(mockNotificationData);
+
+    await act(async () => {
+      render(<NotificationPage />);
+    });
+
+    // Assert that getNotificationPreference was called
+    expect(getNotificationPreference).toHaveBeenCalled();
+
+    // Assert that createNotificationPreference was attempted
+    expect(createNotificationPreference).toHaveBeenCalled();
+
+    // Expect that postMessage was called with specific parameters
+    expect(mockController.postMessage).toHaveBeenCalledWith({
+      action: "subscribeToPush",
+    });
+  });
+
   test("fetchNotificationPreference fetch and post fails for user preference when notification permission is set to granted", async () => {
     // Mock the Notification API in the window object
     Object.defineProperty(window, "Notification", {

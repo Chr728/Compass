@@ -183,6 +183,15 @@ export default function NotificationPage() {
             // Notification preference doesn't exist, create it
             try {
               const createdResult = await createNotificationPreference(data); // Assuming createNotificationPreference handles creation
+              if (
+                "serviceWorker" in navigator &&
+                navigator.serviceWorker.controller
+              ) {
+                // Create subscription object for users
+                navigator.serviceWorker.controller.postMessage({
+                  action: "subscribeToPush",
+                });
+              }
             } catch (error) {
               logger.error(
                 "Error creating notification preference of user:",

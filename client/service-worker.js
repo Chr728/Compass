@@ -344,7 +344,7 @@ self.addEventListener("push", (event) => {
 });
 
 // Function to run every 10 minutes
-function runTaskEvery10Minutes() {
+async function runTaskEvery10Minutes() {
   console.log("Push Notification Task!");
   sendUserReminders();
 }
@@ -354,23 +354,24 @@ function runTaskEvery10Minutes() {
 //   runTaskEvery10Minutes();
 // }, 10 * 60 * 1000); // 10 minutes in milliseconds
 
-self.addEventListener("periodicsync", (event) => {
-  // Handle the periodic sync event
-  event.waitUntil(runTaskEvery10Minutes);
+// When service worker activates, register the periodic syunc
+self.addEventListener("activate", async (event) => {
+  try {
+    await self.registration.periodicSync.register("notification-sync", {
+      // An interval of 10 minutes
+      minInterval: 1 * 60 * 1000,
+    });
+    console.log("periodic sync is here!");
+  } catch (error) {
+    console.log("Periodic sync cannot be used :", error);
+  }
 });
 
-self.addEventListener("activate", async (event) => {
-  if (self.registration.periodicSync)
-    try {
-      await registration.periodicSync.register("content-sync", {
-        // An interval of one day.
-        minInterval: 10 * 60 * 1000,
-      });
-      console.log("periodic sync is here yipppeee");
-    } catch (error) {
-      console.log("Periodic sync cannot be used :", error);
-    }
-  else {
-    console.log("rip");
+// Event listener for the periodic background sync event
+self.addEventListener("periodicsync", (event) => {
+  console.log("Periodic task has been triggered!");
+  console.log(event);
+  if (event.tag === "notification-sync") {
+    event.waitUntil(runTaskEvery10Minutes());
   }
 });
