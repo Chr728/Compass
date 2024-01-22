@@ -4,6 +4,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
+      IS_LOCAL: 'false'
       PORT: ${{ secrets.PORT }}
       PYTHON_HOST: ${{ secrets.PYTHON_HOST }}
 

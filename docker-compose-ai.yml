@@ -6,7 +6,9 @@ services:
     image: python_server_ai_image
     environment:
       - PORT=${PORT}
+      - IS_LOCAL=${IS_LOCAL}
       - PYTHON_HOST=${PYTHON_HOST}
+      - PYTHON_PORT=${PYTHON_PORT}
     build:
       context: ./pythonServer/
     ports:
