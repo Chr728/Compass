@@ -3,14 +3,14 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-    with:
-      lfs: 'true'
     env:
       PORT: ${{ secrets.PORT }}
       PYTHON_HOST: ${{ secrets.PYTHON_HOST }}
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          lfs: 'true'
       - name: Install Dependencies & Coverage Tools
         run: | 
           cd pythonServer
