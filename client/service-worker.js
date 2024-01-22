@@ -24,7 +24,6 @@ import {
   updateSubscription,
   deleteSubscription,
 } from "./app/http/subscriptionAPI";
-
 skipWaiting();
 clientsClaim();
 
@@ -345,33 +344,63 @@ self.addEventListener("push", (event) => {
 
 // Function to run every 10 minutes
 async function runTaskEvery10Minutes() {
-  console.log("Push Notification Task!");
-  sendUserReminders();
+  const currentTime = new Date()
+  const currentHour = currentTime.getHours()
+  const currentMinute = currentTime.getMinutes()
+  console.log(currentHour)
+  console.log(currentMinute)
+  if ((currentHour == 0 && currentMinute == 0) || (currentHour == 0 && currentMinute == 10) || (currentHour == 0 && currentMinute == 20) || (currentHour == 0 && currentMinute == 30) || (currentHour == 0 && currentMinute == 40) || (currentHour == 0 && currentMinute == 50)
+  || (currentHour == 1 && currentMinute == 0) || (currentHour == 1 && currentMinute == 10) || (currentHour == 1 && currentMinute == 20) || (currentHour == 1 && currentMinute == 30) || (currentHour == 1 && currentMinute == 40) || (currentHour == 1 && currentMinute == 50)
+  || (currentHour == 2 && currentMinute == 0) || (currentHour == 2 && currentMinute == 10) || (currentHour == 2 && currentMinute == 20) || (currentHour == 2 && currentMinute == 30) || (currentHour == 2 && currentMinute == 40) || (currentHour == 2 && currentMinute == 50)
+  || (currentHour == 3 && currentMinute == 0) || (currentHour == 3 && currentMinute == 10) || (currentHour == 3 && currentMinute == 20) || (currentHour == 3 && currentMinute == 30) || (currentHour == 3 && currentMinute == 40) || (currentHour == 3 && currentMinute == 50)
+  || (currentHour == 4 && currentMinute == 0) || (currentHour == 4 && currentMinute == 10) || (currentHour == 4 && currentMinute == 20) || (currentHour == 4 && currentMinute == 30) || (currentHour == 4 && currentMinute == 40) || (currentHour == 4 && currentMinute == 50)
+  || (currentHour == 5 && currentMinute == 0) || (currentHour == 5 && currentMinute == 10) || (currentHour == 5 && currentMinute == 20) || (currentHour == 5 && currentMinute == 30) || (currentHour == 5 && currentMinute == 40) || (currentHour == 5 && currentMinute == 50)
+  || (currentHour == 6 && currentMinute == 0) || (currentHour == 6 && currentMinute == 10) || (currentHour == 6 && currentMinute == 20) || (currentHour == 6 && currentMinute == 30) || (currentHour == 6 && currentMinute == 40) || (currentHour == 6 && currentMinute == 50)
+  || (currentHour == 7 && currentMinute == 0) || (currentHour == 7 && currentMinute == 10) || (currentHour == 7 && currentMinute == 20) || (currentHour == 7 && currentMinute == 30) || (currentHour == 7 && currentMinute == 40) || (currentHour == 7 && currentMinute == 50)
+  || (currentHour == 8 && currentMinute == 0) || (currentHour == 8 && currentMinute == 10) || (currentHour == 8 && currentMinute == 20) || (currentHour == 8 && currentMinute == 30) || (currentHour == 8 && currentMinute == 40) || (currentHour == 8 && currentMinute == 50)
+  || (currentHour == 9 && currentMinute == 0) || (currentHour == 9 && currentMinute == 10) || (currentHour == 9 && currentMinute == 20) || (currentHour == 9 && currentMinute == 30) || (currentHour == 9 && currentMinute == 40) || (currentHour == 9 && currentMinute == 50)
+  || (currentHour == 10 && currentMinute == 0) || (currentHour == 10 && currentMinute == 10) || (currentHour == 10 && currentMinute == 20) || (currentHour == 10 && currentMinute == 30) || (currentHour == 10 && currentMinute == 40) || (currentHour == 10 && currentMinute == 50)
+  || (currentHour == 11 && currentMinute == 0) || (currentHour == 11 && currentMinute == 10) || (currentHour == 11 && currentMinute == 20) || (currentHour == 11 && currentMinute == 30) || (currentHour == 11 && currentMinute == 40) || (currentHour == 11 && currentMinute == 50)
+  || (currentHour == 12 && currentMinute == 0) || (currentHour == 12 && currentMinute == 10) || (currentHour == 12 && currentMinute == 20) || (currentHour == 12 && currentMinute == 30) || (currentHour == 12 && currentMinute == 40) || (currentHour == 12 && currentMinute == 50)
+  || (currentHour == 13 && currentMinute == 0) || (currentHour == 13 && currentMinute == 10) || (currentHour == 13 && currentMinute == 20) || (currentHour == 13 && currentMinute == 30) || (currentHour == 13 && currentMinute == 40) || (currentHour == 13 && currentMinute == 50)
+  || (currentHour == 14 && currentMinute == 0) || (currentHour == 14 && currentMinute == 10) || (currentHour == 14 && currentMinute == 20) || (currentHour == 14 && currentMinute == 30) || (currentHour == 14 && currentMinute == 40) || (currentHour == 14 && currentMinute == 50)
+  || (currentHour == 15 && currentMinute == 0) || (currentHour == 15 && currentMinute == 10) || (currentHour == 15 && currentMinute == 20) || (currentHour == 15 && currentMinute == 30) || (currentHour == 15 && currentMinute == 40) || (currentHour == 15 && currentMinute == 50)
+  || (currentHour == 16 && currentMinute == 0) || (currentHour == 16 && currentMinute == 10) || (currentHour == 16 && currentMinute == 20) || (currentHour == 16 && currentMinute == 30) || (currentHour == 16 && currentMinute == 40) || (currentHour == 16 && currentMinute == 50)
+  || (currentHour == 17 && currentMinute == 0) || (currentHour == 17 && currentMinute == 10) || (currentHour == 17 && currentMinute == 20) || (currentHour == 17 && currentMinute == 30) || (currentHour == 17 && currentMinute == 40) || (currentHour == 17 && currentMinute == 50)
+  || (currentHour == 18 && currentMinute == 0) || (currentHour == 18 && currentMinute == 10) || (currentHour == 18 && currentMinute == 20) || (currentHour == 18 && currentMinute == 30) || (currentHour == 18 && currentMinute == 40) || (currentHour == 18 && currentMinute == 50)
+  || (currentHour == 19 && currentMinute == 0) || (currentHour == 19 && currentMinute == 10) || (currentHour == 19 && currentMinute == 20) || (currentHour == 19 && currentMinute == 30) || (currentHour == 19 && currentMinute == 40) || (currentHour == 19 && currentMinute == 50)
+  || (currentHour == 20 && currentMinute == 0) || (currentHour == 20 && currentMinute == 10) || (currentHour == 20 && currentMinute == 20) || (currentHour == 20 && currentMinute == 30) || (currentHour == 20 && currentMinute == 40) || (currentHour == 20 && currentMinute == 50)
+  || (currentHour == 21 && currentMinute == 0) || (currentHour == 21 && currentMinute == 10) || (currentHour == 21 && currentMinute == 20) || (currentHour == 21 && currentMinute == 30) || (currentHour == 21 && currentMinute == 40) || (currentHour == 21 && currentMinute == 50)
+  || (currentHour == 22 && currentMinute == 0) || (currentHour == 22 && currentMinute == 10) || (currentHour == 22 && currentMinute == 20) || (currentHour == 22 && currentMinute == 30) || (currentHour == 22 && currentMinute == 40) || (currentHour == 22 && currentMinute == 50)
+  || (currentHour == 23 && currentMinute == 0) || (currentHour == 23 && currentMinute == 10) || (currentHour == 23 && currentMinute == 20) || (currentHour == 23 && currentMinute == 30) || (currentHour == 23 && currentMinute == 40) || (currentHour == 23 && currentMinute == 50)){
+    console.log("Push Notification Task!");
+    sendUserReminders();
+  }
 }
 
 // // Schedule the task to run every 10 minutes
-// setInterval(() => {
-//   runTaskEvery10Minutes();
-// }, 10 * 60 * 1000); // 10 minutes in milliseconds
+setInterval(() => {
+  runTaskEvery10Minutes();
+}, 1 * 60 * 1000); // 10 minutes in milliseconds
 
 // When service worker activates, register the periodic syunc
-self.addEventListener("activate", async (event) => {
-  try {
-    await self.registration.periodicSync.register("notification-sync", {
-      // An interval of 10 minutes
-      minInterval: 1 * 60 * 1000,
-    });
-    console.log("periodic sync is here!");
-  } catch (error) {
-    console.log("Periodic sync cannot be used :", error);
-  }
-});
+// self.addEventListener("activate", async (event) => {
+//   try {
+//     await self.registration.periodicSync.register("notification-sync", {
+//       // An interval of 10 minutes
+//       minInterval: 1 * 60 * 1000,
+//     });
+//     console.log("periodic sync is here!");
+//   } catch (error) {
+//     console.log("Periodic sync cannot be used :", error);
+//   }
+// });
 
-// Event listener for the periodic background sync event
-self.addEventListener("periodicsync", (event) => {
-  console.log("Periodic task has been triggered!");
-  console.log(event);
-  if (event.tag === "notification-sync") {
-    event.waitUntil(runTaskEvery10Minutes());
-  }
-});
+// // Event listener for the periodic background sync event
+// self.addEventListener("periodicsync", (event) => {
+//   console.log("Periodic task has been triggered!");
+//   console.log(event);
+//   if (event.tag === "notification-sync") {
+//     event.waitUntil(runTaskEvery10Minutes());
+//   }
+// });
