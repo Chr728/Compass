@@ -18,4 +18,4 @@ client/public/fallback-development.js
 pillIdentifierAI/google
 pillIdentifierAI/logs
 pillIdentifierAI/results
-pillIdentifierAI/directory_consumer_grade_images.xlsx
+pillIdentifierAI/*.xlsx
