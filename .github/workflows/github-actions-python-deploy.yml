@@ -1,0 +1,33 @@
+name: Python Server Deploy
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      PORT: ${{ secrets.PORT }}
+      PYTHON_HOST: ${{ secrets.PYTHON_HOST }}
+      HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      HEROKU_PYTHON_APP_NAME: ${{ secrets.HEROKU_PYTHON_APP_NAME }}
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: 'true'
+
+      - name: Login to Heroku Container Registry
+        run: HEROKU_API_KEY=$HEROKU_API_KEY heroku container:login
+
+      - name: Build Docker Image
+        run: docker compose -f docker-compose-ai.yml build
+
+      - name: Tag Docker Image
+        run: docker tag python_server_ai_image registry.heroku.com/$HEROKU_PYTHON_APP_NAME/web:latest
+
+      - name: Push Docker Image
+        run: docker push registry.heroku.com/$HEROKU_PYTHON_APP_NAME/web:latest
+
+      - name: Release Docker Image
+        run: HEROKU_API_KEY=$HEROKU_API_KEY heroku container:release web -a $HEROKU_PYTHON_APP_NAME

@@ -4,13 +4,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      PYTHON_PORT: ${{ secrets.PYTHON_PORT }}
+      PORT: ${{ secrets.PORT }}
       PYTHON_HOST: ${{ secrets.PYTHON_HOST }}
 
     steps:
       - uses: actions/checkout@v2
-      - name: Install Dependencies
-        run: cd pythonServer && pip install -r requirements.txt
+        with:
+          lfs: 'true'
+      - name: Install Dependencies & Coverage Tools
+        run: | 
+          cd pythonServer
+          pip install -r requirements.txt
+          pip install pytest-cov
+          pip install httpx
 
       - name: Run Python Server Tests
         run: cd pythonServer && cd app && pytest --cov-report term-missing --cov=app
