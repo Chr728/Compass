@@ -4,25 +4,23 @@ from fastapi.responses import JSONResponse
 import uvicorn
 import os
 from dotenv import load_dotenv
-import cv2
 import torch
 import numpy as np
 from transformers import AutoImageProcessor, ViTForImageClassification, ViTModel, ViTImageProcessor
 from PIL import Image
-from torchvision.transforms import ToTensor
 import io
 from sklearn.preprocessing import LabelEncoder
 
 load_dotenv()
 
-PYTHON_PORT = int(os.getenv("PYTHON_PORT"))
+PYTHON_PORT = int(os.getenv("PORT"))
 PYTHON_HOST = os.getenv("PYTHON_HOST")
 
 app = FastAPI()
 
 # Load the label encoder
 encoder = LabelEncoder()
-encoder.classes_ = np.load('../../pillIdentifierAI/encoder/encoder.npy', allow_pickle=True)
+encoder.classes_ = np.load('encoder/encoder.npy', allow_pickle=True)
 
 # Load the pre-trained model and feature extractor
 pretrained_model = ViTModel.from_pretrained('google/vit-base-patch16-224')
@@ -40,7 +38,7 @@ config = pretrained_model.config
 config.num_labels = 2112  # Change this to the appropriate number of classes
 model = ViTForImageClassification(config)
 model.vit = pretrained_model
-model.load_state_dict(torch.load('../../pillIdentifierAI/saved_model/model_weights.pth', map_location=torch.device('cpu')))
+model.load_state_dict(torch.load('model/model_weights.pth', map_location=torch.device('cpu')))
 
 model.eval()
 
