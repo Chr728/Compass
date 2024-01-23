@@ -93,7 +93,6 @@ async def read_root():
 async def pill_predict(file: UploadFile = File(...), top_k: int = 5):
     try:
         extension = file.filename.split(".")[-1] in ("jpg", "jpeg", "png")
-        print('File Extension:', file.filename.split(".")[-1])
         
         if not extension:
             item = {"message": "Image format must be jpg, jpeg, or png!"}
