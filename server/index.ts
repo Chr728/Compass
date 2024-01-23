@@ -18,6 +18,8 @@ import Morgan from "./middlewares/morgan";
 import { Logger } from "./middlewares/logger";
 import decodeToken from "./middlewares/decodeToken";
 import { handleError } from "./middlewares/errorMiddleware";
+import { sendUserReminders } from "./controllers/reminderController";
+import cron from "node-cron";
 require("dotenv").config({
   path: "./../.env",
 });
@@ -46,6 +48,15 @@ app.use("/api/journals/foodIntake", foodIntakeJournalRoutes);
 app.use("/api/subscription", subscriptionRoutes);
 app.use("/api/medication", medicationRoutes);
 app.use(handleError);
+
+// Dummy request and response objects
+const dummyReq: any = {}; // Customize as needed
+const dummyRes: any = {}; // Customize as needed
+// Schedule the task within the main process
+cron.schedule("*/1 * * * *", () => {
+  console.log("Running the scheduled task...");
+  sendUserReminders();
+});
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

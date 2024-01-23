@@ -6,7 +6,7 @@ import moment = require("moment-timezone");
 import e = require("express");
 const webPush = require("web-push");
 
-export const sendUserReminders = async (req: Request, res: Response) => {
+export const sendUserReminders = async () => {
   const publicKey = process.env.VAPID_PUBLIC_KEY;
   const privateKey = process.env.VAPID_PRIVATE_KEY;
 
@@ -14,9 +14,6 @@ export const sendUserReminders = async (req: Request, res: Response) => {
   webPush.setVapidDetails("mailto:test@gmail.com", publicKey, privateKey);
 
   try {
-    const userUID = req.params.uid;
-    const timeForAppointments = 1;
-
     // Get the current time and date
     const currentTime = moment.tz("America/Toronto").format("HH:mm:00");
     const currentDate = moment.tz("America/Toronto").format("YYYY-MM-DD");
@@ -98,10 +95,8 @@ export const sendUserReminders = async (req: Request, res: Response) => {
 
           // Return if there's an error
           if (!userNotificationPreferences) {
-            return res.status(404).json({
-              status: "ERROR",
-              message: `Notification preference not found, invalid user id.`,
-            });
+            Logger.error(`Notification preference not found, invalid user id.`);
+            return;
           }
 
           if (userNotificationPreferences.appointmentReminders) {
@@ -113,10 +108,8 @@ export const sendUserReminders = async (req: Request, res: Response) => {
             });
 
             if (!userSubscription) {
-              return res.status(404).json({
-                status: "ERROR",
-                message: `No Subscription was found.`,
-              });
+              Logger.error(`No Subscription was found.`);
+              return;
             }
 
             const payload = JSON.stringify({
@@ -159,10 +152,8 @@ export const sendUserReminders = async (req: Request, res: Response) => {
 
           // Return if there's an error
           if (!userNotificationPreferences) {
-            return res.status(404).json({
-              status: "ERROR",
-              message: `Notification preference not found, invalid user id.`,
-            });
+            Logger.error(`Notification preference not found, invalid user id.`);
+            return;
           }
 
           if (userNotificationPreferences.activityReminders) {
@@ -174,10 +165,8 @@ export const sendUserReminders = async (req: Request, res: Response) => {
             });
 
             if (!userSubscription) {
-              return res.status(404).json({
-                status: "ERROR",
-                message: `No Subscription was found.`,
-              });
+              Logger.error(`No Subscription was found.`);
+              return;
             }
 
             const payload = JSON.stringify({
@@ -221,10 +210,8 @@ export const sendUserReminders = async (req: Request, res: Response) => {
 
           // Return if there's an error
           if (!userNotificationPreferences) {
-            return res.status(404).json({
-              status: "ERROR",
-              message: `Notification preference not found, invalid user id.`,
-            });
+            Logger.error(`Notification preference not found, invalid user id.`);
+            return;
           }
 
           if (userNotificationPreferences.foodIntakeReminders) {
@@ -236,10 +223,8 @@ export const sendUserReminders = async (req: Request, res: Response) => {
             });
 
             if (!userSubscription) {
-              return res.status(404).json({
-                status: "ERROR",
-                message: `No Subscription was found.`,
-              });
+              Logger.error(`No Subscription was found.`);
+              return;
             }
 
             const payload = JSON.stringify({
@@ -280,10 +265,8 @@ export const sendUserReminders = async (req: Request, res: Response) => {
 
           // Return if there's an error
           if (!userNotificationPreferences) {
-            return res.status(404).json({
-              status: "ERROR",
-              message: `Notification preference not found, invalid user id.`,
-            });
+            Logger.error(`Notification preference not found, invalid user id.`);
+            return;
           }
 
           if (userNotificationPreferences.glucoseMeasurementReminders) {
@@ -295,10 +278,8 @@ export const sendUserReminders = async (req: Request, res: Response) => {
             });
 
             if (!userSubscription) {
-              return res.status(404).json({
-                status: "ERROR",
-                message: `No Subscription was found.`,
-              });
+              Logger.error(`No Subscription was found.`);
+              return;
             }
 
             const payload = JSON.stringify({
@@ -315,7 +296,6 @@ export const sendUserReminders = async (req: Request, res: Response) => {
     //Get diabetic sub-journal2 of users for preparing reminder
     const userInsulinDosage = await db.InsulinDosage.findAll({
       where: {
-        uid: userUID,
         date: currentDate,
         time: {
           [db.Sequelize.Op.gte]: startTime.format("HH:mm:00"),
@@ -343,10 +323,8 @@ export const sendUserReminders = async (req: Request, res: Response) => {
 
           // Return if there's an error
           if (!userNotificationPreferences) {
-            return res.status(404).json({
-              status: "ERROR",
-              message: `Notification preference not found, invalid user id.`,
-            });
+            Logger.error(`Notification preference not found, invalid user id.`);
+            return;
           }
 
           if (userNotificationPreferences.insulinDosageReminders) {
@@ -358,10 +336,8 @@ export const sendUserReminders = async (req: Request, res: Response) => {
             });
 
             if (!userSubscription) {
-              return res.status(404).json({
-                status: "ERROR",
-                message: `No Subscription was found.`,
-              });
+              Logger.error(`No Subscription was found.`);
+              return;
             }
 
             const payload = JSON.stringify({
@@ -378,7 +354,6 @@ export const sendUserReminders = async (req: Request, res: Response) => {
     //Get medication of user for preparing reminder
     const userMedication = await db.Medication.findAll({
       where: {
-        uid: userUID,
         time: {
           [db.Sequelize.Op.gte]: startTime.format("HH:mm:00"),
           [db.Sequelize.Op.lt]: endTime.format("HH:mm:00"),
@@ -403,10 +378,8 @@ export const sendUserReminders = async (req: Request, res: Response) => {
 
           // Return if there's an error
           if (!userNotificationPreferences) {
-            return res.status(404).json({
-              status: "ERROR",
-              message: `Notification preference not found, invalid user id.`,
-            });
+            Logger.error(`Notification preference not found, invalid user id.`);
+            return;
           }
 
           if (userNotificationPreferences.medicationReminders) {
@@ -418,10 +391,8 @@ export const sendUserReminders = async (req: Request, res: Response) => {
             });
 
             if (!userSubscription) {
-              return res.status(404).json({
-                status: "ERROR",
-                message: `No Subscription was found.`,
-              });
+              Logger.error(`No Subscription was found.`);
+              return;
             }
             const payload = JSON.stringify({
               title: `Medication Reminder:  ${Medication.medicationName} for ${Medication.dosage} ${Medication.unit} at ${Medication.time}`,
@@ -434,14 +405,8 @@ export const sendUserReminders = async (req: Request, res: Response) => {
       );
     }
 
-    res.status(200).json({
-      status: `SUCCESS`,
-    });
+    Logger.info("Reminders task successfully executed!");
   } catch (err) {
     Logger.error(`Error occurred while fetching reminders for user: ${err}`);
-    res.status(400).json({
-      status: `ERROR`,
-      message: `Error getting reminders of user : ${err}`,
-    });
   }
 };
