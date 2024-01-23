@@ -365,7 +365,7 @@ export default function PillIdentifierPage() {
 									width: "175px",
 									height: "48px",
 								}}
-								onClick={ () => router.push(`/createMedication?name=${apiResults[selectedLabel].label.slice(0,  apiResults[selectedLabel].label.search(/\d/)).trim()}&strength=${apiResults[selectedLabel].label.slice(apiResults[selectedLabel].label.search(/\d/)).trim()}`)}
+								onClick={ () => router.push('/')} //Link to be added later
 							/>
 							<div className="flex space-x-4 mt-4">
 								<div className={`h-2 w-2 rounded-full ${selectedLabel == 0 ? 'bg-blue' : 'bg-grey'}`}></div>
