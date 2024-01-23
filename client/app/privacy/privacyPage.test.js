@@ -2,19 +2,23 @@ import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 
 test("data is displayed correctly", async () => {
-	render(<aboutUsPage />);
+	render(<privacyPage />);
 	setTimeout(() => {
 		expect(
 			screen.getByText(
-				"Compass is a medical wellness app that targets specifically people above 40 years old who might be interested in having some type of assistance to keep their healthy habits and lifestyles. Compass offers features of managing medical reminders, booking appointments,tracking user’s medications and treatments all in one consolidated application. In addition, having features of medical journals such as diabetic journals allows some patients to easily note their daily doses and treatment details making them able to follow the history of their treatments and use it as a reference for themselves or to show to their medical professional. Additionally,with the speed dial fast option to contact relatives during some emergency situations patients would be able to contact their relatives in a faster and easier way. With many features compass aims for users to be healthier and function hassle free."
+				"This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You. We use Your Personal data to provide and improve the Service. By using the Service, You agree to the collection and use of information in accordance with this Privacy Policy."
 			)
 		).toBeInTheDocument();
 	}, 1000);
 });
 
 test("data is displayed correctly", async () => {
-	render(<aboutUsPage />);
+	render(<privacyPage />);
 	setTimeout(() => {
-		expect(screen.getByText("About Compass")).toBeInTheDocument();
+		expect(
+			screen.getByText(
+				"If you have any questions about this Privacy Policy, You can contact us: * By email: soen4901medicalapp@gmail.com"
+			)
+		).toBeInTheDocument();
 	}, 1000);
 });
