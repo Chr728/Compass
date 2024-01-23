@@ -5,6 +5,8 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 import Button from "../components/Button";
 import Header from "../components/Header";
 import { sendImage } from "../http/pillIdentifierAPI";
+import NextImage from "next/image";
+
 
 export default function PillIdentifierPage() {
 	const router = useRouter();
@@ -12,10 +14,20 @@ export default function PillIdentifierPage() {
 	const [selectedImage, setSelectedImage] = useState<string | null | any>(null);
 	const [imageBinaryFile, setImageBinaryFile] = useState<any>(null);
 	const [isCameraActive, setCameraActive] = useState(false);
+	const [apiResults, setApiResults] = useState<any>();
 	const videoRef = useRef<HTMLVideoElement>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const [stream, setStream] = useState<MediaStream | null>(null);
 	const [isImageCaptured, setImageCaptured] = useState(false);
+	const [selectedLabel, setSelectedLabel] = useState(0);
+
+	const handleLeftArrowClick = () => {
+		setSelectedLabel((prevIndex) => Math.max(prevIndex - 1, 0));
+	};
+  
+	const handleRightArrowClick = () => {
+		setSelectedLabel((prevIndex) => Math.min(prevIndex + 1, apiResults.length - 1));
+	};
 	
 	const startCamera = async () => {
 		try {
@@ -63,10 +75,9 @@ export default function PillIdentifierPage() {
 				);
 
 				const imageData = canvas.toDataURL("image/jpeg");
-				console.log(imageData);
-
+				
 				const blob = dataURLtoBlob(imageData);
-
+				
 				setImageBinaryFile(blob);
 				setSelectedImage(imageData);
 				setImageCaptured(true);
@@ -74,26 +85,24 @@ export default function PillIdentifierPage() {
 			}
 		}
 	};
-
-	const dataURLtoBlob = (dataURL: string) => {
-		const parts = dataURL.split(';base64,');
-		const contentType = parts[0].split(':')[1];
-		const characters = atob(parts[1]);
-		const numbers = new Array(characters.length);
-	  
-		for (let i = 0; i < characters.length; i++) {
-			numbers[i] = characters.charCodeAt(i);
+	
+	function dataURLtoBlob(dataURL: any) {
+		const arr = dataURL.split(',');
+		const mime = arr[0].match(/:(.*?);/)[1];
+		const bstr = atob(arr[1]);
+		let n = bstr.length;
+		const u8arr = new Uint8Array(n);
+	
+		while (n--) {
+			u8arr[n] = bstr.charCodeAt(n);
 		}
-	  
-		const arrayOfBytes = new Uint8Array(numbers);
-	  
-		return new Blob([arrayOfBytes], { type: contentType });
-	  };
+	
+		return new Blob([u8arr], { type: mime });
+	}
 	  
 	  
 
 	const handleTakePicture = async () => {
-		console.log('handle take picture', selectedImage)
 		if (!isCameraActive) {
 			startCamera(); // Start the camera only if it's not already active
 			setImageCaptured(false);
@@ -105,9 +114,13 @@ export default function PillIdentifierPage() {
 		try {
 			setTimeout(async() => { 
 				if (selectedImage) {
-					const response = await sendImage(imageBinaryFile);
-					const body = await response.text();
-					console.log(body);
+					const response = await sendImage(imageBinaryFile, true);
+					const body = await response.json();
+					const labelsAndProbabilities = Object.values(body.predictions).map(({ label, probability }: any) => ({
+						label,
+						probability,
+					  }));
+					setApiResults(labelsAndProbabilities);
 				  }
 			}, 1000)
 			
@@ -161,8 +174,11 @@ export default function PillIdentifierPage() {
 		};
 	}, []);
 
+
 	return (
-		<div className="bg-eggshell min-h-screen flex flex-col">
+		!apiResults ?
+			(
+			<div className="bg-eggshell min-h-screen flex flex-col">
 			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
 				<button onClick={() => router.push("/getMedications")}>
 					<Header headerText="Pill Identifier" />
@@ -253,6 +269,131 @@ export default function PillIdentifierPage() {
 					/>
 				</div>
 			</div>
-		</div>
+		</div>)
+			:
+			(
+				<div className="bg-eggshell min-h-screen flex flex-col">
+					<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
+						<button onClick={() => router.push("/getMedications")}>
+							<Header headerText="Results" />
+						</button>
+					</span>
+					<p className="font-bold  text-darkgrey ml-5 p-1 text-[16px]">
+						Swipe left/right to scroll through the results as determined by the AI. A higher score means 
+						a closer match to your picture.
+					</p>
+					<p className="mt-4 font-bold  text-darkgrey ml-5 p-1 text-[16px]">
+						This app does not provide a 100% guarantee.
+					</p>
+					<div
+						className="min-h-[425px] min-w-[340px] rounded-[20px] flex flex-col m-4 self-center items-center"
+						style={{ background: 'var(--Eggshell, #EAF4F8)' }}
+					>
+					
+						<div className="flex p-4 w-full">
+							<div onClick={handleLeftArrowClick} className="mr-auto self-end">
+								<NextImage
+									src="/icons/LeftArrow.svg"
+									alt="Right Arrow Icon"
+									width={15}
+									height={15}
+									style={{ width: "auto", height: "auto" }}
+								/>
+							</div>
+							
+							<img
+								src={selectedImage}
+								alt="User-selected Image"
+								className="small-image m-auto self-center"
+								width={165}
+								height={150}
+								style={{
+									alignItems: "center",
+									justifyContent: "center",
+								}}
+							/>
+
+							<div
+								onClick={handleRightArrowClick}
+								className="ml-auto self-end"
+							>
+								<NextImage
+									src="/icons/RightArrow.svg"
+									alt="Right Arrow Icon"
+									width={15}
+									height={15}
+									style={{ width: "auto", height: "auto" }}
+									className="ml-auto"
+								/>
+							</div>
+						</div>
+						
+						<div className="w-full">
+							<p
+								className="font-bold text-darkgrey p-4 text-[24px] text-center leading-tight -mt-2"
+							>
+								{ apiResults[selectedLabel].label.slice(0,  apiResults[selectedLabel].label.search(/\d/)).trim() }
+							</p>
+
+							<div className="font-bold text-darkgrey text-[18px] px-4 -mt-2">
+								<p>
+									Score:&nbsp;
+									<span
+										className="font-normal"
+									>
+										{Math.round(apiResults[selectedLabel].probability)} % match
+									</span>
+								</p>
+								<p>
+									Strength:&nbsp;
+									<span
+										className="font-normal"
+									>
+										{apiResults[selectedLabel].label.slice(apiResults[selectedLabel].label.search(/\d/)).trim()}
+									</span>
+								</p>
+							</div>
+						</div>
+						
+						
+						
+						<div className="flex flex-col justify-center items-center px-4 pb-4 mt-auto">
+							<Button
+								type="button"
+								text="Add this medication"
+								style={{
+									width: "175px",
+									height: "48px",
+								}}
+								onClick={ () => router.push(`/createMedication?name=${apiResults[selectedLabel].label.slice(0,  apiResults[selectedLabel].label.search(/\d/)).trim()}&strength=${apiResults[selectedLabel].label.slice(apiResults[selectedLabel].label.search(/\d/)).trim()}`)}
+							/>
+							<div className="flex space-x-4 mt-4">
+								<div className={`h-2 w-2 rounded-full ${selectedLabel == 0 ? 'bg-blue' : 'bg-grey'}`}></div>
+								<div className={`h-2 w-2 rounded-full ${selectedLabel==1 ? 'bg-blue': 'bg-grey'}`}></div>
+								<div className={`h-2 w-2 rounded-full ${selectedLabel == 2 ? 'bg-blue' : 'bg-grey'}`}></div>
+								<div className={`h-2 w-2 rounded-full ${selectedLabel == 3 ? 'bg-blue' : 'bg-grey'}`}></div>
+								<div className={`h-2 w-2 rounded-full ${selectedLabel==4 ? 'bg-blue': 'bg-grey'}`}></div>
+							</div>
+						</div>
+					</div>
+
+					<div className="self-center">
+						<Button
+							type="button"
+							text=" Return to Medications"
+							style={{
+								width: "175px",
+								height: "48px",
+								padding: "8px",
+								backgroundColor: "var(--Red, #FF7171)"
+							}}
+							onClick={() => router.push(`/getMedications`)}
+						/>
+					</div>
+					
+				</div>
+			)
+
+		
 	);
 }

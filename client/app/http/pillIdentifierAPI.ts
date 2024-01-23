@@ -1,7 +1,7 @@
 import { auth } from "../config/firebase";
 const logger = require('../../logger');
 
-export async function sendImage(selectedImage: any): Promise<any> {
+export async function sendImage(selectedImage: any, isBinary = false): Promise<any> {
 
     try {
         const currentUser = auth.currentUser;
@@ -13,7 +13,12 @@ export async function sendImage(selectedImage: any): Promise<any> {
         const token = await currentUser.getIdToken();
 
         const formData = new FormData();
-        formData.append('file', selectedImage);
+        if (isBinary) {
+            formData.append('file', selectedImage, 'image.jpeg');
+        } else { 
+            formData.append('file', selectedImage);
+        }
+        
         const response = await fetch(`http://127.0.0.1:8080/PillAI`, {
             method: "POST",
             body:  formData
