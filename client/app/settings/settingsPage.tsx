@@ -98,6 +98,7 @@ export default function SettingsPage() {
 						</span>
 					</div>
 				</Link>
+				<hr className="h-px w-336 text-darkgrey m-2"></hr>
 				<Link href="/privacy">
 					<div className="flex items-center m-2">
 						<span className="text-2xl not-italic font-bold font-IBM Plex Sans text-darkgrey">
