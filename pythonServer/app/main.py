@@ -53,6 +53,9 @@ def preprocess_image(contents):
     # Convert image bytes to PIL Image
     image = Image.open(io.BytesIO(contents))
     
+    if image.mode != 'RGB':
+        image = image.convert('RGB')
+    
     # Use the feature extractor directly
     inputs = feature_extractor(images=[image])
     image_tensor = inputs['pixel_values'][0]
@@ -95,6 +98,7 @@ async def read_root():
 async def pill_predict(file: UploadFile = File(...), top_k: int = 5):
     try:
         extension = file.filename.split(".")[-1] in ("jpg", "jpeg", "png")
+        
         if not extension:
             item = {"message": "Image format must be jpg, jpeg, or png!"}
             return JSONResponse(status_code=400, content=item)
