@@ -154,7 +154,7 @@ export const sendUserReminders = async () => {
 
           if (!userSubscription) {
             Logger.error(`No Subscription was found.`);
-            return;
+            continue;
           }
 
           const payload = JSON.stringify({
@@ -206,7 +206,7 @@ export const sendUserReminders = async () => {
 
           if (!userSubscription) {
             Logger.error(`No Subscription was found.`);
-            return;
+            continue;
           }
 
           const payload = JSON.stringify({
@@ -254,7 +254,7 @@ export const sendUserReminders = async () => {
 
           if (!userSubscription) {
             Logger.error(`No Subscription was found.`);
-            return;
+            continue;
           }
 
           const payload = JSON.stringify({
@@ -305,7 +305,7 @@ export const sendUserReminders = async () => {
 
           if (!userSubscription) {
             Logger.error(`No Subscription was found.`);
-            return;
+            continue;
           }
 
           const payload = JSON.stringify({
@@ -353,7 +353,7 @@ export const sendUserReminders = async () => {
 
           if (!userSubscription) {
             Logger.error(`No Subscription was found.`);
-            return;
+            continue;
           }
           const payload = JSON.stringify({
             title: `Medication Reminder:  ${medication.medicationName} for ${medication.dosage} ${medication.unit} at ${medication.time}`,
