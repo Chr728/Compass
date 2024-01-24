@@ -32,8 +32,9 @@ export default function AboutUsPage() {
 				<div className="flex justify-between items-center">
 					<br></br> <br></br>
 					<div className="font-bold text-start text-darkgrey p-4 text-[14px]">
-						We would like to get your feedback please fill out the
-						following annonymous survey :
+						We always value your suggestions and any feedback you
+						can tell. Please fill out the following annonymous
+						survey :
 						<Button
 							type="button"
 							text="Start Survey"
