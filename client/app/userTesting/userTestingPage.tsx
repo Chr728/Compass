@@ -34,13 +34,16 @@ export default function AboutUsPage() {
 					<div className="font-bold text-start text-darkgrey p-4 text-[14px]">
 						We always value your suggestions and any feedback you
 						can tell. Please fill out the following annonymous
-						survey :
+						survey. Thank you!
 						<Button
 							type="button"
 							text="Start Survey"
-							style={{ width: "140px" }}
+							style={{ width: "110px", marginTop: "30px" }}
 							onClick={() =>
-								router.push(`forms.gle/8imvZJFK4C7zZ3iR6`)
+								window.open(
+									"https://forms.gle/8imvZJFK4C7zZ3iR6",
+									"_blank"
+								)
 							}
 						/>
 						<p
