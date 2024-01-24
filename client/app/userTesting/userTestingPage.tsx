@@ -46,7 +46,7 @@ export default function AboutUsPage() {
 							className={
 								"w-full h-full text-grey text-center mt-32"
 							}>
-							&copy; Compass 2023
+							&copy; Compass 2024
 						</p>
 					</div>
 				</div>
