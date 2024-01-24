@@ -169,3 +169,49 @@ test("renders uploaded image on the screen after uploading", async () => {
 		expect(screen.getByAltText("Uploaded Image")).toBeInTheDocument();
 	}, 1000);
 });
+
+test("Message displayed", async () => {
+	setTimeout(() => {
+		const route = screen.findByText(
+			"Swipe left/right to scroll through the results as determined by the AI. A higher score means a closer match to your picture."
+		);
+		expect(route).toBeInTheDocument();
+	}, 1000);
+});
+
+test("Message displayed", async () => {
+	setTimeout(() => {
+		const route = screen.findByText(
+			"This app does not provide a 100% guarantee."
+		);
+		expect(route).toBeInTheDocument();
+	}, 1000);
+});
+
+test("renders label, score, and strength from API results", () => {
+	setTimeout(() => {
+		// Mock the API results
+		const mockApiResults = [
+			{
+				label: "celecoxib400MGOralCapsule",
+				probability: 0.85,
+			},
+			// Add more mock results as needed
+		];
+
+		// Render the component with mock data
+		const { getByText } = render(
+			<PillIdentifierPage apiResults={mockApiResults} selectedLabel={0} />
+		);
+
+		// Assert that the rendered label, score, and strength match the mock data
+		const renderedLabel = getByText("celecoxib");
+		expect(renderedLabel).toBeInTheDocument();
+
+		const renderedScore = getByText("85% match");
+		expect(renderedScore).toBeInTheDocument();
+
+		const renderedStrength = getByText("400MGOralCapsule");
+		expect(renderedStrength).toBeInTheDocument();
+	}, 1000);
+});
