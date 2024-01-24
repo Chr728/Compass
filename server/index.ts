@@ -49,11 +49,8 @@ app.use("/api/subscription", subscriptionRoutes);
 app.use("/api/medication", medicationRoutes);
 app.use(handleError);
 
-// Dummy request and response objects
-const dummyReq: any = {}; // Customize as needed
-const dummyRes: any = {}; // Customize as needed
 // Schedule the task within the main process
-cron.schedule("*/1 * * * *", () => {
+cron.schedule("*/10 * * * *", () => {
   console.log("Running the scheduled task...");
   sendUserReminders();
 });

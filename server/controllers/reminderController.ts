@@ -3,7 +3,6 @@ import { Request, Response } from "express";
 import { Logger } from "../middlewares/logger";
 import db from "../models";
 import moment = require("moment-timezone");
-import e = require("express");
 const webPush = require("web-push");
 
 export const sendUserReminders = async () => {
@@ -79,48 +78,42 @@ export const sendUserReminders = async () => {
 
     // Iterate through appointments found between the duration specified
     if (userAppointments.length > 0) {
-      userAppointments.forEach(
-        async (appointment: {
-          appointmentWith: string;
-          time: Date;
-          uid: string;
-        }) => {
-          // Retrieve notification preference first.
-          const userNotificationPreferences =
-            await db.NotificationPreference.findOne({
-              where: {
-                uid: appointment.uid,
-              },
-            });
+      for (const appointment of userAppointments) {
+        // Retrieve notification preference first.
+        const userNotificationPreferences =
+          await db.NotificationPreference.findOne({
+            where: {
+              uid: appointment.uid,
+            },
+          });
 
-          // Return if there's an error
-          if (!userNotificationPreferences) {
-            Logger.error(`Notification preference not found, invalid user id.`);
-            return;
-          }
-
-          if (userNotificationPreferences.appointmentReminders) {
-            // Retrieve subscription from database
-            const userSubscription = await db.Subscription.findOne({
-              where: {
-                uid: appointment.uid,
-              },
-            });
-
-            if (!userSubscription) {
-              Logger.error(`No Subscription was found.`);
-              return;
-            }
-
-            const payload = JSON.stringify({
-              title: `Appointment Reminder with Dr ${appointment.appointmentWith} at ${appointment.time}`,
-            });
-            webPush
-              .sendNotification(userSubscription.subscription, payload)
-              .catch((error: any) => Logger.error(error));
-          }
+        // Return if there's an error
+        if (!userNotificationPreferences) {
+          Logger.error(`Notification preference not found, invalid user id.`);
+          return;
         }
-      );
+
+        if (userNotificationPreferences.appointmentReminders) {
+          // Retrieve subscription from database
+          const userSubscription = await db.Subscription.findOne({
+            where: {
+              uid: appointment.uid,
+            },
+          });
+
+          if (!userSubscription) {
+            Logger.error(`No Subscription was found.`);
+            continue;
+          }
+
+          const payload = JSON.stringify({
+            title: `Appointment Reminder with Dr ${appointment.appointmentWith} at ${appointment.time}`,
+          });
+          webPush
+            .sendNotification(userSubscription.subscription, payload)
+            .catch((error: any) => Logger.error(error));
+        }
+      }
     }
 
     //Get activity journals of users for prepearing reminder
@@ -136,48 +129,43 @@ export const sendUserReminders = async () => {
 
     // Iterate through activities found between the duration specified
     if (userActivityJournals.length > 0) {
-      userActivityJournals.forEach(
-        async (activityjournal: {
-          activity: string;
-          time: Date;
-          uid: string;
-        }) => {
-          // Retrieve notification preference first.
-          const userNotificationPreferences =
-            await db.NotificationPreference.findOne({
-              where: {
-                uid: activityjournal.uid,
-              },
-            });
+      for (const activityjournal of userActivityJournals) {
+        // Retrieve notification preference first.
+        const userNotificationPreferences =
+          await db.NotificationPreference.findOne({
+            where: {
+              uid: activityjournal.uid,
+            },
+          });
 
-          // Return if there's an error
-          if (!userNotificationPreferences) {
-            Logger.error(`Notification preference not found, invalid user id.`);
+        // Return if there's an error
+        if (!userNotificationPreferences) {
+          Logger.error(`Notification preference not found, invalid user id.`);
+          return;
+        }
+
+        if (userNotificationPreferences.activityReminders) {
+          // Retrieve subscription from database
+          const userSubscription = await db.Subscription.findOne({
+            where: {
+              uid: activityjournal.uid,
+            },
+          });
+
+          if (!userSubscription) {
+            Logger.error(`No Subscription was found.`);
             return;
           }
 
-          if (userNotificationPreferences.activityReminders) {
-            // Retrieve subscription from database
-            const userSubscription = await db.Subscription.findOne({
-              where: {
-                uid: activityjournal.uid,
-              },
-            });
+          const payload = JSON.stringify({
+            title: `Activity Reminder: ${activityjournal.activity} at ${activityjournal.time}`,
+          });
 
-            if (!userSubscription) {
-              Logger.error(`No Subscription was found.`);
-              return;
-            }
-
-            const payload = JSON.stringify({
-              title: `Activity Reminder: ${activityjournal.activity} at ${activityjournal.time}`,
-            });
-            webPush
-              .sendNotification(userSubscription.subscription, payload)
-              .catch((error: any) => Logger.error(error));
-          }
+          webPush
+            .sendNotification(userSubscription.subscription, payload)
+            .catch((error: any) => Logger.error(error));
         }
-      );
+      }
     }
 
     //Get food intake journals of users for preparing reminder
@@ -193,49 +181,42 @@ export const sendUserReminders = async () => {
 
     // Iterate through food intake journals found between the duration specified
     if (userFoodIntakeJournals.length > 0) {
-      userFoodIntakeJournals.forEach(
-        async (userFoodIntakeJournal: {
-          foodName: string;
-          servingNumber: number;
-          time: Date;
-          uid: string;
-        }) => {
-          // Retrieve notification preference first.
-          const userNotificationPreferences =
-            await db.NotificationPreference.findOne({
-              where: {
-                uid: userFoodIntakeJournal.uid,
-              },
-            });
+      for (const foodIntakeJournal of userFoodIntakeJournals) {
+        // Retrieve notification preference first.
+        const userNotificationPreferences =
+          await db.NotificationPreference.findOne({
+            where: {
+              uid: foodIntakeJournal.uid,
+            },
+          });
 
-          // Return if there's an error
-          if (!userNotificationPreferences) {
-            Logger.error(`Notification preference not found, invalid user id.`);
+        // Return if there's an error
+        if (!userNotificationPreferences) {
+          Logger.error(`Notification preference not found, invalid user id.`);
+          return;
+        }
+
+        if (userNotificationPreferences.foodIntakeReminders) {
+          // Retrieve subscription from database
+          const userSubscription = await db.Subscription.findOne({
+            where: {
+              uid: foodIntakeJournal.uid,
+            },
+          });
+
+          if (!userSubscription) {
+            Logger.error(`No Subscription was found.`);
             return;
           }
 
-          if (userNotificationPreferences.foodIntakeReminders) {
-            // Retrieve subscription from database
-            const userSubscription = await db.Subscription.findOne({
-              where: {
-                uid: userFoodIntakeJournal.uid,
-              },
-            });
-
-            if (!userSubscription) {
-              Logger.error(`No Subscription was found.`);
-              return;
-            }
-
-            const payload = JSON.stringify({
-              title: `Food Intake Reminder: ${userFoodIntakeJournal.foodName} for ${userFoodIntakeJournal.servingNumber} servings at ${userFoodIntakeJournal.time}`,
-            });
-            webPush
-              .sendNotification(userSubscription.subscription, payload)
-              .catch((error: any) => Logger.error(error));
-          }
+          const payload = JSON.stringify({
+            title: `Food Intake Reminder: ${foodIntakeJournal.foodName} for ${foodIntakeJournal.servingNumber} servings at ${foodIntakeJournal.time}`,
+          });
+          webPush
+            .sendNotification(userSubscription.subscription, payload)
+            .catch((error: any) => Logger.error(error));
         }
-      );
+      }
     }
 
     //Get diabetic sub-journal1 of users for preparing remindner
@@ -248,53 +229,46 @@ export const sendUserReminders = async () => {
 
     // Iterate through glucose measurement journals found between the duration specified
     if (userGlucoseMeasurement.length > 0) {
-      userGlucoseMeasurement.forEach(
-        async (GlucoseMeasurement: {
-          bloodGlucose: number;
-          unit: string;
-          mealTime: string;
-          uid: string;
-        }) => {
-          // Retrieve notification preference first.
-          const userNotificationPreferences =
-            await db.NotificationPreference.findOne({
-              where: {
-                uid: GlucoseMeasurement.uid,
-              },
-            });
+      for (const glucoseMeasurement of userGlucoseMeasurement) {
+        // Retrieve notification preference first.
+        const userNotificationPreferences =
+          await db.NotificationPreference.findOne({
+            where: {
+              uid: glucoseMeasurement.uid,
+            },
+          });
 
-          // Return if there's an error
-          if (!userNotificationPreferences) {
-            Logger.error(`Notification preference not found, invalid user id.`);
+        // Return if there's an error
+        if (!userNotificationPreferences) {
+          Logger.error(`Notification preference not found, invalid user id.`);
+          return;
+        }
+
+        if (userNotificationPreferences.glucoseMeasurementReminders) {
+          // Retrieve subscription from database
+          const userSubscription = await db.Subscription.findOne({
+            where: {
+              uid: glucoseMeasurement.uid,
+            },
+          });
+
+          if (!userSubscription) {
+            Logger.error(`No Subscription was found.`);
             return;
           }
 
-          if (userNotificationPreferences.glucoseMeasurementReminders) {
-            // Retrieve subscription from database
-            const userSubscription = await db.Subscription.findOne({
-              where: {
-                uid: GlucoseMeasurement.uid,
-              },
-            });
-
-            if (!userSubscription) {
-              Logger.error(`No Subscription was found.`);
-              return;
-            }
-
-            const payload = JSON.stringify({
-              title: `GlucoseMeasurement Reminder: ${GlucoseMeasurement.bloodGlucose} ${GlucoseMeasurement.unit} for ${GlucoseMeasurement.mealTime}`,
-            });
-            webPush
-              .sendNotification(userSubscription.subscription, payload)
-              .catch((error: any) => Logger.error(error));
-          }
+          const payload = JSON.stringify({
+            title: `GlucoseMeasurement Reminder: ${glucoseMeasurement.bloodGlucose} ${glucoseMeasurement.unit} for ${glucoseMeasurement.mealTime}`,
+          });
+          webPush
+            .sendNotification(userSubscription.subscription, payload)
+            .catch((error: any) => Logger.error(error));
         }
-      );
+      }
     }
 
     //Get diabetic sub-journal2 of users for preparing reminder
-    const userInsulinDosage = await db.InsulinDosage.findAll({
+    const userInsulinDosages = await db.InsulinDosage.findAll({
       where: {
         date: currentDate,
         time: {
@@ -305,54 +279,47 @@ export const sendUserReminders = async () => {
     });
 
     // Iterate through insulin dosage journals found between the duration specified
-    if (userInsulinDosage.length > 0) {
-      userInsulinDosage.forEach(
-        async (InsulinDosage: {
-          time: Date;
-          typeOfInsulin: string;
-          unit: number;
-          bodySite: string;
-        }) => {
-          // Retrieve notification preference first.
-          const userNotificationPreferences =
-            await db.NotificationPreference.findOne({
-              where: {
-                uid: userInsulinDosage.uid,
-              },
-            });
+    if (userInsulinDosages.length > 0) {
+      for (const insulinDosage of userInsulinDosages) {
+        // Retrieve notification preference first.
+        const userNotificationPreferences =
+          await db.NotificationPreference.findOne({
+            where: {
+              uid: insulinDosage.uid,
+            },
+          });
 
-          // Return if there's an error
-          if (!userNotificationPreferences) {
-            Logger.error(`Notification preference not found, invalid user id.`);
+        // Return if there's an error
+        if (!userNotificationPreferences) {
+          Logger.error(`Notification preference not found, invalid user id.`);
+          return;
+        }
+
+        if (userNotificationPreferences.insulinDosageReminders) {
+          // Retrieve subscription from database
+          const userSubscription = await db.Subscription.findOne({
+            where: {
+              uid: insulinDosage.uid,
+            },
+          });
+
+          if (!userSubscription) {
+            Logger.error(`No Subscription was found.`);
             return;
           }
 
-          if (userNotificationPreferences.insulinDosageReminders) {
-            // Retrieve subscription from database
-            const userSubscription = await db.Subscription.findOne({
-              where: {
-                uid: userInsulinDosage.uid,
-              },
-            });
-
-            if (!userSubscription) {
-              Logger.error(`No Subscription was found.`);
-              return;
-            }
-
-            const payload = JSON.stringify({
-              title: `Insulin Dosage Reminder: ${InsulinDosage.typeOfInsulin} ${InsulinDosage.unit} for the ${InsulinDosage.bodySite} at ${InsulinDosage.time}`,
-            });
-            webPush
-              .sendNotification(userSubscription, payload)
-              .catch((error: any) => Logger.error(error));
-          }
+          const payload = JSON.stringify({
+            title: `Insulin Dosage Reminder: ${insulinDosage.typeOfInsulin} ${insulinDosage.unit} for the ${insulinDosage.bodySite} at ${insulinDosage.time}`,
+          });
+          webPush
+            .sendNotification(userSubscription, payload)
+            .catch((error: any) => Logger.error(error));
         }
-      );
+      }
     }
 
     //Get medication of user for preparing reminder
-    const userMedication = await db.Medication.findAll({
+    const userMedications = await db.Medication.findAll({
       where: {
         time: {
           [db.Sequelize.Op.gte]: startTime.format("HH:mm:00"),
@@ -360,49 +327,42 @@ export const sendUserReminders = async () => {
         },
       },
     });
-    if (userMedication.length > 0) {
-      userMedication.forEach(
-        async (Medication: {
-          medicationName: string;
-          time: Date;
-          dosage: number;
-          unit: string;
-        }) => {
-          // Retrieve notification preference first.
-          const userNotificationPreferences =
-            await db.NotificationPreference.findOne({
-              where: {
-                uid: userMedication.uid,
-              },
-            });
+    if (userMedications.length > 0) {
+      for (const medication of userMedications) {
+        // Retrieve notification preference first.
+        const userNotificationPreferences =
+          await db.NotificationPreference.findOne({
+            where: {
+              uid: medication.uid,
+            },
+          });
 
-          // Return if there's an error
-          if (!userNotificationPreferences) {
-            Logger.error(`Notification preference not found, invalid user id.`);
+        // Return if there's an error
+        if (!userNotificationPreferences) {
+          Logger.error(`Notification preference not found, invalid user id.`);
+          return;
+        }
+
+        if (userNotificationPreferences.medicationReminders) {
+          // Retrieve subscription from database
+          const userSubscription = await db.Subscription.findOne({
+            where: {
+              uid: medication.uid,
+            },
+          });
+
+          if (!userSubscription) {
+            Logger.error(`No Subscription was found.`);
             return;
           }
-
-          if (userNotificationPreferences.medicationReminders) {
-            // Retrieve subscription from database
-            const userSubscription = await db.Subscription.findOne({
-              where: {
-                uid: userInsulinDosage.uid,
-              },
-            });
-
-            if (!userSubscription) {
-              Logger.error(`No Subscription was found.`);
-              return;
-            }
-            const payload = JSON.stringify({
-              title: `Medication Reminder:  ${Medication.medicationName} for ${Medication.dosage} ${Medication.unit} at ${Medication.time}`,
-            });
-            webPush
-              .sendNotification(userSubscription, payload)
-              .catch((error: any) => Logger.error(error));
-          }
+          const payload = JSON.stringify({
+            title: `Medication Reminder:  ${medication.medicationName} for ${medication.dosage} ${medication.unit} at ${medication.time}`,
+          });
+          webPush
+            .sendNotification(userSubscription, payload)
+            .catch((error: any) => Logger.error(error));
         }
-      );
+      }
     }
 
     Logger.info("Reminders task successfully executed!");
