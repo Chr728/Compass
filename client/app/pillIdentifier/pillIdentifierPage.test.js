@@ -170,7 +170,7 @@ test("renders uploaded image on the screen after uploading", async () => {
 	}, 1000);
 });
 
-test("Message displayed", async () => {
+test("Results Message displayed", async () => {
 	setTimeout(() => {
 		const route = screen.findByText(
 			"Swipe left/right to scroll through the results as determined by the AI. A higher score means a closer match to your picture."
@@ -179,7 +179,7 @@ test("Message displayed", async () => {
 	}, 1000);
 });
 
-test("Message displayed", async () => {
+test("Results Message displayed", async () => {
 	setTimeout(() => {
 		const route = screen.findByText(
 			"This app does not provide a 100% guarantee."
