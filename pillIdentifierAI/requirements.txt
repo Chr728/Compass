@@ -14,3 +14,4 @@ tensorflow_intel==2.15.0
 torch==2.1.2
 torchvision==0.16.2
 transformers==4.36.2
+imbalanced-learn==0.11.0
