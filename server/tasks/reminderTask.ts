@@ -327,7 +327,7 @@ export const sendUserReminders = async () => {
             title: `Insulin Dosage Reminder: ${insulinDosage.typeOfInsulin} ${insulinDosage.unit} for the ${insulinDosage.bodySite} at ${insulinDosage.time}`,
           });
           webPush
-            .sendNotification(userSubscription, payload)
+            .sendNotification(userSubscription.subscription, payload)
             .catch((error: any) => Logger.error(error));
           Logger.info(
             "Notification for insulinDosages sent to user: ",
@@ -378,7 +378,7 @@ export const sendUserReminders = async () => {
             title: `Medication Reminder:  ${medication.medicationName} for ${medication.dosage} ${medication.unit} at ${medication.time}`,
           });
           webPush
-            .sendNotification(userSubscription, payload)
+            .sendNotification(userSubscription.subscription, payload)
             .catch((error: any) => Logger.error(error));
           Logger.info(
             "Notification for medications sent to user: ",
