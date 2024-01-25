@@ -1,11 +1,11 @@
 // Import necessary dependencies and components
 "use client";
+import NextImage from "next/image";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import Button from "../components/Button";
 import Header from "../components/Header";
 import { sendImage } from "../http/pillIdentifierAPI";
-import NextImage from "next/image";
 
 export default function PillIdentifierPage() {
 	const router = useRouter();
