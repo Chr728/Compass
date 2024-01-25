@@ -1,19 +1,37 @@
 // Import necessary dependencies and components
 "use client";
+import NextImage from "next/image";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import Button from "../components/Button";
 import Header from "../components/Header";
+import { sendImage } from "../http/pillIdentifierAPI";
 
 export default function PillIdentifierPage() {
 	const router = useRouter();
 
-	const [selectedImage, setSelectedImage] = useState<string | null>(null);
+	const [selectedImage, setSelectedImage] = useState<string | null | any>(
+		null
+	);
+	const [imageBinaryFile, setImageBinaryFile] = useState<any>(null);
 	const [isCameraActive, setCameraActive] = useState(false);
+	const [apiResults, setApiResults] = useState<any>();
 	const videoRef = useRef<HTMLVideoElement>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const [stream, setStream] = useState<MediaStream | null>(null);
 	const [isImageCaptured, setImageCaptured] = useState(false);
+	const [selectedLabel, setSelectedLabel] = useState(0);
+
+	const handleLeftArrowClick = () => {
+		setSelectedLabel((prevIndex) => Math.max(prevIndex - 1, 0));
+	};
+
+	const handleRightArrowClick = () => {
+		setSelectedLabel((prevIndex) =>
+			Math.min(prevIndex + 1, apiResults.length - 1)
+		);
+	};
+
 	const startCamera = async () => {
 		try {
 			const videoConstraints: MediaStreamConstraints = {
@@ -42,7 +60,7 @@ export default function PillIdentifierPage() {
 		}
 	};
 
-	const captureImage = () => {
+	const captureImage = async () => {
 		if (videoRef.current && canvasRef.current) {
 			const canvas = canvasRef.current;
 			const context = canvas.getContext("2d");
@@ -59,15 +77,34 @@ export default function PillIdentifierPage() {
 					canvas.height
 				);
 
-				const imageData = canvas.toDataURL("image/png");
-				console.log(imageData);
+				const imageData = canvas.toDataURL("image/jpeg");
 
+				const blob = dataURLtoBlob(imageData);
+
+				setImageBinaryFile(blob);
 				setSelectedImage(imageData);
 				setImageCaptured(true);
 			}
 		}
 	};
-	const handleTakePicture = () => {
+
+	function dataURLtoBlob(dataURL: any) {
+		const arr = dataURL.split(",");
+		const mime = arr[0].match(/:(.*?);/)[1];
+		const bstr = atob(arr[1]);
+		let n = bstr.length;
+		const u8arr = new Uint8Array(n);
+
+		while (n--) {
+			u8arr[n] = bstr.charCodeAt(n);
+		}
+
+		return new Blob([u8arr], { type: mime });
+	}
+
+
+	const handleTakePicture = async () => {
+		setSelectedImage(null);
 		if (!isCameraActive) {
 			startCamera(); // Start the camera only if it's not already active
 			setImageCaptured(false);
@@ -75,12 +112,39 @@ export default function PillIdentifierPage() {
 			captureImage(); // Capture image if the camera is already active
 			stopCamera(); // Stop the camera after capturing the image
 		}
+
+	};
+
+	const handleSubmit = async () => {
+		if (!isCameraActive) {
+			startCamera(); // Start the camera only if it's not already active
+			setImageCaptured(false);
+		} else {
+			captureImage(); // Capture image if the camera is already active
+			stopCamera(); // Stop the camera after capturing the image
+		}
+
+		try {
+				if (selectedImage) {
+					const response = await sendImage(imageBinaryFile, true);
+					const body = await response.json();
+					const labelsAndProbabilities = Object.values(body.predictions).map(({ label, probability }: any) => ({
+						label,
+						probability,
+					  }));
+					setApiResults(labelsAndProbabilities);
+				  }
+        } catch(error){
+            console.error("Error sending image to server:", error);
+        }
 	};
 
 	const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
+		stopCamera();
 		const file = event.target.files?.[0];
 
 		if (file) {
+			setImageBinaryFile(file);
 			const reader = new FileReader();
 			reader.onloadend = () => {
 				const imageDataUrl = reader.result as string;
@@ -121,7 +185,7 @@ export default function PillIdentifierPage() {
 		};
 	}, []);
 
-	return (
+	return !apiResults ? (
 		<div className="bg-eggshell min-h-screen flex flex-col">
 			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
 				<button onClick={() => router.push("/getMedications")}>
@@ -164,14 +228,28 @@ export default function PillIdentifierPage() {
 						style={{ display: isCameraActive ? "block" : "none" }}
 					/>
 
-					<button
-						style={{
-							width: "162px",
-						}}
-						onClick={handleTakePicture}
-						className="bg-blue text-[16px] p-3  text-white font-sans font-medium rounded-md h-[46px] shadow-[0px_4px_8px_0px_rgba(44,39,56,0.08),0px_2px_4px_0px_rgba(44,39,56,0.08)]">
-						{isImageCaptured ? "Submit" : "Take a picture"}
-					</button>
+					{ selectedImage ? (
+						<button
+							style={{
+								width: "162px",
+							}}
+							onClick={handleSubmit}
+							className="bg-blue text-[16px] p-3 text-white font-sans font-medium rounded-md h-[46px] shadow-[0px_4px_8px_0px_rgba(44,39,56,0.08),0px_2px_4px_0px_rgba(44,39,56,0.08)]"
+						>
+							Submit
+						</button>
+            			) : (
+
+						<button
+							style={{
+								width: "162px",
+							}}
+							onClick={handleTakePicture}
+							className="bg-blue text-[16px] p-3 text-white font-sans font-medium rounded-md h-[46px] shadow-[0px_4px_8px_0px_rgba(44,39,56,0.08),0px_2px_4px_0px_rgba(44,39,56,0.08)]"
+						>
+							Take a picture
+						</button>
+           			 )}
 					<canvas ref={canvasRef} style={{ display: "none" }} />
 				</div>
 
@@ -212,6 +290,146 @@ export default function PillIdentifierPage() {
 						onClick={() => router.push(`/getMedications`)}
 					/>
 				</div>
+			</div>
+		</div>
+	) : (
+		<div className="bg-eggshell min-h-screen flex flex-col">
+			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
+				<button onClick={() => router.push("/getMedications")}>
+					<Header headerText="Results" />
+				</button>
+			</span>
+			<p className="font-bold  text-darkgrey ml-5 p-1 text-[16px]">
+				Swipe left/right to scroll through the results as determined by
+				the AI. A higher score means a closer match to your picture.
+			</p>
+			<p className="mt-4 font-bold  text-darkgrey ml-5 p-1 text-[16px]">
+				This app does not provide a 100% guarantee.
+			</p>
+			<div
+				className="min-h-[425px] min-w-[340px] rounded-[20px] flex flex-col m-4 self-center items-center"
+				style={{ background: "var(--Eggshell, #EAF4F8)" }}>
+				<div className="flex p-4 w-full">
+					<div
+						onClick={handleLeftArrowClick}
+						className="mr-auto self-end">
+						<NextImage
+							src="/icons/LeftArrow.svg"
+							alt="Right Arrow Icon"
+							width={15}
+							height={15}
+							style={{ width: "auto", height: "auto" }}
+						/>
+					</div>
+
+					<img
+						src={selectedImage}
+						alt="User-selected Image"
+						className="small-image m-auto self-center"
+						width={165}
+						height={150}
+						style={{
+							alignItems: "center",
+							justifyContent: "center",
+						}}
+					/>
+
+					<div
+						onClick={handleRightArrowClick}
+						className="ml-auto self-end">
+						<NextImage
+							src="/icons/RightArrow.svg"
+							alt="Right Arrow Icon"
+							width={15}
+							height={15}
+							style={{ width: "auto", height: "auto" }}
+							className="ml-auto"
+						/>
+					</div>
+				</div>
+
+				<div className="w-full">
+					<p className="font-bold text-darkgrey p-4 text-[24px] text-center leading-tight -mt-2">
+						{apiResults[selectedLabel].label
+							.slice(
+								0,
+								apiResults[selectedLabel].label.search(/\d/)
+							)
+							.trim()}
+					</p>
+
+					<div className="font-bold text-darkgrey text-[18px] px-4 -mt-2">
+						<p>
+							Score:&nbsp;
+							<span className="font-normal">
+								{Math.round(
+									apiResults[selectedLabel].probability
+								)}{" "}
+								% match
+							</span>
+						</p>
+						<p>
+							Strength:&nbsp;
+							<span className="font-normal">
+								{apiResults[selectedLabel].label
+									.slice(
+										apiResults[selectedLabel].label.search(
+											/\d/
+										)
+									)
+									.trim()}
+							</span>
+						</p>
+					</div>
+				</div>
+
+				<div className="flex flex-col justify-center items-center px-4 pb-4 mt-auto">
+					<Button
+						type="button"
+						text="Add this medication"
+						style={{
+							width: "175px",
+							height: "48px",
+						}}
+						onClick={() => router.push("/")} //Link to be added later
+					/>
+					<div className="flex space-x-4 mt-4">
+						<div
+							className={`h-2 w-2 rounded-full ${
+								selectedLabel == 0 ? "bg-blue" : "bg-grey"
+							}`}></div>
+						<div
+							className={`h-2 w-2 rounded-full ${
+								selectedLabel == 1 ? "bg-blue" : "bg-grey"
+							}`}></div>
+						<div
+							className={`h-2 w-2 rounded-full ${
+								selectedLabel == 2 ? "bg-blue" : "bg-grey"
+							}`}></div>
+						<div
+							className={`h-2 w-2 rounded-full ${
+								selectedLabel == 3 ? "bg-blue" : "bg-grey"
+							}`}></div>
+						<div
+							className={`h-2 w-2 rounded-full ${
+								selectedLabel == 4 ? "bg-blue" : "bg-grey"
+							}`}></div>
+					</div>
+				</div>
+			</div>
+
+			<div className="self-center">
+				<Button
+					type="button"
+					text=" Return to Medications"
+					style={{
+						width: "175px",
+						height: "48px",
+						padding: "8px",
+						backgroundColor: "var(--Red, #FF7171)",
+					}}
+					onClick={() => router.push(`/getMedications`)}
+				/>
 			</div>
 		</div>
 	);

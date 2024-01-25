@@ -16,5 +16,7 @@ client/public/fallback-development.js
 */table.csv
 */.DS_Store
 pillIdentifierAI/google
+pillIdentifierAI/saved_model
 pillIdentifierAI/logs
 pillIdentifierAI/results
+pillIdentifierAI/*.xlsx

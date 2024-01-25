@@ -12,9 +12,11 @@
 ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 ![Jest](https://img.shields.io/badge/-jest-%23C21325?style=for-the-badge&logo=jest&logoColor=white)
-![cypress](https://img.shields.io/badge/-cypress-%23E5E5E5?style=for-the-badge&logo=cypress&logoColor=058a5e)
 ![express](https://img.shields.io/badge/Express%20js-000000?style=for-the-badge&logo=express&logoColor=white)
 ![postgresql](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![fastAPI](https://img.shields.io/badge/fastAPI-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![PyTest](https://img.shields.io/badge/PyTest-14354C?style=for-the-badge&logo=python&logoColor=white)
+![Jupyter Notebook](https://img.shields.io/badge/Made%20with-Jupyter-orange?style=for-the-badge&logo=Jupyter)
 
 ## Getting Started
 
@@ -42,11 +44,12 @@ The docker compose file contains the commands to build and run the project. Plea
 
 ```bash
 docker-compose -f docker-compose-dev.yml up
+docker-compose -f docker-compose-ai.yml up
 ```
 
-If you are running the project in your local environment, the server will be hosted on port 8000, the client will be hosted on port 3000 and the database will be hosted on post 5432
+If you are running the project in your local environment, the express server will be hosted on port 8000, the python server will be hosted on port 8080, the client will be hosted on port 3000 and the database will be hosted on post 5432
 
-Once you see 'Database synchronized' is printed in the terminal, the preparation is done. If you want to check the database, you can either use the terminal or the Postgresql GUI like Pgadmin4 to see if all the tables/data exist in your database. Since the whole project is containerized, the database in the container is the not one you have locally. It can only be connected if the docker container is running. Please make sure to connect to the DB inside of the container instead of other local databases.
+Once you see 'Database synchronized' and 'Uvicorn running on http://127.0.0.1:8080' are printed in the terminal, the preparation is done. If you want to check the database, you can either use the terminal or the Postgresql GUI like Pgadmin4 to see if all the tables/data exist in your database. Since the whole project is containerized, the database in the container is the not one you have locally. It can only be connected if the docker container is running. Please make sure to connect to the DB inside of the container instead of other local databases.
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
@@ -57,7 +60,7 @@ Please rebuild the docker images. To do that you may need to delete the containe
 
 ## Description
 
-Compass is a medical wellness app that targets specifically people above 40 years old who might  be interested in having  some  type of assistance to keep their healthy habits and lifestyles. Compass offers features of managing medical  reminders, booking appointments,tracking user’s medications and treatments  all in one consolidated application. In addition, having features of medical journals such as diabetic journals allows some patients to easily note their daily doses and treatment details making them able to follow the history of their treatments and use it as a reference for themselves or to show to their medical professional. Additionally,with the speed dial fast option to contact relatives during some emergency situations patients would be able to contact their relatives in a faster and easier way. With many features compass aims for users to be healthier and function hassle free. 
+Compass is a medical wellness app that targets specifically people above 40 years old who might  be interested in having  some  type of assistance to keep their healthy habits and lifestyles. Compass offers features of managing medical  reminders, booking appointments, finding pill names, tracking user’s medications and treatments  all in one consolidated application. In addition, having features of medical journals such as diabetic journals allows some patients to easily note their daily doses and treatment details making them able to follow the history of their treatments and use it as a reference for themselves or to show to their medical professional. Users can also send pictures of their unrecognized pills to get the five most possible pill names. Additionally, with the speed dial fast option to contact relatives during some emergency situations patients would be able to contact their relatives in a faster and easier way. With many features compass aims for users to be healthier and function hassle free. 
 
 ## Mockups
 
@@ -92,13 +95,24 @@ The following link directs to a read-only version of the application's UI mockup
 - Express
 - Firebase Authentication
 - PostgreSQL
+- FastAPI
 
 **DevOps and Testing**
 
 - Docker
 - Jest
 - Supertest
-- Cypress
+- PyTest
+
+**Machine Learning**
+
+- Jupyter Notebook
+- HuggingFace
+- Tensorflow
+- Scikit learn
+- torch
+- datasets
+- Transformer
 
 ## Core Features
 
@@ -107,6 +121,7 @@ The following link directs to a read-only version of the application's UI mockup
 - View and Add Medications
 - Personal Diabetes, Food intake, Activity, Weight and Mood Journals
 - Push Notifications for Reminders
+- Predicting pill names based on pill pictures
 - Speed dial to family, caregivers and emergency
 
 ## License
