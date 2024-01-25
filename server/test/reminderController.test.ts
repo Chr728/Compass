@@ -1,21 +1,22 @@
-import request from 'supertest';
-import app from '../index';
-import db from '../models/index';
-import admin from 'firebase-admin';
-import moment = require('moment-timezone');
-const webPush = require('web-push');
-import { user, startServer, stopServer } from '../utils/journalsTestHelper';
+import db from "../models/index";
+import admin from "firebase-admin";
+import moment = require("moment-timezone");
+const webPush = require("web-push");
+import { user, startServer, stopServer } from "../utils/journalsTestHelper";
+import { sendUserReminders } from "../tasks/reminderTask";
+import { Logger } from "../middlewares/logger";
 
 let server: any;
 const port = process.env.PORT;
 const publicKey = process.env.VAPID_PUBLIC_KEY;
 const privateKey = process.env.VAPID_PRIVATE_KEY;
-webPush.setVapidDetails('mailto:test@gmail.com', publicKey, privateKey);
+webPush.setVapidDetails("mailto:test@gmail.com", publicKey, privateKey);
 
 //Predefined preferences
 const userNotificationPreferences = {
   id: 1,
-  uid: 'testuid',
+  uid: "testuid",
+  permissionGranted: true,
   activityReminders: true,
   medicationReminders: true,
   appointmentReminders: true,
@@ -28,12 +29,12 @@ const userNotificationPreferences = {
 const userAppointment = [
   {
     id: 1,
-    uid: 'testuid',
-    appointmentWith: 'New Docker',
-    reason: 'Medications',
-    date: '2023-09-30',
-    time: '12:00:00',
-    notes: 'Call the doctor back 2 days later',
+    uid: "testuid",
+    appointmentWith: "New Docker",
+    reason: "Medications",
+    date: "2023-09-30",
+    time: "12:00:00",
+    notes: "Call the doctor back 2 days later",
   },
 ];
 
@@ -41,12 +42,12 @@ const userAppointment = [
 const userActivityJournal = [
   {
     id: 1,
-    uid: 'testuid',
-    date: '2023-09-30',
-    time: '12:00:00',
-    activity: 'running',
+    uid: "testuid",
+    date: "2023-09-30",
+    time: "12:00:00",
+    activity: "running",
     duration: 175,
-    notes: 'Sample activity entry',
+    notes: "Sample activity entry",
   },
 ];
 
@@ -54,13 +55,13 @@ const userActivityJournal = [
 const userFoodIntake = [
   {
     id: 1,
-    uid: 'testuid',
-    date: '2023-09-30',
-    time: '12:00:00',
-    foodName: 'test',
-    mealType: 'test',
+    uid: "testuid",
+    date: "2023-09-30",
+    time: "12:00:00",
+    foodName: "test",
+    mealType: "test",
     servingNumber: 5,
-    notes: 'test',
+    notes: "test",
   },
 ];
 
@@ -68,15 +69,15 @@ const userFoodIntake = [
 const userMedication = [
   {
     id: 1,
-    uid: 'testuid',
-    medicationName: 'test',
-    dateStarted: '2023-09-30',
-    time: '12:00:00',
+    uid: "testuid",
+    medicationName: "test",
+    dateStarted: "2023-09-30",
+    time: "12:00:00",
     dosage: 2,
-    unit: 'test',
-    frequency: 'Test',
-    route: 'Test',
-    notes: 'test',
+    unit: "test",
+    frequency: "Test",
+    route: "Test",
+    notes: "test",
   },
 ];
 
@@ -84,13 +85,13 @@ const userMedication = [
 const userInsulin = [
   {
     id: 1,
-    uid: 'testuid',
-    date: '2023-09-30',
-    time: '12:00:00',
-    typeOfInsulin: 'Test',
+    uid: "testuid",
+    date: "2023-09-30",
+    time: "12:00:00",
+    typeOfInsulin: "Test",
     unit: 1,
-    bodySite: 'Test',
-    notes: 'test',
+    bodySite: "Test",
+    notes: "test",
   },
 ];
 
@@ -98,214 +99,281 @@ const userInsulin = [
 const userGlucoseMeasurement = [
   {
     id: 1,
-    uid: 'testuid',
-    date: '2023-09-30',
-    mealTime: '12:00:00',
+    uid: "testuid",
+    date: "2023-09-30",
+    mealTime: "12:00:00",
     bloodGlucose: 4,
-    unit: 'Test',
-    notes: 'Test',
+    unit: "Test",
+    notes: "Test",
   },
 ];
 
-// const mockedDecodedToken = {
-//   uid: 'testuid',
-//   aud: '',
-//   auth_time: 0,
-//   exp: 0,
-//   firebase: {
-//     identities: { [0]: 'string' },
-//     sign_in_provider: 'string',
-//   },
-//   iat: 0,
-//   iss: '',
-//   sub: '',
-// };
+const mockedDecodedToken = {
+  uid: "testuid",
+  aud: "",
+  auth_time: 0,
+  exp: 0,
+  firebase: {
+    identities: { [0]: "string" },
+    sign_in_provider: "string",
+  },
+  iat: 0,
+  iss: "",
+  sub: "",
+};
 
 //Predefined subscription
 const userSubscription = {
-  uid: 'test',
+  uid: "testuid",
   subscription: {
-    endpoint: 'test',
-    keys: 'test',
+    endpoint: "test",
+    keys: "test",
   },
 };
 
-describe('Testing reminder controller', () => {
-  beforeAll(() => {
-    startServer();
+beforeAll(() => {
+  startServer();
+});
+
+afterAll(() => {
+  stopServer();
+});
+
+beforeEach(() => {
+  jest.clearAllMocks();
+  jest
+    .spyOn(admin.auth(), "verifyIdToken")
+    .mockResolvedValue(mockedDecodedToken);
+  jest.spyOn(db.User, "findOne").mockResolvedValue(user);
+
+  //Mock momemt library
+  jest.mock("moment-timezone", () => {
+    return moment.tz.setDefault("America/Toronto");
   });
 
-  afterAll(() => {
-    stopServer();
+  //Mock web push library
+  jest.mock("web-push", () => {
+    return {
+      sendNotification: jest.fn(),
+    };
   });
 
-  beforeEach(() => {
-    // jest
-    //   .spyOn(admin.auth(), 'verifyIdToken')
-    //   .mockResolvedValue(mockedDecodedToken);
-    jest.spyOn(db.User, 'findOne').mockResolvedValue(user);
+  // Mock the logger module
+  jest.mock("../middlewares/logger", () => {
+    const originalLogger = jest.requireActual("../middlewares/logger");
 
-    //Mock momemt library
-    jest.mock('moment-timezone', () => {
-      return moment.tz.setDefault('America/Toronto');
-    });
-
-    //Mock web push library
-    jest.mock('web-push', () => {
-      return {
-        sendNotification: jest.fn(),
-      };
-    });
+    return {
+      ...originalLogger,
+      Logger: {
+        info: jest.fn(),
+        error: jest.fn(),
+      },
+    };
   });
+});
 
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
+afterEach(() => {
+  jest.restoreAllMocks();
+});
 
-  it('test should find all reminders and send notification', async () => {
-    //Spy on the sendNotification Method
-    jest.spyOn(webPush, 'sendNotification').mockResolvedValue('test');
-    jest.spyOn(db.Subscription, 'findOne').mockResolvedValue(userSubscription);
+describe("Testing reminder server task", () => {
+  it("should send all reminders and prepare payloads", async () => {
+    // Mock dependencies
+    jest.spyOn(webPush, "sendNotification").mockResolvedValue("test");
+    jest.spyOn(db.Appointment, "findAll").mockResolvedValue(userAppointment);
     jest
-      .spyOn(db.NotificationPreference, 'findOne')
-      .mockResolvedValueOnce(userNotificationPreferences);
+      .spyOn(db.ActivityJournal, "findAll")
+      .mockResolvedValue(userActivityJournal);
     jest
-      .spyOn(db.ActivityJournal, 'findAll')
-      .mockResolvedValueOnce(userActivityJournal);
+      .spyOn(db.FoodIntakeJournal, "findAll")
+      .mockResolvedValue(userFoodIntake);
     jest
-      .spyOn(db.Appointment, 'findAll')
-      .mockResolvedValueOnce(userAppointment);
+      .spyOn(db.GlucoseMeasurement, "findAll")
+      .mockResolvedValue(userGlucoseMeasurement);
+    jest.spyOn(db.InsulinDosage, "findAll").mockResolvedValue(userInsulin);
+    jest.spyOn(db.Medication, "findAll").mockResolvedValue(userMedication);
     jest
-      .spyOn(db.FoodIntakeJournal, 'findAll')
-      .mockResolvedValueOnce(userFoodIntake);
-    jest.spyOn(db.Medication, 'findAll').mockResolvedValueOnce(userMedication);
-    jest.spyOn(db.InsulinDosage, 'findAll').mockResolvedValueOnce(userInsulin);
-    jest
-      .spyOn(db.GlucoseMeasurement, 'findAll')
-      .mockResolvedValueOnce(userGlucoseMeasurement);
-    const res = await request(app)
-      .get(`/api/reminders/${user.uid}`)
-      .send(userSubscription)
-      // .set({ Authorization: 'Bearer token' });
-    expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
-    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
-    expect(db.ActivityJournal.findAll).toHaveBeenCalledTimes(1);
+      .spyOn(db.NotificationPreference, "findOne")
+      .mockResolvedValue(userNotificationPreferences);
+    jest.spyOn(db.Subscription, "findOne").mockResolvedValue(userSubscription);
+
+    // Spy on the Logger.info and Logger.error functions
+    jest.spyOn(Logger, "info");
+
+    await sendUserReminders();
+
+    // Assertions for the main functionality
     expect(db.Appointment.findAll).toHaveBeenCalledTimes(1);
+    expect(db.ActivityJournal.findAll).toHaveBeenCalledTimes(1);
     expect(db.FoodIntakeJournal.findAll).toHaveBeenCalledTimes(1);
     expect(db.GlucoseMeasurement.findAll).toHaveBeenCalledTimes(1);
-    expect(db.Medication.findAll).toHaveBeenCalledTimes(1);
     expect(db.InsulinDosage.findAll).toHaveBeenCalledTimes(1);
+    expect(db.Medication.findAll).toHaveBeenCalledTimes(1);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(6);
+    expect(db.Subscription.findOne).toHaveBeenCalledTimes(6);
+    expect(webPush.sendNotification).toHaveBeenCalledTimes(6);
 
-    //Expect to send notificaiton for the appoinment with the subscription and title
-    userAppointment.forEach((appointment) => {
-      expect(webPush.sendNotification).toBeCalled();
-    });
-
-    //Expect the journals to send notification
-    userActivityJournal.forEach((activity) => {
-      expect(webPush.sendNotification).toBeCalled();
-    });
-
-    userFoodIntake.forEach((foodintake) => {
-      expect(webPush.sendNotification).toBeCalled();
-    });
-
-    userGlucoseMeasurement.forEach((glucose) => {
-      expect(webPush.sendNotification).toBeCalled();
-    });
-
-    userInsulin.forEach((Insulin) => {
-      expect(webPush.sendNotification).toBeCalled();
-    });
-
-    userMedication.forEach((medication) => {
-      expect(webPush.sendNotification).toBeCalled();
-    });
-
-    expect(res.status).toBe(200);
-    expect(res.body.status).toBe('SUCCESS');
-  });
-
-  it('should handle the case when notification preferences are not found', async () => {
-    // Mock the function to simulate the absence of notification preferences
-    jest
-      .spyOn(db.NotificationPreference, 'findOne')
-      .mockResolvedValueOnce(null);
-
-    jest.spyOn(db.Subscription, 'findOne').mockResolvedValue(userSubscription);
-
-    const res = await request(app)
-      .get(`/api/reminders/${user.uid}`)
-      .send('test')
-      // .set({ Authorization: 'Bearer token' });
-
-    // Expectations for the response
-    expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
-    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
-    expect(res.status).toBe(404);
-    expect(res.body.status).toBe('ERROR');
-    expect(res.body.message).toBe(
-      'Notification preference not found, invalid user id.'
+    // Assertions for logging statements
+    expect(Logger.info).toHaveBeenCalledWith(
+      "Notification for appointments sent to user: ",
+      userMedication[0].uid
+    );
+    expect(Logger.info).toHaveBeenCalledWith(
+      "Notification for activityJournals sent to user: ",
+      userMedication[0].uid
+    );
+    expect(Logger.info).toHaveBeenCalledWith(
+      "Notification for foodIntakeJournals sent to user: ",
+      userMedication[0].uid
+    );
+    expect(Logger.info).toHaveBeenCalledWith(
+      "Notification for glucoseMeasurements sent to user: ",
+      userMedication[0].uid
+    );
+    expect(Logger.info).toHaveBeenCalledWith(
+      "Notification for insulinDosages sent to user: ",
+      userMedication[0].uid
+    );
+    expect(Logger.info).toHaveBeenCalledWith(
+      "Notification for medications sent to user: ",
+      userMedication[0].uid
     );
   });
 
-  // it('the test should fail', async () => {
-  //   const res = await request(app)
-  //     .get(`/api/reminders/0`)
-  //     .send('')
-  //     .set({ Authorization: 'Bearer token' });
-  //   expect(res.status).toBe(401);
-  //   expect(res.body.status).toBe('UNAUTHORIZED');
-  // });
+  it("should log an error when notification preferences are not found", async () => {
+    // Mock dependencies
+    jest.spyOn(db.Appointment, "findAll").mockResolvedValue(userAppointment);
+    jest
+      .spyOn(db.ActivityJournal, "findAll")
+      .mockResolvedValue(userActivityJournal);
+    jest
+      .spyOn(db.FoodIntakeJournal, "findAll")
+      .mockResolvedValue(userFoodIntake);
+    jest
+      .spyOn(db.GlucoseMeasurement, "findAll")
+      .mockResolvedValue(userGlucoseMeasurement);
+    jest.spyOn(db.InsulinDosage, "findAll").mockResolvedValue(userInsulin);
+    jest.spyOn(db.Medication, "findAll").mockResolvedValue(userMedication);
+    // Simulates not finding the notification preference
+    jest
+      .spyOn(db.NotificationPreference, "findOne")
+      .mockResolvedValueOnce(null)
+      .mockResolvedValueOnce(null)
+      .mockResolvedValueOnce(null)
+      .mockResolvedValueOnce(null)
+      .mockResolvedValueOnce(null)
+      .mockResolvedValueOnce(null);
+    jest.spyOn(Logger, "error");
 
-  it('notification should fail sending', async () => {
-    //Spy On webpush to give error when calling the sendNotification Method
-    jest
-      .spyOn(webPush, 'sendNotification')
-      .mockRejectedValue(new Error('query error'));
-    jest.spyOn(db.Subscription, 'findOne').mockResolvedValue(userSubscription);
-    jest
-      .spyOn(db.NotificationPreference, 'findOne')
-      .mockResolvedValueOnce(userNotificationPreferences);
-    jest
-      .spyOn(db.ActivityJournal, 'findAll')
-      .mockResolvedValueOnce(userActivityJournal);
-    jest
-      .spyOn(db.Appointment, 'findAll')
-      .mockResolvedValueOnce(userAppointment);
-    jest
-      .spyOn(db.FoodIntakeJournal, 'findAll')
-      .mockResolvedValueOnce(userFoodIntake);
-    jest.spyOn(db.Medication, 'findAll').mockResolvedValueOnce(userMedication);
-    jest.spyOn(db.InsulinDosage, 'findAll').mockResolvedValueOnce(userInsulin);
-    jest
-      .spyOn(db.GlucoseMeasurement, 'findAll')
-      .mockResolvedValueOnce(userGlucoseMeasurement);
-    const res = await request(app)
-      .get(`/api/reminders/${user.uid}`)
-      .send(userSubscription)
-      // .set({ Authorization: 'Bearer token' });
-    expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
+    await sendUserReminders();
+
+    // Assertions
     expect(db.Appointment.findAll).toHaveBeenCalledTimes(1);
-    //Expect it to be called
-    userAppointment.forEach((appointment) => {
-      expect(webPush.sendNotification).toHaveBeenCalled();
-    });
+    expect(db.ActivityJournal.findAll).toHaveBeenCalledTimes(1);
+    expect(db.FoodIntakeJournal.findAll).toHaveBeenCalledTimes(1);
+    expect(db.GlucoseMeasurement.findAll).toHaveBeenCalledTimes(1);
+    expect(db.InsulinDosage.findAll).toHaveBeenCalledTimes(1);
+    expect(db.Medication.findAll).toHaveBeenCalledTimes(1);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(6);
+
+    // Ensure Logger.error is called with the appropriate message
+    expect(Logger.error).toHaveBeenCalledTimes(6);
+    expect(Logger.error).toHaveBeenCalledWith(
+      "Notification preference not found, invalid user id."
+    );
   });
 
-  it('should handle the case when subscription is not found in databases', async () => {
-    // Mock the function to simulate the absence of subscribtion
-    jest.spyOn(db.Subscription, 'findOne').mockResolvedValueOnce(null);
+  it("should log an error when subscriptions is not found", async () => {
+    // Mock dependencies
+    jest.spyOn(db.Appointment, "findAll").mockResolvedValue(userAppointment);
+    jest
+      .spyOn(db.ActivityJournal, "findAll")
+      .mockResolvedValue(userActivityJournal);
+    jest
+      .spyOn(db.FoodIntakeJournal, "findAll")
+      .mockResolvedValue(userFoodIntake);
+    jest
+      .spyOn(db.GlucoseMeasurement, "findAll")
+      .mockResolvedValue(userGlucoseMeasurement);
+    jest.spyOn(db.InsulinDosage, "findAll").mockResolvedValue(userInsulin);
+    jest.spyOn(db.Medication, "findAll").mockResolvedValue(userMedication);
+    jest
+      .spyOn(db.NotificationPreference, "findOne")
+      .mockResolvedValue(userNotificationPreferences);
+    jest.spyOn(db.Subscription, "findOne").mockResolvedValue(null); // Simulate not finding the subscription
+    jest.spyOn(Logger, "error");
 
-    const res = await request(app)
-      .get(`/api/reminders/${user.uid}`)
-      .send('null')
-      // .set({ Authorization: 'Bearer token' });
+    await sendUserReminders();
 
-    // Expectations for the response
-    expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
-    expect(res.status).toBe(404);
-    expect(res.body.status).toBe('ERROR');
-    expect(res.body.message).toBe('No Subscription was found.');
+    // Assertions
+    expect(db.Appointment.findAll).toHaveBeenCalledTimes(1);
+    expect(db.ActivityJournal.findAll).toHaveBeenCalledTimes(1);
+    expect(db.FoodIntakeJournal.findAll).toHaveBeenCalledTimes(1);
+    expect(db.GlucoseMeasurement.findAll).toHaveBeenCalledTimes(1);
+    expect(db.InsulinDosage.findAll).toHaveBeenCalledTimes(1);
+    expect(db.Medication.findAll).toHaveBeenCalledTimes(1);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(6);
+    expect(db.Subscription.findOne).toHaveBeenCalledTimes(6);
+
+    // Ensure Logger.error is called with the appropriate message
+    expect(Logger.error).toHaveBeenCalledTimes(6);
+    expect(Logger.error).toHaveBeenCalledWith("No Subscription was found.");
+  });
+
+  it("should log an error when webPush.sendNotification fails", async () => {
+    // Mock dependencies
+    jest.spyOn(db.Appointment, "findAll").mockResolvedValue(userAppointment);
+    jest
+      .spyOn(db.ActivityJournal, "findAll")
+      .mockResolvedValue(userActivityJournal);
+    jest
+      .spyOn(db.FoodIntakeJournal, "findAll")
+      .mockResolvedValue(userFoodIntake);
+    jest
+      .spyOn(db.GlucoseMeasurement, "findAll")
+      .mockResolvedValue(userGlucoseMeasurement);
+    jest.spyOn(db.InsulinDosage, "findAll").mockResolvedValue(userInsulin);
+    jest.spyOn(db.Medication, "findAll").mockResolvedValue(userMedication);
+    jest
+      .spyOn(db.NotificationPreference, "findOne")
+      .mockResolvedValue(userNotificationPreferences);
+    jest.spyOn(db.Subscription, "findOne").mockResolvedValue(userSubscription);
+    jest.spyOn(webPush, "sendNotification").mockRejectedValue("WebPush Error");
+    jest.spyOn(Logger, "error");
+
+    await sendUserReminders();
+
+    // Assertions
+    expect(db.Appointment.findAll).toHaveBeenCalledTimes(1);
+    expect(db.ActivityJournal.findAll).toHaveBeenCalledTimes(1);
+    expect(db.FoodIntakeJournal.findAll).toHaveBeenCalledTimes(1);
+    expect(db.GlucoseMeasurement.findAll).toHaveBeenCalledTimes(1);
+    expect(db.InsulinDosage.findAll).toHaveBeenCalledTimes(1);
+    expect(db.Medication.findAll).toHaveBeenCalledTimes(1);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(6);
+    expect(db.Subscription.findOne).toHaveBeenCalledTimes(6);
+    expect(webPush.sendNotification).toHaveBeenCalled(); // Ensure this is called
+    expect(Logger.error).toHaveBeenCalledWith("WebPush Error"); // Ensure Logger.error is called with the appropriate message
+  });
+
+  it("should log an error when there's a database error", async () => {
+    // Mock dependencies
+    jest.spyOn(db.Appointment, "findAll").mockImplementation(() => {
+      throw new Error("Database error"); // Simulate a database error
+    });
+    jest.spyOn(Logger, "error");
+
+    try {
+      // Call the function and expect it to throw an error
+      await sendUserReminders();
+
+      // If the promise is resolved, fail the test
+      fail("Expected the promise to be rejected, but it was resolved.");
+    } catch (err) {
+      // Assertions
+      expect(Logger.error).toHaveBeenCalledWith(
+        "Error occurred while fetching reminders for user: Error: Database error"
+      );
+    }
   });
 });
