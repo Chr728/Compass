@@ -116,7 +116,6 @@ const notificationPreferenceValidator = (values: {
     Logger.error(`Invalid permissionGranted: ${permissionGranted}`);
     throw new Error(`Invalid permissionGranted: ${permissionGranted}`);
   }
-
   //check if activityReminders is valid
   if (typeof activityReminders !== "boolean") {
     Logger.error(`Invalid activityReminders: ${activityReminders}`);

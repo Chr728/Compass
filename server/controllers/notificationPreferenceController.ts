@@ -29,7 +29,6 @@ export const createNotificationPreference = async (
     const createNotificationPreference = await db.NotificationPreference.create(
       {
         uid,
-        permissionGranted,
         activityReminders,
         medicationReminders,
         appointmentReminders,

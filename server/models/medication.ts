@@ -14,6 +14,7 @@ type MedicationAttributes = {
   frequency: string;
   route: string;
   notes: string;
+  image: string;
   
   
 
@@ -38,6 +39,7 @@ module.exports = (sequelize:any, DataTypes:any) => {
     frequency!: string;
     route!: string;
     notes!: string;
+    image!: string;
   
 
     static associate(models:any) {
@@ -89,7 +91,11 @@ module.exports = (sequelize:any, DataTypes:any) => {
     notes: {
       type: DataTypes.TEXT,
       allowNull: true,
-    }, 
+    },
+    image: {
+      type: DataTypes.STRING,
+      allowNull:true
+    }
   
   }, {
     sequelize,

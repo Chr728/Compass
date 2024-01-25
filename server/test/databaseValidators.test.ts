@@ -182,6 +182,7 @@ runTests({
       incorrectData: "medicationReminders",
     },
     {
+      permissionGranted: false,
       activityReminders: true,
       medicationReminders: false,
       appointmentReminders: "true",

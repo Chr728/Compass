@@ -45,6 +45,7 @@ app.use("/api/notifications", notificationRoutes);
 app.use("/api/journals/foodIntake", foodIntakeJournalRoutes);
 app.use("/api/subscription", subscriptionRoutes);
 app.use("/api/medication", medicationRoutes);
+app.use("/medicationImages", express.static("./medicationImages"));
 app.use(handleError);
 
 // Schedule the task within the main process
