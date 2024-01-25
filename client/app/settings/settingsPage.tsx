@@ -98,8 +98,18 @@ export default function SettingsPage() {
 						</span>
 					</div>
 				</Link>
-
+        
 				<hr className="h-px w-336 text-darkgrey m-2"></hr>
+        
+	      <Link href="/privacy">
+					<div className="flex items-center m-2">
+						<span className="text-2xl not-italic font-bold font-IBM Plex Sans text-darkgrey">
+							Privacy Policy
+						</span>
+					</div>
+				</Link>
+       
+<hr className="h-px w-336 text-darkgrey m-2"></hr>
 
 				<Link href="/userTesting">
 					<div className="flex items-center m-2">
@@ -108,6 +118,7 @@ export default function SettingsPage() {
 						</span>
 					</div>
 				</Link>
+
 				<Link href="/logout">
 					<div className="text-center mt-[100px] ">
 						<RedButton
@@ -118,6 +129,7 @@ export default function SettingsPage() {
 							}}></RedButton>
 					</div>
 				</Link>
+
 			</div>
 
 			<div className="md:hidden">

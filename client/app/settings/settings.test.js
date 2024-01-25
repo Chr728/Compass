@@ -42,7 +42,7 @@ describe("Settings Page", () => {
 		const PushNotifications = screen.getByText(/Push notifications/i);
 		const AboutCompass = screen.getByText(/About Compass/i);
 		const UserTesting = screen.getByText(/Your Feedback/i);
-
+		const Privacy = screen.getByText(/Privacy Policy/i);
 		const MoreInfo = screen.getByText(/More Info/i);
 		const BackButton = screen.getAllByRole("button")[0];
 		const LogoutButton = screen.getAllByRole("button")[1];
@@ -55,6 +55,7 @@ describe("Settings Page", () => {
 		expect(PushNotifications).toBeInTheDocument();
 		expect(AboutCompass).toBeInTheDocument();
 		expect(UserTesting).toBeInTheDocument();
+		expect(Privacy).toBeInTheDocument();
 		expect(MoreInfo).toBeInTheDocument();
 
 		expect(BackButton).toBeInTheDocument();

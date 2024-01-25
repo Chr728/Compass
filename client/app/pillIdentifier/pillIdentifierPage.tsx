@@ -82,6 +82,7 @@ export default function PillIdentifierPage() {
 				setSelectedImage(imageData);
 				setImageCaptured(true);
 				
+				
 			}
 		}
 	};
@@ -100,9 +101,20 @@ export default function PillIdentifierPage() {
 		return new Blob([u8arr], { type: mime });
 	}
 	  
-	  
 
 	const handleTakePicture = async () => {
+		setSelectedImage(null);
+		if (!isCameraActive) {
+			startCamera(); // Start the camera only if it's not already active
+			setImageCaptured(false);
+		} else {
+			captureImage(); // Capture image if the camera is already active
+			stopCamera(); // Stop the camera after capturing the image
+		}
+
+	};
+
+	const handleSubmit = async () => {
 		if (!isCameraActive) {
 			startCamera(); // Start the camera only if it's not already active
 			setImageCaptured(false);
@@ -112,7 +124,6 @@ export default function PillIdentifierPage() {
 		}
 
 		try {
-			setTimeout(async() => { 
 				if (selectedImage) {
 					const response = await sendImage(imageBinaryFile, true);
 					const body = await response.json();
@@ -122,14 +133,13 @@ export default function PillIdentifierPage() {
 					  }));
 					setApiResults(labelsAndProbabilities);
 				  }
-			}, 1000)
-			
         } catch(error){
             console.error("Error sending image to server:", error);
         }
 	};
 
 	const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
+		stopCamera();
 		const file = event.target.files?.[0];
 
 		if (file) {
@@ -220,14 +230,28 @@ export default function PillIdentifierPage() {
 						style={{ display: isCameraActive ? "block" : "none" }}
 					/>
 
-					<button
-						style={{
-							width: "162px",
-						}}
-						onClick={handleTakePicture}
-						className="bg-blue text-[16px] p-3  text-white font-sans font-medium rounded-md h-[46px] shadow-[0px_4px_8px_0px_rgba(44,39,56,0.08),0px_2px_4px_0px_rgba(44,39,56,0.08)]">
-						{selectedImage ? "Submit" : "Take a picture"}
-					</button>
+					{ selectedImage ? (
+						<button
+							style={{
+								width: "162px",
+							}}
+							onClick={handleSubmit}
+							className="bg-blue text-[16px] p-3 text-white font-sans font-medium rounded-md h-[46px] shadow-[0px_4px_8px_0px_rgba(44,39,56,0.08),0px_2px_4px_0px_rgba(44,39,56,0.08)]"
+						>
+							Submit
+						</button>
+            			) : (
+
+						<button
+							style={{
+								width: "162px",
+							}}
+							onClick={handleTakePicture}
+							className="bg-blue text-[16px] p-3 text-white font-sans font-medium rounded-md h-[46px] shadow-[0px_4px_8px_0px_rgba(44,39,56,0.08),0px_2px_4px_0px_rgba(44,39,56,0.08)]"
+						>
+							Take a picture
+						</button>
+           			 )}
 					<canvas ref={canvasRef} style={{ display: "none" }} />
 				</div>
 
