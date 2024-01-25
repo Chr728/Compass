@@ -1,8 +1,8 @@
-import { sendUserReminders } from '../controllers/reminderController';
-import enforceAuthorization from '../middlewares/enforceAuthorization';
-import { Router } from 'express';
-const router = Router();
+// import { sendUserReminders } from "../tasks/reminderTask";
+// import enforceAuthorization from "../middlewares/enforceAuthorization";
+// import { Router } from "express";
+// const router = Router();
 
-router.route('/').get(sendUserReminders);
+// router.route("/").get(sendUserReminders);
 
-export default router;
+// export default router;

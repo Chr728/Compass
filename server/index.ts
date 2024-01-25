@@ -9,7 +9,7 @@ import moodJournalRoutes from "./routes/moodJournalRoutes";
 import appointmentRoutes from "./routes/appointmentRoutes";
 import notificationRoutes from "./routes/notificationPreferenceRoutes";
 import foodIntakeJournalRoutes from "./routes/foodIntakeJournalRoutes";
-import reminderRoutes from "./routes/remindersRoutes";
+// import reminderRoutes from "./routes/remindersRoutes";
 import diabeticGlucoseJournalRoutes from "./routes/diabeticGlucoseJournalRoutes";
 import diabeticInsulinJournalRoutes from "./routes/diabeticInsulinJournalRoutes";
 import subscriptionRoutes from "./routes/subscriptionRoutes";
@@ -18,7 +18,7 @@ import Morgan from "./middlewares/morgan";
 import { Logger } from "./middlewares/logger";
 import decodeToken from "./middlewares/decodeToken";
 import { handleError } from "./middlewares/errorMiddleware";
-import { sendUserReminders } from "./controllers/reminderController";
+import { sendUserReminders } from "./tasks/reminderTask";
 import cron from "node-cron";
 require("dotenv").config({
   path: "./../.env",
@@ -33,7 +33,7 @@ const isDevelopment = process.env.NODE_ENV === "development";
 app.use(cors());
 app.use(express.json());
 app.use(Morgan);
-app.use("/api/reminders", reminderRoutes);
+// app.use("/api/reminders", reminderRoutes);
 app.use(decodeToken);
 app.use("/api/journals/weight", weightJournalRoutes);
 app.use("/api/journals/mood", moodJournalRoutes);

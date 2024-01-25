@@ -112,6 +112,10 @@ export const sendUserReminders = async () => {
           webPush
             .sendNotification(userSubscription.subscription, payload)
             .catch((error: any) => Logger.error(error));
+          Logger.info(
+            "Notification for appointments sent to user: ",
+            appointment.uid
+          );
         }
       }
     }
@@ -164,6 +168,10 @@ export const sendUserReminders = async () => {
           webPush
             .sendNotification(userSubscription.subscription, payload)
             .catch((error: any) => Logger.error(error));
+          Logger.info(
+            "Notification for activityjournals sent to user: ",
+            activityjournal.uid
+          );
         }
       }
     }
@@ -215,6 +223,10 @@ export const sendUserReminders = async () => {
           webPush
             .sendNotification(userSubscription.subscription, payload)
             .catch((error: any) => Logger.error(error));
+          Logger.info(
+            "Notification for foodIntakeJournals sent to user: ",
+            foodIntakeJournal.uid
+          );
         }
       }
     }
@@ -263,6 +275,10 @@ export const sendUserReminders = async () => {
           webPush
             .sendNotification(userSubscription.subscription, payload)
             .catch((error: any) => Logger.error(error));
+          Logger.info(
+            "Notification for glucoseMeasurements sent to user: ",
+            glucoseMeasurement.uid
+          );
         }
       }
     }
@@ -314,6 +330,10 @@ export const sendUserReminders = async () => {
           webPush
             .sendNotification(userSubscription, payload)
             .catch((error: any) => Logger.error(error));
+          Logger.info(
+            "Notification for insulinDosages sent to user: ",
+            insulinDosage.uid
+          );
         }
       }
     }
@@ -361,6 +381,10 @@ export const sendUserReminders = async () => {
           webPush
             .sendNotification(userSubscription, payload)
             .catch((error: any) => Logger.error(error));
+          Logger.info(
+            "Notification for medications sent to user: ",
+            medication.uid
+          );
         }
       }
     }

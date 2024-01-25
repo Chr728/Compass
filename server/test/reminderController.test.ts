@@ -1,10 +1,10 @@
-import request from "supertest";
-import app from "../index";
 import db from "../models/index";
 import admin from "firebase-admin";
 import moment = require("moment-timezone");
 const webPush = require("web-push");
 import { user, startServer, stopServer } from "../utils/journalsTestHelper";
+import { sendUserReminders } from "../tasks/reminderTask";
+import { Logger } from "../middlewares/logger";
 
 let server: any;
 const port = process.env.PORT;
@@ -16,6 +16,7 @@ webPush.setVapidDetails("mailto:test@gmail.com", publicKey, privateKey);
 const userNotificationPreferences = {
   id: 1,
   uid: "testuid",
+  permissionGranted: true,
   activityReminders: true,
   medicationReminders: true,
   appointmentReminders: true,
@@ -130,172 +131,593 @@ const userSubscription = {
   },
 };
 
-describe("Testing reminder controller", () => {
-  beforeAll(() => {
-    startServer();
+beforeAll(() => {
+  startServer();
+});
+
+afterAll(() => {
+  stopServer();
+});
+
+beforeEach(() => {
+  jest.clearAllMocks();
+  jest
+    .spyOn(admin.auth(), "verifyIdToken")
+    .mockResolvedValue(mockedDecodedToken);
+  jest.spyOn(db.User, "findOne").mockResolvedValue(user);
+
+  //Mock momemt library
+  jest.mock("moment-timezone", () => {
+    return moment.tz.setDefault("America/Toronto");
   });
 
-  afterAll(() => {
-    stopServer();
+  //Mock web push library
+  jest.mock("web-push", () => {
+    return {
+      sendNotification: jest.fn(),
+    };
   });
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-    jest
-      .spyOn(admin.auth(), "verifyIdToken")
-      .mockResolvedValue(mockedDecodedToken);
-    jest.spyOn(db.User, "findOne").mockResolvedValue(user);
+  // Mock the logger module
+  jest.mock("../middlewares/logger", () => {
+    const originalLogger = jest.requireActual("../middlewares/logger");
 
-    //Mock momemt library
-    jest.mock("moment-timezone", () => {
-      return moment.tz.setDefault("America/Toronto");
-    });
-
-    //Mock web push library
-    jest.mock("web-push", () => {
-      return {
-        sendNotification: jest.fn(),
-      };
-    });
+    return {
+      ...originalLogger,
+      Logger: {
+        info: jest.fn(),
+        error: jest.fn(),
+      },
+    };
   });
+});
 
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
+afterEach(() => {
+  jest.restoreAllMocks();
+});
 
-  it("test should find all reminders and send notification", async () => {
-    //Spy on the sendNotification Method
+describe("Testing appointments payload for notifications", () => {
+  it("should send appointment reminders", async () => {
+    // Mock dependencies
     jest.spyOn(webPush, "sendNotification").mockResolvedValue("test");
-    jest.spyOn(db.Subscription, "findOne").mockResolvedValue(userSubscription);
+    jest.spyOn(db.Appointment, "findAll").mockResolvedValue(userAppointment);
     jest
       .spyOn(db.NotificationPreference, "findOne")
-      .mockResolvedValueOnce(userNotificationPreferences);
-    jest
-      .spyOn(db.ActivityJournal, "findAll")
-      .mockResolvedValueOnce(userActivityJournal);
-    jest
-      .spyOn(db.Appointment, "findAll")
-      .mockResolvedValueOnce(userAppointment);
-    jest
-      .spyOn(db.FoodIntakeJournal, "findAll")
-      .mockResolvedValueOnce(userFoodIntake);
-    jest.spyOn(db.Medication, "findAll").mockResolvedValueOnce(userMedication);
-    jest.spyOn(db.InsulinDosage, "findAll").mockResolvedValueOnce(userInsulin);
-    jest
-      .spyOn(db.GlucoseMeasurement, "findAll")
-      .mockResolvedValueOnce(userGlucoseMeasurement);
-    const res = await request(app).get(`/api/reminders`);
-    // .set({ Authorization: 'Bearer token' });
-    expect(db.ActivityJournal.findAll).toHaveBeenCalledTimes(1);
+      .mockResolvedValue(userNotificationPreferences);
+    jest.spyOn(db.Subscription, "findOne").mockResolvedValue(userSubscription);
+
+    // Spy on the Logger.info and Logger.error functions
+    jest.spyOn(Logger, "info");
+
+    await sendUserReminders();
+
+    // Assertions for the main functionality
     expect(db.Appointment.findAll).toHaveBeenCalledTimes(1);
-    expect(db.FoodIntakeJournal.findAll).toHaveBeenCalledTimes(1);
-    expect(db.GlucoseMeasurement.findAll).toHaveBeenCalledTimes(1);
-    expect(db.Medication.findAll).toHaveBeenCalledTimes(1);
-    expect(db.InsulinDosage.findAll).toHaveBeenCalledTimes(1);
-    //Expect to send notificaiton for the appoinment with the subscription and title
-    userAppointment.forEach((appointment) => {
-      expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
-      expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
-      expect(webPush.sendNotification).toBeCalled();
-    });
-    //Expect the journals to send notification
-    userActivityJournal.forEach((activity) => {
-      expect(webPush.sendNotification).toBeCalled();
-    });
-    userFoodIntake.forEach((foodintake) => {
-      expect(webPush.sendNotification).toBeCalled();
-    });
-    userGlucoseMeasurement.forEach((glucose) => {
-      expect(webPush.sendNotification).toBeCalled();
-    });
-    userInsulin.forEach((Insulin) => {
-      expect(webPush.sendNotification).toBeCalled();
-    });
-    userMedication.forEach((medication) => {
-      expect(webPush.sendNotification).toBeCalled();
-    });
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
+    expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
+    expect(webPush.sendNotification).toHaveBeenCalled();
+
+    // Assertions for logging statements
+    expect(Logger.info).toHaveBeenCalledWith(
+      "Notification for appointments sent to user: ",
+      userAppointment[0].uid
+    );
   });
 
-  // it('should handle the case when notification preferences are not found', async () => {
-  //   // Mock the function to simulate the absence of notification preferences
-  //   jest
-  //     .spyOn(db.NotificationPreference, 'findOne')
-  //     .mockResolvedValueOnce(null);
+  it("should log an error when notification preference is not found", async () => {
+    // Mock dependencies
+    jest.spyOn(db.Appointment, "findAll").mockResolvedValue(userAppointment);
+    jest.spyOn(db.NotificationPreference, "findOne").mockResolvedValue(null); // Simulate not finding the notification preference
+    jest.spyOn(Logger, "error");
 
-  //   jest.spyOn(db.Subscription, 'findOne').mockResolvedValue(userSubscription);
+    await sendUserReminders();
 
-  //   const res = await request(app)
-  //     .get(`/api/reminders/`)
-  //     .send('test')
-  //     // .set({ Authorization: 'Bearer token' });
+    // Assertions
+    expect(db.Appointment.findAll).toHaveBeenCalledTimes(1);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
 
-  //   // Expectations for the response
-  //   expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
-  //   expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
-  //   expect(res.status).toBe(404);
-  //   expect(res.body.status).toBe('ERROR');
-  //   expect(res.body.message).toBe(
-  //     'Notification preference not found, invalid user id.'
-  //   );
-  // });
+    // Ensure Logger.error is called with the appropriate message
+    expect(Logger.error).toHaveBeenCalledWith(
+      "Notification preference not found, invalid user id."
+    );
+  });
 
-  // // it('the test should fail', async () => {
-  // //   const res = await request(app)
-  // //     .get(`/api/reminders/0`)
-  // //     .send('')
-  // //     .set({ Authorization: 'Bearer token' });
-  // //   expect(res.status).toBe(401);
-  // //   expect(res.body.status).toBe('UNAUTHORIZED');
-  // // });
+  it("should log an error when subscription is not found", async () => {
+    // Mock dependencies
+    jest.spyOn(db.Appointment, "findAll").mockResolvedValue(userAppointment);
+    jest
+      .spyOn(db.NotificationPreference, "findOne")
+      .mockResolvedValue(userNotificationPreferences);
+    jest.spyOn(db.Subscription, "findOne").mockResolvedValue(null); // Simulate not finding the subscription
+    jest.spyOn(Logger, "error");
 
-  // it('notification should fail sending', async () => {
-  //   //Spy On webpush to give error when calling the sendNotification Method
-  //   jest
-  //     .spyOn(webPush, 'sendNotification')
-  //     .mockRejectedValue(new Error('query error'));
-  //   jest.spyOn(db.Subscription, 'findOne').mockResolvedValue(userSubscription);
-  //   jest
-  //     .spyOn(db.NotificationPreference, 'findOne')
-  //     .mockResolvedValueOnce(userNotificationPreferences);
-  //   jest
-  //     .spyOn(db.ActivityJournal, 'findAll')
-  //     .mockResolvedValueOnce(userActivityJournal);
-  //   jest
-  //     .spyOn(db.Appointment, 'findAll')
-  //     .mockResolvedValueOnce(userAppointment);
-  //   jest
-  //     .spyOn(db.FoodIntakeJournal, 'findAll')
-  //     .mockResolvedValueOnce(userFoodIntake);
-  //   jest.spyOn(db.Medication, 'findAll').mockResolvedValueOnce(userMedication);
-  //   jest.spyOn(db.InsulinDosage, 'findAll').mockResolvedValueOnce(userInsulin);
-  //   jest
-  //     .spyOn(db.GlucoseMeasurement, 'findAll')
-  //     .mockResolvedValueOnce(userGlucoseMeasurement);
-  //   const res = await request(app)
-  //     .get(`/api/reminders/`)
-  //     .send(userSubscription)
-  //     // .set({ Authorization: 'Bearer token' });
-  //   expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
-  //   expect(db.Appointment.findAll).toHaveBeenCalledTimes(1);
-  //   //Expect it to be called
-  //   userAppointment.forEach((appointment) => {
-  //     expect(webPush.sendNotification).toHaveBeenCalled();
-  //   });
-  // });
+    await sendUserReminders();
 
-  // it('should handle the case when subscription is not found in databases', async () => {
-  //   // Mock the function to simulate the absence of subscribtion
-  //   jest.spyOn(db.Subscription, 'findOne').mockResolvedValueOnce(null);
+    // Assertions
+    expect(db.Appointment.findAll).toHaveBeenCalledTimes(1);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
+    expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
 
-  //   const res = await request(app)
-  //     .get(`/api/reminders/`)
-  //     .send('null')
-  //     // .set({ Authorization: 'Bearer token' });
+    // Ensure Logger.error is called with the appropriate message
+    expect(Logger.error).toHaveBeenCalledWith("No Subscription was found.");
+  });
 
-  //   // Expectations for the response
-  //   expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
-  //   expect(res.status).toBe(404);
-  //   expect(res.body.status).toBe('ERROR');
-  //   expect(res.body.message).toBe('No Subscription was found.');
-  // });
+  it("should log an error when webPush.sendNotification fails", async () => {
+    // Mock dependencies
+    jest.spyOn(db.Appointment, "findAll").mockResolvedValue(userAppointment);
+    jest
+      .spyOn(db.NotificationPreference, "findOne")
+      .mockResolvedValue(userNotificationPreferences);
+    jest.spyOn(db.Subscription, "findOne").mockResolvedValue(userSubscription);
+    jest.spyOn(webPush, "sendNotification").mockRejectedValue("WebPush Error");
+    jest.spyOn(Logger, "error");
+
+    await sendUserReminders();
+
+    // Assertions
+    expect(db.Appointment.findAll).toHaveBeenCalledTimes(1);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
+    expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
+    expect(webPush.sendNotification).toHaveBeenCalled(); // Ensure this is called
+    expect(Logger.error).toHaveBeenCalledWith("WebPush Error"); // Ensure Logger.error is called with the appropriate message
+  });
+});
+
+describe("Testing activityJournals payload for notifications", () => {
+  it("should send appointment reminders", async () => {
+    // Mock dependencies
+    jest.spyOn(webPush, "sendNotification").mockResolvedValue("test");
+    jest
+      .spyOn(db.ActivityJournal, "findAll")
+      .mockResolvedValue(userActivityJournal);
+    jest
+      .spyOn(db.NotificationPreference, "findOne")
+      .mockResolvedValue(userNotificationPreferences);
+    jest.spyOn(db.Subscription, "findOne").mockResolvedValue(userSubscription);
+
+    // Spy on the Logger.info and Logger.error functions
+    jest.spyOn(Logger, "info");
+
+    await sendUserReminders();
+
+    // Assertions for the main functionality
+    expect(db.ActivityJournal.findAll).toHaveBeenCalledTimes(1);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
+    expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
+    expect(webPush.sendNotification).toHaveBeenCalled();
+
+    // Assertions for logging statements
+    expect(Logger.info).toHaveBeenCalledWith(
+      "Notification for activityJournals sent to user: ",
+      userActivityJournal[0].uid
+    );
+  });
+
+  it("should log an error when notification preference is not found", async () => {
+    // Mock dependencies
+    jest
+      .spyOn(db.ActivityJournal, "findAll")
+      .mockResolvedValue(userActivityJournal);
+    jest.spyOn(db.NotificationPreference, "findOne").mockResolvedValue(null); // Simulate not finding the notification preference
+    jest.spyOn(Logger, "error");
+
+    await sendUserReminders();
+
+    // Assertions
+    expect(db.ActivityJournal.findAll).toHaveBeenCalledTimes(1);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
+
+    // Ensure Logger.error is called with the appropriate message
+    expect(Logger.error).toHaveBeenCalledWith(
+      "Notification preference not found, invalid user id."
+    );
+  });
+
+  it("should log an error when subscription is not found", async () => {
+    // Mock dependencies
+    jest
+      .spyOn(db.ActivityJournal, "findAll")
+      .mockResolvedValue(userActivityJournal);
+    jest
+      .spyOn(db.NotificationPreference, "findOne")
+      .mockResolvedValue(userNotificationPreferences);
+    jest.spyOn(db.Subscription, "findOne").mockResolvedValue(null); // Simulate not finding the subscription
+    jest.spyOn(Logger, "error");
+
+    await sendUserReminders();
+
+    // Assertions
+    expect(db.ActivityJournal.findAll).toHaveBeenCalledTimes(1);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
+    expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
+
+    // Ensure Logger.error is called with the appropriate message
+    expect(Logger.error).toHaveBeenCalledWith("No Subscription was found.");
+  });
+
+  it("should log an error when webPush.sendNotification fails", async () => {
+    // Mock dependencies
+    jest
+      .spyOn(db.ActivityJournal, "findAll")
+      .mockResolvedValue(userActivityJournal);
+    jest
+      .spyOn(db.NotificationPreference, "findOne")
+      .mockResolvedValue(userNotificationPreferences);
+    jest.spyOn(db.Subscription, "findOne").mockResolvedValue(userSubscription);
+    jest.spyOn(webPush, "sendNotification").mockRejectedValue("WebPush Error");
+    jest.spyOn(Logger, "error");
+
+    await sendUserReminders();
+
+    // Assertions
+    expect(db.ActivityJournal.findAll).toHaveBeenCalledTimes(1);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
+    expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
+    expect(webPush.sendNotification).toHaveBeenCalled(); // Ensure this is called
+    expect(Logger.error).toHaveBeenCalledWith("WebPush Error"); // Ensure Logger.error is called with the appropriate message
+  });
+});
+
+describe("Testing foodIntakeJournals payload for notifications", () => {
+  it("should send foodIntakeJournals reminders", async () => {
+    // Mock dependencies
+    jest.spyOn(webPush, "sendNotification").mockResolvedValue("test");
+    jest
+      .spyOn(db.FoodIntakeJournal, "findAll")
+      .mockResolvedValue(userFoodIntake);
+    jest
+      .spyOn(db.NotificationPreference, "findOne")
+      .mockResolvedValue(userNotificationPreferences);
+    jest.spyOn(db.Subscription, "findOne").mockResolvedValue(userSubscription);
+
+    // Spy on the Logger.info and Logger.error functions
+    jest.spyOn(Logger, "info");
+
+    await sendUserReminders();
+
+    // Assertions for the main functionality
+    expect(db.FoodIntakeJournal.findAll).toHaveBeenCalledTimes(1);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
+    expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
+    expect(webPush.sendNotification).toHaveBeenCalled();
+
+    // Assertions for logging statements
+    expect(Logger.info).toHaveBeenCalledWith(
+      "Notification for foodIntakeJournals sent to user: ",
+      userFoodIntake[0].uid
+    );
+  });
+
+  it("should log an error when notification preference is not found", async () => {
+    // Mock dependencies
+    jest
+      .spyOn(db.FoodIntakeJournal, "findAll")
+      .mockResolvedValue(userFoodIntake);
+    jest.spyOn(db.NotificationPreference, "findOne").mockResolvedValue(null); // Simulate not finding the notification preference
+    jest.spyOn(Logger, "error");
+
+    await sendUserReminders();
+
+    // Assertions
+    expect(db.FoodIntakeJournal.findAll).toHaveBeenCalledTimes(1);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
+
+    // Ensure Logger.error is called with the appropriate message
+    expect(Logger.error).toHaveBeenCalledWith(
+      "Notification preference not found, invalid user id."
+    );
+  });
+
+  it("should log an error when subscription is not found", async () => {
+    // Mock dependencies
+    jest
+      .spyOn(db.FoodIntakeJournal, "findAll")
+      .mockResolvedValue(userFoodIntake);
+    jest
+      .spyOn(db.NotificationPreference, "findOne")
+      .mockResolvedValue(userNotificationPreferences);
+    jest.spyOn(db.Subscription, "findOne").mockResolvedValue(null); // Simulate not finding the subscription
+    jest.spyOn(Logger, "error");
+
+    await sendUserReminders();
+
+    // Assertions
+    expect(db.FoodIntakeJournal.findAll).toHaveBeenCalledTimes(1);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
+    expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
+
+    // Ensure Logger.error is called with the appropriate message
+    expect(Logger.error).toHaveBeenCalledWith("No Subscription was found.");
+  });
+
+  it("should log an error when webPush.sendNotification fails", async () => {
+    // Mock dependencies
+    jest
+      .spyOn(db.FoodIntakeJournal, "findAll")
+      .mockResolvedValue(userFoodIntake);
+    jest
+      .spyOn(db.NotificationPreference, "findOne")
+      .mockResolvedValue(userNotificationPreferences);
+    jest.spyOn(db.Subscription, "findOne").mockResolvedValue(userSubscription);
+    jest.spyOn(webPush, "sendNotification").mockRejectedValue("WebPush Error");
+    jest.spyOn(Logger, "error");
+
+    await sendUserReminders();
+
+    // Assertions
+    expect(db.FoodIntakeJournal.findAll).toHaveBeenCalledTimes(1);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
+    expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
+    expect(webPush.sendNotification).toHaveBeenCalled(); // Ensure this is called
+    expect(Logger.error).toHaveBeenCalledWith("WebPush Error"); // Ensure Logger.error is called with the appropriate message
+  });
+});
+
+describe("Testing glucoseMeasurement payload for notifications", () => {
+  it("should send glucoseMeasurement reminders", async () => {
+    // Mock dependencies
+    jest.spyOn(webPush, "sendNotification").mockResolvedValue("test");
+    jest
+      .spyOn(db.GlucoseMeasurement, "findAll")
+      .mockResolvedValue(userGlucoseMeasurement);
+    jest
+      .spyOn(db.NotificationPreference, "findOne")
+      .mockResolvedValue(userNotificationPreferences);
+    jest.spyOn(db.Subscription, "findOne").mockResolvedValue(userSubscription);
+
+    // Spy on the Logger.info and Logger.error functions
+    jest.spyOn(Logger, "info");
+
+    await sendUserReminders();
+
+    // Assertions for the main functionality
+    expect(db.GlucoseMeasurement.findAll).toHaveBeenCalledTimes(1);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
+    expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
+    expect(webPush.sendNotification).toHaveBeenCalled();
+
+    // Assertions for logging statements
+    expect(Logger.info).toHaveBeenCalledWith(
+      "Notification for glucoseMeasurements sent to user: ",
+      userGlucoseMeasurement[0].uid
+    );
+  });
+
+  it("should log an error when notification preference is not found", async () => {
+    // Mock dependencies
+    jest
+      .spyOn(db.GlucoseMeasurement, "findAll")
+      .mockResolvedValue(userGlucoseMeasurement);
+    jest.spyOn(db.NotificationPreference, "findOne").mockResolvedValue(null); // Simulate not finding the notification preference
+    jest.spyOn(Logger, "error");
+
+    await sendUserReminders();
+
+    // Assertions
+    expect(db.GlucoseMeasurement.findAll).toHaveBeenCalledTimes(1);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
+
+    // Ensure Logger.error is called with the appropriate message
+    expect(Logger.error).toHaveBeenCalledWith(
+      "Notification preference not found, invalid user id."
+    );
+  });
+
+  it("should log an error when subscription is not found", async () => {
+    // Mock dependencies
+    jest
+      .spyOn(db.GlucoseMeasurement, "findAll")
+      .mockResolvedValue(userGlucoseMeasurement);
+    jest
+      .spyOn(db.NotificationPreference, "findOne")
+      .mockResolvedValue(userNotificationPreferences);
+    jest.spyOn(db.Subscription, "findOne").mockResolvedValue(null); // Simulate not finding the subscription
+    jest.spyOn(Logger, "error");
+
+    await sendUserReminders();
+
+    // Assertions
+    expect(db.Appointment.findAll).toHaveBeenCalledTimes(1);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
+    expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
+
+    // Ensure Logger.error is called with the appropriate message
+    expect(Logger.error).toHaveBeenCalledWith("No Subscription was found.");
+  });
+
+  it("should log an error when webPush.sendNotification fails", async () => {
+    // Mock dependencies
+    jest
+      .spyOn(db.GlucoseMeasurement, "findAll")
+      .mockResolvedValue(userGlucoseMeasurement);
+    jest
+      .spyOn(db.NotificationPreference, "findOne")
+      .mockResolvedValue(userNotificationPreferences);
+    jest.spyOn(db.Subscription, "findOne").mockResolvedValue(userSubscription);
+    jest.spyOn(webPush, "sendNotification").mockRejectedValue("WebPush Error");
+    jest.spyOn(Logger, "error");
+
+    await sendUserReminders();
+
+    // Assertions
+    expect(db.GlucoseMeasurement.findAll).toHaveBeenCalledTimes(1);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
+    expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
+    expect(webPush.sendNotification).toHaveBeenCalled(); // Ensure this is called
+    expect(Logger.error).toHaveBeenCalledWith("WebPush Error"); // Ensure Logger.error is called with the appropriate message
+  });
+});
+
+describe("Testing userInsulinDosages payload for notifications", () => {
+  it("should send userInsulinDosages reminders", async () => {
+    // Mock dependencies
+    jest.spyOn(webPush, "sendNotification").mockResolvedValue("test");
+    jest.spyOn(db.InsulinDosage, "findAll").mockResolvedValue(userInsulin);
+    jest
+      .spyOn(db.NotificationPreference, "findOne")
+      .mockResolvedValue(userNotificationPreferences);
+    jest.spyOn(db.Subscription, "findOne").mockResolvedValue(userSubscription);
+
+    // Spy on the Logger.info and Logger.error functions
+    jest.spyOn(Logger, "info");
+
+    await sendUserReminders();
+
+    // Assertions for the main functionality
+    expect(db.InsulinDosage.findAll).toHaveBeenCalledTimes(1);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
+    expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
+    expect(webPush.sendNotification).toHaveBeenCalled();
+
+    // Assertions for logging statements
+    expect(Logger.info).toHaveBeenCalledWith(
+      "Notification for insulinDosages sent to user: ",
+      userInsulin[0].uid
+    );
+  });
+
+  it("should log an error when notification preference is not found", async () => {
+    // Mock dependencies
+    jest.spyOn(db.InsulinDosage, "findAll").mockResolvedValue(userInsulin);
+    jest.spyOn(db.NotificationPreference, "findOne").mockResolvedValue(null); // Simulate not finding the notification preference
+    jest.spyOn(Logger, "error");
+
+    await sendUserReminders();
+
+    // Assertions
+    expect(db.InsulinDosage.findAll).toHaveBeenCalledTimes(1);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
+
+    // Ensure Logger.error is called with the appropriate message
+    expect(Logger.error).toHaveBeenCalledWith(
+      "Notification preference not found, invalid user id."
+    );
+  });
+
+  it("should log an error when subscription is not found", async () => {
+    // Mock dependencies
+    jest.spyOn(db.InsulinDosage, "findAll").mockResolvedValue(userInsulin);
+    jest
+      .spyOn(db.NotificationPreference, "findOne")
+      .mockResolvedValue(userNotificationPreferences);
+    jest.spyOn(db.Subscription, "findOne").mockResolvedValue(null); // Simulate not finding the subscription
+    jest.spyOn(Logger, "error");
+
+    await sendUserReminders();
+
+    // Assertions
+    expect(db.InsulinDosage.findAll).toHaveBeenCalledTimes(1);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
+    expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
+
+    // Ensure Logger.error is called with the appropriate message
+    expect(Logger.error).toHaveBeenCalledWith("No Subscription was found.");
+  });
+
+  it("should log an error when webPush.sendNotification fails", async () => {
+    // Mock dependencies
+    jest.spyOn(db.InsulinDosage, "findAll").mockResolvedValue(userInsulin);
+    jest
+      .spyOn(db.NotificationPreference, "findOne")
+      .mockResolvedValue(userNotificationPreferences);
+    jest.spyOn(db.Subscription, "findOne").mockResolvedValue(userSubscription);
+    jest.spyOn(webPush, "sendNotification").mockRejectedValue("WebPush Error");
+    jest.spyOn(Logger, "error");
+
+    await sendUserReminders();
+
+    // Assertions
+    expect(db.InsulinDosage.findAll).toHaveBeenCalledTimes(1);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
+    expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
+    expect(webPush.sendNotification).toHaveBeenCalled(); // Ensure this is called
+    expect(Logger.error).toHaveBeenCalledWith("WebPush Error"); // Ensure Logger.error is called with the appropriate message
+  });
+});
+
+describe("Testing medications payload for notifications", () => {
+  it("should send medication reminders", async () => {
+    // Mock dependencies
+    jest.spyOn(webPush, "sendNotification").mockResolvedValue("test");
+    jest.spyOn(db.Medication, "findAll").mockResolvedValue(userMedication);
+    jest
+      .spyOn(db.NotificationPreference, "findOne")
+      .mockResolvedValue(userNotificationPreferences);
+    jest.spyOn(db.Subscription, "findOne").mockResolvedValue(userSubscription);
+
+    // Spy on the Logger.info and Logger.error functions
+    jest.spyOn(Logger, "info");
+
+    await sendUserReminders();
+
+    // Assertions for the main functionality
+    expect(db.Medication.findAll).toHaveBeenCalledTimes(1);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
+    expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
+    expect(webPush.sendNotification).toHaveBeenCalled();
+
+    // Assertions for logging statements
+    expect(Logger.info).toHaveBeenCalledWith(
+      "Notification for medications sent to user: ",
+      userMedication[0].uid
+    );
+  });
+
+  it("should log an error when notification preference is not found", async () => {
+    // Mock dependencies
+    jest.spyOn(db.Medication, "findAll").mockResolvedValue(userMedication);
+    jest.spyOn(db.NotificationPreference, "findOne").mockResolvedValue(null); // Simulate not finding the notification preference
+    jest.spyOn(Logger, "error");
+
+    await sendUserReminders();
+
+    // Assertions
+    expect(db.Medication.findAll).toHaveBeenCalledTimes(1);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
+
+    // Ensure Logger.error is called with the appropriate message
+    expect(Logger.error).toHaveBeenCalledWith(
+      "Notification preference not found, invalid user id."
+    );
+  });
+
+  it("should log an error when subscription is not found", async () => {
+    // Mock dependencies
+    jest.spyOn(db.Medication, "findAll").mockResolvedValue(userMedication);
+    jest
+      .spyOn(db.NotificationPreference, "findOne")
+      .mockResolvedValue(userNotificationPreferences);
+    jest.spyOn(db.Subscription, "findOne").mockResolvedValue(null); // Simulate not finding the subscription
+    jest.spyOn(Logger, "error");
+
+    await sendUserReminders();
+
+    // Assertions
+    expect(db.Medication.findAll).toHaveBeenCalledTimes(1);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
+    expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
+
+    // Ensure Logger.error is called with the appropriate message
+    expect(Logger.error).toHaveBeenCalledWith("No Subscription was found.");
+  });
+
+  it("should log an error when webPush.sendNotification fails", async () => {
+    // Mock dependencies
+    jest.spyOn(db.Medication, "findAll").mockResolvedValue(userMedication);
+    jest
+      .spyOn(db.NotificationPreference, "findOne")
+      .mockResolvedValue(userNotificationPreferences);
+    jest.spyOn(db.Subscription, "findOne").mockResolvedValue(userSubscription);
+    jest.spyOn(webPush, "sendNotification").mockRejectedValue("WebPush Error");
+    jest.spyOn(Logger, "error");
+
+    await sendUserReminders();
+
+    // Assertions
+    expect(db.Medication.findAll).toHaveBeenCalledTimes(1);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
+    expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
+    expect(webPush.sendNotification).toHaveBeenCalled(); // Ensure this is called
+    expect(Logger.error).toHaveBeenCalledWith("WebPush Error"); // Ensure Logger.error is called with the appropriate message
+  });
 });
