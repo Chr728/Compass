@@ -63,7 +63,6 @@ export const sendUserReminders = async () => {
         break;
       }
     }
-    Logger.info(`This is the meal time for glucose: ${mealTime}`);
 
     //Get appointment of users for preperaing reminder
     const userAppointments = await db.Appointment.findAll({
@@ -87,10 +86,10 @@ export const sendUserReminders = async () => {
             },
           });
 
-        // Return if there's an error
+        // Continue if there's an error
         if (!userNotificationPreferences) {
           Logger.error(`Notification preference not found, invalid user id.`);
-          return;
+          continue;
         }
 
         if (userNotificationPreferences.appointmentReminders) {
@@ -145,7 +144,7 @@ export const sendUserReminders = async () => {
         // Return if there's an error
         if (!userNotificationPreferences) {
           Logger.error(`Notification preference not found, invalid user id.`);
-          return;
+          continue;
         }
 
         if (userNotificationPreferences.activityReminders) {
@@ -169,7 +168,7 @@ export const sendUserReminders = async () => {
             .sendNotification(userSubscription.subscription, payload)
             .catch((error: any) => Logger.error(error));
           Logger.info(
-            "Notification for activityjournals sent to user: ",
+            "Notification for activityJournals sent to user: ",
             activityjournal.uid
           );
         }
@@ -198,10 +197,10 @@ export const sendUserReminders = async () => {
             },
           });
 
-        // Return if there's an error
+        // Continue if there's an error
         if (!userNotificationPreferences) {
           Logger.error(`Notification preference not found, invalid user id.`);
-          return;
+          continue;
         }
 
         if (userNotificationPreferences.foodIntakeReminders) {
@@ -250,10 +249,10 @@ export const sendUserReminders = async () => {
             },
           });
 
-        // Return if there's an error
+        // Continue if there's an error
         if (!userNotificationPreferences) {
           Logger.error(`Notification preference not found, invalid user id.`);
-          return;
+          continue;
         }
 
         if (userNotificationPreferences.glucoseMeasurementReminders) {
@@ -305,10 +304,10 @@ export const sendUserReminders = async () => {
             },
           });
 
-        // Return if there's an error
+        // Continue if there's an error
         if (!userNotificationPreferences) {
           Logger.error(`Notification preference not found, invalid user id.`);
-          return;
+          continue;
         }
 
         if (userNotificationPreferences.insulinDosageReminders) {
@@ -357,10 +356,10 @@ export const sendUserReminders = async () => {
             },
           });
 
-        // Return if there's an error
+        // Continue if there's an error
         if (!userNotificationPreferences) {
           Logger.error(`Notification preference not found, invalid user id.`);
-          return;
+          continue;
         }
 
         if (userNotificationPreferences.medicationReminders) {
