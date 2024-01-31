@@ -15,6 +15,7 @@ import { useSearchParams } from 'next/navigation';
 import Header from '../components/Header';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import Swal from 'sweetalert2';
 
 export default function ChangePassword() {
   const searchParams = useSearchParams();
@@ -82,6 +83,16 @@ export default function ChangePassword() {
         if (values.newPassword !== values.currentPassword) {
           await updatePassword(user, values.newPassword);
           setPasswordChanged(true);
+          Swal.fire({
+            title: 'Success!',
+            text: 'Password changed successfully!',
+            icon: 'success',
+          }).then((result) => {
+            // Redirect to settings page after closing the alert
+            if (result.isConfirmed || result.isDismissed) {
+              router.push('/settings');
+            }
+          });
         } else {
           console.error(
             'New password cannot be the same as the current password.'
@@ -128,9 +139,7 @@ export default function ChangePassword() {
           </button>
         </span>
       </>
-      {passwordChanged ? (
-        <p>Password changed successfully!</p>
-      ) : (
+      {passwordChanged ? null : (
         <form
           className="rounded-3xl bg-white flex flex-col m-auto w-full md:max-w-[800px] md:h-[400px] p-8"
           onSubmit={formik.handleSubmit}
