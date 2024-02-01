@@ -33,10 +33,10 @@ export default function Register() {
                 sex: values.sex,
             }
             signUp(data)
-        } catch (error){
-            console.log('error signing up')
-            logger.error(error)
             formik.setSubmitting(false);
+        } catch (error){
+            logger.error(error)
+
         }
 
     },
