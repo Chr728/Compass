@@ -386,7 +386,6 @@ export default function Register() {
         <Button
           type="submit"
           text="Finish"
-          isSubmitting={formik.isSubmitting}
           style={{ width: '140px', alignSelf: 'center', marginTop: '14px' }}
         />
       </form>
