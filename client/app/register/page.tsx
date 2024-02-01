@@ -32,9 +32,11 @@ export default function Register() {
                 birthDate: values.birthdate,
                 sex: values.sex,
             }
-            signUp(data);
+            signUp(data)
         } catch (error){
+            console.log('error signing up')
             logger.error(error)
+            formik.setSubmitting(false);
         }
 
     },
