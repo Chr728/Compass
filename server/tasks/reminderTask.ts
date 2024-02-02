@@ -340,7 +340,6 @@ export const sendUserReminders = async () => {
     //Get medication of user for preparing reminder
     const userMedications = await db.Medication.findAll({
       where: {
-        date: currentDate,
         time: {
           [db.Sequelize.Op.gte]: startTime.format("HH:mm:00"),
           [db.Sequelize.Op.lt]: endTime.format("HH:mm:00"),
