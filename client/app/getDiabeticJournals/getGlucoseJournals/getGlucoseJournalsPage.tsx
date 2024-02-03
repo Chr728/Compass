@@ -78,12 +78,12 @@ export default function GetGlucoseJournalsPage() {
 
 	const handleOrderDate = () => {
 		setOrderDate(!orderdate)
-		if (orderdate){
-			const increasingOrderglucoseData = [...glucose].sort((a,b) => new Date(a.date).getDate() - new Date(b.date).getDate())
+		if (!orderdate){
+			const increasingOrderglucoseData = [...glucose].sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime())
 			setglucose(increasingOrderglucoseData)
 		}
 		else{
-			const decreasingOrderglucoseData = [...glucose].sort((a,b) => new Date(b.date).getDate() - new Date(a.date).getDate())
+			const decreasingOrderglucoseData = [...glucose].sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 			setglucose(decreasingOrderglucoseData)
 		}
 	}
@@ -93,7 +93,7 @@ export default function GetGlucoseJournalsPage() {
 
 	const handleOrderGlucose = () => {
 		setOrderGlucose(!orderglucose)
-		if (orderglucose){
+		if (!orderglucose){
 			const increasingOrderglucoseData = [...glucose].sort((a,b) => a.bloodGlucose - b.bloodGlucose)
 			setglucose(increasingOrderglucoseData)
 		}
@@ -109,7 +109,7 @@ export default function GetGlucoseJournalsPage() {
 
 	const handleOrderMealTime = () => {
 		setOrderMealTime(!ordermealtime)
-		if (ordermealtime){
+		if (!ordermealtime){
 			const increasingOrderglucoseData = [...glucose].sort((a,b) => (a.mealTime).toLowerCase() < (b.mealTime).toLowerCase() ? -1 : 1)
 			setglucose(increasingOrderglucoseData)
 		}
