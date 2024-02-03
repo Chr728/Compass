@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { MdDeleteForever, MdKeyboardArrowDown } from "react-icons/md";
+import { MdDeleteForever, MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import Swal from "sweetalert2";
 import Button from "../../components/Button";
 import Header from "../../components/Header";
@@ -72,6 +72,53 @@ export default function GetGlucoseJournalsPage() {
 		});
 	}
 
+
+	//Order by Date
+	const [orderdate, setOrderDate] = useState(false)
+
+	const handleOrderDate = () => {
+		setOrderDate(!orderdate)
+		if (orderdate){
+			const increasingOrderglucoseData = [...glucose].sort((a,b) => new Date(a.date).getDate() - new Date(b.date).getDate())
+			setglucose(increasingOrderglucoseData)
+		}
+		else{
+			const decreasingOrderglucoseData = [...glucose].sort((a,b) => new Date(b.date).getDate() - new Date(a.date).getDate())
+			setglucose(decreasingOrderglucoseData)
+		}
+	}
+
+	//Order by blood glucose
+	const [orderglucose, setOrderGlucose] = useState(false)
+
+	const handleOrderGlucose = () => {
+		setOrderGlucose(!orderglucose)
+		if (orderglucose){
+			const increasingOrderglucoseData = [...glucose].sort((a,b) => a.bloodGlucose - b.bloodGlucose)
+			setglucose(increasingOrderglucoseData)
+		}
+		else{
+			const decreasingOrderglucoseData = [...glucose].sort((a,b) => b.bloodGlucose - a.bloodGlucose)
+			setglucose(decreasingOrderglucoseData)
+		}
+	}
+
+
+	//Order by meal time
+	const [ordermealtime, setOrderMealTime] = useState(false)
+
+	const handleOrderMealTime = () => {
+		setOrderMealTime(!ordermealtime)
+		if (ordermealtime){
+			const increasingOrderglucoseData = [...glucose].sort((a,b) => (a.mealTime).toLowerCase() < (b.mealTime).toLowerCase() ? -1 : 1)
+			setglucose(increasingOrderglucoseData)
+		}
+		else{
+			const decreasingOrderglucoseData = [...glucose].sort((a,b) => (a.mealTime).toLowerCase() > (b.mealTime).toLowerCase() ? -1 : 1)
+			setglucose(decreasingOrderglucoseData)
+		}
+	}
+
 	return (
 		<div className="bg-eggshell min-h-screen flex flex-col">
 			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
@@ -112,19 +159,25 @@ export default function GetGlucoseJournalsPage() {
 						<div className="flex-2" style={{ marginRight: "5%" }}>
 							<div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
 								Date
-								<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+								<button onClick={handleOrderDate}>
+									{orderdate ? <MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" /> : <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />  }
+								</button>		
 							</div>
 						</div>
 						<div className="flex-2" style={{ marginRight: "1%" }}>
 							<div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
 								Meal Time
-								<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+								<button onClick={handleOrderMealTime}>
+									{ordermealtime ? <MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" /> : <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />  }
+								</button>
 							</div>
 						</div>
 						<div className="flex-2" style={{ marginRight: "11%" }}>
 							<div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
 								Glucose
-								<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+								<button onClick={handleOrderGlucose}>
+									{orderglucose ? <MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" /> : <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />  }
+								</button>
 							</div>
 						</div>
 					</div>
