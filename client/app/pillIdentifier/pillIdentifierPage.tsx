@@ -116,14 +116,6 @@ export default function PillIdentifierPage() {
 	};
 
 	const handleSubmit = async () => {
-		if (!isCameraActive) {
-			startCamera(); // Start the camera only if it's not already active
-			setImageCaptured(false);
-		} else {
-			captureImage(); // Capture image if the camera is already active
-			stopCamera(); // Stop the camera after capturing the image
-		}
-
 		try {
 				if (selectedImage) {
 					const response = await sendImage(imageBinaryFile, true);
