@@ -14,7 +14,7 @@ import { useEffect, useState } from 'react';
 import { Appointment } from '../http/appointmentAPI';
 import { formatDate, formatMilitaryTime } from '../helpers/utils/datetimeformat';
 import { useAuth } from '../contexts/AuthContext';
-import { MdKeyboardArrowDown } from 'react-icons/md';
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
 import Swal from 'sweetalert2';
 import Header from '../components/Header';
 
@@ -75,6 +75,36 @@ export default function ViewAppointmentsPage() {
     const handleClick = (appointmentID: string) => {
         router.push(`/viewappointments/${appointmentID}`);
     }
+
+    //Order by appoinment doctor name
+	const [ordername, setOrderName] = useState(false)
+
+	const handleOrderName = () => {
+		setOrderName(!ordername)
+		if (!ordername && Array.isArray(data)){
+			const increasingappointmentData = [...data].sort((a,b) => (a.appointmentWith).toLowerCase() < (b.appointmentWith).toLowerCase() ? -1 : 1)
+			setData(increasingappointmentData)
+		}
+		else if (Array.isArray(data)){
+			const decreasingOrderglucoseData = [...data].sort((a,b) => (a.appointmentWith).toLowerCase() > (b.appointmentWith).toLowerCase() ? -1 : 1)
+			setData(decreasingOrderglucoseData)
+		}
+	}
+
+    //Order by DateTime
+	const [orderdate, setOrderdate] = useState(false)
+
+	const handleOrderDate = () => {
+		setOrderdate(!orderdate)
+		if (!orderdate && Array.isArray(data)){
+			const increasingappointmentData = [...data].sort((a,b) => new Date(a.date.substring(0,10)+"T"+a.time).getTime() - new Date(b.date.substring(0,10)+"T"+b.time).getTime())
+			setData(increasingappointmentData)
+		}
+		else if (Array.isArray(data)){
+			const decreasingOrderglucoseData = [...data].sort((a,b) => new Date(b.date.substring(0,10)+"T"+b.time).getTime() - new Date(a.date.substring(0,10)+"T"+a.time).getTime())
+			setData(decreasingOrderglucoseData)
+		}
+	}
   
   return (
     <div className="bg-eggshell min-h-screen flex flex-col w-full">
@@ -114,13 +144,17 @@ export default function ViewAppointmentsPage() {
                         <TableCell>
                             <div>
                                 Date/Time
-                                <MdKeyboardArrowDown className="inline-block text-[24px] text-darkgrey" />
+                                <button onClick={handleOrderDate}>
+									{orderdate ? <MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" /> : <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />  }
+								</button>
                             </div>
                         </TableCell>
                         <TableCell>
                             <div>
                             Appointment
-                            <MdKeyboardArrowDown className="inline-block text-[24px] text-darkgrey" />
+                            <button onClick={handleOrderName}>
+									{ordername ? <MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" /> : <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />  }
+							</button>
                             </div>
                         </TableCell>
                         <TableCell></TableCell>
