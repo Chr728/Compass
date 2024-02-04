@@ -144,15 +144,15 @@ export default function ViewAppointmentsPage() {
                         <TableCell>
                             <div>
                                 Date/Time
-                                <button onClick={handleOrderDate}>
-									{orderdate ? <MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" /> : <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />  }
+                                <button onClick={handleOrderDate} aria-label="orderDate">
+									{orderdate ? <MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" /> : <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey"/>}
 								</button>
                             </div>
                         </TableCell>
                         <TableCell>
                             <div>
                             Appointment
-                            <button onClick={handleOrderName}>
+                            <button onClick={handleOrderName} aria-label="orderName">
 									{ordername ? <MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" /> : <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />  }
 							</button>
                             </div>

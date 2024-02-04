@@ -153,7 +153,7 @@ export default function GetInsulinJournalsPage() {
 						<div className="flex-2" style={{ marginRight: "2%" }}>
 							<div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
 								Date/Time
-								<button onClick={handleOrderDate}>
+								<button onClick={handleOrderDate} aria-label="orderDate">
 									{orderdate ? <MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" /> : <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />  }
 								</button>
 							</div>
@@ -161,7 +161,7 @@ export default function GetInsulinJournalsPage() {
 						<div className="flex-2" style={{ marginRight: "5%" }}>
 							<div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
 								Units
-								<button onClick={handleOrderUnit}>
+								<button onClick={handleOrderUnit} aria-label="orderUnit">
 									{orderunit ? <MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" /> : <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />  }
 								</button>
 							</div>
@@ -169,7 +169,7 @@ export default function GetInsulinJournalsPage() {
 						<div className="flex-2" style={{ marginRight: "25%" }}>
 							<div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
 								Site
-								<button onClick={handleOrderSite}>
+								<button onClick={handleOrderSite} aria-label="orderSite">
 									{ordersite ? <MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" /> : <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />  }
 								</button>
 							</div>

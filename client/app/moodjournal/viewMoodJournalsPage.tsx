@@ -221,7 +221,7 @@ export default function ViewMoodJournalsPage() {
         </div>
         {!showCalendar &&
           <div className="flex flex-col space-y-2 p-4 text-darkgrey" style={{ overflowY: 'auto', maxHeight: '380px' }}>
-            <button onClick={handleOrderDate}>
+            <button onClick={handleOrderDate} aria-label="orderDate">
 									{orderdate ? <MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" /> : <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />  }
 						</button>
             {moodJournal && moodJournal.map((data: any, index: number) => (
