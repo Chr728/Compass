@@ -81,11 +81,11 @@ export default function GetInsulinJournalsPage() {
 	const handleOrderSite = () => {
 		setOrderSite(!ordersite)
 		if (!ordersite){
-			const increasingOrderinsulinData = [...insulin].sort((a,b) => (a.bodySite).toLowerCase() > (b.bodySite).toLowerCase() ? -1 : 1)
+			const increasingOrderinsulinData = [...insulin].sort((a,b) => (a.bodySite).toLowerCase() < (b.bodySite).toLowerCase() ? -1 : 1)
 			setinsulin(increasingOrderinsulinData)
 		}
 		else{
-			const decreasingOrderinsulinData = [...insulin].sort((a,b) => (a.bodySite).toLowerCase() < (b.bodySite).toLowerCase() ? -1 : 1)
+			const decreasingOrderinsulinData = [...insulin].sort((a,b) => (a.bodySite).toLowerCase() > (b.bodySite).toLowerCase() ? -1 : 1)
 			setinsulin(decreasingOrderinsulinData)
 		}
 	}
