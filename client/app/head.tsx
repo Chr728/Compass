@@ -10,7 +10,7 @@ const Head = () => {
           <meta charSet="UTF-8"/>
           <link rel="icon" href=""/>
           <link rel="manifest" href="/manifest.json"/>
-          <meta name="theme-color" color="red"></meta>
+          <meta name="theme-color" media="(prefers-color-scheme: light)" content="#7C9CBF"/>
       </>
   );
 };
