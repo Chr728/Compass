@@ -32,9 +32,11 @@ export default function Register() {
                 birthDate: values.birthdate,
                 sex: values.sex,
             }
-            signUp(data);
+            signUp(data)
+            formik.setSubmitting(false);
         } catch (error){
             logger.error(error)
+
         }
 
     },
@@ -384,7 +386,6 @@ export default function Register() {
         <Button
           type="submit"
           text="Finish"
-          isSubmitting={formik.isSubmitting}
           style={{ width: '140px', alignSelf: 'center', marginTop: '14px' }}
         />
       </form>
