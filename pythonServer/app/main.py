@@ -28,7 +28,7 @@ encoder = LabelEncoder()
 encoder.classes_ = np.load('encoder/encoder.npy', allow_pickle=True)
 
 # Load the pre-trained model and feature extractor
-pretrained_model = ViTModel.from_pretrained('google/vit-base-patch16-224')
+pretrained_model = ViTModel.from_pretrained('pillIdentifierAI/pillIdentifier')
 feature_extractor = ViTImageProcessor(
     image_size=224,
     do_resize=True,
@@ -43,9 +43,6 @@ config = pretrained_model.config
 config.num_labels = 2112  # Change this to the appropriate number of classes
 model = ViTForImageClassification(config)
 model.vit = pretrained_model
-
-if __name__ == "__main__":
-    model.load_state_dict(torch.load('model/model_weights.pth', map_location=torch.device('cpu')))
 
 model.eval()
 
