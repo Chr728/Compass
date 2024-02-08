@@ -6,6 +6,7 @@ import AppWrapper from '@/app/components/AppWrapper';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { Viewport } from 'next';
 
 export const metadata: Metadata = {
   title: 'Compass',
@@ -17,6 +18,15 @@ export const metadata: Metadata = {
     maximumScale: 1,
     userScalable: false,
   },
+};
+
+export const viewport: Viewport = {
+  initialScale: 1,
+  width: 'device-width',
+  height: 'device-height',
+  minimumScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({
