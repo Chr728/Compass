@@ -1,13 +1,13 @@
 import FormLabel from "@/app/components/FormLabel";
 import { useFormik } from "formik";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import Button from "../components/Button";
 import Header from "../components/Header";
 import Input from "../components/Input";
 import { useAuth } from "../contexts/AuthContext";
 import { useProp } from "../contexts/PropContext";
-import { createMedication } from "../http/medicationAPI";
+import { createMedication, uploadMedicationImage } from "../http/medicationAPI";
 import Custom403 from "../pages/403";
 
 export default function CreateMedicationPage() {
@@ -15,6 +15,17 @@ export default function CreateMedicationPage() {
 	const router = useRouter();
 	const user = useAuth();
 	const { handlePopUp } = useProp();
+	const { image } = useParams();
+	const [imageSrc, setImageSrc] = useState("");
+	const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
+
+	useEffect(() => {
+		// Retrieve the image data URL from session storage
+		const storedImageDataUrl = sessionStorage.getItem("imageDataUrl");
+		if (storedImageDataUrl) {
+			setImageDataUrl(storedImageDataUrl);
+		}
+	}, []);
 
 	useEffect(() => {
 		if (!user) {
@@ -29,7 +40,143 @@ export default function CreateMedicationPage() {
 			</div>
 		);
 	}
+	// useEffect(() => {
+	// 	const fetchImageFromServer = async () => {
+	// 		try {
+	// 			const imagePath = await getImagePath(medicationId);
+	// 			const imageUrl = await fetchImage(imagePath);
+	// 			setImageSrc(imageUrl);
+	// 		} catch (error) {
+	// 			console.error("Error fetching image:", error);
+	// 		}
+	// 	};
 
+	// 	if (image) {
+	// 		fetchImageFromServer();
+	// 	}
+	// }, [image, medicationId]);
+
+	const getImagePath = async (medicationId: any) => {
+		try {
+			const response = await fetch(
+				`/api/medication/getImage/${medicationId}`
+			);
+			if (!response.ok) {
+				throw new Error(
+					`Failed to retrieve image path. HTTP Status: ${response.status}`
+				);
+			}
+
+			const data = await response.json();
+			return data.imagePath; // Assuming your response includes the imagePath
+		} catch (error) {
+			console.error("Error getting image path:", error);
+			throw error;
+		}
+	};
+
+	const fetchImage = async (imagePath: any) => {
+		try {
+			const response = await fetch(`/medicationImages/${imagePath}`);
+			if (!response.ok) {
+				throw new Error(
+					`Failed to retrieve image. HTTP Status: ${response.status}`
+				);
+			}
+
+			const blob = await response.blob();
+			return URL.createObjectURL(blob);
+		} catch (error) {
+			console.error("Error fetching image:", error);
+			throw error;
+		}
+	};
+	// const formik = useFormik({
+	// 	initialValues: {
+	// 		name: "",
+	// 		date: "",
+	// 		time: "",
+	// 		dosage: "",
+	// 		unit: "",
+	// 		frequency: "",
+	// 		route: "",
+	// 		notes: "",
+	// 	},
+	// 	onSubmit: async (values) => {
+	// 		try {
+	// 			const data = {
+	// 				medicationName: values.name,
+	// 				dateStarted: values.date,
+	// 				time: values.time,
+	// 				dosage: values.dosage,
+	// 				unit: values.unit,
+	// 				frequency: values.frequency,
+	// 				route: values.route,
+	// 				notes: values.notes,
+	// 			};
+	// 			const result = await createMedication(data).then((result) => {
+	// 				// logger.info('Medication entry created:', result);
+	// 				const medicationId = result?.id;
+
+	// 				router.push("/getMedications");
+	// 			});
+
+	// 			// const result = await createMedication(data);
+	// 			// logger.info("Medication entry created:", result);
+	// 			// router.push("/getMedications");
+	// 		} catch (error) {
+	// 			handlePopUp("error", "Error creating medication entry:");
+	// 		}
+	// 		const imagecreation = await uploadMedicationImage(
+	// 				medicationId,
+	// 				imageDataUrl
+	// 		);
+
+	// 	},
+
+	// 	validate: async (values) => {
+	// 		let errors: {
+	// 			name?: string;
+	// 			date?: string;
+	// 			time?: string;
+	// 			dosage?: string;
+	// 			unit?: string;
+	// 			frequency?: string;
+	// 			route?: string;
+	// 			notes?: string;
+	// 		} = {};
+
+	// 		if (!values.name) {
+	// 			errors.name = "This field cannot be left empty.";
+	// 		}
+	// 		if (!values.date) {
+	// 			errors.date = "This field cannot be left empty.";
+	// 		}
+
+	// 		if (!values.time) {
+	// 			errors.time = "This field cannot be left empty.";
+	// 		}
+
+	// 		if (parseFloat(values.dosage) <= 0) {
+	// 			errors.dosage = "This field cannot be negative or zero.";
+	// 		} else if (!values.dosage) {
+	// 			errors.dosage = "This field cannot be left empty.";
+	// 		}
+
+	// 		if (!values.unit) {
+	// 			errors.unit = "This field cannot be left empty.";
+	// 		}
+
+	// 		if (!values.frequency) {
+	// 			errors.frequency = "This field cannot be left empty.";
+	// 		}
+
+	// 		if (!values.route) {
+	// 			errors.route = "This field cannot be left empty.";
+	// 		}
+	// 		return errors;
+	// 	},
+	// });
 	const formik = useFormik({
 		initialValues: {
 			name: "",
@@ -53,59 +200,61 @@ export default function CreateMedicationPage() {
 					route: values.route,
 					notes: values.notes,
 				};
-				// const result = await createMedication(data).then((result) => {
-				// 	// logger.info('Medication entry created:', result);
-				// 	router.push("/getMedications");
-				// });
-				const result = await createMedication(data);
-				logger.info("Medication entry created:", result);
+				const result = await createMedication(data); // Assuming createMedication returns an object with an 'id' property
+				const medicationId = result.data.id;
+				if (!imageDataUrl) {
+					console.error("No image data URL available");
+					return;
+				}
+
+				// Extracting the base64 data part of the URL
+				const base64Data = imageDataUrl.split(",")[1];
+
+				// Convert base64 to binary
+				const binaryData = atob(base64Data);
+
+				// Convert binary to array buffer
+				const arrayBuffer = new ArrayBuffer(binaryData.length);
+				const uint8Array = new Uint8Array(arrayBuffer);
+				for (let i = 0; i < binaryData.length; i++) {
+					uint8Array[i] = binaryData.charCodeAt(i);
+				}
+
+				// Convert array buffer to blob
+				const blob = new Blob([arrayBuffer], { type: "image/png" });
+				console.log("HELLO ", blob);
+				// Get the file extension from the imageDataUrl
+				let extension = "png";
+				if (imageDataUrl.includes("jpeg")) {
+					extension = "jpeg";
+				} else if (imageDataUrl.includes("jpg")) {
+					extension = "jpg";
+				}
+
+				// Determine the file type based on the extension
+				let fileType = "";
+				if (extension === "jpeg") {
+					fileType = "image/jpeg";
+				} else if (extension === "jpg" || extension === "png") {
+					fileType = "image/" + extension;
+				} else {
+					console.error("Unsupported file type", extension);
+					return;
+				}
+				console.log("fileType HELLO ", fileType);
+
+				// Create a File object from the Blob
+				const file = new File([blob], `image.${extension}`, {
+					type: fileType,
+				});
+				console.log("SADfileHELLO ", file);
+
+				// Assuming uploadMedicationImage function is correctly implemented
+				await uploadMedicationImage(medicationId, file);
 				router.push("/getMedications");
 			} catch (error) {
-				handlePopUp("error", "Error creating medication entry:");
+				console.error("Error submitting medication:", error);
 			}
-		},
-
-		validate: async (values) => {
-			let errors: {
-				name?: string;
-				date?: string;
-				time?: string;
-				dosage?: string;
-				unit?: string;
-				frequency?: string;
-				route?: string;
-				notes?: string;
-			} = {};
-
-			if (!values.name) {
-				errors.name = "This field cannot be left empty.";
-			}
-			if (!values.date) {
-				errors.date = "This field cannot be left empty.";
-			}
-
-			if (!values.time) {
-				errors.time = "This field cannot be left empty.";
-			}
-
-			if (parseFloat(values.dosage) <= 0) {
-				errors.dosage = "This field cannot be negative or zero.";
-			} else if (!values.dosage) {
-				errors.dosage = "This field cannot be left empty.";
-			}
-
-			if (!values.unit) {
-				errors.unit = "This field cannot be left empty.";
-			}
-
-			if (!values.frequency) {
-				errors.frequency = "This field cannot be left empty.";
-			}
-
-			if (!values.route) {
-				errors.route = "This field cannot be left empty.";
-			}
-			return errors;
 		},
 	});
 
@@ -120,6 +269,26 @@ export default function CreateMedicationPage() {
 			<form
 				className="rounded-3xl bg-white flex flex-col mb-8 w-full md:max-w-[800px] md:min-h-[550px] p-4 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
 				onSubmit={formik.handleSubmit}>
+				{/* <div>
+					<h1>Create Medication Page</h1>
+					{image && (
+						<div>
+							<h2>Image Preview:</h2>
+							{imageSrc && (
+								<img src={imageSrc} alt="Medication" />
+							)}
+						</div>
+					)}
+				</div> */}
+				<div>
+					{imageDataUrl && (
+						<img
+							src={decodeURIComponent(imageDataUrl)}
+							alt="Selected Image"
+							style={{ marginBottom: "20px" }}
+						/>
+					)}
+				</div>
 				<div className="self-end -mt-4">
 					<p className="text-red text-[20px]">
 						{" "}
@@ -194,7 +363,9 @@ export default function CreateMedicationPage() {
 
 				<div className="flex">
 					<div className="mt-3">
-						<FormLabel htmlFor={"dosage"} label={"Dosage"}></FormLabel>
+						<FormLabel
+							htmlFor={"dosage"}
+							label={"Dosage"}></FormLabel>
 						<Input
 							name="dosage"
 							id="dosage"

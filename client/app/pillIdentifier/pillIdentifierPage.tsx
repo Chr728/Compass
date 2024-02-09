@@ -1,4 +1,3 @@
-// Import necessary dependencies and components
 "use client";
 import NextImage from "next/image";
 import { useRouter } from "next/navigation";
@@ -6,7 +5,6 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 import Button from "../components/Button";
 import Header from "../components/Header";
 import { sendImage } from "../http/pillIdentifierAPI";
-
 export default function PillIdentifierPage() {
 	const router = useRouter();
 
@@ -102,7 +100,6 @@ export default function PillIdentifierPage() {
 		return new Blob([u8arr], { type: mime });
 	}
 
-
 	const handleTakePicture = async () => {
 		setSelectedImage(null);
 		if (!isCameraActive) {
@@ -112,23 +109,171 @@ export default function PillIdentifierPage() {
 			captureImage(); // Capture image if the camera is already active
 			stopCamera(); // Stop the camera after capturing the image
 		}
-
 	};
 
 	const handleSubmit = async () => {
 		try {
-				if (selectedImage) {
-					const response = await sendImage(imageBinaryFile, true);
-					const body = await response.json();
-					const labelsAndProbabilities = Object.values(body.predictions).map(({ label, probability }: any) => ({
-						label,
-						probability,
-					  }));
-					setApiResults(labelsAndProbabilities);
-				  }
-        } catch(error){
-            console.error("Error sending image to server:", error);
-        }
+			if (selectedImage) {
+				const response = await sendImage(imageBinaryFile, true);
+				const body = await response.json();
+				const labelsAndProbabilities = Object.values(
+					body.predictions
+				).map(({ label, probability }: any) => ({
+					label,
+					probability,
+				}));
+				setApiResults(labelsAndProbabilities);
+			}
+		} catch (error) {
+			console.error("Error sending image to server:", error);
+		}
+	};
+
+	// const handleAddMedication = async () => {
+	// 	try {
+	// 		await handleSubmit();
+
+	// 		if (imageBinaryFile) {
+	// 			await uploadMedicationImage(imageBinaryFile);
+	// 		}
+
+	// 		router.push("/createMedication");
+	// 	} catch (error) {
+	// 		console.error("Error adding medication:", error);
+	// 	}
+	// };
+
+	// const handleAddMedication = async () => {
+	// 	try {
+	// 		// await handleSubmit();
+
+	// 		// let imageUrl = "/createMedication";
+
+	// 		// if (
+	// 		// 	imageBinaryFile &&
+	// 		// 	typeof imageBinaryFile.toDataURL === "function"
+	// 		// ) {
+	// 		// 	const imageDataUrl = imageBinaryFile.toDataURL();
+	// 		// 	imageUrl += `?image=${encodeURIComponent(imageDataUrl)}`;
+	// 		// } else {
+	// 		// 	console.error(
+	// 		// 		"Image is not valid or cannot be converted to Data URL"
+	// 		// 	);
+	// 		// 	console.log("Image Binary File PROBLEMATIC:", imageBinaryFile);
+	// 		// }
+	// 		// if (imageBinaryFile instanceof Blob) {
+	// 		// 	console.log("imageBinaryFile is a Blob object");
+	// 		// 	// Additional checks or actions specific to Blob objects
+	// 		// } else if (imageBinaryFile instanceof File) {
+	// 		// 	console.log("imageBinaryFile is a File object");
+	// 		// 	// Additional checks or actions specific to File objects
+	// 		// } else {
+	// 		// 	console.log("imageBinaryFile is not a Blob or File object");
+	// 		// }
+	// 		// if (
+	// 		// 	imageBinaryFile.type === "image/jpeg" ||
+	// 		// 	imageBinaryFile.type === "image/png"
+	// 		// ) {
+	// 		// 	console.log("Image file type is supported");
+	// 		// } else {
+	// 		// 	console.log("Image file type is not supported");
+	// 		// }
+	// 		let imageUrl = "/createMedication";
+
+	// 		// Image upload logic
+	// 		const file = event.target.files[0];
+	// 		const reader = new FileReader();
+	// 		reader.onload = () => {
+	// 			const imageDataUrl = reader.result;
+	// 			const imageUrl = `/targetPage?image=${encodeURIComponent(
+	// 				imageDataUrl
+	// 			)}`;
+	// 			window.location.href = imageUrl;
+	// 		};
+	// 		reader.readAsDataURL(file);
+
+	// 		router.push(imageUrl);
+	// 	} catch (error) {
+	// 		console.error("Error adding medication:", error);
+	// 	}
+	// };
+
+	// const handleAddMedication = async (
+	// 	event: React.ChangeEvent<HTMLInputElement>
+	// ) => {
+	// 	try {
+	// 		if (!event.target.files || !event.target.files[0]) {
+	// 			console.error("No file selected");
+	// 			return;
+	// 		}
+
+	// 		const file = event.target.files[0];
+
+	// 		const reader = new FileReader();
+	// 		reader.onload = () => {
+	// 			const imageDataUrl = reader.result;
+	// 			if (!imageDataUrl) {
+	// 				console.error("Failed to read image data");
+	// 				return;
+	// 			}
+
+	// 			const imageUrl = `/targetPage?image=${encodeURIComponent(
+	// 				imageDataUrl.toString()
+	// 			)}`;
+	// 			window.location.href = imageUrl;
+	// 		};
+	// 		reader.readAsDataURL(file);
+	// 	} catch (error) {
+	// 		console.error("Error adding medication:", error);
+	// 	}
+	// };
+
+	// const handleAddMedication = async (
+	// 	event: React.ChangeEvent<HTMLInputElement>
+	// ) => {
+	// 	try {
+	// 		if (!event.target.files || !event.target.files[0]) {
+	// 			console.error("No file selected");
+	// 			return;
+	// 		}
+
+	// 		const file = event.target.files[0];
+
+	// 		const reader = new FileReader();
+	// 		reader.onload = () => {
+	// 			const imageDataUrl = reader.result;
+	// 			if (!imageDataUrl) {
+	// 				console.error("Failed to read image data");
+	// 				return;
+	// 			}
+
+	// 			// Store the image data URL in session storage
+	// 			sessionStorage.setItem("imageDataUrl", imageDataUrl.toString());
+
+	// 			// Navigate to the target page
+	// 			window.location.href = "/targetPage";
+	// 		};
+	// 		reader.readAsDataURL(file);
+	// 	} catch (error) {
+	// 		console.error("Error adding medication:", error);
+	// 	}
+	// };
+	const handleAddMedication = async (selectedImage: string) => {
+		try {
+			if (!selectedImage) {
+				console.error("No file selected");
+				return;
+			}
+
+			// Store the image data URL in session storage
+			sessionStorage.setItem("imageDataUrl", selectedImage);
+
+			// Navigate to the target page
+			// window.location.href = "/createMedication";
+			router.push("/createMedication");
+		} catch (error) {
+			console.error("Error adding medication:", error);
+		}
 	};
 
 	const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
@@ -220,28 +365,25 @@ export default function PillIdentifierPage() {
 						style={{ display: isCameraActive ? "block" : "none" }}
 					/>
 
-					{ selectedImage ? (
+					{selectedImage ? (
 						<button
 							style={{
 								width: "162px",
 							}}
 							onClick={handleSubmit}
-							className="bg-blue text-[16px] p-3 text-white font-sans font-medium rounded-md h-[46px] shadow-[0px_4px_8px_0px_rgba(44,39,56,0.08),0px_2px_4px_0px_rgba(44,39,56,0.08)]"
-						>
+							className="bg-blue text-[16px] p-3 text-white font-sans font-medium rounded-md h-[46px] shadow-[0px_4px_8px_0px_rgba(44,39,56,0.08),0px_2px_4px_0px_rgba(44,39,56,0.08)]">
 							Submit
 						</button>
-            			) : (
-
+					) : (
 						<button
 							style={{
 								width: "162px",
 							}}
 							onClick={handleTakePicture}
-							className="bg-blue text-[16px] p-3 text-white font-sans font-medium rounded-md h-[46px] shadow-[0px_4px_8px_0px_rgba(44,39,56,0.08),0px_2px_4px_0px_rgba(44,39,56,0.08)]"
-						>
+							className="bg-blue text-[16px] p-3 text-white font-sans font-medium rounded-md h-[46px] shadow-[0px_4px_8px_0px_rgba(44,39,56,0.08),0px_2px_4px_0px_rgba(44,39,56,0.08)]">
 							Take a picture
 						</button>
-           			 )}
+					)}
 					<canvas ref={canvasRef} style={{ display: "none" }} />
 				</div>
 
@@ -376,6 +518,15 @@ export default function PillIdentifierPage() {
 				</div>
 
 				<div className="flex flex-col justify-center items-center px-4 pb-4 mt-auto">
+					{/* <Button
+						type="button"
+						text="Add this medication"
+						style={{
+							width: "175px",
+							height: "48px",
+						}}
+						onClick={handleAddMedication}
+					/> */}
 					<Button
 						type="button"
 						text="Add this medication"
@@ -383,8 +534,32 @@ export default function PillIdentifierPage() {
 							width: "175px",
 							height: "48px",
 						}}
-						onClick={() => router.push("/")} //Link to be added later
+						onClick={() => handleAddMedication(selectedImage)}
 					/>
+
+					{/* Input element for file selection */}
+					{/* <input
+						type="file"
+						onChange={handleAddMedication}
+						style={{ display: "none" }} // Hide the input visually
+					/> */}
+					{/* Button to trigger file selection */}
+					{/* <Button
+						type="button"
+						text="Add this medication"
+						style={{
+							width: "175px",
+							height: "48px",
+						}}
+						onClick={() =>
+							(
+								document.querySelector(
+									'input[type="file"]'
+								) as HTMLInputElement
+							)?.click()
+						} // Trigger file input click
+					/> */}
+
 					<div className="flex space-x-4 mt-4">
 						<div
 							className={`h-2 w-2 rounded-full ${
