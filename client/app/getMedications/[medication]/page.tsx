@@ -64,16 +64,15 @@ export default function GetMedication({
 			{medicationdata && (
 				<span className="rounded-2xl  mt-6 mb-10 mr-28 bg-white flex flex-col m-auto w-full md:max-w-[800px] md:min-h-[600px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]">
 					<div className="mt-3 relative">
-						<SingleEntry
-							label={"Medication Image:"}
-							value={medicationdata.image}></SingleEntry>
-						<img
-							src={`${process.env.NEXT_PUBLIC_API_URL}/${medicationdata.image}`}
-							alt="Logo"
-							className="smallImage"
-							width={350}
-							height={250}
-						/>
+						{medicationdata.image && (
+							<img
+								src={`${process.env.NEXT_PUBLIC_API_URL}/${medicationdata.image}`}
+								alt="Medication Image"
+								className="smallImage"
+								width={350}
+								height={250}
+							/>
+						)}
 
 						<SingleEntry
 							label={"Medication Name:"}

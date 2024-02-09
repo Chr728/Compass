@@ -136,11 +136,8 @@ export default function PillIdentifierPage() {
 				return;
 			}
 
-			// Store the image data URL in session storage
 			sessionStorage.setItem("imageDataUrl", selectedImage);
 
-			// Navigate to the target page
-			// window.location.href = "/createMedication";
 			router.push("/createMedication");
 		} catch (error) {
 			console.error("Error adding medication:", error);
