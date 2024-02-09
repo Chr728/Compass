@@ -23,6 +23,7 @@ jest.mock("../../http/medicationAPI", () => {
 				data: {
 					uid: "1",
 					medicationName: "Advil",
+					image: "imagepath",
 					dateStarted: "2014-01-01",
 					time: "08:36",
 					dosage: 60,
@@ -84,6 +85,8 @@ describe("User is logged in", () => {
 			expect(screen.getByText("other")).toBeInTheDocument();
 			expect(screen.getByText("other")).toBeInTheDocument();
 			expect(screen.getByText("I got a lower dose")).toBeInTheDocument();
+			const pillImage = screen.getByAltText("Medication Image");
+			expect(pillImage).toBeVisible();
 		}, 1000);
 	});
 
