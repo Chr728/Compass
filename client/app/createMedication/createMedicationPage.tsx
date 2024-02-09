@@ -1,12 +1,11 @@
 import FormLabel from "@/app/components/FormLabel";
 import { useFormik } from "formik";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Button from "../components/Button";
 import Header from "../components/Header";
 import Input from "../components/Input";
 import { useAuth } from "../contexts/AuthContext";
-import { useProp } from "../contexts/PropContext";
 import { createMedication, uploadMedicationImage } from "../http/medicationAPI";
 import Custom403 from "../pages/403";
 
@@ -14,13 +13,9 @@ export default function CreateMedicationPage() {
 	const logger = require("../../logger");
 	const router = useRouter();
 	const user = useAuth();
-	const { handlePopUp } = useProp();
-	const { image } = useParams();
-	const [imageSrc, setImageSrc] = useState("");
 	const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
 
 	useEffect(() => {
-		// Retrieve the image data URL from session storage
 		const storedImageDataUrl = sessionStorage.getItem("imageDataUrl");
 		if (storedImageDataUrl) {
 			setImageDataUrl(storedImageDataUrl);
@@ -40,57 +35,6 @@ export default function CreateMedicationPage() {
 			</div>
 		);
 	}
-	// useEffect(() => {
-	// 	const fetchImageFromServer = async () => {
-	// 		try {
-	// 			const imagePath = await getImagePath(medicationId);
-	// 			const imageUrl = await fetchImage(imagePath);
-	// 			setImageSrc(imageUrl);
-	// 		} catch (error) {
-	// 			console.error("Error fetching image:", error);
-	// 		}
-	// 	};
-
-	// 	if (image) {
-	// 		fetchImageFromServer();
-	// 	}
-	// }, [image, medicationId]);
-
-	const getImagePath = async (medicationId: any) => {
-		try {
-			const response = await fetch(
-				`/api/medication/getImage/${medicationId}`
-			);
-			if (!response.ok) {
-				throw new Error(
-					`Failed to retrieve image path. HTTP Status: ${response.status}`
-				);
-			}
-
-			const data = await response.json();
-			return data.imagePath; // Assuming your response includes the imagePath
-		} catch (error) {
-			console.error("Error getting image path:", error);
-			throw error;
-		}
-	};
-
-	const fetchImage = async (imagePath: any) => {
-		try {
-			const response = await fetch(`/medicationImages/${imagePath}`);
-			if (!response.ok) {
-				throw new Error(
-					`Failed to retrieve image. HTTP Status: ${response.status}`
-				);
-			}
-
-			const blob = await response.blob();
-			return URL.createObjectURL(blob);
-		} catch (error) {
-			console.error("Error fetching image:", error);
-			throw error;
-		}
-	};
 
 	const formik = useFormik({
 		initialValues: {

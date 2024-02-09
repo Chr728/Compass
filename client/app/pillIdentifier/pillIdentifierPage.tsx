@@ -129,135 +129,6 @@ export default function PillIdentifierPage() {
 		}
 	};
 
-	// const handleAddMedication = async () => {
-	// 	try {
-	// 		await handleSubmit();
-
-	// 		if (imageBinaryFile) {
-	// 			await uploadMedicationImage(imageBinaryFile);
-	// 		}
-
-	// 		router.push("/createMedication");
-	// 	} catch (error) {
-	// 		console.error("Error adding medication:", error);
-	// 	}
-	// };
-
-	// const handleAddMedication = async () => {
-	// 	try {
-	// 		// await handleSubmit();
-
-	// 		// let imageUrl = "/createMedication";
-
-	// 		// if (
-	// 		// 	imageBinaryFile &&
-	// 		// 	typeof imageBinaryFile.toDataURL === "function"
-	// 		// ) {
-	// 		// 	const imageDataUrl = imageBinaryFile.toDataURL();
-	// 		// 	imageUrl += `?image=${encodeURIComponent(imageDataUrl)}`;
-	// 		// } else {
-	// 		// 	console.error(
-	// 		// 		"Image is not valid or cannot be converted to Data URL"
-	// 		// 	);
-	// 		// 	console.log("Image Binary File PROBLEMATIC:", imageBinaryFile);
-	// 		// }
-	// 		// if (imageBinaryFile instanceof Blob) {
-	// 		// 	console.log("imageBinaryFile is a Blob object");
-	// 		// 	// Additional checks or actions specific to Blob objects
-	// 		// } else if (imageBinaryFile instanceof File) {
-	// 		// 	console.log("imageBinaryFile is a File object");
-	// 		// 	// Additional checks or actions specific to File objects
-	// 		// } else {
-	// 		// 	console.log("imageBinaryFile is not a Blob or File object");
-	// 		// }
-	// 		// if (
-	// 		// 	imageBinaryFile.type === "image/jpeg" ||
-	// 		// 	imageBinaryFile.type === "image/png"
-	// 		// ) {
-	// 		// 	console.log("Image file type is supported");
-	// 		// } else {
-	// 		// 	console.log("Image file type is not supported");
-	// 		// }
-	// 		let imageUrl = "/createMedication";
-
-	// 		// Image upload logic
-	// 		const file = event.target.files[0];
-	// 		const reader = new FileReader();
-	// 		reader.onload = () => {
-	// 			const imageDataUrl = reader.result;
-	// 			const imageUrl = `/targetPage?image=${encodeURIComponent(
-	// 				imageDataUrl
-	// 			)}`;
-	// 			window.location.href = imageUrl;
-	// 		};
-	// 		reader.readAsDataURL(file);
-
-	// 		router.push(imageUrl);
-	// 	} catch (error) {
-	// 		console.error("Error adding medication:", error);
-	// 	}
-	// };
-
-	// const handleAddMedication = async (
-	// 	event: React.ChangeEvent<HTMLInputElement>
-	// ) => {
-	// 	try {
-	// 		if (!event.target.files || !event.target.files[0]) {
-	// 			console.error("No file selected");
-	// 			return;
-	// 		}
-
-	// 		const file = event.target.files[0];
-
-	// 		const reader = new FileReader();
-	// 		reader.onload = () => {
-	// 			const imageDataUrl = reader.result;
-	// 			if (!imageDataUrl) {
-	// 				console.error("Failed to read image data");
-	// 				return;
-	// 			}
-
-	// 			const imageUrl = `/targetPage?image=${encodeURIComponent(
-	// 				imageDataUrl.toString()
-	// 			)}`;
-	// 			window.location.href = imageUrl;
-	// 		};
-	// 		reader.readAsDataURL(file);
-	// 	} catch (error) {
-	// 		console.error("Error adding medication:", error);
-	// 	}
-	// };
-
-	// const handleAddMedication = async (
-	// 	event: React.ChangeEvent<HTMLInputElement>
-	// ) => {
-	// 	try {
-	// 		if (!event.target.files || !event.target.files[0]) {
-	// 			console.error("No file selected");
-	// 			return;
-	// 		}
-
-	// 		const file = event.target.files[0];
-
-	// 		const reader = new FileReader();
-	// 		reader.onload = () => {
-	// 			const imageDataUrl = reader.result;
-	// 			if (!imageDataUrl) {
-	// 				console.error("Failed to read image data");
-	// 				return;
-	// 			}
-
-	// 			// Store the image data URL in session storage
-	// 			sessionStorage.setItem("imageDataUrl", imageDataUrl.toString());
-
-	// 			// Navigate to the target page
-	// 			window.location.href = "/targetPage";
-	// 		};
-	// 		reader.readAsDataURL(file);
-	// 	} catch (error) {
-	// 		console.error("Error adding medication:", error);
-	// 	}
-	// };
 	const handleAddMedication = async (selectedImage: string) => {
 		try {
 			if (!selectedImage) {
@@ -518,15 +389,6 @@ export default function PillIdentifierPage() {
 				</div>
 
 				<div className="flex flex-col justify-center items-center px-4 pb-4 mt-auto">
-					{/* <Button
-						type="button"
-						text="Add this medication"
-						style={{
-							width: "175px",
-							height: "48px",
-						}}
-						onClick={handleAddMedication}
-					/> */}
 					<Button
 						type="button"
 						text="Add this medication"
@@ -536,30 +398,6 @@ export default function PillIdentifierPage() {
 						}}
 						onClick={() => handleAddMedication(selectedImage)}
 					/>
-
-					{/* Input element for file selection */}
-					{/* <input
-						type="file"
-						onChange={handleAddMedication}
-						style={{ display: "none" }} // Hide the input visually
-					/> */}
-					{/* Button to trigger file selection */}
-					{/* <Button
-						type="button"
-						text="Add this medication"
-						style={{
-							width: "175px",
-							height: "48px",
-						}}
-						onClick={() =>
-							(
-								document.querySelector(
-									'input[type="file"]'
-								) as HTMLInputElement
-							)?.click()
-						} // Trigger file input click
-					/> */}
-
 					<div className="flex space-x-4 mt-4">
 						<div
 							className={`h-2 w-2 rounded-full ${
