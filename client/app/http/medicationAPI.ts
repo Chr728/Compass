@@ -119,55 +119,6 @@ export async function createMedication(medicationData: any): Promise<any> {
 	}
 }
 
-// Update the uploadMedicationImage function
-// export async function uploadMedicationImage(imageFile: File): Promise<any> {
-// 	try {
-// 		// Assuming you have identified a medication and have its ID in the results
-// 		const medicationId = "exampleMedicationId"; // Replace with the actual medication ID
-
-// 		const currentUser = auth.currentUser;
-// 		if (!currentUser) {
-// 			logger.error("No user is currently signed in.");
-// 			throw new Error("No user is currently signed in.");
-// 		}
-// 		const id = currentUser.uid;
-// 		const token = await currentUser.getIdToken();
-
-// 		const formData = new FormData();
-// 		formData.append("image", imageFile);
-
-// 		const response = await fetch(
-// 			`${process.env.NEXT_PUBLIC_API_URL}/api/medication/image/${medicationId}`,
-// 			{
-// 				method: "POST",
-// 				headers: {
-// 					Authorization: `Bearer ${token}`,
-// 				},
-// 				body: formData,
-// 			}
-// 		);
-
-// 		logger.info(
-// 			`Medication image uploaded successfully for medication ${medicationId}`
-// 		);
-
-// 		if (!response.ok) {
-// 			logger.error(
-// 				`Failed to upload Medication image. HTTP Status: ${response.status}`
-// 			);
-// 			throw new Error(
-// 				`Failed to upload Medication image. HTTP Status: ${response.status}`
-// 			);
-// 		}
-
-// 		const data = await response.json();
-// 		return data;
-// 	} catch (error) {
-// 		logger.error("Error uploading Medication image:", error);
-// 		throw error;
-// 	}
-// }
-
 export async function uploadMedicationImage(
 	medicationId: string,
 	imageFile: File
