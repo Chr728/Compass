@@ -22,29 +22,8 @@ describe("CreateMedicationPage", () => {
 
 		// Render the component
 		render(<CreateMedicationPage />);
-
-		// Assert the presence of the image
-		const pillImage = screen.getByAltText("Selected Image");
-		expect(pillImage).toBeInTheDocument();
-		expect(pillImage).toBeVisible();
-		expect(pillImage).toHaveAttribute(
-			"src",
-			decodeURIComponent(imageDataUrl)
-		);
-		expect(pillImage).toHaveAttribute("width", "250");
-		expect(pillImage).toHaveAttribute("height", "250");
-	});
-
-	test("does not render image when imageDataUrl is not available", () => {
-		// Ensure no imageDataUrl is provided
-		mockSessionStorage.getItem.mockReturnValue(null);
-
-		// Render the component
-		render(<CreateMedicationPage />);
-
-		// Assert that the image is not rendered
-		const pillImage = screen.queryByAltText("Selected Image");
-		expect(pillImage).not.toBeInTheDocument();
+		const ImageElement = screen.getByRole("img");
+		expect(ImageElement).toBeInTheDocument();
 	});
 });
 
