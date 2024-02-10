@@ -1,20 +1,26 @@
 import FormLabel from "@/app/components/FormLabel";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Button from "../components/Button";
 import Header from "../components/Header";
 import Input from "../components/Input";
 import { useAuth } from "../contexts/AuthContext";
-import { useProp } from "../contexts/PropContext";
-import { createMedication } from "../http/medicationAPI";
+import { createMedication, uploadMedicationImage } from "../http/medicationAPI";
 import Custom403 from "../pages/403";
 
 export default function CreateMedicationPage() {
 	const logger = require("../../logger");
 	const router = useRouter();
 	const user = useAuth();
-	const { handlePopUp } = useProp();
+	const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
+
+	useEffect(() => {
+		const storedImageDataUrl = sessionStorage.getItem("imageDataUrl");
+		if (storedImageDataUrl) {
+			setImageDataUrl(storedImageDataUrl);
+		}
+	}, []);
 
 	useEffect(() => {
 		if (!user) {
@@ -53,18 +59,52 @@ export default function CreateMedicationPage() {
 					route: values.route,
 					notes: values.notes,
 				};
-				// const result = await createMedication(data).then((result) => {
-				// 	// logger.info('Medication entry created:', result);
-				// 	router.push("/getMedications");
-				// });
 				const result = await createMedication(data);
-				logger.info("Medication entry created:", result);
+				const medicationId = result.data.id;
+				if (!imageDataUrl) {
+					console.error("No image data URL available");
+					return;
+				}
+
+				const base64Data = imageDataUrl.split(",")[1];
+
+				const binaryData = atob(base64Data);
+
+				const arrayBuffer = new ArrayBuffer(binaryData.length);
+				const uint8Array = new Uint8Array(arrayBuffer);
+				for (let i = 0; i < binaryData.length; i++) {
+					uint8Array[i] = binaryData.charCodeAt(i);
+				}
+
+				const blob = new Blob([arrayBuffer], { type: "image/png" });
+				let extension = "png";
+				if (imageDataUrl.includes("jpeg")) {
+					extension = "jpeg";
+				} else if (imageDataUrl.includes("jpg")) {
+					extension = "jpg";
+				}
+
+				let fileType = "";
+				if (extension === "jpeg") {
+					fileType = "image/jpeg";
+				} else if (extension === "jpg" || extension === "png") {
+					fileType = "image/" + extension;
+				} else {
+					console.error("Unsupported file type", extension);
+					return;
+				}
+
+				const file = new File([blob], `image.${extension}`, {
+					type: fileType,
+				});
+
+				await uploadMedicationImage(medicationId, file);
 				router.push("/getMedications");
+				sessionStorage.clear();
 			} catch (error) {
-				handlePopUp("error", "Error creating medication entry:");
+				console.error("Error submitting medication:", error);
 			}
 		},
-
 		validate: async (values) => {
 			let errors: {
 				name?: string;
@@ -120,6 +160,17 @@ export default function CreateMedicationPage() {
 			<form
 				className="rounded-3xl bg-white flex flex-col mb-8 w-full md:max-w-[800px] md:min-h-[550px] p-4 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
 				onSubmit={formik.handleSubmit}>
+				<div>
+					{imageDataUrl && (
+						<img
+							src={decodeURIComponent(imageDataUrl)}
+							alt="Selected Image"
+							style={{ marginBottom: "20px" }}
+							width={250}
+							height={250}
+						/>
+					)}
+				</div>
 				<div className="self-end -mt-4">
 					<p className="text-red text-[20px]">
 						{" "}
@@ -194,7 +245,9 @@ export default function CreateMedicationPage() {
 
 				<div className="flex">
 					<div className="mt-3">
-						<FormLabel htmlFor={"dosage"} label={"Dosage"}></FormLabel>
+						<FormLabel
+							htmlFor={"dosage"}
+							label={"Dosage"}></FormLabel>
 						<Input
 							name="dosage"
 							id="dosage"
