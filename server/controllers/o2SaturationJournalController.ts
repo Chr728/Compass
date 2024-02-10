@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { Logger } from '../middlewares/logger';
 import db from '../models';
-import { diabeticInsulinJournalValidator } from '../utils/databaseValidators';
+import { o2SaturationJournalValidator } from '../utils/databaseValidators';
 import { ErrorHandler } from '../middlewares/errorMiddleware';
 
 export const getO2SaturationJournals = async (
@@ -108,6 +108,7 @@ export const createO2SaturationJournal = async (
     }
 
     const { date, time, o2sat, pulse, activityLevel, notes } = req.body;
+    o2SaturationJournalValidator(req.body);
     const o2SaturationJournal = await db.O2SaturationJournal.create({
       uid: req.params.uid,
       date,
@@ -162,7 +163,7 @@ export const updateO2SaturationJournal = async (
     }
 
     const { date, time, o2sat, pulse, activityLevel, notes } = req.body;
-
+    o2SaturationJournalValidator(req.body);
     await db.O2SaturationJournal.update(
       { date, time, o2sat, pulse, activityLevel, notes },
       { where: { id: o2SaturationJournalId } }

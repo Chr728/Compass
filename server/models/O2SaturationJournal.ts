@@ -2,7 +2,7 @@
 
 import { IntegerDataType, Model } from 'sequelize';
 
-interface O2SaturationJournalAttributes {
+export interface O2SaturationJournalAttributes {
   id: number;
   uid: string;
   date: Date;
