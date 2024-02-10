@@ -100,6 +100,7 @@ export default function CreateMedicationPage() {
 
 				await uploadMedicationImage(medicationId, file);
 				router.push("/getMedications");
+				sessionStorage.clear();
 			} catch (error) {
 				console.error("Error submitting medication:", error);
 			}
