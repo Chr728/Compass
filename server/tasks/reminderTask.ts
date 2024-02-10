@@ -5,6 +5,96 @@ import db from "../models";
 import moment = require("moment-timezone");
 const webPush = require("web-push");
 
+function checkFrequency(
+  frequency: string,
+  currentDate: Date,
+  currentTime: string
+) {
+  const parsedTime = moment(currentTime, "HH:mm:ss");
+  switch (frequency) {
+    case "Once a day (morning)":
+      // Check if the current time is 8am
+      if (parsedTime.hours() === 8 && parsedTime.minutes() === 0) break;
+    case "Once a day (evening)":
+      // Check if the current time is 8pm
+      if (parsedTime.hours() === 20 && parsedTime.minutes() === 0) break;
+
+    case "Twice a day":
+      break;
+
+    case "Three times a day":
+      break;
+
+    case "Four times a day":
+      break;
+
+    case "Five times a day":
+      break;
+
+    case "Six times a day":
+      break;
+
+    case "Every 30 minutes":
+      // Check if time is a multiple of 30
+      if (parsedTime.minutes() % 30 === 0) break;
+
+    case "Every 1 hour":
+      // Check if minutes are 0
+      if (parsedTime.minutes() === 0) break;
+
+    case "Every 2 hours":
+      // Check if hours are a multiple of 2
+      if (parsedTime.hours() % 2 === 0 && parsedTime.minutes() === 0) break;
+      break;
+
+    case "Every 4 hours":
+      // Check if hours are a multiple of 4
+      if (parsedTime.hours() % 4 === 0 && parsedTime.minutes() === 0) break;
+      break;
+
+    case "Every 6 hours":
+      // Check if hours are a multiple of 6
+      if (parsedTime.hours() % 6 === 0 && parsedTime.minutes() === 0) break;
+      break;
+
+    case "Every 8 hours":
+      // Check if hours are a multiple of 8
+      if (parsedTime.hours() % 8 === 0 && parsedTime.minutes() === 0) break;
+      break;
+
+    case "Before meals":
+      // Check if hours are 9am, 12pm or 6pm
+      if (
+        (parsedTime.hours() === 9 ||
+          parsedTime.hours() === 12 ||
+          parsedTime.hours() === 18) &&
+        parsedTime.minutes() === 0
+      )
+        break;
+      break;
+
+    case "After meals":
+      break;
+
+    case "Before bedtime":
+      break;
+
+    case "Round-the-clock (RTC)":
+      break;
+
+    case "As needed (PRN)":
+      break;
+
+    case "Other":
+      break;
+
+    default:
+      Logger.error("Unknown frequency entered for medication...");
+      return false;
+  }
+  return true;
+}
+
 export const sendUserReminders = async () => {
   const publicKey = process.env.VAPID_PUBLIC_KEY;
   const privateKey = process.env.VAPID_PRIVATE_KEY;
@@ -40,7 +130,7 @@ export const sendUserReminders = async () => {
     // 10 minutes after start time
     const thirtyMinutesLater = startTimeMinutes + 10;
 
-    // Define time-string pairs for glucose journals and medication
+    // Define time-string pairs for glucose journals
     const timeStrings: [string, number][] = [
       ["Before breakfast", 7 * 60],
       ["30min after breakfast", 8 * 60 + 30],
@@ -63,6 +153,8 @@ export const sendUserReminders = async () => {
         break;
       }
     }
+
+    // Define time-string pairs for medication journals
 
     //Get appointment of users for preperaing reminder
     const userAppointments = await db.Appointment.findAll({
@@ -343,12 +435,14 @@ export const sendUserReminders = async () => {
         dateStarted: {
           [db.Sequelize.Op.lt]: currentDate,
         },
-        time: {
-          [db.Sequelize.Op.gte]: startTime.format("HH:mm:00"),
-          [db.Sequelize.Op.lt]: endTime.format("HH:mm:00"),
+        expirationDate: {
+          [db.Sequelize.Op.gte]: currentDate,
         },
       },
     });
+
+    // Filter medications based on user frequency options
+
     if (userMedications.length > 0) {
       for (const medication of userMedications) {
         // Retrieve notification preference first.
