@@ -104,6 +104,48 @@ export default function CreateMedicationPage() {
 				console.error("Error submitting medication:", error);
 			}
 		},
+		validate: async (values) => {
+			let errors: {
+				name?: string;
+				date?: string;
+				time?: string;
+				dosage?: string;
+				unit?: string;
+				frequency?: string;
+				route?: string;
+				notes?: string;
+			} = {};
+
+			if (!values.name) {
+				errors.name = "This field cannot be left empty.";
+			}
+			if (!values.date) {
+				errors.date = "This field cannot be left empty.";
+			}
+
+			if (!values.time) {
+				errors.time = "This field cannot be left empty.";
+			}
+
+			if (parseFloat(values.dosage) <= 0) {
+				errors.dosage = "This field cannot be negative or zero.";
+			} else if (!values.dosage) {
+				errors.dosage = "This field cannot be left empty.";
+			}
+
+			if (!values.unit) {
+				errors.unit = "This field cannot be left empty.";
+			}
+
+			if (!values.frequency) {
+				errors.frequency = "This field cannot be left empty.";
+			}
+
+			if (!values.route) {
+				errors.route = "This field cannot be left empty.";
+			}
+			return errors;
+		},
 	});
 
 	return (
