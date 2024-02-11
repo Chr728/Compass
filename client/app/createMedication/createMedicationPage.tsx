@@ -29,17 +29,14 @@ export default function CreateMedicationPage() {
 			const medicationDosage = parseInt(words[0]);
 			if (strengthText.includes("MG")) {
 				const unit = "MG";
-				console.log("strengthText", unit);
 
 				setMedicationUnit(unit);
 			}
 			if (strengthText.includes("MCG")) {
 				const unit = "MCG";
-				console.log("strengthText", unit);
 
 				setMedicationUnit(unit);
 			}
-			console.log("medicationDosage", medicationDosage);
 
 			setImageDataUrl(selectedImage);
 			labelText && setmedicationName(labelText);
