@@ -86,11 +86,6 @@ export default function CreateMedicationPage() {
 
 				const result = await createMedication(data);
 				const medicationId = result.data.id;
-				// if (!imageDataUrl) {
-				// 	console.error("No image data URL available");
-				// 	return;
-				// }
-
 				const base64Data = imageDataUrl?.split(",")[1];
 
 				const binaryData = atob(base64Data ?? "");
@@ -338,6 +333,23 @@ export default function CreateMedicationPage() {
 								value="milligram (mg)">
 								<option value="milligram (mg)">
 									milligram (mg)
+								</option>
+							</select>
+						) : medicationUnit === "MCG" ? (
+							<select
+								className="text-darkgrey h-[52px] p-2"
+								name="unit"
+								id="unit"
+								style={{
+									width: "100%",
+									border: "1px solid #DBE2EA",
+									borderRadius: "5px",
+								}}
+								onChange={formik.handleChange}
+								onBlur={formik.handleBlur}
+								value="microgram (mcg)">
+								<option value="microgram (mcg)">
+									microgram (mcg)
 								</option>
 							</select>
 						) : (
