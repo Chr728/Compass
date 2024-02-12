@@ -2,24 +2,23 @@
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useAuth } from "../contexts/AuthContext";
-import Custom403 from "../pages/403";
 import CreateGlucoseJournalPage from "./createGlucoseJournalPage";
 
 export default function CreateGlucoseJournal() {
-  const router = useRouter();
-  const { user } = useAuth();
+	const router = useRouter();
+	const { user } = useAuth();
 
-  React.useEffect(() => {
-    if (!user) router.push("/login");
-  }, [user]);
+	React.useEffect(() => {
+		if (!user) router.push("/login");
+	}, [user]);
 
-  if (!user) {
-    return (
-      <div>
-        <Custom403 />
-      </div>
-    );
-  }
+	// if (!user) {
+	//   return (
+	//     <div>
+	//       <Custom403 />
+	//     </div>
+	//   );
+	// }
 
-  return <CreateGlucoseJournalPage />;
+	return <CreateGlucoseJournalPage />;
 }

@@ -2,7 +2,6 @@
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useAuth } from "../contexts/AuthContext";
-import Custom403 from "../pages/403";
 import PrivacyPage from "./privacyPage";
 
 export default function GetFoodJournals() {
@@ -13,13 +12,13 @@ export default function GetFoodJournals() {
 		if (!user) router.push("/login");
 	}, [user]);
 
-	if (!user) {
-		return (
-			<div>
-				<Custom403 />
-			</div>
-		);
-	}
+	// if (!user) {
+	// 	return (
+	// 		<div>
+	// 			<Custom403 />
+	// 		</div>
+	// 	);
+	// }
 
 	return <PrivacyPage />;
 }
