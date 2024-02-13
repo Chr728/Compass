@@ -113,6 +113,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         const errorMessage = error.message;
         logger.error(errorCode, errorMessage);
         handlePopUp('error', errorMessage);
+        handleLoading(false);
       });
   };
 

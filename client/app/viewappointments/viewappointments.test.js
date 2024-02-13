@@ -79,6 +79,15 @@ describe ("Logged in user", () => {
             expect(result.status).toEqual('SUCCESS');
             expect(result.data).toEqual('Successfully deleted appointment.');
         })
+
+        it ("Click on the filters", async () => {
+            const orderDate = screen.getByLabelText("orderDate")
+            await userEvent.click(orderDate)
+            await userEvent.click(orderDate)
+            const orderName = screen.getByLabelText("orderName")
+            await userEvent.click(orderName)
+            await userEvent.click(orderName)
+        })
     
 })
 

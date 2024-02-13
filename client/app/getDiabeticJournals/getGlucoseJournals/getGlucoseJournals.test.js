@@ -87,7 +87,7 @@ jest.mock('../../http/diabeticJournalAPI', () => {
 
 
     test("Get Glucose Journals list is displayed correctly", async () => {
-        setTimeout(() => {
+        setTimeout(async () => {
             const date = screen.findByText('Jan 1, 2014');
             const mealTime = screen.findByText('Before lunch');
             const bloodGlucose = screen.findByText('23');
@@ -95,6 +95,17 @@ jest.mock('../../http/diabeticJournalAPI', () => {
             expect(date).toBeInTheDocument();
             expect(mealTime).toBeInTheDocument();
             expect(bloodGlucose).toBeInTheDocument();
+
+            const orderDate = screen.getByLabelText("orderDate")
+            await userEvent.click(orderDate)
+            await userEvent.click(orderDate)
+            const orderMeal = screen.getByLabelText("orderMeal")
+            await userEvent.click(orderMeal)
+            await userEvent.click(orderMeal)
+            const orderGlucose = screen.getByLabelText("orderGlucose")
+            await userEvent.click(orderGlucose)
+            await userEvent.click(orderGlucose)
+
         }, 1000);    
     })
 
@@ -106,6 +117,7 @@ jest.mock('../../http/diabeticJournalAPI', () => {
         const message = screen.getByText(/Keep track of your insulin doses and glucose measurements to ensure a healthy lifestyle./i);
         expect(message).toBeInTheDocument();
     })
+
 
 
     

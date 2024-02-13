@@ -80,3 +80,9 @@ jest.mock('../http/moodJournalAPI', () => {
             expect(result.data).toEqual('Successfully deleted mood journal entry.');
         }, 1000);    
     })
+
+    test("Click on the filters", async () => {
+        const orderDate = screen.getByLabelText("orderDate")
+        await userEvent.click(orderDate)
+        await userEvent.click(orderDate)
+    })

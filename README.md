@@ -44,7 +44,6 @@ The docker compose file contains the commands to build and run the project. Plea
 
 ```bash
 docker-compose -f docker-compose-dev.yml up
-docker-compose -f docker-compose-ai.yml up
 ```
 
 If you are running the project in your local environment, the express server will be hosted on port 8000, the python server will be hosted on port 8080, the client will be hosted on port 3000 and the database will be hosted on post 5432
