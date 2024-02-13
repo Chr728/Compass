@@ -15,15 +15,32 @@ Object.defineProperty(window, "sessionStorage", {
 });
 
 describe("CreateMedicationPage", () => {
-	test("renders image when imageDataUrl is available", () => {
-		// Set up mocked imageDataUrl
-		const imageDataUrl = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQE...";
-		mockSessionStorage.getItem.mockReturnValue(imageDataUrl);
+	test("transfers label text and strength into sessionStorage", () => {
+		// Set up mocked data
+		const labelText = "Label Text";
+		const strengthText = "10 MG";
+		const imageDataWithText = JSON.stringify({
+			selectedImage: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQE...",
+			labelText,
+			strengthText,
+		});
 
-		// Render the component
+		mockSessionStorage.getItem.mockReturnValue(imageDataWithText);
+
 		render(<CreateMedicationPage />);
 		const ImageElement = screen.getByRole("img");
 		expect(ImageElement).toBeInTheDocument();
+		expect(mockSessionStorage.getItem).toHaveBeenCalledWith(
+			"imageDataWithText"
+		);
+
+		expect(
+			JSON.parse(mockSessionStorage.getItem("imageDataWithText"))
+		).toEqual({
+			selectedImage: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQE...",
+			labelText,
+			strengthText,
+		});
 	});
 });
 
