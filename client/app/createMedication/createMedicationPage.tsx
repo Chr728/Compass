@@ -15,13 +15,34 @@ export default function CreateMedicationPage() {
 	const user = useAuth();
 	const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
 
+	const [medicationName, setmedicationName] = useState<string>();
+	const [medicationDosage, setMedicationDosage] = useState<number>();
+	const [medicationUnit, setMedicationUnit] = useState<string>();
+
 	useEffect(() => {
-		const storedImageDataUrl = sessionStorage.getItem("imageDataUrl");
-		if (storedImageDataUrl) {
-			setImageDataUrl(storedImageDataUrl);
+		const imageDataWithText = sessionStorage.getItem("imageDataWithText");
+
+		if (imageDataWithText) {
+			const { selectedImage, labelText, strengthText } =
+				JSON.parse(imageDataWithText);
+			const words = strengthText.trim().split(" ");
+			const medicationDosage = parseInt(words[0]);
+			if (strengthText.includes("MG")) {
+				const unit = "MG";
+
+				setMedicationUnit(unit);
+			}
+			if (strengthText.includes("MCG")) {
+				const unit = "MCG";
+
+				setMedicationUnit(unit);
+			}
+
+			setImageDataUrl(selectedImage);
+			labelText && setmedicationName(labelText);
+			medicationDosage && setMedicationDosage(medicationDosage);
 		}
 	}, []);
-
 	useEffect(() => {
 		if (!user) {
 			router.push("/login");
@@ -50,25 +71,21 @@ export default function CreateMedicationPage() {
 		onSubmit: async (values) => {
 			try {
 				const data = {
-					medicationName: values.name,
+					medicationName: medicationName ?? values.name,
 					dateStarted: values.date,
 					time: values.time,
-					dosage: values.dosage,
-					unit: values.unit,
+					dosage: medicationDosage ?? values.dosage,
+					unit: medicationUnit ?? values.unit,
 					frequency: values.frequency,
 					route: values.route,
 					notes: values.notes,
 				};
+
 				const result = await createMedication(data);
 				const medicationId = result.data.id;
-				if (!imageDataUrl) {
-					console.error("No image data URL available");
-					return;
-				}
+				const base64Data = imageDataUrl?.split(",")[1];
 
-				const base64Data = imageDataUrl.split(",")[1];
-
-				const binaryData = atob(base64Data);
+				const binaryData = atob(base64Data ?? "");
 
 				const arrayBuffer = new ArrayBuffer(binaryData.length);
 				const uint8Array = new Uint8Array(arrayBuffer);
@@ -78,9 +95,9 @@ export default function CreateMedicationPage() {
 
 				const blob = new Blob([arrayBuffer], { type: "image/png" });
 				let extension = "png";
-				if (imageDataUrl.includes("jpeg")) {
+				if (imageDataUrl?.includes("jpeg")) {
 					extension = "jpeg";
-				} else if (imageDataUrl.includes("jpg")) {
+				} else if (imageDataUrl?.includes("jpg")) {
 					extension = "jpg";
 				}
 
@@ -117,7 +134,7 @@ export default function CreateMedicationPage() {
 				notes?: string;
 			} = {};
 
-			if (!values.name) {
+			if (!values.name && !medicationName) {
 				errors.name = "This field cannot be left empty.";
 			}
 			if (!values.date) {
@@ -130,11 +147,11 @@ export default function CreateMedicationPage() {
 
 			if (parseFloat(values.dosage) <= 0) {
 				errors.dosage = "This field cannot be negative or zero.";
-			} else if (!values.dosage) {
+			} else if (!values.dosage && !medicationDosage) {
 				errors.dosage = "This field cannot be left empty.";
 			}
 
-			if (!values.unit) {
+			if (!values.unit && !medicationUnit) {
 				errors.unit = "This field cannot be left empty.";
 			}
 
@@ -185,15 +202,28 @@ export default function CreateMedicationPage() {
 					<FormLabel
 						htmlFor={"name"}
 						label={"Medication Name"}></FormLabel>
-					<Input
-						name="name"
-						id="name"
-						type="text"
-						style={{ width: "100%" }}
-						onChange={formik.handleChange}
-						value={formik.values.name}
-						onBlur={formik.handleBlur}
-					/>
+					{medicationName && medicationName !== "" ? (
+						<Input
+							name="name"
+							id="name"
+							type="text"
+							style={{ width: "100%" }}
+							onChange={formik.handleChange}
+							value={medicationName}
+							onBlur={formik.handleBlur}
+						/>
+					) : (
+						<Input
+							name="name"
+							id="name"
+							type="text"
+							style={{ width: "100%" }}
+							onChange={formik.handleChange}
+							value={formik.values.name}
+							onBlur={formik.handleBlur}
+						/>
+					)}
+
 					{formik.touched.name && formik.errors.name && (
 						<p className="text-red text-[14px]">
 							{formik.errors.name}
@@ -248,15 +278,27 @@ export default function CreateMedicationPage() {
 						<FormLabel
 							htmlFor={"dosage"}
 							label={"Dosage"}></FormLabel>
-						<Input
-							name="dosage"
-							id="dosage"
-							type="number"
-							style={{ width: "75%" }}
-							onChange={formik.handleChange}
-							value={formik.values.dosage.toString()}
-							onBlur={formik.handleBlur}
-						/>
+						{medicationDosage && !"" ? (
+							<Input
+								name="dosage"
+								id="dosage"
+								type="number"
+								style={{ width: "75%" }}
+								onChange={formik.handleChange}
+								value={medicationDosage.toString()}
+								onBlur={formik.handleBlur}
+							/>
+						) : (
+							<Input
+								name="dosage"
+								id="dosage"
+								type="number"
+								style={{ width: "75%" }}
+								onChange={formik.handleChange}
+								value={formik.values.dosage}
+								onBlur={formik.handleBlur}
+							/>
+						)}
 						{formik.touched.dosage && formik.errors.dosage && (
 							<p className="text-red text-[14px] mr-2">
 								{formik.errors.dosage}
@@ -271,42 +313,80 @@ export default function CreateMedicationPage() {
 							marginLeft: "-2%",
 						}}>
 						<FormLabel htmlFor={"unit"} label={"Unit"}></FormLabel>
-						<select
-							className="text-darkgrey h-[52px] p-2"
-							name="unit"
-							id="unit"
-							style={{
-								width: "100%",
-								border: "1px solid #DBE2EA",
-								borderRadius: "5px",
-							}}
-							onChange={formik.handleChange}
-							onBlur={formik.handleBlur}
-							value={formik.values.unit}>
-							<option value="">Choose one</option>
-							<option value="drop (gtts)">drop (gtts)</option>
-							<option value="teaspoon (tsp)">
-								teaspoon (tsp)
-							</option>
-							<option value="tablespoon (tbsp)">
-								tablespoon (tbsp)
-							</option>
-							<option value="millilitre (mL)">
-								millilitre (mL)
-							</option>
-							<option value="fluid ounce (fl oz)">
-								fluid ounce (fl oz)
-							</option>
-							<option value="microgram (mcg)">
-								microgram (mcg)
-							</option>
-							<option value="milligram (mg)">
-								milligram (mg)
-							</option>
-							<option value="gram (g)">gram (g)</option>
-							<option value="ounce (oz)">ounce (oz)</option>
-							<option value="Other">Other</option>
-						</select>
+						{medicationUnit &&
+						medicationUnit !== "" &&
+						medicationUnit == "MG" ? (
+							<select
+								className="text-darkgrey h-[52px] p-2"
+								name="unit"
+								id="unit"
+								style={{
+									width: "100%",
+									border: "1px solid #DBE2EA",
+									borderRadius: "5px",
+								}}
+								onChange={formik.handleChange}
+								onBlur={formik.handleBlur}
+								value="milligram (mg)">
+								<option value="milligram (mg)">
+									milligram (mg)
+								</option>
+							</select>
+						) : medicationUnit === "MCG" ? (
+							<select
+								className="text-darkgrey h-[52px] p-2"
+								name="unit"
+								id="unit"
+								style={{
+									width: "100%",
+									border: "1px solid #DBE2EA",
+									borderRadius: "5px",
+								}}
+								onChange={formik.handleChange}
+								onBlur={formik.handleBlur}
+								value="microgram (mcg)">
+								<option value="microgram (mcg)">
+									microgram (mcg)
+								</option>
+							</select>
+						) : (
+							<select
+								className="text-darkgrey h-[52px] p-2"
+								name="unit"
+								id="unit"
+								style={{
+									width: "100%",
+									border: "1px solid #DBE2EA",
+									borderRadius: "5px",
+								}}
+								onChange={formik.handleChange}
+								onBlur={formik.handleBlur}
+								value={formik.values.unit}>
+								<option value="">Choose one</option>
+								<option value="drop (gtts)">drop (gtts)</option>
+								<option value="teaspoon (tsp)">
+									teaspoon (tsp)
+								</option>
+								<option value="tablespoon (tbsp)">
+									tablespoon (tbsp)
+								</option>
+								<option value="millilitre (mL)">
+									millilitre (mL)
+								</option>
+								<option value="fluid ounce (fl oz)">
+									fluid ounce (fl oz)
+								</option>
+								<option value="microgram (mcg)">
+									microgram (mcg)
+								</option>
+								<option value="milligram (mg)">
+									milligram (mg)
+								</option>
+								<option value="gram (g)">gram (g)</option>
+								<option value="ounce (oz)">ounce (oz)</option>
+								<option value="Other">Other</option>
+							</select>
+						)}
 						{formik.touched.unit && formik.errors.unit && (
 							<p className="text-red text-[14px]">
 								{formik.errors.unit}
