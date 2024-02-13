@@ -241,7 +241,7 @@ export default function ViewMoodJournalsPage() {
                     </div>
                   </div>
                   <div className="relative rounded-md p-2 w-[240px] h-[100px] text-white" onClick={() => handleClick(data.id)} style={{ background: setColor(data.howAreYou) }}>
-                    <div onClick={() => deleteMoodJournals(data.id)}>
+                    <div>
                       <Image
                         src="/icons/greyTrash.svg"
                         alt="Grey-colored Trash icon"
@@ -249,6 +249,13 @@ export default function ViewMoodJournalsPage() {
                         height={10}
                         className="absolute top-2 right-2"
                         style={{ width: 'auto', height: 'auto' }}
+                        onClick=
+                          {
+                            (event) => {
+                              event.stopPropagation();
+                              deleteMoodJournals(data.id)
+                            }
+                        }
                       />
                     </div>
                     <p className="font-medium">Felt {data.howAreYou}!</p>
