@@ -60,36 +60,40 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const uid = user ? user.uid : null; // Access the UID if the user is authenticated
   const router = useRouter();
   const { handlePopUp, loading, handleLoading } = useProp();
-  
+    const [isDataLoaded, setIsDataLoaded] = useState(false);
+
   useEffect(() => {
     const fetchUserData = async () => {
       handleLoading(true);
       if (uid) {
         getUser()
-          .then((userData) => {
-            setUserInfo(userData);
-            router.push("/tpage");
-            handleLoading(false, 1000);
-          })
-          .catch((error) => {
-            handlePopUp("error", error.message);
-            signOut(auth);
-          });
+            .then((userData) => {
+              setUserInfo(userData);
+              router.push("/tpage");
+              handleLoading(false, 1000);
+            })
+            .catch((error) => {
+              handlePopUp("error", error.message);
+              signOut(auth);
+            })
+            .finally(() => {
+              setIsDataLoaded(true); // Set the data loaded flag to true
+            });
       } else {
         setUserInfo(null);
         handleLoading(false);
+        setIsDataLoaded(true); // Set the data loaded flag to true
       }
     };
+
     if (user) {
-      // setTimeout(() => {
-        (async () => {
-          await fetchUserData();
-        })();
-      // }, 1000);
+      (async () => {
+        await fetchUserData();
+      })();
     } else {
       handleLoading(false);
+      setIsDataLoaded(true); // Set the data loaded flag to true even if there's no user
     }
-
   }, [uid]);
 
   const updateCurrentUser = (userData: EditableUserAttributes) => {
@@ -110,5 +114,5 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     updateCurrentUser,
   };
 
-  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={value}>{isDataLoaded && children}</UserContext.Provider>;
 };

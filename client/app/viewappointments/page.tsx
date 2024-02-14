@@ -8,9 +8,9 @@ export default function ViewAppointments() {
 	const router = useRouter();
 	const { user } = useAuth();
 
-	React.useEffect(() => {
-		if (!user) router.push("/login");
-	}, [user]);
+	// React.useEffect(() => {
+	// 	if (!user) router.push("/login");
+	// }, [user]);
 
 	// if (!user) {
 	//   return <div><Custom403/></div>

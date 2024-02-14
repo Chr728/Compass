@@ -9,9 +9,9 @@ export default function MainMenu() {
 	const { user } = useAuth();
 	const router = useRouter();
 
-	React.useEffect(() => {
-		if (!user) router.push("/login");
-	}, [user]);
+	// React.useEffect(() => {
+	// 	if (!user) router.push("/login");
+	// }, [user]);
 
 	// if (!user) {
 	//   return <div><Custom403/></div>

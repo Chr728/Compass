@@ -8,10 +8,6 @@ import { useAuth } from "./contexts/AuthContext";
 import "./globals.css";
 import Custom403 from "./pages/403";
 
-export const useUser = () => {
-	const { user } = useAuth();
-	return user;
-};
 
 export const metadata: Metadata = {
 	title: "Compass",
@@ -39,19 +35,6 @@ export default function RootLayout({
 }: {
 	children: React.ReactNode;
 }) {
-	if (!useUser) {
-		return (
-			<html lang="en">
-				<GoogleAnalytics />
-				<head />
-				<body>
-					<AppWrapper>
-						<Custom403 />
-					</AppWrapper>
-				</body>
-			</html>
-		);
-	}
 	return (
 		<html lang="en">
 			<GoogleAnalytics></GoogleAnalytics>

@@ -16,9 +16,9 @@ export default function Profile() {
 		setProfile(userInfo);
 	}, [userInfo]);
 
-	React.useEffect(() => {
-		if (!user) router.push("/login");
-	}, [user]);
+	// React.useEffect(() => {
+	// 	if (!user) router.push("/login");
+	// }, [user]);
 
 	// if (!user) {
 	//   return <div><Custom403/></div>
