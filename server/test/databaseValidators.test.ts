@@ -739,7 +739,7 @@ runTests({
       foodName: "Food A",
       mealType: "Breakfast",
       servingNumber: 1,
-      notes: 123,
+      notes: "123",
       incorrectData: "calorie",
     },
   ],
