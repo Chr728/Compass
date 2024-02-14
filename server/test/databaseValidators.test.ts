@@ -660,76 +660,6 @@ runTests({
     },
   ],
 });
-
-//Food Intake Jounral Validator
-runTests({
-  validator: foodIntakeJournalValidator,
-  validData: {
-    date: '2023-12-15',
-    time: '14:30',
-    foodName: 'Food A',
-    mealType: 'Breakfast',
-    servingNumber: 1,
-    notes: 'Feeling good after walking.',
-  },
-  invalidData: [
-    {
-      date: 123,
-      time: '14:30',
-      foodName: 'Food A',
-      mealType: 'Breakfast',
-      servingNumber: 1,
-      notes: 'Feeling good after walking.',
-      incorrectData: 'date',
-    },
-    {
-      date: '2023-12-15',
-      time: 123,
-      foodName: 'Food A',
-      mealType: 'Breakfast',
-      servingNumber: 1,
-      notes: 'Feeling good after walking.',
-      incorrectData: 'time',
-    },
-    {
-      date: '2023-12-15',
-      time: '14:30',
-      foodName: 123,
-      mealType: 'Breakfast',
-      servingNumber: 1,
-      notes: 'Feeling good after walking.',
-      incorrectData: 'foodName',
-    },
-    {
-      date: '2023-12-15',
-      time: '14:30',
-      foodName: 'Food A',
-      mealType: 123,
-      servingNumber: 1,
-      notes: 'Feeling good after walking.',
-      incorrectData: 'mealType',
-    },
-    {
-      date: '2023-12-15',
-      time: '14:30',
-      foodName: 'Food A',
-      mealType: 'Breakfast',
-      servingNumber: 'InvalidServingNumber',
-      notes: 'Feeling good after walking.',
-      incorrectData: 'servingNumber',
-    },
-    {
-      date: '2023-12-15',
-      time: '14:30',
-      foodName: 'Food A',
-      mealType: 'Breakfast',
-      servingNumber: 1,
-      notes: 123,
-      incorrectData: 'notes',
-    },
-  ],
-});
-
 // O2 Saturation Journal Validator
 runTests({
   validator: o2SaturationJournalValidator,
@@ -795,6 +725,91 @@ runTests({
       activityLevel: 'Normal',
       notes: 123,
       incorrectData: 'notes',
+    },
+  ],
+});
+
+//Food Intake Jounral Validator
+runTests({
+  validator: foodIntakeJournalValidator,
+  validData: {
+    date: '2023-12-15',
+    time: '14:30',
+    foodName: 'Food A',
+    mealType: 'Breakfast',
+    servingNumber: 1,
+    notes: "Feeling good after walking.",
+    calorie: 300
+  },
+  invalidData: [
+    {
+      date: 123,
+      time: '14:30',
+      foodName: 'Food A',
+      mealType: 'Breakfast',
+      servingNumber: 1,
+      notes: "Feeling good after walking.",
+      calorie: 300,
+      incorrectData: "date",
+    },
+    {
+      date: '2023-12-15',
+      time: 123,
+      foodName: 'Food A',
+      mealType: 'Breakfast',
+      servingNumber: 1,
+      notes: "Feeling good after walking.",
+      calorie: null,
+      incorrectData: "time",
+    },
+    {
+      date: '2023-12-15',
+      time: '14:30',
+      foodName: 123,
+      mealType: 'Breakfast',
+      servingNumber: 1,
+      notes: "Feeling good after walking.",
+      calorie: 300,
+      incorrectData: "foodName",
+    },
+    {
+      date: '2023-12-15',
+      time: '14:30',
+      foodName: 'Food A',
+      mealType: 123,
+      servingNumber: 1,
+      notes: "Feeling good after walking.",
+      calorie: 300,
+      incorrectData: "mealType",
+    },
+    {
+      date: "2023-12-15",
+      time: "14:30",
+      foodName: "Food A",
+      mealType: "Breakfast",
+      servingNumber: "InvalidServingNumber",
+      notes: "Feeling good after walking.",
+      calorie: 300,
+      incorrectData: "servingNumber",
+    },
+    {
+      date: '2023-12-15',
+      time: '14:30',
+      foodName: 'Food A',
+      mealType: 'Breakfast',
+      servingNumber: 1,
+      notes: 123,
+      calorie: 300,
+      incorrectData: "notes",
+    },
+    {
+      date: "2023-12-15",
+      time: "14:30",
+      foodName: "Food A",
+      mealType: "Breakfast",
+      servingNumber: 1,
+      notes: "123",
+      incorrectData: "calorie",
     },
   ],
 });
