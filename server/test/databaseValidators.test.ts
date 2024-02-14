@@ -670,6 +670,7 @@ runTests({
     mealType: "Breakfast",
     servingNumber: 1,
     notes: "Feeling good after walking.",
+    calorie: 300
   },
   invalidData: [
     {
@@ -679,6 +680,7 @@ runTests({
       mealType: "Breakfast",
       servingNumber: 1,
       notes: "Feeling good after walking.",
+      calorie: 300,
       incorrectData: "date",
     },
     {
@@ -688,6 +690,7 @@ runTests({
       mealType: "Breakfast",
       servingNumber: 1,
       notes: "Feeling good after walking.",
+      calorie: null,
       incorrectData: "time",
     },
     {
@@ -697,6 +700,7 @@ runTests({
       mealType: "Breakfast",
       servingNumber: 1,
       notes: "Feeling good after walking.",
+      calorie: 300,
       incorrectData: "foodName",
     },
     {
@@ -706,6 +710,7 @@ runTests({
       mealType: 123,
       servingNumber: 1,
       notes: "Feeling good after walking.",
+      calorie: 300,
       incorrectData: "mealType",
     },
     {
@@ -715,6 +720,7 @@ runTests({
       mealType: "Breakfast",
       servingNumber: "InvalidServingNumber",
       notes: "Feeling good after walking.",
+      calorie: 300,
       incorrectData: "servingNumber",
     },
     {
@@ -724,7 +730,17 @@ runTests({
       mealType: "Breakfast",
       servingNumber: 1,
       notes: 123,
+      calorie: 300,
       incorrectData: "notes",
+    },
+    {
+      date: "2023-12-15",
+      time: "14:30",
+      foodName: "Food A",
+      mealType: "Breakfast",
+      servingNumber: 1,
+      notes: 123,
+      incorrectData: "calorie",
     },
   ],
 });

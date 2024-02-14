@@ -442,8 +442,9 @@ const foodIntakeJournalValidator = (values: {
   mealType: string;
   servingNumber: number;
   notes: string;
+  calorie : number;
 }) => {
-  const { date, time, foodName, mealType, servingNumber, notes } = values;
+  const { date, time, foodName, mealType, servingNumber, notes, calorie } = values;
   //check if date is valid, should be string
   if (!date || typeof date !== "string") {
     Logger.error(`Invalid Date: ${date}`);
@@ -478,6 +479,12 @@ const foodIntakeJournalValidator = (values: {
   if (notes == undefined || typeof notes !== "string") {
     Logger.error(`Invalid notes: ${notes}`);
     throw new Error(`Invalid notes: ${notes}`);
+  }
+
+  //check if notes is valid, should be string
+  if (calorie !== null && typeof calorie !== "number") {
+    Logger.error(`Invalid calorie: ${calorie}`);
+    throw new Error(`Invalid calorie: ${calorie}`);
   }
 };
 
