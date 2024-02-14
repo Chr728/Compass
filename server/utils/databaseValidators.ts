@@ -481,6 +481,12 @@ const foodIntakeJournalValidator = (values: {
     Logger.error(`Invalid notes: ${notes}`);
     throw new Error(`Invalid notes: ${notes}`);
   }
+
+  //check if calorie is valid, should be integer
+  if (calorie !== null && typeof calorie !== "number") {
+    Logger.error(`Invalid calorie: ${calorie}`);
+    throw new Error(`Invalid calorie: ${calorie}`);
+  }
 };
 
 const o2SaturationJournalValidator = (
@@ -523,11 +529,6 @@ const o2SaturationJournalValidator = (
     throw new Error(`Invalid notes: ${notes}`);
   }
 
-  //check if notes is valid, should be string
-  if (calorie !== null && typeof calorie !== "number") {
-    Logger.error(`Invalid calorie: ${calorie}`);
-    throw new Error(`Invalid calorie: ${calorie}`);
-  }
 };
 
 export {
