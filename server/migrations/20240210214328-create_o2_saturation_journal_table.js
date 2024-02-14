@@ -12,7 +12,6 @@ module.exports = {
       uid: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true,
       },
       date: {
         type: Sequelize.DATE,
@@ -36,7 +35,7 @@ module.exports = {
       },
       notes: {
         type: Sequelize.TEXT,
-        allowNull: false,
+        allowNull: true,
       },
     });
   },
