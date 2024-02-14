@@ -660,6 +660,74 @@ runTests({
     },
   ],
 });
+// O2 Saturation Journal Validator
+runTests({
+  validator: o2SaturationJournalValidator,
+  validData: {
+    date: '2023-12-15',
+    time: '14:30',
+    o2sat: 98,
+    pulse: 70,
+    activityLevel: 'Normal',
+    notes: 'Feeling good after walking.',
+  },
+  invalidData: [
+    {
+      date: 123,
+      time: '14:30',
+      o2sat: 98,
+      pulse: 70,
+      activityLevel: 'Normal',
+      notes: 'Feeling good after walking.',
+      incorrectData: 'date',
+    },
+    {
+      date: '2023-12-15',
+      time: 123,
+      o2sat: 98,
+      pulse: 70,
+      activityLevel: 'Normal',
+      notes: 'Feeling good after walking.',
+      incorrectData: 'time',
+    },
+    {
+      date: '2023-12-15',
+      time: '14:30',
+      o2sat: 'InvalidO2Sat',
+      pulse: 70,
+      activityLevel: 'Normal',
+      notes: 'Feeling good after walking.',
+      incorrectData: 'o2sat',
+    },
+    {
+      date: '2023-12-15',
+      time: '14:30',
+      o2sat: 98,
+      pulse: 'InvalidPulse',
+      activityLevel: 'Normal',
+      notes: 'Feeling good after walking.',
+      incorrectData: 'pulse',
+    },
+    {
+      date: '2023-12-15',
+      time: '14:30',
+      o2sat: 98,
+      pulse: 70,
+      activityLevel: 123,
+      notes: 'Feeling good after walking.',
+      incorrectData: 'activityLevel',
+    },
+    {
+      date: '2023-12-15',
+      time: '14:30',
+      o2sat: 98,
+      pulse: 70,
+      activityLevel: 'Normal',
+      notes: 123,
+      incorrectData: 'notes',
+    },
+  ],
+});
 
 //Food Intake Jounral Validator
 runTests({
