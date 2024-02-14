@@ -34,7 +34,7 @@ const Renders = ({ children }: { children: ReactNode }) => {
     }, [pathname]);
 
 
-    if (!userInfo && !loading && !isPublicRoute()) {
+    if (!user && !userInfo && !loading && !isPublicRoute()) {
         return <Custom403 />;
     }else{
         return (
