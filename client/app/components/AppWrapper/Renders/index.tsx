@@ -22,16 +22,17 @@ const Renders = ({ children }: { children: ReactNode }) => {
     const { userInfo } = useUser();
 
     //set handle loading to true  when page is refreshing
-    React.useEffect(() => {
-        window.onbeforeunload = () => {
-            handleLoading(true);
-
-        }
-        window.onload = () => {
-            handleLoading(false);
-        }
-
-    }, [pathname]);
+    // React.useEffect(() => {
+    //     window.onbeforeunload = () => {
+    //         handleLoading(true);
+    //
+    //     }
+    //     window.onload = () => {
+    //         handleLoading(false);
+    //     }
+    //
+    //
+    // }, [pathname]);
 
 
     if (!user && !userInfo && !loading && !isPublicRoute()) {

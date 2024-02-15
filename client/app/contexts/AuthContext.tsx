@@ -17,6 +17,7 @@ import {
   createUserWithEmailAndPassword,
 } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
+
 import createUser from '@/app/http/createUser';
 import { createUserAttributes } from '@/app/lib/Models/User';
 import { useProp } from './PropContext';
@@ -96,6 +97,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
           .then((res) => {
             if (res !== null) {
               handleLoading(false);
+
               router.push('/tpage');
             }
           })
