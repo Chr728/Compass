@@ -11,8 +11,7 @@ import Swal from 'sweetalert2';
 import Header from '../components/Header';
 import { useEffect, useState } from 'react';
 import {useRouter} from 'next/navigation';
-import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
-import record from '../../public/icons/record.svg';
+import { MdKeyboardArrowDown } from 'react-icons/md';
 import NextImage from "next/image";
 
 export default function RecordAudioPage() {
@@ -66,10 +65,10 @@ export default function RecordAudioPage() {
                             </TableCell>
                             <TableCell>
                                 <div>
-                                Result
-                                <button aria-label="recordingResult">
-                                    <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" /> 
-                                </button>
+                                    Result
+                                    <button aria-label="recordingResult">
+                                        <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" /> 
+                                    </button>
                                 </div>
                             </TableCell>
                             <TableCell></TableCell>    {/*Table cell for play recording icon column*/}
