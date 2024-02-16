@@ -82,7 +82,7 @@ if (!user) {
       <br></br>
 
 {/* link for snoring detection page to be added */}
-      <Link href="/"> 
+      <Link href="/snoringAI"> 
             <div className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 m-1" style={{backgroundColor: '#7C9CBF' }}>
               <div> 
                 <p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
