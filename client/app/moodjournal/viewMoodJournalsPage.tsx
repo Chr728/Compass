@@ -13,6 +13,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { PickersDay } from "@mui/x-date-pickers/PickersDay";
 import { styled } from "@mui/material/styles";
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
 
 export default function ViewMoodJournalsPage() {
   const logger = require('../../logger');
@@ -154,6 +155,21 @@ export default function ViewMoodJournalsPage() {
     );
   };
 
+   //Order by Date
+	const [orderdate, setOrderDate] = useState(false)
+
+	const handleOrderDate = () => {
+		setOrderDate(!orderdate)
+		if (!orderdate){
+			const increasingOrdermoodData = [...moodJournal].sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+			setMoodJournal(increasingOrdermoodData)
+		}
+		else{
+			const decreasingOrdermoodData = [...moodJournal].sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+			setMoodJournal(decreasingOrdermoodData)
+		}
+	}
+
   return (
     <div className="bg-eggshell min-h-screen flex flex-col w-full">
 
@@ -205,7 +221,9 @@ export default function ViewMoodJournalsPage() {
         </div>
         {!showCalendar &&
           <div className="flex flex-col space-y-2 p-4 text-darkgrey" style={{ overflowY: 'auto', maxHeight: '380px' }}>
-
+            <button onClick={handleOrderDate} aria-label="orderDate">
+									{orderdate ? <MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" /> : <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />  }
+						</button>
             {moodJournal && moodJournal.map((data: any, index: number) => (
               <div
                 key={data.id}
@@ -223,7 +241,7 @@ export default function ViewMoodJournalsPage() {
                     </div>
                   </div>
                   <div className="relative rounded-md p-2 w-[240px] h-[100px] text-white" onClick={() => handleClick(data.id)} style={{ background: setColor(data.howAreYou) }}>
-                    <div onClick={() => deleteMoodJournals(data.id)}>
+                    <div>
                       <Image
                         src="/icons/greyTrash.svg"
                         alt="Grey-colored Trash icon"
@@ -231,6 +249,13 @@ export default function ViewMoodJournalsPage() {
                         height={10}
                         className="absolute top-2 right-2"
                         style={{ width: 'auto', height: 'auto' }}
+                        onClick=
+                          {
+                            (event) => {
+                              event.stopPropagation();
+                              deleteMoodJournals(data.id)
+                            }
+                        }
                       />
                     </div>
                     <p className="font-medium">Felt {data.howAreYou}!</p>

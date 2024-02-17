@@ -85,7 +85,7 @@ test("Add an entry button  functions correctly", async() => {
 
 
     test("Get Insulin Journals list is displayed correctly", async () => {
-        setTimeout(() => {
+        setTimeout(async () => {
             const date = screen.findByText('Jan 1, 2014 8h36');
             const units = screen.findByText('60');
             const bodySite = screen.findByText('Lower Back (left)');
@@ -93,6 +93,16 @@ test("Add an entry button  functions correctly", async() => {
             expect(date).toBeInTheDocument();
             expect(units).toBeInTheDocument();
             expect(bodySite).toBeInTheDocument();
+
+            const orderDate = screen.getByLabelText("orderDate")
+            await userEvent.click(orderDate)
+            await userEvent.click(orderDate)
+            const orderUnit = screen.getByLabelText("orderUnit")
+            await userEvent.click(orderUnit)
+            await userEvent.click(orderUnit)
+            const orderSit = screen.getByLabelText("orderSite")
+            await userEvent.click(orderSite)
+            await userEvent.click(orderSite)
         },1000);    
     })
 
