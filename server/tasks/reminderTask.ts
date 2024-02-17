@@ -1,65 +1,115 @@
 require("dotenv").config();
-import { Request, Response } from "express";
 import { Logger } from "../middlewares/logger";
 import db from "../models";
 import moment = require("moment-timezone");
 const webPush = require("web-push");
 
-function checkFrequency(
-  frequency: string,
-  currentDate: Date,
-  currentTime: string
-) {
+function checkFrequency(frequency: string, currentTime: string) {
   const parsedTime = moment(currentTime, "HH:mm:ss");
+  console.log("This is the current time: ", parsedTime);
+
   switch (frequency) {
     case "Once a day (morning)":
       // Check if the current time is 8am
-      if (parsedTime.hours() === 8 && parsedTime.minutes() === 0) break;
+      if (parsedTime.hours() === 8 && parsedTime.minutes() === 0) return true;
+      break;
+
     case "Once a day (evening)":
       // Check if the current time is 8pm
-      if (parsedTime.hours() === 20 && parsedTime.minutes() === 0) break;
+      if (parsedTime.hours() === 20 && parsedTime.minutes() === 0) return true;
+      break;
 
     case "Twice a day":
+      // Check if the current time is 10am or 5pm
+      if (
+        (parsedTime.hours() === 10 || parsedTime.hours() === 17) &&
+        parsedTime.minutes() === 0
+      )
+        return true;
       break;
 
     case "Three times a day":
+      // Check if the current time is 10am, 3pm or 8pm
+      if (
+        (parsedTime.hours() === 10 ||
+          parsedTime.hours() === 17 ||
+          parsedTime.hours() === 20) &&
+        parsedTime.minutes() === 0
+      )
+        return true;
       break;
 
     case "Four times a day":
+      // Check if the current time is 8am, 12pm, 4pm or 8pm
+      if (
+        (parsedTime.hours() === 8 ||
+          parsedTime.hours() === 12 ||
+          parsedTime.hours() === 16 ||
+          parsedTime.hours() === 20) &&
+        parsedTime.minutes() === 0
+      )
+        return true;
       break;
 
     case "Five times a day":
+      // Check if the current time is 7am, 10am, 1pm, 4pm, 9pm
+      if (
+        (parsedTime.hours() === 7 ||
+          parsedTime.hours() === 10 ||
+          parsedTime.hours() === 13 ||
+          parsedTime.hours() === 16 ||
+          parsedTime.hours() === 21) &&
+        parsedTime.minutes() === 0
+      )
+        return true;
       break;
 
     case "Six times a day":
+      // Check if the current time is 6am, 10am, 2pm, 5pm, 8pm, 10pm
+      if (
+        (parsedTime.hours() === 6 ||
+          parsedTime.hours() === 10 ||
+          parsedTime.hours() === 14 ||
+          parsedTime.hours() === 17 ||
+          parsedTime.hours() === 20 ||
+          parsedTime.hours() === 22) &&
+        parsedTime.minutes() === 0
+      )
+        return true;
       break;
 
     case "Every 30 minutes":
       // Check if time is a multiple of 30
-      if (parsedTime.minutes() % 30 === 0) break;
+      if (parsedTime.minutes() % 30 === 0) return true;
+      break;
 
     case "Every 1 hour":
       // Check if minutes are 0
-      if (parsedTime.minutes() === 0) break;
+      if (parsedTime.minutes() === 0) return true;
+      break;
 
     case "Every 2 hours":
       // Check if hours are a multiple of 2
-      if (parsedTime.hours() % 2 === 0 && parsedTime.minutes() === 0) break;
+      if (parsedTime.hours() % 2 === 0 && parsedTime.minutes() === 0)
+        return true;
       break;
 
     case "Every 4 hours":
       // Check if hours are a multiple of 4
-      if (parsedTime.hours() % 4 === 0 && parsedTime.minutes() === 0) break;
+      if (parsedTime.hours() % 4 === 0 && parsedTime.minutes() === 0)
+        return true;
       break;
 
     case "Every 6 hours":
       // Check if hours are a multiple of 6
-      if (parsedTime.hours() % 6 === 0 && parsedTime.minutes() === 0) break;
+      if (parsedTime.hours() % 6 === 0 && parsedTime.minutes() === 0)
+        return true;
       break;
 
     case "Every 8 hours":
       // Check if hours are a multiple of 8
-      if (parsedTime.hours() % 8 === 0 && parsedTime.minutes() === 0) break;
+      if (parsedTime.hours() % 8 === 0 && parsedTime.minutes() === 0)
+        return true;
       break;
 
     case "Before meals":
@@ -70,13 +120,22 @@ function checkFrequency(
           parsedTime.hours() === 18) &&
         parsedTime.minutes() === 0
       )
-        break;
+        return true;
       break;
 
     case "After meals":
+      // Check if hours are 10am, 1pm or 8pm
+      if (
+        (parsedTime.hours() === 10 ||
+          parsedTime.hours() === 13 ||
+          parsedTime.hours() === 20) &&
+        parsedTime.minutes() === 0
+      )
+        return true;
       break;
-
     case "Before bedtime":
+      // Check if hours are 10pm
+      if (parsedTime.hours() === 22 && parsedTime.minutes() === 0) return true;
       break;
 
     case "Round-the-clock (RTC)":
@@ -90,9 +149,9 @@ function checkFrequency(
 
     default:
       Logger.error("Unknown frequency entered for medication...");
-      return false;
+      break;
   }
-  return true;
+  return false;
 }
 
 export const sendUserReminders = async () => {
@@ -154,7 +213,7 @@ export const sendUserReminders = async () => {
       }
     }
 
-    // Define time-string pairs for medication journals
+    // Check frequency
 
     //Get appointment of users for preperaing reminder
     const userAppointments = await db.Appointment.findAll({
@@ -442,7 +501,6 @@ export const sendUserReminders = async () => {
     });
 
     // Filter medications based on user frequency options
-
     if (userMedications.length > 0) {
       for (const medication of userMedications) {
         // Retrieve notification preference first.
@@ -471,16 +529,44 @@ export const sendUserReminders = async () => {
             Logger.error(`No Subscription was found.`);
             continue;
           }
-          const payload = JSON.stringify({
-            title: `Medication Reminder:  ${medication.medicationName} for ${medication.dosage} ${medication.unit} at ${medication.time}`,
-          });
-          webPush
-            .sendNotification(userSubscription.subscription, payload)
-            .catch((error: any) => Logger.error(error));
-          Logger.info(
-            "Notification for medications sent to user: ",
-            medication.uid
-          );
+
+          // Send notification to users if medication is about to expire
+          if (moment(medication.expirationDate).isSame(currentDate, "day")) {
+            Logger.info("Found current day for expiration date!!");
+            // If the time is 10am, then send the medication expiration reminder
+            if (startTime.format("HH:mm:00") === "16:50:00") {
+              Logger.info("Found proper time for expiration date!!");
+              const payload = JSON.stringify({
+                title: `Medication Expiration Reminder:  ${medication.medicationName} for ${medication.dosage} ${medication.unit} at ${medication.time} is expiring today.`,
+              });
+              webPush
+                .sendNotification(userSubscription.subscription, payload)
+                .catch((error: any) => Logger.error(error));
+              Logger.info(
+                "Expiration notification for medications sent to user: ",
+                medication.uid
+              );
+              continue;
+            }
+            // If its not 10am but the medication is expired, skip the notification sending process
+            else {
+              continue;
+            }
+          }
+
+          // Check frequency
+          if (checkFrequency(medication.frequency, currentTime)) {
+            const payload = JSON.stringify({
+              title: `Medication Reminder:  ${medication.medicationName} for ${medication.dosage} ${medication.unit} at ${medication.time}`,
+            });
+            webPush
+              .sendNotification(userSubscription.subscription, payload)
+              .catch((error: any) => Logger.error(error));
+            Logger.info(
+              "Notification for medications sent to user: ",
+              medication.uid
+            );
+          }
         }
       }
     }
