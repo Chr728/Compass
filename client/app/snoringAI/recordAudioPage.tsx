@@ -14,7 +14,6 @@ import {useRouter} from 'next/navigation';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import NextImage from "next/image";
 import RedButton from '../components/RedButton';
-import Button from '../components/Button';
 
 export default function RecordAudioPage() {
     const logger = require('../../logger');
@@ -99,6 +98,15 @@ export default function RecordAudioPage() {
             mediaRecorderRef.current = null;
         }
     };
+
+    const handleReplayClick = () => {
+        if (recordedAudioBlob) {
+          const audioUrl = URL.createObjectURL(recordedAudioBlob);
+          const audio = new Audio(audioUrl);
+          audio.play();
+        }
+    };
+      
    
   return (
     <div className="bg-eggshell min-h-screen flex flex-col w-full overflow-y-auto">
@@ -133,7 +141,7 @@ export default function RecordAudioPage() {
                             {formatTimer(timer)}
                         </div>
 
-                        <div className="flex flex-col space-y-2 mt-auto mb-20" >
+                        <div className="flex flex-col space-y-2 mt-auto mb-24" >
                             <RedButton
                                 type="button"
                                 text="Stop"
@@ -147,6 +155,11 @@ export default function RecordAudioPage() {
                              <RedButton
                                 type="button"
                                 text="Cancel"
+                            /> 
+                            <RedButton
+                                type="button"
+                                text="Replay"
+                                onClick={handleReplayClick}
                             /> 
                         </div>
                     </div>
@@ -200,11 +213,8 @@ export default function RecordAudioPage() {
                 </TableContainer>
             </div>
             </>
-         )} 
-                       
+         )}              
         </div>
-
-        
     </div>
   )
 }
