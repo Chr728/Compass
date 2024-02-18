@@ -21,4 +21,4 @@ pillIdentifierAI/logs
 pillIdentifierAI/results
 pillIdentifierAI/*.xlsx
 *.h5
-*.h5
+pillIdentifierAI/*.jpg
