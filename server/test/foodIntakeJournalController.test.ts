@@ -26,6 +26,7 @@ const foodIntakeJournals = [
     mealType: 'mealType1',
     servingNumber: 1,
     notes: 'notes1',
+    calorie:600,
   },
   {
     id: 2,
@@ -36,6 +37,7 @@ const foodIntakeJournals = [
     mealType: 'mealType2',
     servingNumber: 2,
     notes: 'notes2',
+    calorie:900
   },
 ];
 
@@ -48,6 +50,7 @@ const createFoodIntakeJournal = {
   mealType: 'mealType1',
   servingNumber: 1,
   notes: 'notes1',
+  calorie:600
 };
 
 const invalidFoodIntakeJournal = {
@@ -59,6 +62,7 @@ const invalidFoodIntakeJournal = {
   mealType: 'mealType1',
   servingNumber: 'servingNumber',
   notes: 'notes1',
+  calorie: 800
 };
 
 const updatedFoodIntakeJournal = {
@@ -70,6 +74,7 @@ const updatedFoodIntakeJournal = {
   mealType: 'mealType1',
   servingNumber: 1,
   notes: 'notes1',
+  calorie: 700
 };
 
 const mockedDecodedToken = {

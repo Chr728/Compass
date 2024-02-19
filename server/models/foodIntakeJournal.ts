@@ -10,6 +10,7 @@ interface FoodIntakeAttributes {
   foodName: string;
   mealType: string;
   servingNumber: number;
+  calorie: number;
   notes: string;
 }
 
@@ -27,6 +28,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     foodName!: string;
     mealType!: string;
     servingNumber!: number;
+    calorie!: number;
     notes!: string;
     static associate(models: any) {
       // define association here
@@ -70,6 +72,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
       },
       notes: {
         type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      calorie: {
+        type: DataTypes.INTEGER,
         allowNull: true,
       },
     },

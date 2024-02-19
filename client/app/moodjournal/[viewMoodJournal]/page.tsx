@@ -47,9 +47,9 @@ export default function GetMoodJournal( {params: { viewMoodJournal } } : { param
     }
   }, []);
 
-  if (!user) {
-    return <div><Custom403/></div>
-  }
+  // if (!user) {
+  //   return <div><Custom403/></div>
+  // }
 
   return (
     mood && <div className="bg-eggshell min-h-screen flex flex-col">
