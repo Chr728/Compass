@@ -169,7 +169,7 @@ export default function ViewMoodJournalsPage() {
 			setMoodJournal(increasingOrdermoodData)
 		}
 		else{
-			const decreasingOrdermoodData = [...moodJournal].sort((a,b) => new Date(b.date.substring(0,10)+"T"+a.time).getTime() - new Date(a.date.substring(0,10)+"T"+b.time).getTime())
+			const decreasingOrdermoodData = [...moodJournal].sort((a,b) => new Date(b.date.substring(0,10)+"T"+b.time).getTime() - new Date(a.date.substring(0,10)+"T"+a.time).getTime())
 			setMoodJournal(decreasingOrdermoodData)
 		}
 	}
