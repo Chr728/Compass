@@ -59,6 +59,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         handleLoading(false);
         // Signed in
         setError(null);
+        router.push('/tpage');
       })
       .catch((error) => {
         setError('Invalid User Credentials. Please try again.');
