@@ -3,11 +3,21 @@ import { useRouter } from 'next/navigation';
 import Header from '../components/Header';
 import IconButton from '../components/IconButton';
 import { useState } from 'react';
+import CardFolder from '../components/CardFolder';
 
 export default function GetMedVaultPage() {
   const router = useRouter();
   const [isExportDisabled, setIsExportDisabled] = useState(false);
   const [data, setData] = useState([]);
+
+  const cardData = [
+    { icon: '/Upload.svg', name: 'Dr. Bellamy N', text: 'Viralogy' },
+    { icon: '/Upload.svg', name: 'Dr. Smith', text: 'Immunology' },
+    { icon: '/Upload.svg', name: 'Dr. Johnson', text: 'Pathology' },
+    { icon: '/Upload.svg', name: 'Dr. Anderson', text: 'Microbiology' },
+    { icon: '/Upload.svg', name: 'Dr. Williams', text: 'Epidemiology' },
+    { icon: '/Upload.svg', name: 'Dr. Brown', text: 'Genetics' },
+  ];
 
   return (
     <div className="bg-eggshell h-screen flex flex-col">
@@ -43,7 +53,18 @@ export default function GetMedVaultPage() {
           </div>
         </div>
         {data ? (
-          <div>{/* Your content when data exists */}</div>
+          <div className="grid grid-cols-2 gap-4 mt-4 mb-24">
+            {' '}
+            {/* Add bottom margin */}
+            {cardData.map((data, index) => (
+              <CardFolder
+                key={index}
+                icon={data.icon}
+                name={data.name}
+                text={data.text}
+              />
+            ))}
+          </div>
         ) : (
           // Render this if data doesn't exist
           <div>
