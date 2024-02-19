@@ -61,8 +61,9 @@ export default function Register() {
       }
       if (!values.password) {
         errors.password = 'Password Required';
-      } else if (values.password.length < 6){
-        errors.password = 'Password must be at least 6 characters long';
+      } //password mus tbe at least of length 8 and have 1 capital, one lowercase, one number and one special character
+      else if(!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!+@#$%^&*()_\-=\[\]{};':"\\|,.<>\/?]).{8,}$/.test(values.password)) {
+        errors.password = 'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character';
       }
       if (!values.confPassword) {
         errors.confPassword = 'Confirmation of Password Required';
