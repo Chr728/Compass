@@ -1,64 +1,37 @@
-import React, { CSSProperties } from 'react';
+'use client';
 import Image from 'next/image';
+import React, { CSSProperties } from 'react';
 
 type ButtonProps = {
   type: 'button' | 'submit' | 'reset' | undefined;
   text: string;
-  icon?: string; // Icon as image source
   style?: CSSProperties;
   onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   disabled?: boolean;
   isSubmitting?: boolean;
-  outlined?: boolean;
   id?: string;
 };
 
 export default function Button({
   type,
   text,
-  icon,
   style,
   onClick,
   disabled,
   isSubmitting,
-  outlined,
   id,
 }: ButtonProps) {
-  const buttonStyle: CSSProperties = {
-    ...style,
-    border: outlined ? '1px solid #3182CE' : 'none',
-    color: outlined ? '#3182CE' : 'white',
-    backgroundColor: outlined ? 'transparent' : '#3182CE',
-  };
-
-  const disabledButtonStyle: CSSProperties = {
-    ...buttonStyle,
-    border: disabled ? '1px solid #D1D5DB' : buttonStyle.border,
-    color: disabled ? '#D1D5DB' : buttonStyle.color,
-    backgroundColor: disabled ? '#F3F4F6' : buttonStyle.backgroundColor,
-    cursor: disabled ? 'not-allowed' : 'pointer',
-  };
-
   const submittedButtonStyle: CSSProperties = {
     opacity: isSubmitting ? 0.7 : 1,
-    ...buttonStyle,
+    ...style,
   };
-
   return (
     <button
-      className={`font-sans font-medium rounded-md h-[56px] shadow-[0px_4px_8px_0px_rgba(44,39,56,0.08),0px_2px_4px_0px_rgba(44,39,56,0.08)] ${
-        outlined ? 'border border-blue text-blue' : 'bg-blue text-white'
-      }`}
+      className="bg-blue text-[16px] text-white font-sans font-medium rounded-md h-[56px] shadow-[0px_4px_8px_0px_rgba(44,39,56,0.08),0px_2px_4px_0px_rgba(44,39,56,0.08)]"
       type={type}
-      style={
-        disabled
-          ? disabledButtonStyle
-          : isSubmitting
-          ? submittedButtonStyle
-          : buttonStyle
-      }
+      style={submittedButtonStyle}
       onClick={onClick}
-      disabled={isSubmitting || disabled}
+      disabled={isSubmitting}
       id={id}
     >
       {isSubmitting ? (
@@ -77,15 +50,7 @@ export default function Button({
           <span style={{ verticalAlign: 'middle' }}>Submitting</span>
         </div>
       ) : (
-        <>
-          {icon && (
-            <div style={{ display: 'inline-flex', alignItems: 'center' }}>
-              <img src={icon} alt="Icon" />
-              {text}
-            </div>
-          )}
-          {!icon && text}
-        </>
+        text
       )}
     </button>
   );
