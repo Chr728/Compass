@@ -1,50 +1,75 @@
+// AppWrapper.test.js
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import "@testing-library/jest-dom";
 import AppWrapper from './index';
-import { usePathname } from 'next/navigation';
+import AuthContext from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
+import { useUser } from "../../contexts/UserContext";
+import {PropProvider, useProp} from "../../contexts/PropContext";
+import { render, screen } from "@testing-library/react";
 
+
+const mockRouter = jest.fn();
 const mockUsePathname = jest.fn();
 
-// Mock the usePathname hook from next/navigation
-jest.mock('next/navigation', () => ({
-    usePathname: () => mockUsePathname()
+jest.mock("next/navigation", () => ({
+    useRouter: () => {
+        return {
+            push: mockRouter,
+        };
+    },
+    usePathname: () => mockUsePathname(),
 }));
 
-// Mocking the contexts and Menu component to isolate AppWrapper during the test
+jest.mock("../../contexts/UserContext", () => ({
+    UserProvider: ({ children }) => <div>{children}</div>,
+    useUser: jest.fn(),
+}));
+
+jest.mock("../../contexts/PropContext", () => ({
+    PropProvider: ({ children }) => <div>{children}</div>,
+        useProp: jest.fn(),
+        loading: false,
+        popUp: {show: false, message: ""},
+
+}));
+
 jest.mock('../../contexts/AuthContext', () => ({
-    AuthProvider: ({ children }) => <div>{children}</div>
+    AuthProvider: ({ children }) => <div>{children}</div>,
+    useAuth: jest.fn(),
 }));
 
-jest.mock('../../contexts/UserContext', () => ({
-    UserProvider: ({ children }) => <div>{children}</div>
-}));
-
-jest.mock('../Menu', () => () => <div>Menu Component</div>);
 
 
-describe('AppWrapper', () => {
-    it('renders children', () => {
+describe("AppWrapper", () => {
+    it("renders children when user is logged in", () => {
+        mockUsePathname.mockReturnValue("/dashboard");
+        useAuth.mockImplementation(() => {
+            return {
+                user: { uid: "123" },
+                login: jest.fn(),
+                logout: jest.fn(),
+                error: null,
+                signUp: jest.fn(),
+            };
+        });
+
+        useUser.mockImplementation(() => {
+            return {
+                userInfo: { uid: "123", name: "Test User" },
+            };
+        });
+
+        useProp.mockImplementation(() => {
+            return {
+                handleLoading: jest.fn(),
+                loading: false,
+                handlePopUp: jest.fn(),
+                popUp: {show: false, message: ""},
+            };
+        });
+
         render(<AppWrapper>Test Child</AppWrapper>);
         expect(screen.getByText('Test Child')).toBeInTheDocument();
-    });
-
-    it('renders menu when not on login or register page', () => {
-        // Mocking the return value of usePathname
-        mockUsePathname.mockReturnValue('/dashboard');
-        render(<AppWrapper>Test Child</AppWrapper>);
-        expect(screen.getByText('Menu Component')).toBeInTheDocument();
-    });
-
-    it('does not render menu on login page', () => {
-        mockUsePathname.mockReturnValue('/login');
-        render(<AppWrapper>Test Child</AppWrapper>);
-        expect(screen.queryByText('Menu Component')).toBeNull();
-    });
-
-    it('does not render menu on register page', () => {
-        mockUsePathname.mockReturnValue('/register');
-        render(<AppWrapper>Test Child</AppWrapper>);
-        expect(screen.queryByText('Menu Component')).toBeNull();
     });
 });

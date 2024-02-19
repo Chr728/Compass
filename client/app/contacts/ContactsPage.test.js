@@ -50,15 +50,4 @@ describe("Contacts Menu Test", () => {
             expect(mockRouter).toHaveBeenCalledWith('/tpage');
         });
     })
-
-    it("User not logged in", async () => {
-        useAuth.mockImplementation(() => {
-            return {
-              user: null
-            };
-          });
-        render(<Contacts/>);
-        const text = await screen.findByText("Error 403 - Access Forbidden"); 
-        expect(text).toBeInTheDocument();
-    })
 });

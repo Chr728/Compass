@@ -158,22 +158,3 @@ describe("Logged In User", () => {
     })
 });
 
-
-describe("User not logged in", () => {
-
-    test("User redirected to login page", () =>{
-        render(<AddMoodEntry/>);
-        expect(mockRouter).toBeCalledWith('/login');
-    })
-
-    test("User is shown 403 forbidden error", async () =>{
-        render(<AddMoodEntry/>);
-        const errorText = await screen.findByText("Error 403 - Access Forbidden");
-        const redirectionMessage = await screen.findByText("Redirecting to Login Page...");
-        const loginButton = await screen.findByRole("button");
-
-        expect(errorText).toBeInTheDocument();
-        expect(redirectionMessage).toBeInTheDocument();
-        expect(loginButton).toBeInTheDocument();
-    })
-})

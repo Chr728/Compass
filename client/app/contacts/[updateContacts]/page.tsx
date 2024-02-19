@@ -41,9 +41,9 @@ export default function UpdateContactPage( {params: { updateContacts } } : { par
     }
   }, []);
   
-  if (!user) {
-    return <div><Custom403/></div>
-  }
+  // if (!user) {
+  //   return <div><Custom403/></div>
+  // }
 
   useEffect(() =>{
     const  { setValues } = formik;

@@ -44,9 +44,9 @@ export default function EditGlucoseJournal({params: { glucoseJournal } } : { par
     }
   }, []);
   
-  if (!user) {
-    return <div><Custom403/></div>
-  }
+  // if (!user) {
+  //   return <div><Custom403/></div>
+  // }
   
   const formik = useFormik({
     initialValues: {

@@ -40,9 +40,9 @@ export default function EditMedication( { params: { medication} } : { params : {
         }
     }, [user]);
 
-    if (!user) {
-        return <div><Custom403/></div>
-    }
+    // if (!user) {
+    //     return <div><Custom403/></div>
+    // }
 
     const formik = useFormik({
         initialValues: {
