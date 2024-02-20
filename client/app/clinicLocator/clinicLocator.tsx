@@ -1,6 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { useRouter } from 'next/navigation';
+import { useAuth } from "../contexts/AuthContext";
 import Button from "../components/Button"
 import Header from "../components/Header";
 
@@ -35,12 +36,36 @@ const clinicTypes = [{
     slug: "psychiatric"
 }]
 
+const LOCATION_STORAGE_KEY = process.env.NEXT_SESSION_STORAGE as string;
+const EXPIRATION_PERIOD = 1000 * 60 * 60; // 1 hour
+
 export default function LocateClinic() {
+
     const [location, setLocation]
         = useState<Location>(null);
     const [locationError, setLocationError]
         = useState("");
+    const { user } = useAuth();
     const router = useRouter();
+
+
+
+    useEffect(() => {
+        if (!user) {
+            router.push("/login");
+        } else {
+            const storedLocation = localStorage.getItem(LOCATION_STORAGE_KEY);
+            if (storedLocation) {
+                const { latitude, longitude, timestamp } = JSON.parse(storedLocation);
+                const now = new Date().getTime();
+                if (now - timestamp < EXPIRATION_PERIOD) {
+                    setLocation({ latitude, longitude });
+                } else {
+                    localStorage.removeItem(LOCATION_STORAGE_KEY);
+                }
+            }
+        }
+    }, [user]);
 
     const onClick = () => {
 
@@ -49,12 +74,15 @@ export default function LocateClinic() {
         }
 
         navigator.geolocation.getCurrentPosition((position) => {
-                const { latitude, longitude } = position.coords;
-                setLocation({ latitude, longitude })
-            } ,() => {
-                setLocationError("Error retrieving your location")
-                setLocation(null)
-            }
+            const { latitude, longitude } = position.coords;
+            const locationData = { latitude, longitude, timestamp: new Date().getTime() };
+            localStorage.setItem(LOCATION_STORAGE_KEY, JSON.stringify(locationData));
+            setLocation({ latitude, longitude });
+            setLocationError(""); // Clear any previous error messages
+        }, () => {
+            setLocationError("Unable to retrieve your location");
+            setLocation(null); // Clear location if there's an error
+        }
         )}
 
     return (
