@@ -24,8 +24,10 @@ export default function LocateClinic() {
     //     return <div><Custom403/></div>
     // }
 
-    const [location, setLocation] = useState<Location>(null);
-    const [locationError, setLocationError] = useState("");
+    const [location, setLocation]
+        = useState<Location>(null);
+    const [locationError, setLocationError]
+        = useState("");
 
     const onClick = () => {
 
@@ -43,8 +45,10 @@ export default function LocateClinic() {
         )}
 
     return (
-        <div className="location">
+        <div>
             {location ? (
+                // Display Selection of Clinics
+                // If it keeps resetting before getting the chance to fetch the clinics, add local storage.
                 <p>Location is lat: {location.latitude}, lon: {location.longitude}</p>
             ): (
                 <Button
