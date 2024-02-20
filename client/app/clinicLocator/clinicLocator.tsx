@@ -12,27 +12,27 @@ type Location = {
 const clinicTypes = [{
     name: "Pharmacy",
     icon: "/pharmacy-icon.png",
-    type: "drugstore"
+    slug: "drugstore"
 }, {
     name: "Hospital",
     icon: "/hospital-icon.png",
-    type: "hospital"
+    slug: "hospital"
 }, {
     name: "Doctor",
     icon: "/doctor-icon.png",
-    type: "doctor"
+    slug: "doctor"
 }, {
     name: "Dentist",
     icon: "/dentist-icon.png",
-    type: "dentist"
+    slug: "dentist"
 }, {
     name: "Physiotherapist",
     icon: "/physio-icon.png",
-    type: "physiotherapist"
+    slug: "physiotherapist"
 }, {
     name: "Mental Health",
     icon: "/mental-icon.png",
-    type: "psychiatric"
+    slug: "psychiatric"
 }]
 
 export default function LocateClinic() {
@@ -65,8 +65,6 @@ export default function LocateClinic() {
                         </button>
                     </span>
             {location ? (
-                // Display Selection of Clinics
-                // If it keeps resetting before getting the chance to fetch the clinics, add local storage.
                 <div className="">
                     <p className="font-sans text-darkgrey ml-5 p-5  text-[14px]">
                         Choose a type of clinic to locate
@@ -77,7 +75,7 @@ export default function LocateClinic() {
                                 key={clinic.name}
                                 className="flex flex-col items-center justify-center rounded-lg drop-shadow-lg p-5 w-40 h-40"
                                 style={{ backgroundColor: "#F2F2F2" }}
-                                onClick={() => router.push(`/clinicLocator/${clinic.name}`)}
+                                onClick={() => router.push(`/clinicLocator/${clinic.slug}`)}
                                 aria-label={`Locate ${clinic.name}`}
                             >
                                 <img
