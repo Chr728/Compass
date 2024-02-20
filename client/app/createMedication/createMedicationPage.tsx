@@ -424,7 +424,6 @@ export default function CreateMedicationPage() {
             <option value="Before meals">Before meals</option>
             <option value="After meals">After meals</option>
             <option value="Before bedtime">Before bedtime</option>
-            <option value="Round-the-clock (RTC)">Round-the-clock (RTC)</option>
             <option value="As needed (PRN)">As needed (PRN)</option>
             <option value="Other">Other</option>
           </select>

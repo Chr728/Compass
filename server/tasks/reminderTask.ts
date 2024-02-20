@@ -6,7 +6,6 @@ const webPush = require("web-push");
 
 function checkFrequency(frequency: string, currentTime: string) {
   const parsedTime = moment(currentTime, "HH:mm:ss");
-  console.log("This is the current time: ", parsedTime);
 
   switch (frequency) {
     case "Once a day (morning)":
@@ -136,9 +135,6 @@ function checkFrequency(frequency: string, currentTime: string) {
     case "Before bedtime":
       // Check if hours are 10pm
       if (parsedTime.hours() === 22 && parsedTime.minutes() === 0) return true;
-      break;
-
-    case "Round-the-clock (RTC)":
       break;
 
     case "As needed (PRN)":
@@ -533,11 +529,11 @@ export const sendUserReminders = async () => {
           // Send notification to users if medication is about to expire
           if (moment(medication.expirationDate).isSame(currentDate, "day")) {
             Logger.info("Found current day for expiration date!!");
-            // If the time is 10am, then send the medication expiration reminder
-            if (startTime.format("HH:mm:00") === "16:50:00") {
+            // If the time is 4am, then send the medication expiration reminder
+            if (startTime.format("HH:mm:00") === "4:00:00") {
               Logger.info("Found proper time for expiration date!!");
               const payload = JSON.stringify({
-                title: `Medication Expiration Reminder:  ${medication.medicationName} for ${medication.dosage} ${medication.unit} at ${medication.time} is expiring today.`,
+                title: `Medication Expiration Reminder: ${medication.medicationName} for ${medication.dosage} ${medication.unit} at ${medication.time} is expiring today.`,
               });
               webPush
                 .sendNotification(userSubscription.subscription, payload)
@@ -557,7 +553,7 @@ export const sendUserReminders = async () => {
           // Check frequency
           if (checkFrequency(medication.frequency, currentTime)) {
             const payload = JSON.stringify({
-              title: `Medication Reminder:  ${medication.medicationName} for ${medication.dosage} ${medication.unit} at ${medication.time}`,
+              title: `Medication Reminder: ${medication.medicationName} for ${medication.dosage} ${medication.unit} at ${medication.time}`,
             });
             webPush
               .sendNotification(userSubscription.subscription, payload)
