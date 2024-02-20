@@ -49,13 +49,12 @@ export default function GetMedVaultPage() {
                 fontSize: '14px',
                 float: 'right',
               }}
+              onClick={() => router.push(`/createMedVault`)}
             />
           </div>
         </div>
         {data ? (
           <div className="grid grid-cols-2 gap-4 mt-4 mb-24">
-            {' '}
-            {/* Add bottom margin */}
             {cardData.map((data, index) => (
               <CardFolder
                 key={index}
@@ -80,7 +79,7 @@ export default function GetMedVaultPage() {
               }}
             />
             <div
-              className="bg-white rounded-lg p-4 shadow-2xl flex items-center justify-center cursor-pointer"
+              className="bg-white rounded-lg p-4 shadow-xl flex items-center justify-center cursor-pointer"
               onClick={() => {
                 // Handle button click action here
               }}
