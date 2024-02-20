@@ -29,6 +29,10 @@ const clinicTypes = [{
     name: "Physiotherapist",
     icon: "/physio-icon.png",
     type: "physiotherapist"
+}, {
+    name: "Mental Health",
+    icon: "/mental-icon.png",
+    type: "psychiatric"
 }]
 
 export default function LocateClinic() {
