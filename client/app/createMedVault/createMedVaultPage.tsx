@@ -25,8 +25,6 @@ export default function CreateMedVaultPage() {
     },
     onSubmit: async (values) => {
       // Save data to IndexedDB along with the selected icon
-      console.log(selectedIcon.name);
-
       await saveData({ ...values, icon: selectedIcon.name });
 
       // Redirect to getMedVault page
