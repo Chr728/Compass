@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+'use client';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Header from '../components/Header';
 import Input from '../components/Input';
@@ -6,28 +7,12 @@ import Button from '../components/Button';
 import FormLabel from '../components/FormLabel';
 import { useFormik } from 'formik';
 import { openDB } from 'idb';
+import HealthIconModal from '../components/HealthIconModal';
 
 export default function CreateMedVaultPage() {
   const router = useRouter();
-  const [db, setDb] = useState<any>(null);
-
-  // Open the IndexedDB database
-  const initDB = async () => {
-    const database = await openDB('medVaultDB', 1, {
-      upgrade(db) {
-        const store = db.createObjectStore('folders', {
-          keyPath: 'id',
-          autoIncrement: true,
-        });
-      },
-    });
-    setDb(database);
-  };
-
-  // Call initDB on component mount
-  useEffect(() => {
-    initDB();
-  }, []);
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
+  const [selectedIcon, setSelectedIcon] = useState<any>(null); // State to manage selected icon
 
   const formik = useFormik({
     initialValues: {
@@ -35,13 +20,34 @@ export default function CreateMedVaultPage() {
       specialization: '',
     },
     onSubmit: async (values) => {
-      // Save form data to IndexedDB
-      await db.add('folders', values);
-      console.log('Form data saved:', values);
+      // Save data to IndexedDB along with the selected icon
+      console.log(selectedIcon.name);
+
+      await saveData({ ...values, icon: selectedIcon.name });
+
       // Redirect to getMedVault page
       router.push('/getMedVault');
     },
   });
+
+  const saveData = async (values: any) => {
+    const db = await openDB('medVault', 1, {
+      upgrade(db) {
+        db.createObjectStore('folders', { keyPath: 'id', autoIncrement: true });
+      },
+    });
+
+    const tx = db.transaction('folders', 'readwrite');
+    const store = tx.objectStore('folders');
+    await store.add(values);
+    await tx.done;
+    db.close();
+  };
+
+  const handleIconSelect = (icon: any) => {
+    setSelectedIcon(icon);
+    setIsModalOpen(false); // Close the modal after selecting an icon
+  };
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
@@ -52,14 +58,29 @@ export default function CreateMedVaultPage() {
       </span>
 
       <div className="flex justify-center items-center">
-        <div className="w-40 h-40 flex justify-center items-center rounded-lg overflow-hidden shadow-lg">
-          <img
-            src={'/acti.svg'}
-            alt="Folder Icon"
-            className="w-24 h-24 object-cover"
-          />
+        <div
+          className={`w-40 h-40 flex justify-center items-center rounded-lg overflow-hidden shadow-lg ${
+            selectedIcon ? 'text-5xl' : ''
+          }`}
+          onClick={() => setIsModalOpen(true)}
+        >
+          {selectedIcon ? ( // Display the selected icon if any
+            selectedIcon.component
+          ) : (
+            <img
+              src={'/acti.svg'}
+              alt="Folder Icon"
+              className="w-24 h-24 object-cover"
+            />
+          )}
         </div>
       </div>
+
+      <HealthIconModal // Render the HealthIconModal component
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)} // Close the modal when clicking outside or on close button
+        onSelect={handleIconSelect} // Pass the handleIconSelect function to handle icon selection
+      />
 
       <form
         className="rounded-3xl flex flex-col mt-4 mb-44 w-full md:max-w-[800px] md:min-h-[550px] p-4"
