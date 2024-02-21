@@ -23,22 +23,48 @@ export default function Profile() {
 	}, [userInfo, router]);
 
 	return (
-		<div className="bg-eggshell min-h-screen flex flex-col">
+		<div className="bg-eggshell min-h-screen flex flex-col ">
 			<button onClick={() => router.push("/settings")}>
 				<div>
 					<Header headerText="View Profile"></Header>
 				</div>
 			</button>
 			{profile && (
+				// <span className="rounded-2xl mt-6 mb-10 mr-28 bg-white flex flex-col m-auto w-full md:max-w-[800px] md:min-h-[600px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]">
 				<span
 					className="rounded-2xl mt-6 mb-10 mr-28 bg-white flex flex-col m-auto w-full md:max-w-[800px] md:min-h-[600px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
 					style={{
+						minHeight: "500px",
+						height: "auto",
 						backgroundImage: "url('/profile.svg')",
 						backgroundSize: "cover",
 						backgroundPosition: "center",
 						backgroundRepeat: "no-repeat",
 					}}>
 					<div className="mt-3 relative">
+						{profile.sex === "female" && (
+							<div className="flex justify-center">
+								<img
+									src="/female.jpg"
+									alt="Female"
+									className="rounded-full mt-1 "
+									height={100}
+									width={100}
+								/>
+							</div>
+						)}
+						{profile.sex === "male" && (
+							<div className="flex justify-center">
+								<img
+									src="/male.jpg"
+									alt="Male"
+									className="rounded-full mt-1"
+									height={100}
+									width={100}
+								/>
+							</div>
+						)}
+
 						<SingleEntry
 							label={"First Name :"}
 							value={profile.firstName}></SingleEntry>
