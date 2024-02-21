@@ -4,7 +4,7 @@ import db from "../models";
 import moment = require("moment-timezone");
 const webPush = require("web-push");
 
-function checkFrequency(frequency: string, currentTime: string) {
+export function checkFrequency(frequency: string, currentTime: string) {
   const parsedTime = moment(currentTime, "HH:mm:ss");
 
   switch (frequency) {
@@ -528,10 +528,8 @@ export const sendUserReminders = async () => {
 
           // Send notification to users if medication is about to expire
           if (moment(medication.expirationDate).isSame(currentDate, "day")) {
-            Logger.info("Found current day for expiration date!!");
             // If the time is 4am, then send the medication expiration reminder
             if (startTime.format("HH:mm:00") === "4:00:00") {
-              Logger.info("Found proper time for expiration date!!");
               const payload = JSON.stringify({
                 title: `Medication Expiration Reminder: ${medication.medicationName} for ${medication.dosage} ${medication.unit} at ${medication.time} is expiring today.`,
               });

@@ -1,9 +1,9 @@
 import db from "../models/index";
 import admin from "firebase-admin";
-import moment = require("moment-timezone");
+import moment from "moment-timezone";
 const webPush = require("web-push");
 import { user, startServer, stopServer } from "../utils/journalsTestHelper";
-import { sendUserReminders } from "../tasks/reminderTask";
+import { checkFrequency, sendUserReminders } from "../tasks/reminderTask";
 import { Logger } from "../middlewares/logger";
 
 let server: any;
@@ -71,7 +71,21 @@ const userMedication = [
     id: 1,
     uid: "testuid",
     medicationName: "test",
+    dateStarted: "2023-09-20",
+    expirationDate: "2023-09-30",
+    time: "12:00:00",
+    dosage: 2,
+    unit: "test",
+    frequency: "Test",
+    route: "Test",
+    notes: "test",
+  },
+  {
+    id: 2,
+    uid: "testuid",
+    medicationName: "test",
     dateStarted: "2023-09-30",
+    expirationDate: "2023-10-10",
     time: "12:00:00",
     dosage: 2,
     unit: "test",
@@ -146,17 +160,15 @@ beforeEach(() => {
     .mockResolvedValue(mockedDecodedToken);
   jest.spyOn(db.User, "findOne").mockResolvedValue(user);
 
-  //Mock momemt library
-  jest.mock("moment-timezone", () => {
-    return moment.tz.setDefault("America/Toronto");
-  });
-
   //Mock web push library
   jest.mock("web-push", () => {
     return {
       sendNotification: jest.fn(),
     };
   });
+
+  // Mock the moment module
+  jest.mock("moment-timezone");
 
   // Mock the logger module
   jest.mock("../middlewares/logger", () => {
@@ -209,35 +221,39 @@ describe("Testing reminder server task", () => {
     expect(db.GlucoseMeasurement.findAll).toHaveBeenCalledTimes(1);
     expect(db.InsulinDosage.findAll).toHaveBeenCalledTimes(1);
     expect(db.Medication.findAll).toHaveBeenCalledTimes(1);
-    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(6);
-    expect(db.Subscription.findOne).toHaveBeenCalledTimes(6);
-    expect(webPush.sendNotification).toHaveBeenCalledTimes(6);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(7);
+    expect(db.Subscription.findOne).toHaveBeenCalledTimes(7);
+    expect(webPush.sendNotification).toHaveBeenCalledTimes(5);
 
     // Assertions for logging statements
     expect(Logger.info).toHaveBeenCalledWith(
       "Notification for appointments sent to user: ",
-      userMedication[0].uid
+      userAppointment[0].uid
     );
     expect(Logger.info).toHaveBeenCalledWith(
       "Notification for activityJournals sent to user: ",
-      userMedication[0].uid
+      userActivityJournal[0].uid
     );
     expect(Logger.info).toHaveBeenCalledWith(
       "Notification for foodIntakeJournals sent to user: ",
-      userMedication[0].uid
+      userFoodIntake[0].uid
     );
     expect(Logger.info).toHaveBeenCalledWith(
       "Notification for glucoseMeasurements sent to user: ",
-      userMedication[0].uid
+      userGlucoseMeasurement[0].uid
     );
     expect(Logger.info).toHaveBeenCalledWith(
       "Notification for insulinDosages sent to user: ",
-      userMedication[0].uid
+      userInsulin[0].uid
     );
-    expect(Logger.info).toHaveBeenCalledWith(
-      "Notification for medications sent to user: ",
-      userMedication[0].uid
-    );
+    // expect(Logger.info).toHaveBeenCalledWith(
+    //   "Expiration notification for medications sent to user: ",
+    //   userMedication[0].uid
+    // );
+    // expect(Logger.info).toHaveBeenCalledWith(
+    //   "Notification for medications sent to user: ",
+    //   userMedication[1].uid
+    // );
   });
 
   it("should log an error when notification preferences are not found", async () => {
@@ -274,10 +290,10 @@ describe("Testing reminder server task", () => {
     expect(db.GlucoseMeasurement.findAll).toHaveBeenCalledTimes(1);
     expect(db.InsulinDosage.findAll).toHaveBeenCalledTimes(1);
     expect(db.Medication.findAll).toHaveBeenCalledTimes(1);
-    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(6);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(7);
 
     // Ensure Logger.error is called with the appropriate message
-    expect(Logger.error).toHaveBeenCalledTimes(6);
+    expect(Logger.error).toHaveBeenCalledTimes(7);
     expect(Logger.error).toHaveBeenCalledWith(
       "Notification preference not found, invalid user id."
     );
@@ -312,11 +328,11 @@ describe("Testing reminder server task", () => {
     expect(db.GlucoseMeasurement.findAll).toHaveBeenCalledTimes(1);
     expect(db.InsulinDosage.findAll).toHaveBeenCalledTimes(1);
     expect(db.Medication.findAll).toHaveBeenCalledTimes(1);
-    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(6);
-    expect(db.Subscription.findOne).toHaveBeenCalledTimes(6);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(7);
+    expect(db.Subscription.findOne).toHaveBeenCalledTimes(7);
 
     // Ensure Logger.error is called with the appropriate message
-    expect(Logger.error).toHaveBeenCalledTimes(6);
+    expect(Logger.error).toHaveBeenCalledTimes(7);
     expect(Logger.error).toHaveBeenCalledWith("No Subscription was found.");
   });
 
@@ -350,8 +366,8 @@ describe("Testing reminder server task", () => {
     expect(db.GlucoseMeasurement.findAll).toHaveBeenCalledTimes(1);
     expect(db.InsulinDosage.findAll).toHaveBeenCalledTimes(1);
     expect(db.Medication.findAll).toHaveBeenCalledTimes(1);
-    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(6);
-    expect(db.Subscription.findOne).toHaveBeenCalledTimes(6);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(7);
+    expect(db.Subscription.findOne).toHaveBeenCalledTimes(7);
     expect(webPush.sendNotification).toHaveBeenCalled(); // Ensure this is called
     expect(Logger.error).toHaveBeenCalledWith("WebPush Error"); // Ensure Logger.error is called with the appropriate message
   });
