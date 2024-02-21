@@ -11,10 +11,19 @@ export default function GetMedVaultPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const fetchData = async () => {
+    const initializeDatabase = async () => {
       try {
-        const db = await openDB('medVault', 1); // Use the correct database name
-        const folders = await db.getAll('folders'); // Use the correct object store name
+        const db = await openDB('medVault', 1, {
+          upgrade(db) {
+            if (!db.objectStoreNames.contains('folders')) {
+              db.createObjectStore('folders', {
+                keyPath: 'id',
+                autoIncrement: true,
+              });
+            }
+          },
+        });
+        const folders = await db.getAll('folders');
         if (folders && folders.length > 0) {
           setIsExportDisabled(false);
           setData(folders);
@@ -22,10 +31,10 @@ export default function GetMedVaultPage() {
           setIsExportDisabled(true);
         }
       } catch (error) {
-        console.error('Error fetching data from IndexedDB:', error);
+        console.error('Error initializing database:', error);
       }
     };
-    fetchData();
+    initializeDatabase();
   }, []);
 
   const deleteFolder = async (folderId: any) => {

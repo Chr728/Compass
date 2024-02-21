@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Header from '../components/Header';
 import Input from '../components/Input';
@@ -8,11 +8,15 @@ import FormLabel from '../components/FormLabel';
 import { useFormik } from 'formik';
 import { openDB } from 'idb';
 import HealthIconModal from '../components/HealthIconModal';
+import { ICertificatePaper } from 'healthicons-react/dist/filled'; // Import ICertificatePaper icon
 
 export default function CreateMedVaultPage() {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
-  const [selectedIcon, setSelectedIcon] = useState<any>(null); // State to manage selected icon
+  const [selectedIcon, setSelectedIcon] = useState({
+    name: 'ICertificatePaper',
+    component: <ICertificatePaper />,
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -33,7 +37,13 @@ export default function CreateMedVaultPage() {
   const saveData = async (values: any) => {
     const db = await openDB('medVault', 1, {
       upgrade(db) {
-        db.createObjectStore('folders', { keyPath: 'id', autoIncrement: true });
+        if (!db.objectStoreNames.contains('folders')) {
+          const foldersStore = db.createObjectStore('folders', {
+            keyPath: 'id',
+            autoIncrement: true,
+          });
+          console.log(foldersStore);
+        }
       },
     });
 
@@ -67,11 +77,7 @@ export default function CreateMedVaultPage() {
           {selectedIcon ? ( // Display the selected icon if any
             selectedIcon.component
           ) : (
-            <img
-              src={'/acti.svg'}
-              alt="Folder Icon"
-              className="w-24 h-24 object-cover"
-            />
+            <ICertificatePaper /> // Default to ICertificatePaper
           )}
         </div>
       </div>
