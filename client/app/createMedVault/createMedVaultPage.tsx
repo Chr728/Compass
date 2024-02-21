@@ -89,7 +89,7 @@ export default function CreateMedVaultPage() {
       />
 
       <form
-        className="rounded-3xl flex flex-col mt-4 mb-44 w-full md:max-w-[800px] md:min-h-[550px] p-4"
+        className="rounded-3xl flex flex-col mt-4 w-full md:max-w-[800px] md:min-h-[550px] p-4"
         onSubmit={formik.handleSubmit}
       >
         <div className="mt-3">

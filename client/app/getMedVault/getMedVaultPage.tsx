@@ -50,13 +50,13 @@ export default function GetMedVaultPage() {
   };
 
   return (
-    <div className="bg-eggshell h-screen flex flex-col">
+    <div className="bg-eggshell min-h-screen flex flex-col">
       <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
         <button onClick={() => router.push('/health')}>
           <Header headerText="MedVault"></Header>
         </button>
       </span>
-      <div className="rounded-3xl flex flex-col mt-4 mb-44 w-full md:max-w-[800px] md:min-h-[550px] p-4">
+      <div className="rounded-3xl flex flex-col mt-4 w-full md:max-w-[800px] md:min-h-[550px] p-4">
         <div className="flex justify-between items-center">
           <div>
             <IconButton
@@ -79,7 +79,7 @@ export default function GetMedVaultPage() {
           </div>
         </div>
         {data && data.length > 0 ? (
-          <div className="grid grid-cols-2 gap-4 mt-4 mb-24">
+          <div className="grid grid-cols-2 gap-4 mt-4 mb-20 ">
             {data.map((folder: any) => (
               <CardFolder
                 key={folder.id}
