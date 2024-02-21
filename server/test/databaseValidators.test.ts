@@ -336,19 +336,20 @@ runTests({
   validData: {
     howAreYou: 'Feeling good',
     stressSignals: {
-      tired: 'Low',
-      sleep: 'Normal',
-      hunger: 'Low',
-      overeating: 'No',
-      depressed: 'No',
-      pressure: 'Low',
-      anxiety: 'No',
-      attention: 'Normal',
-      anger: 'No',
-      headache: 'No',
+      tired: "Low",
+      sleep: "Normal",
+      hunger: "Low",
+      overeating: "No",
+      depressed: "No",
+      pressure: "Low",
+      anxiety: "No",
+      attention: "Normal",
+      anger: "No",
+      headache: "No",
     },
-    date: '2023-12-15',
-    notes: 'Feeling happy today!',
+    date: "2023-12-15",
+    notes: "Feeling happy today!",
+    time:"10:00:00"
   },
   invalidData: [
     {

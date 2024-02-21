@@ -27,7 +27,8 @@ jest.mock('../../http/moodJournalAPI', () => {
                             date: '2014-01-01',
                             howAreYou: 'good',
                             stressSignals: '',
-                            notes: 'notes'
+                            notes: 'notes',
+                            time:"10:00"
                     }
             }
         ),
@@ -84,6 +85,7 @@ describe("User is logged in", () => {
             expect(screen.getByText("I feel angry or irritated:")).toBeInTheDocument();
             expect(screen.getByText("I get headaches and&sol;or colds:")).toBeInTheDocument();
             expect(screen.getByText("Notes:")).toBeInTheDocument();
+            expect(screen.getByText("Time:")).toBeInTheDocument();
         }, 1000);
     })
 

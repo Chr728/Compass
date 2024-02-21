@@ -230,8 +230,9 @@ const moodJournalValidator = (values: {
   stressSignals: stressSignals;
   date: Date;
   notes: string;
+  time: Date;
 }) => {
-  const { howAreYou, stressSignals, date, notes } = values;
+  const { howAreYou, stressSignals, date, notes, time } = values;
   //check if howAreYou is valid
   if (!howAreYou || typeof howAreYou !== 'string') {
     Logger.error(`Invalid howAreYou: ${howAreYou}`);
@@ -267,6 +268,11 @@ const moodJournalValidator = (values: {
   if (notes !== undefined && (/\d/.test(notes) || typeof notes !== 'string')) {
     Logger.error(`Invalid notes: ${notes}`);
     throw new Error(`Invalid notes: ${notes}`);
+  }
+  //check if time is valid
+  if (!time || typeof time !== "string") {
+    Logger.error(`Invalid time: ${time}`);
+    throw new Error(`Invalid time: ${time}`);
   }
 };
 
