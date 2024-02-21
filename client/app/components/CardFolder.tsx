@@ -5,19 +5,21 @@ interface CardFolderProps {
   icon: string; // Image URL for the icon
   name: string; // Name of the folder
   text: string; // Additional details or description
+  onDelete: () => void; // Function to handle delete
 }
 
-const CardFolder: React.FC<CardFolderProps> = ({ icon, name, text }) => {
+const CardFolder: React.FC<CardFolderProps> = ({
+  icon,
+  name,
+  text,
+  onDelete,
+}) => {
   return (
     <div className="relative w-[170px] h-[178.40px] bg-white rounded-[20px] shadow-lg mt-4 flex flex-col items-center justify-center">
       <MdDeleteForever
         className="absolute top-2 right-2 text-red-500 cursor-pointer"
-        style={{
-          color: 'var(--Red, #FF7171)',
-          width: '25px',
-          height: '30px',
-        }}
-        onClick={() => {}}
+        style={{ color: 'var(--Red, #FF7171)', width: '25px', height: '30px' }}
+        onClick={onDelete} // Call onDelete function when delete button is clicked
       />
       <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center mb-2">
         <img

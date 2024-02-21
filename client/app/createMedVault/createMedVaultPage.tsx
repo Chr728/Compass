@@ -1,13 +1,33 @@
-'use client';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Header from '../components/Header';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import FormLabel from '../components/FormLabel';
 import { useFormik } from 'formik';
+import { openDB } from 'idb';
 
 export default function CreateMedVaultPage() {
   const router = useRouter();
+  const [db, setDb] = useState<any>(null);
+
+  // Open the IndexedDB database
+  const initDB = async () => {
+    const database = await openDB('medVaultDB', 1, {
+      upgrade(db) {
+        const store = db.createObjectStore('folders', {
+          keyPath: 'id',
+          autoIncrement: true,
+        });
+      },
+    });
+    setDb(database);
+  };
+
+  // Call initDB on component mount
+  useEffect(() => {
+    initDB();
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -15,7 +35,11 @@ export default function CreateMedVaultPage() {
       specialization: '',
     },
     onSubmit: async (values) => {
-      console.log(values);
+      // Save form data to IndexedDB
+      await db.add('folders', values);
+      console.log('Form data saved:', values);
+      // Redirect to getMedVault page
+      router.push('/getMedVault');
     },
   });
 
@@ -30,7 +54,7 @@ export default function CreateMedVaultPage() {
       <div className="flex justify-center items-center">
         <div className="w-40 h-40 flex justify-center items-center rounded-lg overflow-hidden shadow-lg">
           <img
-            src={'/Upload.svg'}
+            src={'/acti.svg'}
             alt="Folder Icon"
             className="w-24 h-24 object-cover"
           />
@@ -75,7 +99,6 @@ export default function CreateMedVaultPage() {
               type="submit"
               text="Add Folder"
               style={{ width: '180px', textAlign: 'center' }}
-              onClick={() => router.push('/getMedVault')}
             />
           </div>
         </div>
