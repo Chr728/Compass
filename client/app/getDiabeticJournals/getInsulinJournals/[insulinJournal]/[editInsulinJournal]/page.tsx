@@ -46,9 +46,9 @@ export default function EditInsulinJournal({params: { insulinJournal } } : { par
     }
   }, []);
   
-  if (!user) {
-    return <div><Custom403/></div>
-  }
+  // if (!user) {
+  //   return <div><Custom403/></div>
+  // }
   
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const formik = useFormik({

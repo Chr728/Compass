@@ -46,7 +46,8 @@ jest.mock('../http/moodJournalAPI', () => {
                           howAreYou:"awesome",
                           id:4,
                           notes:"abcd",
-                          stressSignals:{"tired":"always","sleep":"often","hunger":"always","overeating":"often","depressed":"always","pressure":"sometimes","anxiety":"always","attention":"sometimes","anger":"always","headache":"never"}
+                          stressSignals:{"tired":"always","sleep":"often","hunger":"always","overeating":"often","depressed":"always","pressure":"sometimes","anxiety":"always","attention":"sometimes","anger":"always","headache":"never"},
+                          time:"10:00:00",
                     }
                 ]
             }

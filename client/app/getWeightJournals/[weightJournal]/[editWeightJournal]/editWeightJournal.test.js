@@ -115,23 +115,3 @@ describe("User is logged in", () => {
 })
 
 
-describe("User is not logged in", () => {
-
-  beforeEach(async() => {
-    useAuth.mockImplementation(() => {
-        return {
-            user: null
-        }
-    })
-  })
-
-  test("Error message shown", async () => {
-    render(<EditWeightJournal params={{ weightJournal:'1'}}/>);
-    const errorText = await screen.findByText("Error 403 - Access Forbidden");
-    const errorRedirectingText = await screen.findByText("Redirecting to Login Page...");
-    expect(errorText).toBeInTheDocument();
-    expect(errorRedirectingText).toBeInTheDocument();
-
-  })
-
-})

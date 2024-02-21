@@ -230,8 +230,9 @@ const moodJournalValidator = (values: {
   stressSignals: stressSignals;
   date: Date;
   notes: string;
+  time: Date;
 }) => {
-  const { howAreYou, stressSignals, date, notes } = values;
+  const { howAreYou, stressSignals, date, notes, time } = values;
   //check if howAreYou is valid
   if (!howAreYou || typeof howAreYou !== 'string') {
     Logger.error(`Invalid howAreYou: ${howAreYou}`);
@@ -267,6 +268,11 @@ const moodJournalValidator = (values: {
   if (notes !== undefined && (/\d/.test(notes) || typeof notes !== 'string')) {
     Logger.error(`Invalid notes: ${notes}`);
     throw new Error(`Invalid notes: ${notes}`);
+  }
+  //check if time is valid
+  if (!time || typeof time !== "string") {
+    Logger.error(`Invalid time: ${time}`);
+    throw new Error(`Invalid time: ${time}`);
   }
 };
 
@@ -443,8 +449,9 @@ const foodIntakeJournalValidator = (values: {
   mealType: string;
   servingNumber: number;
   notes: string;
+  calorie : number;
 }) => {
-  const { date, time, foodName, mealType, servingNumber, notes } = values;
+  const { date, time, foodName, mealType, servingNumber, notes, calorie } = values;
   //check if date is valid, should be string
   if (!date || typeof date !== 'string') {
     Logger.error(`Invalid Date: ${date}`);
@@ -479,6 +486,12 @@ const foodIntakeJournalValidator = (values: {
   if (notes == undefined || typeof notes !== 'string') {
     Logger.error(`Invalid notes: ${notes}`);
     throw new Error(`Invalid notes: ${notes}`);
+  }
+
+  //check if calorie is valid, should be integer
+  if (calorie !== null && typeof calorie !== "number") {
+    Logger.error(`Invalid calorie: ${calorie}`);
+    throw new Error(`Invalid calorie: ${calorie}`);
   }
 };
 
@@ -521,6 +534,7 @@ const o2SaturationJournalValidator = (
     Logger.error(`Invalid notes: ${notes}`);
     throw new Error(`Invalid notes: ${notes}`);
   }
+
 };
 
 export {

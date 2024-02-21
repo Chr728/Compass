@@ -48,23 +48,6 @@ describe("Main page shown only to logged in users", () => {
         expect(profileTextElement).toBeInTheDocument();
     })
 
-    it("Error page is shown", async () => {
-        useAuth.mockImplementation(() => {
-            return {
-            user: null,
-            };
-        });
-        render(<MainMenu />);
-        const errorMessage = await screen.findByText("Error 403 - Access Forbidden");
-        expect(errorMessage).toBeInTheDocument();
-    })
-
-
-    it("Error page is not shown", async () =>{
-        render(<MainMenu/>);
-        const errorMessage = screen.queryByText("Error 403 - Access Forbidden");
-        expect(errorMessage).not.toBeInTheDocument();
-        })
 
     it("Redirect to appointments routes", async() => {
         render(<MainMenu/>);

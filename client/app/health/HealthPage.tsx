@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import appointments from '../../public/appointments.svg';
 import medications from '../../public/medications.svg';
 import medVault from '../../public/documents.svg';
+import snore from '../../public/snore.svg';
 import Header from '../components/Header';
 import Custom403 from '../pages/403';
 
@@ -113,6 +114,30 @@ export default function Health() {
           <br></br>
         </div>
       </div>
+      {/* link for snoring detection page to be added */}
+      <Link href="/snoringAI">
+        <div
+          className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 m-1"
+          style={{ backgroundColor: '#7C9CBF' }}
+        >
+          <div>
+            <p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
+              Snore AI
+            </p>
+            <p className="text-[14px] text-white pr-20 font-IBM Plex Sans  text-start">
+              Doubting if you're snoring?
+            </p>
+            <NextImage
+              src={snore}
+              alt="snoring"
+              height={100}
+              className="absolute inset-y-0 right-4 shrink-0"
+              style={{ top: '-12px' }}
+            />
+          </div>
+        </div>
+      </Link>
+      <br></br>
     </div>
   );
 }

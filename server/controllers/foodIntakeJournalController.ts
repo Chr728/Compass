@@ -18,7 +18,7 @@ export const createFoodIntakeJournal = async (req: Request, res: Response, next:
             throw new ErrorHandler(404, 'NOT_FOUND', 'User not found, invalid user uid.');
         }
 
-        const { date, time, foodName, mealType, servingNumber, notes } = req.body;
+        const { date, time, foodName, mealType, servingNumber, notes, calorie } = req.body;
         foodIntakeJournalValidator(req.body);
         const foodIntakeJournal = await db.FoodIntakeJournal.create({
             uid: userId,
@@ -27,7 +27,8 @@ export const createFoodIntakeJournal = async (req: Request, res: Response, next:
             foodName,
             mealType,
             servingNumber,
-            notes
+            notes,
+            calorie
         });
 
         return res.status(201).json({
@@ -120,7 +121,7 @@ export const updateFoodIntakeJournal = async (req: Request, res: Response, next:
             throw new ErrorHandler(404, 'NOT_FOUND', 'Food intake journal not found, invalid journal id.');
         }
 
-        const { date, time, foodName, mealType, servingNumber, notes } = req.body;
+        const { date, time, foodName, mealType, servingNumber, notes, calorie } = req.body;
         foodIntakeJournalValidator(req.body);
 
         await db.FoodIntakeJournal.update({
@@ -129,7 +130,8 @@ export const updateFoodIntakeJournal = async (req: Request, res: Response, next:
             foodName,
             mealType,
             servingNumber,
-            notes
+            notes,
+            calorie
         }, {
             where: {
                 id: journalId
