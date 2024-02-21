@@ -31,7 +31,7 @@ export function checkFrequency(frequency: string, currentTime: string) {
       // Check if the current time is 10am, 3pm or 8pm
       if (
         (parsedTime.hours() === 10 ||
-          parsedTime.hours() === 17 ||
+          parsedTime.hours() === 15 ||
           parsedTime.hours() === 20) &&
         parsedTime.minutes() === 0
       )
