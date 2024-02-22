@@ -30,10 +30,6 @@ const clinicTypes = [{
     name: "Physiotherapist",
     icon: "/physio-icon.png",
     slug: "physiotherapist"
-}, {
-    name: "Mental Health",
-    icon: "/mental-icon.png",
-    slug: "psychiatric"
 }]
 
 const EXPIRATION_PERIOD = 1000 * 60 * 60; // 1 hour
