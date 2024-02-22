@@ -97,11 +97,6 @@ const ClinicLocations: FC<pageProps> = ({ params }) => {
         </p>
         <LocationComponent name={name} address={vicinity} rating={rating} userRatingsTotal={user_ratings_total}
                            icon={icon}/>
-
-        <div className="">
-
-        </div>
-
     </div>
 }
 
