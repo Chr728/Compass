@@ -87,6 +87,7 @@ export default function GetMedVaultPage() {
                 name={folder.folderName}
                 text={folder.specialization}
                 onDelete={() => deleteFolder(folder.id)}
+                onPush={() => router.push(`/getMedVault/${folder.id}`)}
               />
             ))}
           </div>

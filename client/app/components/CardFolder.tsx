@@ -25,6 +25,7 @@ interface CardFolderProps {
   name: string;
   text: string;
   onDelete: () => void;
+  onPush: () => void;
 }
 
 const iconComponents: { [key: string]: React.ReactNode } = {
@@ -51,6 +52,7 @@ const CardFolder: React.FC<CardFolderProps> = ({
   name,
   text,
   onDelete,
+  onPush,
 }) => {
   const IconComponent = iconComponents[icon];
 
@@ -61,11 +63,18 @@ const CardFolder: React.FC<CardFolderProps> = ({
         style={{ color: 'var(--Red, #FF7171)', width: '25px', height: '30px' }}
         onClick={onDelete} // Call onDelete function when delete button is clicked
       />
-      <div className="w-12 h-12 bg-gray-300 rounded-full text-4xl flex items-center justify-center mb-2">
+      <div
+        className="w-12 h-12 bg-gray-300 rounded-full text-4xl flex items-center justify-center mb-2"
+        onClick={onPush}
+      >
         {IconComponent} {/* Render the corresponding icon component */}
       </div>
-      <h2 className="text-darkgrey text-lg font-bold mb-1">{name}</h2>
-      <p className="text-darkgrey text-sm">{text}</p>
+      <h2 className="text-darkgrey text-lg font-bold mb-1" onClick={onPush}>
+        {name}
+      </h2>
+      <p className="text-darkgrey text-sm" onClick={onPush}>
+        {text}
+      </p>
     </div>
   );
 };
