@@ -10,6 +10,7 @@ import { openDB } from 'idb';
 
 export default function CreateDocumentPage() {
   const router = useRouter();
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const formik = useFormik({
     initialValues: {
@@ -17,12 +18,42 @@ export default function CreateDocumentPage() {
       dateOfAnalysis: '',
     },
     onSubmit: async (values) => {
-      // Handle form submission here
       console.log('Form Values:', values);
-      // Redirect to getMedVault page
-      router.push('/getMedVault');
+      await storeDocument(values);
+      router.push(`/getMedVault/${getFolderIdFromURL()}`);
     },
   });
+
+  const getFolderIdFromURL = () => {
+    const urlParts = window.location.pathname.split('/');
+    console.log(urlParts[urlParts.length - 2]);
+
+    return urlParts[urlParts.length - 2];
+  };
+
+  const handleFileChange = (event: any) => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
+  };
+
+  const storeDocument = async (formData: any) => {
+    try {
+      const db = await openDB('medVault', 1);
+
+      const store = db.transaction('data', 'readwrite').objectStore('data'); // Replace 'your_store_name' with your actual store name
+
+      const documentData = {
+        documentName: formData.documentName,
+        dateOfAnalysis: formData.dateOfAnalysis,
+        file: selectedFile,
+        folderId: getFolderIdFromURL(),
+      };
+
+      await store.add(documentData);
+    } catch (error) {
+      console.error('Error storing document:', error);
+    }
+  };
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
@@ -42,19 +73,23 @@ export default function CreateDocumentPage() {
           style={{ alignItems: 'center', justifyContent: 'center' }}
         />
         <div className="flex justify-center items-center">
-          <div
-            className="bg-white p-4 shadow-xl flex items-center justify-center cursor-pointer w-[307px] h-[132px] rounded-[20px]"
-            onClick={() => {
-              // Handle button click action here
-            }}
-          >
-            <div className="text-center flex flex-col items-center">
-              <img src="/Upload.svg" alt="Download" className="w-12 h-12" />
-              <h3 className="font-semibold text-lg text-darkgrey">
-                Click to Upload File
-              </h3>
+          <input
+            type="file"
+            accept="image/*,.pdf,.doc,.docx"
+            style={{ display: 'none' }}
+            onChange={handleFileChange}
+            id="fileInput"
+          />
+          <label htmlFor="fileInput">
+            <div className="bg-white p-4 shadow-xl flex items-center justify-center cursor-pointer w-[307px] h-[132px] rounded-[20px]">
+              <div className="text-center flex flex-col items-center">
+                <img src="/Upload.svg" alt="Download" className="w-12 h-12" />
+                <h3 className="font-semibold text-lg text-darkgrey">
+                  Click to Upload File
+                </h3>
+              </div>
             </div>
-          </div>
+          </label>
         </div>
 
         <form

@@ -20,12 +20,14 @@ import {
   Joints,
 } from 'healthicons-react/dist/filled';
 
+import { ClinicalF } from 'healthicons-react/dist/outline';
+
 interface CardFolderProps {
   icon: string;
   name: string;
   text: string;
   onDelete: () => void;
-  onPush: () => void;
+  onPush?: () => void;
 }
 
 const iconComponents: { [key: string]: React.ReactNode } = {
@@ -45,6 +47,7 @@ const iconComponents: { [key: string]: React.ReactNode } = {
   Body: <Body />,
   ChildCognition: <ChildCognition />,
   Joints: <Joints />,
+  ClinicalF: <ClinicalF />,
 };
 
 const CardFolder: React.FC<CardFolderProps> = ({

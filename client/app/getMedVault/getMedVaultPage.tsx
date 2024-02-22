@@ -21,6 +21,12 @@ export default function GetMedVaultPage() {
                 autoIncrement: true,
               });
             }
+            if (!db.objectStoreNames.contains('data')) {
+              db.createObjectStore('data', {
+                keyPath: 'id',
+                autoIncrement: true,
+              });
+            }
           },
         });
         const folders = await db.getAll('folders');

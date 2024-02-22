@@ -4,6 +4,7 @@ import Header from '../../components/Header';
 import { useRouter } from 'next/navigation';
 import { openDB } from 'idb';
 import IconButton from '../../components/IconButton';
+import CardFolder from '../../components/CardFolder';
 
 interface Prop {
   params: {
@@ -14,15 +15,21 @@ interface Prop {
 export default function GetFolder({ params }: Prop) {
   const router = useRouter();
   const [folderData, setFolderData] = useState<any>(null);
+  const [documents, setDocuments] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchFolderData = async () => {
       try {
-        const db = await openDB('medVault', 1); // Open the same IndexedDB instance
-        const folderId = parseInt(params.folder); // Convert folder ID to integer
+        const db = await openDB('medVault', 1);
+        const folderId = parseInt(params.folder);
         const folder = await db.get('folders', folderId);
         if (folder) {
           setFolderData(folder);
+          const allDocuments = await db.getAll('data');
+          const folderDocuments = allDocuments.filter(
+            (document) => document.folderId == folderId
+          );
+          setDocuments(folderDocuments);
         } else {
           console.error('Folder not found in IndexedDB');
         }
@@ -34,6 +41,17 @@ export default function GetFolder({ params }: Prop) {
     fetchFolderData();
   }, [params.folder]);
 
+  const deleteDocument = async (documentId: any) => {
+    try {
+      const db = await openDB('medVault', 1);
+      await db.delete('data', documentId);
+      const updatedDocuments = await db.getAll('data');
+      setDocuments(updatedDocuments);
+    } catch (error) {
+      console.error('Error deleting document from IndexedDB:', error);
+    }
+  };
+
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
       <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
@@ -44,11 +62,10 @@ export default function GetFolder({ params }: Prop) {
       <div className="rounded-3xl flex flex-col mt-4 w-full md:max-w-[800px] md:min-h-[550px] p-4">
         <div className="flex justify-between items-center">
           <div>
-            {/* Display specialization in bold and doctor's name in regular text */}
             <p className="text-[color:var(--Dark-Grey,#2C2738)] text-2xl not-italic font-bold leading-[normal] font-family: IBM Plex Sans">
               {folderData?.specialization}
             </p>
-            <p className="text-darkgrey ml-2 font-family: IBM Plex Sans">
+            <p className="text-darkgrey font-family: IBM Plex Sans">
               {folderData?.folderName}
             </p>
           </div>
@@ -63,6 +80,17 @@ export default function GetFolder({ params }: Prop) {
               }
             />
           </div>
+        </div>
+        <div className="grid grid-cols-2 gap-4 mt-4 mb-20">
+          {documents.map((document) => (
+            <CardFolder
+              key={document.id}
+              icon={'ClinicalF'}
+              name={document.documentName}
+              text={document.dateOfAnalysis}
+              onDelete={() => deleteDocument(document.id)}
+            />
+          ))}
         </div>
       </div>
     </div>
