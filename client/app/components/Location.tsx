@@ -1,11 +1,11 @@
 import React from 'react';
 
 interface LocationProps {
-    name: string;
-    address: string;
-    rating: number;
-    userRatingsTotal: number;
-    icon: string;
+    name: string | undefined;
+    address: string | undefined;
+    rating: number | undefined;
+    userRatingsTotal: number | undefined;
+    icon: string | undefined;
 }
 
 const LocationComponent: React.FC<LocationProps> = ({ name, address, rating, userRatingsTotal, icon }) => {

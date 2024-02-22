@@ -2,10 +2,10 @@
 import React, {FC, useEffect, useState} from "react";
 import { useRouter } from 'next/navigation';
 import Header from "@/app/components/Header";
-import fetchLocations from "@/app/http/fetchLocations";
 import PlaceResult = google.maps.places.PlaceResult
 // TODO: make helper for this and array of clinics
 import LocationComponent from "@/app/components/Location";
+import fetchLocations from "@/app/http/fetchLocations";
 
 interface pageProps {
     params: {
@@ -73,15 +73,15 @@ const ClinicLocations: FC<pageProps> = ({ params }) => {
     const [places, setPlaces] = useState<PlaceResult[]>([]);
 
     const location: any = localStorage.getItem('location');
-    const { name, vicinity, rating, icon , user_ratings_total} = testLocation;
-
     useEffect(() => {
 
         if (!location) {
             router.push('/clinicLocator');
         } else {
             const {latitude, longitude} = JSON.parse(location);
-            console.log("LATITUDE: ", latitude, "LONGITUDE: ",longitude, "CLINIC: ",params.clinicType);
+            fetchLocations(latitude, longitude, params.clinicType).then((places: any) => {
+                setPlaces(places.data)
+            });
         }
     },[])
 
@@ -92,11 +92,16 @@ const ClinicLocations: FC<pageProps> = ({ params }) => {
                             headerText={`Locate ${params.clinicType.charAt(0).toUpperCase() + params.clinicType.slice(1)}`}></Header>
                         </button>
                     </span>
-        <p className="font-sans text-darkgrey ml-5 p-5  text-[14px]">
-            {`Here are the nearest clinics to you`}
+        <p className="font-sans text-darkgrey ml-5 p-5  text-[17px]">
+            {`Here are the clinics closest to you`}
         </p>
-        <LocationComponent name={name} address={vicinity} rating={rating} userRatingsTotal={user_ratings_total}
-                           icon={icon}/>
+
+        {places ? places.map((place: PlaceResult) => {
+            const { name, vicinity, rating, icon, user_ratings_total } = place;
+            return <LocationComponent key={name} name={name} address={vicinity} rating={rating} userRatingsTotal={user_ratings_total}
+                                     icon={icon}/>})
+            :
+            <div>Loading...</div>}
     </div>
 }
 
