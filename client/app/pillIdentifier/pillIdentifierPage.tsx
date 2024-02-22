@@ -111,6 +111,20 @@ export default function PillIdentifierPage() {
 		}
 	};
 
+	useEffect(() => {
+		const stopCameraOnUnmount = () => {
+			if (isCameraActive) {
+				stopCamera();
+			}
+		};
+
+		window.addEventListener("beforeunload", stopCameraOnUnmount);
+
+		return () => {
+			window.removeEventListener("beforeunload", stopCameraOnUnmount);
+			stopCameraOnUnmount();
+		};
+	}, [isCameraActive]);
 	const handleSubmit = async () => {
 		try {
 			if (selectedImage) {
@@ -227,7 +241,7 @@ export default function PillIdentifierPage() {
 					<li>Take pictures against a clear background.</li>
 				</ul>
 			</div>
-			<div className="text-center text-darkgrey">
+			<div className=" rounded-3xl bg-white flex flex-col mt-4 mb-44 w-full md:max-w-[800px] md:min-h-[550px] p-4 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)] text-center text-darkgrey">
 				{!isCameraActive && (
 					<img
 						src={selectedImage || "/compass-removebg.png"}
@@ -246,7 +260,9 @@ export default function PillIdentifierPage() {
 						ref={videoRef}
 						autoPlay
 						playsInline
-						style={{ display: isCameraActive ? "block" : "none" }}
+						style={{
+							display: isCameraActive ? "block" : "none",
+						}}
 					/>
 
 					{selectedImage ? (
@@ -262,6 +278,7 @@ export default function PillIdentifierPage() {
 						<button
 							style={{
 								width: "162px",
+								marginTop: "10px",
 							}}
 							onClick={handleTakePicture}
 							className="bg-blue text-[16px] p-3 text-white font-sans font-medium rounded-md h-[46px] shadow-[0px_4px_8px_0px_rgba(44,39,56,0.08),0px_2px_4px_0px_rgba(44,39,56,0.08)]">
