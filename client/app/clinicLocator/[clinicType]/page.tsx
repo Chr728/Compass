@@ -38,7 +38,7 @@ const ClinicLocations: FC<pageProps> = ({ params }) => {
                         </button>
                     </span>
         <p className="font-sans text-darkgrey ml-5 p-5  text-[17px]">
-            {`Here are the clinics closest to you`}
+            {`Select a location to get directions`}
         </p>
 
         {places ? places.map((place: PlaceResult) => {
