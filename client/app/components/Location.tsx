@@ -6,11 +6,12 @@ interface LocationProps {
     rating: number | undefined;
     userRatingsTotal: number | undefined;
     icon: string | undefined;
+    onClick?: () => void;
 }
 
-const LocationComponent: React.FC<LocationProps> = ({ name, address, rating, userRatingsTotal, icon }) => {
+const LocationComponent: React.FC<LocationProps> = ({ name, address, rating, userRatingsTotal, icon, onClick }) => {
     return (
-        <div className="max-w-md rounded overflow-hidden shadow-lg p-4 m-4 bg-white flex items-start"
+        <div onClick={onClick} className="max-w-md rounded overflow-hidden shadow-lg p-4 m-4 bg-white flex items-start cursor-pointer"
         style={{ backgroundColor: '#F2F2F2'}}>
             <div className="flex-grow" style={{ color: "black"}}>
                 <div className="flex justify-between items-center">
