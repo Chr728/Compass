@@ -85,7 +85,7 @@ export default function LocateClinic() {
                     </span>
             {location ? (
                 <div className="">
-                    <p className="font-sans text-darkgrey ml-5 p-5  text-[14px]">
+                    <p className="font-sans text-darkgrey ml-5 p-5  text-[17px]">
                         Choose a type of clinic to locate
                     </p>
                     <div className="grid grid-cols-2 gap-5 place-items-center p-5">
