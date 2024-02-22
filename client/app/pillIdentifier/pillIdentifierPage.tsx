@@ -301,7 +301,7 @@ export default function PillIdentifierPage() {
 						</label>
 					</div>
 				) : (
-					<div className="p-2 mb-2">
+					<div className="p-2 mb-1">
 						<button
 							style={{
 								width: "165px",
