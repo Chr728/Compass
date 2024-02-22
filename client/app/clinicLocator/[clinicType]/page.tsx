@@ -82,12 +82,6 @@ const ClinicLocations: FC<pageProps> = ({ params }) => {
         } else {
             const {latitude, longitude} = JSON.parse(location);
             console.log("LATITUDE: ", latitude, "LONGITUDE: ",longitude, "CLINIC: ",params.clinicType);
-            // fetchLocations(latitude, longitude, params.clinicType).then((places: any) => {
-            //     setPlaces(places);
-            //     console.log("PLACES: ", places)
-            // }).catch((error) => {
-            //     console.error("ERROR: ", error);
-            // });
         }
     },[])
 
@@ -99,7 +93,7 @@ const ClinicLocations: FC<pageProps> = ({ params }) => {
                         </button>
                     </span>
         <p className="font-sans text-darkgrey ml-5 p-5  text-[14px]">
-            Choose a type of clinic to locate
+            {`Here are the nearest clinics to you`}
         </p>
         <LocationComponent name={name} address={vicinity} rating={rating} userRatingsTotal={user_ratings_total}
                            icon={icon}/>
