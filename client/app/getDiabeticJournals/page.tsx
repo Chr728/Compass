@@ -1,6 +1,5 @@
 "use client";
 import { useRouter } from "next/navigation";
-import React from "react";
 import { useAuth } from "../contexts/AuthContext";
 import GetGlucoseJournalsPage from "./getGlucoseJournals/getGlucoseJournalsPage";
 import GetInsulinJournalsPage from "./getInsulinJournals/getInsulinJournalsPage";
@@ -20,6 +19,7 @@ export default function GetDiabeticJournals() {
 	return (
 		<>
 			<GetGlucoseJournalsPage />
+
 			<GetInsulinJournalsPage />
 		</>
 	);
