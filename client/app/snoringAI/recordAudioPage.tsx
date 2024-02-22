@@ -99,6 +99,11 @@ export default function RecordAudioPage() {
         }
     };
 
+    const handleCancelClick = () => {
+        setItemRecorded(false);
+        setRecordedAudioBlob(null);
+    }
+
     const handleReplayClick = () => {
         if (recordedAudioBlob) {
           const audioUrl = URL.createObjectURL(recordedAudioBlob);
@@ -142,25 +147,38 @@ export default function RecordAudioPage() {
                         </div>
 
                         <div className="flex flex-col space-y-2 mt-auto mb-24" >
-                            <RedButton
-                                type="button"
-                                text="Stop"
-                                onClick={handleStopClick}
-                            />
-                           {/* Submit button should save and submit the audio both */}
-                            <RedButton
-                                type="button"
-                                text="Submit"
-                            /> 
+                            {
+                                !itemRecorded && (
+                                    <RedButton
+                                        type="button"
+                                        text="Stop"
+                                        onClick={handleStopClick}
+                                    />
+                                )
+                            }
+                            {
+                                    itemRecorded && (
+                                        <>
+                                        {/* Submit button should save and submit the audio both */}
+                                            <RedButton
+                                                type="button"
+                                                text="Submit"
+                                            /> 
+                                            <RedButton
+                                                type="button"
+                                                text="Replay"
+                                                onClick={handleReplayClick}
+                                            /> 
+                                    </>
+                                    )
+                                }
+
                              <RedButton
                                 type="button"
                                 text="Cancel"
+                                onClick={handleCancelClick}
                             /> 
-                            <RedButton
-                                type="button"
-                                text="Replay"
-                                onClick={handleReplayClick}
-                            /> 
+
                         </div>
                     </div>
                     </>
