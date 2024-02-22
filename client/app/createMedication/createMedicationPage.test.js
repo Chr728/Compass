@@ -28,8 +28,8 @@ describe("CreateMedicationPage", () => {
     mockSessionStorage.getItem.mockReturnValue(imageDataWithText);
 
     render(<CreateMedicationPage />);
-    const ImageElement = screen.getByRole("img");
-    expect(ImageElement).toBeInTheDocument();
+    const ImageElement = screen.getAllByRole("img");
+    expect(ImageElement[0]).toBeInTheDocument();
     expect(mockSessionStorage.getItem).toHaveBeenCalledWith(
       "imageDataWithText"
     );

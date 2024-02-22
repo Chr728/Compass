@@ -43,13 +43,15 @@ export default function AddMoodEntry() {
             },
             date:'',
             notes: '',
+            time: '',
           },
           onSubmit: async (values) => {
               const moodData = {
                 howAreYou: values.howAreYou,
                 stressSignals: values.stressSignals,
                 date: values.date,
-                notes: values.notes
+                notes: values.notes,
+                time:values.time,
               }
               await createMoodJournal(moodData)
               .then(result => {
@@ -62,6 +64,7 @@ export default function AddMoodEntry() {
                 howAreYou?: string;
                 date?: string;
                 stressSignals?: any,
+                time?: string;
                 }
                = {};
 
@@ -109,6 +112,9 @@ export default function AddMoodEntry() {
             if(!values.stressSignals.headache){
                 errors.stressSignals = {...errors.stressSignals,  headache :"Value required." }
             }
+            if (!values.time) {
+				errors.time = "Value required.";
+			}
 
             return errors;
         },
@@ -163,6 +169,25 @@ export default function AddMoodEntry() {
                     </p>
                 )}
             </div>
+
+            <div className="m-2 w-1/2">
+					<div className="max-w-[230px]">
+						<Input
+							name="time"
+							id="time"
+							type="time"
+							style={{ width: "100%" }}
+							onChange={formik.handleChange}
+							value={formik.values.time}
+							onBlur={formik.handleBlur}
+						/>
+						{formik.touched.time && formik.errors.time && (
+							<p className="text-red text-[14px]">
+								{formik.errors.time}
+							</p>
+						)}
+					</div>
+			</div>
            
   
         <div className="flex flex-col p-2 rounded-2xl w-full text-darkgrey bg-white shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]">

@@ -370,6 +370,7 @@ runTests({
     },
     date: "2023-12-15",
     notes: "Feeling happy today!",
+    time: "10:00:00",
   },
   invalidData: [
     {

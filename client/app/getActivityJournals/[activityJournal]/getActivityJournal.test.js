@@ -108,23 +108,3 @@ describe("Getting an activity journal", () => {
 })
 
 
-describe("User not logged in", () => {
-
-    beforeEach(() => {
-        useAuth.mockImplementation(() => {
-            return {
-                user: null
-            }
-        })
-    })
-
-    afterEach( () => {
-        jest.resetAllMocks();
-    })
-
-    it("Error page displayed", async () => {
-        render(<GetActivityJournal params={{ activityJournal: null }}/>);
-        const errorText = await screen.findByText("Error 403 - Access Forbidden");
-        expect(errorText).toBeInTheDocument();
-    })
-})

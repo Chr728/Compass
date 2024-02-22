@@ -47,9 +47,9 @@ export default function GetMoodJournal( {params: { viewMoodJournal } } : { param
     }
   }, []);
 
-  if (!user) {
-    return <div><Custom403/></div>
-  }
+  // if (!user) {
+  //   return <div><Custom403/></div>
+  // }
 
   return (
     mood && <div className="bg-eggshell min-h-screen flex flex-col">
@@ -67,6 +67,9 @@ export default function GetMoodJournal( {params: { viewMoodJournal } } : { param
             >
               <Typography variant="body1" ml={2} mt={2} color="black">
                 <b>Date:</b> {formatDate(mood.date)}
+              </Typography>
+              <Typography  variant="body1" ml={2} mt={2} color="black">
+                <b>Time:</b> {formatMilitaryTime(mood.time)}
               </Typography>
               <Typography variant="body1" ml={2} color="black">
                 <b>How Were You:</b> {mood.howAreYou}

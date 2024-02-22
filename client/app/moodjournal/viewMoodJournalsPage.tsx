@@ -3,7 +3,7 @@ import Button from '../components/Button';
 import { useRouter } from 'next/navigation';
 import { deleteMoodJournal, getMoodJournals } from '../http/moodJournalAPI';
 import { useEffect, useState } from 'react';
-import { formatDate, formatDateYearMonthDate } from '../helpers/utils/datetimeformat';
+import { formatDate, formatDateYearMonthDate, formatMilitaryTime } from '../helpers/utils/datetimeformat';
 import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/Header';
 import Image from 'next/image';
@@ -122,7 +122,9 @@ export default function ViewMoodJournalsPage() {
 
     const getMoodForDay = () => {
       const formattedDate = day.format("YYYY-MM-DD");
-      const moodEntry = moodJournal.find((entry: any) => formatDateYearMonthDate(entry.date) === formattedDate);
+      let moodEntry = moodJournal.filter((entry: any) => formatDateYearMonthDate(entry.date) === formattedDate);
+      moodEntry = [...moodEntry].sort((a,b) => new Date("2024-01-01"+"T"+b.time).getTime() - new Date("2024-01-01"+"T"+a.time).getTime())
+      moodEntry = moodEntry[0]
       return moodEntry ? moodEntry.howAreYou : null;
     };
     const mood = getMoodForDay();
@@ -134,7 +136,9 @@ export default function ViewMoodJournalsPage() {
     
   const handleClick = () => {
     const formattedDate = day.format('YYYY-MM-DD');
-    const moodEntry = moodJournal.find((entry: any) => formatDateYearMonthDate(entry.date) === formattedDate);
+    let moodEntry = moodJournal.filter((entry: any) => formatDateYearMonthDate(entry.date) === formattedDate);
+    moodEntry = [...moodEntry].sort((a,b) => new Date("2024-01-01"+"T"+b.time).getTime() - new Date("2024-01-01"+"T"+a.time).getTime())
+    moodEntry = moodEntry[0]
     
     if (moodEntry) {
       router.push(`/moodjournal/${moodEntry.id}`);
@@ -160,12 +164,12 @@ export default function ViewMoodJournalsPage() {
 
 	const handleOrderDate = () => {
 		setOrderDate(!orderdate)
-		if (!orderdate){
-			const increasingOrdermoodData = [...moodJournal].sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    if (!orderdate){
+      const increasingOrdermoodData = [...moodJournal].sort((a,b) => new Date(a.date.substring(0,10)+"T"+a.time).getTime() - new Date(b.date.substring(0,10)+"T"+b.time).getTime())
 			setMoodJournal(increasingOrdermoodData)
 		}
 		else{
-			const decreasingOrdermoodData = [...moodJournal].sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+			const decreasingOrdermoodData = [...moodJournal].sort((a,b) => new Date(b.date.substring(0,10)+"T"+b.time).getTime() - new Date(a.date.substring(0,10)+"T"+a.time).getTime())
 			setMoodJournal(decreasingOrdermoodData)
 		}
 	}
@@ -258,7 +262,7 @@ export default function ViewMoodJournalsPage() {
                         }
                       />
                     </div>
-                    <p className="font-medium">Felt {data.howAreYou}!</p>
+                    <p className="font-medium">Felt {data.howAreYou}! at {data.time ? <>{formatMilitaryTime(data.time)}</> : <>N/A</>}</p>
                     {data.notes && (
                       <p className="opacity-[0.86] pt-1">{data.notes.length > 55 ? `${data.notes.substring(0, 55)}...` : data.notes}</p>
                     )}

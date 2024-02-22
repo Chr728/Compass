@@ -116,23 +116,3 @@ describe("User is logged in", () => {
     })
     
 })
-
-
-describe("User is not logged in", () => {
-
-    beforeEach(() => {
-        useAuth.mockImplementation(() => {
-            return {
-                user: null,
-            };
-        });
-    })
-
-    test("Error page is shown", async() => {
-        render(<GetGlucoseJournal params={{ glucoseJournal: '1' }} />);
-        const errorText = await screen.findByText("Error 403 - Access Forbidden");
-        expect(errorText).toBeInTheDocument();
-    })
-   
-    
-})

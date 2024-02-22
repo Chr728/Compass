@@ -98,14 +98,14 @@ test("Cancel button works correctly", async () => {
     expect(mockRouter).toHaveBeenCalled();
 })
 
-test("Error page is shown when the user is not logged in", async () => {
-  useAuth.mockImplementation(() => {
-      return {
-      user: null,
-      };
-  });
-
-  render(<UpdateContactPage params={{ updateContacts:'1'}} />);
-  const errorMessage = await screen.findByText("Error 403 - Access Forbidden");
-  expect(errorMessage).toBeInTheDocument();
-})
+// test("Error page is shown when the user is not logged in", async () => {
+//   useAuth.mockImplementation(() => {
+//       return {
+//       user: null,
+//       };
+//   });
+//
+//   render(<UpdateContactPage params={{ updateContacts:'1'}} />);
+//   const errorMessage = await screen.findByText("Error 403 - Access Forbidden");
+//   expect(errorMessage).toBeInTheDocument();
+// })

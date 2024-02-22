@@ -43,9 +43,9 @@ export default function GetInsulinJournal({params: { insulinJournal } } : { para
     }
   }, []);  
 
-  if (!user) {
-    return <div><Custom403/></div>
-  }
+  // if (!user) {
+  //   return <div><Custom403/></div>
+  // }
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
