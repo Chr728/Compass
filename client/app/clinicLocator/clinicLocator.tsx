@@ -5,7 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 import Button from "../components/Button"
 import Header from "../components/Header";
 
-type Location = {
+export type Location = {
     latitude: number;
     longitude: number;
 } | null;
@@ -36,7 +36,6 @@ const clinicTypes = [{
     slug: "psychiatric"
 }]
 
-const LOCATION_STORAGE_KEY = process.env.NEXT_SESSION_STORAGE as string;
 const EXPIRATION_PERIOD = 1000 * 60 * 60; // 1 hour
 
 export default function LocateClinic() {
@@ -45,43 +44,39 @@ export default function LocateClinic() {
         = useState<Location>(null);
     const [locationError, setLocationError]
         = useState("");
-    const { user } = useAuth();
+    // const { user } = useAuth();
     const router = useRouter();
 
 
 
     useEffect(() => {
-        if (!user) {
-            router.push("/login");
-        } else {
-            const storedLocation = localStorage.getItem(LOCATION_STORAGE_KEY);
+            const storedLocation = localStorage.getItem('location');
+            console.log('STORED LOCATION IS:  ', storedLocation);
             if (storedLocation) {
                 const { latitude, longitude, timestamp } = JSON.parse(storedLocation);
                 const now = new Date().getTime();
                 if (now - timestamp < EXPIRATION_PERIOD) {
                     setLocation({ latitude, longitude });
                 } else {
-                    localStorage.removeItem(LOCATION_STORAGE_KEY);
+                    localStorage.removeItem('location');
                 }
             }
-        }
-    }, [user]);
+    }, []);
 
     const onClick = () => {
-
         if(!navigator.geolocation) {
             setLocationError("Geolocation is not supported by your device!")
         }
 
         navigator.geolocation.getCurrentPosition((position) => {
             const { latitude, longitude } = position.coords;
-            const locationData = { latitude, longitude, timestamp: new Date().getTime() };
-            localStorage.setItem(LOCATION_STORAGE_KEY, JSON.stringify(locationData));
+            const locationData = { latitude, longitude, timestamp: new Date().getTime()};
+            localStorage.setItem('location', JSON.stringify(locationData));
             setLocation({ latitude, longitude });
-            setLocationError(""); // Clear any previous error messages
+            setLocationError("");
         }, () => {
             setLocationError("Unable to retrieve your location");
-            setLocation(null); // Clear location if there's an error
+            setLocation(null);
         }
         )}
 

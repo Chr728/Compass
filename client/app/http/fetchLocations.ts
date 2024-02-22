@@ -1,10 +1,10 @@
 require('dotenv').config({
-    path: '../../../.env'
+    path: '../../.env'
 })
 
-const findNearbyClinics = async (latitude: number, longitude: number, type: string) => {
+const fetchLocations = async (latitude: number, longitude: number, type: string) => {
     const radius = 10000;
-    const apiKey = process.env.GOOGLE_MAPS_API_KEY as string;
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string;
     const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=${type}&key=${apiKey}`
 
     try {
@@ -20,4 +20,4 @@ const findNearbyClinics = async (latitude: number, longitude: number, type: stri
     }
 }
 
-export default findNearbyClinics;
+export default fetchLocations;
