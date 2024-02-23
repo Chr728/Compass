@@ -10,7 +10,7 @@ import { openDB } from 'idb';
 
 export default function CreateDocumentPage() {
   const router = useRouter();
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFile, setSelectedFile] = useState<any>(null);
 
   const formik = useFormik({
     initialValues: {
@@ -18,7 +18,6 @@ export default function CreateDocumentPage() {
       dateOfAnalysis: '',
     },
     onSubmit: async (values) => {
-      console.log('Form Values:', values);
       await storeDocument(values);
       router.push(`/getMedVault/${getFolderIdFromURL()}`);
     },
@@ -26,8 +25,6 @@ export default function CreateDocumentPage() {
 
   const getFolderIdFromURL = () => {
     const urlParts = window.location.pathname.split('/');
-    console.log(urlParts[urlParts.length - 2]);
-
     return urlParts[urlParts.length - 2];
   };
 
@@ -39,19 +36,11 @@ export default function CreateDocumentPage() {
   const storeDocument = async (formData: any) => {
     try {
       const db = await openDB('medVault', 1);
-
-      const store = db.transaction('data', 'readwrite').objectStore('data'); // Replace 'your_store_name' with your actual store name
-
-      const documentData = {
-        documentName: formData.documentName,
-        dateOfAnalysis: formData.dateOfAnalysis,
-        file: selectedFile,
-        folderId: getFolderIdFromURL(),
-      };
-
-      await store.add(documentData);
+      const folderId = getFolderIdFromURL();
+      const documentData = { ...formData, folderId, file: selectedFile };
+      await db.add('data', documentData);
     } catch (error) {
-      console.error('Error storing document:', error);
+      console.error('Error storing document in IndexedDB:', error);
     }
   };
 

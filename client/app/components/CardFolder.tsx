@@ -28,6 +28,7 @@ interface CardFolderProps {
   text: string;
   onDelete: () => void;
   onPush?: () => void;
+  onView?: () => void;
 }
 
 const iconComponents: { [key: string]: React.ReactNode } = {
@@ -56,6 +57,7 @@ const CardFolder: React.FC<CardFolderProps> = ({
   text,
   onDelete,
   onPush,
+  onView,
 }) => {
   const IconComponent = iconComponents[icon];
 
@@ -68,7 +70,7 @@ const CardFolder: React.FC<CardFolderProps> = ({
       />
       <div
         className="w-12 h-12 bg-gray-300 rounded-full text-4xl flex items-center justify-center mb-2"
-        onClick={onPush}
+        onClick={onView}
       >
         {IconComponent} {/* Render the corresponding icon component */}
       </div>

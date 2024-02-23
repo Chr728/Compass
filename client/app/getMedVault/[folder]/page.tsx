@@ -89,6 +89,7 @@ export default function GetFolder({ params }: Prop) {
               name={document.documentName}
               text={document.dateOfAnalysis}
               onDelete={() => deleteDocument(document.id)}
+              onView={() => window.open(URL.createObjectURL(document.file))}
             />
           ))}
         </div>
