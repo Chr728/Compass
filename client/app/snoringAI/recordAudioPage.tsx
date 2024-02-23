@@ -15,6 +15,7 @@ import { MdKeyboardArrowDown } from 'react-icons/md';
 import NextImage from "next/image";
 import RedButton from '../components/RedButton';
 
+
 export default function RecordAudioPage() {
     const logger = require('../../logger');
     const { user } = useAuth();
@@ -102,6 +103,7 @@ export default function RecordAudioPage() {
     const handleCancelClick = () => {
         setItemRecorded(false);
         setRecordedAudioBlob(null);
+        setRecording(false);
     }
 
     const handleReplayClick = () => {
@@ -111,7 +113,34 @@ export default function RecordAudioPage() {
           audio.play();
         }
     };
+
+    const checkExistingAudio = () => {
+        const existingAudioData = JSON.parse(localStorage.getItem("savedAudio") || "[]");
+        if(existingAudioData && existingAudioData.length){
+            const audio = new Audio(existingAudioData[0]);
+            audio.play();
+        }
+    }
       
+    const handleSubmit = async() => {
+       
+        const existingAudioData = JSON.parse(localStorage.getItem("savedAudio") || "[]");
+
+        if (recordedAudioBlob) {
+            const blobURL = URL.createObjectURL(recordedAudioBlob);
+            existingAudioData.push(blobURL);
+            localStorage.setItem("savedAudio", JSON.stringify(existingAudioData));
+            // const app = await client("pillIdentifierAI/snoringAI");
+
+            // const formData:any = new FormData();
+            // formData.append("audio", recordedAudioBlob);
+
+            // const result:any = await app.predict("/predict", formData);
+
+            // console.log(result.data);
+        }
+        console.log('clicked submit')
+    }
    
   return (
     <div className="bg-eggshell min-h-screen flex flex-col w-full overflow-y-auto">
@@ -163,11 +192,17 @@ export default function RecordAudioPage() {
                                             <RedButton
                                                 type="button"
                                                 text="Submit"
+                                                onClick={handleSubmit}
                                             /> 
                                             <RedButton
                                                 type="button"
                                                 text="Replay"
                                                 onClick={handleReplayClick}
+                                            /> 
+                                             <RedButton
+                                                type="button"
+                                                text="Check Audio"
+                                                onClick={checkExistingAudio}
                                             /> 
                                     </>
                                     )
