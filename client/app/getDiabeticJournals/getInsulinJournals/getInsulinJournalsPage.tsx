@@ -1,7 +1,11 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { MdDeleteForever, MdKeyboardArrowDown, MdKeyboardArrowUp  } from "react-icons/md";
+import {
+	MdDeleteForever,
+	MdKeyboardArrowDown,
+	MdKeyboardArrowUp,
+} from "react-icons/md";
 import Swal from "sweetalert2";
 import Button from "../../components/Button";
 import { useAuth } from "../../contexts/AuthContext";
@@ -75,53 +79,62 @@ export default function GetInsulinJournalsPage() {
 	}
 
 	//Order by Site
-	const [ordersite, setOrderSite] = useState(false)
+	const [ordersite, setOrderSite] = useState(false);
 
-	
 	const handleOrderSite = () => {
-		setOrderSite(!ordersite)
-		if (!ordersite){
-			const increasingOrderinsulinData = [...insulin].sort((a,b) => (a.bodySite).toLowerCase() < (b.bodySite).toLowerCase() ? -1 : 1)
-			setinsulin(increasingOrderinsulinData)
+		setOrderSite(!ordersite);
+		if (!ordersite) {
+			const increasingOrderinsulinData = [...insulin].sort((a, b) =>
+				a.bodySite.toLowerCase() < b.bodySite.toLowerCase() ? -1 : 1
+			);
+			setinsulin(increasingOrderinsulinData);
+		} else {
+			const decreasingOrderinsulinData = [...insulin].sort((a, b) =>
+				a.bodySite.toLowerCase() > b.bodySite.toLowerCase() ? -1 : 1
+			);
+			setinsulin(decreasingOrderinsulinData);
 		}
-		else{
-			const decreasingOrderinsulinData = [...insulin].sort((a,b) => (a.bodySite).toLowerCase() > (b.bodySite).toLowerCase() ? -1 : 1)
-			setinsulin(decreasingOrderinsulinData)
-		}
-	}
-
+	};
 
 	//Order by Unit
-	const [orderunit, setOrderUnit] = useState(false)
+	const [orderunit, setOrderUnit] = useState(false);
 
-	
 	const handleOrderUnit = () => {
-		setOrderUnit(!orderunit)
-		if (!orderunit){
-			const increasingOrderinsulinData = [...insulin].sort((a,b) => a.unit - b.unit)
-			setinsulin(increasingOrderinsulinData)
+		setOrderUnit(!orderunit);
+		if (!orderunit) {
+			const increasingOrderinsulinData = [...insulin].sort(
+				(a, b) => a.unit - b.unit
+			);
+			setinsulin(increasingOrderinsulinData);
+		} else {
+			const decreasingOrderinsulinData = [...insulin].sort(
+				(a, b) => b.unit - a.unit
+			);
+			setinsulin(decreasingOrderinsulinData);
 		}
-		else{
-			const decreasingOrderinsulinData = [...insulin].sort((a,b) => b.unit - a.unit)
-			setinsulin(decreasingOrderinsulinData)
-		}
-	}
+	};
 
 	//Order by DateTime
-	const [orderdate, setOrderdate] = useState(false)
+	const [orderdate, setOrderdate] = useState(false);
 
 	const handleOrderDate = () => {
-		setOrderdate(!orderdate)
-		if (!orderdate){
-			const increasingOrderinsulinData = [...insulin].sort((a,b) => new Date(a.date.substring(0,10)+"T"+a.time).getTime() - new Date(b.date.substring(0,10)+"T"+b.time).getTime())
-			setinsulin(increasingOrderinsulinData)
+		setOrderdate(!orderdate);
+		if (!orderdate) {
+			const increasingOrderinsulinData = [...insulin].sort(
+				(a, b) =>
+					new Date(a.date.substring(0, 10) + "T" + a.time).getTime() -
+					new Date(b.date.substring(0, 10) + "T" + b.time).getTime()
+			);
+			setinsulin(increasingOrderinsulinData);
+		} else {
+			const decreasingOrderinsulinData = [...insulin].sort(
+				(a, b) =>
+					new Date(b.date.substring(0, 10) + "T" + b.time).getTime() -
+					new Date(a.date.substring(0, 10) + "T" + a.time).getTime()
+			);
+			setinsulin(decreasingOrderinsulinData);
 		}
-		else{
-			const decreasingOrderinsulinData = [...insulin].sort((a,b) => new Date(b.date.substring(0,10)+"T"+b.time).getTime() - new Date(a.date.substring(0,10)+"T"+a.time).getTime())
-			setinsulin(decreasingOrderinsulinData)
-		}
-	}
-
+	};
 
 	return (
 		<div
@@ -153,24 +166,42 @@ export default function GetInsulinJournalsPage() {
 						<div className="flex-2" style={{ marginRight: "2%" }}>
 							<div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
 								Date/Time
-								<button onClick={handleOrderDate} aria-label="orderDate">
-									{orderdate ? <MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" /> : <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />  }
+								<button
+									onClick={handleOrderDate}
+									aria-label="orderDate">
+									{orderdate ? (
+										<MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" />
+									) : (
+										<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+									)}
 								</button>
 							</div>
 						</div>
 						<div className="flex-2" style={{ marginRight: "5%" }}>
 							<div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
 								Units
-								<button onClick={handleOrderUnit} aria-label="orderUnit">
-									{orderunit ? <MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" /> : <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />  }
+								<button
+									onClick={handleOrderUnit}
+									aria-label="orderUnit">
+									{orderunit ? (
+										<MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" />
+									) : (
+										<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+									)}
 								</button>
 							</div>
 						</div>
 						<div className="flex-2" style={{ marginRight: "25%" }}>
 							<div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
 								Site
-								<button onClick={handleOrderSite} aria-label="orderSite">
-									{ordersite ? <MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" /> : <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />  }
+								<button
+									onClick={handleOrderSite}
+									aria-label="orderSite">
+									{ordersite ? (
+										<MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" />
+									) : (
+										<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+									)}
 								</button>
 							</div>
 						</div>
