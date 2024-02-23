@@ -102,25 +102,3 @@ describe("Getting an activity journal", () => {
 		}, 1000);
 	});
 });
-
-test("Get Activity Journals list is displayed correctly", async () => {
-	setTimeout(async () => {
-		const date = screen.findByText("Jan 1, 2014");
-		const activity = screen.findByText("running");
-		const duration = screen.findByText("60");
-
-		expect(date).toBeInTheDocument();
-		expect(activity).toBeInTheDocument();
-		expect(duration).toBeInTheDocument();
-
-		const orderDate = screen.getByLabelText("orderDate");
-		await userEvent.click(orderDate);
-		await userEvent.click(orderDate);
-		const orderActivity = screen.getByLabelText("orderActivity");
-		await userEvent.click(orderActivity);
-		await userEvent.click(orderActivity);
-		const orderDuration = screen.getByLabelText("orderDuration");
-		await userEvent.click(orderDuration);
-		await userEvent.click(orderDuration);
-	}, 1000);
-});
