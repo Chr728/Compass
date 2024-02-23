@@ -13,7 +13,7 @@ jobs:
         with:
           lfs: 'true'
       - name: Install Dependencies & Coverage Tools
-        run: | 
+        run: |
           cd pythonServer
           pip install -r requirements.txt
           pip install pytest-cov
