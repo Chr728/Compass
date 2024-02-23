@@ -319,7 +319,7 @@ export default function EditMedication({
             <option value="Four times a day">Four times a day</option>
             <option value="Five times a day">Five times a day</option>
             <option value="Six times a day">Six times a day</option>
-            <option value="Every 30 minutes<">Every 30 minutes</option>
+            <option value="Every 30 minutes">Every 30 minutes</option>
             <option value="Every 1 hour">Every 1 hour</option>
             <option value="Every 2 hours">Every 2 hours</option>
             <option value="Every 4 hours">Every 4 hours</option>
@@ -328,7 +328,6 @@ export default function EditMedication({
             <option value="Before meals">Before meals</option>
             <option value="After meals">After meals</option>
             <option value="Before bedtime">Before bedtime</option>
-            <option value="Round-the-clock (RTC)">Round-the-clock (RTC)</option>
             <option value="As needed (PRN)">As needed (PRN)</option>
             <option value="Other">Other</option>
           </select>

@@ -6,7 +6,6 @@ const webPush = require("web-push");
 
 export function checkFrequency(frequency: string, currentTime: string) {
   const parsedTime = moment(currentTime, "HH:mm:ss");
-
   switch (frequency) {
     case "Once a day (morning)":
       // Check if the current time is 8am
@@ -488,7 +487,7 @@ export const sendUserReminders = async () => {
     const userMedications = await db.Medication.findAll({
       where: {
         dateStarted: {
-          [db.Sequelize.Op.lt]: currentDate,
+          [db.Sequelize.Op.lte]: currentDate,
         },
         expirationDate: {
           [db.Sequelize.Op.gte]: currentDate,
@@ -529,7 +528,7 @@ export const sendUserReminders = async () => {
           // Send notification to users if medication is about to expire
           if (moment(medication.expirationDate).isSame(currentDate, "day")) {
             // If the time is 4am, then send the medication expiration reminder
-            if (startTime.format("HH:mm:00") === "4:00:00") {
+            if (startTime.format("HH:mm:00") === "16:00:00") {
               const payload = JSON.stringify({
                 title: `Medication Expiration Reminder: ${medication.medicationName} for ${medication.dosage} ${medication.unit} at ${medication.time} is expiring today.`,
               });
