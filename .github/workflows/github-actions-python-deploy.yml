@@ -6,6 +6,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: ${{ secrets.DEPLOY_ENABLED}} == 'true'
     env:
       IS_LOCAL: 'false'
       PORT: ${{ secrets.PORT }}
@@ -13,6 +14,7 @@ jobs:
       PYTHON_PORT: ${{ secrets.PYTHON_PORT }}
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       HEROKU_PYTHON_APP_NAME: ${{ secrets.HEROKU_PYTHON_APP_NAME }}
+      DEPLOY_ENABLED: 'false'
 
     steps:
       - uses: actions/checkout@v2
