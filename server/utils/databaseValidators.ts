@@ -158,6 +158,7 @@ const notificationPreferenceValidator = (values: {
 const medicationValidator = (values: {
   medicationName: string;
   dateStarted: Date;
+  expirationDate: Date;
   time: Date;
   dosage: number;
   unit: string;
@@ -168,6 +169,7 @@ const medicationValidator = (values: {
   const {
     medicationName,
     dateStarted,
+    expirationDate,
     time,
     dosage,
     unit,
@@ -188,6 +190,11 @@ const medicationValidator = (values: {
   if (!dateStarted || typeof dateStarted !== 'string') {
     Logger.error(`Invalid date started: ${dateStarted}`);
     throw new Error(`Invalid date started: ${dateStarted}`);
+  }
+  //check if expiration date is valid
+  if (!expirationDate || typeof expirationDate !== "string") {
+    Logger.error(`Invalid expiration date: ${expirationDate}`);
+    throw new Error(`Invalid expiration date: ${expirationDate}`);
   }
   //check if time is valid
   if (!time || typeof time !== 'string') {
