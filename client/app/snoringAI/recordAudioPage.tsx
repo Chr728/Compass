@@ -22,10 +22,12 @@ export default function RecordAudioPage() {
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
     const [recording, setRecording] = useState(false);
     const [itemRecorded, setItemRecorded] = useState(false);
+    const [isPlaying, setIsPlaying] = useState(false);
     const [timer, setTimer] = useState(0);
     const [currentRecordingDate, setCurrentRecordingDate] = useState<string>('');
     const [timerInterval, setTimerInterval] = useState<NodeJS.Timeout | null>(null);
     const [recordedAudioBlob, setRecordedAudioBlob] = useState<Blob | null>(null);
+    
 
 
     useEffect(() =>{
@@ -106,22 +108,6 @@ export default function RecordAudioPage() {
         setRecording(false);
     }
 
-    const handleReplayClick = () => {
-        if (recordedAudioBlob) {
-          const audioUrl = URL.createObjectURL(recordedAudioBlob);
-          const audio = new Audio(audioUrl);
-          audio.play();
-        }
-    };
-
-    const checkExistingAudio = () => {
-        const existingAudioData = JSON.parse(localStorage.getItem("savedAudio") || "[]");
-        if(existingAudioData && existingAudioData.length){
-            const audio = new Audio(existingAudioData[0]);
-            audio.play();
-        }
-    }
-      
     const handleSubmit = async() => {
        
         const existingAudioData = JSON.parse(localStorage.getItem("savedAudio") || "[]");
@@ -130,14 +116,6 @@ export default function RecordAudioPage() {
             const blobURL = URL.createObjectURL(recordedAudioBlob);
             existingAudioData.push(blobURL);
             localStorage.setItem("savedAudio", JSON.stringify(existingAudioData));
-            // const app = await client("pillIdentifierAI/snoringAI");
-
-            // const formData:any = new FormData();
-            // formData.append("audio", recordedAudioBlob);
-
-            // const result:any = await app.predict("/predict", formData);
-
-            // console.log(result.data);
         }
         console.log('clicked submit')
     }
@@ -171,10 +149,15 @@ export default function RecordAudioPage() {
                                 className={!itemRecorded ? "animate-pulse": " "}
                                 style={{ width: "100%", height: "auto" }}
                         />
-                        <div className="mt-2 text-center text-red mb-4">
-                            {formatTimer(timer)}
-                        </div>
-
+                        {isPlaying && <p className="text-sm text-darkgrey mt-1">Playing</p>}
+                        {
+                            !isPlaying && (
+                                <div className="mt-2 text-center text-red mb-4">
+                                    {formatTimer(timer)}
+                                </div>
+                            )
+                        }
+                       
                         <div className="flex flex-col space-y-2 mt-auto mb-24" >
                             {
                                 !itemRecorded && (
@@ -193,16 +176,6 @@ export default function RecordAudioPage() {
                                                 type="button"
                                                 text="Submit"
                                                 onClick={handleSubmit}
-                                            /> 
-                                            <RedButton
-                                                type="button"
-                                                text="Replay"
-                                                onClick={handleReplayClick}
-                                            /> 
-                                             <RedButton
-                                                type="button"
-                                                text="Check Audio"
-                                                onClick={checkExistingAudio}
                                             /> 
                                     </>
                                     )
