@@ -6,8 +6,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: ${{ secrets.DEPLOY_ENABLED}} == 'true'
     env:
-      if: ${{ secrets.DEPLOY_ENABLED}} == 'true'
       IS_LOCAL: 'false'
       PORT: ${{ secrets.PORT }}
       PYTHON_HOST: ${{ secrets.PYTHON_HOST }}
