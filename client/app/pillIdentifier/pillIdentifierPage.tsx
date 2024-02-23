@@ -136,7 +136,23 @@ export default function PillIdentifierPage() {
 				return;
 			}
 
-			sessionStorage.setItem("imageDataUrl", selectedImage);
+			// Extracting the desired text data
+			const labelText = apiResults[selectedLabel].label
+				.slice(0, apiResults[selectedLabel].label.search(/\d/))
+				.trim();
+			const strengthText = apiResults[selectedLabel].label
+				.slice(apiResults[selectedLabel].label.search(/\d/))
+				.trim();
+
+			// Combining the selected image URL and text data
+			const imageDataWithText = JSON.stringify({
+				selectedImage,
+				labelText,
+				strengthText,
+			});
+
+			// Storing the combined data in session storage
+			sessionStorage.setItem("imageDataWithText", imageDataWithText);
 
 			router.push("/createMedication");
 		} catch (error) {

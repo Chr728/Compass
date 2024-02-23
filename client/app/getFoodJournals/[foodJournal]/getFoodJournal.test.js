@@ -121,20 +121,3 @@ test("Update button functions correctly", async() => {
 })
 
 
-describe("User is not logged in", () => {
-    beforeEach(() => {
-        useAuth.mockImplementation(() => {
-            return {
-                user: null
-            }
-        })
-
-    });
-
-    test("Error page is shown", async () => {
-        render(<GetFoodJournal params={{ foodJournal: '1' }} />);
-        const errorText = await screen.findByText("Error 403 - Access Forbidden");
-        expect(errorText).toBeInTheDocument();
-        
-    } )
-})

@@ -49,6 +49,7 @@ describe("Update entry page", () => {
                     stressSignals: JSON.stringify({ tired: "rarely", sleep: "rarely", hunger: "rarely",  overeating: "rarely",  depressed: "rarely", pressure: "rarely", anxiety: "rarely", attention: "rarely", anger: "always", headache: "always"}),
                     date: "2023-10-10",
                     notes: "Test note",
+                    time:"10:00",
                 }
             };
         }),
@@ -138,6 +139,7 @@ it("All buttons are displayed to the user", async() => {
       const angerStressSignal = screen.getByLabelText("I feel angry or irritated.");
       const headacheStressSignal = screen.getByLabelText("I get headaches and/or colds.");
       const notes = screen.getByLabelText("Notes");
+      const time = document.querySelector('input[name="time"]');
       
 
       expect(date).toHaveValue("2023-10-10");
@@ -153,6 +155,7 @@ it("All buttons are displayed to the user", async() => {
       expect(angerStressSignal).toHaveValue("always");
       expect(headacheStressSignal).toHaveValue("always");
       expect(notes).toHaveValue("Test note");
+      expect(time).toHaveValue("10:00")
       })
     });
  

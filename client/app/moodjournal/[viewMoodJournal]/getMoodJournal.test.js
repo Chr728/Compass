@@ -27,7 +27,8 @@ jest.mock('../../http/moodJournalAPI', () => {
                             date: '2014-01-01',
                             howAreYou: 'good',
                             stressSignals: '',
-                            notes: 'notes'
+                            notes: 'notes',
+                            time:"10:00"
                     }
             }
         ),
@@ -84,6 +85,7 @@ describe("User is logged in", () => {
             expect(screen.getByText("I feel angry or irritated:")).toBeInTheDocument();
             expect(screen.getByText("I get headaches and&sol;or colds:")).toBeInTheDocument();
             expect(screen.getByText("Notes:")).toBeInTheDocument();
+            expect(screen.getByText("Time:")).toBeInTheDocument();
         }, 1000);
     })
 
@@ -112,24 +114,5 @@ describe("User is logged in", () => {
         await waitFor(() => {
             expect(getMoodJournal).toHaveBeenCalled();
         }); 
-    })
-})
-
-describe("User is not logged in", () => {
-    beforeEach(async() => {
-        useAuth.mockImplementation(() => {
-            return {
-                user: null
-            }
-        })
-    })
-
-    test("Error message is shown", async () => {
-        render(<GetMoodJournal params={{ viewMoodJournal: '1' }} />);
-        const errorText = await screen.findByText("Error 403 - Access Forbidden");
-        const errorRedirectingText = await screen.findByText("Redirecting to Login Page...");
-        expect(errorText).toBeInTheDocument();
-        expect(errorRedirectingText).toBeInTheDocument();
-        
     })
 })

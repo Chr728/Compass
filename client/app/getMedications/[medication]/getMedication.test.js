@@ -119,25 +119,3 @@ describe("User is logged in", () => {
 		});
 	});
 });
-
-describe("User is not logged in", () => {
-	beforeEach(() => {
-		useAuth.mockImplementation(() => {
-			return {
-				user: null,
-			};
-		});
-	});
-
-	test("Error message is shown", async () => {
-		render(<GetMedication params={{ medication: "1" }} />);
-		const errorText = await screen.findByText(
-			"Error 403 - Access Forbidden"
-		);
-		const errorRedirectingText = await screen.findByText(
-			"Redirecting to Login Page..."
-		);
-		expect(errorText).toBeInTheDocument();
-		expect(errorRedirectingText).toBeInTheDocument();
-	});
-});

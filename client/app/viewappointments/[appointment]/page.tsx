@@ -27,17 +27,17 @@ export default function Appointment( {params: { appointment } } : { params: { ap
 }
 
   useEffect(() => {
-    if (!user){
-      router.push("/login")
-    }
+    // if (!user){
+    //   router.push("/login")
+    // }
     if (user) {
     getSingleAppointment();
   }
 }, [user, appointment]);
 
-if (!user) {
-  return <div><Custom403/></div>
-}
+// if (!user) {
+//   return <div><Custom403/></div>
+// }
 
   return (
     data && <div className="bg-eggshell min-h-screen flex flex-col appointment mb-[60px]">

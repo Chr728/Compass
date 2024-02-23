@@ -14,9 +14,9 @@ export default function GetInsulinJournals() {
       router.push("/login")
   }, [user])
 
-  if (!user) {
-    return <div><Custom403/></div>
-  }
+  // if (!user) {
+  //   return <div><Custom403/></div>
+  // }
 
   return (
     <GetInsulinJournalsPage />  );
