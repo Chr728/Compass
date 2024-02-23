@@ -3,7 +3,6 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: ${{ secrets.DEPLOY_ENABLED}} == 'true'
     env:
       IS_LOCAL: 'false'
       PORT: ${{ secrets.PORT }}
@@ -19,16 +18,21 @@ jobs:
           lfs: 'true'
 
       - name: Login to Heroku Container Registry
+        if: $DEPLOY_ENABLED == 'true'
         run: HEROKU_API_KEY=$HEROKU_API_KEY heroku container:login
 
       - name: Build Docker Image
+        if: $DEPLOY_ENABLED == 'true'
         run: docker compose -f docker-compose-ai.yml build
 
       - name: Tag Docker Image
+        if: $DEPLOY_ENABLED == 'true'
         run: docker tag python_server_ai_image registry.heroku.com/$HEROKU_PYTHON_APP_NAME/web:latest
 
       - name: Push Docker Image
+        if: $DEPLOY_ENABLED == 'true'
         run: docker push registry.heroku.com/$HEROKU_PYTHON_APP_NAME/web:latest
 
       - name: Release Docker Image
+        if: $DEPLOY_ENABLED == 'true'
         run: HEROKU_API_KEY=$HEROKU_API_KEY heroku container:release web -a $HEROKU_PYTHON_APP_NAME
