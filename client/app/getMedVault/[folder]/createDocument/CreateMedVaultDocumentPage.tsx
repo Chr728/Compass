@@ -10,7 +10,8 @@ import { openDB } from 'idb';
 
 export default function CreateDocumentPage() {
   const router = useRouter();
-  const [selectedFile, setSelectedFile] = useState<any>(null);
+  const [selectedFiles, setSelectedFiles] = useState<any[]>([]);
+  const maxFiles = 5;
 
   const formik = useFormik({
     initialValues: {
@@ -29,15 +30,26 @@ export default function CreateDocumentPage() {
   };
 
   const handleFileChange = (event: any) => {
-    const file = event.target.files[0];
-    setSelectedFile(file);
+    const files = Array.from(event.target.files).slice(0, maxFiles);
+    if (selectedFiles.length < maxFiles) {
+      setSelectedFiles((prevFiles) => [
+        ...prevFiles,
+        ...files.slice(0, maxFiles - prevFiles.length),
+      ]);
+    }
+  };
+
+  const handleFileRemove = (index: number) => {
+    const updatedFiles = [...selectedFiles];
+    updatedFiles.splice(index, 1);
+    setSelectedFiles(updatedFiles);
   };
 
   const storeDocument = async (formData: any) => {
     try {
       const db = await openDB('medVault', 1);
       const folderId = getFolderIdFromURL();
-      const documentData = { ...formData, folderId, file: selectedFile };
+      const documentData = { ...formData, folderId, files: selectedFiles };
       await db.add('data', documentData);
     } catch (error) {
       console.error('Error storing document in IndexedDB:', error);
@@ -53,33 +65,75 @@ export default function CreateDocumentPage() {
       </span>
 
       <div>
-        <img
-          src="/compass-removebg.png"
-          alt="Logo"
-          className="smallImage m-auto"
-          width={230}
-          height={230}
-          style={{ alignItems: 'center', justifyContent: 'center' }}
-        />
-        <div className="flex justify-center items-center">
-          <input
-            type="file"
-            accept="image/*,.pdf,.doc,.docx"
-            style={{ display: 'none' }}
-            onChange={handleFileChange}
-            id="fileInput"
+        {selectedFiles.length === 0 && (
+          <img
+            src="/compass-removebg.png"
+            alt="Logo"
+            className="smallImage m-auto"
+            width={230}
+            height={230}
+            style={{ alignItems: 'center', justifyContent: 'center' }}
           />
-          <label htmlFor="fileInput">
-            <div className="bg-white p-4 shadow-xl flex items-center justify-center cursor-pointer w-[307px] h-[132px] rounded-[20px]">
-              <div className="text-center flex flex-col items-center">
-                <img src="/Upload.svg" alt="Download" className="w-12 h-12" />
-                <h3 className="font-semibold text-lg text-darkgrey">
-                  Click to Upload File
-                </h3>
+        )}
+        {selectedFiles.length > 0 && (
+          <div className="grid grid-cols-3 gap-4">
+            {selectedFiles.map((file, index) => (
+              <div key={index} className="relative bg-lightgrey p-4 rounded">
+                {file.type.startsWith('image/') ? (
+                  <img
+                    src={URL.createObjectURL(file)}
+                    alt="Preview"
+                    className="w-full h-auto"
+                  />
+                ) : (
+                  <div className="flex items-center justify-center w-full h-full bg-gray-200">
+                    <div className="flex flex-col items-center max-w-full">
+                      <img
+                        src="/documents.svg"
+                        alt="PDF Icon"
+                        className="w-12 h-12"
+                      />
+                      <span
+                        className="text-darkgrey text-sm truncate"
+                        style={{ maxWidth: '80px' }}
+                      >
+                        {file.name}
+                      </span>
+                    </div>
+                  </div>
+                )}
+                <span
+                  className="absolute text-darkgrey top-0 right-0 cursor-pointer rounded-full bg-white p-1"
+                  onClick={() => handleFileRemove(index)}
+                >
+                  X
+                </span>
               </div>
+            ))}
+          </div>
+        )}
+
+        <input
+          type="file"
+          accept="image/*,.pdf,.doc,.docx"
+          style={{ display: 'none' }}
+          onChange={handleFileChange}
+          multiple
+          id="fileInput"
+        />
+        <label htmlFor="fileInput" className="flex justify-center items-center">
+          <div className="bg-white p-4 shadow-xl flex items-center justify-center cursor-pointer w-[307px] h-[132px] rounded-[20px]">
+            <div className="text-center flex flex-col items-center">
+              <img src="/Upload.svg" alt="Download" className="w-12 h-12" />
+              <h3 className="font-semibold text-lg text-darkgrey">
+                Click to Upload File
+              </h3>
+              <p className="text-sm text-grey mt-1">
+                (Max 5 files, supported formats: jpg, jpeg, png, pdf)
+              </p>
             </div>
-          </label>
-        </div>
+          </div>
+        </label>
 
         <form
           className="rounded-3xl flex flex-col mt-4 w-full md:max-w-[800px] md:min-h-[550px] p-4"
