@@ -1,7 +1,11 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { MdDeleteForever, MdKeyboardArrowDown } from "react-icons/md";
+import {
+	MdDeleteForever,
+	MdKeyboardArrowDown,
+	MdKeyboardArrowUp,
+} from "react-icons/md";
 import Swal from "sweetalert2";
 import Button from "../components/Button";
 import Header from "../components/Header";
@@ -76,6 +80,44 @@ export default function GetFoodJournalsPage() {
 		});
 	}
 
+	const [orderdate, setOrderdate] = useState(false);
+
+	const handleOrderDate = () => {
+		setOrderdate(!orderdate);
+		if (!orderdate && Array.isArray(food)) {
+			const increasingfoodData = [...food].sort(
+				(a, b) =>
+					new Date(a.date.substring(0, 10) + "T" + a.time).getTime() -
+					new Date(b.date.substring(0, 10) + "T" + b.time).getTime()
+			);
+			setfood(increasingfoodData);
+		} else if (Array.isArray(food)) {
+			const decreasingOrderfoodData = [...food].sort(
+				(a, b) =>
+					new Date(b.date.substring(0, 10) + "T" + b.time).getTime() -
+					new Date(a.date.substring(0, 10) + "T" + a.time).getTime()
+			);
+			setfood(decreasingOrderfoodData);
+		}
+	};
+
+	const [ordername, setOrderName] = useState(false);
+
+	const handleOrderName = () => {
+		setOrderName(!ordername);
+		if (!ordername) {
+			const increasingOrderfoodData = [...food].sort((a, b) =>
+				a.activity.toLowerCase() < b.activity.toLowerCase() ? -1 : 1
+			);
+			setfood(increasingOrderfoodData);
+		} else {
+			const decreasingOrderfoodData = [...food].sort((a, b) =>
+				a.activity.toLowerCase() > b.activity.toLowerCase() ? -1 : 1
+			);
+			setfood(decreasingOrderfoodData);
+		}
+	};
+
 	return (
 		<div className="bg-eggshell min-h-screen flex flex-col">
 			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
@@ -117,13 +159,29 @@ export default function GetFoodJournalsPage() {
 						<div className="flex-2" style={{ marginRight: "14%" }}>
 							<div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
 								Date/Time
-								<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+								<button
+									onClick={handleOrderDate}
+									aria-label="orderDate">
+									{orderdate ? (
+										<MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" />
+									) : (
+										<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+									)}
+								</button>
 							</div>
 						</div>
 						<div className="flex-2" style={{ marginRight: "20%" }}>
 							<div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
 								Food Item
-								<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+								<button
+									onClick={handleOrderName}
+									aria-label="orderName">
+									{ordername ? (
+										<MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" />
+									) : (
+										<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+									)}
+								</button>
 							</div>
 						</div>
 					</div>

@@ -1,7 +1,11 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { MdDeleteForever, MdKeyboardArrowDown } from "react-icons/md";
+import {
+	MdDeleteForever,
+	MdKeyboardArrowDown,
+	MdKeyboardArrowUp,
+} from "react-icons/md";
 import Swal from "sweetalert2";
 import Button from "../components/Button";
 import Header from "../components/Header";
@@ -69,6 +73,60 @@ export default function GetMedicationsPage() {
 		});
 	}
 
+	const [ordername, setOrderName] = useState(false);
+
+	const handleOrderName = () => {
+		setOrderName(!ordername);
+		if (!ordername) {
+			const increasingOrdermedicationData = [...medication].sort((a, b) =>
+				a.medicationName.toLowerCase() < b.medicationName.toLowerCase()
+					? -1
+					: 1
+			);
+			setmedication(increasingOrdermedicationData);
+		} else {
+			const decreasingOrdermedicationData = [...medication].sort((a, b) =>
+				a.medicationName.toLowerCase() > b.medicationName.toLowerCase()
+					? -1
+					: 1
+			);
+			setmedication(decreasingOrdermedicationData);
+		}
+	};
+
+	const [orderactivity, setOrderActivity] = useState(false);
+
+	const handleOrderRoute = () => {
+		setOrderActivity(!orderactivity);
+		if (!orderactivity) {
+			const increasingOrdermedicationData = [...medication].sort((a, b) =>
+				a.route.toLowerCase() < b.route.toLowerCase() ? -1 : 1
+			);
+			setmedication(increasingOrdermedicationData);
+		} else {
+			const decreasingOrdermedicationData = [...medication].sort((a, b) =>
+				a.route.toLowerCase() > b.route.toLowerCase() ? -1 : 1
+			);
+			setmedication(decreasingOrdermedicationData);
+		}
+	};
+
+	const [orderduration, setOrderDuration] = useState(false);
+
+	const handleOrderDosage = () => {
+		setOrderDuration(!orderduration);
+		if (!orderduration) {
+			const increasingOrdermedicationData = [...medication].sort(
+				(a, b) => a.dosage - b.dosage
+			);
+			setmedication(increasingOrdermedicationData);
+		} else {
+			const decreasingOrdermedicationData = [...medication].sort(
+				(a, b) => b.dosage - a.dosage
+			);
+			setmedication(decreasingOrdermedicationData);
+		}
+	};
 	return (
 		<div className="bg-eggshell min-h-screen flex flex-col">
 			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
@@ -113,19 +171,43 @@ export default function GetMedicationsPage() {
 						<div className="flex-1">
 							<div className="font-sans ml-1 font-bold text-darkgrey text-[18px] text-start ">
 								Name
-								<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+								<button
+									onClick={handleOrderName}
+									aria-label="orderName">
+									{orderactivity ? (
+										<MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" />
+									) : (
+										<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+									)}
+								</button>
 							</div>
 						</div>
 						<div className="flex-2">
 							<div className="font-sans  font-bold  text-darkgrey text-[18px] ml-1 text-start">
 								Dosage
-								<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+								<button
+									onClick={handleOrderDosage}
+									aria-label="orderDosage">
+									{orderduration ? (
+										<MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" />
+									) : (
+										<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+									)}
+								</button>
 							</div>
 						</div>
 						<div className="flex-1" style={{ marginRight: "5%" }}>
 							<div className="font-sans font-bold text-darkgrey text-[18px] ml-3 text-start">
 								Route
-								<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+								<button
+									onClick={handleOrderRoute}
+									aria-label="orderRoute">
+									{orderactivity ? (
+										<MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" />
+									) : (
+										<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+									)}
+								</button>
 							</div>
 						</div>
 					</div>
