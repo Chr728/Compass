@@ -11,6 +11,7 @@ services:
       - FIREBASE_SA=${FIREBASE_SA}
       - VAPID_PUBLIC_KEY=${VAPID_PUBLIC_KEY}
       - VAPID_PRIVATE_KEY=${VAPID_PRIVATE_KEY}
+      - GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY}
     build:
       context: .
       dockerfile: prod.Dockerfile
