@@ -1,7 +1,11 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { MdDeleteForever, MdKeyboardArrowDown } from "react-icons/md";
+import {
+	MdDeleteForever,
+	MdKeyboardArrowDown,
+	MdKeyboardArrowUp,
+} from "react-icons/md";
 import Swal from "sweetalert2";
 import Button from "../components/Button";
 import Header from "../components/Header";
@@ -73,6 +77,66 @@ export default function GetWeightJournalsPage() {
 		});
 	}
 
+	const [orderdate, setOrderdate] = useState(false);
+
+	const handleOrderDate = () => {
+		setOrderdate(!orderdate);
+		if (!orderdate && Array.isArray(weight)) {
+			const increasingweightData = [...weight].sort(
+				(a, b) =>
+					new Date(a.date.substring(0, 10) + "T" + a.time).getTime() -
+					new Date(b.date.substring(0, 10) + "T" + b.time).getTime()
+			);
+			setweight(increasingweightData);
+		} else if (Array.isArray(weight)) {
+			const decreasingOrderweightData = [...weight].sort(
+				(a, b) =>
+					new Date(b.date.substring(0, 10) + "T" + b.time).getTime() -
+					new Date(a.date.substring(0, 10) + "T" + a.time).getTime()
+			);
+			setweight(decreasingOrderweightData);
+		}
+	};
+
+	const [orderBMI, setOrderBMI] = useState(false);
+
+	const handleOrderBMI = () => {
+		setOrderBMI(!orderBMI);
+		if (!orderBMI) {
+			const increasingweightData = [...weight].sort(
+				(a, b) =>
+					parseFloat((a.weight / (a.height / 100) ** 2).toFixed(2)) -
+					parseFloat((b.weight / (b.height / 100) ** 2).toFixed(2))
+			);
+
+			setweight(increasingweightData);
+		} else {
+			const decreasingOrderweightData = [...weight].sort(
+				(a, b) =>
+					parseFloat((b.weight / (b.height / 100) ** 2).toFixed(2)) -
+					parseFloat((a.weight / (a.height / 100) ** 2).toFixed(2))
+			);
+			setweight(decreasingOrderweightData);
+		}
+	};
+
+	const [orderweight, setOrderWeight] = useState(false);
+
+	const handleOrderWeight = () => {
+		setOrderWeight(!orderweight);
+		if (!orderweight) {
+			const increasingweightData = [...weight].sort(
+				(a, b) => a.weight - b.weight
+			);
+			setweight(increasingweightData);
+		} else {
+			const decreasingOrderweightData = [...weight].sort(
+				(a, b) => b.weight - a.weight
+			);
+			setweight(decreasingOrderweightData);
+		}
+	};
+
 	return (
 		<div className="bg-eggshell min-h-screen flex flex-col">
 			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
@@ -124,20 +188,44 @@ export default function GetWeightJournalsPage() {
 						<div className="flex-2" style={{ marginRight: "12%" }}>
 							<div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
 								Date/Time
-								<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+								<button
+									onClick={handleOrderDate}
+									aria-label="orderDate">
+									{orderdate ? (
+										<MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" />
+									) : (
+										<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+									)}
+								</button>
 							</div>
 						</div>
 
 						<div className="flex-2" style={{ marginRight: "2%" }}>
 							<div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
 								BMI
-								<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+								<button
+									onClick={handleOrderBMI}
+									aria-label="orderBMI">
+									{orderBMI ? (
+										<MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" />
+									) : (
+										<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+									)}
+								</button>
 							</div>
 						</div>
 						<div className="flex-2" style={{ marginRight: "10%" }}>
 							<div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
 								Weight
-								<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+								<button
+									onClick={handleOrderWeight}
+									aria-label="orderWeight">
+									{orderweight ? (
+										<MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" />
+									) : (
+										<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+									)}
+								</button>
 							</div>
 						</div>
 					</div>
