@@ -78,7 +78,7 @@ export default function CreateDocumentPage() {
         {selectedFiles.length > 0 && (
           <div className="grid grid-cols-3 gap-4 m-4">
             {selectedFiles.map((file, index) => (
-              <div key={index} className="relative border-4 p-4 rounded-xl">
+              <div key={index} className="relative border p-4 rounded-xl">
                 {file.type.startsWith('image/') ? (
                   <img
                     src={URL.createObjectURL(file)}

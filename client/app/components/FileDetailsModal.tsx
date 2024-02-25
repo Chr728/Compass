@@ -8,7 +8,7 @@ const FileDetailsModal = ({ document, onClose }: any) => {
   return (
     <div className="fixed inset-0 overflow-y-auto z-50 flex justify-center items-center">
       <div className="fixed inset-0 bg-black opacity-50"></div>
-      <div className="bg-white p-4 rounded-lg z-50 max-w-sm border-2 border-gray-300">
+      <div className="bg-white p-4 rounded-lg z-50 max-w-sm border border-gray-300">
         <h2 className="text-darkgrey text-2xl font-bold mb-4 text-center">
           {document.documentName}
         </h2>
@@ -17,7 +17,7 @@ const FileDetailsModal = ({ document, onClose }: any) => {
           {document.files.map((file: any, index: any) => (
             <div
               key={index}
-              className="relative border-2 p-4 rounded-xl cursor-pointer"
+              className="relative border p-4 rounded-xl cursor-pointer"
               onClick={() => openFile(URL.createObjectURL(file))}
             >
               {file.type.startsWith('image/') ? (
