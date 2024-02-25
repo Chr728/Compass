@@ -20,11 +20,15 @@ import {
   Joints,
 } from 'healthicons-react/dist/filled';
 
+import { ClinicalF } from 'healthicons-react/dist/outline';
+
 interface CardFolderProps {
   icon: string;
   name: string;
   text: string;
   onDelete: () => void;
+  onPush?: () => void;
+  onView?: () => void;
 }
 
 const iconComponents: { [key: string]: React.ReactNode } = {
@@ -44,6 +48,7 @@ const iconComponents: { [key: string]: React.ReactNode } = {
   Body: <Body />,
   ChildCognition: <ChildCognition />,
   Joints: <Joints />,
+  ClinicalF: <ClinicalF />,
 };
 
 const CardFolder: React.FC<CardFolderProps> = ({
@@ -51,21 +56,33 @@ const CardFolder: React.FC<CardFolderProps> = ({
   name,
   text,
   onDelete,
+  onPush,
+  onView,
 }) => {
   const IconComponent = iconComponents[icon];
 
   return (
-    <div className="relative w-[170px] h-[178.40px] bg-white rounded-[20px] shadow-lg mt-4 flex flex-col items-center justify-center">
+    <div
+      className="relative w-[170px] h-[178.40px] bg-white rounded-[20px] shadow-lg mt-4 flex flex-col items-center justify-center"
+      onClick={onPush}
+    >
       <MdDeleteForever
         className="absolute top-2 right-2 text-red-500 cursor-pointer"
         style={{ color: 'var(--Red, #FF7171)', width: '25px', height: '30px' }}
         onClick={onDelete} // Call onDelete function when delete button is clicked
       />
-      <div className="w-12 h-12 bg-gray-300 rounded-full text-4xl flex items-center justify-center mb-2">
+      <div
+        className="w-12 h-12 bg-gray-300 rounded-full text-4xl flex items-center justify-center mb-2"
+        onClick={onView}
+      >
         {IconComponent} {/* Render the corresponding icon component */}
       </div>
-      <h2 className="text-darkgrey text-lg font-bold mb-1">{name}</h2>
-      <p className="text-darkgrey text-sm">{text}</p>
+      <h2 className="text-darkgrey text-lg font-bold mb-1" onClick={onView}>
+        {name}
+      </h2>
+      <p className="text-darkgrey text-sm" onClick={onView}>
+        {text}
+      </p>
     </div>
   );
 };

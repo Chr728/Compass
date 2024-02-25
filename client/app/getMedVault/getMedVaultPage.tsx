@@ -21,6 +21,12 @@ export default function GetMedVaultPage() {
                 autoIncrement: true,
               });
             }
+            if (!db.objectStoreNames.contains('data')) {
+              db.createObjectStore('data', {
+                keyPath: 'id',
+                autoIncrement: true,
+              });
+            }
           },
         });
         const folders = await db.getAll('folders');
@@ -87,6 +93,7 @@ export default function GetMedVaultPage() {
                 name={folder.folderName}
                 text={folder.specialization}
                 onDelete={() => deleteFolder(folder.id)}
+                onPush={() => router.push(`/getMedVault/${folder.id}`)}
               />
             ))}
           </div>
