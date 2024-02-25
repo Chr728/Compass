@@ -26,16 +26,6 @@ def preprocess_mp3(sample, index):
 
 def greet(name):
     wave, volume = load_audio_to_tensor(name)
-    # power = sum(wave * 2) / len(wave)   # audio signal power
-    # SNR = 3.5                           # signal-to-noise ratio
-    # SNR_linear = 10 ** (SNR / 10)       # convert SNR to linear scale
-    # noise_power = power / SNR_linear    # noise power
-
-    # # add noise to audio to simulate environment
-    # noise = np.random.normal(0, noise_power ** 0.5, wave.shape)  # generate noise
-    # wave = (wave + noise) * 32768.0     # add noise to the audio signal
-    tensor_wave = tf.convert_to_tensor(wave, dtype=tf.float32)  # convert to tensor
-    min_wave = min(wave)  
     if len(wave) > 16000:
         sequence_stride = 16000
     else:
@@ -47,8 +37,6 @@ def greet(name):
     
     audio_slices = audio_slices.map(preprocess_mp3)
     audio_slices = audio_slices.batch(64)   
-
-    # model = from_pretrained_keras("CXDJY/snore_ai")
 
     yhat = model.predict(audio_slices)
     yhat = [1 if prediction > 0.99 else 0 for prediction in yhat]
