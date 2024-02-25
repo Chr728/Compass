@@ -55,5 +55,5 @@ def greet(name):
     yhat1 = [key for key, group in groupby(yhat)]
     return yhat1
 
-iface = gr.Interface(fn=greet, inputs="audio", outputs="text")
+iface = gr.Interface(fn=greet, inputs="file", outputs="text")
 iface.launch()
