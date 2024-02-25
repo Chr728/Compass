@@ -62,7 +62,10 @@ const CardFolder: React.FC<CardFolderProps> = ({
   const IconComponent = iconComponents[icon];
 
   return (
-    <div className="relative w-[170px] h-[178.40px] bg-white rounded-[20px] shadow-lg mt-4 flex flex-col items-center justify-center">
+    <div
+      className="relative w-[170px] h-[178.40px] bg-white rounded-[20px] shadow-lg mt-4 flex flex-col items-center justify-center"
+      onClick={onPush}
+    >
       <MdDeleteForever
         className="absolute top-2 right-2 text-red-500 cursor-pointer"
         style={{ color: 'var(--Red, #FF7171)', width: '25px', height: '30px' }}
@@ -74,10 +77,10 @@ const CardFolder: React.FC<CardFolderProps> = ({
       >
         {IconComponent} {/* Render the corresponding icon component */}
       </div>
-      <h2 className="text-darkgrey text-lg font-bold mb-1" onClick={onPush}>
+      <h2 className="text-darkgrey text-lg font-bold mb-1" onClick={onView}>
         {name}
       </h2>
-      <p className="text-darkgrey text-sm" onClick={onPush}>
+      <p className="text-darkgrey text-sm" onClick={onView}>
         {text}
       </p>
     </div>

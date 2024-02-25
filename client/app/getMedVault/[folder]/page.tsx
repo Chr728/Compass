@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { openDB } from 'idb';
 import IconButton from '../../components/IconButton';
 import CardFolder from '../../components/CardFolder';
+import FileDetailsModal from '../../components/FileDetailsModal'; // Import your modal component
 
 interface Prop {
   params: {
@@ -16,6 +17,9 @@ export default function GetFolder({ params }: Prop) {
   const router = useRouter();
   const [folderData, setFolderData] = useState<any>(null);
   const [documents, setDocuments] = useState<any[]>([]);
+  const [selectedDocument, setSelectedDocument] = useState<any>(null);
+  const [showFileDetailsModal, setShowFileDetailsModal] =
+    useState<boolean>(false);
 
   useEffect(() => {
     const fetchFolderData = async () => {
@@ -50,6 +54,11 @@ export default function GetFolder({ params }: Prop) {
     } catch (error) {
       console.error('Error deleting document from IndexedDB:', error);
     }
+  };
+
+  const viewDocumentDetails = (document: any) => {
+    setSelectedDocument(document);
+    setShowFileDetailsModal(true);
   };
 
   return (
@@ -89,11 +98,17 @@ export default function GetFolder({ params }: Prop) {
               name={document.documentName}
               text={document.dateOfAnalysis}
               onDelete={() => deleteDocument(document.id)}
-              onView={() => {}}
+              onView={() => viewDocumentDetails(document)} // Add this onClick event
             />
           ))}
         </div>
       </div>
+      {showFileDetailsModal && (
+        <FileDetailsModal
+          document={selectedDocument}
+          onClose={() => setShowFileDetailsModal(false)}
+        />
+      )}
     </div>
   );
 }
