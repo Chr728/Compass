@@ -48,8 +48,4 @@ describe('GET /api/locations', () => {
             .set({ Authorization: 'Bearer token' });
         expect(response.status).toBe(200);
     });
-
-
 });
-
-

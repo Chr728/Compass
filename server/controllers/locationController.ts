@@ -18,7 +18,6 @@ const getLocations = async (req: Request, rez: Response, next: NextFunction) => 
         const res = await fetch(url);
         const data = await res.json();
 
-        console.log(data)
         const places = data.results
             .filter((place: any) => place.business_status === "OPERATIONAL")
             .sort((a: any, b: any) => b.rating - a.rating);
