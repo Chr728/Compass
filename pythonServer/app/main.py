@@ -39,27 +39,18 @@ def load_audio_to_tensor(file, type):
     # Convert mp3 to wav since librosa soundfile doesn't support mp3
     if type == "mp3":
         try:
-            print(1)
             seg=AudioSegment.from_mp3(io.BytesIO(file))
         # Some mp3 files are actually in acc format which should be handled specifically
         except:
-            print(1.2)
             seg = AudioSegment.from_file(io.BytesIO(file), format="aac")
-        print(2)
         wavIO=io.BytesIO()
-        print(3)
         seg.export(wavIO, format="wav")
-        print(4)
         audio, sampling_rate = librosa.load(io.BytesIO(wavIO.getvalue()), sr=None, mono=True)
     else:
         audio, sampling_rate = librosa.load(io.BytesIO(file), sr=None, mono=True)  # load audio and convert to mono
-    print(5)
     wave = librosa.resample(audio, orig_sr=sampling_rate, target_sr=16000)  # resample to 16KHz
-    print(6)
     rms = librosa.feature.rms(y=audio)[0]                           # get root mean square of audio
-    print(7)
     volume = np.mean(rms)                                             # get volume of audio
-    print(8)
     return wave, volume
 
 def preprocess_mp3(sample, index):
@@ -174,9 +165,8 @@ async def snoring_predict(file: UploadFile = File(...)):
             wave, volume = load_audio_to_tensor(file, "mp3")
         else:
             file = await file.read()
-            wave, volume = load_audio_to_tensor(file, "wav")
-        # tensor_wave = tf.convert_to_tensor(wave, dtype=tf.float32)  # convert to tensor
-        # min_wave = min(wave)  
+            wave, volume = load_audio_to_tensor(file, "wav") 
+        
         if len(wave) > 16000:
             sequence_stride = 16000
         else:
@@ -184,7 +174,7 @@ async def snoring_predict(file: UploadFile = File(...)):
 
         # create audio slices
         audio_slices = tf.keras.utils.timeseries_dataset_from_array(wave, wave, sequence_length=16000, sequence_stride=sequence_stride, batch_size=1)
-        # samples, index = audio_slices.as_numpy_iterator().next()   
+
     
         audio_slices = audio_slices.map(preprocess_mp3)
         audio_slices = audio_slices.batch(64)   
