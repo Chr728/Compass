@@ -20,6 +20,7 @@ import userRoutes from './routes/userRoutes';
 import weightJournalRoutes from './routes/weightJournalRoutes';
 import { sendUserReminders } from './tasks/reminderTask';
 import o2SaturationJournalRoutes from './routes/o2SaturationJournalRoutes';
+import { sendMoodReminder } from './tasks/moodReminderTask';
 
 require('dotenv').config({
   path: './../.env',
@@ -56,6 +57,11 @@ cron.schedule('*/10 * * * *', () => {
   console.log('Running the scheduled task...');
   sendUserReminders();
 });
+
+// Schedule the mood journal reminder
+cron.schedule("* * * * *", () => {
+  sendMoodReminder();
+})
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
