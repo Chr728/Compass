@@ -61,3 +61,8 @@ def test_snoring_AI_wav():
     response = client.post('/SnoringAI', files=files)
     assert response.status_code == 200
 
+def test_snoring_AI_mp3_acc():
+    test_file = './test_files/test_audio_short2.mp3'
+    files = {'file': ('test_audio_short2.mp3', open(test_file, 'rb'))}
+    response = client.post('/SnoringAI', files=files)
+    assert response.status_code == 200
