@@ -48,11 +48,11 @@ def test_test():
     main.predict=original_predict
 
 
-# def test_snoring_AI_mp3():
-#     test_file = './test_files/test_audio_long.mp3'
-#     files = {'file': ('test_audio_long.mp3', open(test_file, 'rb'))}
-#     response = client.post('/SnoringAI', files=files)
-#     assert response.status_code == 200
+def test_snoring_AI_mp3():
+    test_file = './test_files/test_audio_long.mp3'
+    files = {'file': ('test_audio_long.mp3', open(test_file, 'rb'))}
+    response = client.post('/SnoringAI', files=files)
+    assert response.status_code == 200
 
 
 def test_snoring_AI_wav():
@@ -66,3 +66,19 @@ def test_snoring_AI_mp3_acc():
     files = {'file': ('test_audio_short2.mp3', open(test_file, 'rb'))}
     response = client.post('/SnoringAI', files=files)
     assert response.status_code == 200
+
+def test_snoring_AI_HTTPException():
+    main.load_audio_to_tensor=fake_load_audio_to_tensor
+    test_file = './test_files/1_4.wav'
+    files = {'file': ('1_4.wav', open(test_file, 'rb'))}
+    response = client.post('/SnoringAI', files=files)
+    assert response.status_code == 500
+    assert response.json() == {'detail': 'Error: HTTPException'}
+    main.load_audio_to_tensor=original_load_audio_to_tensor
+
+def test_snoring_AI_wrong_file_format():
+    test_file = './test_files/test.txt'
+    files = {'file': ('test.txt', open(test_file, 'rb'))}
+    response = client.post('/SnoringAI', files=files)
+    assert response.status_code == 400
+    assert response.json() == {"message": "Audio format must be mp3, wav!"}

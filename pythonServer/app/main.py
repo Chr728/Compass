@@ -39,18 +39,27 @@ def load_audio_to_tensor(file, type):
     # Convert mp3 to wav since librosa soundfile doesn't support mp3
     if type == "mp3":
         try:
+            print(1)
             seg=AudioSegment.from_mp3(io.BytesIO(file))
         # Some mp3 files are actually in acc format which should be handled specifically
         except:
+            print(1.2)
             seg = AudioSegment.from_file(io.BytesIO(file), format="aac")
+        print(2)
         wavIO=io.BytesIO()
+        print(3)
         seg.export(wavIO, format="wav")
+        print(4)
         audio, sampling_rate = librosa.load(io.BytesIO(wavIO.getvalue()), sr=None, mono=True)
     else:
         audio, sampling_rate = librosa.load(io.BytesIO(file), sr=None, mono=True)  # load audio and convert to mono
+    print(5)
     wave = librosa.resample(audio, orig_sr=sampling_rate, target_sr=16000)  # resample to 16KHz
+    print(6)
     rms = librosa.feature.rms(y=audio)[0]                           # get root mean square of audio
+    print(7)
     volume = np.mean(rms)                                             # get volume of audio
+    print(8)
     return wave, volume
 
 def preprocess_mp3(sample, index):
@@ -203,3 +212,5 @@ app.add_middleware(
 
 if __name__ == "__main__":
     uvicorn.run(app, host=PYTHON_HOST, port=PYTHON_PORT)
+
+
