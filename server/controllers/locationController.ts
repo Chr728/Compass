@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { Logger } from "../middlewares/logger";
+import { ErrorHandler } from "../middlewares/errorMiddleware";
 
 const getLocations = async (req: Request, rez: Response, next: NextFunction) => {
     try {
@@ -8,6 +9,10 @@ const getLocations = async (req: Request, rez: Response, next: NextFunction) => 
         const type = req.query.type as string;
         const radius = 10000;
         const apiKey = process.env.GOOGLE_MAPS_API_KEY as string;
+
+        if(!latitude || !longitude || !type) {
+            throw new ErrorHandler(400, 'ERROR', 'Invalid query parameters');
+        }
 
         const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=${type}&key=${apiKey}`
         const res = await fetch(url);
@@ -24,7 +29,11 @@ const getLocations = async (req: Request, rez: Response, next: NextFunction) => 
         });
     } catch (error) {
         Logger.error(`Error occurred while fetching locations: ${error}`);
-        next(error);
+        if (error instanceof ErrorHandler) {
+            next(error);
+        } else {
+            next(new ErrorHandler(400, 'ERROR', `Error fetching locations: ${error}`));
+        }
     }
 }
 
