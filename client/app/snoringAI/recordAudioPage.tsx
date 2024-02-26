@@ -129,7 +129,7 @@ export default function RecordAudioPage() {
         </span>
 
         <div
-            className="flex flex-col items-center justify-center p-4"
+            className="flex flex-col justify-center p-4"
         >
         
             { (recording  || itemRecorded) &&
@@ -195,7 +195,7 @@ export default function RecordAudioPage() {
 
                 { !recording && !itemRecorded && (
                     <>
-                <div className="relative" onClick={handleRecordClick}>
+                <div className="relative self-center" onClick={handleRecordClick}>
                     <NextImage
                             src="/icons/record.svg"
                             alt="Record Audio Icon"
@@ -207,24 +207,24 @@ export default function RecordAudioPage() {
                         Record
                     </p>
                 </div>
-                <div className='h-[400px]'>
+                <div className='h-[440px]'>
                 <TableContainer sx={{ maxHeight: 440,  }}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
                             <TableRow>
                                 <TableCell>
-                                    <div>
+                                    <div className="font-bold">
                                         Date
                                         <button aria-label="recordingDate">
-                                            <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />  
+                                            <MdKeyboardArrowDown className="inline-block text-2xl text-darkgrey" />  
                                         </button>
                                     </div>
                                 </TableCell>
                                 <TableCell>
-                                    <div>
+                                    <div className="font-bold">
                                         Result
                                         <button aria-label="recordingResult">
-                                            <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" /> 
+                                            <MdKeyboardArrowDown className="inline-block text-2xl text-darkgrey" /> 
                                         </button>
                                     </div>
                                 </TableCell>
