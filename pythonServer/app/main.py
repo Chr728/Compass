@@ -37,7 +37,17 @@ snoringModel = from_pretrained_keras("CXDJY/snore_ai")
 
 def load_audio_to_tensor(file, type):
     # Convert mp3 to wav since librosa soundfile doesn't support mp3
-    audio, sampling_rate = librosa.load(io.BytesIO(file), sr=None, mono=True)
+    if type == "mp3":
+        try:
+            seg=AudioSegment.from_mp3(io.BytesIO(file))
+        # Some mp3 files are actually in acc format which should be handled specifically
+        except:
+            seg = AudioSegment.from_file(io.BytesIO(file), format="aac")
+        wavIO=io.BytesIO()
+        seg.export(wavIO, format="wav")
+        audio, sampling_rate = librosa.load(io.BytesIO(wavIO.getvalue()), sr=None, mono=True)
+    else:
+        audio, sampling_rate = librosa.load(io.BytesIO(file), sr=None, mono=True)  # load audio and convert to mono
     wave = librosa.resample(audio, orig_sr=sampling_rate, target_sr=16000)  # resample to 16KHz
     rms = librosa.feature.rms(y=audio)[0]                           # get root mean square of audio
     volume = np.mean(rms)                                             # get volume of audio
