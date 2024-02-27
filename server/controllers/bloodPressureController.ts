@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { Logger } from '../middlewares/logger';
 import db from '../models';
 import {ErrorHandler} from "../middlewares/errorMiddleware";
+import {bloodPressureJournalValidator} from "../utils/databaseValidators";
 
 export const getBloodPressureJournals = async (
   req: Request,
@@ -101,17 +102,17 @@ export const createBloodPressureJournal = async (
     if (!user) {
       throw new ErrorHandler(404, 'NOT_FOUND', 'User not found');
     }
-
+    const {  date, time, systolic, diastolic, pulse, notes } = req.body;
+   bloodPressureJournalValidator(req.body);
     const bloodPressureJournal = await db.BloodPressureJournal.create({
       uid: req.body.uid,
-      date: req.body.date,
-      time: req.body.time,
-      systolic: req.body.systolic,
-      diastolic: req.body.diastolic,
-      pulse: req.body.pulse,
-      notes: req.body.notes,
+      date,
+      time,
+      systolic,
+      diastolic,
+      pulse,
+      notes,
     });
-
     return res.status(201).json({
       status: 'SUCCESS',
       data: bloodPressureJournal,
@@ -148,42 +149,48 @@ export const updateBloodPressureJournal = async (
     });
 
     if (!bloodPressureJournal) {
-      throw new ErrorHandler(404, 'NOT_FOUND', 'Blood pressure journal not found');
+      throw new ErrorHandler(
+          404,
+          'NOT_FOUND',
+          'Blood pressure journal not found'
+      );
     }
 
+    const {date, time, systolic, diastolic, pulse, notes} = req.body;
+    bloodPressureJournalValidator(req.body)
     await db.BloodPressureJournal.update(
-      {
-        date: req.body.date,
-        time: req.body.time,
-        systolic: req.body.systolic,
-        diastolic: req.body.diastolic,
-        pulse: req.body.pulse,
-        notes: req.body.notes,
-      },
-      {
-        where: {
-          id: bloodPressureJournalId,
+        {
+          date,
+          time,
+          systolic,
+          diastolic,
+          pulse,
+          notes,
         },
-      }
+        { where: { id: bloodPressureJournalId } }
     );
+
+    const updatedBloodPressureJournal = await db.BloodPressureJournal.findOne({
+      where: { id: bloodPressureJournalId },
+    });
 
     return res.status(200).json({
       status: 'SUCCESS',
-      message: 'Blood pressure journal updated successfully',
+      data: updatedBloodPressureJournal
     });
   } catch (error) {
     Logger.error(
-      `Error occurred while updating blood pressure journal: ${error}`
+        `Error occurred while updating blood pressure journal: ${error}`
     );
     if (error instanceof ErrorHandler) {
       next(error);
     } else {
       next(
-        new ErrorHandler(
-          400,
-          'ERROR',
-          `Error updating blood pressure journal: ${error}`
-        )
+          new ErrorHandler(
+              400,
+              'ERROR',
+              `Error updating blood pressure journal: ${error}`
+          )
       );
     }
   }
