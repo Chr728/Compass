@@ -38,17 +38,21 @@ export const sendMoodReminder = async () => {
                 Logger.error(`No Subscription was found.`);
                 continue;
             }
-
-            const payload = JSON.stringify({
-                title: `Your latest mood journal entry has been assesed. New tips have arrived!`,
-              });
-              webPush
-                .sendNotification(userSubscription.subscription, payload)
-                .catch((error: any) => Logger.error(error));
-              Logger.info(
-                "Notification for moodJournal sent to user: ",
-                moodJournal.uid
-            );
+            
+            //Send the reminder if they are feeling meh, bad or awful
+            if (moodJournal.howAreYou == "sad" || moodJournal.howAreYou == "bad" || moodJournal.howAreYou == "awful"){
+                const payload = JSON.stringify({
+                    title: `Your latest mood journal entry has been assesed. New tips have arrived!`,
+                    body:`It appears you have been feeling ${moodJournal.howAreYou} lately. Compass has found new tips for you to make you feel better!`
+                  });
+                  webPush
+                    .sendNotification(userSubscription.subscription, payload)
+                    .catch((error: any) => Logger.error(error));
+                  Logger.info(
+                    "Notification for moodJournal sent to user: ",
+                    moodJournal.uid
+                );
+            }
         }
     }
     Logger.info("Mood Journal Reminder sucesfully executed!");
