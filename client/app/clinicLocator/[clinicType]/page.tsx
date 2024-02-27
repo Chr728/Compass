@@ -3,7 +3,6 @@ import React, {FC, useEffect, useState} from "react";
 import { useRouter } from 'next/navigation';
 import Header from "@/app/components/Header";
 import PlaceResult = google.maps.places.PlaceResult
-// TODO: make helper for this and array of clinics
 import LocationComponent from "@/app/components/Location";
 import fetchLocations from "@/app/http/fetchLocations";
 
