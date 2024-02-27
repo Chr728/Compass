@@ -14,15 +14,31 @@ export const sendMoodReminder = async () => {
 
   try{
     
-    //Get current Date
+    //Get current Date and current Time
     const currentDate = moment.tz("America/Toronto").format("YYYY-MM-DD");
+    const currentTime = moment.tz("America/Toronto").format("HH:mm:00");
 
-    //Get all mood journal entries that correspond to current Date
+    const moodJournalStartTime =  moment(currentTime, "HH:mm:ss");
+    const moodJournalEndTime = moodJournalStartTime.clone().subtract(30, 'minutes');
+
+
+    //Get all mood journal entries that correspond to current Date and 30 minutes before the current time
     const moodJournals = await db.MoodJournal.findAll({
         where:{
-            date: currentDate
-        }
+            date: currentDate,
+            time:{
+                [db.Sequelize.Op.lte]: moodJournalStartTime.format("HH:mm:00"),
+                [db.Sequelize.Op.gte]: moodJournalEndTime.format("HH:mm:00"),
+            },
+        },
+        order: [
+            ['date', 'DESC'],
+            ['time', 'DESC'],
+            ["uid", "ASC"],
+        ],       
     })
+
+    let sentAlready: string | any[] = []
 
     if (moodJournals.length > 0) {
         for (const moodJournal of moodJournals){
@@ -39,8 +55,8 @@ export const sendMoodReminder = async () => {
                 continue;
             }
             
-            //Send the reminder if they are feeling meh, bad or awful
-            if (moodJournal.howAreYou == "sad" || moodJournal.howAreYou == "bad" || moodJournal.howAreYou == "awful"){
+            //Send the reminder if they are feeling meh, bad or awful. Send their latest mood journal entry
+            if ((moodJournal.howAreYou == "sad" || moodJournal.howAreYou == "bad" || moodJournal.howAreYou == "awful") && !sentAlready.includes(moodJournal.uid)){
                 const payload = JSON.stringify({
                     title: `Your latest mood journal entry has been assesed. New tips have arrived!`,
                     body:`It appears you have been feeling ${moodJournal.howAreYou} lately. Compass has found new tips for you to make you feel better!`
@@ -52,10 +68,15 @@ export const sendMoodReminder = async () => {
                     "Notification for moodJournal sent to user: ",
                     moodJournal.uid
                 );
+
+                sentAlready.push(moodJournal.uid)
             }
         }
+        sentAlready = []
     }
     Logger.info("Mood Journal Reminder sucesfully executed!");
+    
+    
   }
   catch (err) {
     Logger.error(`Error occurred while fetching mood journal reminders for user: ${err}`);
