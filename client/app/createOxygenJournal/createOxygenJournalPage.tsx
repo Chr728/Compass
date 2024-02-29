@@ -7,7 +7,7 @@ import Header from "../components/Header";
 import Input from "../components/Input";
 import { useAuth } from "../contexts/AuthContext";
 import { useProp } from "../contexts/PropContext";
-import { createOxygenJournal } from "../http/oxygenJournalAPI";
+import { createO2SaturationJournal } from "../http/oxygenJournalAPI";
 
 export default function CreateOxygenJournalPage() {
 	const logger = require("../../logger");
@@ -37,7 +37,7 @@ export default function CreateOxygenJournalPage() {
 					activityLevel: values.activityLevel,
 					notes: values.notes,
 				};
-				const result = await createOxygenJournal(data).then(
+				const result = await createO2SaturationJournal(data).then(
 					(result) => {
 						router.push("/getOxygenJournals");
 					}

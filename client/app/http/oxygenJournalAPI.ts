@@ -2,7 +2,7 @@ import { auth } from "../config/firebase";
 const logger = require("pino")();
 
 // Function to make a GET request to retrieve all oxygen journals for a user
-export async function getOxygenJournals(): Promise<any> {
+export async function getO2SaturationJournals(): Promise<any> {
 	try {
 		const currentUser = auth.currentUser;
 		if (!currentUser) {
@@ -41,7 +41,9 @@ export async function getOxygenJournals(): Promise<any> {
 }
 
 // Function to make a GET request to retrieve a specific oxygen journal entry
-export async function getOxygenJournal(oxygenJournalId: string): Promise<any> {
+export async function getO2SaturationJournal(
+	oxygenJournalId: string
+): Promise<any> {
 	try {
 		const currentUser = auth.currentUser;
 		if (!currentUser) {
@@ -80,7 +82,7 @@ export async function getOxygenJournal(oxygenJournalId: string): Promise<any> {
 }
 
 // Function to make a POST request to create a new oxygen journal entry
-export async function createOxygenJournal(
+export async function createO2SaturationJournal(
 	oxygenJournalData: any
 ): Promise<any> {
 	try {
@@ -121,7 +123,7 @@ export async function createOxygenJournal(
 }
 
 // Function to make a PUT request to update an existing oxygen journal entry
-export async function updateOxygenJournal(
+export async function updateO2SaturationJournal(
 	oxygenJournalId: string,
 	updatedOxygenJournalData: any
 ): Promise<any> {
@@ -164,7 +166,7 @@ export async function updateOxygenJournal(
 }
 
 // Function to make a DELETE request to delete a oxygen journal entry
-export async function deleteOxygenJournal(
+export async function deleteO2SaturationJournal(
 	oxygenJournalId: string
 ): Promise<any> {
 	try {
