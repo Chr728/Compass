@@ -13,15 +13,6 @@ def greet(name):
 
 
 async def test2(file, top_k: int = 5):
-    # extension = file.filename.split(".")[-1] in ("jpg", "jpeg", "png")
-        
-    # if not extension:
-    #     return "Image format must be jpg, jpeg, or png!"
-    # # Read image contents
-    # contents = await file.read()
-        
-        # Preprocess image
-    # image_tensor = preprocess_image(contents)
     image_tensor = preprocess_image(file)
         
         # Make predictions
@@ -53,8 +44,6 @@ model.eval()
 
 # def preprocess_image(contents):
 def preprocess_image(image):
-    # Convert image bytes to PIL Image
-    # image = Image.open(io.BytesIO(contents))
     image = Image.fromarray(np.uint8(image))
     if image.mode != 'RGB':
         image = image.convert('RGB')
