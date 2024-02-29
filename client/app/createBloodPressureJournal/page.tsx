@@ -4,7 +4,7 @@ import React from "react";
 import { useAuth } from "../contexts/AuthContext";
 import CreateBloodPressureJournalPage from "./createBloodPressureJournalPage";
 
-export default function CreateActivityJournal() {
+export default function CreateBloodPressureJournal() {
 	const router = useRouter();
 	const { user } = useAuth();
 
