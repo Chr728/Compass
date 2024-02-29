@@ -351,7 +351,7 @@ export default function Register() {
                     formik.handleChange(event);
                     formik.handleBlur(event);
                   }}
-                  defaultValue={formik.values.birthdate}
+                  value={formik.values.birthdate}
                   onBlur={formik.handleBlur}
                 />
                 {formik.touched.birthdate && formik.errors.birthdate && (
