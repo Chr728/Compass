@@ -154,7 +154,11 @@ export default function AddAppointmentPage() {
             type="date"
             value={formik.values.date}
             style={{ width: "250px" }}
-            onChange={formik.handleChange}
+            onChange={(event) => {
+              formik.handleChange(event);
+              formik.handleBlur(event);
+            }}
+
             onBlur={formik.handleBlur}
           />
           {formik.touched.date && formik.errors.date && (
@@ -178,7 +182,11 @@ export default function AddAppointmentPage() {
             type="time"
             value={formik.values.time}
             style={{ width: "250px" }}
-            onChange={formik.handleChange}
+            onChange={(event) => {
+              formik.handleChange(event);
+              formik.handleBlur(event);
+            }}
+
             onBlur={formik.handleBlur}
           />
           {formik.touched.time && formik.errors.time && (
