@@ -59,9 +59,9 @@ export async function createBloodPressureJournal(journalData: any): Promise<any>
         );
         logger.info(`Journal created successfully for user ${id}`)
         if (!response.ok) {
-          logger.error(`Failed to create journal for user ${id}. HTTP Status: ${response.status}`);
+          logger.error(`Failed to create blood pressure journal for user`);
           throw new Error(
-            `Failed to create journal for user ${id}. HTTP Status: ${response.status}`
+            `Failed to create blood pressure journal for user`
           );
         }
         const data = await response.json();
