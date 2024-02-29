@@ -6,7 +6,10 @@ import Button from '../components/Button';
 import Input from '../components/Input';
 import Link from 'next/link';
 import { useAuth } from '@/app/contexts/AuthContext';
-import DatePicker from 'react-datepicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 
 export default function Register() {
   const logger = require('../../logger');
@@ -108,7 +111,7 @@ export default function Register() {
 
     fields.forEach(field => {
       const input = document.getElementById(field) as HTMLInputElement;
-      if (input.value.length !== 0) {
+      if (input && input.value.length !== 0) {
         formik.setFieldTouched(field, true);
       }
   });
@@ -343,30 +346,23 @@ export default function Register() {
                   Birthdate
                 </label>
                 <br />
-                {/* <Input
-                  name="birthdate"
-                  id="birthdate"
-                  type="date"
-                  style={{ width: '100%' }}
-                  onChange={(event) => {
-                    formik.handleChange(event);
-                    formik.handleBlur(event);
-                  }}
-                  value={formik.values.birthdate}
-                  onBlur={formik.handleBlur}
-                /> */}
-                <DatePicker
-                  selected={formik.values.birthdate}
-                  onChange={(date) => formik.setFieldValue('birthdate', date)}
-                  onBlur={formik.handleBlur}
-                  placeholderText="Select a date"
-                  className="h-[52px] border border-solid border-lightgrey rounded-md text-grey p-2"
-                />
+                
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    selected={formik.values.birthdate}
+                    onChange={(date) => formik.setFieldValue('birthdate', date)}
+                    onBlur={formik.handleBlur}
+                    placeholderText="Select a date"
+                    className="h-[52px] border border-solid border-lightgrey rounded-md text-grey p-2"
+                  />
+                </LocalizationProvider>
+                  
                 {formik.touched.birthdate && formik.errors.birthdate && (
                   <p className="text-[16px] text-red font-sans">
                     {formik.errors.birthdate}
                   </p>
-                )}
+                 )} 
+              
               </div>
               <div className="mt-3 relative">
                 <label

@@ -9,22 +9,22 @@ import { createAppointment } from "@/app/http/appointmentAPI";
 import { useAuth } from "@/app/contexts/AuthContext";
 import { useEffect } from "react";
 import Menu from "../../components/Menu";
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 export default function AddAppointmentPage() {
   const { user } = useAuth();
   useEffect(() => {
     if (!user) router.push("/login");
   }, [user]);
-  const getRef = (ref:any) => { if (ref) ref.defaultValue = "" };
   const router = useRouter();
   const userId = user?.uid || "";
   const formik = useFormik({
     initialValues: {
       doctor: "",
       reason: "",
-      date: null,
+      date: '',
       time: "",
       notes: "",
     },
@@ -150,25 +150,16 @@ export default function AddAppointmentPage() {
             Date
           </label>
           <br />
-          {/* <Input
-            name="date"
-            id="date"
-            type="date"
-            defaultValue={formik.values.date}
-            style={{ width: "250px" }}
-            onChange={(event) => {
-              formik.handleChange(event);
-              formik.handleBlur(event);
-            }}
-            onBlur={formik.handleBlur}
-          /> */}
-           <DatePicker
+         
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
               selected={formik.values.date}
               onChange={(date) => formik.setFieldValue('date', date)}
               onBlur={formik.handleBlur}
               placeholderText="Select a date"
               className="h-[52px] border border-solid border-lightgrey rounded-md text-grey p-2"
             />
+          </LocalizationProvider>
           {formik.touched.date && formik.errors.date && (
             <p className="text-[16px] text-red font-sans">
               {formik.errors.date}
