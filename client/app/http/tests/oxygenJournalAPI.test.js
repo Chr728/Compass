@@ -208,9 +208,9 @@ describe("createO2SaturationJournal", () => {
 		const mockOxygenJournalData = {
 			date: "2022-01-01",
 			time: "12:00:00",
-			oxygen: 150,
-			height: 70,
-			unit: "kg",
+			o2sat: 98,
+			pulse: 90,
+			activitylevel: "at rest",
 			notes: "Test oxygen journal entry",
 		};
 
@@ -255,9 +255,9 @@ describe("createO2SaturationJournal", () => {
 		const mockOxygenJournalData = {
 			date: "2022-01-01",
 			time: "12:00:00",
-			oxygen: 150,
-			height: 70,
-			unit: "kg",
+			o2sat: 98,
+			pulse: 90,
+			activitylevel: "at rest",
 			notes: "Test oxygen journal entry",
 		};
 		const mockToken = "mockToken";
@@ -301,9 +301,9 @@ describe("updateO2SaturationJournal", () => {
 		const mockUpdatedOxygenJournalData = {
 			date: "2022-01-01",
 			time: "12:00:00",
-			oxygen: 150,
-			height: 70,
-			unit: "kg",
+			o2sat: 98,
+			pulse: 90,
+			activitylevel: "at rest",
 			notes: "Test oxygen journal entry",
 		};
 		const mockToken = "mockToken";
@@ -349,9 +349,9 @@ describe("updateO2SaturationJournal", () => {
 		const mockUpdatedOxygenJournalData = {
 			date: "2022-01-01",
 			time: "12:00:00",
-			oxygen: 150,
-			height: 70,
-			unit: "kg",
+			o2sat: 98,
+			pulse: 90,
+			activitylevel: "at rest",
 			notes: "Test oxygen journal entry",
 		};
 		const mockToken = "mockToken";
