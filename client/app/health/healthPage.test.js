@@ -33,10 +33,12 @@ describe("Health Menu Test", () => {
             const subheading = screen.getByText("Let Compass remove the hassle of recalling when to take your medications and when you have important medical appointments.")
             const appointmentBox = screen.getAllByRole('link')[0];
             const medicationBox = screen.getAllByRole('link')[1];
+            const snoreDetectionBox = screen.getAllByRole('link')[2];
             expect(heading).toBeInTheDocument();
             expect(subheading).toBeInTheDocument();
             expect(appointmentBox).toBeInTheDocument();
             expect(medicationBox).toBeInTheDocument();
+            expect(snoreDetectionBox).toBeInTheDocument();
         }) 
     })
 

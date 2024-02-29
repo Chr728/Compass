@@ -9,6 +9,7 @@ interface MoodJournalAttributes {
   stressSignals: string;
   date: Date;
   notes: string;
+  time: Date;
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
@@ -24,6 +25,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     stressSignals!: string;
     date!: Date;
     notes!: string;
+    time!: Date;
     static associate(models: any) {
       MoodJournal.belongsTo(models.User,{
         foreignKey: "uid",
@@ -59,6 +61,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
       notes: {
         type: DataTypes.TEXT,
         allowNull: true,
+      },
+      time: {
+        type: DataTypes.TIME,
+        allowNull: true,
+        defaultValue:"00:00:00",
       },
     },
 

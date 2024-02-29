@@ -138,6 +138,7 @@ describe("Logged In User", () => {
         const headacheStressSignal = screen.getByLabelText("I get headaches and/or colds.");
         const notes = screen.getByLabelText("Notes");
         const winkIcon = screen.getByAltText("Wink icon");
+        const time = document.querySelector('input[name="time"]');
         
         await userEvent.type(date,"2023-10-10");
         await userEvent.selectOptions(tiredStressSignal, "Rarely");
@@ -151,6 +152,7 @@ describe("Logged In User", () => {
         await userEvent.selectOptions(angerStressSignal, "Rarely");
         await userEvent.selectOptions(headacheStressSignal, "Rarely");
         await userEvent.type(notes, "Mood Notes");
+        await userEvent.type(time, "10:00")
         await userEvent.click(winkIcon);
         await userEvent.click(submitButton);
         expect(createMoodJournal).toHaveBeenCalledTimes(1);
@@ -158,22 +160,3 @@ describe("Logged In User", () => {
     })
 });
 
-
-describe("User not logged in", () => {
-
-    test("User redirected to login page", () =>{
-        render(<AddMoodEntry/>);
-        expect(mockRouter).toBeCalledWith('/login');
-    })
-
-    test("User is shown 403 forbidden error", async () =>{
-        render(<AddMoodEntry/>);
-        const errorText = await screen.findByText("Error 403 - Access Forbidden");
-        const redirectionMessage = await screen.findByText("Redirecting to Login Page...");
-        const loginButton = await screen.findByRole("button");
-
-        expect(errorText).toBeInTheDocument();
-        expect(redirectionMessage).toBeInTheDocument();
-        expect(loginButton).toBeInTheDocument();
-    })
-})

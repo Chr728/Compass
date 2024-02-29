@@ -67,13 +67,15 @@ export default function UpdateMoodEntry( {params: { updateEntryId } } : { params
             },
             date:'',
             notes: '',
+            time: '',
           },
           onSubmit: async (values) => {
               const moodData = {
                 howAreYou: values.howAreYou,
                 stressSignals: values.stressSignals,
                 date: values.date,
-                notes: values.notes
+                notes: values.notes,
+                time: values.time,
               }
               await updateMoodJournal(updateEntryId, moodData)
               .then(result => {
@@ -86,6 +88,7 @@ export default function UpdateMoodEntry( {params: { updateEntryId } } : { params
                 howAreYou?: string;
                 date?: string;
                 stressSignals?: any,
+                time?: string;
                 }
                = {};
 
@@ -133,6 +136,9 @@ export default function UpdateMoodEntry( {params: { updateEntryId } } : { params
             if(!values.stressSignals.headache){
                 errors.stressSignals = {...errors.stressSignals,  headache :"Value required." }
             }
+            if (!values.time){
+                errors.time="Time required"
+            }
 
             return errors;
         },
@@ -145,6 +151,7 @@ export default function UpdateMoodEntry( {params: { updateEntryId } } : { params
             stressSignals: data?.stressSignals || '',
             date: formatDateYearMonthDate(data?.date || '') || '',
             notes: data?.notes || '',
+            time: data?.time || "",
         });
         setSelectedMood(data?.howAreYou);
       }, [data])
@@ -201,6 +208,25 @@ export default function UpdateMoodEntry( {params: { updateEntryId } } : { params
                     </p>
                 )}
             </div>
+
+            <div className="m-2 w-1/2">
+					<div className="max-w-[230px]">
+						<Input
+							name="time"
+							id="time"
+							type="time"
+							style={{ width: "100%" }}
+							onChange={formik.handleChange}
+							value={formik.values.time}
+							onBlur={formik.handleBlur}
+						/>
+						{formik.touched.time && formik.errors.time && (
+							<p className="text-red text-[14px]">
+								{formik.errors.time}
+							</p>
+						)}
+					</div>
+			</div>
   
         <div className="flex flex-col rounded-2xl w-full text-darkgrey bg-white shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]">
             <div className="p-2">

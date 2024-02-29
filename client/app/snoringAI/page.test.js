@@ -2,7 +2,7 @@ import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import { useAuth } from "../contexts/AuthContext";
 import { useUser } from "../contexts/UserContext";
-import UserTestingPage from "./page";
+import GetSnoringAI from "./page";
 
 const mockRouter = jest.fn();
 const mockUsePathname = jest.fn();
@@ -28,7 +28,7 @@ jest.mock("../contexts/UserContext", () => {
 	};
 });
 
-describe("User testing page shown only to logged in users", () => {
+describe("Record audio page shown only to logged in users", () => {
 	it("Error page is shown", async () => {
 		useAuth.mockImplementation(() => {
 			return {
@@ -36,7 +36,7 @@ describe("User testing page shown only to logged in users", () => {
 			};
 		});
 
-		render(<UserTestingPage />);
+		render(<GetSnoringAI />);
 		const errorMessage = await screen.findByText(
 			"Error 403 - Access Forbidden"
 		);
@@ -56,7 +56,7 @@ describe("User testing page shown only to logged in users", () => {
 			};
 		});
 
-		render(<UserTestingPage />);
+		render(<GetSnoringAI />);
 		const errorMessage = screen.queryByText("Error 403 - Access Forbidden");
 		expect(errorMessage).not.toBeInTheDocument();
 	});

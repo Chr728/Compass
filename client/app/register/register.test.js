@@ -106,6 +106,19 @@ describe("Error validation", () => {
         fireEvent.blur(passwordInput);
         const error = await screen.findByText("Password Required");
         expect(error).toBeInTheDocument();
+        const invalidPass = '123456'
+        const invalidPassError = 'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character';
+        await userEvent.type(passwordInput, invalidPass);
+        fireEvent.blur(passwordInput);
+        const error2 = await screen.findByText(invalidPassError);
+        expect(error2).toBeInTheDocument();
+        const validPass = 'Password@123'
+        await userEvent.clear(passwordInput);
+        await userEvent.type(passwordInput, validPass);
+        fireEvent.blur(passwordInput);
+        const error3 = await screen.queryByText(invalidPassError);
+        expect(error3).toBeNull();
+
     })
 
     test("Confirm password error message", async () => {

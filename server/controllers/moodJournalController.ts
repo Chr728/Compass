@@ -75,8 +75,8 @@ export const createMoodJournal = async (req: Request, res: Response, next: NextF
       throw new ErrorHandler(404, 'NOT_FOUND', 'User not found');
     }
 
-    const { howAreYou, stressSignals, date, notes } = req.body;
-    moodJournalValidator({ howAreYou, stressSignals, date, notes });
+    const { howAreYou, stressSignals, date, notes, time } = req.body;
+    moodJournalValidator({ howAreYou, stressSignals, date, notes, time });
 
     const stressSignalsString = JSON.stringify(stressSignals);
 
@@ -86,6 +86,7 @@ export const createMoodJournal = async (req: Request, res: Response, next: NextF
       stressSignals: stressSignalsString,
       date,
       notes,
+      time,
     });
 
     return res.status(201).json({
@@ -115,8 +116,8 @@ export const updateMoodJournal = async (req: Request, res: Response, next: NextF
       throw new ErrorHandler(404, 'NOT_FOUND', 'Mood Journal not found');
     }
 
-    const { howAreYou, stressSignals, date, notes } = req.body;
-    moodJournalValidator({ howAreYou, stressSignals, date, notes });
+    const { howAreYou, stressSignals, date, notes, time } = req.body;
+    moodJournalValidator({ howAreYou, stressSignals, date, notes, time });
 
     const stressSignalsString = JSON.stringify(stressSignals);
 
@@ -126,6 +127,7 @@ export const updateMoodJournal = async (req: Request, res: Response, next: NextF
           stressSignals: stressSignalsString,
           date,
           notes,
+          time,
         },
         {
           where: {

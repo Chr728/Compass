@@ -1,13 +1,12 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 
 type MedicationAttributes = {
   id: number;
   uid: string;
   medicationName: string;
   dateStarted: Date;
+  expirationDate: Date;
   time: Date;
   dosage: number;
   unit: string;
@@ -15,15 +14,15 @@ type MedicationAttributes = {
   route: string;
   notes: string;
   image: string;
-  
-  
 
   // other attributes...
 };
 
-module.exports = (sequelize:any, DataTypes:any) => {
-  class Medication extends Model<MedicationAttributes>
-  implements MedicationAttributes {
+module.exports = (sequelize: any, DataTypes: any) => {
+  class Medication
+    extends Model<MedicationAttributes>
+    implements MedicationAttributes
+  {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -33,6 +32,7 @@ module.exports = (sequelize:any, DataTypes:any) => {
     uid!: string;
     medicationName!: string;
     dateStarted!: Date;
+    expirationDate!: Date;
     time!: Date;
     dosage!: number;
     unit!: string;
@@ -40,67 +40,72 @@ module.exports = (sequelize:any, DataTypes:any) => {
     route!: string;
     notes!: string;
     image!: string;
-  
 
-    static associate(models:any) {
-      Medication.belongsTo(models.User,{
+    static associate(models: any) {
+      Medication.belongsTo(models.User, {
         foreignKey: "uid",
-        targetKey: 'uid',}
-      )
+        targetKey: "uid",
+      });
       // define association here
     }
   }
-  Medication.init({
-    id: {
-      type:DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
+  Medication.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      uid: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      medicationName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      dateStarted: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      expirationDate: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
+      time: {
+        type: DataTypes.TIME,
+        allowNull: false,
+      },
+      dosage: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+      },
+      unit: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      frequency: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      route: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      notes: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      image: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
     },
-    uid: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    medicationName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    }, 
-    dateStarted: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-    time: {
-      type: DataTypes.TIME,
-      allowNull: false,
-    },
-    dosage: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-    },
-    unit: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    }, 
-    frequency: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    }, 
-    route: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    }, 
-    notes: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-    },
-    image: {
-      type: DataTypes.STRING,
-      allowNull:true
+    {
+      sequelize,
+      modelName: "Medication",
+      timestamps: false,
     }
-  
-  }, {
-    sequelize,
-    modelName: 'Medication',
-    timestamps: false
-  });
+  );
   return Medication;
 };

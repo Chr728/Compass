@@ -13,6 +13,7 @@ jobs:
       PYTHON_PORT: ${{ secrets.PYTHON_PORT }}
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       HEROKU_PYTHON_APP_NAME: ${{ secrets.HEROKU_PYTHON_APP_NAME }}
+      DEPLOY_ENABLED: 'false'
 
     steps:
       - uses: actions/checkout@v2
@@ -20,16 +21,21 @@ jobs:
           lfs: 'true'
 
       - name: Login to Heroku Container Registry
+        if: $DEPLOY_ENABLED == 'true'
         run: HEROKU_API_KEY=$HEROKU_API_KEY heroku container:login
 
       - name: Build Docker Image
+        if: $DEPLOY_ENABLED == 'true'
         run: docker compose -f docker-compose-ai.yml build
 
       - name: Tag Docker Image
+        if: $DEPLOY_ENABLED == 'true'
         run: docker tag python_server_ai_image registry.heroku.com/$HEROKU_PYTHON_APP_NAME/web:latest
 
       - name: Push Docker Image
+        if: $DEPLOY_ENABLED == 'true'
         run: docker push registry.heroku.com/$HEROKU_PYTHON_APP_NAME/web:latest
 
       - name: Release Docker Image
+        if: $DEPLOY_ENABLED == 'true'
         run: HEROKU_API_KEY=$HEROKU_API_KEY heroku container:release web -a $HEROKU_PYTHON_APP_NAME
