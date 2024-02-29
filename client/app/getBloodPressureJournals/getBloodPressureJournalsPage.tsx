@@ -18,19 +18,70 @@ import {
 	formatDate,
 	formatMilitaryTime,
 } from "../helpers/utils/datetimeformat";
+import { getBloodPressureJournals, deleteBloodPressureJournalEntry } from '../http/bloodPressureJournalAPI';
 
 export default function GetBloodPressureJournalsPage() {
+
     const logger = require("../../logger");
     const router = useRouter();
     const { user } = useAuth();
-    const { userInfo } = useUser();
+    // const { userInfo } = useUser();
+    const [data, setData] = useState<any>();
 
 	useEffect(() => {
-		if (!userInfo) {
+		if (!user) {
 			logger.warn("User not found.");
 			alert("User not found.");
 		}
-	}, [userInfo, router]);
+	}, [user, router]);
+
+    useEffect(() => {
+        async function fetchBPJournals() {
+            try {
+                const userId = user?.uid || '';
+                const journalData = await getBloodPressureJournals();
+                logger.info('All journals retrieved:', journalData.data)
+                setData(journalData.data);
+            } catch (error) {
+                logger.error('Error fetching appointments', error);
+            }
+        }
+        fetchBPJournals();
+    }, [user]);
+
+    const handleClick = (journalID: string) => {
+        router.push(`/getBloodPressureJournals/${journalID}`);
+    }
+
+    async function deleteBloodPressureJournal(bloodPressureJournalID: string) {
+		Swal.fire({
+			text: "Are you sure you want to delete this blood pressure journal entry?",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Delete",
+		}).then(async (result: { isConfirmed: any }) => {
+			if (result.isConfirmed) {
+				const deleteresult = await deleteBloodPressureJournalEntry(
+					bloodPressureJournalID
+				);
+				const newData =
+					data &&
+					data.filter(
+						(item: { id: string }) => item.id != bloodPressureJournalID
+					);
+                    setData(newData);
+				router.push("/getBloodPressureJournals");
+				Swal.fire({
+					title: "Deleted!",
+					text: "Your blood pressure journal entry has been deleted.",
+					icon: "success",
+				});
+			} else {
+				router.push("/getBloodPressureJournals");
+			}
+		});
+	}
 
     return (
     <div className="bg-eggshell min-h-screen flex flex-col">
@@ -86,10 +137,41 @@ export default function GetBloodPressureJournalsPage() {
                                         <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />  
                                     </div>
                                 </TableCell>
+                                <TableCell></TableCell>
                             </TableRow>
                             </TableHead>
                             <TableBody>
-                                {/* to be added */}
+                                {data && Array.isArray(data) && data.map((row, index) => (
+                                    <TableRow 
+                                        onClick={() => handleClick(row.id)} 
+                                        style={ { backgroundColor: index % 2 === 0 ? '#DBE2EA':'white',  cursor: 'pointer'  }}
+                                        key={index}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                     <TableCell component="th" scope="row">
+                                         {formatDate(row.date)},
+                                             <span className="font-bold"> {formatMilitaryTime(row.time)}</span>
+                                     </TableCell>
+                                     <TableCell >{row.systolic}/{row.diastolic}</TableCell>
+                                     <TableCell >{row.pulse}</TableCell>
+                                     <TableCell>
+                                         <Image 
+                                             src="/icons/trash.svg"
+                                             alt="Trash icon"
+                                             width={10}
+                                             height={10}
+                                             className="mr-4 md:hidden"
+                                             style={{ width: 'auto', height: 'auto' }}
+                                             onClick={(event) => {
+                                                event.stopPropagation();
+                                                deleteBloodPressureJournal(row.id);
+                                            }}
+                                         />  
+                                                                   
+                                     </TableCell>
+                                 </TableRow>
+
+                                ))}
                             </TableBody>
                         </Table>
             </TableContainer>
