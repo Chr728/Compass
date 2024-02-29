@@ -1,14 +1,14 @@
 import { auth } from "../../config/firebase";
 import {
-	createOxygenJournal,
-	deleteOxygenJournal,
-	getOxygenJournal,
-	getOxygenJournals,
-	updateOxygenJournal,
+	createO2SaturationJournal,
+	deleteO2SaturationJournal,
+	getO2SaturationJournal,
+	getO2SaturationJournals,
+	updateO2SaturationJournal,
 } from "../oxygenJournalAPI";
 
-//test the getOxygenJournals function
-describe("getOxygenJournals", () => {
+//test the getO2SaturationJournals function
+describe("getO2SaturationJournals", () => {
 	beforeEach(() => {
 		global.fetch = jest.fn();
 	});
@@ -36,7 +36,7 @@ describe("getOxygenJournals", () => {
 		const mockFetch = jest.fn().mockResolvedValue(mockResponse);
 		global.fetch = mockFetch;
 
-		const result = await getOxygenJournals(mockUserId);
+		const result = await getO2SaturationJournals(mockUserId);
 
 		expect(mockFetch).toHaveBeenCalledWith(
 			`${process.env.NEXT_PUBLIC_API_URL}/api/journals/o2Saturation/user/${mockUserId}`,
@@ -64,7 +64,7 @@ describe("getOxygenJournals", () => {
 		const mockFetch = jest.fn().mockResolvedValue(mockResponse);
 		global.fetch = mockFetch;
 
-		await expect(getOxygenJournals()).rejects.toThrow(
+		await expect(getO2SaturationJournals()).rejects.toThrow(
 			"No user is currently signed in."
 		);
 	});
@@ -88,14 +88,14 @@ describe("getOxygenJournals", () => {
 		const mockFetch = jest.fn().mockResolvedValue(mockResponse);
 		global.fetch = mockFetch;
 
-		await expect(getOxygenJournals(mockUserId)).rejects.toThrow(
+		await expect(getO2SaturationJournals(mockUserId)).rejects.toThrow(
 			`Failed to retrieve oxygen journals for user. HTTP Status: ${mockResponse.status}`
 		);
 	});
 });
 
-//test the getOxygenJournal function
-describe("getOxygenJournal", () => {
+//test the getO2SaturationJournal function
+describe("getO2SaturationJournal", () => {
 	beforeEach(() => {
 		global.fetch = jest.fn();
 	});
@@ -127,7 +127,7 @@ describe("getOxygenJournal", () => {
 		const mockFetch = jest.fn().mockResolvedValue(mockResponse);
 		global.fetch = mockFetch;
 
-		const userData = await getOxygenJournal(mockUser.id);
+		const userData = await getO2SaturationJournal(mockUser.id);
 
 		expect(mockResponse.json).toHaveBeenCalled();
 		expect(mockFetch).toHaveBeenCalledWith(
@@ -154,7 +154,7 @@ describe("getOxygenJournal", () => {
 		const mockFetch = jest.fn().mockResolvedValue(mockResponse);
 		global.fetch = mockFetch;
 
-		await expect(getOxygenJournal()).rejects.toThrow(
+		await expect(getO2SaturationJournal()).rejects.toThrow(
 			"No user is currently signed in."
 		);
 	});
@@ -177,7 +177,7 @@ describe("getOxygenJournal", () => {
 		});
 		global.fetch.mockImplementation(mockFetch);
 
-		await expect(getOxygenJournal(mockUserId)).rejects.toThrow(
+		await expect(getO2SaturationJournal(mockUserId)).rejects.toThrow(
 			"Failed to retrieve oxygen journal entry 1 for user. HTTP Status: 500"
 		);
 		expect(mockFetch).toHaveBeenCalledWith(
@@ -193,8 +193,8 @@ describe("getOxygenJournal", () => {
 	});
 });
 
-//test the createOxygenJournal function
-describe("createOxygenJournal", () => {
+//test the createO2SaturationJournal function
+describe("createO2SaturationJournal", () => {
 	beforeEach(() => {
 		global.fetch = jest.fn();
 	});
@@ -231,7 +231,7 @@ describe("createOxygenJournal", () => {
 		const mockFetch = jest.fn().mockResolvedValue(mockResponse);
 		global.fetch = mockFetch;
 
-		const result = await createOxygenJournal(
+		const result = await createO2SaturationJournal(
 			mockUserId,
 			mockOxygenJournalData
 		);
@@ -278,15 +278,15 @@ describe("createOxygenJournal", () => {
 		global.fetch = mockFetch;
 
 		await expect(
-			createOxygenJournal(mockUserId, mockOxygenJournalData)
+			createO2SaturationJournal(mockUserId, mockOxygenJournalData)
 		).rejects.toThrow(
 			`Failed to create oxygen journal entry for user. HTTP Status: ${mockResponse.status}`
 		);
 	});
 });
 
-//test the updateOxygenJournal function
-describe("updateOxygenJournal", () => {
+//test the updateO2SaturationJournal function
+describe("updateO2SaturationJournal", () => {
 	beforeEach(() => {
 		global.fetch = jest.fn();
 	});
@@ -323,7 +323,7 @@ describe("updateOxygenJournal", () => {
 		const mockFetch = jest.fn().mockResolvedValue(mockResponse);
 		global.fetch = mockFetch;
 
-		const result = await updateOxygenJournal(
+		const result = await updateO2SaturationJournal(
 			mockUserId,
 			mockOxygenJournalId,
 			mockUpdatedOxygenJournalData
@@ -372,7 +372,7 @@ describe("updateOxygenJournal", () => {
 		global.fetch = mockFetch;
 
 		await expect(
-			updateOxygenJournal(
+			updateO2SaturationJournal(
 				mockOxygenJournalId,
 				mockUpdatedOxygenJournalData
 			)
@@ -382,8 +382,8 @@ describe("updateOxygenJournal", () => {
 	});
 });
 
-//test the deleteOxygenJournal function
-describe("deleteOxygenJournal", () => {
+//test the deleteO2SaturationJournal function
+describe("deleteO2SaturationJournal", () => {
 	beforeEach(() => {
 		global.fetch = jest.fn();
 	});
@@ -413,7 +413,7 @@ describe("deleteOxygenJournal", () => {
 			get: jest.fn().mockReturnValue(mockCurrentUser),
 		});
 
-		const result = await deleteOxygenJournal(mockOxygenJournalId);
+		const result = await deleteO2SaturationJournal(mockOxygenJournalId);
 
 		expect(mockFetch).toHaveBeenCalledWith(
 			`${process.env.NEXT_PUBLIC_API_URL}/api/journals/o2Saturation/${mockOxygenJournalId}`,
@@ -459,7 +459,9 @@ describe("deleteOxygenJournal", () => {
 		const mockErrorFetch = jest.fn().mockResolvedValue(mockErrorResponse);
 		global.fetch = mockErrorFetch;
 
-		await expect(deleteOxygenJournal(mockOxygenJournalId)).rejects.toThrow(
+		await expect(
+			deleteO2SaturationJournal(mockOxygenJournalId)
+		).rejects.toThrow(
 			`Failed to delete oxygen journal entry. HTTP Status: ${mockErrorResponse.status}`
 		);
 	});
