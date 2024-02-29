@@ -1,9 +1,9 @@
 import '@testing-library/jest-dom';
-import { render, screen, act, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import EditBloodPressureJournal from './page';
 import { useAuth } from '../../../contexts/AuthContext';
-import { getBloodPressureJournal, updateBloodPressureJournal } from '../../../http/bloodPressureJournalAPI';
+import { getBloodPressureJournal } from '../../../http/bloodPressureJournalAPI';
 
 const mockRouter = jest.fn();
 jest.mock("next/navigation", () => ({

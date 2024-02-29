@@ -2,12 +2,11 @@
 import Image from 'next/image';
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { MdDeleteForever, MdKeyboardArrowDown } from "react-icons/md";
+import { MdKeyboardArrowUp, MdKeyboardArrowDown } from "react-icons/md";
 import Swal from "sweetalert2";
 import Button from "../components/Button";
 import Header from "../components/Header";
 import { useAuth } from "../contexts/AuthContext";
-import { useUser } from "../contexts/UserContext";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -83,6 +82,66 @@ export default function GetBloodPressureJournalsPage() {
 		});
 	}
 
+    const [orderdate, setOrderDate] = useState(false);
+
+    const handleOrderDate = () => {
+		setOrderDate(!orderdate);
+		if (!orderdate) {
+			const increasingOrderBloodPressureData = [...data].sort(
+				(a, b) =>
+					new Date(a.date).getTime() - new Date(b.date).getTime()
+			);
+			setData(increasingOrderBloodPressureData);
+		} else {
+			const decreasingOrderBloodPressureData = [...data].sort(
+				(a, b) =>
+					new Date(b.date).getTime() - new Date(a.date).getTime()
+			);
+			setData(decreasingOrderBloodPressureData);
+		}
+	};
+
+    const [orderBloodPressure, setOrderBloodPressure] = useState(false);
+
+    const handleOrderBloodPressure = () => {
+        setOrderBloodPressure(!orderBloodPressure);
+        const sortedData = [...data].sort((a, b) => {
+
+            if (orderBloodPressure) {
+                if (a.systolic !== b.systolic) {
+                    return b.systolic - a.systolic;
+                }
+                return b.diastolic - a.diastolic;
+            } else {
+                if (a.systolic !== b.systolic) {
+                    return a.systolic - b.systolic;
+                }
+                return a.diastolic - b.diastolic;
+            }
+        });
+
+        setData(sortedData);
+    };
+    
+  
+    
+    const [orderPulse, setOrderPulse] = useState(false);
+
+	const handleOrderPulse = () => {
+		setOrderPulse(!orderPulse);
+		if (!orderPulse) {
+			const increasingOrderPulseData = [...data].sort(
+				(a, b) => a.pulse - b.pulse
+			);
+			setData(increasingOrderPulseData);
+		} else {
+			const decreasingOrderPulseData = [...data].sort(
+				(a, b) => b.pulse - a.pulse
+			);
+			setData(decreasingOrderPulseData);
+		}
+	};
+
     return (
     <div className="bg-eggshell min-h-screen flex flex-col">
         <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
@@ -122,19 +181,44 @@ export default function GetBloodPressureJournalsPage() {
                                 <TableCell>
                                     <div className="font-bold">
                                         Date/Time
-                                        <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />  
+                                        {/* <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />   */}
+                                        <button
+                                            onClick={handleOrderDate}
+                                            aria-label="orderDate">
+                                            {orderdate ? (
+                                                <MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" />
+                                            ) : (
+                                                <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+                                            )}
+								        </button>
                                     </div>
                                 </TableCell>
                                 <TableCell>
                                     <div className="font-bold">
                                         BP
-                                        <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />  
+                                        <button
+                                            onClick={handleOrderBloodPressure}
+                                            aria-label="orderBloodPressure">
+                                            {orderBloodPressure ? (
+                                                <MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" />
+                                            ) : (
+                                                <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+                                            )}
+								        </button> 
                                     </div>
                                 </TableCell>
                                 <TableCell>
                                     <div className="font-bold">
                                         Pulse
-                                        <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />  
+                                        <button
+                                            onClick={handleOrderPulse}
+                                            aria-label="orderPulse">
+                                            {orderPulse ? (
+                                                <MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" />
+                                            ) : (
+                                                <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+                                            )}
+								        </button>
                                     </div>
                                 </TableCell>
                                 <TableCell></TableCell>

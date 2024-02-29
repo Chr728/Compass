@@ -120,14 +120,30 @@ Monitor your insulin and glucose.
           Document what changes your mood.
               </p>
                <NextImage
-        src = {mood}
-        alt="mood journal"
-        height={ 105 }
-        className="absolute bottom-0 right-4 shrink-0"
-      />
+                  src = {mood}
+                  alt="mood journal"
+                  height={ 105 }
+                  className="absolute bottom-0 right-4 shrink-0"
+                />
         </div>
       </div>
 </Link>
+<br></br>
+
+<Link href="/getBloodPressureJournals">
+      <div className="rounded-3xl relative flex flex-col w-full md:max-w-[800px] md:h-[600px] p-5 " style={{backgroundColor: '#7C9CBF' }}>
+        
+        <div>
+          <p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
+          Blood Pressure Journal
+          </p>
+          <p className="text-[14px] text-white pr-20 font-IBM Plex Sans  text-start">
+          Log your blood pressure.
+              </p>
+        </div>
+      </div>
+</Link>
+
 </div>
 </div>
     

@@ -1,9 +1,8 @@
-import {render, screen, act, waitFor} from '@testing-library/react';
+import {render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import GetBloodPressureJournal from './page';
 import { useAuth } from '../../contexts/AuthContext';
-import { getBloodPressureJournal } from '../../http/bloodPressureJournalAPI'
 
 const mockRouter = jest.fn();
 const mockUsePathname = jest.fn();
