@@ -5,7 +5,8 @@ type InputProps = {
     name: string;
     id: string;
     type:string;
-    value: string;
+    value?: string;
+    defaultValue?:string;
     onChange?: React.ChangeEventHandler<HTMLElement>;
     onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
     style?: CSSProperties;

@@ -15,7 +15,7 @@ export default function AddAppointmentPage() {
   useEffect(() => {
     if (!user) router.push("/login");
   }, [user]);
-
+  const getRef = (ref:any) => { if (ref) ref.defaultValue = "" };
   const router = useRouter();
   const userId = user?.uid || "";
   const formik = useFormik({
@@ -152,13 +152,12 @@ export default function AddAppointmentPage() {
             name="date"
             id="date"
             type="date"
-            value={formik.values.date}
+            defaultValue={formik.values.date}
             style={{ width: "250px" }}
             onChange={(event) => {
               formik.handleChange(event);
               formik.handleBlur(event);
             }}
-
             onBlur={formik.handleBlur}
           />
           {formik.touched.date && formik.errors.date && (
@@ -180,7 +179,7 @@ export default function AddAppointmentPage() {
             name="time"
             id="time"
             type="time"
-            value={formik.values.time}
+            defaultValue={formik.values.time}
             style={{ width: "250px" }}
             onChange={(event) => {
               formik.handleChange(event);
