@@ -11,6 +11,7 @@ import {
   diabeticInsulinJournalValidator,
   foodIntakeJournalValidator,
   o2SaturationJournalValidator,
+    bloodPressureJournalValidator
 } from "../utils/databaseValidators";
 
 type ValidatorFunction = (data: any) => void;
@@ -832,6 +833,74 @@ runTests({
       servingNumber: 1,
       notes: "123",
       incorrectData: "calorie",
+    },
+  ],
+});
+
+//Blood Pressure Journal Validator
+runTests({
+  validator: bloodPressureJournalValidator,
+  validData: {
+    date: "2023-12-15",
+    time: "14:30",
+    systolic: 120,
+    diastolic: 80,
+    pulse: 70,
+    notes: "Feeling good after walking.",
+  },
+  invalidData: [
+    {
+      date: 123,
+      time: "14:30",
+      systolic: 120,
+      diastolic: 'some string',
+      pulse: 70,
+      notes: "Feeling good after walking.",
+      incorrectData: "date",
+    },
+    {
+      date: "2023-12-15",
+      time: 123,
+      systolic: 120,
+      diastolic: 80,
+      pulse: 70,
+      notes: "Feeling good after walking.",
+      incorrectData: "time",
+    },
+    {
+      date: "2023-12-15",
+      time: "14:30",
+      systolic: "InvalidSystolic",
+      diastolic: 80,
+      pulse: 70,
+      notes: "Feeling good after walking.",
+      incorrectData: "systolic",
+    },
+    {
+      date: "2023-12-15",
+      time: "14:30",
+      systolic: 120,
+      diastolic: "InvalidDiastolic",
+      pulse: 70,
+      notes: "Feeling good after walking.",
+      incorrectData: "diastolic",
+    },
+    {
+      date: "2023-12-15",
+      time: "14:30",
+      systolic: 120,
+      diastolic: 80,
+      pulse: "InvalidPulse",
+      notes: "Feeling good after walking.",
+      incorrectData: "pulse",
+    },
+    {
+      date: "2023-12-15",
+      time: "14:30",
+      systolic: 120,
+      diastolic: 80,
+      pulse: 70,
+      notes: 123,
     },
   ],
 });
