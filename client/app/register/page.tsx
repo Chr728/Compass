@@ -6,6 +6,7 @@ import Button from '../components/Button';
 import Input from '../components/Input';
 import Link from 'next/link';
 import { useAuth } from '@/app/contexts/AuthContext';
+import DatePicker from 'react-datepicker';
 
 export default function Register() {
   const logger = require('../../logger');
@@ -18,7 +19,7 @@ export default function Register() {
       fname: '',
       lname: '',
       phone: '',
-      birthdate: '',
+      birthdate: null,
       sex: '',
     },
     onSubmit: (values) => {
@@ -342,7 +343,7 @@ export default function Register() {
                   Birthdate
                 </label>
                 <br />
-                <Input
+                {/* <Input
                   name="birthdate"
                   id="birthdate"
                   type="date"
@@ -353,6 +354,13 @@ export default function Register() {
                   }}
                   value={formik.values.birthdate}
                   onBlur={formik.handleBlur}
+                /> */}
+                <DatePicker
+                  selected={formik.values.birthdate}
+                  onChange={(date) => formik.setFieldValue('birthdate', date)}
+                  onBlur={formik.handleBlur}
+                  placeholderText="Select a date"
+                  className="h-[52px] border border-solid border-lightgrey rounded-md text-grey p-2"
                 />
                 {formik.touched.birthdate && formik.errors.birthdate && (
                   <p className="text-[16px] text-red font-sans">

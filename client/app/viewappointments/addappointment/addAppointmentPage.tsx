@@ -9,6 +9,8 @@ import { createAppointment } from "@/app/http/appointmentAPI";
 import { useAuth } from "@/app/contexts/AuthContext";
 import { useEffect } from "react";
 import Menu from "../../components/Menu";
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 export default function AddAppointmentPage() {
   const { user } = useAuth();
@@ -22,7 +24,7 @@ export default function AddAppointmentPage() {
     initialValues: {
       doctor: "",
       reason: "",
-      date: "",
+      date: null,
       time: "",
       notes: "",
     },
@@ -148,7 +150,7 @@ export default function AddAppointmentPage() {
             Date
           </label>
           <br />
-          <Input
+          {/* <Input
             name="date"
             id="date"
             type="date"
@@ -159,7 +161,14 @@ export default function AddAppointmentPage() {
               formik.handleBlur(event);
             }}
             onBlur={formik.handleBlur}
-          />
+          /> */}
+           <DatePicker
+              selected={formik.values.date}
+              onChange={(date) => formik.setFieldValue('date', date)}
+              onBlur={formik.handleBlur}
+              placeholderText="Select a date"
+              className="h-[52px] border border-solid border-lightgrey rounded-md text-grey p-2"
+            />
           {formik.touched.date && formik.errors.date && (
             <p className="text-[16px] text-red font-sans">
               {formik.errors.date}
