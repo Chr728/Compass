@@ -347,8 +347,11 @@ export default function Register() {
                   id="birthdate"
                   type="date"
                   style={{ width: '100%' }}
-                  onChange={formik.handleChange}
-                  value={formik.values.birthdate}
+                  onChange={(event) => {
+                    formik.handleChange(event);
+                    formik.handleBlur(event);
+                  }}
+                  defaultValue={formik.values.birthdate}
                   onBlur={formik.handleBlur}
                 />
                 {formik.touched.birthdate && formik.errors.birthdate && (
