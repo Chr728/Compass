@@ -7,7 +7,7 @@ import Header from "../components/Header";
 import Input from "../components/Input";
 import { useAuth } from "../contexts/AuthContext";
 import { useProp } from "../contexts/PropContext";
-import { createWeightJournal } from "../http/weightJournalAPI"; // Replace '../api/yourApiFile' with the correct path
+import { createWeightJournal } from "../http/weightJournalAPI";
 
 export default function CreateWeightJournalPage() {
 	const logger = require("../../logger");
