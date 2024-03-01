@@ -21,6 +21,7 @@ import weightJournalRoutes from './routes/weightJournalRoutes';
 import { sendUserReminders } from './tasks/reminderTask';
 import o2SaturationJournalRoutes from './routes/o2SaturationJournalRoutes';
 import bloodPressureRoutes from "./routes/bloodPressureRoutes";
+import emergencyRoomRoutes from './routes/emergencyRoomRoutes';
 import scraper from './scraper';
 
 require('dotenv').config({
@@ -37,7 +38,7 @@ app.use(cors());
 app.use(express.json());
 app.use(Morgan);
 app.use('/medicationImages', express.static('./medicationImages'));
-app.use(decodeToken);
+// app.use(decodeToken);
 app.use('/api/journals/weight', weightJournalRoutes);
 app.use('/api/journals/mood', moodJournalRoutes);
 app.use('/api/journals/diabetic/glucose', diabeticGlucoseJournalRoutes);
@@ -52,6 +53,7 @@ app.use('/api/subscription', subscriptionRoutes);
 app.use('/api/medication', medicationRoutes);
 app.use('/api/journals/o2Saturation', o2SaturationJournalRoutes);
 app.use('/api/journals/bloodPressure', bloodPressureRoutes);
+app.use('/api/emergencyRoomData', emergencyRoomRoutes);
 app.use(handleError);
 
 // Schedule the task within the main process
