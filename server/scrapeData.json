@@ -1,0 +1,101 @@
+[
+  {
+    "last_updated": 1709320739835,
+    "hospital_name": "Centre multiservices de santé et de services sociaux de Port-Cartier",
+    "hospital_address": "3 rue De Shelter Bay, Port-Cartier, G5B 2W9\n            \n            Côte-Nord",
+    "waiting_time": "02:46",
+    "waiting_people": "4",
+    "total_people": "9",
+    "stretcher_occupancy": "80%"
+  },
+  {
+    "last_updated": 1709320739837,
+    "hospital_name": "Centre multiservices de santé et de services sociaux de Rivière-Rouge",
+    "hospital_address": "1525 rue de L'Annonciation Nord, Rivière-Rouge, J0T 1T0\n            \n            Laurentides",
+    "waiting_time": "04:36",
+    "waiting_people": "9",
+    "total_people": "16",
+    "stretcher_occupancy": "140%"
+  },
+  {
+    "last_updated": 1709320739838,
+    "hospital_name": "Centre multiservices de santé et de services sociaux de Saint-Marc-des-Carrières",
+    "hospital_address": "1045 boulevard Bona-Dussault, Saint-Marc-des-Carrières, G0A 4B0\n            \n            Capitale-Nationale",
+    "waiting_time": "02:55",
+    "waiting_people": "5",
+    "total_people": "11",
+    "stretcher_occupancy": "100%"
+  },
+  {
+    "last_updated": 1709320739838,
+    "hospital_name": "Centre multiservices de santé et de services sociaux de Saint-Raymond",
+    "hospital_address": "700 rue Saint-Cyrille, Saint-Raymond, G3L 1W1\n            \n            Capitale-Nationale",
+    "waiting_time": "00:24",
+    "waiting_people": "0",
+    "total_people": "1",
+    "stretcher_occupancy": "14%"
+  },
+  {
+    "last_updated": 1709320739838,
+    "hospital_name": "Centre multiservices de santé et de services sociaux de Sainte-Agathe",
+    "hospital_address": "234 rue Saint-Vincent, Sainte-Agathe-des-Monts, J8C 2B8\n            \n            Laurentides",
+    "waiting_time": "10:07",
+    "waiting_people": "26",
+    "total_people": "53",
+    "stretcher_occupancy": "128%"
+  },
+  {
+    "last_updated": 1709320739839,
+    "hospital_name": "Centre multiservices de santé et de services sociaux de Sainte-Anne-de-Beaupré",
+    "hospital_address": "11000 rue des Montagnards, Beaupré, G0A 1E0\n            \n            Capitale-Nationale",
+    "waiting_time": "04:32",
+    "waiting_people": "9",
+    "total_people": "18",
+    "stretcher_occupancy": "125%"
+  },
+  {
+    "last_updated": 1709320739839,
+    "hospital_name": "Centre multiservices de santé et de services sociaux de Trois-Pistoles",
+    "hospital_address": "550 rue Notre-Dame Est, Trois-Pistoles, G0L 4K0\n            \n            Bas-Saint-Laurent",
+    "waiting_time": "04:23",
+    "waiting_people": "10",
+    "total_people": "12",
+    "stretcher_occupancy": "67%"
+  },
+  {
+    "last_updated": 1709320739839,
+    "hospital_name": "Centre multiservices de santé et de services sociaux de Témiscaming-Kipawa",
+    "hospital_address": "180 rue Anvik, Témiscaming, J0Z 3R0\n            \n            Abitibi-Témiscamingue",
+    "waiting_time": "01:03",
+    "waiting_people": "1",
+    "total_people": "2",
+    "stretcher_occupancy": "100%"
+  },
+  {
+    "last_updated": 1709320739839,
+    "hospital_name": "Centre multiservices de santé et de services sociaux de Ville-Marie",
+    "hospital_address": "22 rue Notre-Dame Nord, Ville-Marie, J9V 1W8\n            \n            Abitibi-Témiscamingue",
+    "waiting_time": "07:54",
+    "waiting_people": "11",
+    "total_people": "16",
+    "stretcher_occupancy": "20%"
+  },
+  {
+    "last_updated": 1709320739840,
+    "hospital_name": "Centre multiservices de santé et de services sociaux des Escoumins",
+    "hospital_address": "4 rue de l'Hôpital, Les Escoumins, G0T 1K0\n            \n            Côte-Nord",
+    "waiting_time": "02:09",
+    "waiting_people": "3",
+    "total_people": "4",
+    "stretcher_occupancy": "0%"
+  },
+  {
+    "last_updated": 1709320739840,
+    "hospital_name": "Ensemble du Québec",
+    "hospital_address": "",
+    "waiting_time": "00:00",
+    "waiting_people": "1,285",
+    "total_people": "4,179",
+    "stretcher_occupancy": "118%"
+  }
+]
