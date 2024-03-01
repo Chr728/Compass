@@ -351,7 +351,7 @@ describe("updateO2SaturationJournal", () => {
 			time: "12:00:00",
 			o2sat: 98,
 			pulse: 90,
-			activitylevel: "at rest",
+			activitylevel: "At rest",
 			notes: "Test oxygen journal entry",
 		};
 		const mockToken = "mockToken";

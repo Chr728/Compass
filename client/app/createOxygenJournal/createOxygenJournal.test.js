@@ -2,7 +2,7 @@ import "@testing-library/jest-dom";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { auth } from "../config/firebase";
-
+import CreateOxygenJournalPage from "./createOxygenJournalPage";
 const fakeUser = {
 	uid: "1",
 };
@@ -62,7 +62,7 @@ describe("oxygen journal tests", () => {
 		await userEvent.type(time, "8:36");
 		await userEvent.type(o2sat, "95");
 		await userEvent.type(pulse, "85");
-		await userEvent.selectOptions(activitylevel, "kg");
+		await userEvent.selectOptions(activitylevel, "At rest");
 		await userEvent.type(notes, "abc");
 
 		const mockOxygenJournalData = {
@@ -101,7 +101,7 @@ describe("oxygen journal tests", () => {
 		);
 
 		expect(mockFetch).toHaveBeenCalledWith(
-			`${process.env.NEXT_PUBLIC_API_URL}/api/journals/oxygen/user/${mockUserId}`,
+			`${process.env.NEXT_PUBLIC_API_URL}/api/journals/o2Saturation/user/${mockUserId}`,
 			{
 				method: "POST",
 				headers: {
