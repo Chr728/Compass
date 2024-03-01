@@ -1,12 +1,12 @@
 import "@testing-library/jest-dom";
 import { act, cleanup, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { getWeightJournals } from "../http/weightJournalAPI";
-import GetWeightJournalsPage from "./getWeightJournalsPage";
+import { getO2SaturationJournals } from "../http/oxygenJournalAPI";
+import GetOxygenJournalsPage from "./getOxygenJournalsPage";
 
 beforeEach(async () => {
 	await act(async () => {
-		render(<GetWeightJournalsPage />);
+		render(<GetOxygenJournalsPage />);
 	});
 });
 
@@ -35,38 +35,38 @@ jest.mock("../contexts/UserContext", () => {
 	};
 });
 
-jest.mock("../http/weightJournalAPI", () => {
+jest.mock("../http/oxygenJournalAPI", () => {
 	return {
-		getWeightJournals: jest.fn().mockResolvedValue({
+		getO2SaturationJournals: jest.fn().mockResolvedValue({
 			success: "SUCCESS",
 			data: [
 				{
 					uid: "1",
 					date: "2014-01-01",
 					time: "8:36",
-					weight: "75.5",
-					height: 1.65,
-					unit: "kg",
-					Notes: "I am feeling good today",
+					o2sat: "96",
+					pulse: 101,
+					unit: "At rest",
+					Notes: "Test",
 				},
 			],
 		}),
 
-		deleteWeightJournal: async (weightJournalId) => {
+		deleteOxygenJournal: async (oxygenJournalId) => {
 			return {
 				status: "SUCCESS",
-				data: `Successfully deleted weight Journal.`,
+				data: `Successfully deleted oxygen Journal.`,
 			};
 		},
 	};
 });
 
-test("Fetches weight entries correctly", async () => {
+test("Fetches oxygen entries correctly", async () => {
 	await act(async () => {
-		jest.advanceTimersByTime(500);
+		jest.advanceTimersByTime(1000);
 	});
 	await waitFor(() => {
-		expect(getWeightJournals).toHaveBeenCalled();
+		expect(getO2SaturationJournals).toHaveBeenCalled();
 	});
 });
 
@@ -75,57 +75,50 @@ test("Add an entry button  functions correctly", async () => {
 		const addButton = screen.getAllByRole("button")[1];
 		userEvent.click(addButton);
 		mockRouter;
-		expect(mockRouter).toHaveBeenCalledWith("/createWeightJournal");
+		expect(mockRouter).toHaveBeenCalledWith("/createOxygenJournal");
 	}, 1000);
 });
 
-test("Get Weight Journals list is displayed correctly", async () => {
+test("Get Oxygen Journals list is displayed correctly", async () => {
 	setTimeout(() => {
 		const date = screen.findByText("Jan 1, 2014 8h36");
-		const weight = screen.findByText("75.5");
-		const height = screen.findByText("1.65cm");
+		const o2sat = screen.findByText("96");
+		const pulse = screen.findByText("101");
 
 		expect(date).toBeInTheDocument();
-		expect(weight).toBeInTheDocument();
-		expect(height).toBeInTheDocument();
+		expect(o2sat).toBeInTheDocument();
+		expect(pulse).toBeInTheDocument();
 	}, 1000);
 });
 
 // checks the texts
 test("Message displayed", async () => {
 	const message = screen.getByText(
-		/Managing your weight helps you stay healthy./i
+		/With your pulse oximeter, log your observations here in one go!/i
 	);
 	expect(message).toBeInTheDocument();
 });
 
-test("Message displayed", async () => {
-	const message = screen.getByText(
-		/our BMI can tell you if you’re at risk for certain health conditions like heart disease./i
-	);
-	expect(message).toBeInTheDocument();
-});
-
-test("Get Weight order Journals list is displayed correctly", async () => {
+test("Get Oxygen order Journals list is displayed correctly", async () => {
 	setTimeout(async () => {
 		const date = screen.findByText("Jan 1, 2014");
 		const time = await screen.findByText("8h36");
-		const BMI = screen.findByText("19.2");
-		const weight = screen.findByText("62");
+		const o2sat = screen.findByText("96");
+		const pulse = screen.findByText("101");
 
 		expect(date).toBeInTheDocument();
 		expect(time).toBeInTheDocument();
-		expect(BMI).toBeInTheDocument();
-		expect(weight).toBeInTheDocument();
+		expect(o2sat).toBeInTheDocument();
+		expect(pulse).toBeInTheDocument();
 
 		const orderDate = screen.getByLabelText("orderDate");
 		await userEvent.click(orderDate);
 		await userEvent.click(orderDate);
-		const orderBMI = screen.getByLabelText("orderBMI");
-		await userEvent.click(orderBMI);
-		await userEvent.click(orderBMI);
-		const orderWeight = screen.getByLabelText("orderWeight");
-		await userEvent.click(orderWeight);
-		await userEvent.click(orderWeight);
+		const orderO2 = screen.getByLabelText("orderO2");
+		await userEvent.click(orderO2);
+		await userEvent.click(orderO2);
+		const orderPulse = screen.getByLabelText("orderPulse");
+		await userEvent.click(orderPulse);
+		await userEvent.click(orderPulse);
 	}, 1000);
 });

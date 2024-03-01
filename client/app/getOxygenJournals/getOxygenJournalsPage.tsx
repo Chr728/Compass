@@ -48,7 +48,7 @@ export default function GetOxygenJournalsPage() {
 		}
 		setTimeout(() => {
 			fetchOxygenJournals();
-		}, 500);
+		}, 1000);
 	}, [user]);
 
 	async function deleteOxygenJournals(oxygenJournalId: string) {

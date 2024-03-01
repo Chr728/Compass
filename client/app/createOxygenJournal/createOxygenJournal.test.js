@@ -2,6 +2,8 @@ import "@testing-library/jest-dom";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { auth } from "../config/firebase";
+import { createO2SaturationJournal } from "../http/oxygenJournalAPI";
+
 import CreateOxygenJournalPage from "./createOxygenJournalPage";
 const fakeUser = {
 	uid: "1",
@@ -95,7 +97,7 @@ describe("oxygen journal tests", () => {
 		const mockFetch = jest.fn().mockResolvedValue(mockResponse);
 		global.fetch = mockFetch;
 
-		const result = await createOxygenJournal(
+		const result = await createO2SaturationJournal(
 			mockUserId,
 			mockOxygenJournalData
 		);
@@ -217,6 +219,6 @@ describe("oxygen journal tests", () => {
 		const cancelButton = screen.getAllByRole("button")[1];
 		await userEvent.click(cancelButton);
 		await mockRouter;
-		expect(mockRouter).toHaveBeenCalledWith("/getOxygenJournals ");
+		expect(mockRouter).toHaveBeenCalledWith("/getOxygenJournals");
 	});
 });
