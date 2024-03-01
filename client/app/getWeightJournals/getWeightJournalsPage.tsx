@@ -1,4 +1,5 @@
 "use client";
+import { Chart } from "chart.js";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
@@ -20,7 +21,6 @@ import {
 	deleteWeightJournal,
 	getWeightJournals,
 } from "../http/weightJournalAPI";
-
 export default function GetWeightJournalsPage() {
 	const logger = require("../../logger");
 	const router = useRouter();
@@ -28,6 +28,9 @@ export default function GetWeightJournalsPage() {
 	const { userInfo } = useUser();
 	const [weight, setweight] = useState<any>(null);
 	const { handlePopUp } = useProp();
+	const [chartData, setChartData] = useState<
+		{ weight: number; bmi: number }[]
+	>([]);
 
 	useEffect(() => {
 		if (!userInfo) {
@@ -42,6 +45,59 @@ export default function GetWeightJournalsPage() {
 				const result = await getWeightJournals();
 				logger.info("All Weight journals entry retrieved:", result);
 				setweight(result.data);
+
+				// Prepare chart data
+				const data = result.data.map(
+					(item: { weight: number; height: number }) => ({
+						weight: item.weight,
+						bmi: parseFloat(
+							(item.weight / (item.height / 100) ** 2).toFixed(2)
+						),
+					})
+				);
+				setChartData(data);
+				// Make sure ctx references a canvas element
+				const ctx = document.getElementById(
+					"weightChart"
+				) as HTMLCanvasElement;
+
+				// Convert BMI values to numbers
+				const bmis: number[] = data.map((item: { bmi: string }) =>
+					parseFloat(item.bmi)
+				);
+
+				// Render the chart
+				new Chart(ctx, {
+					type: "bar",
+					data: {
+						labels: data.map(
+							(_: any, index: number) => `Person ${index + 1}`
+						),
+						datasets: [
+							{
+								label: "Weight",
+								backgroundColor: "rgba(255, 99, 132, 0.5)",
+								borderColor: "rgba(255, 99, 132, 1)",
+								data: data.map(
+									(item: { weight: string }) => item.weight
+								),
+							},
+							{
+								label: "BMI",
+								backgroundColor: "rgba(54, 162, 235, 0.5)",
+								borderColor: "rgba(54, 162, 235, 1)",
+								data: bmis,
+							},
+						],
+					},
+					options: {
+						scales: {
+							y: {
+								beginAtZero: true,
+							},
+						},
+					},
+				});
 			} catch (error) {
 				handlePopUp("error", "Error retrieving weight journal entry:");
 			}
@@ -155,6 +211,10 @@ export default function GetWeightJournalsPage() {
 
 			{weight && (
 				<div className="rounded-3xl bg-white flex flex-col mt-4 mb-44 w-full md:max-w-[800px] md:min-h-[550px] p-4 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]">
+					<canvas
+						id="weightChart"
+						style={{ maxHeight: "400px" }}></canvas>
+
 					<div className="flex justify-between items-center">
 						<div>
 							<Button
