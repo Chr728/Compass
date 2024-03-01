@@ -103,8 +103,8 @@ export default function GetOxygenJournalsPage() {
 	const [orderO2, setOrderO2] = useState(false);
 
 	const handleOrderO2 = () => {
-		setOrderO2(!orderoxygen);
-		if (!orderoxygen) {
+		setOrderO2(!orderO2);
+		if (!orderO2) {
 			const increasingOxygenData = [...oxygen].sort(
 				(a, b) => a.o2sat - b.o2sat
 			);
@@ -116,11 +116,11 @@ export default function GetOxygenJournalsPage() {
 			setoxygen(decreasingOrderOxygenData);
 		}
 	};
-	const [orderoxygen, setOrderOxygen] = useState(false);
+	const [orderPulse, setOrderPulse] = useState(false);
 
-	const handleOrderOxygen = () => {
-		setOrderOxygen(!orderoxygen);
-		if (!orderoxygen) {
+	const handleOrderPulse = () => {
+		setOrderPulse(!orderPulse);
+		if (!orderPulse) {
 			const increasingOxygenData = [...oxygen].sort(
 				(a, b) => a.pulse - b.pulse
 			);
@@ -196,9 +196,9 @@ export default function GetOxygenJournalsPage() {
 							<div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
 								Pulse
 								<button
-									onClick={handleOrderOxygen}
+									onClick={handleOrderPulse}
 									aria-label="orderOxygen">
-									{orderoxygen ? (
+									{orderPulse ? (
 										<MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" />
 									) : (
 										<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
