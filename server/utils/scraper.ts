@@ -1,7 +1,7 @@
 import cheerio from 'cheerio';
 import fs from 'fs';
 import path from 'path';
-import { Logger } from './middlewares/logger';
+import { Logger } from '../middlewares/logger';
 
 async function scrape() {
     try {
@@ -33,10 +33,12 @@ async function scrape() {
             })
         }
         fs.writeFileSync(path.join(__dirname, 'scrapeData.json'), JSON.stringify(data, null, 2))
-        Logger.info('Data has been scraped and saved to data.json')
+        Logger.info('Data has been scraped and saved to scrapeData.json')
     } catch (err: any) {
         Logger.log(err)
     }
 }
 
-export default scrape;
+
+scrape()
+// export default scrape;
