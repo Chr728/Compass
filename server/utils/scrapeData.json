@@ -1,6 +1,6 @@
 [
   {
-    "last_updated": 1709324053150,
+    "last_updated": 1709325646486,
     "hospital_name": "Centre de santé et de services sociaux du Granit",
     "hospital_address": "3569 rue Laval, Lac-Mégantic, G6B 1A5\n            \n            Estrie",
     "waiting_time": "05:14",
@@ -9,7 +9,7 @@
     "stretcher_occupancy": "20%"
   },
   {
-    "last_updated": 1709324053152,
+    "last_updated": 1709325646487,
     "hospital_name": "Centre hospitalier de l'Université de Montréal",
     "hospital_address": "1000 rue Saint-Denis, Montréal, H2X 0A9\n            \n            Montréal",
     "waiting_time": "03:11",
@@ -18,7 +18,7 @@
     "stretcher_occupancy": "175%"
   },
   {
-    "last_updated": 1709324053153,
+    "last_updated": 1709325646488,
     "hospital_name": "Centre hospitalier de l'Université Laval",
     "hospital_address": "2705 boulevard Laurier, Québec, G1V 4G2\n            \n            Capitale-Nationale",
     "waiting_time": "09:00",
@@ -27,7 +27,7 @@
     "stretcher_occupancy": "not applicable"
   },
   {
-    "last_updated": 1709324053153,
+    "last_updated": 1709325646488,
     "hospital_name": "Centre hospitalier de St.Mary",
     "hospital_address": "3830 avenue Lacombe, Montréal, H3T 1M5\n            \n            Montréal",
     "waiting_time": "01:48",
@@ -36,7 +36,7 @@
     "stretcher_occupancy": "109%"
   },
   {
-    "last_updated": 1709324053153,
+    "last_updated": 1709325646489,
     "hospital_name": "Centre hospitalier régional du Grand-Portage",
     "hospital_address": "75 rue Saint-Henri, Rivière-du-Loup, G5R 2A4\n            \n            Bas-Saint-Laurent",
     "waiting_time": "04:38",
@@ -45,7 +45,7 @@
     "stretcher_occupancy": "144%"
   },
   {
-    "last_updated": 1709324053154,
+    "last_updated": 1709325646489,
     "hospital_name": "Centre multiservices de santé et de services sociaux Avellin-Dalcourt",
     "hospital_address": "450 2e Rue, Louiseville, J5V 1V3\n            \n            Mauricie et Centre-du-Québec",
     "waiting_time": "10:27",
@@ -54,7 +54,7 @@
     "stretcher_occupancy": "125%"
   },
   {
-    "last_updated": 1709324053154,
+    "last_updated": 1709325646489,
     "hospital_name": "Centre multiservices de santé et de services sociaux Chauveau",
     "hospital_address": "11999 rue de l'Hôpital, Québec, G2A 2T7\n            \n            Capitale-Nationale",
     "waiting_time": "06:37",
@@ -63,7 +63,7 @@
     "stretcher_occupancy": "100%"
   },
   {
-    "last_updated": 1709324053154,
+    "last_updated": 1709325646490,
     "hospital_name": "Centre multiservices de santé et de services sociaux Christ-Roi",
     "hospital_address": "675 rue Saint-Jean-Baptiste, Nicolet, J3T 1S4\n            \n            Mauricie et Centre-du-Québec",
     "waiting_time": "06:38",
@@ -72,7 +72,7 @@
     "stretcher_occupancy": "67%"
   },
   {
-    "last_updated": 1709324053154,
+    "last_updated": 1709325646490,
     "hospital_name": "Centre multiservices de santé et de services sociaux d'Argenteuil",
     "hospital_address": "145 avenue de la Providence, Lachute, J8H 4C7\n            \n            Laurentides",
     "waiting_time": "08:48",
@@ -81,7 +81,7 @@
     "stretcher_occupancy": "not applicable"
   },
   {
-    "last_updated": 1709324053155,
+    "last_updated": 1709325646490,
     "hospital_name": "Centre multiservices de santé et de services sociaux de Baie-Saint-Paul",
     "hospital_address": "88 rue Racine, Baie-Saint-Paul, G3Z 0K3\n            \n            Capitale-Nationale",
     "waiting_time": "04:39",
@@ -90,7 +90,7 @@
     "stretcher_occupancy": "75%"
   },
   {
-    "last_updated": 1709324053155,
+    "last_updated": 1709325646490,
     "hospital_name": "Ensemble du Québec",
     "hospital_address": "",
     "waiting_time": "00:00",
@@ -99,7 +99,7 @@
     "stretcher_occupancy": "117%"
   },
   {
-    "last_updated": 1709324053846,
+    "last_updated": 1709325647114,
     "hospital_name": "Centre multiservices de santé et de services sociaux de Fermont",
     "hospital_address": "1 rue Aquilon, Fermont, G0G 1J0\n            \n            Côte-Nord",
     "waiting_time": "03:33",
@@ -108,7 +108,7 @@
     "stretcher_occupancy": "100%"
   },
   {
-    "last_updated": 1709324053846,
+    "last_updated": 1709325647115,
     "hospital_name": "Centre multiservices de santé et de services sociaux de Forestville",
     "hospital_address": "2 7e rue, Forestville, G0T 1E0\n            \n            Côte-Nord",
     "waiting_time": "02:50",
@@ -117,7 +117,7 @@
     "stretcher_occupancy": "0%"
   },
   {
-    "last_updated": 1709324053847,
+    "last_updated": 1709325647115,
     "hospital_name": "Centre multiservices de santé et de services sociaux de Fortierville",
     "hospital_address": "216 rue Principale, Fortierville, G0S 1J0\n            \n            Mauricie et Centre-du-Québec",
     "waiting_time": "02:21",
@@ -126,7 +126,7 @@
     "stretcher_occupancy": "0%"
   },
   {
-    "last_updated": 1709324053847,
+    "last_updated": 1709325647115,
     "hospital_name": "Centre multiservices de santé et de services sociaux de Grande-Vallée",
     "hospital_address": "71 rue Saint-François-Xavier Ouest, Grande-Vallée, G0E 1K0\n            \n            Gaspésie-Îles-de-la-Madeleine",
     "waiting_time": "01:38",
@@ -135,7 +135,7 @@
     "stretcher_occupancy": "0%"
   },
   {
-    "last_updated": 1709324053847,
+    "last_updated": 1709325647115,
     "hospital_name": "Centre multiservices de santé et de services sociaux de la Basse-Côte-Nord",
     "hospital_address": "1070 boulevard Docteur-Camille-Marcoux, Blanc-Sablon, G0G 1W0\n            \n            Côte-Nord",
     "waiting_time": "02:04",
@@ -144,7 +144,7 @@
     "stretcher_occupancy": "50%"
   },
   {
-    "last_updated": 1709324053847,
+    "last_updated": 1709325647115,
     "hospital_name": "Centre multiservices de santé et de services sociaux de la Minganie",
     "hospital_address": "1035 promenade des Anciens, Havre-Saint-Pierre, G0G 1P0\n            \n            Côte-Nord",
     "waiting_time": "07:21",
@@ -153,7 +153,7 @@
     "stretcher_occupancy": "50%"
   },
   {
-    "last_updated": 1709324053847,
+    "last_updated": 1709325647116,
     "hospital_name": "Centre multiservices de santé et de services sociaux de la MRC de Coaticook",
     "hospital_address": "138 rue Jeanne-Mance, Coaticook, J1A 1W3\n            \n            Estrie",
     "waiting_time": "04:28",
@@ -162,7 +162,7 @@
     "stretcher_occupancy": "33%"
   },
   {
-    "last_updated": 1709324053848,
+    "last_updated": 1709325647116,
     "hospital_name": "Centre multiservices de santé et de services sociaux de La Sarre",
     "hospital_address": "679 2e Rue Est, La Sarre, J9Z 2X7\n            \n            Abitibi-Témiscamingue",
     "waiting_time": "05:46",
@@ -171,7 +171,7 @@
     "stretcher_occupancy": "140%"
   },
   {
-    "last_updated": 1709324053848,
+    "last_updated": 1709325647116,
     "hospital_name": "Centre multiservices de santé et de services sociaux de Mansfield-et-Pontefact",
     "hospital_address": "160 Chemin de la Chute, Mansfield-et-Pontefract, J0X 1R0\n            \n            Outaouais",
     "waiting_time": "01:03",
@@ -180,7 +180,7 @@
     "stretcher_occupancy": "0%"
   },
   {
-    "last_updated": 1709324053848,
+    "last_updated": 1709325647116,
     "hospital_name": "Centre multiservices de santé et de services sociaux de Memphrémagog",
     "hospital_address": "50 rue Saint-Patrice Est, Magog, J1X 3X3\n            \n            Estrie",
     "waiting_time": "06:02",
@@ -189,7 +189,7 @@
     "stretcher_occupancy": "100%"
   },
   {
-    "last_updated": 1709324053848,
+    "last_updated": 1709325647117,
     "hospital_name": "Ensemble du Québec",
     "hospital_address": "",
     "waiting_time": "00:00",
@@ -198,7 +198,7 @@
     "stretcher_occupancy": "117%"
   },
   {
-    "last_updated": 1709324054838,
+    "last_updated": 1709325648101,
     "hospital_name": "Centre multiservices de santé et de services sociaux de Port-Cartier",
     "hospital_address": "3 rue De Shelter Bay, Port-Cartier, G5B 2W9\n            \n            Côte-Nord",
     "waiting_time": "03:23",
@@ -207,7 +207,7 @@
     "stretcher_occupancy": "80%"
   },
   {
-    "last_updated": 1709324054838,
+    "last_updated": 1709325648101,
     "hospital_name": "Centre multiservices de santé et de services sociaux de Rivière-Rouge",
     "hospital_address": "1525 rue de L'Annonciation Nord, Rivière-Rouge, J0T 1T0\n            \n            Laurentides",
     "waiting_time": "04:40",
@@ -216,7 +216,7 @@
     "stretcher_occupancy": "120%"
   },
   {
-    "last_updated": 1709324054838,
+    "last_updated": 1709325648102,
     "hospital_name": "Centre multiservices de santé et de services sociaux de Saint-Marc-des-Carrières",
     "hospital_address": "1045 boulevard Bona-Dussault, Saint-Marc-des-Carrières, G0A 4B0\n            \n            Capitale-Nationale",
     "waiting_time": "03:17",
@@ -225,7 +225,7 @@
     "stretcher_occupancy": "100%"
   },
   {
-    "last_updated": 1709324054839,
+    "last_updated": 1709325648102,
     "hospital_name": "Centre multiservices de santé et de services sociaux de Saint-Raymond",
     "hospital_address": "700 rue Saint-Cyrille, Saint-Raymond, G3L 1W1\n            \n            Capitale-Nationale",
     "waiting_time": "02:05",
@@ -234,7 +234,7 @@
     "stretcher_occupancy": "0%"
   },
   {
-    "last_updated": 1709324054839,
+    "last_updated": 1709325648102,
     "hospital_name": "Centre multiservices de santé et de services sociaux de Sainte-Agathe",
     "hospital_address": "234 rue Saint-Vincent, Sainte-Agathe-des-Monts, J8C 2B8\n            \n            Laurentides",
     "waiting_time": "10:32",
@@ -243,7 +243,7 @@
     "stretcher_occupancy": "150%"
   },
   {
-    "last_updated": 1709324054839,
+    "last_updated": 1709325648102,
     "hospital_name": "Centre multiservices de santé et de services sociaux de Sainte-Anne-de-Beaupré",
     "hospital_address": "11000 rue des Montagnards, Beaupré, G0A 1E0\n            \n            Capitale-Nationale",
     "waiting_time": "04:05",
@@ -252,7 +252,7 @@
     "stretcher_occupancy": "100%"
   },
   {
-    "last_updated": 1709324054839,
+    "last_updated": 1709325648102,
     "hospital_name": "Centre multiservices de santé et de services sociaux de Trois-Pistoles",
     "hospital_address": "550 rue Notre-Dame Est, Trois-Pistoles, G0L 4K0\n            \n            Bas-Saint-Laurent",
     "waiting_time": "04:29",
@@ -261,7 +261,7 @@
     "stretcher_occupancy": "67%"
   },
   {
-    "last_updated": 1709324054840,
+    "last_updated": 1709325648103,
     "hospital_name": "Centre multiservices de santé et de services sociaux de Témiscaming-Kipawa",
     "hospital_address": "180 rue Anvik, Témiscaming, J0Z 3R0\n            \n            Abitibi-Témiscamingue",
     "waiting_time": "00:31",
@@ -270,7 +270,7 @@
     "stretcher_occupancy": "100%"
   },
   {
-    "last_updated": 1709324054840,
+    "last_updated": 1709325648103,
     "hospital_name": "Centre multiservices de santé et de services sociaux de Ville-Marie",
     "hospital_address": "22 rue Notre-Dame Nord, Ville-Marie, J9V 1W8\n            \n            Abitibi-Témiscamingue",
     "waiting_time": "05:25",
@@ -279,7 +279,7 @@
     "stretcher_occupancy": "20%"
   },
   {
-    "last_updated": 1709324054840,
+    "last_updated": 1709325648103,
     "hospital_name": "Centre multiservices de santé et de services sociaux des Escoumins",
     "hospital_address": "4 rue de l'Hôpital, Les Escoumins, G0T 1K0\n            \n            Côte-Nord",
     "waiting_time": "01:11",
@@ -288,7 +288,7 @@
     "stretcher_occupancy": "33%"
   },
   {
-    "last_updated": 1709324054840,
+    "last_updated": 1709325648103,
     "hospital_name": "Ensemble du Québec",
     "hospital_address": "",
     "waiting_time": "00:00",
@@ -297,7 +297,7 @@
     "stretcher_occupancy": "117%"
   },
   {
-    "last_updated": 1709324055764,
+    "last_updated": 1709325648795,
     "hospital_name": "Centre multiservices de santé et de services sociaux des Sources",
     "hospital_address": "475 3e Avenue, Val-des-Sources, J1T 1X6\n            \n            Estrie",
     "waiting_time": "07:07",
@@ -306,7 +306,7 @@
     "stretcher_occupancy": "0%"
   },
   {
-    "last_updated": 1709324055764,
+    "last_updated": 1709325648795,
     "hospital_name": "Centre multiservices de santé et de services sociaux du Haut-Saint-Maurice",
     "hospital_address": "885 boulevard Ducharme, La Tuque, G9X 3C1\n            \n            Mauricie et Centre-du-Québec",
     "waiting_time": "04:50",
@@ -315,7 +315,7 @@
     "stretcher_occupancy": "0%"
   },
   {
-    "last_updated": 1709324055764,
+    "last_updated": 1709325648795,
     "hospital_name": "CHSLD et Hôpital Paul-Gilbert",
     "hospital_address": "9330 boulevard du Centre-Hospitalier, Lévis, G6X 1L6\n            \n            Chaudière-Appalaches",
     "waiting_time": "03:49",
@@ -324,7 +324,7 @@
     "stretcher_occupancy": "not applicable"
   },
   {
-    "last_updated": 1709324055765,
+    "last_updated": 1709325648796,
     "hospital_name": "CHU Sainte-Justine",
     "hospital_address": "3175 chemin de la Côte-Sainte-Catherine, Montréal, H3T 1C5\n            \n            Montréal",
     "waiting_time": "01:49",
@@ -333,7 +333,7 @@
     "stretcher_occupancy": "not applicable"
   },
   {
-    "last_updated": 1709324055765,
+    "last_updated": 1709325648796,
     "hospital_name": "CHUS - Hôpital Fleurimont",
     "hospital_address": "3001 12e Avenue Nord, Sherbrooke, J1H 5N4\n            \n            Estrie",
     "waiting_time": "04:54",
@@ -342,7 +342,7 @@
     "stretcher_occupancy": "129%"
   },
   {
-    "last_updated": 1709324055765,
+    "last_updated": 1709325648796,
     "hospital_name": "CHUS - Hôtel-Dieu de Sherbrooke",
     "hospital_address": "580 rue Bowen Sud, Sherbrooke, J1G 2E8\n            \n            Estrie",
     "waiting_time": "05:37",
@@ -351,7 +351,7 @@
     "stretcher_occupancy": "111%"
   },
   {
-    "last_updated": 1709324055765,
+    "last_updated": 1709325648796,
     "hospital_name": "CLSC de Pohénégamook",
     "hospital_address": "1922 rue Saint-Vallier, Pohénégamook, G0L 1J0\n            \n            Bas-Saint-Laurent",
     "waiting_time": "01:15",
@@ -360,7 +360,7 @@
     "stretcher_occupancy": "0%"
   },
   {
-    "last_updated": 1709324055765,
+    "last_updated": 1709325648797,
     "hospital_name": "CLSC et centre d'hébergement de la Petite-Nation",
     "hospital_address": "14 rue Saint-André, Saint-André-Avellin, J0V 1W0\n            \n            Outaouais",
     "waiting_time": "03:10",
@@ -369,7 +369,7 @@
     "stretcher_occupancy": "0%"
   },
   {
-    "last_updated": 1709324055766,
+    "last_updated": 1709325648797,
     "hospital_name": "CLSC et centre de services ambulatoires de Murdochville",
     "hospital_address": "600 avenue William-May, Murdochville, G0E 1W0\n            \n            Gaspésie-Îles-de-la-Madeleine",
     "waiting_time": "01:04",
@@ -378,7 +378,7 @@
     "stretcher_occupancy": "0%"
   },
   {
-    "last_updated": 1709324055766,
+    "last_updated": 1709325648797,
     "hospital_name": "CLSC et centre de services ambulatoires de Paspébiac",
     "hospital_address": "273 boulevard Gérard-D.-Levesque, Paspébiac, G0C 2K0\n            \n            Gaspésie-Îles-de-la-Madeleine",
     "waiting_time": "02:56",
@@ -387,7 +387,7 @@
     "stretcher_occupancy": "100%"
   },
   {
-    "last_updated": 1709324055766,
+    "last_updated": 1709325648797,
     "hospital_name": "Ensemble du Québec",
     "hospital_address": "",
     "waiting_time": "00:00",
@@ -396,7 +396,7 @@
     "stretcher_occupancy": "117%"
   },
   {
-    "last_updated": 1709324056271,
+    "last_updated": 1709325649664,
     "hospital_name": "CLSC et hôpital Le Royer",
     "hospital_address": "635 boulevard Jolliet, Baie-Comeau, G5C 1P1\n            \n            Côte-Nord",
     "waiting_time": "07:49",
@@ -405,7 +405,7 @@
     "stretcher_occupancy": "190%"
   },
   {
-    "last_updated": 1709324056271,
+    "last_updated": 1709325649664,
     "hospital_name": "Hôpital Anna-Laberge",
     "hospital_address": "200 boulevard Brisebois, Châteauguay, J6K 4W8\n            \n            Montérégie",
     "waiting_time": "06:27",
@@ -414,7 +414,7 @@
     "stretcher_occupancy": "175%"
   },
   {
-    "last_updated": 1709324056272,
+    "last_updated": 1709325649664,
     "hospital_name": "Hôpital Barrie Memorial / Barrie Memorial Hospital",
     "hospital_address": "28 rue Gale, Ormstown, J0S 1K0\n            \n            Montérégie",
     "waiting_time": "07:56",
@@ -423,7 +423,7 @@
     "stretcher_occupancy": "80%"
   },
   {
-    "last_updated": 1709324056272,
+    "last_updated": 1709325649665,
     "hospital_name": "Hôpital Brome-Missisquoi-Perkins",
     "hospital_address": "950 rue Principale, Cowansville, J2K 1K3\n            \n            Estrie",
     "waiting_time": "07:56",
@@ -432,7 +432,7 @@
     "stretcher_occupancy": "131%"
   },
   {
-    "last_updated": 1709324056272,
+    "last_updated": 1709325649665,
     "hospital_name": "Hôpital Charles-Le Moyne",
     "hospital_address": "3120 boulevard Taschereau, Longueuil, J4V 2H1\n            \n            Montérégie",
     "waiting_time": "10:13",
@@ -441,7 +441,7 @@
     "stretcher_occupancy": "102%"
   },
   {
-    "last_updated": 1709324056273,
+    "last_updated": 1709325649665,
     "hospital_name": "Hôpital d'Alma",
     "hospital_address": "300 boulevard Champlain Sud, Alma, G8B 5W3\n            \n            Saguenay-Lac-Saint-Jean",
     "waiting_time": "05:22",
@@ -450,7 +450,7 @@
     "stretcher_occupancy": "53%"
   },
   {
-    "last_updated": 1709324056273,
+    "last_updated": 1709325649665,
     "hospital_name": "Hôpital d'Amos",
     "hospital_address": "622 4e Rue Ouest, Amos, J9T 2S2\n            \n            Abitibi-Témiscamingue",
     "waiting_time": "04:21",
@@ -459,7 +459,7 @@
     "stretcher_occupancy": "100%"
   },
   {
-    "last_updated": 1709324056273,
+    "last_updated": 1709325649665,
     "hospital_name": "Hôpital d'Amqui",
     "hospital_address": "135 avenue Gaëtan-Archambault, Amqui, G5J 2K5\n            \n            Bas-Saint-Laurent",
     "waiting_time": "02:49",
@@ -468,7 +468,7 @@
     "stretcher_occupancy": "0%"
   },
   {
-    "last_updated": 1709324056273,
+    "last_updated": 1709325649665,
     "hospital_name": "Hôpital de Chandler",
     "hospital_address": "451 rue Monseigneur-Ross Est, Chandler, G0C 1K0\n            \n            Gaspésie-Îles-de-la-Madeleine",
     "waiting_time": "04:57",
@@ -477,7 +477,7 @@
     "stretcher_occupancy": "50%"
   },
   {
-    "last_updated": 1709324056274,
+    "last_updated": 1709325649666,
     "hospital_name": "Hôpital de Chicoutimi",
     "hospital_address": "305 rue Saint-Vallier, Saguenay, G7H 5H6\n            \n            Saguenay-Lac-Saint-Jean",
     "waiting_time": "08:43",
@@ -486,7 +486,7 @@
     "stretcher_occupancy": "98%"
   },
   {
-    "last_updated": 1709324056274,
+    "last_updated": 1709325649666,
     "hospital_name": "Ensemble du Québec",
     "hospital_address": "",
     "waiting_time": "00:00",
@@ -495,7 +495,7 @@
     "stretcher_occupancy": "117%"
   },
   {
-    "last_updated": 1709324056889,
+    "last_updated": 1709325651889,
     "hospital_name": "Hôpital de Dolbeau-Mistassini",
     "hospital_address": "2000 boulevard Sacré-Coeur, Dolbeau-Mistassini, G8L 2R5\n            \n            Saguenay-Lac-Saint-Jean",
     "waiting_time": "04:11",
@@ -504,7 +504,7 @@
     "stretcher_occupancy": "20%"
   },
   {
-    "last_updated": 1709324056890,
+    "last_updated": 1709325651890,
     "hospital_name": "Hôpital de Gaspé",
     "hospital_address": "215 boulevard de York Ouest, Gaspé, G4X 2W2\n            \n            Gaspésie-Îles-de-la-Madeleine",
     "waiting_time": "03:47",
@@ -513,7 +513,7 @@
     "stretcher_occupancy": "67%"
   },
   {
-    "last_updated": 1709324056890,
+    "last_updated": 1709325651890,
     "hospital_name": "Hôpital de Gatineau",
     "hospital_address": "909 boulevard La Vérendrye Ouest, Gatineau, J8P 7H2\n            \n            Outaouais",
     "waiting_time": "08:43",
@@ -522,7 +522,7 @@
     "stretcher_occupancy": "107%"
   },
   {
-    "last_updated": 1709324056890,
+    "last_updated": 1709325651890,
     "hospital_name": "Hôpital de Granby",
     "hospital_address": "205 boulevard Leclerc Ouest, Granby, J2G 1T7\n            \n            Estrie",
     "waiting_time": "09:46",
@@ -531,7 +531,7 @@
     "stretcher_occupancy": "140%"
   },
   {
-    "last_updated": 1709324056890,
+    "last_updated": 1709325651891,
     "hospital_name": "Hôpital de Hull",
     "hospital_address": "116 boulevard Lionel-Émond, Gatineau, J8Y 1W7\n            \n            Outaouais",
     "waiting_time": "05:35",
@@ -540,7 +540,7 @@
     "stretcher_occupancy": "124%"
   },
   {
-    "last_updated": 1709324056891,
+    "last_updated": 1709325651891,
     "hospital_name": "Hôpital de l'Archipel",
     "hospital_address": "430 chemin Principal, Les Îles-de-la-Madeleine, G4T 1R9\n            \n            Gaspésie-Îles-de-la-Madeleine",
     "waiting_time": "02:50",
@@ -549,7 +549,7 @@
     "stretcher_occupancy": "67%"
   },
   {
-    "last_updated": 1709324056891,
+    "last_updated": 1709325651891,
     "hospital_name": "Hôpital de l'Enfant-Jésus",
     "hospital_address": "1401 18e Rue, Québec, G1J 1Z4\n            \n            Capitale-Nationale",
     "waiting_time": "03:42",
@@ -558,7 +558,7 @@
     "stretcher_occupancy": "104%"
   },
   {
-    "last_updated": 1709324056891,
+    "last_updated": 1709325651892,
     "hospital_name": "Hôpital de La Baie",
     "hospital_address": "1000 rue du Docteur-Desgagné, Saguenay, G7B 2Y6\n            \n            Saguenay-Lac-Saint-Jean",
     "waiting_time": "06:11",
@@ -567,7 +567,7 @@
     "stretcher_occupancy": "71%"
   },
   {
-    "last_updated": 1709324056891,
+    "last_updated": 1709325651892,
     "hospital_name": "Hôpital de la Cité-de-la-Santé",
     "hospital_address": "1755 boulevard René-Laennec, Laval, H7M 3L9\n            \n            Laval",
     "waiting_time": "04:55",
@@ -576,7 +576,7 @@
     "stretcher_occupancy": "137%"
   },
   {
-    "last_updated": 1709324056892,
+    "last_updated": 1709325651892,
     "hospital_name": "Hôpital de Lachine",
     "hospital_address": "650 16e Avenue, Montréal, H8S 3N5\n            \n            Montréal",
     "waiting_time": "06:07",
@@ -585,7 +585,7 @@
     "stretcher_occupancy": "71%"
   },
   {
-    "last_updated": 1709324056892,
+    "last_updated": 1709325651893,
     "hospital_name": "Ensemble du Québec",
     "hospital_address": "",
     "waiting_time": "00:00",
@@ -594,7 +594,7 @@
     "stretcher_occupancy": "117%"
   },
   {
-    "last_updated": 1709324057510,
+    "last_updated": 1709325652911,
     "hospital_name": "Hôpital de Lanaudière et Centre d'hébergement Parphilia-Ferland",
     "hospital_address": "1000 boulevard Sainte-Anne, Saint-Charles-Borromée, J6E 6J2\n            \n            Lanaudière",
     "waiting_time": "05:05",
@@ -603,7 +603,7 @@
     "stretcher_occupancy": "not applicable"
   },
   {
-    "last_updated": 1709324057511,
+    "last_updated": 1709325652912,
     "hospital_name": "Hôpital de LaSalle",
     "hospital_address": "8585 terrasse Champlain, Montréal, H8P 1C1\n            \n            Montréal",
     "waiting_time": "04:47",
@@ -612,7 +612,7 @@
     "stretcher_occupancy": "167%"
   },
   {
-    "last_updated": 1709324057511,
+    "last_updated": 1709325652912,
     "hospital_name": "Hôpital de Maniwaki",
     "hospital_address": "309 boulevard Desjardins, Maniwaki, J9E 2E7\n            \n            Outaouais",
     "waiting_time": "04:59",
@@ -621,7 +621,7 @@
     "stretcher_occupancy": "83%"
   },
   {
-    "last_updated": 1709324057511,
+    "last_updated": 1709325652913,
     "hospital_name": "Hôpital de Matane",
     "hospital_address": "333 rue Thibault, Matane, G4W 2W5\n            \n            Bas-Saint-Laurent",
     "waiting_time": "02:57",
@@ -630,7 +630,7 @@
     "stretcher_occupancy": "86%"
   },
   {
-    "last_updated": 1709324057511,
+    "last_updated": 1709325652913,
     "hospital_name": "Hôpital de Mont-Laurier",
     "hospital_address": "2561 chemin de la Lièvre Sud, Mont-Laurier, J9L 3G3\n            \n            Laurentides",
     "waiting_time": "03:51",
@@ -639,7 +639,7 @@
     "stretcher_occupancy": "180%"
   },
   {
-    "last_updated": 1709324057512,
+    "last_updated": 1709325652913,
     "hospital_name": "Hôpital de Montmagny",
     "hospital_address": "350 boulevard Taché Ouest, Montmagny, G5V 3R8\n            \n            Chaudière-Appalaches",
     "waiting_time": "02:53",
@@ -648,7 +648,7 @@
     "stretcher_occupancy": "90%"
   },
   {
-    "last_updated": 1709324057512,
+    "last_updated": 1709325652914,
     "hospital_name": "Hôpital Notre-Dame-du-Lac",
     "hospital_address": "58 rue de l'Église, Témiscouata-sur-le-Lac, G0L 1X0\n            \n            Bas-Saint-Laurent",
     "waiting_time": "01:55",
@@ -657,7 +657,7 @@
     "stretcher_occupancy": "20%"
   },
   {
-    "last_updated": 1709324057512,
+    "last_updated": 1709325652914,
     "hospital_name": "Hôpital de Rouyn-Noranda",
     "hospital_address": "4 9e Rue, Rouyn-Noranda, J9X 2B2\n            \n            Abitibi-Témiscamingue",
     "waiting_time": "06:46",
@@ -666,7 +666,7 @@
     "stretcher_occupancy": "38%"
   },
   {
-    "last_updated": 1709324057512,
+    "last_updated": 1709325652914,
     "hospital_name": "Hôpital de Saint-Eustache",
     "hospital_address": "520 boulevard Arthur-Sauvé, Saint-Eustache, J7R 5B1\n            \n            Laurentides",
     "waiting_time": "10:51",
@@ -675,7 +675,7 @@
     "stretcher_occupancy": "156%"
   },
   {
-    "last_updated": 1709324057513,
+    "last_updated": 1709325652915,
     "hospital_name": "Hôpital de Saint-Georges",
     "hospital_address": "1515 17e rue, Saint-Georges, G5Y 4T8\n            \n            Chaudière-Appalaches",
     "waiting_time": "06:11",
@@ -684,7 +684,7 @@
     "stretcher_occupancy": "138%"
   },
   {
-    "last_updated": 1709324057513,
+    "last_updated": 1709325652915,
     "hospital_name": "Ensemble du Québec",
     "hospital_address": "",
     "waiting_time": "00:00",
@@ -693,7 +693,7 @@
     "stretcher_occupancy": "117%"
   },
   {
-    "last_updated": 1709324058138,
+    "last_updated": 1709325654298,
     "hospital_name": "Hôpital de Saint-Jérôme",
     "hospital_address": "290 rue Montigny, Saint-Jérôme, J7Z 5T3\n            \n            Laurentides",
     "waiting_time": "14:56",
@@ -702,7 +702,7 @@
     "stretcher_occupancy": "170%"
   },
   {
-    "last_updated": 1709324058138,
+    "last_updated": 1709325654298,
     "hospital_name": "Hôpital de Thetford",
     "hospital_address": "1717 rue Notre-Dame Est, Thetford Mines, G6G 2V4\n            \n            Chaudière-Appalaches",
     "waiting_time": "01:39",
@@ -711,7 +711,7 @@
     "stretcher_occupancy": "150%"
   },
   {
-    "last_updated": 1709324058139,
+    "last_updated": 1709325654299,
     "hospital_name": "Hôpital et centre de réadaptation en dépendance de Val-d'Or",
     "hospital_address": "725 6e Rue, Val-d'Or, J9P 3Y1\n            \n            Abitibi-Témiscamingue",
     "waiting_time": "07:55",
@@ -720,7 +720,7 @@
     "stretcher_occupancy": "91%"
   },
   {
-    "last_updated": 1709324058139,
+    "last_updated": 1709325654299,
     "hospital_name": "Hôpital de Verdun",
     "hospital_address": "4000 boulevard LaSalle, Montréal, H4G 2A3\n            \n            Montréal",
     "waiting_time": "02:58",
@@ -729,7 +729,7 @@
     "stretcher_occupancy": "158%"
   },
   {
-    "last_updated": 1709324058139,
+    "last_updated": 1709325654305,
     "hospital_name": "Hôpital Douglas",
     "hospital_address": "6875 boulevard Lasalle, Montréal, H4H 1R3\n            \n            Montréal",
     "waiting_time": "03:41",
@@ -738,7 +738,7 @@
     "stretcher_occupancy": "100%"
   },
   {
-    "last_updated": 1709324058139,
+    "last_updated": 1709325654306,
     "hospital_name": "Hôpital du Centre-de-la-Mauricie",
     "hospital_address": "50 119e Rue, Shawinigan, G9P 5K1\n            \n            Mauricie et Centre-du-Québec",
     "waiting_time": "02:33",
@@ -747,7 +747,7 @@
     "stretcher_occupancy": "95%"
   },
   {
-    "last_updated": 1709324058139,
+    "last_updated": 1709325654306,
     "hospital_name": "Hôpital du Haut-Richelieu",
     "hospital_address": "920 boulevard du Séminaire Nord, Saint-Jean-sur-Richelieu, J3A 1B7\n            \n            Montérégie",
     "waiting_time": "07:14",
@@ -756,7 +756,7 @@
     "stretcher_occupancy": "130%"
   },
   {
-    "last_updated": 1709324058140,
+    "last_updated": 1709325654306,
     "hospital_name": "Hôpital du Sacré-Cœur de Montréal",
     "hospital_address": "5400 boulevard Gouin Ouest, Montréal, H4J 1C5\n            \n            Montréal",
     "waiting_time": "04:59",
@@ -765,7 +765,7 @@
     "stretcher_occupancy": "124%"
   },
   {
-    "last_updated": 1709324058140,
+    "last_updated": 1709325654307,
     "hospital_name": "Hôpital du Saint-Sacrement",
     "hospital_address": "1050 chemin Sainte-Foy, Québec, G1S 4L8\n            \n            Capitale-Nationale",
     "waiting_time": "06:11",
@@ -774,7 +774,7 @@
     "stretcher_occupancy": "91%"
   },
   {
-    "last_updated": 1709324058140,
+    "last_updated": 1709325654307,
     "hospital_name": "Hôpital du Suroît",
     "hospital_address": "150 rue Saint-Thomas, Salaberry-de-Valleyfield, J6T 6C1\n            \n            Montérégie",
     "waiting_time": "08:15",
@@ -783,7 +783,7 @@
     "stretcher_occupancy": "175%"
   },
   {
-    "last_updated": 1709324058140,
+    "last_updated": 1709325654307,
     "hospital_name": "Ensemble du Québec",
     "hospital_address": "",
     "waiting_time": "00:00",
@@ -792,7 +792,7 @@
     "stretcher_occupancy": "117%"
   },
   {
-    "last_updated": 1709324058974,
+    "last_updated": 1709325655017,
     "hospital_name": "Hôpital en santé mentale Albert-Prévost",
     "hospital_address": "6555 boulevard Gouin Ouest, Montréal, H4K 1B3\n            \n            Montréal",
     "waiting_time": "01:15",
@@ -801,7 +801,7 @@
     "stretcher_occupancy": "100%"
   },
   {
-    "last_updated": 1709324058974,
+    "last_updated": 1709325655018,
     "hospital_name": "Hôpital et centre d'hébergement de Roberval",
     "hospital_address": "450 rue Brassard, Roberval, G8H 1B9\n            \n            Saguenay-Lac-Saint-Jean",
     "waiting_time": "03:30",
@@ -810,7 +810,7 @@
     "stretcher_occupancy": "54%"
   },
   {
-    "last_updated": 1709324058974,
+    "last_updated": 1709325655018,
     "hospital_name": "Hôpital et centre de réadaptation de Jonquière",
     "hospital_address": "2230 rue de l'Hôpital, Saguenay, G7X 7X2\n            \n            Saguenay-Lac-Saint-Jean",
     "waiting_time": "08:28",
@@ -819,7 +819,7 @@
     "stretcher_occupancy": "119%"
   },
   {
-    "last_updated": 1709324058975,
+    "last_updated": 1709325655018,
     "hospital_name": "Hôpital et CHSLD de Papineau",
     "hospital_address": "155 rue Maclaren Est, Gatineau, J8L 0C2\n            \n            Outaouais",
     "waiting_time": "09:23",
@@ -828,7 +828,7 @@
     "stretcher_occupancy": "58%"
   },
   {
-    "last_updated": 1709324058975,
+    "last_updated": 1709325655019,
     "hospital_name": "Hôpital et CHSLD du Pontiac",
     "hospital_address": "200 rue Argue, Shawville, J0X 2Y0\n            \n            Outaouais",
     "waiting_time": "04:45",
@@ -837,7 +837,7 @@
     "stretcher_occupancy": "25%"
   },
   {
-    "last_updated": 1709324058975,
+    "last_updated": 1709325655019,
     "hospital_name": "Hôpital et CHSLD Mémorial de Wakefield / Wakefield Memorial Hospital",
     "hospital_address": "101 chemin Burnside, La Pêche, J0X 3G0\n            \n            Outaouais",
     "waiting_time": "08:26",
@@ -846,7 +846,7 @@
     "stretcher_occupancy": "175%"
   },
   {
-    "last_updated": 1709324058975,
+    "last_updated": 1709325655019,
     "hospital_name": "Hôpital et CLSC de la Malbaie",
     "hospital_address": "303 rue Saint-Étienne, La Malbaie, G5A 1T1\n            \n            Capitale-Nationale",
     "waiting_time": "05:29",
@@ -855,7 +855,7 @@
     "stretcher_occupancy": "56%"
   },
   {
-    "last_updated": 1709324058976,
+    "last_updated": 1709325655020,
     "hospital_name": "Hôpital et CLSC de Sainte-Anne-des-Monts",
     "hospital_address": "50 rue du Belvédère, Sainte-Anne-des-Monts, G4V 1X4\n            \n            Gaspésie-Îles-de-la-Madeleine",
     "waiting_time": "05:21",
@@ -864,7 +864,7 @@
     "stretcher_occupancy": "117%"
   },
   {
-    "last_updated": 1709324058976,
+    "last_updated": 1709325655020,
     "hospital_name": "Hôpital et CLSC de Sept-Îles",
     "hospital_address": "45 rue du Père-Divet, Sept-Îles, G4R 3N7\n            \n            Côte-Nord",
     "waiting_time": "07:54",
@@ -873,7 +873,7 @@
     "stretcher_occupancy": "160%"
   },
   {
-    "last_updated": 1709324058976,
+    "last_updated": 1709325655020,
     "hospital_name": "Hôpital et groupe de médecine de famille universitaire de Maria",
     "hospital_address": "419 boulevard Perron, Maria, G0C 1Y0\n            \n            Gaspésie-Îles-de-la-Madeleine",
     "waiting_time": "03:43",
@@ -882,7 +882,7 @@
     "stretcher_occupancy": "90%"
   },
   {
-    "last_updated": 1709324058976,
+    "last_updated": 1709325655020,
     "hospital_name": "Ensemble du Québec",
     "hospital_address": "",
     "waiting_time": "00:00",
@@ -891,7 +891,7 @@
     "stretcher_occupancy": "117%"
   },
   {
-    "last_updated": 1709324059631,
+    "last_updated": 1709325655712,
     "hospital_name": "Hôpital Fleury",
     "hospital_address": "2180 rue Fleury Est, Montréal, H2B 1K3\n            \n            Montréal",
     "waiting_time": "08:05",
@@ -900,7 +900,7 @@
     "stretcher_occupancy": "128%"
   },
   {
-    "last_updated": 1709324059631,
+    "last_updated": 1709325655712,
     "hospital_name": "Hôpital général de Montréal",
     "hospital_address": "1650 avenue Cedar, Montréal, H3G 1A4\n            \n            Montréal",
     "waiting_time": "03:58",
@@ -909,7 +909,7 @@
     "stretcher_occupancy": "123%"
   },
   {
-    "last_updated": 1709324059632,
+    "last_updated": 1709325655713,
     "hospital_name": "Hôpital général du Lakeshore",
     "hospital_address": "160 avenue Stillview, Pointe-Claire, H9R 2Y2\n            \n            Montréal",
     "waiting_time": "05:52",
@@ -918,7 +918,7 @@
     "stretcher_occupancy": "132%"
   },
   {
-    "last_updated": 1709324059632,
+    "last_updated": 1709325655713,
     "hospital_name": "Hôpital général juif",
     "hospital_address": "3755 chemin de la Côte-Sainte-Catherine, Montréal, H3T 1E2\n            \n            Montréal",
     "waiting_time": "05:09",
@@ -927,7 +927,7 @@
     "stretcher_occupancy": "194%"
   },
   {
-    "last_updated": 1709324059632,
+    "last_updated": 1709325655714,
     "hospital_name": "Hôpital Honoré-Mercier",
     "hospital_address": "2750 boulevard Laframboise, Saint-Hyacinthe, J2S 4Y8\n            \n            Montérégie",
     "waiting_time": "12:03",
@@ -936,7 +936,7 @@
     "stretcher_occupancy": "115%"
   },
   {
-    "last_updated": 1709324059632,
+    "last_updated": 1709325655714,
     "hospital_name": "Hôpital Jean-Talon",
     "hospital_address": "1385 rue Jean-Talon Est, Montréal, H2E 1S6\n            \n            Montréal",
     "waiting_time": "05:14",
@@ -945,7 +945,7 @@
     "stretcher_occupancy": "100%"
   },
   {
-    "last_updated": 1709324059632,
+    "last_updated": 1709325655714,
     "hospital_name": "Hôpital Maisonneuve-Rosemont",
     "hospital_address": "5415 boulevard de l'Assomption, Montréal, H1T 2M4\n            \n            Montréal",
     "waiting_time": "10:48",
@@ -954,7 +954,7 @@
     "stretcher_occupancy": "113%"
   },
   {
-    "last_updated": 1709324059633,
+    "last_updated": 1709325655715,
     "hospital_name": "Hôpital Notre-Dame",
     "hospital_address": "1560 rue Sherbrooke Est, Montréal, H2L 4M1\n            \n            Montréal",
     "waiting_time": "05:39",
@@ -963,7 +963,7 @@
     "stretcher_occupancy": "not applicable"
   },
   {
-    "last_updated": 1709324059633,
+    "last_updated": 1709325655715,
     "hospital_name": "Hôpital Notre-Dame-de-Fatima",
     "hospital_address": "1201 6e Avenue, La Pocatière, G0R 1Z0\n            \n            Bas-Saint-Laurent",
     "waiting_time": "03:06",
@@ -972,7 +972,7 @@
     "stretcher_occupancy": "57%"
   },
   {
-    "last_updated": 1709324059633,
+    "last_updated": 1709325655716,
     "hospital_name": "Hôpital Pierre-Boucher",
     "hospital_address": "1333 boulevard Jacques-Cartier Est, Longueuil, J4M 2A5\n            \n            Montérégie",
     "waiting_time": "10:32",
@@ -981,7 +981,7 @@
     "stretcher_occupancy": "109%"
   },
   {
-    "last_updated": 1709324059633,
+    "last_updated": 1709325655716,
     "hospital_name": "Ensemble du Québec",
     "hospital_address": "",
     "waiting_time": "00:00",
@@ -990,7 +990,7 @@
     "stretcher_occupancy": "117%"
   },
   {
-    "last_updated": 1709324060127,
+    "last_updated": 1709325656471,
     "hospital_name": "Hôpital Pierre-Le Gardeur",
     "hospital_address": "911 montée des Pionniers, Terrebonne, J6V 2H2\n            \n            Lanaudière",
     "waiting_time": "10:22",
@@ -999,7 +999,7 @@
     "stretcher_occupancy": "not applicable"
   },
   {
-    "last_updated": 1709324060127,
+    "last_updated": 1709325656471,
     "hospital_name": "Hôpital Royal Victoria",
     "hospital_address": "687 avenue des Pins Ouest, Montréal, H3A 1A1\n            \n            Montréal",
     "waiting_time": "13:34",
@@ -1008,7 +1008,7 @@
     "stretcher_occupancy": "185%"
   },
   {
-    "last_updated": 1709324060128,
+    "last_updated": 1709325656472,
     "hospital_name": "Hôpital régional de Rimouski",
     "hospital_address": "150 avenue Rouleau, Rimouski, G5L 5T1\n            \n            Bas-Saint-Laurent",
     "waiting_time": "04:19",
@@ -1017,7 +1017,7 @@
     "stretcher_occupancy": "142%"
   },
   {
-    "last_updated": 1709324060128,
+    "last_updated": 1709325656472,
     "hospital_name": "Hôpital Saint-François D'Assise",
     "hospital_address": "10 rue de l'Espinay, Québec, G1L 3L5\n            \n            Capitale-Nationale",
     "waiting_time": "04:24",
@@ -1026,7 +1026,7 @@
     "stretcher_occupancy": "not applicable"
   },
   {
-    "last_updated": 1709324060128,
+    "last_updated": 1709325656472,
     "hospital_name": "Hôpital Sainte-Croix",
     "hospital_address": "570 rue Heriot, Drummondville, J2B 1C1\n            \n            Mauricie et Centre-du-Québec",
     "waiting_time": "08:09",
@@ -1035,7 +1035,7 @@
     "stretcher_occupancy": "121%"
   },
   {
-    "last_updated": 1709324060129,
+    "last_updated": 1709325656473,
     "hospital_name": "Hôpital Santa Cabrini",
     "hospital_address": "5655 rue Saint-Zotique Est, Montréal, H1T 1P7\n            \n            Montréal",
     "waiting_time": "05:08",
@@ -1044,7 +1044,7 @@
     "stretcher_occupancy": "113%"
   },
   {
-    "last_updated": 1709324060129,
+    "last_updated": 1709325656473,
     "hospital_name": "Hôtel-Dieu d'Arthabaska",
     "hospital_address": "5 rue des Hospitalières, Victoriaville, G6P 6N2\n            \n            Mauricie et Centre-du-Québec",
     "waiting_time": "07:45",
@@ -1053,7 +1053,7 @@
     "stretcher_occupancy": "88%"
   },
   {
-    "last_updated": 1709324060129,
+    "last_updated": 1709325656473,
     "hospital_name": "Hôtel-Dieu de Lévis",
     "hospital_address": "143 rue Wolfe, Lévis, G6V 3Z1\n            \n            Chaudière-Appalaches",
     "waiting_time": "01:50",
@@ -1062,7 +1062,7 @@
     "stretcher_occupancy": "119%"
   },
   {
-    "last_updated": 1709324060129,
+    "last_updated": 1709325656474,
     "hospital_name": "Hôtel-Dieu de Sorel",
     "hospital_address": "400 avenue de l'Hôtel-Dieu, Sorel-Tracy, J3P 1N5\n            \n            Montérégie",
     "waiting_time": "06:17",
@@ -1071,7 +1071,7 @@
     "stretcher_occupancy": "135%"
   },
   {
-    "last_updated": 1709324060129,
+    "last_updated": 1709325656474,
     "hospital_name": "Institut de cardiologie de Montréal",
     "hospital_address": "5000 rue Bélanger, Montréal, H1T 1C8\n            \n            Montréal",
     "waiting_time": "03:34",
@@ -1080,7 +1080,7 @@
     "stretcher_occupancy": "68%"
   },
   {
-    "last_updated": 1709324060130,
+    "last_updated": 1709325656474,
     "hospital_name": "Ensemble du Québec",
     "hospital_address": "",
     "waiting_time": "00:00",
@@ -1089,7 +1089,7 @@
     "stretcher_occupancy": "117%"
   },
   {
-    "last_updated": 1709324060799,
+    "last_updated": 1709325658238,
     "hospital_name": "Institut universitaire de cardiologie et de pneumologie de Québec",
     "hospital_address": "2725 chemin Sainte-Foy, Québec, G1V 4G5\n            \n            Capitale-Nationale",
     "waiting_time": "03:41",
@@ -1098,7 +1098,7 @@
     "stretcher_occupancy": "115%"
   },
   {
-    "last_updated": 1709324060799,
+    "last_updated": 1709325658238,
     "hospital_name": "Hôpital de soins psychiatriques de l'Est-de-Montréal",
     "hospital_address": "7401 rue Hochelaga, Montréal, H1N 3M5\n            \n            Montréal",
     "waiting_time": "01:12",
@@ -1107,7 +1107,7 @@
     "stretcher_occupancy": "17%"
   },
   {
-    "last_updated": 1709324060799,
+    "last_updated": 1709325658239,
     "hospital_name": "L'Hôpital de Montréal pour enfants",
     "hospital_address": "2300 rue Tupper, Montréal, H3H 1P3\n            \n            Montréal",
     "waiting_time": "02:30",
@@ -1116,7 +1116,7 @@
     "stretcher_occupancy": "142%"
   },
   {
-    "last_updated": 1709324060799,
+    "last_updated": 1709325658239,
     "hospital_name": "L'Hôtel-Dieu de Québec",
     "hospital_address": "11 Côte du Palais, Québec, G1R 2J6\n            \n            Capitale-Nationale",
     "waiting_time": "02:43",
@@ -1125,7 +1125,7 @@
     "stretcher_occupancy": "87%"
   },
   {
-    "last_updated": 1709324060800,
+    "last_updated": 1709325658240,
     "hospital_name": "Pavillon Sainte-Marie",
     "hospital_address": "1991 boulevard du Carmel, Trois-Rivières, G8Z 3R9\n            \n            Mauricie et Centre-du-Québec",
     "waiting_time": "06:15",
@@ -1134,7 +1134,7 @@
     "stretcher_occupancy": "129%"
   },
   {
-    "last_updated": 1709324060800,
+    "last_updated": 1709325658240,
     "hospital_name": "Ensemble du Québec",
     "hospital_address": "",
     "waiting_time": "00:00",

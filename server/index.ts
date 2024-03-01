@@ -67,7 +67,9 @@ cron.schedule('0 0 0 * * *', () => {
   Logger.info('Running the scheduled emergency room scraper task...');
   scraper().then(() => {
     Logger.info('Scraping completed. ER data file updated.');
-  });
+  }).catch((err) => {
+    Logger.error('Error scraping ER data: ',err);
+  })
 });
 
 app.get('/', (req, res) => {
