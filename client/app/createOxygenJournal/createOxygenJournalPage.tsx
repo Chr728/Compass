@@ -159,45 +159,28 @@ export default function CreateOxygenJournalPage() {
 								)))}
 					</div>
 
-					<div
-						className="mt-3"
-						style={{
-							width: "50%",
-						}}>
-						<FormLabel
-							htmlFor={"activityLevel"}
-							label={"Activity Level"}></FormLabel>
-						<select
-							className="text-darkgrey"
-							name="activityLevel"
-							id="activityLevel"
-							style={{
-								width: "100%",
-								height: "50px",
-								border: "1px solid #DBE2EA", // Border style
-								borderRadius: "5px",
-								marginTop: "2px",
-							}}
-							onChange={formik.handleChange}
-							onBlur={formik.handleBlur}
-							value={formik.values.activityLevel}>
-							<option className="text-darkgrey" value="">
-								Choose one
-							</option>
-							<option className="text-darkgrey" value="kg">
-								kg
-							</option>
-							<option className="text-darkgrey" value="lb">
-								lb
-							</option>
-						</select>
-						{formik.touched.activityLevel &&
-							!formik.values.activityLevel && (
-								<p className="text-red text-[14px]">
-									This field can't be left empty.
-								</p>
-							)}
-					</div>
+					<FormLabel
+						htmlFor={"activityLevel"}
+						label={"Activity Level"}></FormLabel>
+					<select
+						name="activityLevel"
+						id="activityLevel"
+						onChange={formik.handleChange}
+						value={formik.values.activityLevel}
+						onBlur={formik.handleBlur}
+						className="p-2 w-full h-[52px] border border-solid border-lightgrey rounded-md text-grey focus:outline-blue shadow-[0_4px_8px_0_rgba(44,39,56,0.04)]">
+						<option value="">Choose one</option>
+						<option value="At rest">At rest</option>
+						<option value="Light">Light</option>
+						<option value="Moderate">Moderate</option>
+						<option value="Heavy">Heavy</option>
+					</select>
+					{formik.touched.activityLevel &&
+						!formik.values.activityLevel && (
+							<p className="text-red text-[14px]">
+								This field can't be left empty.
+							</p>
+						)}
 				</div>
 
 				<div className="mt-3">
