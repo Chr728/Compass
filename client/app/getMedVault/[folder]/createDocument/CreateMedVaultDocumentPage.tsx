@@ -49,7 +49,19 @@ export default function CreateDocumentPage() {
     try {
       const db = await openDB('medVault', 1);
       const folderId = getFolderIdFromURL();
-      const documentData = { ...formData, folderId, files: selectedFiles };
+
+      // Convert files to blobs
+      const fileBlobs = await Promise.all(
+        selectedFiles.map(async (file) => {
+          const blob = await fetch(URL.createObjectURL(file)).then((res) =>
+            res.blob()
+          );
+          return blob;
+        })
+      );
+
+      // Store form data and file blobs
+      const documentData = { ...formData, folderId, files: fileBlobs };
       await db.add('data', documentData);
     } catch (error) {
       console.error('Error storing document in IndexedDB:', error);
