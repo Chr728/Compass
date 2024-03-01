@@ -39,6 +39,7 @@ export default function CreateOxygenJournalPage() {
 				};
 				const result = await createO2SaturationJournal(data).then(
 					(result) => {
+						console.log("Christinas", data.time);
 						router.push("/getOxygenJournals");
 					}
 				);
@@ -75,7 +76,7 @@ export default function CreateOxygenJournalPage() {
 						<p className="text-red text-[14px]">
 							This field can't be left empty.
 						</p>
-					)}{" "}
+					)}
 				</div>
 
 				<div className="mt-3">
