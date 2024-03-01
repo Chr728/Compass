@@ -17,16 +17,16 @@ import {
 	formatMilitaryTime,
 } from "../helpers/utils/datetimeformat";
 import {
-	deleteWeightJournal,
-	getWeightJournals,
-} from "../http/weightJournalAPI";
+	deleteO2SaturationJournal,
+	getO2SaturationJournals,
+} from "../http/oxygenJournalAPI";
 
-export default function GetWeightJournalsPage() {
+export default function GetOxygenJournalsPage() {
 	const logger = require("../../logger");
 	const router = useRouter();
 	const { user } = useAuth();
 	const { userInfo } = useUser();
-	const [weight, setweight] = useState<any>(null);
+	const [oxygen, setoxygen] = useState<any>(null);
 	const { handlePopUp } = useProp();
 
 	useEffect(() => {
@@ -37,40 +37,42 @@ export default function GetWeightJournalsPage() {
 	}, [userInfo, router]);
 
 	useEffect(() => {
-		async function fetchWeightJournals() {
+		async function fetchOxygenJournals() {
 			try {
-				const result = await getWeightJournals();
-				logger.info("All Weight journals entry retrieved:", result);
-				setweight(result.data);
+				const result = await getO2SaturationJournals();
+				logger.info("All Oxygen journals entry retrieved:", result);
+				setoxygen(result.data);
 			} catch (error) {
-				handlePopUp("error", "Error retrieving weight journal entry:");
+				handlePopUp("error", "Error retrieving oxygen journal entry:");
 			}
 		}
 		setTimeout(() => {
-			fetchWeightJournals();
+			fetchOxygenJournals();
 		}, 500);
 	}, [user]);
 
-	async function deleteWeightJournals(weightJournalId: string) {
+	async function deleteOxygenJournals(oxygenJournalId: string) {
 		Swal.fire({
-			text: "Are you sure you want to delete this weight journal entry?",
+			text: "Are you sure you want to delete this oxygen journal entry?",
 			showCancelButton: true,
 			confirmButtonColor: "#3085d6",
 			cancelButtonColor: "#d33",
 			confirmButtonText: "Delete",
 		}).then(async (result: { isConfirmed: any }) => {
 			if (result.isConfirmed) {
-				const deleteresult = await deleteWeightJournal(weightJournalId);
+				const deleteresult = await deleteO2SaturationJournal(
+					oxygenJournalId
+				);
 				const newData =
-					weight &&
-					weight.filter(
-						(item: { id: string }) => item.id != weightJournalId
+					oxygen &&
+					oxygen.filter(
+						(item: { id: string }) => item.id != oxygenJournalId
 					);
-				setweight(newData);
-				router.push("/getWeightJournals");
+				setoxygen(newData);
+				router.push("/getOxygenJournals");
 				Swal.fire({
 					title: "Deleted!",
-					text: "Your weight journal entry has been deleted.",
+					text: "Your oxygen journal entry has been deleted.",
 					icon: "success",
 				});
 			}
@@ -81,59 +83,53 @@ export default function GetWeightJournalsPage() {
 
 	const handleOrderDate = () => {
 		setOrderdate(!orderdate);
-		if (!orderdate && Array.isArray(weight)) {
-			const increasingweightData = [...weight].sort(
+		if (!orderdate && Array.isArray(oxygen)) {
+			const increasingOxygenData = [...oxygen].sort(
 				(a, b) =>
 					new Date(a.date.substring(0, 10) + "T" + a.time).getTime() -
 					new Date(b.date.substring(0, 10) + "T" + b.time).getTime()
 			);
-			setweight(increasingweightData);
-		} else if (Array.isArray(weight)) {
-			const decreasingOrderweightData = [...weight].sort(
+			setoxygen(increasingOxygenData);
+		} else if (Array.isArray(oxygen)) {
+			const decreasingOrderOxygenData = [...oxygen].sort(
 				(a, b) =>
 					new Date(b.date.substring(0, 10) + "T" + b.time).getTime() -
 					new Date(a.date.substring(0, 10) + "T" + a.time).getTime()
 			);
-			setweight(decreasingOrderweightData);
+			setoxygen(decreasingOrderOxygenData);
 		}
 	};
 
-	const [orderBMI, setOrderBMI] = useState(false);
+	const [orderO2, setOrderO2] = useState(false);
 
-	const handleOrderBMI = () => {
-		setOrderBMI(!orderBMI);
-		if (!orderBMI) {
-			const increasingweightData = [...weight].sort(
-				(a, b) =>
-					parseFloat((a.weight / (a.height / 100) ** 2).toFixed(2)) -
-					parseFloat((b.weight / (b.height / 100) ** 2).toFixed(2))
+	const handleOrderO2 = () => {
+		setOrderO2(!orderoxygen);
+		if (!orderoxygen) {
+			const increasingOxygenData = [...oxygen].sort(
+				(a, b) => a.o2sat - b.o2sat
 			);
-
-			setweight(increasingweightData);
+			setoxygen(increasingOxygenData);
 		} else {
-			const decreasingOrderweightData = [...weight].sort(
-				(a, b) =>
-					parseFloat((b.weight / (b.height / 100) ** 2).toFixed(2)) -
-					parseFloat((a.weight / (a.height / 100) ** 2).toFixed(2))
+			const decreasingOrderOxygenData = [...oxygen].sort(
+				(a, b) => b.o2sat - a.o2sat
 			);
-			setweight(decreasingOrderweightData);
+			setoxygen(decreasingOrderOxygenData);
 		}
 	};
+	const [orderoxygen, setOrderOxygen] = useState(false);
 
-	const [orderweight, setOrderWeight] = useState(false);
-
-	const handleOrderWeight = () => {
-		setOrderWeight(!orderweight);
-		if (!orderweight) {
-			const increasingweightData = [...weight].sort(
-				(a, b) => a.weight - b.weight
+	const handleOrderOxygen = () => {
+		setOrderOxygen(!orderoxygen);
+		if (!orderoxygen) {
+			const increasingOxygenData = [...oxygen].sort(
+				(a, b) => a.pulse - b.pulse
 			);
-			setweight(increasingweightData);
+			setoxygen(increasingOxygenData);
 		} else {
-			const decreasingOrderweightData = [...weight].sort(
-				(a, b) => b.weight - a.weight
+			const decreasingOrderOxygenData = [...oxygen].sort(
+				(a, b) => b.pulse - a.pulse
 			);
-			setweight(decreasingOrderweightData);
+			setoxygen(decreasingOrderOxygenData);
 		}
 	};
 
@@ -141,45 +137,27 @@ export default function GetWeightJournalsPage() {
 		<div className="bg-eggshell min-h-screen flex flex-col">
 			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
 				<button onClick={() => router.push("/journals")}>
-					<Header headerText="Weight Journals "></Header>
+					<Header headerText="Oxygen Journals "></Header>
 				</button>
 			</span>
 			<p className="font-sans text-darkgrey ml-5 text-[14px]">
-				Managing your weight helps you stay healthy.
+				With your pulse oximeter, log your observations here in one go!
 			</p>
 			<br></br>
-			<p className="font-sans text-darkgrey ml-5 text-[14px]">
-				Your BMI can tell you if you’re at risk for certain health
-				conditions like heart disease.
-			</p>
 
-			{weight && (
+			{oxygen && (
 				<div className="rounded-3xl bg-white flex flex-col mt-4 mb-44 w-full md:max-w-[800px] md:min-h-[550px] p-4 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]">
 					<div className="flex justify-between items-center">
-						<div>
-							<Button
-								type="button"
-								text="Add an Entry"
-								style={{
-									width: "120px",
-									fontSize: "14px",
-									padding: "1px 10px",
-								}}
-								onClick={() =>
-									router.push(`/createWeightJournal`)
-								}
-							/>
-						</div>
-						<div className="flex items-center">
-							<p className="font-sans text-darkgrey ml-2 font-bold text-[14px]">
-								Your height:
-							</p>
-							{weight.length > 0 && weight[0].height && (
-								<p className="font-sans text-darkgrey mr-8 font-medium text-[14px]">
-									{weight[weight.length - 1].height}cm
-								</p>
-							)}
-						</div>
+						<Button
+							type="button"
+							text="Add an Entry"
+							style={{
+								width: "120px",
+								fontSize: "14px",
+								padding: "1px 10px",
+							}}
+							onClick={() => router.push(`/createOxygenJournal`)}
+						/>
 					</div>
 					<br></br>
 					<div
@@ -202,11 +180,11 @@ export default function GetWeightJournalsPage() {
 
 						<div className="flex-2" style={{ marginRight: "2%" }}>
 							<div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
-								BMI
+								O<sub>2</sub>
 								<button
-									onClick={handleOrderBMI}
-									aria-label="orderBMI">
-									{orderBMI ? (
+									onClick={handleOrderO2}
+									aria-label="orderO2">
+									{orderO2 ? (
 										<MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" />
 									) : (
 										<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
@@ -216,11 +194,11 @@ export default function GetWeightJournalsPage() {
 						</div>
 						<div className="flex-2" style={{ marginRight: "10%" }}>
 							<div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
-								Weight
+								Pulse
 								<button
-									onClick={handleOrderWeight}
-									aria-label="orderWeight">
-									{orderweight ? (
+									onClick={handleOrderOxygen}
+									aria-label="orderOxygen">
+									{orderoxygen ? (
 										<MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" />
 									) : (
 										<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
@@ -229,16 +207,16 @@ export default function GetWeightJournalsPage() {
 							</div>
 						</div>
 					</div>
-					{weight.map((item: any, index: number) => (
+					{oxygen.map((item: any, index: number) => (
 						<div
-							key={item.weightJournalId}
+							key={item.oxygenJournalId}
 							className={`flex justify-between items-center mt-3`}
 							style={{
 								backgroundColor:
 									index % 2 === 0 ? "white" : "#DBE2EA",
 							}}
 							onClick={() =>
-								router.push(`/getWeightJournals/${item.id}`)
+								router.push(`/getOxygenJournals/${item.id}`)
 							}>
 							<div className="flex-2">
 								<p className="font-sans font-medium text-darkgrey text-[14px] text-center">
@@ -249,15 +227,12 @@ export default function GetWeightJournalsPage() {
 							</div>
 							<div className="flex-2">
 								<p className="mr-2 font-sans font-medium text-darkgrey text-[14px] text-center">
-									{(
-										item.weight /
-										(item.height / 100) ** 2
-									).toFixed(2)}
+									{item.o2sat}
 								</p>
 							</div>
 							<div className="flex-2">
 								<p className="ml-3 font-sans font-medium text-darkgrey text-[14px] text-center">
-									{item.weight}
+									{item.pulse}
 								</p>
 							</div>
 
@@ -276,7 +251,7 @@ export default function GetWeightJournalsPage() {
 										}}
 										onClick={(event) => {
 											event.stopPropagation();
-											deleteWeightJournals(item.id);
+											deleteOxygenJournals(item.id);
 										}}
 									/>
 								</div>
