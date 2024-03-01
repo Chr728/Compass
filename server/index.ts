@@ -21,6 +21,7 @@ import weightJournalRoutes from './routes/weightJournalRoutes';
 import { sendUserReminders } from './tasks/reminderTask';
 import o2SaturationJournalRoutes from './routes/o2SaturationJournalRoutes';
 import bloodPressureRoutes from "./routes/bloodPressureRoutes";
+import scraper from './scraper';
 
 require('dotenv').config({
   path: './../.env',
@@ -57,6 +58,14 @@ app.use(handleError);
 cron.schedule('*/10 * * * *', () => {
   console.log('Running the scheduled task...');
   sendUserReminders();
+});
+
+// Schedule scraper task
+cron.schedule('0 0 0 * * *', () => {
+  Logger.info('Running the scheduled emergency room scraper task...');
+  scraper().then(() => {
+    Logger.info('Scraping completed. ER data file updated.');
+  });
 });
 
 app.get('/', (req, res) => {
