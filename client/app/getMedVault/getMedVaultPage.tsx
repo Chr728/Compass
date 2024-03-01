@@ -96,7 +96,6 @@ export default function GetMedVaultPage() {
       a.href = url;
       a.download = 'medVaultExport.json';
       a.click();
-      URL.revokeObjectURL(url);
     } catch (error) {
       console.error('Error exporting data:', error);
     }
