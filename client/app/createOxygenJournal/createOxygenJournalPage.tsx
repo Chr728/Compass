@@ -32,7 +32,7 @@ export default function CreateOxygenJournalPage() {
 				const data = {
 					date: values.date,
 					time: values.time,
-					Oxygen: values.o2sat,
+					o2sat: values.o2sat,
 					pulse: values.pulse,
 					activityLevel: values.activityLevel,
 					notes: values.notes,
