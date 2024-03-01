@@ -35,7 +35,7 @@ async function scrape() {
         fs.writeFileSync(path.join(__dirname, 'scrapeData.json'), JSON.stringify(data, null, 2))
         Logger.info('Data has been scraped and saved to scrapeData.json')
     } catch (err: any) {
-        Logger.log(err)
+        Logger.error(err)
     }
 }
 

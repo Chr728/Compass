@@ -1,1 +1,0 @@
-import scrape from '../scraper';
