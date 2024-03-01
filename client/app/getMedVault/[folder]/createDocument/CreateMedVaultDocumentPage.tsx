@@ -50,7 +50,6 @@ export default function CreateDocumentPage() {
       const db = await openDB('medVault', 1);
       const folderId = getFolderIdFromURL();
 
-      // Convert files to blobs
       const fileBlobs = await Promise.all(
         selectedFiles.map(async (file) => {
           const blob = await fetch(URL.createObjectURL(file)).then((res) =>
@@ -60,7 +59,6 @@ export default function CreateDocumentPage() {
         })
       );
 
-      // Store form data and file blobs
       const documentData = { ...formData, folderId, files: fileBlobs };
       await db.add('data', documentData);
     } catch (error) {

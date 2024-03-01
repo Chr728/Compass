@@ -46,30 +46,40 @@ export default function GetMedVaultPage() {
 
   const deleteFolder = async (folderId: any) => {
     try {
-      const db = await openDB('medVault', 1); // Use the correct database name
+      const db = await openDB('medVault', 1);
+
       await db.delete('folders', folderId);
+      const allData = await db.getAll('data');
+
+      const documentsToDelete = allData.filter(
+        (doc) => doc.folderId == folderId
+      );
+
+      const deletePromises = documentsToDelete.map((doc) =>
+        db.delete('data', doc.id)
+      );
+      await Promise.all(deletePromises);
+
       const updatedFolders = await db.getAll('folders');
       setData(updatedFolders);
       setIsExportDisabled(updatedFolders.length === 0);
+
+      router.push('/getMedVault');
     } catch (error) {
-      console.error('Error deleting folder from IndexedDB:', error);
+      console.error(
+        'Error deleting folder and associated data from IndexedDB:',
+        error
+      );
     }
   };
 
   const exportData = async () => {
     try {
       const db = await openDB('medVault', 1);
-
-      // Get all folders
       const folders = await db.getAll('folders');
-
-      // Get all documents
       const documents = await db.getAll('data');
-
-      // Create a JSON object containing both folders and documents
       const exportData = { folders, documents };
 
-      // Convert blobs to base64 strings for documents
       for (const doc of exportData.documents) {
         const filePromises = doc.files.map(async (file: any) => {
           const base64String = await readFileAsBase64(file);
@@ -78,10 +88,8 @@ export default function GetMedVaultPage() {
         doc.files = await Promise.all(filePromises);
       }
 
-      // Convert the JSON object to a string
       const exportString = JSON.stringify(exportData);
 
-      // Trigger download of the export data
       const blob = new Blob([exportString], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -120,22 +128,17 @@ export default function GetMedVaultPage() {
 
         const db = await openDB('medVault', 1);
 
-        // Clear existing data
         await db.clear('folders');
         await db.clear('data');
 
-        // Import folders
         if (importedData.folders && importedData.folders.length > 0) {
           for (const folder of importedData.folders) {
             await db.add('folders', folder);
           }
         }
-        console.log(importedData.documents);
 
-        // Import documents
         if (importedData.documents && importedData.documents.length > 0) {
           for (const document of importedData.documents) {
-            // Convert base64 strings back to blobs
             document.files = await Promise.all(
               document.files.map(async (fileString: string) => {
                 const res = await fetch(fileString);
@@ -147,7 +150,6 @@ export default function GetMedVaultPage() {
           }
         }
 
-        // Refresh data state
         const updatedFolders = await db.getAll('folders');
         setData(updatedFolders);
       };
