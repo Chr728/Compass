@@ -129,7 +129,7 @@ export default function Journal() {
 						</div>
 					</div>
 				</Link>
-
+				<br></br>
 				<Link href="/getOxygenJournals">
 					<div
 						className="rounded-3xl relative mt-1 flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 "

@@ -96,69 +96,67 @@ export default function CreateOxygenJournalPage() {
 					)}
 				</div>
 
-				<div className="flex">
-					<div className="mt-3">
-						<FormLabel
-							htmlFor={"o2sat"}
-							label={"Oxygen Saturation"}></FormLabel>
-						<Input
-							name="o2sat"
-							id="o2sat"
-							type="number"
-							style={{ width: "75%" }}
-							onChange={formik.handleChange}
-							value={formik.values.o2sat.toString()}
-							onBlur={formik.handleBlur}
-						/>
-						{/* Check if the field is touched */}
-						{formik.touched.o2sat &&
-							// Check if the field is empty
-							((!formik.values.o2sat && (
+				<div className="mt-3">
+					<FormLabel
+						htmlFor={"o2sat"}
+						label={"Oxygen Saturation"}></FormLabel>
+					<Input
+						name="o2sat"
+						id="o2sat"
+						type="number"
+						style={{ width: "100%" }}
+						onChange={formik.handleChange}
+						value={formik.values.o2sat.toString()}
+						onBlur={formik.handleBlur}
+					/>
+					{/* Check if the field is touched */}
+					{formik.touched.o2sat &&
+						// Check if the field is empty
+						((!formik.values.o2sat && (
+							<p className="text-red text-[14px]">
+								This field can't be left empty or zero.
+							</p>
+						)) ||
+							// Check if the field is less than or equal to zero
+							(formik.values.o2sat <= 0 && (
 								<p className="text-red text-[14px]">
-									This field can't be left empty or zero.
+									You can't enter a negative Oxygen Saturation
+									level or a level of Saturation of zero.
 								</p>
-							)) ||
-								// Check if the field is less than or equal to zero
-								(formik.values.o2sat <= 0 && (
-									<p className="text-red text-[14px]">
-										You can't enter a negative Oxygen
-										Saturation level or a level of
-										Saturation of zero.
-									</p>
-								)))}
-					</div>
+							)))}
+				</div>
 
-					<div className="mt-3">
-						<FormLabel
-							htmlFor={"pulse"}
-							label={"Pulse Rate"}></FormLabel>
-						<Input
-							name="pulse"
-							id="pulse"
-							type="number"
-							style={{ width: "100%" }}
-							onChange={formik.handleChange}
-							value={formik.values.pulse.toString()}
-							onBlur={formik.handleBlur}
-						/>
-
-						{/* Check if the field is touched */}
-						{formik.touched.pulse &&
-							// Check if the field is empty
-							((!formik.values.pulse && (
+				<div className="mt-3">
+					<FormLabel
+						htmlFor={"pulse"}
+						label={"Pulse Rate"}></FormLabel>
+					<Input
+						name="pulse"
+						id="pulse"
+						type="number"
+						style={{ width: "100%" }}
+						onChange={formik.handleChange}
+						value={formik.values.pulse.toString()}
+						onBlur={formik.handleBlur}
+					/>
+					{/* Check if the field is touched */}
+					{formik.touched.pulse &&
+						// Check if the field is empty
+						((!formik.values.pulse && (
+							<p className="text-red text-[14px]">
+								This field can't be left empty or zero.
+							</p>
+						)) ||
+							// Check if the field is less than or equal to zero
+							(formik.values.pulse <= 0 && (
 								<p className="text-red text-[14px]">
-									This field can't be left empty or zero.
+									You can't enter a negative pulse or a pulse
+									of zero.
 								</p>
-							)) ||
-								// Check if the field is less than or equal to zero
-								(formik.values.pulse <= 0 && (
-									<p className="text-red text-[14px]">
-										You can't enter a negative pulse or a
-										pulse of zero.
-									</p>
-								)))}
-					</div>
+							)))}
+				</div>
 
+				<div className="mt-3">
 					<FormLabel
 						htmlFor={"activityLevel"}
 						label={"Activity Level"}></FormLabel>
@@ -182,7 +180,6 @@ export default function CreateOxygenJournalPage() {
 							</p>
 						)}
 				</div>
-
 				<div className="mt-3">
 					<label
 						htmlFor="notes"
