@@ -2,11 +2,10 @@
 import Header from "../components/Header";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { useAuth } from "../contexts/AuthContext";
+import Button from "../components/Button";
 
 export default function InstallInstructions() {
   const router = useRouter();
-  const auth = useAuth();
 
   const [platform, setPlatform] = useState<"android" | "ios" | null>(null);
 
@@ -40,19 +39,16 @@ export default function InstallInstructions() {
     return (
       <div className="flex flex-col items-center">
         {/* Image */}
-        <div className="mb-4">
+        <div className="">
           <img
             src={`/${platform}-step${currentStep + 1}.png`}
             alt={`${platform} Instruction ${currentStep + 1}`}
-            className="w-full"
+            className="w-200 h-100"
           />
         </div>
         {/* Instructions */}
-        <div className="text-center mb-4">
+        <div className="text-center mb-4" style={{ color: "black" }}>
           <p>Follow these steps to install on your {platform} device:</p>
-          <ol className="list-decimal pl-4">
-            {/* Add your specific instructions for each step here */}
-          </ol>
         </div>
         {/* Step Navigation Buttons */}
         <div className="flex">
@@ -60,12 +56,14 @@ export default function InstallInstructions() {
             onClick={handlePrevStep}
             disabled={currentStep === 0}
             className="mr-2"
+            style={{ color: "black" }}
           >
             Previous
           </button>
           <button
             onClick={handleNextStep}
             disabled={currentStep === totalSteps - 1}
+            style={{ color: "black" }}
           >
             Next
           </button>
@@ -80,20 +78,39 @@ export default function InstallInstructions() {
     <div className="bg-eggshell min-h-screen flex flex-col">
       <div>
         <button onClick={() => router.push("/login")}>
-          <Header headerText="Install Instructions" />
+          <Header headerText="Installation Instructions" />
         </button>
       </div>
       <div>
         {/* Platform Selection */}
         {platform === null && (
-          <div className="flex mb-4">
-            <button
-              onClick={() => handleSelectPlatform("android")}
-              className="mr-2"
-            >
-              Android
-            </button>
-            <button onClick={() => handleSelectPlatform("ios")}>iOS</button>
+          <div className="flex flex-col items-center mb-8">
+            {/* App Logo */}
+            <img
+              src="/compass-removebg.png"
+              alt="App Logo"
+              className="w-16 h-16 mb-4"
+              style={{ width: "400px", height: "400px" }}
+            />
+            {/* Platform Buttons */}
+            <div className="flex mb-4" style={{ color: "black" }}>
+              Please choose the platform of your choice
+            </div>
+            {/* Platform Buttons */}
+            <div className="flex mb-4">
+              <Button
+                type="submit"
+                text="Android"
+                onClick={() => handleSelectPlatform("android")}
+                style={{ width: "140px", marginRight: "10px" }}
+              />
+              <Button
+                type="submit"
+                text="iOS"
+                onClick={() => handleSelectPlatform("ios")}
+                style={{ width: "140px", marginLeft: "10px" }}
+              />
+            </div>
           </div>
         )}
 

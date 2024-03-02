@@ -169,9 +169,8 @@ export default function Login() {
       <style jsx global>{`
         #installInstructions {
           display: none;
-          background-color: #3490dc;
-          color: #ffffff;
           cursor: pointer;
+          min-width: 300px;
         }
 
         @media (display-mode: browser) {
