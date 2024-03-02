@@ -95,7 +95,11 @@ export default function GetMedVaultPage() {
       const a = document.createElement('a');
       a.href = url;
       a.download = 'medVaultExport.json';
+      a.style.display = 'none';
+      document.body.appendChild(a);
       a.click();
+      URL.revokeObjectURL(url);
+      document.body.removeChild(a);
     } catch (error) {
       console.error('Error exporting data:', error);
     }
