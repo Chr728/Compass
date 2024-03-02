@@ -48,9 +48,13 @@ export default function GetFolder({ params }: Prop) {
   const deleteDocument = async (documentId: any) => {
     try {
       const db = await openDB('medVault', 1);
+      const folderId = parseInt(params.folder);
       await db.delete('data', documentId);
-      const updatedDocuments = await db.getAll('data');
-      setDocuments(updatedDocuments);
+      const updatedAllDocuments = await db.getAll('data');
+      const folderDocuments = updatedAllDocuments.filter(
+        (document) => document.folderId == folderId
+      );
+      setDocuments(folderDocuments);
     } catch (error) {
       console.error('Error deleting document from IndexedDB:', error);
     }
