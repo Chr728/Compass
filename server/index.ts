@@ -20,6 +20,7 @@ import userRoutes from './routes/userRoutes';
 import weightJournalRoutes from './routes/weightJournalRoutes';
 import { sendUserReminders } from './tasks/reminderTask';
 import o2SaturationJournalRoutes from './routes/o2SaturationJournalRoutes';
+import bloodPressureRoutes from "./routes/bloodPressureRoutes";
 
 require('dotenv').config({
   path: './../.env',
@@ -49,6 +50,7 @@ app.use('/api/journals/foodIntake', foodIntakeJournalRoutes);
 app.use('/api/subscription', subscriptionRoutes);
 app.use('/api/medication', medicationRoutes);
 app.use('/api/journals/o2Saturation', o2SaturationJournalRoutes);
+app.use('/api/journals/bloodPressure', bloodPressureRoutes);
 app.use(handleError);
 
 // Schedule the task within the main process
