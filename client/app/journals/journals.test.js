@@ -12,7 +12,7 @@ jest.mock("next/navigation", () => ({
 	},
 }));
 
-describe("Proper displayment of all journals", () => {
+ describe("Proper displayment of all journals", () => {
 	test("Activity Journals Message displayed", async () => {
 		render(<Journals />);
 		const message = screen.getByText(/Activity Journal/i);
@@ -60,6 +60,14 @@ describe("Proper displayment of all journals", () => {
 		const message1 = screen.getByText(/Monitor your insulin and glucose./i);
 		expect(message1).toBeInTheDocument();
 	});
+  
+ test("Blood Pressure Journals Message displayed", async () => {
+    render(<Journals />);
+    const message = screen.getByText(/Blood Pressure Journal/i);
+    expect(message).toBeInTheDocument();
+    const message1 = screen.getByText(/Log your blood pressure./i);
+    expect(message1).toBeInTheDocument();
+  });
 
 	test("link redirects to weight journals page", async () => {
 		render(<Journals />);
@@ -96,4 +104,10 @@ describe("Proper displayment of all journals", () => {
 		const linkElement = screen.getAllByRole("link")[3];
 		expect(linkElement).toHaveAttribute("href", "/getFoodJournals");
 	});
+  
+  test("link redirects to blood pressure journals page", async () => {  
+    render(<Journals />);
+    const linkElement = screen.getAllByRole("link")[6];
+    expect(linkElement).toHaveAttribute("href", "/getBloodPressureJournals");
+  });
 });

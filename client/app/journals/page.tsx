@@ -1,13 +1,15 @@
-"use client";
-import NextImage from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import activity from "../../public/activity.svg";
-import diabetes from "../../public/diabetes.svg";
-import food from "../../public/food.svg";
-import mood from "../../public/mood.svg";
-import weight from "../../public/weight.svg";
-import Header from "../components/Header";
+'use client';
+import NextImage from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import activity from '../../public/activity.svg';
+import diabetes from '../../public/diabetes.svg';
+import food from '../../public/food.svg';
+import mood from '../../public/mood.svg';
+import weight from '../../public/weight.svg';
+import bloodPressure from '../../public/bloodPressure.svg';
+import Header from '../components/Header';
+
 export default function Journal() {
 	const router = useRouter();
 
@@ -108,7 +110,6 @@ export default function Journal() {
 					</div>
 				</Link>
 				<br></br>
-
 				<Link href="/moodjournal">
 					<div
 						className="rounded-3xl relative flex flex-col w-full md:max-w-[800px] md:h-[600px] p-5 "
@@ -145,6 +146,28 @@ export default function Journal() {
 					</div>
 				</Link>
 				<br></br>
+        <Link href="/getBloodPressureJournals">
+          <div 
+            className="rounded-3xl relative flex flex-col w-full md:max-w-[800px] md:h-[600px] p-5 " 
+            style={{backgroundColor: '#7C9CBF' }}>
+            <div>
+              <p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
+                Blood Pressure Journal
+              </p>
+              <p className="text-[14px] text-white pr-20 font-IBM Plex Sans  text-start">
+                Log your blood pressure.
+              </p>
+              <NextImage
+                src = {bloodPressure}
+                alt="blood pressure journal"
+                width={113}
+                height={ 80 }
+                className="absolute top-0 right-0 ml-16 transform -scale-x-100 shrink-0"
+              />     
+            </div>
+          </div>
+      </Link>
+       <br></br>
 			</div>
 		</div>
 	);
