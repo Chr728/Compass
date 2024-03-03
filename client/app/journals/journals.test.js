@@ -65,6 +65,15 @@ jest.mock("next/navigation", () => ({
       expect(message1).toBeInTheDocument();
     });
 
+    test("Blood Pressure Journals Message displayed", async () => {
+     
+      render(<Journals />);
+      const message = screen.getByText(/Blood Pressure Journal/i);
+      expect(message).toBeInTheDocument();
+      const message1 = screen.getByText(/Log your blood pressure./i);
+      expect(message1).toBeInTheDocument();
+    });
+
     test("link redirects to weight journals page", async () => {  
       render(<Journals />);
       const linkElement = screen.getAllByRole("link")[2];

@@ -7,6 +7,7 @@ import diabetes from '../../public/diabetes.svg';
 import food from '../../public/food.svg';
 import mood from '../../public/mood.svg';
 import weight from '../../public/weight.svg';
+import bloodPressure from '../../public/bloodPressure.svg';
 import Header from '../components/Header';
 export default function Journal() {
   const router = useRouter();
@@ -138,8 +139,15 @@ Monitor your insulin and glucose.
           Blood Pressure Journal
           </p>
           <p className="text-[14px] text-white pr-20 font-IBM Plex Sans  text-start">
-          Log your blood pressure.
-              </p>
+            Log your blood pressure.
+          </p>
+          <NextImage
+            src = {bloodPressure}
+            alt="blood pressure journal"
+            width={113}
+            height={ 80 }
+            className="absolute top-0 right-0 ml-16 transform -scale-x-100 shrink-0"
+          />     
         </div>
       </div>
 </Link>
