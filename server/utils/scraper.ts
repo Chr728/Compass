@@ -17,6 +17,8 @@ async function scrape() {
                 const last_updated = Date.now()
                 const hospital_name = $(el).find('.font-weight-bold').first().text()
                 const hospital_address = $(el).find('.adresse').text().trim();
+                const arrondissementLines = hospital_address.split('\n').map(line => line.trim());
+                const arrondissement = arrondissementLines[arrondissementLines.length - 1];
                 const waiting_time = $(el).find('.hopital-item .font-weight-bold').first().text().trim();
                 const waiting_people = $(el).find('li.hopital-item').eq(1).text().split(':')[1].trim()
                 const total_people = $(el).find('li.hopital-item').eq(2).text().split(':')[1].trim()
@@ -25,6 +27,7 @@ async function scrape() {
                     last_updated,
                     hospital_name,
                     hospital_address,
+                    arrondissement,
                     waiting_time,
                     waiting_people,
                     total_people,
@@ -39,4 +42,5 @@ async function scrape() {
     }
 }
 
-export default scrape;
+// export default scrape;
+scrape()
