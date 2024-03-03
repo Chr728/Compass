@@ -172,7 +172,7 @@ export default function CreateBloodPressureJournalPage() {
                   name="notes"
                   id="notes"
                   className="w-full border border-solid border-lightgrey text-darkgrey rounded-md shadow-[0_4px_8px_0_rgba(44,39,56,0.04)]"
-                  rows={2}
+                  rows={4}
                   value={formik.values.notes}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}

@@ -42,7 +42,7 @@ export default function GetBloodPressureJournalsPage() {
                 logger.info('All journals retrieved:', journalData.data)
                 setData(journalData.data);
             } catch (error) {
-                logger.error('Error fetching appointments', error);
+                logger.error('Error fetching journal', error);
             }
         }
         fetchBPJournals();
