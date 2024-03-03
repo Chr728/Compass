@@ -16,9 +16,10 @@ async function scrape() {
             hospital_elements.each((i, el) => {
                 const last_updated = Date.now()
                 const hospital_name = $(el).find('.font-weight-bold').first().text()
-                const hospital_address = $(el).find('.adresse').text().trim();
+                let hospital_address = $(el).find('.adresse').text().trim();
                 const arrondissementLines = hospital_address.split('\n').map(line => line.trim());
                 const arrondissement = arrondissementLines[arrondissementLines.length - 1];
+                hospital_address = hospital_address.split('\n')[0].trim();
                 const waiting_time = $(el).find('.hopital-item .font-weight-bold').first().text().trim();
                 const waiting_people = $(el).find('li.hopital-item').eq(1).text().split(':')[1].trim()
                 const total_people = $(el).find('li.hopital-item').eq(2).text().split(':')[1].trim()
