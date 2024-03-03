@@ -107,6 +107,12 @@ jest.mock("next/navigation", () => ({
       const linkElement = screen.getAllByRole("link")[3];
       expect(linkElement).toHaveAttribute("href", "/getFoodJournals");
     });
+
+    test("link redirects to blood pressure journals page", async () => {  
+      render(<Journals />);
+      const linkElement = screen.getAllByRole("link")[5];
+      expect(linkElement).toHaveAttribute("href", "/getBloodPressureJournals");
+    });
   });
 
 
