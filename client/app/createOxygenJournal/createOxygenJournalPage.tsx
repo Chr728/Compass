@@ -7,9 +7,9 @@ import Header from "../components/Header";
 import Input from "../components/Input";
 import { useAuth } from "../contexts/AuthContext";
 import { useProp } from "../contexts/PropContext";
-import { createWeightJournal } from "../http/weightJournalAPI";
+import { createO2SaturationJournal } from "../http/oxygenJournalAPI";
 
-export default function CreateWeightJournalPage() {
+export default function CreateOxygenJournalPage() {
 	const logger = require("../../logger");
 	const router = useRouter();
 	const { user } = useAuth();
@@ -19,9 +19,9 @@ export default function CreateWeightJournalPage() {
 		initialValues: {
 			date: "", // Initialize the form fields with empty values
 			time: "",
-			weight: 0.0,
-			height: 0.0,
-			unit: "",
+			o2sat: 0.0,
+			pulse: 0.0,
+			activityLevel: "",
 			notes: "",
 		},
 
@@ -32,19 +32,20 @@ export default function CreateWeightJournalPage() {
 				const data = {
 					date: values.date,
 					time: values.time,
-					weight: values.weight,
-					height: values.height,
-					unit: values.unit,
+					o2sat: values.o2sat,
+					pulse: values.pulse,
+					activityLevel: values.activityLevel,
 					notes: values.notes,
 				};
-				const result = await createWeightJournal(data).then(
+				const result = await createO2SaturationJournal(data).then(
 					(result) => {
-						router.push("/getWeightJournals");
+						console.log("Christinas", data.time);
+						router.push("/getOxygenJournals");
 					}
 				);
-				logger.info("Weight journal entry created:", result);
+				logger.info("Oxygen journal entry created:", result);
 			} catch (error) {
-				handlePopUp("error", "Error creating weight journal entry:");
+				handlePopUp("error", "Error creating Oxygen journal entry:");
 			}
 		},
 	});
@@ -52,8 +53,8 @@ export default function CreateWeightJournalPage() {
 	return (
 		<div className="bg-eggshell min-h-screen flex flex-col">
 			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-				<button onClick={() => router.push("/getWeightJournals")}>
-					<Header headerText="Create Weight Journal"></Header>
+				<button onClick={() => router.push("/getOxygenJournals")}>
+					<Header headerText="Add an Entry - O2 Saturation"></Header>
 				</button>
 			</span>
 			<form
@@ -75,7 +76,7 @@ export default function CreateWeightJournalPage() {
 						<p className="text-red text-[14px]">
 							This field can't be left empty.
 						</p>
-					)}{" "}
+					)}
 				</div>
 
 				<div className="mt-3">
@@ -96,104 +97,89 @@ export default function CreateWeightJournalPage() {
 					)}
 				</div>
 
-				<div className="flex">
-					<div className="mt-3">
-						<FormLabel
-							htmlFor={"weight"}
-							label={"Weight"}></FormLabel>
-						<Input
-							name="weight"
-							id="weight"
-							type="number"
-							style={{ width: "75%" }}
-							onChange={formik.handleChange}
-							value={formik.values.weight.toString()}
-							onBlur={formik.handleBlur}
-						/>
-						{/* Check if the field is touched */}
-						{formik.touched.weight &&
-							// Check if the field is empty
-							((!formik.values.weight && (
-								<p className="text-red text-[14px]">
-									This field can't be left empty or zero.
-								</p>
-							)) ||
-								// Check if the field is less than or equal to zero
-								(formik.values.weight <= 0 && (
-									<p className="text-red text-[14px]">
-										You can't enter a negative weight or a
-										weight of zero.
-									</p>
-								)))}
-					</div>
-
-					<div
-						className="mt-3"
-						style={{
-							width: "50%",
-						}}>
-						<FormLabel htmlFor={"unit"} label={"Unit"}></FormLabel>
-						<select
-							className="text-darkgrey"
-							name="unit"
-							id="unit"
-							style={{
-								width: "100%",
-								height: "50px",
-								border: "1px solid #DBE2EA", // Border style
-								borderRadius: "5px",
-								marginTop: "2px",
-							}}
-							onChange={formik.handleChange}
-							onBlur={formik.handleBlur}
-							value={formik.values.unit}>
-							<option className="text-darkgrey" value="">
-								Choose one
-							</option>
-							<option className="text-darkgrey" value="kg">
-								kg
-							</option>
-							<option className="text-darkgrey" value="lb">
-								lb
-							</option>
-						</select>
-						{formik.touched.unit && !formik.values.unit && (
-							<p className="text-red text-[14px]">
-								This field can't be left empty.
-							</p>
-						)}
-					</div>
-				</div>
-
 				<div className="mt-3">
 					<FormLabel
-						htmlFor={"height"}
-						label={"Height (in centimeters)"}></FormLabel>
+						htmlFor={"o2sat"}
+						label={"Oxygen Saturation"}></FormLabel>
 					<Input
-						name="height"
-						id="height"
+						name="o2sat"
+						id="o2sat"
 						type="number"
 						style={{ width: "100%" }}
 						onChange={formik.handleChange}
-						value={formik.values.height.toString()}
+						value={formik.values.o2sat.toString()}
 						onBlur={formik.handleBlur}
 					/>
-
 					{/* Check if the field is touched */}
-					{formik.touched.height &&
+					{formik.touched.o2sat &&
 						// Check if the field is empty
-						((!formik.values.height && (
+						((!formik.values.o2sat && (
 							<p className="text-red text-[14px]">
 								This field can't be left empty or zero.
 							</p>
 						)) ||
 							// Check if the field is less than or equal to zero
-							(formik.values.height <= 0 && (
+							(formik.values.o2sat <= 0 && (
 								<p className="text-red text-[14px]">
-									You can't enter a negative height or a
-									height of zero.
+									You can't enter a negative Oxygen Saturation
+									level or a level of Saturation of zero.
 								</p>
 							)))}
+				</div>
+
+				<div className="mt-3">
+					<FormLabel
+						htmlFor={"pulse"}
+						label={"Pulse Rate"}></FormLabel>
+					<Input
+						name="pulse"
+						id="pulse"
+						type="number"
+						style={{ width: "100%" }}
+						onChange={formik.handleChange}
+						value={formik.values.pulse.toString()}
+						onBlur={formik.handleBlur}
+					/>
+					{/* Check if the field is touched */}
+					{formik.touched.pulse &&
+						// Check if the field is empty
+						((!formik.values.pulse && (
+							<p className="text-red text-[14px]">
+								This field can't be left empty or zero.
+							</p>
+						)) ||
+							// Check if the field is less than or equal to zero
+							(formik.values.pulse <= 0 && (
+								<p className="text-red text-[14px]">
+									You can't enter a negative pulse or a pulse
+									of zero.
+								</p>
+							)))}
+				</div>
+
+				<div className="mt-3">
+					<FormLabel
+						htmlFor={"activityLevel"}
+						label={"Activity Level"}></FormLabel>
+					<select
+						name="activityLevel"
+						id="activityLevel"
+						onChange={formik.handleChange}
+						value={formik.values.activityLevel}
+						onBlur={formik.handleBlur}
+						className="p-2 w-full h-[52px] border border-solid border-lightgrey rounded-md text-grey focus:outline-blue shadow-[0_4px_8px_0_rgba(44,39,56,0.04)]">
+						<option value="">Choose one</option>
+						<option value="At rest">At rest</option>
+						<option value="Light">Light</option>
+						<option value="Moderate">Moderate</option>
+						<option value="Heavy">Heavy</option>
+					</select>
+					{formik.touched.activityLevel &&
+						!formik.values.activityLevel && (
+							<p className="text-red text-[14px]">
+								This field can't be left empty.
+							</p>
+						)}
 				</div>
 				<div className="mt-3">
 					<label
@@ -221,7 +207,7 @@ export default function CreateWeightJournalPage() {
 								width: "140px",
 								backgroundColor: "var(--Red, #FF7171)",
 							}}
-							onClick={() => router.push("/getWeightJournals")}
+							onClick={() => router.push("/getOxygenJournals")}
 						/>
 
 						<Button
@@ -229,18 +215,18 @@ export default function CreateWeightJournalPage() {
 							text="Submit"
 							disabled={
 								!(formik.isValid && formik.dirty) || // Check if the form is valid and dirty
-								formik.values.weight === 0 || // Check if weight is zero
-								formik.values.weight < 0 || // Check if weight is less than  zero
-								formik.values.height === 0 || // Check if height is zero
-								formik.values.height < 0 || // Check if height is less than zero
-								!formik.values.unit || // Check if unit is missing or empty
+								formik.values.o2sat === 0 || // Check if o2sat is zero
+								formik.values.o2sat < 0 || // Check if o2sat is less than  zero
+								formik.values.pulse === 0 || // Check if pulse is zero
+								formik.values.pulse < 0 || // Check if pulse is less than zero
+								!formik.values.activityLevel || // Check if activityLevel is missing or empty
 								!formik.values.date || // Check if date is missing or empty
 								!formik.values.time || // Check if time is missing or empty
-								!formik.values.weight || // Check if weight is missing or empty
-								!formik.values.height // Check if height is missing or empty
+								!formik.values.o2sat || // Check if o2sat is missing or empty
+								!formik.values.pulse // Check if pulse is missing or empty
 							}
 							style={{ width: "140px", textAlign: "center" }}
-							onClick={() => router.push("/getWeightJournals")}
+							onClick={() => router.push("/getOxygenJournals")}
 						/>
 					</div>
 				</div>

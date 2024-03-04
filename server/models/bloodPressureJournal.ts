@@ -45,7 +45,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         allowNull: false,
       },
       time: {
-        type: DataTypes.DATE,
+        type: DataTypes.TIME,
         allowNull: false,
       },
       systolic: {
