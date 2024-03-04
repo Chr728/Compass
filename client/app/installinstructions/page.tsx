@@ -53,8 +53,9 @@ export default function InstallInstructions() {
         {/* Instructions */}
         <div className="flex flex-col items-center mb-8">
           <div className="flex mb-4">
-            <p style={{ color: "black" }}>
-              Follow these steps to install on your {platform} device:
+            <p style={{ color: "black", textAlign: "center" }}>
+              Follow where the red arrow is pointing to install on your{" "}
+              {platform} device
             </p>
           </div>
           {/* Step Navigation Buttons */}

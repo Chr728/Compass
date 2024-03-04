@@ -161,10 +161,6 @@ export default function Login() {
           </p>
         </div>
       </div>
-      <p className={"w-full h-full text-grey text-center mt-20"}>
-        &copy; Compass 2023
-      </p>
-
       {/* Banner for installation instructions */}
       <style jsx global>{`
         #installInstructions {
@@ -179,14 +175,18 @@ export default function Login() {
           }
         }
       `}</style>
-      <Link href="/installinstructions">
-        <button
-          id="installInstructions"
-          className="bg-blue text-[16px] text-white font-sans font-medium rounded-md h-[40px] shadow-[0px_4px_8px_0px_rgba(44,39,56,0.08),0px_2px_4px_0px_rgba(44,39,56,0.08)]"
-        >
+
+      <button
+        id="installInstructions"
+        className="mt-20 bg-blue text-[16px] text-white font-sans font-medium rounded-md h-[40px] shadow-[0px_4px_8px_0px_rgba(44,39,56,0.08),0px_2px_4px_0px_rgba(44,39,56,0.08)]"
+      >
+        <Link href="/installinstructions">
           Need help with installation? Click here.
-        </button>
-      </Link>
+        </Link>
+      </button>
+      <p className={"w-full h-full text-grey text-center mt-2"}>
+        &copy; Compass 2023
+      </p>
     </div>
   );
 }
