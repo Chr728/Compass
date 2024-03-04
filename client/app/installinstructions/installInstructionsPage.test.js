@@ -67,7 +67,7 @@ describe("Install instructions page", () => {
     }));
 
     render(<InstallInstructions />);
-    const backButton = screen.getByText("Install Instructions");
+    const backButton = screen.getByText("Installation Instructions");
 
     fireEvent.click(backButton);
     expect(mockPush).toHaveBeenCalledWith("/login");

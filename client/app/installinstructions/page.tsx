@@ -36,6 +36,10 @@ export default function InstallInstructions() {
       setCurrentStep((prevStep) => (prevStep - 1 + totalSteps) % totalSteps);
     };
 
+    // Calculate margin based on button visibility
+    const buttonMargin =
+      currentStep !== 0 && currentStep !== totalSteps - 1 ? "10px" : "";
+
     return (
       <div className="flex flex-col items-center">
         {/* Image */}
@@ -43,33 +47,47 @@ export default function InstallInstructions() {
           <img
             src={`/${platform}-step${currentStep + 1}.png`}
             alt={`${platform} Instruction ${currentStep + 1}`}
-            className="w-200 h-100"
+            style={{ width: "300px", height: "600px" }}
           />
         </div>
         {/* Instructions */}
-        <div className="text-center mb-4" style={{ color: "black" }}>
-          <p>Follow these steps to install on your {platform} device:</p>
+        <div className="flex flex-col items-center mb-8">
+          <div className="flex mb-4">
+            <p style={{ color: "black" }}>
+              Follow these steps to install on your {platform} device:
+            </p>
+          </div>
+          {/* Step Navigation Buttons */}
+          <div className="flex mb-4">
+            <Button
+              text="Previous"
+              type="submit"
+              onClick={handlePrevStep}
+              disabled={currentStep === 0}
+              hidden={currentStep === 0}
+              style={{
+                height: "30px",
+                width: "70px",
+                marginRight: buttonMargin,
+              }}
+            />
+            <Button
+              text="Next"
+              type="submit"
+              onClick={handleNextStep}
+              disabled={currentStep === totalSteps - 1}
+              hidden={currentStep === totalSteps - 1}
+              style={{ height: "30px", width: "70px" }}
+            />
+          </div>
+          {/* Back Button */}
+          <Button
+            type="submit"
+            text="Back"
+            onClick={onBack}
+            style={{ height: "30px", width: "70px" }}
+          />
         </div>
-        {/* Step Navigation Buttons */}
-        <div className="flex">
-          <button
-            onClick={handlePrevStep}
-            disabled={currentStep === 0}
-            className="mr-2"
-            style={{ color: "black" }}
-          >
-            Previous
-          </button>
-          <button
-            onClick={handleNextStep}
-            disabled={currentStep === totalSteps - 1}
-            style={{ color: "black" }}
-          >
-            Next
-          </button>
-        </div>
-        {/* Back Button */}
-        <button onClick={onBack}>Back</button>
       </div>
     );
   };
