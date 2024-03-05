@@ -17,6 +17,7 @@ import {
   createUserWithEmailAndPassword,
 } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
+
 import createUser from '@/app/http/createUser';
 import { createUserAttributes } from '@/app/lib/Models/User';
 import { useProp } from './PropContext';
@@ -48,19 +49,24 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const [dataLoaded, setDataLoaded] = useState<boolean>(false);
   const { handleLoading, handlePopUp } = useProp();
 
   const login = (email: string, password: string) => {
+    setDataLoaded(false);
     signInWithEmailAndPassword(auth, email, password)
       .then(() => {
+        handleLoading(false);
         // Signed in
         setError(null);
+        router.push('/tpage');
       })
       .catch((error) => {
         setError('Invalid User Credentials. Please try again.');
         const errorCode = error.code;
         const errorMessage = error.message;
         logger.error(errorCode, errorMessage);
+        setDataLoaded(true);
         handlePopUp('error', errorMessage);
         handleLoading(false);
       });
@@ -92,6 +98,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
           .then((res) => {
             if (res !== null) {
               handleLoading(false);
+
               router.push('/tpage');
             }
           })
@@ -113,6 +120,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         const errorMessage = error.message;
         logger.error(errorCode, errorMessage);
         handlePopUp('error', errorMessage);
+        setDataLoaded(true);
         handleLoading(false);
       });
   };
@@ -121,6 +129,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
       // Specify the type here
       setUser(user);
+        setDataLoaded(true);
       handleLoading(false);
       setError(null);
     });
@@ -136,7 +145,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     signUp,
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={value}>{dataLoaded && children}</AuthContext.Provider>;
 };
 
 export default AuthContext;

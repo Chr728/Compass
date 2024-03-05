@@ -3,6 +3,8 @@ import { UserAttributes } from '../models/user';
 import { SpeedDialAttributes } from '../models/speedDial';
 import { AppointmentAttributes } from '../models/appointment';
 import { O2SaturationJournalAttributes } from '../models/O2SaturationJournal';
+import { BloodPressureJournalAttributes } from '../models/bloodPressureJournal';
+import bloodPressureRoutes from "../routes/bloodPressureRoutes";
 
 const userValidator = (values: UserAttributes) => {
   const { email, firstName, lastName, phoneNumber } = values;
@@ -158,6 +160,7 @@ const notificationPreferenceValidator = (values: {
 const medicationValidator = (values: {
   medicationName: string;
   dateStarted: Date;
+  expirationDate: Date;
   time: Date;
   dosage: number;
   unit: string;
@@ -168,6 +171,7 @@ const medicationValidator = (values: {
   const {
     medicationName,
     dateStarted,
+    expirationDate,
     time,
     dosage,
     unit,
@@ -188,6 +192,11 @@ const medicationValidator = (values: {
   if (!dateStarted || typeof dateStarted !== 'string') {
     Logger.error(`Invalid date started: ${dateStarted}`);
     throw new Error(`Invalid date started: ${dateStarted}`);
+  }
+  //check if expiration date is valid
+  if (!expirationDate || typeof expirationDate !== "string") {
+    Logger.error(`Invalid expiration date: ${expirationDate}`);
+    throw new Error(`Invalid expiration date: ${expirationDate}`);
   }
   //check if time is valid
   if (!time || typeof time !== 'string') {
@@ -230,8 +239,9 @@ const moodJournalValidator = (values: {
   stressSignals: stressSignals;
   date: Date;
   notes: string;
+  time: Date;
 }) => {
-  const { howAreYou, stressSignals, date, notes } = values;
+  const { howAreYou, stressSignals, date, notes, time } = values;
   //check if howAreYou is valid
   if (!howAreYou || typeof howAreYou !== 'string') {
     Logger.error(`Invalid howAreYou: ${howAreYou}`);
@@ -267,6 +277,11 @@ const moodJournalValidator = (values: {
   if (notes !== undefined && (/\d/.test(notes) || typeof notes !== 'string')) {
     Logger.error(`Invalid notes: ${notes}`);
     throw new Error(`Invalid notes: ${notes}`);
+  }
+  //check if time is valid
+  if (!time || typeof time !== "string") {
+    Logger.error(`Invalid time: ${time}`);
+    throw new Error(`Invalid time: ${time}`);
   }
 };
 
@@ -531,6 +546,48 @@ const o2SaturationJournalValidator = (
 
 };
 
+const bloodPressureJournalValidator = (values: BloodPressureJournalAttributes) => {
+    const { date, time, systolic, diastolic, pulse, notes } = values;
+    //check if date is valid
+    if (!date || typeof date !== 'string') {
+        Logger.error(`Invalid Date: ${date}`);
+        throw new Error(`Invalid Date : ${date}`);
+    }
+
+    //check if time is valid
+    if (!time || typeof time !== 'string') {
+        Logger.error(`Invalid time : ${time}`);
+        throw new Error(`Invalid time  : ${time}`);
+    }
+
+    //check if systolic is valid
+    if (!systolic || typeof systolic !== 'number') {
+        Logger.error(`Invalid systolic: ${systolic}`);
+        throw new Error(`Invalid systolic: ${systolic}`);
+    }
+
+    //check if diastolic is valid
+    if (!diastolic || typeof diastolic !== 'number') {
+        Logger.error(`Invalid diastolic: ${diastolic}`);
+        throw new Error(`Invalid diastolic: ${diastolic}`);
+    }
+
+    //check if pulse is valid
+    if (!pulse || typeof pulse !== 'number') {
+        Logger.error(`Invalid pulse: ${pulse}`);
+        throw new Error(`Invalid pulse: ${pulse}`);
+    }
+
+    //check if notes is valid
+    if (notes == undefined || typeof notes !== 'string') {
+        Logger.error(`Invalid notes: ${notes}`);
+        throw new Error(`Invalid notes: ${notes}`);
+    }
+
+}
+
+
+
 export {
   userValidator,
   speedDialValidator,
@@ -544,4 +601,5 @@ export {
   diabeticInsulinJournalValidator,
   foodIntakeJournalValidator,
   o2SaturationJournalValidator,
+    bloodPressureJournalValidator
 };

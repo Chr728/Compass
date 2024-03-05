@@ -116,9 +116,9 @@ export default function Contacts() {
     return null;
   }
 
-  if (!user) {
-    return <div><Custom403/></div>
-  }
+  // if (!user) {
+  //   return <div><Custom403/></div>
+  // }
   
   return (
     <div className="bg-eggshell p-2 min-h-screen flex flex-col">

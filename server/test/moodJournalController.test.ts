@@ -33,6 +33,7 @@ const moodJournal = {
   },
   date: '2023-10-08T10:00:00Z',
   notes: 'Sample mood entry',
+  time:"10:00:00",
 };
 
 const updateMoodJournal = {
@@ -52,6 +53,7 @@ const updateMoodJournal = {
   },
   date: '2023-10-08T10:00:00Z',
   notes: 'Updated Sample mood entry',
+  time:"10:00:00",
 };
 
 const mockedDecodedToken = {

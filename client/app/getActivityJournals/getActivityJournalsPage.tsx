@@ -1,7 +1,11 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { MdDeleteForever, MdKeyboardArrowDown } from "react-icons/md";
+import {
+	MdDeleteForever,
+	MdKeyboardArrowDown,
+	MdKeyboardArrowUp,
+} from "react-icons/md";
 import Swal from "sweetalert2";
 import Button from "../components/Button";
 import Header from "../components/Header";
@@ -77,6 +81,58 @@ export default function GetActivityJournalsPage() {
 		});
 	}
 
+	const [orderdate, setOrderDate] = useState(false);
+
+	const handleOrderDate = () => {
+		setOrderDate(!orderdate);
+		if (!orderdate) {
+			const increasingOrderactivityData = [...activity].sort(
+				(a, b) =>
+					new Date(a.date).getTime() - new Date(b.date).getTime()
+			);
+			setactivity(increasingOrderactivityData);
+		} else {
+			const decreasingOrderactivityData = [...activity].sort(
+				(a, b) =>
+					new Date(b.date).getTime() - new Date(a.date).getTime()
+			);
+			setactivity(decreasingOrderactivityData);
+		}
+	};
+
+	const [orderactivity, setOrderActivity] = useState(false);
+
+	const handleOrderActivity = () => {
+		setOrderActivity(!orderactivity);
+		if (!orderactivity) {
+			const increasingOrderactivityData = [...activity].sort((a, b) =>
+				a.activity.toLowerCase() < b.activity.toLowerCase() ? -1 : 1
+			);
+			setactivity(increasingOrderactivityData);
+		} else {
+			const decreasingOrderactivityData = [...activity].sort((a, b) =>
+				a.activity.toLowerCase() > b.activity.toLowerCase() ? -1 : 1
+			);
+			setactivity(decreasingOrderactivityData);
+		}
+	};
+
+	const [orderduration, setOrderDuration] = useState(false);
+
+	const handleOrderUnit = () => {
+		setOrderDuration(!orderduration);
+		if (!orderduration) {
+			const increasingOrderactivityData = [...activity].sort(
+				(a, b) => a.duration - b.duration
+			);
+			setactivity(increasingOrderactivityData);
+		} else {
+			const decreasingOrderactivityData = [...activity].sort(
+				(a, b) => b.duration - a.duration
+			);
+			setactivity(decreasingOrderactivityData);
+		}
+	};
 	return (
 		<div className="bg-eggshell min-h-screen flex flex-col">
 			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
@@ -112,19 +168,43 @@ export default function GetActivityJournalsPage() {
 						<div className="flex-2">
 							<div className="font-sans  font-bold text-darkgrey text-[18px] text-center ">
 								Date
-								<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+								<button
+									onClick={handleOrderDate}
+									aria-label="orderDate">
+									{orderdate ? (
+										<MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" />
+									) : (
+										<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+									)}
+								</button>
 							</div>
 						</div>
 						<div className="flex-2" style={{ marginRight: "3%" }}>
 							<div className="font-sans  font-bold  text-darkgrey text-[18px] ml-14 text-center">
 								Activity
-								<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+								<button
+									onClick={handleOrderActivity}
+									aria-label="orderActivity">
+									{orderactivity ? (
+										<MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" />
+									) : (
+										<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+									)}
+								</button>
 							</div>
 						</div>
 						<div className="flex-2" style={{ marginRight: "10%" }}>
 							<div className="font-sans font-bold text-darkgrey text-[18px] ml-2 text-center">
 								Duration
-								<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+								<button
+									onClick={handleOrderUnit}
+									aria-label="orderUnit">
+									{orderduration ? (
+										<MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" />
+									) : (
+										<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+									)}
+								</button>
 							</div>
 						</div>
 					</div>
