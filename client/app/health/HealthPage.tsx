@@ -105,52 +105,54 @@ if (!user) {
                 </Link>
                 <br></br>
 
-            </div>
-      <br></br>
+                <Link href="/getMedications">
+                    <div className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 "
+                         style={{backgroundColor: 'var(--Black, #2C2738)'}}>
 
-      <Link href="/getMedications">
-            <div className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 " style={{backgroundColor: 'var(--Black, #2C2738)' }}>
+                        <div>
+                            <p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
+                                Medications
+                            </p>
+                            <p className="text-[14px] text-white font-IBM Plex Sans  text-start">
+                                Never miss a crucial dose.
+                            </p>
+                            <NextImage
+                                src={medications}
+                                alt="medications"
+                                width={88}
+                                height={106}
+                                className="absolute inset-y-0 right-4 shrink-0"
+                            />
+                        </div>
+                    </div>
+                </Link>
+                <br></br>
+                <Link href="/snoringAI">
+                    <div className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 m-1" style={{backgroundColor: '#7C9CBF' }}>
+                        <div>
+                            <p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
+                                Snore AI
+                            </p>
+                            <p className="text-[14px] text-white pr-20 font-IBM Plex Sans  text-start">
+                                Doubting if you're snoring?
+                            </p>
+                            <NextImage
+                                src = {snore}
+                                alt="snoring"
+                                height={ 100 }
+                                className="absolute inset-y-0 right-4 shrink-0"
+                                style={{ top: '-12px' }}
+                            />
 
-              <div>
-                <p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
-                Medications
-                </p>
-                <p className="text-[14px] text-white font-IBM Plex Sans  text-start">
-                Never miss a crucial dose.
-                </p>
-                 <NextImage
-        src = {medications}
-        alt="medications"
-        width={88}
-        height={ 106 }
-        className="absolute inset-y-0 right-4 shrink-0"
-      />
-              </div>
+                        </div>
+                    </div>
+                </Link>
             </div>
-      </Link>
-      <br></br>
+
+            <br></br>
 
 {/* link for snoring detection page to be added */}
-      <Link href="/snoringAI">
-            <div className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 m-1" style={{backgroundColor: '#7C9CBF' }}>
-              <div>
-                <p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
-                  Snore AI
-                </p>
-                <p className="text-[14px] text-white pr-20 font-IBM Plex Sans  text-start">
-                Doubting if you're snoring?
-                </p>
-                <NextImage
-                  src = {snore}
-                  alt="snoring"
-                  height={ 100 }
-                  className="absolute inset-y-0 right-4 shrink-0"
-                  style={{ top: '-12px' }}
-                />
 
-              </div>
-            </div>
-      </Link>
       <br></br>
 
     </div>
