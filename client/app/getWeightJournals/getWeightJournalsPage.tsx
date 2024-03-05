@@ -237,7 +237,7 @@ export default function GetWeightJournalsPage() {
 						</div>
 					</div>
 					<br></br>
-					<div style={{ marginBottom: "5px" }}>
+					<div style={{ marginBottom: "5px", padding: "3px" }}>
 						<canvas id="weightChart"></canvas>
 					</div>
 					<div
