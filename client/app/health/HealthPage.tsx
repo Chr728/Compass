@@ -108,8 +108,6 @@ if (!user) {
             </div>
       <br></br>
 
-
-
       <Link href="/getMedications">
             <div className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 " style={{backgroundColor: 'var(--Black, #2C2738)' }}>
 
