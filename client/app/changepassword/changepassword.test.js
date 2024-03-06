@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import "@testing-library/jest-dom";
 import { auth } from "../config/firebase";
 import Swal from "sweetalert2";
+import { reauthenticateWithCredential, updatePassword } from "firebase/auth";
 
 // Mocking the next/navigation and firebase dependencies
 jest.mock("next/navigation", () => ({
@@ -14,7 +15,26 @@ jest.mock("next/navigation", () => ({
 
 // Mocking SweetAlert2
 jest.mock("sweetalert2", () => ({
-  fire: jest.fn(() => Promise.resolve({ isConfirmed: true })),
+  fire: jest.fn(),
+}));
+
+// Mocking the auth object
+jest.mock("../config/firebase", () => ({
+  auth: {
+    currentUser: {
+      uid: 1,
+      getIdToken: jest.fn().mockResolvedValue("mockToken"),
+    },
+  },
+}));
+
+// Mock firebase functions
+jest.mock("firebase/auth", () => ({
+  updatePassword: jest.fn(),
+  reauthenticateWithCredential: jest.fn(),
+  EmailAuthProvider: {
+    credential: jest.fn(),
+  },
 }));
 
 describe("ChangePassword tests", () => {
@@ -53,17 +73,6 @@ describe("ChangePassword tests", () => {
   });
 
   test("submits the form successfully", async () => {
-    const mockUserId = "123";
-    const mockToken = "mockToken";
-    const mockCurrentUser = {
-      uid: mockUserId,
-      getIdToken: jest.fn().mockResolvedValue(mockToken),
-    };
-
-    Object.defineProperty(auth, "currentUser", {
-      get: jest.fn().mockReturnValue(mockCurrentUser),
-    });
-
     render(<ChangePassword />);
     // Mocking user input
     userEvent.type(
@@ -81,15 +90,20 @@ describe("ChangePassword tests", () => {
 
     fireEvent.click(screen.getByText("Change Password"));
 
-    // Wait for asynchronous tasks to complete
+    // Wait for asynchronous operations to complete
     await waitFor(() => {
-      expect(require("../config/firebase").updatePassword).toHaveBeenCalledWith(
+      // Asserting that the updatePassword function was called
+      expect(updatePassword).toHaveBeenCalledWith(
         expect.any(Object),
         "newPassword123"
       );
-      expect(
-        screen.getByText(/password changed successfully/i)
-      ).toBeInTheDocument();
+
+      // Asserting that the SweetAlert success message was displayed
+      expect(window.swal.fire).toHaveBeenCalledWith({
+        title: "Success!",
+        text: "Password changed successfully!",
+        icon: "success",
+      });
     });
   });
 

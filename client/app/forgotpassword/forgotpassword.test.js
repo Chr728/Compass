@@ -147,4 +147,36 @@ describe("tests when submitting password reset form", () => {
       );
     });
   });
+
+  test("handles form submission and fails", async () => {
+    // Mocking the sendPasswordResetEmail function to reject the promise
+    sendPasswordResetEmail.mockRejectedValue({
+      code: "auth/user-not-found", // Simulating a user-not-found error
+      message: "User not found",
+    });
+    render(<ForgotPassword />);
+
+    // Simulate user entering a valid email
+    await userEvent.type(
+      screen.getByLabelText("Email"),
+      "nonexistent-email@example.com"
+    );
+    userEvent.click(screen.getByText("Send Reset Link"));
+
+    // Ensure the sendPasswordResetEmail function is called with the correct arguments
+    await waitFor(() => {
+      expect(sendPasswordResetEmail).toHaveBeenCalledWith(
+        expect.objectContaining(auth),
+        "nonexistent-email@example.com"
+      );
+    });
+
+    // Ensure the error is logged
+    await waitFor(() => {
+      expect(require("../../logger").error).toHaveBeenCalledWith(
+        "auth/user-not-found",
+        "User not found"
+      );
+    });
+  });
 });
