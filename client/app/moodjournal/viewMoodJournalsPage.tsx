@@ -52,7 +52,7 @@ export default function ViewMoodJournalsPage() {
 
 	useEffect(() => {
 		renderGraph();
-	}, [moodJournal]); // Re-render the graph when the mood data changes
+	}, [moodJournal]);
 
 	const renderGraph = () => {
 		const canvas = document.getElementById(
@@ -78,7 +78,6 @@ export default function ViewMoodJournalsPage() {
 						}
 					});
 
-				// Destroy existing chart instance if exists
 				if (chartInstance) {
 					chartInstance.destroy();
 				}
@@ -93,7 +92,7 @@ export default function ViewMoodJournalsPage() {
 							datasets: [
 								{
 									label: "Mood",
-									data: moodValues || [], // Provide a default empty array if moodValues is falsy
+									data: moodValues || [],
 									borderColor: "rgba(75, 192, 192, 1)",
 									tension: 0.1,
 								},
@@ -103,7 +102,7 @@ export default function ViewMoodJournalsPage() {
 							scales: {
 								y: {
 									beginAtZero: true,
-									suggestedMax: 5, // Maximum value of y-axis
+									suggestedMax: 5,
 								},
 							},
 						},
