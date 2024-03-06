@@ -75,6 +75,8 @@ test("Mood journal is displayed correctly", async () => {
 	setTimeout(() => {
 		const date = screen.findByText("Oct 17, 2023");
 		const notes = screen.findByText("abcd");
+		const canvasElement = screen.getByTestId("moodChart");
+		expect(canvasElement).toBeInTheDocument();
 		expect(date).toBeInTheDocument();
 		expect(notes).toBeInTheDocument();
 	}, 500);
