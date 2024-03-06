@@ -65,7 +65,7 @@ cron.schedule('*/10 * * * *', () => {
 });
 
 // Schedule scraper task
-cron.schedule('0 0 0 * * *', () => {
+cron.schedule('0 0 */2 * * *', () => {
   Logger.info('Running the scheduled emergency room scraper task...');
   scraper()
     .then(() => {
