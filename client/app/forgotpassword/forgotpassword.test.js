@@ -15,13 +15,6 @@ jest.mock("next/navigation", () => ({
 }));
 
 // Mocking next and firebase modules
-jest.mock("next/image", () => ({ src, alt }) => <img src={src} alt={alt} />);
-jest.mock(
-  "next/link",
-  () =>
-    ({ children }) =>
-      children
-);
 jest.mock("../../logger", () => ({ error: jest.fn() }));
 
 jest.mock("firebase/auth", () => ({
