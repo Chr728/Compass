@@ -1,14 +1,42 @@
 import React from "react";
-import { fireEvent, render, screen, act } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import ForgotPassword from "../forgotpassword/page";
+import { act } from "react-dom/test-utils";
+import { auth } from "../config/firebase";
+import { sendPasswordResetEmail } from "firebase/auth";
 
 // Mock useSearchParams directly in this test file
 jest.mock("next/navigation", () => ({
   useSearchParams: () => ({
     get: jest.fn(),
   }),
+}));
+
+// Mocking next and firebase modules
+jest.mock("next/image", () => ({ src, alt }) => <img src={src} alt={alt} />);
+jest.mock(
+  "next/link",
+  () =>
+    ({ children }) =>
+      children
+);
+jest.mock("../../logger", () => ({ error: jest.fn() }));
+
+jest.mock("firebase/auth", () => ({
+  getAuth: jest.fn(),
+  sendPasswordResetEmail: jest.fn(), // Mocking the function
+}));
+
+// Mocking the auth object
+jest.mock("../config/firebase", () => ({
+  auth: {
+    currentUser: {
+      uid: 1,
+      getIdToken: jest.fn().mockResolvedValue("mockToken"),
+    },
+  },
 }));
 
 // Test forgot password page
@@ -89,5 +117,41 @@ describe("Change password page messages", () => {
     render(<ForgotPassword />);
     const linkElement = screen.getAllByRole("link")[0];
     expect(linkElement).toHaveAttribute("href", "/settings");
+  });
+});
+
+// Tests for when submitting the form
+describe("tests when submitting password reset form", () => {
+  test("handles form submission and triggers password reset email", async () => {
+    render(<ForgotPassword />);
+
+    // Simulate user entering a valid email
+    await userEvent.type(
+      screen.getByLabelText("Email"),
+      "valid-email@example.com"
+    );
+    userEvent.click(screen.getByText("Send Reset Link"));
+
+    // Ensure the sendPasswordResetEmail function is called with the correct arguments
+    await waitFor(() => {
+      expect(sendPasswordResetEmail).toHaveBeenCalledWith(
+        expect.objectContaining(auth),
+        "valid-email@example.com"
+      );
+    });
+
+    // Mock a successful password reset email sending
+    sendPasswordResetEmail.mockResolvedValue();
+
+    // Submit the form again to trigger the success scenario
+    userEvent.click(screen.getByText("Send Reset Link"));
+
+    // Ensure the sendPasswordResetEmail function is called again
+    await waitFor(() => {
+      expect(sendPasswordResetEmail).toHaveBeenCalledWith(
+        expect.objectContaining(auth),
+        "valid-email@example.com"
+      );
+    });
   });
 });

@@ -1,21 +1,21 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Input from '../components/Input';
-import Button from '../components/Button';
-import { useFormik } from 'formik';
-import { useState } from 'react';
-import { auth } from '../config/firebase';
+import React from "react";
+import Input from "../components/Input";
+import Button from "../components/Button";
+import { useFormik } from "formik";
+import { useState } from "react";
+import { auth } from "../config/firebase";
 import {
   updatePassword,
   reauthenticateWithCredential,
   EmailAuthProvider,
-} from 'firebase/auth';
-import { useSearchParams } from 'next/navigation';
-import Header from '../components/Header';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-import Swal from 'sweetalert2';
+} from "firebase/auth";
+import { useSearchParams } from "next/navigation";
+import Header from "../components/Header";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import Swal from "sweetalert2";
 
 export default function ChangePassword() {
   const searchParams = useSearchParams();
@@ -24,7 +24,7 @@ export default function ChangePassword() {
   const [newVisible, setNewVisible] = useState<boolean>(false);
   const [confirmVisible, setConfirmVisible] = useState<boolean>(false);
   const [passwordChanged, setPasswordChanged] = useState<boolean>(
-    searchParams.get('passwordChanged') === 'true'
+    searchParams.get("passwordChanged") === "true"
   );
   const [reauthError, setReauthError] = useState<boolean>(false);
 
@@ -55,28 +55,28 @@ export default function ChangePassword() {
 
   const formik = useFormik({
     initialValues: {
-      currentPassword: '',
-      newPassword: '',
-      confirmPassword: '',
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
     },
     onSubmit: async (values) => {
       try {
         const user = auth.currentUser;
 
         if (!user) {
-          console.error('User not authenticated.');
+          console.error("User not authenticated.");
           return;
         }
 
         const credential = EmailAuthProvider.credential(
-          user?.email || '',
+          user?.email || "",
           values.currentPassword
         );
         try {
           await reauthenticateWithCredential(user, credential);
           setReauthError(false);
         } catch (error) {
-          console.error('Reauthentication failed:', error);
+          console.error("Reauthentication failed:", error);
           setReauthError(true);
         }
         // Ensure the new password is not the same as the current password
@@ -84,45 +84,45 @@ export default function ChangePassword() {
           await updatePassword(user, values.newPassword);
           setPasswordChanged(true);
           Swal.fire({
-            title: 'Success!',
-            text: 'Password changed successfully!',
-            icon: 'success',
+            title: "Success!",
+            text: "Password changed successfully!",
+            icon: "success",
           }).then((result) => {
             // Redirect to settings page after closing the alert
             if (result.isConfirmed || result.isDismissed) {
-              router.push('/settings');
+              router.push("/settings");
             }
           });
         } else {
           console.error(
-            'New password cannot be the same as the current password.'
+            "New password cannot be the same as the current password."
           );
         }
       } catch (error) {
-        console.error('Password change failed:', error);
+        console.error("Password change failed:", error);
       }
     },
     validate: (values) => {
       if (!values.currentPassword) {
-        errors.currentPassword = 'Current Password is required';
+        errors.currentPassword = "Current Password is required";
       }
       if (reauthError) {
-        errors.currentPassword = 'Incorrect current password';
+        errors.currentPassword = "Incorrect current password";
       }
 
       if (!values.newPassword) {
-        errors.newPassword = 'New Password is required';
+        errors.newPassword = "New Password is required";
       } else if (values.newPassword.length < 6) {
-        errors.newPassword = 'Password must be at least 6 characters long';
+        errors.newPassword = "Password must be at least 6 characters long";
       } else if (values.newPassword === values.currentPassword) {
         errors.newPassword =
-          'New Password cannot be the same as the Current Password';
+          "New Password cannot be the same as the Current Password";
       }
 
       if (!values.confirmPassword) {
-        errors.confirmPassword = 'Confirm Password is required';
+        errors.confirmPassword = "Confirm Password is required";
       } else if (values.confirmPassword !== values.newPassword) {
-        errors.confirmPassword = 'Passwords do not match';
+        errors.confirmPassword = "Passwords do not match";
       }
 
       return errors;
@@ -132,9 +132,9 @@ export default function ChangePassword() {
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
       <>
-        {' '}
+        {" "}
         <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-          <button onClick={() => router.push('/settings')}>
+          <button onClick={() => router.push("/settings")}>
             <Header headerText="Change your password"></Header>
           </button>
         </span>
@@ -153,11 +153,11 @@ export default function ChangePassword() {
               <Input
                 name="currentPassword"
                 id="currentPassword"
-                type={currentVisible ? 'text' : 'password'}
+                type={currentVisible ? "text" : "password"}
                 value={formik.values.currentPassword}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                style={{ width: '100%' }}
+                style={{ width: "100%" }}
               />
               <div
                 className="absolute right-2 bottom-3"
@@ -176,7 +176,7 @@ export default function ChangePassword() {
                     alt="Eye icon"
                     width={24}
                     height={24}
-                    style={{ width: 'auto', height: 'auto' }}
+                    style={{ width: "auto", height: "auto" }}
                   />
                 )}
               </div>
@@ -197,11 +197,11 @@ export default function ChangePassword() {
               <Input
                 name="newPassword"
                 id="newPassword"
-                type={newVisible ? 'text' : 'password'}
+                type={newVisible ? "text" : "password"}
                 value={formik.values.newPassword}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                style={{ width: '100%' }}
+                style={{ width: "100%" }}
               />
               <div
                 className="absolute right-2 bottom-3"
@@ -220,7 +220,7 @@ export default function ChangePassword() {
                     alt="Eye icon"
                     width={24}
                     height={24}
-                    style={{ width: 'auto', height: 'auto' }}
+                    style={{ width: "auto", height: "auto" }}
                   />
                 )}
               </div>
@@ -241,11 +241,11 @@ export default function ChangePassword() {
               <Input
                 name="confirmPassword"
                 id="confirmPassword"
-                type={confirmVisible ? 'text' : 'password'}
+                type={confirmVisible ? "text" : "password"}
                 value={formik.values.confirmPassword}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                style={{ width: '100%' }}
+                style={{ width: "100%" }}
               />
               <div
                 className="absolute right-2 bottom-3"
@@ -264,7 +264,7 @@ export default function ChangePassword() {
                     alt="Eye icon"
                     width={24}
                     height={24}
-                    style={{ width: 'auto', height: 'auto' }}
+                    style={{ width: "auto", height: "auto" }}
                   />
                 )}
               </div>
@@ -281,13 +281,13 @@ export default function ChangePassword() {
               <Button
                 type="submit"
                 text="Change Password"
-                style={{ width: '100%', cursor: 'not-allowed' }}
+                style={{ width: "100%", cursor: "not-allowed" }}
               />
             ) : (
               <Button
                 type="submit"
                 text="Change Password"
-                style={{ width: '100%' }}
+                style={{ width: "100%" }}
               />
             )}
           </div>
