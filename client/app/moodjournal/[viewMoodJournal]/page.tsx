@@ -131,7 +131,7 @@ export default function GetMoodJournal({
               shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
 					style={{ overflowY: "auto", maxHeight: "480px" }}>
 					<div style={{ marginBottom: "10px", padding: "3px" }}>
-						<canvas id="weightChart"></canvas>
+						<canvas id="moodChart"></canvas>
 					</div>
 					<Typography variant="body1" ml={2} mt={2} color="black">
 						<b>Date:</b> {formatDate(mood.date)}
