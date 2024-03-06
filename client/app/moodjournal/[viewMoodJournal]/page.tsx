@@ -5,7 +5,6 @@ import {
 	formatMilitaryTime,
 } from "@/app/helpers/utils/datetimeformat";
 import Typography from "@mui/material/Typography";
-import Chart from "chart.js/auto";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Button from "../../components/Button";
@@ -23,7 +22,6 @@ export default function GetMoodJournal({
 	const router = useRouter();
 	const { userInfo } = useUser();
 	const [mood, setMood] = useState<any>(null);
-	let chartInstance: Chart<"line", any, unknown> | null = null;
 
 	async function fetchMoodJournal() {
 		try {
@@ -40,71 +38,6 @@ export default function GetMoodJournal({
 			logger.error("Error retrieving mood journal entry:", error);
 		}
 	}
-
-	useEffect(() => {
-		renderGraph();
-	}, [mood]); // Re-render the graph when the mood data changes
-
-	const renderGraph = () => {
-		const canvas = document.getElementById(
-			"moodChart"
-		) as HTMLCanvasElement | null;
-		if (canvas) {
-			const ctx = canvas.getContext("2d");
-			if (ctx) {
-				const moodValues = mood.map((item: { howAreYou: string }) => {
-					switch (item.howAreYou) {
-						case "Awesome":
-							return 5;
-						case "Good":
-							return 4;
-						case "Meh":
-							return 3;
-						case "Bad":
-							return 2;
-						case "Awful":
-							return 1;
-					}
-				});
-
-				// Destroy existing chart instance if exists
-				if (chartInstance) {
-					chartInstance.destroy();
-				}
-
-				setTimeout(() => {
-					chartInstance = new Chart(ctx, {
-						type: "line",
-						data: {
-							labels: mood.map(
-								(item: any, index: number) => index + 1
-							),
-							datasets: [
-								{
-									label: "Mood",
-									data: moodValues,
-									borderColor: "rgba(75, 192, 192, 1)",
-									tension: 0.1,
-								},
-							],
-						},
-						options: {
-							scales: {
-								y: {
-									beginAtZero: true,
-									suggestedMax: 5, // Maximum value of y-axis
-								},
-							},
-						},
-					});
-				}, 100);
-			} else {
-				console.error("Could not get 2D context for canvas element.");
-			}
-		} else {
-			console.error("Could not find canvas element with id 'moodChart'.");
-		}
-	};
 
 	useEffect(() => {
 		if (!user) {
@@ -130,9 +63,6 @@ export default function GetMoodJournal({
               bg-white flex flex-col space-y-4 mt-2 self-center	text-black
               shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
 					style={{ overflowY: "auto", maxHeight: "480px" }}>
-					<div style={{ marginBottom: "10px", padding: "3px" }}>
-						<canvas id="moodChart"></canvas>
-					</div>
 					<Typography variant="body1" ml={2} mt={2} color="black">
 						<b>Date:</b> {formatDate(mood.date)}
 					</Typography>
