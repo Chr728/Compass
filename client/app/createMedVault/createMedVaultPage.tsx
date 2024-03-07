@@ -8,14 +8,14 @@ import FormLabel from '../components/FormLabel';
 import { useFormik } from 'formik';
 import { openDB } from 'idb';
 import HealthIconModal from '../components/HealthIconModal';
-import { ICertificatePaper } from 'healthicons-react/dist/filled'; // Import ICertificatePaper icon
+import { ChildCognition } from 'healthicons-react/dist/filled';
 
 export default function CreateMedVaultPage() {
   const router = useRouter();
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedIcon, setSelectedIcon] = useState({
-    name: 'ICertificatePaper',
-    component: <ICertificatePaper />,
+    name: 'ChildCognition',
+    component: <ChildCognition />,
   });
 
   const formik = useFormik({
@@ -75,7 +75,7 @@ export default function CreateMedVaultPage() {
           {selectedIcon ? ( // Display the selected icon if any
             selectedIcon.component
           ) : (
-            <ICertificatePaper /> // Default to ICertificatePaper
+            <ChildCognition /> // Default to ICertificatePaper
           )}
         </div>
       </div>
