@@ -22,3 +22,5 @@ pillIdentifierAI/results
 pillIdentifierAI/*.xlsx
 *.h5
 pillIdentifierAI/*.jpg
+*/training20_set
+*/testing20_set
