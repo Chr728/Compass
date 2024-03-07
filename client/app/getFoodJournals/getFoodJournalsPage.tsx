@@ -58,50 +58,58 @@ export default function GetFoodJournalsPage() {
 	}, [food]);
 
 	const renderGraph = () => {
-		const canvas = document.getElementById(
-			"foodChart"
-		) as HTMLCanvasElement | null;
-		if (canvas) {
-			const ctx = canvas.getContext("2d");
-			if (ctx) {
-				const calories = food.map(
-					(item: { calorie: number }) => item.calorie
-				);
+		try {
+			const canvas = document.getElementById(
+				"foodChart"
+			) as HTMLCanvasElement | null;
+			if (canvas) {
+				const ctx = canvas.getContext("2d");
+				if (ctx) {
+					const calories = food.map(
+						(item: { calorie: number }) => item.calorie
+					);
 
-				if (chartInstance) {
-					chartInstance.destroy();
-				}
+					if (chartInstance) {
+						chartInstance.destroy();
+					}
 
-				setTimeout(() => {
-					chartInstance = new Chart(ctx, {
-						type: "line",
-						data: {
-							labels: food.map(
-								(item: any, index: number) => index + 1
-							),
-							datasets: [
-								{
-									label: "Calorie",
-									data: calories,
-									borderColor: "rgba(75, 192, 192, 1)",
-									tension: 0.1,
-								},
-							],
-						},
-						options: {
-							scales: {
-								y: {
-									beginAtZero: true,
+					setTimeout(() => {
+						chartInstance = new Chart(ctx, {
+							type: "line",
+							data: {
+								labels: food.map(
+									(item: any, index: number) => index + 1
+								),
+								datasets: [
+									{
+										label: "Calorie",
+										data: calories,
+										borderColor: "rgba(75, 192, 192, 1)",
+										tension: 0.1,
+									},
+								],
+							},
+							options: {
+								scales: {
+									y: {
+										beginAtZero: true,
+									},
 								},
 							},
-						},
-					});
-				}, 100);
+						});
+					}, 100);
+				} else {
+					console.error(
+						"Could not get 2D context for canvas element."
+					);
+				}
 			} else {
-				console.error("Could not get 2D context for canvas element.");
+				console.error(
+					"Could not find canvas element with id 'foodChart'."
+				);
 			}
-		} else {
-			console.error("Could not find canvas element with id 'foodChart'.");
+		} catch (error) {
+			console.error("Error rendering graph:", error);
 		}
 	};
 	async function deleteFoodJournals(foodJournalId: string) {

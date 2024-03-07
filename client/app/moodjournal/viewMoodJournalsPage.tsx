@@ -55,64 +55,72 @@ export default function ViewMoodJournalsPage() {
 	}, [moodJournal]);
 
 	const renderGraph = () => {
-		const canvas = document.getElementById(
-			"moodChart"
-		) as HTMLCanvasElement | null;
-		if (canvas) {
-			const ctx = canvas.getContext("2d");
-			if (ctx) {
-				const moodValues =
-					moodJournal &&
-					moodJournal.map((item: { howAreYou: string }) => {
-						switch (item.howAreYou) {
-							case "awesome":
-								return 5;
-							case "good":
-								return 4;
-							case "sad":
-								return 3;
-							case "bad":
-								return 2;
-							case "awful":
-								return 1;
-						}
-					});
+		try {
+			const canvas = document.getElementById(
+				"moodChart"
+			) as HTMLCanvasElement | null;
+			if (canvas) {
+				const ctx = canvas.getContext("2d");
+				if (ctx) {
+					const moodValues =
+						moodJournal &&
+						moodJournal.map((item: { howAreYou: string }) => {
+							switch (item.howAreYou) {
+								case "awesome":
+									return 5;
+								case "good":
+									return 4;
+								case "sad":
+									return 3;
+								case "bad":
+									return 2;
+								case "awful":
+									return 1;
+							}
+						});
 
-				if (chartInstance) {
-					chartInstance.destroy();
-				}
+					if (chartInstance) {
+						chartInstance.destroy();
+					}
 
-				setTimeout(() => {
-					chartInstance = new Chart(ctx, {
-						type: "line",
-						data: {
-							labels: moodJournal.map(
-								(item: any, index: number) => index + 1
-							),
-							datasets: [
-								{
-									label: "Mood",
-									data: moodValues || [],
-									borderColor: "rgba(75, 192, 192, 1)",
-									tension: 0.1,
-								},
-							],
-						},
-						options: {
-							scales: {
-								y: {
-									beginAtZero: true,
-									suggestedMax: 5,
+					setTimeout(() => {
+						chartInstance = new Chart(ctx, {
+							type: "line",
+							data: {
+								labels: moodJournal.map(
+									(item: any, index: number) => index + 1
+								),
+								datasets: [
+									{
+										label: "Mood",
+										data: moodValues || [],
+										borderColor: "rgba(75, 192, 192, 1)",
+										tension: 0.1,
+									},
+								],
+							},
+							options: {
+								scales: {
+									y: {
+										beginAtZero: true,
+										suggestedMax: 5,
+									},
 								},
 							},
-						},
-					});
-				}, 100);
+						});
+					}, 100);
+				} else {
+					console.error(
+						"Could not get 2D context for canvas element."
+					);
+				}
 			} else {
-				console.error("Could not get 2D context for canvas element.");
+				console.error(
+					"Could not find canvas element with id 'moodChart'."
+				);
 			}
-		} else {
-			console.error("Could not find canvas element with id 'moodChart'.");
+		} catch (error) {
+			console.error("Error rendering graph:", error);
 		}
 	};
 	function setColor(mood: String) {

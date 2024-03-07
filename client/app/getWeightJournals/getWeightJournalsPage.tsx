@@ -56,52 +56,58 @@ export default function GetWeightJournalsPage() {
 	}, [weight]);
 
 	const renderGraph = () => {
-		const canvas = document.getElementById(
-			"weightChart"
-		) as HTMLCanvasElement | null;
-		if (canvas) {
-			const ctx = canvas.getContext("2d");
-			if (ctx) {
-				const weights = weight.map(
-					(item: { weight: number }) => item.weight
-				);
+		try {
+			const canvas = document.getElementById(
+				"weightChart"
+			) as HTMLCanvasElement | null;
+			if (canvas) {
+				const ctx = canvas.getContext("2d");
+				if (ctx) {
+					const weights = weight.map(
+						(item: { weight: number }) => item.weight
+					);
 
-				if (chartInstance) {
-					chartInstance.destroy();
-				}
+					if (chartInstance) {
+						chartInstance.destroy();
+					}
 
-				setTimeout(() => {
-					chartInstance = new Chart(ctx, {
-						type: "line",
-						data: {
-							labels: weight.map(
-								(item: any, index: number) => index + 1
-							),
-							datasets: [
-								{
-									label: "Weight",
-									data: weights,
-									borderColor: "rgba(75, 192, 192, 1)",
-									tension: 0.1,
-								},
-							],
-						},
-						options: {
-							scales: {
-								y: {
-									beginAtZero: true,
+					setTimeout(() => {
+						chartInstance = new Chart(ctx, {
+							type: "line",
+							data: {
+								labels: weight.map(
+									(item: any, index: number) => index + 1
+								),
+								datasets: [
+									{
+										label: "Weight",
+										data: weights,
+										borderColor: "rgba(75, 192, 192, 1)",
+										tension: 0.1,
+									},
+								],
+							},
+							options: {
+								scales: {
+									y: {
+										beginAtZero: true,
+									},
 								},
 							},
-						},
-					});
-				}, 100);
+						});
+					}, 100);
+				} else {
+					console.error(
+						"Could not get 2D context for canvas element."
+					);
+				}
 			} else {
-				console.error("Could not get 2D context for canvas element.");
+				console.error(
+					"Could not find canvas element with id 'weightChart'."
+				);
 			}
-		} else {
-			console.error(
-				"Could not find canvas element with id 'weightChart'."
-			);
+		} catch (error) {
+			console.error("Error rendering graph:", error);
 		}
 	};
 
