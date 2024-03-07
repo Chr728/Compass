@@ -161,6 +161,7 @@ export default function ChangePassword() {
               />
               <div
                 className="absolute right-2 bottom-3"
+                aria-label="Toggle Current Password Visibility"
                 onClick={handleCurrentVisibility}
               >
                 {currentVisible ? (
@@ -205,6 +206,7 @@ export default function ChangePassword() {
               />
               <div
                 className="absolute right-2 bottom-3"
+                aria-label="Toggle New Password Visibility"
                 onClick={handleNewVisibility}
               >
                 {newVisible ? (
@@ -249,6 +251,7 @@ export default function ChangePassword() {
               />
               <div
                 className="absolute right-2 bottom-3"
+                aria-label="Toggle Confirm Password Visibility"
                 onClick={handleConfirmVisibility}
               >
                 {confirmVisible ? (

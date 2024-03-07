@@ -55,30 +55,85 @@ describe("ChangePassword rendering tests", () => {
     expect(screen.getByText("Change your password")).toBeInTheDocument();
   });
 
-  test("handles current password visibility toggle", () => {
+  test("toggling the current password visibility", () => {
     render(<ChangePassword />);
     const currentPasswordInput = screen.getByLabelText("Current Password");
-    const visibilityButton =
-      screen.getByText("Current Password").parentNode.lastChild;
+    const currentVisibilityButton = screen.getByLabelText(
+      "Toggle Current Password Visibility"
+    );
 
-    expect(currentPasswordInput.type).toBe("password");
+    // Initially, password is hidden
+    expect(currentPasswordInput).toHaveAttribute("type", "password");
 
-    fireEvent.click(visibilityButton);
+    // Clicking the visibility button
+    fireEvent.click(currentVisibilityButton);
 
-    expect(currentPasswordInput.type).toBe("password");
+    // Now, password should be visible
+    expect(currentPasswordInput).toHaveAttribute("type", "text");
+
+    // Clicking the visibility button again
+    fireEvent.click(currentVisibilityButton);
+
+    // Password should be hidden again
+    expect(currentPasswordInput).toHaveAttribute("type", "password");
   });
 
-  test("handles new password visibility toggle", () => {
+  test("toggling the new password visibility", () => {
     render(<ChangePassword />);
     const newPasswordInput = screen.getByLabelText("New Password");
-    const visibilityButton =
-      screen.getByText("New Password").parentNode.lastChild;
+    const newVisibilityButton = screen.getByLabelText(
+      "Toggle New Password Visibility"
+    );
 
-    expect(newPasswordInput.type).toBe("password");
+    // Initially, password is hidden
+    expect(newPasswordInput).toHaveAttribute("type", "password");
 
-    fireEvent.click(visibilityButton);
+    // Clicking the visibility button
+    fireEvent.click(newVisibilityButton);
 
-    expect(newPasswordInput.type).toBe("password");
+    // Now, password should be visible
+    expect(newPasswordInput).toHaveAttribute("type", "text");
+
+    // Clicking the visibility button again
+    fireEvent.click(newVisibilityButton);
+
+    // Password should be hidden again
+    expect(newPasswordInput).toHaveAttribute("type", "password");
+  });
+
+  test("toggling the confirm password visibility", () => {
+    render(<ChangePassword />);
+    const confirmPasswordInput = screen.getByLabelText("Confirm Password");
+    const confirmVisibilityButton = screen.getByLabelText(
+      "Toggle Confirm Password Visibility"
+    );
+    // Initially, password is hidden
+    expect(confirmPasswordInput).toHaveAttribute("type", "password");
+
+    // Clicking the visibility button
+    fireEvent.click(confirmVisibilityButton);
+
+    // Now, password should be visible
+    expect(confirmPasswordInput).toHaveAttribute("type", "text");
+
+    // Clicking the visibility button again
+    fireEvent.click(confirmVisibilityButton);
+
+    // Password should be hidden again
+    expect(confirmPasswordInput).toHaveAttribute("type", "password");
+  });
+
+  test("Routes to settings page on button click", () => {
+    const mockPush = jest.fn();
+    useRouter.mockImplementation(() => ({
+      push: mockPush,
+    }));
+
+    render(<ChangePassword />);
+    const backButton = screen.getByText("Change your password");
+
+    fireEvent.click(backButton);
+    expect(mockPush).toHaveBeenCalledWith("/settings");
   });
 });
 
