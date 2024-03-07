@@ -87,7 +87,8 @@ test("Get Food order Journals list is displayed correctly", async () => {
 		expect(date).toBeInTheDocument();
 		expect(time).toBeInTheDocument();
 		expect(foodName).toBeInTheDocument();
-
+		const canvasElement = screen.getByTestId("foodChart");
+		expect(canvasElement).toBeInTheDocument();
 		const orderDate = screen.getByLabelText("orderDate");
 		await userEvent.click(orderDate);
 		await userEvent.click(orderDate);
