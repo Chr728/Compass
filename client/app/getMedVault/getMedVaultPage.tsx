@@ -90,11 +90,14 @@ export default function GetMedVaultPage() {
 
       const exportString = JSON.stringify(exportData);
 
+      const timestamp = new Date().toISOString().replace(/:/g, '-'); // Get current timestamp
+      const fileName = `medVaultExport_${timestamp}.json`; // Append timestamp to file name
+
       const blob = new Blob([exportString], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'medVaultExport.json';
+      a.download = fileName; // Use modified file name
       a.style.display = 'none';
       document.body.appendChild(a);
       a.click();
