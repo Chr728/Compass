@@ -22,3 +22,4 @@ pillIdentifierAI/results
 pillIdentifierAI/*.xlsx
 *.h5
 pillIdentifierAI/*.jpg
+snoringAI/saved_models/snore_detector.onnx
