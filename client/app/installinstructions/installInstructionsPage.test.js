@@ -20,10 +20,9 @@ describe("Install instructions page", () => {
     expect(iosButton).toBeInTheDocument();
   });
 
-  test("allows platform selection", () => {
+  test("allows platform selection for android", () => {
     render(<InstallInstructions />);
     const androidButton = screen.getByText("Android");
-    const iosButton = screen.getByText("iOS");
 
     fireEvent.click(androidButton);
     expect(
@@ -31,6 +30,11 @@ describe("Install instructions page", () => {
     ).not.toBeInTheDocument();
     expect(screen.queryByText("Android")).not.toBeInTheDocument();
     expect(screen.queryByText("iOS")).not.toBeInTheDocument();
+  });
+
+  test("allows platform selection for ios", () => {
+    render(<InstallInstructions />);
+    const iosButton = screen.getByText("iOS");
 
     fireEvent.click(iosButton);
     expect(
