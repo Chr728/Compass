@@ -20,6 +20,7 @@ import userRoutes from './routes/userRoutes';
 import weightJournalRoutes from './routes/weightJournalRoutes';
 import { sendUserReminders } from './tasks/reminderTask';
 import o2SaturationJournalRoutes from './routes/o2SaturationJournalRoutes';
+import { sendMoodReminder } from './tasks/moodReminderTask';
 import snoringResultRoutes from './routes/snoringResultRoutes';
 import bloodPressureRoutes from './routes/bloodPressureRoutes';
 import emergencyRoomRoutes from './routes/emergencyRoomRoutes';
@@ -64,6 +65,12 @@ cron.schedule('*/10 * * * *', () => {
   sendUserReminders();
 });
 
+
+// Schedule the mood journal reminder
+cron.schedule("*/30 * * * *", () => {
+  sendMoodReminder();
+})
+
 // Schedule scraper task
 cron.schedule('0 0 0 * * *', () => {
   Logger.info('Running the scheduled emergency room scraper task...');
@@ -75,6 +82,7 @@ cron.schedule('0 0 0 * * *', () => {
       Logger.error('Error scraping ER data: ', err);
     });
 });
+
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
