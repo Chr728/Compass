@@ -10,7 +10,7 @@ import { sendPasswordResetEmail } from "firebase/auth";
 import { useSearchParams } from "next/navigation";
 
 export default function ForgotPassword() {
-  const logger = require('../../logger');
+  const logger = require("../../logger");
   const searchParams = useSearchParams();
 
   let errors: {
@@ -44,12 +44,6 @@ export default function ForgotPassword() {
       ) {
         errors.email = "Invalid email format";
       }
-      // TO BE ADDED
-      //   else if (
-      //     // If email does not exist in the database
-      //   ) {
-      //     errors.email = 'No account found with this email';
-      //   }
       return errors;
     },
   });
