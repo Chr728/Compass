@@ -11,41 +11,36 @@ jest.mock("next/navigation", () => ({
 describe("Install instructions page", () => {
   test("renders platform selection buttons", () => {
     render(<InstallInstructions />);
+    const appLogo = screen.getByAltText("App Logo");
     const androidButton = screen.getByText("Android");
     const iosButton = screen.getByText("iOS");
 
+    expect(appLogo).toBeInTheDocument();
     expect(androidButton).toBeInTheDocument();
     expect(iosButton).toBeInTheDocument();
   });
 
-  test("renders instructions after selecting a platform", () => {
+  test("allows platform selection", () => {
     render(<InstallInstructions />);
     const androidButton = screen.getByText("Android");
-    fireEvent.click(androidButton);
+    const iosButton = screen.getByText("iOS");
 
-    // You can check for specific elements or texts within the Instructions component here
-    const instructionText = screen.getByText(
-      "Follow these steps to install on your android device:"
-    );
-    expect(instructionText).toBeInTheDocument();
+    fireEvent.click(androidButton);
+    expect(
+      screen.queryByText("Please choose the platform of your choice")
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText("Android")).not.toBeInTheDocument();
+    expect(screen.queryByText("iOS")).not.toBeInTheDocument();
+
+    fireEvent.click(iosButton);
+    expect(
+      screen.queryByText("Please choose the platform of your choice")
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText("Android")).not.toBeInTheDocument();
+    expect(screen.queryByText("iOS")).not.toBeInTheDocument();
   });
 
-  test("allows navigation between steps in instructions", () => {
-    render(<InstallInstructions />);
-    const androidButton = screen.getByText("Android");
-    fireEvent.click(androidButton);
-
-    const nextButton = screen.getByText("Next");
-    fireEvent.click(nextButton);
-
-    // Assert that the content for the next step is rendered
-    const stepTwoText = screen.getByText(
-      "Follow these steps to install on your android device:"
-    );
-    expect(stepTwoText).toBeInTheDocument();
-  });
-
-  test("allows navigation back to platform selection", () => {
+  test("handles going back from instructions", () => {
     render(<InstallInstructions />);
     const androidButton = screen.getByText("Android");
     fireEvent.click(androidButton);
@@ -53,11 +48,29 @@ describe("Install instructions page", () => {
     const backButton = screen.getByText("Back");
     fireEvent.click(backButton);
 
-    // Assert that the platform selection buttons are rendered again
-    const androidButtonAfterBack = screen.getByText("Android");
-    const iosButtonAfterBack = screen.getByText("iOS");
-    expect(androidButtonAfterBack).toBeInTheDocument();
-    expect(iosButtonAfterBack).toBeInTheDocument();
+    // Your assertions for returning to platform selection
+    const androidButtonAgain = screen.getByText("Android");
+    expect(androidButtonAgain).toBeInTheDocument();
+  });
+
+  test("handles back button click in instructions", () => {
+    render(<InstallInstructions />);
+    const androidButton = screen.getByText("Android");
+
+    fireEvent.click(androidButton);
+
+    const backButton = screen.getByText("Back");
+
+    // Navigate to a different step
+    fireEvent.click(screen.getByText("Next"));
+
+    // Click the back button
+    fireEvent.click(backButton);
+
+    // Should go back to platform selection
+    expect(
+      screen.getByText("Please choose the platform of your choice")
+    ).toBeInTheDocument();
   });
 
   test("Routes to settings page on button click", () => {

@@ -45,6 +45,7 @@ export default function InstallInstructions() {
         {/* Image */}
         <div className="">
           <img
+            data-testid="instruction-image"
             src={`/${platform}-step${currentStep + 1}.png`}
             alt={`${platform} Instruction ${currentStep + 1}`}
             style={{ width: "300px", height: "600px" }}
