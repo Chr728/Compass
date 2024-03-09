@@ -52,13 +52,6 @@ export default function ForgotPassword() {
     searchParams.get("loggedIn") === "true"
   );
 
-  const handleVisibility = (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ): void => {
-    e.preventDefault();
-    setLoggedIn((previous) => !previous);
-  };
-
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
       {loggedIn ? (
