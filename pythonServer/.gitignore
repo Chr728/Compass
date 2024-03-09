@@ -2,3 +2,4 @@ app/__pycache__
 app/.pytest_cache
 .coverage
 app/model
+app/.coverage.*

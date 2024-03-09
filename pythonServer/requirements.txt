@@ -9,3 +9,9 @@ numpy
 scikit-learn
 pillow
 python-multipart
+librosa
+huggingface_hub
+tensorflow_intel
+ffmpeg
+pydub
+ffmpeg-python
