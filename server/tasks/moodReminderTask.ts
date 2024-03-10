@@ -116,6 +116,33 @@ export const sendMoodReminder = async () => {
                     Logger.info(JSON.stringify(depressionTips))
                   });
                 }
+
+                //Fetch tired tips
+                const tiredResults: string | any[] = []
+                if (stressSignalsParsed.tired == "always" || stressSignalsParsed.tired == "often"){
+                  fs.createReadStream('./healthTips/tiredTips.csv')
+                  .pipe(csv())
+                  .on('data', (data: string) => tiredResults.push(data))
+                  .on('end', () => {
+                    let getFirstRandomTip = Math.floor(Math.random() * ((tiredResults.length - 1) - 0 + 1) + 0)
+                    let firstTip = tiredResults[getFirstRandomTip].TIPS
+                    let secondTip = false
+                    let getSecondRandomTip = 0
+                    while(!secondTip){
+                      getSecondRandomTip = Math.floor(Math.random() * ((tiredResults.length - 1) - 0 + 1) + 0)
+                      if (getSecondRandomTip != getFirstRandomTip){
+                        secondTip = true
+                      }
+                    }
+                    secondTip = tiredResults[getSecondRandomTip].TIPS
+
+                    const tiredTips = {
+                      "tip1":firstTip,
+                      "tip2":secondTip,
+                    }
+                    Logger.info(JSON.stringify(tiredTips))
+                  });
+                }
               
               
               
