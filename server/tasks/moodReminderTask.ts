@@ -3,6 +3,8 @@ import { Logger } from "../middlewares/logger";
 import db from "../models";
 import moment = require("moment-timezone");
 const webPush = require("web-push");
+const fs = require("fs");
+const csv = require("csv-parser")
 
 
 export const sendMoodReminder = async () => {
@@ -57,7 +59,39 @@ export const sendMoodReminder = async () => {
             
             //Send the reminder if they are feeling meh, bad or awful. Send their latest mood journal entry
             if ((moodJournal.howAreYou == "sad" || moodJournal.howAreYou == "bad" || moodJournal.howAreYou == "awful") && !sentAlready.includes(moodJournal.uid)){
-                const payload = JSON.stringify({
+              
+              //Fetch sleep tips
+              const results: string | any[] = []
+              const stressSignalsParsed = JSON.parse(moodJournal.stressSignals)
+              if (stressSignalsParsed.sleep == "always" || stressSignalsParsed.sleep == "often"){
+                fs.createReadStream('./healthTips/sleepTips.csv')
+                .pipe(csv())
+                .on('data', (data: string) => results.push(data))
+                .on('end', () => {
+                  let getFirstRandomTip = Math.floor(Math.random() * ((results.length - 1) - 0 + 1) + 0)
+                  let firstTip = results[getFirstRandomTip].TIPS
+                  let secondTip = false
+                  let getSecondRandomTip = 0
+                  while(!secondTip){
+                    getSecondRandomTip = Math.floor(Math.random() * ((results.length - 1) - 0 + 1) + 0)
+                    if (getSecondRandomTip != getFirstRandomTip){
+                      secondTip = true
+                    }
+                  }
+                  secondTip = results[getSecondRandomTip].TIPS
+
+                  const sleepTips = {
+                    "tip1":firstTip,
+                    "tip2":secondTip,
+                  }
+
+                  Logger.info(JSON.stringify(sleepTips))
+
+                });
+              }
+              
+              
+              const payload = JSON.stringify({
                     title: `Your latest mood journal entry has been assesed. New tips have arrived!`,
                     body:`It appears you have been feeling ${moodJournal.howAreYou} lately. Compass has found new tips for you to make you feel better!`
                   });
