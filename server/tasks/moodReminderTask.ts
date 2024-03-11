@@ -197,7 +197,60 @@ export const sendMoodReminder = async () => {
                     Logger.info(JSON.stringify(angerTips))
                   });
                 }
-              
+                
+                //Fetch anxiety tips
+                const anxietyResults: string | any[] = []
+                if(stressSignalsParsed.anxiety == "always" || stressSignalsParsed.anxiety == "often"){
+                  fs.createReadStream('./healthTips/anxietyTips.csv')
+                  .pipe(csv())
+                  .on('data', (data: string) => anxietyResults.push(data))
+                  .on('end', () => {
+                    let getFirstRandomTip = Math.floor(Math.random() * ((anxietyResults.length - 1) - 0 + 1) + 0)
+                    let firstTip = anxietyResults[getFirstRandomTip].TIPS
+                    let secondTip = false
+                    let getSecondRandomTip = 0
+                    while(!secondTip){
+                      getSecondRandomTip = Math.floor(Math.random() * ((anxietyResults.length - 1) - 0 + 1) + 0)
+                      if (getSecondRandomTip != getFirstRandomTip){
+                        secondTip = true
+                      }
+                    }
+                    secondTip = anxietyResults[getSecondRandomTip].TIPS
+
+                    const anxietyTips = {
+                      "tip1":firstTip,
+                      "tip2":secondTip,
+                    }
+                    Logger.info(JSON.stringify(anxietyTips))
+                  });
+                }
+
+                //Fetch pressure tips
+                const pressureResults: string | any[] = []
+                if(stressSignalsParsed.pressure == "always" || stressSignalsParsed.pressure == "often"){
+                  fs.createReadStream('./healthTips/overwhelmedTips.csv')
+                  .pipe(csv())
+                  .on('data', (data: string) => pressureResults.push(data))
+                  .on('end', () => {
+                    let getFirstRandomTip = Math.floor(Math.random() * ((pressureResults.length - 1) - 0 + 1) + 0)
+                    let firstTip = pressureResults[getFirstRandomTip].TIPS
+                    let secondTip = false
+                    let getSecondRandomTip = 0
+                    while(!secondTip){
+                      getSecondRandomTip = Math.floor(Math.random() * ((pressureResults.length - 1) - 0 + 1) + 0)
+                      if (getSecondRandomTip != getFirstRandomTip){
+                        secondTip = true
+                      }
+                    }
+                    secondTip = pressureResults[getSecondRandomTip].TIPS
+
+                    const pressureTips = {
+                      "tip1":firstTip,
+                      "tip2":secondTip,
+                    }
+                    Logger.info(JSON.stringify(pressureTips))
+                  });
+                }
               
               
               const payload = JSON.stringify({
