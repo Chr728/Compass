@@ -15,6 +15,9 @@ import tensorflow as tf
 from huggingface_hub import from_pretrained_keras
 from itertools import groupby
 from pydub import AudioSegment
+# import subprocess
+# import tempfile
+# import json
 
 load_dotenv()
 
@@ -35,9 +38,9 @@ encoder.classes_ = np.load('encoder/encoder.npy', allow_pickle=True)
 # Load the pre-trained model and feature extractor
 snoringModel = from_pretrained_keras("CXDJY/snore_ai")
 
-def load_audio_to_tensor(file, type):
+def load_audio_to_tensor(file, type2):
     # Convert mp3 to wav since librosa soundfile doesn't support mp3
-    if type == "mp3":
+    if type2 == "mp3":
         try:
             seg=AudioSegment.from_mp3(io.BytesIO(file))
         # Some mp3 files are actually in acc format which should be handled specifically
@@ -47,7 +50,27 @@ def load_audio_to_tensor(file, type):
         seg.export(wavIO, format="wav")
         audio, sampling_rate = librosa.load(io.BytesIO(wavIO.getvalue()), sr=None, mono=True)
     else:
-        audio, sampling_rate = librosa.load(io.BytesIO(file), sr=None, mono=True)  # load audio and convert to mono
+        # print(1)
+        # with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+        #     print(2)
+        #     temp_file.write(file)
+        #     print(3)
+        #     temp_file_path = temp_file.name
+
+        # command = ['ffprobe', '-v', 'error', '-show_format', '-show_streams', temp_file_path]
+        # result = subprocess.run(command, capture_output=True, text=True)
+        # print(result.stdout)
+        # temp_file.close()
+        # raise Exception("Sorry, no numbers below zero")
+        try:
+            audio, sampling_rate = librosa.load(io.BytesIO(file), sr=None, mono=True)  # load audio and convert to mono
+        except:
+            sound = AudioSegment.from_file(io.BytesIO(file), codec="opus")
+            wavIO=io.BytesIO()
+            sound.export(wavIO, format="wav")
+
+            #audio, sampling_rate = librosa.load(io.BytesIO(file), sr=None, mono=True)  # load audio and convert to mono
+            audio, sampling_rate = librosa.load(io.BytesIO(wavIO.getvalue()), sr=None, mono=True)
     wave = librosa.resample(audio, orig_sr=sampling_rate, target_sr=16000)  # resample to 16KHz
     rms = librosa.feature.rms(y=audio)[0]                           # get root mean square of audio
     volume = np.mean(rms)                                             # get volume of audio
