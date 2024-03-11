@@ -124,7 +124,6 @@ export default function RecordAudioPage() {
     };
 
     const handleRecordClick = async () => {
-        const chunks: any = [];
         try {
        
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -190,23 +189,6 @@ export default function RecordAudioPage() {
         setRecording(false);
     }
 
-    function generateFormDataBody(formData:any, boundary:any) {
-        const body = [];
-    
-        // Append each form field with the boundary
-        formData.forEach((value:any, key:any) => {
-            body.push(`--${boundary}`);
-            body.push(`Content-Disposition: form-data; name="${key}"`);
-            body.push('');
-            body.push(value);
-        });
-    
-        // Add the boundary for the end of the request
-        body.push(`--${boundary}--`);
-        body.push('');
-    
-        return body.join('\r\n');
-    }
 
     const handleSubmit = async() => {
        
