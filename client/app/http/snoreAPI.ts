@@ -3,7 +3,67 @@ const logger = require('../../logger');
 
 
 
-//Function to send the recorded audio to the server for prediction
+// Function to send the recorded audio to the server for prediction
+export async function sendAudio(audioBlob:any): Promise<any>{
+	try{
+		const currentUser = auth.currentUser;
+        if (!currentUser) {
+            logger.error('No user is currently signed in.');
+            throw new Error("No user is currently signed in.");
+        }
+        const id = currentUser.uid;
+        const token = await currentUser.getIdToken();
+
+		const formData = new FormData();
+		formData.append('file', audioBlob, 'recording.wav');
+		
+		const response = await fetch('http://127.0.0.1:8080/SnoringAI', {
+			method: 'POST',
+			body: formData,
+		});
+		
+		return response;
+	} catch (error) {
+        logger.error("Error sending audio:", error);
+        throw error;
+      }
+}
+
+// Function to get an individual audio entry
+export async function getAudioEntry(audioEntryID: any): Promise<any> {
+    try {
+		const currentUser = auth.currentUser;
+		if (!currentUser) {
+			logger.error("No user is currently signed in.");
+			throw new Error("No user is currently signed in.");
+		}
+		const id = currentUser.uid;
+		const token = await currentUser.getIdToken();
+        const response = await fetch(
+			`${process.env.NEXT_PUBLIC_API_URL}/api/snoringAI/${audioEntryID}`,
+			{
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`,
+				},
+			}
+		);
+        logger.info(`Audio entry fetched successfully for user ${id}`);
+		if (!response.ok) {
+			logger.error("Failed to retrieve a single audio entry for user");
+			throw new Error(`Failed to retrieve a single audio entry for user`);
+		}
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		logger.error("Error fetching a single audio entry:", error);
+		throw error;
+	}
+}
+
+
+
 
 // Function to GET the list of all audio files
 export async function getAudioEntries(): Promise<any> {
@@ -83,14 +143,12 @@ export async function createAudioEntry(audioFileData: any):Promise<any> {
 // Function to delete an audio entry
 export async function deleteAudioEntry(audioEntryID: string): Promise<any>{
 	try {
-		console.log("entered try before token");
 		const currentUser = auth.currentUser;
 		if (!currentUser) {
 		  logger.error('No user is currently signed in.');
 		  throw new Error('No user is currently signed in.');
 		}
 		const token = await currentUser.getIdToken();
-		console.log("request is here")
 		const response = await fetch(
 		  `${process.env.NEXT_PUBLIC_API_URL}/api/snoringAI/${audioEntryID}`,
 		  {
@@ -100,7 +158,6 @@ export async function deleteAudioEntry(audioEntryID: string): Promise<any>{
 			  },
 		  }
 		);
-		console.log("Delete response is here")
 		logger.info(`Audio entry deleted successfully for user ${audioEntryID}`)
 		if (!response.ok) {
 		  logger.error(`Failed to delete the entry. HTTP Status: ${response.status}`);

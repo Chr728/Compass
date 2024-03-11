@@ -14,7 +14,7 @@ import {useRouter} from 'next/navigation';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import NextImage from "next/image";
 import RedButton from '../components/RedButton';
-import { createAudioEntry, deleteAudioEntry, getAudioEntries } from '../http/snoreAPI';
+import { createAudioEntry, deleteAudioEntry, getAudioEntries, getAudioEntry, sendAudio } from '../http/snoreAPI';
 import { useProp } from '../contexts/PropContext';
 import Image from 'next/image';
 
@@ -41,28 +41,32 @@ export default function RecordAudioPage() {
             cancelButtonColor: "#d33",
             confirmButtonText: "Delete",
         }).then(async (result: { isConfirmed: any }) => {
-            if (result.isConfirmed) {
-                const deleteresult = await deleteAudioEntry(
-                    audioEntryID
-                );
+                // Retrieving the audio entry to be deleted
+                const entryToBeDeleted = await getAudioEntry(audioEntryID);
+                if (result.isConfirmed) {
+                    const deleteresult = await deleteAudioEntry(
+                        audioEntryID
+                    );
+            
+                    const audioEntry = entryToBeDeleted.data;
+                    const existingAudioData = JSON.parse(localStorage.getItem("savedAudio") || "[]");
+                    const deletedEntry = existingAudioData.find((item:any) => item === audioEntry.filename);
+                    if (deletedEntry) {
+                        const updatedAudioData = existingAudioData.filter((item:any) => item !== deletedEntry);
+                        localStorage.setItem("savedAudio", JSON.stringify(updatedAudioData));
+                    }
                 
-
-                const existingAudioData = JSON.parse(localStorage.getItem("savedAudio") || "[]");
-                const blobURL = `blob:${window.location.origin}${audioEntryID}`; // Assuming audioEntryID is the path
-                const updatedAudioData = existingAudioData.filter((item) => item !== blobURL);
-                localStorage.setItem("savedAudio", JSON.stringify(updatedAudioData));
-              
-                const newEntries = await getAudioEntries();
-                    setEntries(newEntries.data);
-                router.push("/snoringAI");
-                Swal.fire({
-                    title: "Deleted!",
-                    text: "Your audio entry has been deleted.",
-                    icon: "success",
-                });
-            } else {
-                router.push("/snoringAI");
-            }
+                    const newEntries = await getAudioEntries();
+                        setEntries(newEntries.data);
+                    router.push("/snoringAI");
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Your audio entry has been deleted.",
+                        icon: "success",
+                    });
+                } else {
+                    router.push("/snoringAI");
+                }
         });
     }
 
@@ -93,13 +97,12 @@ export default function RecordAudioPage() {
                 const entryData = await getAudioEntries();
                 logger.info('All entries retrieved:', entryData.data)
                 setEntries(entryData.data);
-                // console.log(entryData);
             } catch (error) {
                 logger.error('Error fetching journal', error);
             }
         }
         fetchAudioEntries();
-    }, [user]);
+    }, [user, itemRecorded]);
 
     const formatTimer = (seconds:any) => {
         const minutes = Math.floor(seconds / 60);
@@ -109,24 +112,9 @@ export default function RecordAudioPage() {
 
     const router = useRouter();
 
-    const dataURLtoBlob = (dataURL: any) => {
-        const arr = dataURL.split(",");
-        const mime = arr[0].match(/:(.*?);/)[1];
-        const bstr = atob(arr[1]);
-        let n = bstr.length;
-        const u8arr = new Uint8Array(n);
-
-        while (n--) {
-            u8arr[n] = bstr.charCodeAt(n);
-        }
-
-        return new Blob([u8arr], { type: mime });
-    };
-
     const handleRecordClick = async () => {
         try {
-       
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
             const mediaRecorder = new MediaRecorder(stream);
             mediaRecorderRef.current = mediaRecorder;
@@ -139,23 +127,7 @@ export default function RecordAudioPage() {
                 const audioBlob = new Blob([event.data], { type: 'audio/wav' });
                 setRecordedAudioBlob(audioBlob);
 
-                // Send the audioBlob to the backend
-                try {
-                    const formData = new FormData();
-                    console.log("here")
-                    formData.append('file', audioBlob, 'recording.wav');
-
-                    const response =  await fetch('http://127.0.0.1:8080/SnoringAI', {
-                        method: 'POST',
-                        body: formData,
-                    });
-                    console.log(await response.json())
-
-
-                } catch (error) {
-                    console.error('Error during audio file upload:', error);
                 }
-            }
             };
 
             mediaRecorder.start();
@@ -169,7 +141,6 @@ export default function RecordAudioPage() {
 
       const handleStopClick = () => {
         if (mediaRecorderRef.current) {
-            alert('stop')
             mediaRecorderRef.current.onstop = () => {
             };
     
@@ -202,23 +173,23 @@ export default function RecordAudioPage() {
             existingAudioData.push(blobURL);
             localStorage.setItem("savedAudio",  JSON.stringify(existingAudioData));
 
+
             try {  
+                const response = await sendAudio(recordedAudioBlob);
+                const results = await response.json();
+                const resultsArray = results.results;
+                const snoringDetected = resultsArray.includes(1);
+
                 const data = {
-                  date: currentRecordingDate,
-                  filename: blobURL,
-                  result: 'Snoring detected'
-                };
+                    date: currentRecordingDate,
+                    filename: blobURL,
+                    result: snoringDetected ? 'Snoring detected':'No Snoring Detected'
+                  };
                 const result = await createAudioEntry(data);
                
-                const formData = new FormData();
-                formData.append('file', recordedAudioBlob, 'recording.wav');
-                
-                const results = await fetch('http://127.0.0.1:8080/SnoringAI', {
-                    method: 'POST',
-                    body: formData,
-                });
-    
-                console.log(results);
+                  
+                setRecording(false);
+                setItemRecorded(false);
               } catch (error) {
                 handlePopUp("error", "Error creating audio entry.");
               }
@@ -234,14 +205,14 @@ export default function RecordAudioPage() {
         </span>
 
         <div
-            className="flex flex-col justify-center p-4"
+            className="flex flex-col justify-center"
         >
         
             { (recording  || itemRecorded) &&
                 (
                     <>
                     {currentRecordingDate && (
-                        <p className="text-sm text-darkgrey mt-1">
+                        <p className="text-sm text-darkgrey mt-1 mx-auto">
                         Recording Date: {currentRecordingDate}
                         </p>
                     )}
@@ -263,7 +234,7 @@ export default function RecordAudioPage() {
                             )
                         }
                        
-                        <div className="flex flex-col space-y-2 mt-auto mb-24" >
+                        <div className="flex flex-col space-y-2 mt-auto mb-24 items-center" >
                             {
                                 !itemRecorded && (
                                     <RedButton
@@ -284,7 +255,7 @@ export default function RecordAudioPage() {
                                             /> 
                                     </>
                                     )
-                                }
+                            }
 
                              <RedButton
                                 type="button"
@@ -312,41 +283,48 @@ export default function RecordAudioPage() {
                         Record
                     </p>
                 </div>
-                <div className='h-[440px]'>
-                <TableContainer sx={{ maxHeight: 440,  }}>
-                    <Table stickyHeader aria-label="sticky table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>
-                                    <div className="font-bold">
-                                        Date
-                                        <button aria-label="recordingDate">
-                                            <MdKeyboardArrowDown className="inline-block text-2xl text-darkgrey" />  
-                                        </button>
-                                    </div>
-                                </TableCell>
-                                <TableCell>
-                                    <div className="font-bold">
-                                        Result
-                                        <button aria-label="recordingResult">
-                                            <MdKeyboardArrowDown className="inline-block text-2xl text-darkgrey" /> 
-                                        </button>
-                                    </div>
-                                </TableCell>
-                                <TableCell></TableCell>    {/*Table cell for play recording icon column*/}
-                                <TableCell></TableCell>    {/*Table cell for trash icon column*/}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            { entries && Array.isArray(entries) && entries.map((row, index) => (
-                                <TableRow  key={index}>
-                                    <TableCell component="th" scope="row">
-                                        {formatDate(row.date)}
+                <div className='alternatingRowColor h-[440px]'>
+                    <TableContainer sx={{ maxHeight: 440 }}>
+                        <Table stickyHeader aria-label="sticky table">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>
+                                        <div className="font-bold">
+                                            Date
+                                            <button aria-label="recordingDate">
+                                                <MdKeyboardArrowDown className="inline-block text-2xl text-darkgrey" />  
+                                            </button>
+                                        </div>
                                     </TableCell>
-                                    <TableCell >{row.result}</TableCell>
-                                    <TableCell></TableCell>
-                                    <TableCell >
-                                        <Image 
+                                    <TableCell>
+                                        <div className="font-bold">
+                                            Result
+                                            <button aria-label="recordingResult">
+                                                <MdKeyboardArrowDown className="inline-block text-2xl text-darkgrey" /> 
+                                            </button>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell></TableCell> 
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                { entries && Array.isArray(entries) && entries.map((row, index) => (
+                                    <TableRow  key={index}>
+                                        <TableCell component="th" scope="row">
+                                            {formatDate(row.date)}
+                                        </TableCell>
+                                        <TableCell >{row.result}</TableCell>
+                                        <TableCell >
+                                            <div className="flex items-center">
+                                            <Image 
+                                                src="/icons/resultDisplay.svg"
+                                                alt="Play icon to display results"
+                                                width={10}
+                                                height={10}
+                                                className="mr-4 md:hidden"
+                                                style={{ width: 'auto', height: 'auto' }}
+                                            />  
+                                            <Image 
                                                 src="/icons/trash.svg"
                                                 alt="Trash icon"
                                                 width={10}
@@ -358,12 +336,14 @@ export default function RecordAudioPage() {
                                                     deleteAudioEntryFunction(row.id);
                                                 }}
                                             />  
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
+                                            </div>
+                                            
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
                         </Table>
-                </TableContainer>
+                    </TableContainer>
             </div>
             </>
          )}              
