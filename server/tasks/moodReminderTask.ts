@@ -170,6 +170,33 @@ export const sendMoodReminder = async () => {
                     Logger.info(JSON.stringify(attentionTips))
                   });
                 }
+
+                //Fetch anger tips
+                const angerResults: string | any[] = []
+                if(stressSignalsParsed.anger == "always" || stressSignalsParsed.anger == "often"){
+                  fs.createReadStream('./healthTips/angerTips.csv')
+                  .pipe(csv())
+                  .on('data', (data: string) => angerResults.push(data))
+                  .on('end', () => {
+                    let getFirstRandomTip = Math.floor(Math.random() * ((angerResults.length - 1) - 0 + 1) + 0)
+                    let firstTip = angerResults[getFirstRandomTip].TIPS
+                    let secondTip = false
+                    let getSecondRandomTip = 0
+                    while(!secondTip){
+                      getSecondRandomTip = Math.floor(Math.random() * ((angerResults.length - 1) - 0 + 1) + 0)
+                      if (getSecondRandomTip != getFirstRandomTip){
+                        secondTip = true
+                      }
+                    }
+                    secondTip = angerResults[getSecondRandomTip].TIPS
+
+                    const angerTips = {
+                      "tip1":firstTip,
+                      "tip2":secondTip,
+                    }
+                    Logger.info(JSON.stringify(angerTips))
+                  });
+                }
               
               
               
