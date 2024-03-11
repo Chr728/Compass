@@ -142,12 +142,15 @@ export default function RecordAudioPage() {
                 // Send the audioBlob to the backend
                 try {
                     const formData = new FormData();
+                    console.log("here")
                     formData.append('file', audioBlob, 'recording.wav');
 
                     const response =  await fetch('http://127.0.0.1:8080/SnoringAI', {
                         method: 'POST',
                         body: formData,
                     });
+                    console.log(await response.json())
+
 
                 } catch (error) {
                     console.error('Error during audio file upload:', error);
