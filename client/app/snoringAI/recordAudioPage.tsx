@@ -14,11 +14,15 @@ import {useRouter} from 'next/navigation';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import NextImage from "next/image";
 import RedButton from '../components/RedButton';
+import { createAudioEntry, deleteAudioEntry, getAudioEntries } from '../http/snoreAPI';
+import { useProp } from '../contexts/PropContext';
+import Image from 'next/image';
 
 
 export default function RecordAudioPage() {
     const logger = require('../../logger');
     const { user } = useAuth();
+    const { handlePopUp} = useProp();
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
     const [recording, setRecording] = useState(false);
     const [itemRecorded, setItemRecorded] = useState(false);
@@ -27,8 +31,40 @@ export default function RecordAudioPage() {
     const [currentRecordingDate, setCurrentRecordingDate] = useState<string>('');
     const [timerInterval, setTimerInterval] = useState<NodeJS.Timeout | null>(null);
     const [recordedAudioBlob, setRecordedAudioBlob] = useState<Blob | null>(null);
+    const [entries, setEntries] = useState<any>();
     
+    async function deleteAudioEntryFunction(audioEntryID: string) {
+        Swal.fire({
+            text: "Are you sure you want to delete this blood pressure journal entry?",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Delete",
+        }).then(async (result: { isConfirmed: any }) => {
+            if (result.isConfirmed) {
+                const deleteresult = await deleteAudioEntry(
+                    audioEntryID
+                );
+                
 
+                const existingAudioData = JSON.parse(localStorage.getItem("savedAudio") || "[]");
+                const blobURL = `blob:${window.location.origin}${audioEntryID}`; // Assuming audioEntryID is the path
+                const updatedAudioData = existingAudioData.filter((item) => item !== blobURL);
+                localStorage.setItem("savedAudio", JSON.stringify(updatedAudioData));
+              
+                const newEntries = await getAudioEntries();
+                    setEntries(newEntries.data);
+                router.push("/snoringAI");
+                Swal.fire({
+                    title: "Deleted!",
+                    text: "Your audio entry has been deleted.",
+                    icon: "success",
+                });
+            } else {
+                router.push("/snoringAI");
+            }
+        });
+    }
 
     useEffect(() =>{
         if (!user) 
@@ -50,6 +86,21 @@ export default function RecordAudioPage() {
         return () => clearInterval(interval);
     }, [recording]); 
 
+    useEffect(() => {
+        async function fetchAudioEntries() {
+            try {
+                const userId = user?.uid || '';
+                const entryData = await getAudioEntries();
+                logger.info('All entries retrieved:', entryData.data)
+                setEntries(entryData.data);
+                // console.log(entryData);
+            } catch (error) {
+                logger.error('Error fetching journal', error);
+            }
+        }
+        fetchAudioEntries();
+    }, [user]);
+
     const formatTimer = (seconds:any) => {
         const minutes = Math.floor(seconds / 60);
         const remainingSeconds = seconds % 60;
@@ -58,34 +109,65 @@ export default function RecordAudioPage() {
 
     const router = useRouter();
 
-    const handleRecordClick = async () => {
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    
-          const mediaRecorder = new MediaRecorder(stream);
-          mediaRecorderRef.current = mediaRecorder;
+    const dataURLtoBlob = (dataURL: any) => {
+        const arr = dataURL.split(",");
+        const mime = arr[0].match(/:(.*?);/)[1];
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
 
-          setCurrentRecordingDate(formatDateYearMonthDate(new Date()));
-    
-          mediaRecorder.ondataavailable = (event) => {
-            if (event.data.size > 0) {
-              const audioBlob = new Blob([event.data], { type: 'audio/wav' });
-              setRecordedAudioBlob(audioBlob);
-              
-            }
-          };
-    
-          mediaRecorder.start();
-          setRecording(true);
-
-        } catch (error) {
-          console.error('Error accessing microphone:', error);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
         }
+
+        return new Blob([u8arr], { type: mime });
+    };
+
+    const handleRecordClick = async () => {
+        const chunks: any = [];
+        try {
+       
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+            const mediaRecorder = new MediaRecorder(stream);
+            mediaRecorderRef.current = mediaRecorder;
+
+            setCurrentRecordingDate(formatDateYearMonthDate(new Date()));
+
+            mediaRecorder.ondataavailable = async(event) => {
+                if (event.data.size > 0) {
+           
+                const audioBlob = new Blob([event.data], { type: 'audio/wav' });
+                setRecordedAudioBlob(audioBlob);
+
+                // Send the audioBlob to the backend
+                try {
+                    const formData = new FormData();
+                    formData.append('file', audioBlob, 'recording.wav');
+
+                    const response =  await fetch('http://127.0.0.1:8080/SnoringAI', {
+                        method: 'POST',
+                        body: formData,
+                    });
+
+                } catch (error) {
+                    console.error('Error during audio file upload:', error);
+                }
+            }
+            };
+
+            mediaRecorder.start();
+            setRecording(true);
+        } catch (error) {
+            console.error('Error accessing microphone:', error);
+        }
+
+        
       };
 
       const handleStopClick = () => {
-
         if (mediaRecorderRef.current) {
+            alert('stop')
             mediaRecorderRef.current.onstop = () => {
             };
     
@@ -108,6 +190,24 @@ export default function RecordAudioPage() {
         setRecording(false);
     }
 
+    function generateFormDataBody(formData:any, boundary:any) {
+        const body = [];
+    
+        // Append each form field with the boundary
+        formData.forEach((value:any, key:any) => {
+            body.push(`--${boundary}`);
+            body.push(`Content-Disposition: form-data; name="${key}"`);
+            body.push('');
+            body.push(value);
+        });
+    
+        // Add the boundary for the end of the request
+        body.push(`--${boundary}--`);
+        body.push('');
+    
+        return body.join('\r\n');
+    }
+
     const handleSubmit = async() => {
        
         const existingAudioData = JSON.parse(localStorage.getItem("savedAudio") || "[]");
@@ -115,11 +215,31 @@ export default function RecordAudioPage() {
         if (recordedAudioBlob) {
             const blobURL = URL.createObjectURL(recordedAudioBlob);
             existingAudioData.push(blobURL);
-            localStorage.setItem("savedAudio", JSON.stringify(existingAudioData));
+            localStorage.setItem("savedAudio",  JSON.stringify(existingAudioData));
+
+            try {  
+                const data = {
+                  date: currentRecordingDate,
+                  filename: blobURL,
+                  result: 'Snoring detected'
+                };
+                const result = await createAudioEntry(data);
+               
+                const formData = new FormData();
+                formData.append('file', recordedAudioBlob, 'recording.wav');
+                
+                const results = await fetch('http://127.0.0.1:8080/SnoringAI', {
+                    method: 'POST',
+                    body: formData,
+                });
+    
+                console.log(results);
+              } catch (error) {
+                handlePopUp("error", "Error creating audio entry.");
+              }
         }
-        console.log('clicked submit')
     }
-   
+    
   return (
     <div className="bg-eggshell min-h-screen flex flex-col w-full overflow-y-auto">
         <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-2">
@@ -233,7 +353,29 @@ export default function RecordAudioPage() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            
+                            { entries && Array.isArray(entries) && entries.map((row, index) => (
+                                <TableRow  key={index}>
+                                    <TableCell component="th" scope="row">
+                                        {formatDate(row.date)}
+                                    </TableCell>
+                                    <TableCell >{row.result}</TableCell>
+                                    <TableCell></TableCell>
+                                    <TableCell >
+                                        <Image 
+                                                src="/icons/trash.svg"
+                                                alt="Trash icon"
+                                                width={10}
+                                                height={10}
+                                                className="mr-4 md:hidden"
+                                                style={{ width: 'auto', height: 'auto' }}
+                                                onClick={(event) => {
+                                                    event.stopPropagation();
+                                                    deleteAudioEntryFunction(row.id);
+                                                }}
+                                            />  
+                                    </TableCell>
+                                </TableRow>
+                            ))}
                         </TableBody>
                         </Table>
                 </TableContainer>
