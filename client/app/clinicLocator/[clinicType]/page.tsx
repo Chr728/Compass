@@ -40,7 +40,7 @@ const ClinicLocations: FC<pageProps> = ({ params }) => {
             {`Select a location to get directions`}
         </p>
 
-        {places ? places.map((place: PlaceResult) => {
+        {places && places.length > 0 ? places.map((place: PlaceResult) => {
                 const {name, vicinity, rating, icon, user_ratings_total} = place;
                 return <LocationComponent key={name}
                                           onClick={() => window.open(`http://maps.google.com/?q=${vicinity}`, '_blank')}
@@ -49,7 +49,12 @@ const ClinicLocations: FC<pageProps> = ({ params }) => {
                                           icon={icon}/>
             })
             :
-            <div>Loading...</div>
+            <div>
+                <p className="font-sans text-darkgrey ml-5 p-5  text-[17px]">
+                    No clinics found near your location.
+                </p>
+                <img src="/no-location-icon.png" alt="no results" className="w-1/2 mx-auto"/>
+            </div>
         }
         <div style={{minHeight: '100px'}}></div>
     </div>
