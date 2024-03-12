@@ -7,8 +7,6 @@ import { startServer, stopServer } from '../utils/journalsTestHelper';
 let server: any;
 const port = process.env.PORT;
 
-
-
 const appointment = [
   {
     id: 1,
@@ -17,6 +15,8 @@ const appointment = [
     reason: 'test',
     date: '2023-09-23T10:30:00.000Z',
     time: '00:00:00',
+    frequency: 'daily',
+    quantity: 2,
     notes: 'Call the doctor back 2 days later',
   },
   {
@@ -26,6 +26,8 @@ const appointment = [
     appointmentWith: 'Jane Doe',
     date: '2023-09-30T10:30:00.000Z',
     time: '00:00:00',
+    frequency: 'monthly',
+    quantity: 2,
     notes: 'Checkup',
   },
 ];
@@ -37,6 +39,8 @@ const createAppointment = {
   reason: 'Medications',
   date: '2023-09-23T10:30:00.000Z',
   time: '00:00:00',
+  frequency: 'monthly',
+  quantity: 2,
   notes: 'Call the doctor back 2 days later',
 };
 
@@ -47,6 +51,8 @@ const updateAppointment = {
   reason: 'Medications',
   date: '2023-10-23T11:30:00.000Z',
   time: '11:30:00',
+  frequency: 'biweekly',
+  quantity: 2,
   notes: 'Call the doctor back 2 days later',
 };
 
