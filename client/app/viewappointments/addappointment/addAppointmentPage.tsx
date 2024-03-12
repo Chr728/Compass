@@ -25,7 +25,7 @@ export default function AddAppointmentPage() {
       date: '',
       time: '',
       frequency: '',
-      quantity: '',
+      quantity: 0,
       notes: '',
     },
     onSubmit: async (values) => {
@@ -215,6 +215,7 @@ export default function AddAppointmentPage() {
             <option value="weekly">Weekly</option>
             <option value="bi-weekly">Bi-Weekly</option>
             <option value="monthly">Monthly</option>
+            <option value="yearly">Yearly</option>
           </select>
           {formik.touched.frequency && formik.errors.frequency && (
             <p className="text-[16px] text-red font-sans">
