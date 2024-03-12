@@ -42,8 +42,27 @@ Those credential files contain the environment variables needed to run the proje
 
 The docker compose file contains the commands to build and run the project. Please cd to the root folder (the Compass folder) and run:    
 
+#### For the express server and the nextjs frontend:
 ```bash
 docker-compose -f docker-compose-dev.yml up
+```
+
+#### For the python server
+First cd to the pythonServer folder:
+``` bash
+cd pythonServer
+```
+
+Please make sure all the dependencies are installed on your local environment by running:
+```bash
+pip install -r requirements.txt
+```
+##### In addition to the requirements.txt, the library ffmpeg also needs to be set up on your local machine. The set up procedure depends on your OS and your local environment. Please check their website: https://www.ffmpeg.org/download.html 
+
+After all the dependencies are successfully installed, move to the app folder and run the server:
+```bash
+cd app
+python3 main.py
 ```
 
 If you are running the project in your local environment, the express server will be hosted on port 8000, the python server will be hosted on port 8080, the client will be hosted on port 3000 and the database will be hosted on post 5432
