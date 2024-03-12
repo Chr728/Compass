@@ -35,7 +35,7 @@ export default function RecordAudioPage() {
     
     async function deleteAudioEntryFunction(audioEntryID: string) {
         Swal.fire({
-            text: "Are you sure you want to delete this blood pressure journal entry?",
+            text: "Are you sure you want to delete this audio entry?",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
