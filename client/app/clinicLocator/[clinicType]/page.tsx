@@ -41,13 +41,17 @@ const ClinicLocations: FC<pageProps> = ({ params }) => {
         </p>
 
         {places ? places.map((place: PlaceResult) => {
-            const { name, vicinity, rating, icon, user_ratings_total } = place;
-            return <LocationComponent key={name} onClick={() => window.open(`http://maps.google.com/?q=${vicinity}`, '_blank')}
-                                      name={name} address={vicinity} rating={rating} userRatingsTotal={user_ratings_total}
-                                      icon={icon}/>})
+                const {name, vicinity, rating, icon, user_ratings_total} = place;
+                return <LocationComponent key={name}
+                                          onClick={() => window.open(`http://maps.google.com/?q=${vicinity}`, '_blank')}
+                                          name={name} address={vicinity} rating={rating}
+                                          userRatingsTotal={user_ratings_total}
+                                          icon={icon}/>
+            })
             :
             <div>Loading...</div>
         }
+        <div style={{minHeight: '100px'}}></div>
     </div>
 }
 
