@@ -57,9 +57,44 @@ export const sendMoodReminder = async () => {
                 continue;
             }
             
+            
+
             //Send the reminder if they are feeling meh, bad or awful. Send their latest mood journal entry
             if ((moodJournal.howAreYou == "sad" || moodJournal.howAreYou == "bad" || moodJournal.howAreYou == "awful") && !sentAlready.includes(moodJournal.uid)){
               
+
+              //find exisitng entry
+              const healthTipEntry = await db.HealthTips.findOne({
+                where: {
+                  uid: moodJournal.uid,
+                },
+              })
+              
+              //Clear content of existing entry if does not exist or create a new one
+              if (healthTipEntry){
+                await db.HealthTips.update({
+                  angertips: "",
+                  anxietytips: "",
+                  depressiontips: "",
+                  overwhelmedtips: "",
+                  sleeptips:"",
+                  tiredtips:"",
+                  attentiontips:"",
+                },{
+                  where: {
+                      uid: moodJournal.uid
+                  }
+                })
+              }
+              else{
+                await db.HealthTips.create({
+                  uid:moodJournal.uid
+                })
+              }
+              
+              
+
+
               //Fetch sleep tips
               const results: string | any[] = []
               const stressSignalsParsed = JSON.parse(moodJournal.stressSignals)
@@ -67,7 +102,7 @@ export const sendMoodReminder = async () => {
                 fs.createReadStream('./healthTips/sleepTips.csv')
                 .pipe(csv())
                 .on('data', (data: string) => results.push(data))
-                .on('end', () => {
+                .on('end', async () => {
                   let getFirstRandomTip = Math.floor(Math.random() * ((results.length - 1) - 0 + 1) + 0)
                   let firstTip = results[getFirstRandomTip].TIPS
                   let secondTip = false
@@ -79,16 +114,26 @@ export const sendMoodReminder = async () => {
                     }
                   }
                   secondTip = results[getSecondRandomTip].TIPS
-
-                  const sleepTips = {
+                  const JSONsleepTips = {
                     "tip1":firstTip,
                     "tip2":secondTip,
                   }
+                  const sleepTips = JSON.stringify(JSONsleepTips)
 
-                  Logger.info(JSON.stringify(sleepTips))
-
+                  if (sleepTips != ""){
+                    await db.HealthTips.update({
+                      sleeptips:sleepTips,
+                      date: moodJournal.date,
+                      time:moodJournal.time,
+                    },{
+                      where: {
+                          uid: moodJournal.uid
+                      }
+                    })
+                  }
                 });
               }
+
             
               //Fetch depression tips
               const depressionResults: string | any[] = []
@@ -96,7 +141,7 @@ export const sendMoodReminder = async () => {
                   fs.createReadStream('./healthTips/depressionTips.csv')
                   .pipe(csv())
                   .on('data', (data: string) => depressionResults.push(data))
-                  .on('end', () => {
+                  .on('end', async () => {
                     let getFirstRandomTip = Math.floor(Math.random() * ((depressionResults.length - 1) - 0 + 1) + 0)
                     let firstTip = depressionResults[getFirstRandomTip].TIPS
                     let secondTip = false
@@ -109,11 +154,25 @@ export const sendMoodReminder = async () => {
                     }
                     secondTip = depressionResults[getSecondRandomTip].TIPS
 
-                    const depressionTips = {
+                    const JSONdepressionTips = {
                       "tip1":firstTip,
                       "tip2":secondTip,
                     }
-                    Logger.info(JSON.stringify(depressionTips))
+                  
+
+                    const depressionTips = JSON.stringify(JSONdepressionTips)
+
+                    if (depressionTips != ""){
+                      await db.HealthTips.update({
+                        depressiontips:depressionTips,
+                        date: moodJournal.date,
+                        time:moodJournal.time,
+                      },{
+                        where: {
+                            uid: moodJournal.uid
+                        }
+                    })
+                    }
                   });
                 }
 
@@ -123,7 +182,7 @@ export const sendMoodReminder = async () => {
                   fs.createReadStream('./healthTips/tiredTips.csv')
                   .pipe(csv())
                   .on('data', (data: string) => tiredResults.push(data))
-                  .on('end', () => {
+                  .on('end', async () => {
                     let getFirstRandomTip = Math.floor(Math.random() * ((tiredResults.length - 1) - 0 + 1) + 0)
                     let firstTip = tiredResults[getFirstRandomTip].TIPS
                     let secondTip = false
@@ -136,11 +195,24 @@ export const sendMoodReminder = async () => {
                     }
                     secondTip = tiredResults[getSecondRandomTip].TIPS
 
-                    const tiredTips = {
+                    const JSONtiredTips = {
                       "tip1":firstTip,
                       "tip2":secondTip,
                     }
-                    Logger.info(JSON.stringify(tiredTips))
+                   
+                    const tiredTips = JSON.stringify(JSONtiredTips)
+
+                    if (tiredTips != ""){
+                      await db.HealthTips.update({
+                        tiredtips:tiredTips,
+                        date: moodJournal.date,
+                        time:moodJournal.time,
+                      },{
+                        where: {
+                            uid: moodJournal.uid
+                        }
+                    })
+                    }
                   });
                 }
 
@@ -150,7 +222,7 @@ export const sendMoodReminder = async () => {
                   fs.createReadStream('./healthTips/attentionTips.csv')
                   .pipe(csv())
                   .on('data', (data: string) => attentionResults.push(data))
-                  .on('end', () => {
+                  .on('end', async () => {
                     let getFirstRandomTip = Math.floor(Math.random() * ((attentionResults.length - 1) - 0 + 1) + 0)
                     let firstTip = attentionResults[getFirstRandomTip].TIPS
                     let secondTip = false
@@ -163,11 +235,25 @@ export const sendMoodReminder = async () => {
                     }
                     secondTip = attentionResults[getSecondRandomTip].TIPS
 
-                    const attentionTips = {
+                    const JSONattentionTips = {
                       "tip1":firstTip,
                       "tip2":secondTip,
                     }
-                    Logger.info(JSON.stringify(attentionTips))
+                   
+
+                    const attentionTips = JSON.stringify(JSONattentionTips)
+
+                    if (attentionTips != ""){
+                      await db.HealthTips.update({
+                        attentiontips:attentionTips,
+                        date: moodJournal.date,
+                        time:moodJournal.time,
+                      },{
+                        where: {
+                            uid: moodJournal.uid
+                        }
+                    })
+                    }
                   });
                 }
 
@@ -177,7 +263,7 @@ export const sendMoodReminder = async () => {
                   fs.createReadStream('./healthTips/angerTips.csv')
                   .pipe(csv())
                   .on('data', (data: string) => angerResults.push(data))
-                  .on('end', () => {
+                  .on('end', async () => {
                     let getFirstRandomTip = Math.floor(Math.random() * ((angerResults.length - 1) - 0 + 1) + 0)
                     let firstTip = angerResults[getFirstRandomTip].TIPS
                     let secondTip = false
@@ -190,11 +276,25 @@ export const sendMoodReminder = async () => {
                     }
                     secondTip = angerResults[getSecondRandomTip].TIPS
 
-                    const angerTips = {
+                    const JSONangerTips = {
                       "tip1":firstTip,
                       "tip2":secondTip,
                     }
-                    Logger.info(JSON.stringify(angerTips))
+                    
+
+                    const angerTips = JSON.stringify(JSONangerTips)
+
+                    if (angerTips != ""){
+                      await db.HealthTips.update({
+                        angertips:angerTips,
+                        date: moodJournal.date,
+                        time:moodJournal.time,
+                      },{
+                        where: {
+                            uid: moodJournal.uid
+                        }
+                    })
+                    }
                   });
                 }
                 
@@ -204,7 +304,7 @@ export const sendMoodReminder = async () => {
                   fs.createReadStream('./healthTips/anxietyTips.csv')
                   .pipe(csv())
                   .on('data', (data: string) => anxietyResults.push(data))
-                  .on('end', () => {
+                  .on('end', async () => {
                     let getFirstRandomTip = Math.floor(Math.random() * ((anxietyResults.length - 1) - 0 + 1) + 0)
                     let firstTip = anxietyResults[getFirstRandomTip].TIPS
                     let secondTip = false
@@ -217,11 +317,25 @@ export const sendMoodReminder = async () => {
                     }
                     secondTip = anxietyResults[getSecondRandomTip].TIPS
 
-                    const anxietyTips = {
+                    const JSONanxietyTips = {
                       "tip1":firstTip,
                       "tip2":secondTip,
                     }
-                    Logger.info(JSON.stringify(anxietyTips))
+                    
+
+                    const anxietyTips = JSON.stringify(JSONanxietyTips)
+
+                    if (anxietyTips != ""){
+                      await db.HealthTips.update({
+                        anxietytips:anxietyTips,
+                        date: moodJournal.date,
+                        time:moodJournal.time,
+                      },{
+                        where: {
+                            uid: moodJournal.uid
+                        }
+                    })
+                    }
                   });
                 }
 
@@ -231,7 +345,7 @@ export const sendMoodReminder = async () => {
                   fs.createReadStream('./healthTips/overwhelmedTips.csv')
                   .pipe(csv())
                   .on('data', (data: string) => pressureResults.push(data))
-                  .on('end', () => {
+                  .on('end', async () => {
                     let getFirstRandomTip = Math.floor(Math.random() * ((pressureResults.length - 1) - 0 + 1) + 0)
                     let firstTip = pressureResults[getFirstRandomTip].TIPS
                     let secondTip = false
@@ -244,14 +358,26 @@ export const sendMoodReminder = async () => {
                     }
                     secondTip = pressureResults[getSecondRandomTip].TIPS
 
-                    const pressureTips = {
+                  const JSONpressureTips = {
                       "tip1":firstTip,
                       "tip2":secondTip,
-                    }
-                    Logger.info(JSON.stringify(pressureTips))
-                  });
+                  }
+                  
+                  const pressureTips = JSON.stringify(JSONpressureTips)
+
+                  if (pressureTips != ""){
+                    await db.HealthTips.update({
+                      overwhelmedtips:pressureTips,
+                      date: moodJournal.date,
+                      time:moodJournal.time,
+                    },{
+                      where: {
+                          uid: moodJournal.uid
+                      }
+                  })
+                  }
+                  })    
                 }
-              
               
               const payload = JSON.stringify({
                     title: `Your latest mood journal entry has been assesed. New tips have arrived!`,
