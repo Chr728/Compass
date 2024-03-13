@@ -101,12 +101,22 @@ export async function createAppointment(
     // Extract frequency and quantity from appointmentData
     const { frequency, quantity, date, ...rest } = appointmentData;
 
-    // Calculate dates based on frequency and quantity
+    // Calculate dates based on frequency and quantity if they are provided and valid
     const dates = [];
-    const startDate = new Date(date);
-    const frequencyInMillis = getFrequencyInMilliseconds(frequency);
-    for (let i = 0; i < quantity; i++) {
-      dates.push(new Date(startDate.getTime() + i * frequencyInMillis));
+    if (
+      frequency &&
+      quantity &&
+      typeof frequency === 'string' &&
+      typeof quantity === 'number'
+    ) {
+      const startDate = new Date(date);
+      const frequencyInMillis = getFrequencyInMilliseconds(frequency);
+      for (let i = 0; i < quantity; i++) {
+        dates.push(new Date(startDate.getTime() + i * frequencyInMillis));
+      }
+    } else {
+      // If frequency or quantity is null or not valid, simply use the provided date
+      dates.push(new Date(date));
     }
 
     // Split dates into batches of 5

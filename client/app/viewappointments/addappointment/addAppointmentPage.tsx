@@ -7,16 +7,17 @@ import Button from '../../components/Button';
 import { useRouter } from 'next/navigation';
 import { createAppointment } from '@/app/http/appointmentAPI';
 import { useAuth } from '@/app/contexts/AuthContext';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react'; // Import useState
 import Menu from '../../components/Menu';
 
 export default function AddAppointmentPage() {
   const { user } = useAuth();
+  const [repeatChecked, setRepeatChecked] = useState(false); // State for checkbox
+  const router = useRouter();
   useEffect(() => {
     if (!user) router.push('/login');
   }, [user]);
 
-  const router = useRouter();
   const userId = user?.uid || '';
   const formik = useFormik({
     initialValues: {
@@ -52,26 +53,21 @@ export default function AddAppointmentPage() {
         quantity?: string;
         notes?: string;
       } = {};
-
       if (!values.doctor) {
         errors.doctor = 'Name is required.';
       } else if (!/^[^0-9 ][^\d]*[^0-9 ]$/i.test(values.doctor)) {
         errors.doctor =
           'Names cannot contain numbers and must not begin or end with a space.';
       }
-
       if (!values.reason) {
         errors.reason = 'Please provide a reason for the appointment.';
       }
-
       if (!values.date) {
         errors.date = 'Please provide a date for the appointment.';
       }
-
       if (!values.time) {
         errors.time = 'Please provide a time for the appointment.';
       }
-
       return errors;
     },
   });
@@ -193,60 +189,76 @@ export default function AddAppointmentPage() {
           )}
         </div>
 
-        <div className="frequency">
-          <label
-            htmlFor="frequency"
-            className="font-sans font-medium text-grey text-[16px]"
-          >
-            Frequency
+        <div className="repeat">
+          <label className="font-sans font-medium text-grey text-[16px] flex items-center">
+            Repeat
+            <input
+              type="checkbox"
+              checked={repeatChecked}
+              onChange={(e) => setRepeatChecked(e.target.checked)}
+              className="ml-2 h-5 w-5"
+            />
           </label>
-          <br />
-          <select
-            name="frequency"
-            id="frequency"
-            value={formik.values.frequency}
-            style={{ width: '250px' }}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            className="p-2 w-full h-[52px] border border-solid border-lightgrey rounded-md text-grey focus:outline-blue shadow-[0_4px_8px_0_rgba(44,39,56,0.04)]"
-          >
-            <option value="">Choose one</option>
-            <option value="daily">Daily</option>
-            <option value="weekly">Weekly</option>
-            <option value="bi-weekly">Bi-Weekly</option>
-            <option value="monthly">Monthly</option>
-            <option value="yearly">Yearly</option>
-          </select>
-          {formik.touched.frequency && formik.errors.frequency && (
-            <p className="text-[16px] text-red font-sans">
-              {formik.errors.frequency}
-            </p>
-          )}
         </div>
 
-        <div className="quantity">
-          <label
-            htmlFor="quantity"
-            className="font-sans font-medium text-grey text-[16px]"
-          >
-            Quantity
-          </label>
-          <br />
-          <Input
-            name="quantity"
-            id="quantity"
-            type="quantity"
-            value={formik.values.quantity}
-            style={{ width: '250px' }}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
-          {formik.touched.quantity && formik.errors.quantity && (
-            <p className="text-[16px] text-red font-sans">
-              {formik.errors.quantity}
-            </p>
-          )}
-        </div>
+        {repeatChecked && (
+          <>
+            <div className="frequency">
+              <label
+                htmlFor="frequency"
+                className="font-sans font-medium text-grey text-[16px]"
+              >
+                Frequency
+              </label>
+              <br />
+              <select
+                name="frequency"
+                id="frequency"
+                value={formik.values.frequency}
+                style={{ width: '250px' }}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className="p-2 w-full h-[52px] border border-solid border-lightgrey rounded-md text-grey focus:outline-blue shadow-[0_4px_8px_0_rgba(44,39,56,0.04)]"
+              >
+                <option value="">Choose one</option>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="bi-weekly">Bi-Weekly</option>
+                <option value="monthly">Monthly</option>
+                <option value="yearly">Yearly</option>
+              </select>
+              {formik.touched.frequency && formik.errors.frequency && (
+                <p className="text-[16px] text-red font-sans">
+                  {formik.errors.frequency}
+                </p>
+              )}
+            </div>
+
+            <div className="quantity">
+              <label
+                htmlFor="quantity"
+                className="font-sans font-medium text-grey text-[16px]"
+              >
+                Quantity
+              </label>
+              <br />
+              <Input
+                name="quantity"
+                id="quantity"
+                type="number"
+                value={formik.values.quantity}
+                style={{ width: '250px' }}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
+              {formik.touched.quantity && formik.errors.quantity && (
+                <p className="text-[16px] text-red font-sans">
+                  {formik.errors.quantity}
+                </p>
+              )}
+            </div>
+          </>
+        )}
 
         <div>
           <label
