@@ -174,7 +174,7 @@ export async function createAppointment(
 }
 
 // Helper function to get frequency in milliseconds
-function getFrequencyInMilliseconds(frequency: string): number {
+export function getFrequencyInMilliseconds(frequency: string): number {
   switch (frequency) {
     case 'daily':
       return 24 * 60 * 60 * 1000; // 1 day
