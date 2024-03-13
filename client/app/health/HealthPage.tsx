@@ -82,8 +82,7 @@ if (!user) {
                     </div>
                 </Link>
                 <br></br>
-
-
+                
                 <Link href="/clinicLocator">
                     <div className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 "
                          style={{backgroundColor: '#FF7171'}}>
@@ -99,29 +98,6 @@ if (!user) {
                                 alt="locator"
                                 height={120}
                                 className="absolute inset-y-0 right-0 shrink-0"
-                            />
-                        </div>
-                    </div>
-                </Link>
-                <br></br>
-
-                <Link href="/getMedications">
-                    <div className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 "
-                         style={{backgroundColor: 'var(--Black, #2C2738)'}}>
-
-                        <div>
-                            <p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
-                                Medications
-                            </p>
-                            <p className="text-[14px] text-white font-IBM Plex Sans  text-start">
-                                Never miss a crucial dose.
-                            </p>
-                            <NextImage
-                                src={medications}
-                                alt="medications"
-                                width={88}
-                                height={106}
-                                className="absolute inset-y-0 right-4 shrink-0"
                             />
                         </div>
                     </div>
