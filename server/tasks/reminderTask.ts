@@ -528,9 +528,27 @@ export const sendUserReminders = async () => {
           // Send notification to users if medication is about to expire
           if (moment(medication.expirationDate).isSame(currentDate, "day")) {
             // If the time is between 4am and before 4:10am, then send the medication expiration reminder
+
+            // Added logs for debugging for expiration medication
+            console.log(
+              "Current date for expiration medication: ",
+              currentDate
+            );
+            console.log(
+              "Current date for medication that is expiring: ",
+              medication.expirationDate
+            );
+            console.log("Current time for medication expiration: ", startTime);
+            const checkTime =
+              startTime.isSameOrAfter("18:00:00") &&
+              startTime.isBefore("18:10:00");
+            console.log("Is time between 6pm and 6:10pm: ", checkTime);
+
+            //////////
+
             if (
-              startTime.isSameOrAfter("04:00:00") &&
-              startTime.isBefore("04:10:00")
+              startTime.isSameOrAfter("18:00:00") &&
+              startTime.isBefore("18:10:00")
             ) {
               const payload = JSON.stringify({
                 title: `Medication Expiration Reminder: ${medication.medicationName} for ${medication.dosage} ${medication.unit} at ${medication.time} is expiring today.`,
