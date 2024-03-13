@@ -47,7 +47,6 @@ export default function LocateClinic() {
 
     useEffect(() => {
             const storedLocation = localStorage.getItem('location');
-            console.log('STORED LOCATION IS:  ', storedLocation);
             if (storedLocation) {
                 const { latitude, longitude, timestamp } = JSON.parse(storedLocation);
                 const now = new Date().getTime();
