@@ -109,40 +109,50 @@ export async function createAppointment(
       dates.push(new Date(startDate.getTime() + i * frequencyInMillis));
     }
 
-    // Make API calls to create appointments for each date
-    const promises = dates.map(async (appointmentDate) => {
-      const data = {
-        ...rest,
-        frequency,
-        quantity,
-        date: appointmentDate.toISOString(), // Convert date to ISO string format
-      };
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/appointments/${userId}`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(data),
+    // Split dates into batches of 5
+    const dateBatches = [];
+    for (let i = 0; i < dates.length; i += 5) {
+      dateBatches.push(dates.slice(i, i + 5));
+    }
+
+    // Make API calls to create appointments for each batch
+    const responseData = [];
+    for (const batch of dateBatches) {
+      const promises = batch.map(async (appointmentDate) => {
+        const data = {
+          ...rest,
+          frequency,
+          quantity,
+          date: appointmentDate.toISOString(), // Convert date to ISO string format
+        };
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/appointments/${userId}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(data),
+          }
+        );
+
+        if (!response.ok) {
+          logger.error(
+            `Failed to create appointment for user ${userId}. HTTP Status: ${response.status}`
+          );
+          throw new Error(
+            `Failed to create appointment for user ${userId}. HTTP Status: ${response.status}`
+          );
         }
-      );
 
-      if (!response.ok) {
-        logger.error(
-          `Failed to create appointment for user ${userId}. HTTP Status: ${response.status}`
-        );
-        throw new Error(
-          `Failed to create appointment for user ${userId}. HTTP Status: ${response.status}`
-        );
-      }
+        return await response.json();
+      });
 
-      return await response.json();
-    });
-
-    // Wait for all promises to resolve
-    const responseData = await Promise.all(promises);
+      // Wait for all promises in the batch to resolve
+      const batchResponse = await Promise.all(promises);
+      responseData.push(...batchResponse);
+    }
 
     logger.info(`Appointments created successfully for user ${userId}`);
 
