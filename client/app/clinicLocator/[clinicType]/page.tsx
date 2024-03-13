@@ -50,7 +50,7 @@ const ClinicLocations: FC<pageProps> = ({ params }) => {
             })
             :
             <div>
-                <p className="font-sans text-darkgrey ml-5 p-5  text-[17px]">
+                <p className="font-sans text-darkgrey ml-5 p-5  text-[17px] font-bold">
                     No clinics found near your location.
                 </p>
                 <img src="/no-location-icon.png" alt="no results" className="w-1/2 mx-auto"/>
