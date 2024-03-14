@@ -8,10 +8,9 @@ import { useRouter } from "next/navigation";
 import {Steps} from "intro.js-react";
 import {useSearchParams} from "next/navigation";
 import {introductionSteps, journalSteps, foodJournalSteps, createFoodJournalSteps, getFoodJournalSteps} from "@/app/lib/IntroJs/IntroJs";
-import introJs from "intro.js";
 
 const Renders = ({ children }: { children: ReactNode }) => {
-    const [introActive, setIntroActive] = useState(false);
+    const {loading, introJsActive, handleIntroJsActive} = useProp();
     const [currentStep, setCurrentStep] = useState(0);
     const [introJsSteps, setIntroJsSteps] = useState<any>(introductionSteps);
     const [introJsOptions, setIntroJsOptions] = useState<any>();
@@ -20,6 +19,7 @@ const Renders = ({ children }: { children: ReactNode }) => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const intro = searchParams.get('intro');
+    console.log('is intro js active', introJsActive)
     const isPublicRoute = () => {
         return (
             pathname === "/login" ||
@@ -29,13 +29,7 @@ const Renders = ({ children }: { children: ReactNode }) => {
             pathname === "/"
         );
     }
-    useEffect(() => {
-        setIntroActive(true);
-    }, []);
-
-
     const { user } = useAuth();
-    const {loading} = useProp();
     const { userInfo } = useUser();
     useEffect(() => {
         if(user && userInfo && isPublicRoute()){
@@ -43,9 +37,13 @@ const Renders = ({ children }: { children: ReactNode }) => {
         }
         switch (pathname) {
             case '/tpage':
-                setIntroJsSteps(introductionSteps.steps);
-                setIntroJsOptions(introductionSteps.options);
-                setExitPath(introductionSteps.onExitPath);
+                if(intro == 'false'){
+                    handleIntroJsActive(false);
+                }else{
+                    setIntroJsSteps(introductionSteps.steps);
+                    setIntroJsOptions(introductionSteps.options);
+                    setExitPath(introductionSteps.onExitPath);
+                }
                 break;
             case '/journals':
                 setIntroJsSteps(journalSteps.steps)
@@ -69,6 +67,8 @@ const Renders = ({ children }: { children: ReactNode }) => {
                 setIntroJsOptions(createFoodJournalSteps.options)
                 setExitPath(createFoodJournalSteps.onExitPath)
                 break;
+                default:
+                    handleIntroJsActive(false);
         }
     }, [pathname]);
 
@@ -104,9 +104,9 @@ const Renders = ({ children }: { children: ReactNode }) => {
         return (
             <>
                 {children}
-                {introJsSteps &&
+                {children && introJsActive &&
                 <Steps
-                    enabled={introActive}
+                    enabled={introJsActive}
                     steps={introJsSteps}
                     initialStep={0}
                     onExit={handleExit}

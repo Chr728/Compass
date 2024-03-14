@@ -1,4 +1,3 @@
-import {useRouter} from 'next/router'
 interface introJsInterface {
     steps: any,
     options: any,
@@ -110,7 +109,7 @@ export const getFoodJournalSteps: introJsInterface = {
         },
         {
             title: 'Food journal',
-            intro: 'When having alot of entries, you can use the filter to query for a specific entry',
+            intro: 'When having alot of entries, you can use the filter to display recent entries',
             element: '#filter',
             disableInteraction: true,
 
@@ -123,7 +122,6 @@ export const getFoodJournalSteps: introJsInterface = {
     options: {
         doneLabel: 'Launch compass',
     },
-
     onExitPath: '/tpage?intro=false'
 }
     
