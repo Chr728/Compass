@@ -6,6 +6,7 @@ import { Metadata, Viewport } from "next";
 import React from "react";
 import { useAuth } from "./contexts/AuthContext";
 import "./globals.css";
+import 'intro.js/introjs.css';
 import Custom403 from "./pages/403";
 
 

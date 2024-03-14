@@ -89,3 +89,49 @@ input[type="date"]:focus:before {
   content: '' !important;
 }
 
+.introjs-tooltip {
+  background-color: #ffffff !important; /* Custom background color */
+  font-size: 25px;
+  color: #2D2739;
+  border-radius: 25px !important;
+  width: 350px !important;
+  max-width: 350px !important;
+  padding: 20px !important;
+    margin-left: 10px;
+
+}
+
+.introjs-tooltip-title {
+  color: #2D2739;
+  font-size: 30px !important;
+}
+
+.introjs-button {
+    border-radius: 10px !important;
+    /*width: 70px;*/
+    font-size: 20px;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    font-weight: normal;
+    width: fit-content;
+    padding: 10px 20px;
+
+
+}
+
+.introjs-nextbutton {
+    background-color: #0780AE !important;
+    color: #ffffff !important;
+    border:none;
+    width: fit-content;
+}
+
+.introjs-prevbutton {
+    background-color: #ffffff;
+    color: #0780AE !important;
+    border: 1px solid #0780AE !important;
+
+
+}
+

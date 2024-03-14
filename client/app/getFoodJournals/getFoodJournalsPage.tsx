@@ -133,12 +133,11 @@ export default function GetFoodJournalsPage() {
 				Remember, eating healthy is all about eating the right foods in
 				the right amounts.
 			</p>
-
-			{food && (
 				<div className="rounded-3xl bg-white flex flex-col mt-4 mb-44 w-full md:max-w-[800px] md:min-h-[550px] p-4 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]">
 					<div className="flex justify-between items-center">
 						<div>
 							<Button
+								id={'add-meal'}
 								type="button"
 								text="Add an Entry"
 								style={{
@@ -154,6 +153,7 @@ export default function GetFoodJournalsPage() {
 					</div>
 					<br></br>
 					<div
+						id={'filter'}
 						className="flex"
 						style={{ justifyContent: "space-between" }}>
 						<div className="flex-2" style={{ marginRight: "14%" }}>
@@ -185,7 +185,7 @@ export default function GetFoodJournalsPage() {
 							</div>
 						</div>
 					</div>
-					{food.map((item: any, index: number) => (
+					{food && food.map((item: any, index: number) => (
 						<div
 							key={item.foodJournalId}
 							className={`flex justify-between items-center mt-3`}
@@ -232,7 +232,6 @@ export default function GetFoodJournalsPage() {
 						</div>
 					))}
 				</div>
-			)}
 		</div>
 	);
 }

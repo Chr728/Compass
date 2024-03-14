@@ -1,25 +1,21 @@
 "use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, {useEffect} from "react";
 import { MdCalendarMonth, MdEditNote } from "react-icons/md";
 import { useAuth } from "../contexts/AuthContext";
+import introJs from "intro.js";
+import {Steps} from "intro.js-react";
+import {introductionSteps} from "../lib/IntroJs/IntroJs";
 
 export default function MainMenu() {
 	const { user } = useAuth();
 	const router = useRouter();
 
-	// React.useEffect(() => {
-	// 	if (!user) router.push("/login");
-	// }, [user]);
-
-	// if (!user) {
-	//   return <div><Custom403/></div>
-	// }
 
 	return (
 		<div className="bg-eggshell min-h-screen flex flex-col pb-32">
-			<div className="grid grid-cols-2 gap-3 p-4 my-auto text-center">
+			<div id="sections" className="grid grid-cols-2 gap-3 p-4 my-auto text-center">
 				<div className="text-darkgrey font-bold col-span-2 text-[24px]">
 					Welcome to Compass
 				</div>
@@ -28,11 +24,12 @@ export default function MainMenu() {
 				</div>
 
 				<div
+					id="appointments-section"
 					className="bg-red rounded-xl h-36 py-14 bg-opacity-90 hover:-translate-y-1.5"
 					onClick={() => router.push("/viewappointments")}>
 					Appointments
 					<div className="flex text-2xl justify-center">
-						<MdCalendarMonth />
+						<MdCalendarMonth/>
 					</div>
 				</div>
 
@@ -51,11 +48,12 @@ export default function MainMenu() {
 				</div>
 
 				<div
+					id="journals-section"
 					className="bg-yellow rounded-xl h-36 py-14 bg-opacity-90 hover:translate-y-1.5"
 					onClick={() => router.push("/journals")}>
 					Journals
 					<div className="flex text-3xl justify-center">
-						<MdEditNote />
+						<MdEditNote/>
 					</div>
 				</div>
 
