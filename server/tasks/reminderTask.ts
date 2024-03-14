@@ -1,4 +1,5 @@
 require("dotenv").config();
+import { stat } from "fs";
 import { Logger } from "../middlewares/logger";
 import db from "../models";
 import moment = require("moment-timezone");
@@ -530,26 +531,22 @@ export const sendUserReminders = async () => {
             // If the time is between 4am and before 4:10am, then send the medication expiration reminder
 
             // Added logs for debugging for expiration medication
+
             console.log(
-              "Current date for expiration medication: ",
-              currentDate
+              "Current time for medication expiration in hours: ",
+              startTime.hours()
             );
             console.log(
-              "Current date for medication that is expiring: ",
-              medication.expirationDate
+              "Current time for medication expiration in minutes: ",
+              startTime.minutes()
             );
-            console.log("Current time for medication expiration: ", startTime);
             const checkTime =
-              startTime.isSameOrAfter("18:00:00") &&
-              startTime.isBefore("18:10:00");
-            console.log("Is time between 6pm and 6:10pm: ", checkTime);
+              startTime.hours() === 20 && startTime.minutes() === 0;
+            console.log("Is time equal to 8:00pm", checkTime);
 
             //////////
 
-            if (
-              startTime.isSameOrAfter("18:00:00") &&
-              startTime.isBefore("18:10:00")
-            ) {
+            if (startTime.hours() === 20 && startTime.minutes() === 0) {
               const payload = JSON.stringify({
                 title: `Medication Expiration Reminder: ${medication.medicationName} for ${medication.dosage} ${medication.unit} at ${medication.time} is expiring today.`,
               });

@@ -283,8 +283,6 @@ describe('createAppointment', () => {
   });
 });
 
-// Import the function you want to test
-
 describe('getFrequencyInMilliseconds', () => {
   it('should return correct milliseconds for daily frequency', () => {
     expect(getFrequencyInMilliseconds('daily')).toBe(24 * 60 * 60 * 1000); // 1 day
@@ -297,20 +295,6 @@ describe('getFrequencyInMilliseconds', () => {
   it('should return correct milliseconds for bi-weekly frequency', () => {
     expect(getFrequencyInMilliseconds('bi-weekly')).toBe(
       14 * 24 * 60 * 60 * 1000
-    );
-  });
-
-  it('should return correct milliseconds for monthly frequency', () => {
-    expect(getFrequencyInMilliseconds('monthly')).toBeCloseTo(
-      30 * 24 * 60 * 60 * 1000,
-      -2
-    );
-  });
-
-  it('should return correct milliseconds for yearly frequency', () => {
-    expect(getFrequencyInMilliseconds('yearly')).toBeCloseTo(
-      365 * 24 * 60 * 60 * 1000,
-      -1
     );
   });
 

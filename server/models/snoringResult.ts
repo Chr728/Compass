@@ -52,6 +52,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     {
       sequelize,
       modelName: 'SnoringResult',
+      timestamps: false,
     }
   );
   return SnoringResult;

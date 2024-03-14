@@ -110,58 +110,66 @@ export async function createAppointment(
       typeof quantity === 'number'
     ) {
       const startDate = new Date(date);
-      const frequencyInMillis = getFrequencyInMilliseconds(frequency);
       for (let i = 0; i < quantity; i++) {
-        dates.push(new Date(startDate.getTime() + i * frequencyInMillis));
+        let appointmentDate;
+        if (frequency === 'monthly') {
+          appointmentDate = new Date(startDate);
+          appointmentDate.setMonth(startDate.getMonth() + i);
+          // If the resulting month is beyond December, adjust year and month
+          if (appointmentDate.getMonth() > 11) {
+            appointmentDate.setFullYear(
+              startDate.getFullYear() +
+                Math.floor((startDate.getMonth() + i) / 12)
+            );
+            appointmentDate.setMonth((startDate.getMonth() + i) % 12);
+          }
+        } else if (frequency === 'yearly') {
+          appointmentDate = new Date(startDate);
+          appointmentDate.setFullYear(startDate.getFullYear() + i);
+        } else {
+          const frequencyInMillis = getFrequencyInMilliseconds(frequency);
+          appointmentDate = new Date(
+            startDate.getTime() + i * frequencyInMillis
+          );
+        }
+        dates.push(appointmentDate);
       }
     } else {
       // If frequency or quantity is null or not valid, simply use the provided date
       dates.push(new Date(date));
     }
 
-    // Split dates into batches of 5
-    const dateBatches = [];
-    for (let i = 0; i < dates.length; i += 5) {
-      dateBatches.push(dates.slice(i, i + 5));
-    }
-
-    // Make API calls to create appointments for each batch
+    // Make API calls to create appointments for each date
     const responseData = [];
-    for (const batch of dateBatches) {
-      const promises = batch.map(async (appointmentDate) => {
-        const data = {
-          ...rest,
-          frequency,
-          quantity,
-          date: appointmentDate.toISOString(), // Convert date to ISO string format
-        };
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/appointments/${userId}`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(data),
-          }
-        );
-
-        if (!response.ok) {
-          logger.error(
-            `Failed to create appointment for user ${userId}. HTTP Status: ${response.status}`
-          );
-          throw new Error(
-            `Failed to create appointment for user ${userId}. HTTP Status: ${response.status}`
-          );
+    for (const appointmentDate of dates) {
+      const data = {
+        ...rest,
+        frequency,
+        quantity,
+        date: appointmentDate.toISOString(), // Convert date to ISO string format
+      };
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/appointments/${userId}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(data),
         }
+      );
 
-        return await response.json();
-      });
+      if (!response.ok) {
+        logger.error(
+          `Failed to create appointment for user ${userId}. HTTP Status: ${response.status}`
+        );
+        throw new Error(
+          `Failed to create appointment for user ${userId}. HTTP Status: ${response.status}`
+        );
+      }
 
-      // Wait for all promises in the batch to resolve
-      const batchResponse = await Promise.all(promises);
-      responseData.push(...batchResponse);
+      responseData.push(await response.json());
     }
 
     logger.info(`Appointments created successfully for user ${userId}`);
@@ -182,10 +190,6 @@ export function getFrequencyInMilliseconds(frequency: string): number {
       return 7 * 24 * 60 * 60 * 1000; // 1 week
     case 'bi-weekly':
       return 14 * 24 * 60 * 60 * 1000; // 2 weeks
-    case 'monthly':
-      return 30 * 24 * 60 * 60 * 1000; // 1 month (approximately)
-    case 'yearly':
-      return 365 * 24 * 60 * 60 * 1000; // 1 year (approximately)
     default:
       throw new Error('Invalid frequency');
   }
