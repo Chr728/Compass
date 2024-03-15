@@ -1,6 +1,6 @@
 'use strict';
 
-import { IntegerDataType, Model } from 'sequelize';
+import { Model } from 'sequelize';
 
 export interface O2SaturationJournalAttributes {
   id: number;
@@ -47,7 +47,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         allowNull: false,
       },
       time: {
-        type: DataTypes.DATE,
+        type: DataTypes.TIME,
         allowNull: false,
       },
       o2sat: {
@@ -70,6 +70,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     {
       sequelize,
       modelName: 'O2SaturationJournal',
+      timestamps: false,
     }
   );
   return O2SaturationJournal;

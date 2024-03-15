@@ -84,7 +84,8 @@ test("Get Weight Journals list is displayed correctly", async () => {
 		const date = screen.findByText("Jan 1, 2014 8h36");
 		const weight = screen.findByText("75.5");
 		const height = screen.findByText("1.65cm");
-
+		const canvasElement = screen.getByTestId("weightChart");
+		expect(canvasElement).toBeInTheDocument();
 		expect(date).toBeInTheDocument();
 		expect(weight).toBeInTheDocument();
 		expect(height).toBeInTheDocument();

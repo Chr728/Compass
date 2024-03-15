@@ -2,7 +2,6 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { MdCalendarMonth, MdEditNote } from "react-icons/md";
 import { useAuth } from "../contexts/AuthContext";
 
 export default function MainMenu() {
@@ -28,49 +27,59 @@ export default function MainMenu() {
 				</div>
 
 				<div
-					className="bg-red rounded-xl h-36 py-14 bg-opacity-90 hover:-translate-y-1.5"
+					className="bg-red rounded-xl h-36 py-2 bg-opacity-90 hover:-translate-y-1.5"
 					onClick={() => router.push("/viewappointments")}>
+					<div className="flex justify-center">
+						<Image
+							src="/appointments.svg"
+							alt="Appointments icon"
+							width={50}
+							height={50}
+							/>
+					</div>
 					Appointments
-					<div className="flex text-2xl justify-center">
-						<MdCalendarMonth />
-					</div>
 				</div>
 
 				<div
-					className="bg-darkgrey rounded-xl h-36 py-14 bg-opacity-90 hover:-translate-y-1.5"
+					className="bg-darkgrey rounded-xl h-36 py-2 bg-opacity-90 hover:-translate-y-1.5"
 					onClick={() => router.push("/getMedications")}>
-					Medications
 					<div className="flex justify-center">
 						<Image
-							src="/icons/medication.svg"
+							src="/medications.svg"
 							alt="Medicine icon"
-							width={20}
-							height={20}
-						/>
+							width={85}
+							height={85}
+							/>
 					</div>
+					Medications
 				</div>
 
 				<div
-					className="bg-yellow rounded-xl h-36 py-14 bg-opacity-90 hover:translate-y-1.5"
+					className="bg-yellow rounded-xl h-36 py-2 bg-opacity-90 hover:translate-y-1.5"
 					onClick={() => router.push("/journals")}>
-					Journals
-					<div className="flex text-3xl justify-center">
-						<MdEditNote />
-					</div>
-				</div>
-
-				<div
-					className="bg-green rounded-xl h-36 py-14 bg-opacity-90 hover:translate-y-1.5"
-					onClick={() => router.push("/profile")}>
-					Profile
 					<div className="flex justify-center">
 						<Image
-							src="/icons/whiteMask.svg"
-							alt="Profile icon"
-							width={18}
-							height={18}
+							src="/icons/journals.svg"
+							alt="Journal icon"
+							width={105}
+							height={105}
 						/>
 					</div>
+					Journals
+				</div>
+
+				<div
+					className="bg-green rounded-xl h-36 py-2 bg-opacity-90 hover:translate-y-1.5"
+					onClick={() => router.push("/profile")}>
+					<div className="flex justify-center">
+						<Image
+							src="/icons/profile.svg"
+							alt="Profile icon"
+							width={100}
+							height={100}
+							/>
+					</div>
+					Profile
 				</div>
 			</div>
 		</div>

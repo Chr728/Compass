@@ -232,7 +232,7 @@ export default function ViewAppointmentsPage() {
             </div>
             
             {!showCalendar &&
-                <div className='appointment h-[400px]'>
+                <div className='alternatingRowColor h-[400px]'>
                     <TableContainer sx={{ maxHeight: 440,  }}>
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead>
