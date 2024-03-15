@@ -20,13 +20,13 @@ export default function AboutUsPage() {
 		<div className="bg-eggshell min-h-screen flex flex-col">
 			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
 				<button onClick={() => router.push("/settings")}>
-					<Header headerText="About Us"></Header>
+					<Header headerText="Emergency Rooms"></Header>
 				</button>
 			</span>
 
 			<div className="rounded-3xl bg-white flex flex-col mt-4 mb-44 w-full md:max-w-[800px] md:min-h-[550px] p-4 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]">
 				<div className="font-bold text-start text-darkgrey p-3 text-[20px]">
-					About Compass
+					Last Updated:
 				</div>
 				<div className="flex justify-between items-center">
 					<br></br> <br></br>
