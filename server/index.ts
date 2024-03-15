@@ -24,6 +24,7 @@ import { sendMoodReminder } from './tasks/moodReminderTask';
 import snoringResultRoutes from './routes/snoringResultRoutes';
 import bloodPressureRoutes from './routes/bloodPressureRoutes';
 import emergencyRoomRoutes from './routes/emergencyRoomRoutes';
+import healthTipRoutes from "./routes/healthTipsRoutes"
 import scraper from './utils/scraper';
 
 require('dotenv').config({
@@ -57,6 +58,7 @@ app.use('/api/journals/o2Saturation', o2SaturationJournalRoutes);
 app.use('/api/snoringAI', snoringResultRoutes);
 app.use('/api/journals/bloodPressure', bloodPressureRoutes);
 app.use('/api/emergencyRoomData', emergencyRoomRoutes);
+app.use("/api/healthtips", healthTipRoutes)
 app.use(handleError);
 
 // Schedule the task within the main process
