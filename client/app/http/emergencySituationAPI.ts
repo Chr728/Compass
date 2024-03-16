@@ -2,7 +2,7 @@ import { auth } from "../config/firebase";
 const logger = require("../../logger");
 
 // Function to make a GET request to retrieve all emergency rooms
-export async function getEmergencySituation(): Promise<any> {
+export async function scrape(): Promise<any> {
 	try {
 		const currentUser = auth.currentUser;
 		if (!currentUser) {
@@ -13,7 +13,7 @@ export async function getEmergencySituation(): Promise<any> {
 		const token = await currentUser.getIdToken();
 
 		const response = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL}/api/emergencyRoomData/${id}`,
+			`${process.env.NEXT_PUBLIC_API_URL}/api/emergencyRoomData/`,
 			{
 				method: "GET",
 				headers: {
