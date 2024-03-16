@@ -13,10 +13,26 @@ export default function CreateDocumentPage() {
   const [selectedFiles, setSelectedFiles] = useState<any[]>([]);
   const maxFiles = 5;
 
+  let errors: {
+    documentName?: string;
+    dateOfAnalysis?: string;
+  } = {};
+
   const formik = useFormik({
     initialValues: {
       documentName: '',
       dateOfAnalysis: '',
+    },
+    validate: (values) => {
+      if (!values.documentName.trim()) {
+        errors.documentName = 'Document Name is required';
+      }
+
+      if (!values.dateOfAnalysis.trim()) {
+        errors.dateOfAnalysis = 'Date of Analysis is required';
+      }
+
+      return errors;
     },
     onSubmit: async (values) => {
       await storeDocument(values);
@@ -161,6 +177,11 @@ export default function CreateDocumentPage() {
               onBlur={formik.handleBlur}
             />
           </div>
+          {formik.touched.documentName && formik.errors.documentName ? (
+            <p className="text-[16px] text-red font-sans">
+              {formik.errors.documentName}
+            </p>
+          ) : null}
           <div className="mt-3">
             <FormLabel htmlFor="dateOfAnalysis" label="Date of Analysis" />
             <Input
@@ -173,6 +194,11 @@ export default function CreateDocumentPage() {
               onBlur={formik.handleBlur}
             />
           </div>
+          {formik.touched.dateOfAnalysis && formik.errors.dateOfAnalysis ? (
+            <p className="text-[16px] text-red font-sans">
+              {formik.errors.dateOfAnalysis}
+            </p>
+          ) : null}
 
           <div className="mt-10 pb-4 self-center">
             <div className="mt-5 mb-20 space-x-2">

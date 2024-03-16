@@ -29,6 +29,7 @@ interface CardFolderProps {
   onDelete: () => void;
   onPush?: () => void;
   onView?: () => void;
+  maxNameLength?: number; // Add prop for maximum name length
 }
 
 const iconComponents: { [key: string]: React.ReactNode } = {
@@ -58,8 +59,15 @@ const CardFolder: React.FC<CardFolderProps> = ({
   onDelete,
   onPush,
   onView,
+  maxNameLength = 14, // Default maximum name length
 }) => {
   const IconComponent = iconComponents[icon];
+
+  // Truncate name if it exceeds maximum length
+  const truncatedName =
+    name.length > maxNameLength
+      ? name.substring(0, maxNameLength) + '...'
+      : name;
 
   return (
     <div
@@ -78,7 +86,7 @@ const CardFolder: React.FC<CardFolderProps> = ({
         {IconComponent} {/* Render the corresponding icon component */}
       </div>
       <h2 className="text-darkgrey text-lg font-bold mb-1" onClick={onView}>
-        {name}
+        {truncatedName} {/* Display truncated name */}
       </h2>
       <p className="text-darkgrey text-sm" onClick={onView}>
         {text}

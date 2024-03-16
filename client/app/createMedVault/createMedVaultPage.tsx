@@ -8,20 +8,36 @@ import FormLabel from '../components/FormLabel';
 import { useFormik } from 'formik';
 import { openDB } from 'idb';
 import HealthIconModal from '../components/HealthIconModal';
-import { ICertificatePaper } from 'healthicons-react/dist/filled'; // Import ICertificatePaper icon
+import { ChildCognition } from 'healthicons-react/dist/filled';
 
 export default function CreateMedVaultPage() {
   const router = useRouter();
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedIcon, setSelectedIcon] = useState({
-    name: 'ICertificatePaper',
-    component: <ICertificatePaper />,
+    name: 'ChildCognition',
+    component: <ChildCognition />,
   });
+
+  let errors: {
+    folderName?: string;
+    specialization?: string;
+  } = {};
 
   const formik = useFormik({
     initialValues: {
       folderName: '',
       specialization: '',
+    },
+    validate: (values) => {
+      if (!values.folderName.trim()) {
+        errors.folderName = "Doctor's Name is required";
+      }
+
+      if (!values.specialization.trim()) {
+        errors.specialization = "Doctor's Specialization is required";
+      }
+
+      return errors;
     },
     onSubmit: async (values) => {
       // Save data to IndexedDB along with the selected icon
@@ -75,7 +91,7 @@ export default function CreateMedVaultPage() {
           {selectedIcon ? ( // Display the selected icon if any
             selectedIcon.component
           ) : (
-            <ICertificatePaper /> // Default to ICertificatePaper
+            <ChildCognition /> // Default to ICertificatePaper
           )}
         </div>
       </div>
@@ -102,6 +118,11 @@ export default function CreateMedVaultPage() {
             onBlur={formik.handleBlur}
           />
         </div>
+        {formik.touched.folderName && formik.errors.folderName ? (
+          <p className="text-[16px] text-red font-sans">
+            {formik.errors.folderName}
+          </p>
+        ) : null}
         <div className="mt-3">
           <FormLabel
             htmlFor={'specialization'}
@@ -117,6 +138,11 @@ export default function CreateMedVaultPage() {
             onBlur={formik.handleBlur}
           />
         </div>
+        {formik.touched.specialization && formik.errors.specialization ? (
+          <p className="text-[16px] text-red font-sans">
+            {formik.errors.specialization}
+          </p>
+        ) : null}
 
         <div className="mt-10 pb-4 self-center">
           <div className="mt-5 mb-5 space-x-2">
