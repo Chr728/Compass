@@ -100,7 +100,7 @@ export default function Health() {
                   MedVault
                 </p>
                 <p className="text-[14px] text-white font-IBM Plex Sans  text-start">
-                  Store your medical documents in one place.
+                  Store your medical documents.
                 </p>
                 <NextImage
                   src={medVault}
