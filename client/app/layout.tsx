@@ -4,10 +4,8 @@ import GoogleAnalytics from "@/components/GoogleAnalytics";
 // import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Metadata, Viewport } from "next";
 import React from "react";
-import { useAuth } from "./contexts/AuthContext";
 import "./globals.css";
 import 'intro.js/introjs.css';
-import Custom403 from "./pages/403";
 
 
 export const metadata: Metadata = {
@@ -40,8 +38,8 @@ export default function RootLayout({
 		<html lang="en">
 			<GoogleAnalytics></GoogleAnalytics>
 			<head />
-			<body>
-				<AppWrapper>
+			<body id={'body'}>
+				<AppWrapper >
 					{/* {!useUser && <Custom403 />} */}
 					{children}
 					{/* <Analytics />

@@ -12,14 +12,13 @@ import {introductionSteps, journalSteps, foodJournalSteps, createFoodJournalStep
 const Renders = ({ children }: { children: ReactNode }) => {
     const {loading, introJsActive, handleIntroJsActive} = useProp();
     const [currentStep, setCurrentStep] = useState(0);
-    const [introJsSteps, setIntroJsSteps] = useState<any>(introductionSteps);
-    const [introJsOptions, setIntroJsOptions] = useState<any>();
+    const [introJsSteps, setIntroJsSteps] = useState<any>(introductionSteps.steps);
+    const [introJsOptions, setIntroJsOptions] = useState<any>(introductionSteps.options);
     const [exitPath, setExitPath] = useState<string>('\\');
     const pathname = usePathname();
     const router = useRouter();
     const searchParams = useSearchParams();
     const intro = searchParams.get('intro');
-    console.log('is intro js active', introJsActive)
     const isPublicRoute = () => {
         return (
             pathname === "/login" ||
@@ -37,12 +36,13 @@ const Renders = ({ children }: { children: ReactNode }) => {
         }
         switch (pathname) {
             case '/tpage':
-                if(intro == 'false'){
-                    handleIntroJsActive(false);
-                }else{
+                if(intro == 'true'){
                     setIntroJsSteps(introductionSteps.steps);
                     setIntroJsOptions(introductionSteps.options);
                     setExitPath(introductionSteps.onExitPath);
+                    handleIntroJsActive(true);
+                }else{
+                    handleIntroJsActive(false);
                 }
                 break;
             case '/journals':
@@ -76,6 +76,7 @@ const Renders = ({ children }: { children: ReactNode }) => {
         setCurrentStep(nextStepIndex);
     };
 
+
     const handleExit = () => {
         if (currentStep === introJsSteps.length - 1) {
             exitPath!= '/' && router.push(exitPath);
@@ -104,7 +105,6 @@ const Renders = ({ children }: { children: ReactNode }) => {
         return (
             <>
                 {children}
-                {children && introJsActive &&
                 <Steps
                     enabled={introJsActive}
                     steps={introJsSteps}
@@ -113,7 +113,6 @@ const Renders = ({ children }: { children: ReactNode }) => {
                     onBeforeChange={handleBeforeChange}
                     options={introJsOptions}
                 />
-                }
             </>
         );
     }

@@ -50,7 +50,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const [dataLoaded, setDataLoaded] = useState<boolean>(false);
-  const { handleLoading, handlePopUp, handleIntroJsActive } = useProp();
+  const { handleLoading, handlePopUp} = useProp();
 
   const login = (email: string, password: string) => {
     setDataLoaded(false);
@@ -98,9 +98,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
           .then((res) => {
             if (res !== null) {
               handleLoading(false);
-
-              router.push('/tpage');
-              handleIntroJsActive(true);
+              router.push('/tpage?intro=true');
             }
           })
           .catch((error) => {

@@ -9,6 +9,7 @@ export const introductionSteps: introJsInterface = {
     steps: [
     {
         title: "Welcome to Compass!",
+        element: '#body',
         intro: "Click next to get started",
         disableInteraction: true
     },
@@ -28,11 +29,13 @@ export const introductionSteps: introJsInterface = {
         title: "Let's start off with journals",
         element: '#journals-section',
         intro: 'Click here to view your journals',
+        position: 'top',
         disableInteraction: false,
     }
 ],
     options: {
         doneLabel: 'Go to journals',
+        // hideNext: false
     },
     onExitPath: '/journals',
 }
@@ -41,7 +44,9 @@ export const journalSteps: introJsInterface = {
     {
         title: "Never miss a journal entry!",
         intro: "Lets go to the food intake journal to record your meals",
+        position: 'top',
         element: '#food-journal',
+        disableInteraction: true,
     },
 ],
     options: {
@@ -61,6 +66,7 @@ export const foodJournalSteps : introJsInterface = {
             element: '#add-meal',
             title: 'Food intake journal',
             intro: 'Lets add your first meal entry',
+            disableInteraction: true,
         }
     ],
 options: {
@@ -75,18 +81,21 @@ export const createFoodJournalSteps: introJsInterface = {
         {
             title: 'Create a food journal entry',
             intro: 'These are the fields that you can fill in to create a food journal entry',
-            element: '#fields'
+            element: '#fields',
+            disableInteraction: true,
         },
         {
             title: 'Create a food journal entry',
             intro: 'The fields containing a * are required',
-            element: '#required-fields'
+            element: '#required-fields',
+            disableInteraction: true,
 
         },
         {
             title: 'Create a food journal entry',
             intro: 'While the fields without a * are optional',
-            element: '#optional-fields'
+            element: '#optional-fields',
+            disableInteraction: true,
         },
         {
             title: 'Create a food journal entry',
@@ -120,7 +129,7 @@ export const getFoodJournalSteps: introJsInterface = {
         }
     ],
     options: {
-        doneLabel: 'Launch compass',
+        doneLabel: 'Launch Compass',
     },
     onExitPath: '/tpage?intro=false'
 }
