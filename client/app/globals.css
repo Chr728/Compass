@@ -51,14 +51,14 @@ input[type="date"]::-webkit-datetime-edit-year-field  {
     color: #0880AE;
 }
 
-.appointment .MuiTableBody-root .MuiTableRow-root:nth-child(odd){
+.alternatingRowColor .MuiTableBody-root .MuiTableRow-root:nth-child(odd){
   background:var(--Light-Grey, #DBE2EA);
 }
-.appointment .MuiTableBody-root .MuiTableRow-root:nth-child(even){
+.alternatingRowColor .MuiTableBody-root .MuiTableRow-root:nth-child(even){
   background: white;
 }
 
-.appointment ::placeholder {
+.alternatingRowColor ::placeholder {
   color: #0880AE !important;
 }
 

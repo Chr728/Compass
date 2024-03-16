@@ -4,7 +4,11 @@ import db from '../models';
 import { appointmentValidator } from '../utils/databaseValidators';
 import { ErrorHandler } from '../middlewares/errorMiddleware';
 
-export const getAppointments = async (req: Request, res: Response, next: NextFunction) => {
+export const getAppointments = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const uid = req.params.uid;
     const userAppointments = await db.Appointment.findAll({
@@ -22,15 +26,26 @@ export const getAppointments = async (req: Request, res: Response, next: NextFun
     if (err instanceof ErrorHandler) {
       next(err);
     } else {
-      next(new ErrorHandler(400, 'ERROR', `Error getting appointments of user: ${err}`));
+      next(
+        new ErrorHandler(
+          400,
+          'ERROR',
+          `Error getting appointments of user: ${err}`
+        )
+      );
     }
   }
 };
 
-export const createAppointment = async (req: Request, res: Response, next: NextFunction) => {
+export const createAppointment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const uid = req.params.uid;
-    const { appointmentWith, reason, date, time, notes } = req.body;
+    const { appointmentWith, reason, date, time, frequency, quantity, notes } =
+      req.body;
     appointmentValidator(req.body);
     const createdAppointment = await db.Appointment.create({
       uid,
@@ -38,6 +53,8 @@ export const createAppointment = async (req: Request, res: Response, next: NextF
       reason,
       date,
       time,
+      frequency,
+      quantity,
       notes,
     });
     res.status(201).json({
@@ -49,12 +66,22 @@ export const createAppointment = async (req: Request, res: Response, next: NextF
     if (err instanceof ErrorHandler) {
       next(err);
     } else {
-      next(new ErrorHandler(400, 'ERROR', `Error creating appointment record: ${err}`));
+      next(
+        new ErrorHandler(
+          400,
+          'ERROR',
+          `Error creating appointment record: ${err}`
+        )
+      );
     }
   }
 };
 
-export const getAppointment = async (req: Request, res: Response, next: NextFunction) => {
+export const getAppointment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const appointmentId = req.params.id;
     const appointment = await db.Appointment.findOne({
@@ -64,7 +91,11 @@ export const getAppointment = async (req: Request, res: Response, next: NextFunc
     });
 
     if (!appointment) {
-      throw new ErrorHandler(404, 'ERROR', `Appointment not found, invalid appointment id.`);
+      throw new ErrorHandler(
+        404,
+        'ERROR',
+        `Appointment not found, invalid appointment id.`
+      );
     }
 
     res.status(200).json({
@@ -81,7 +112,11 @@ export const getAppointment = async (req: Request, res: Response, next: NextFunc
   }
 };
 
-export const deleteAppointment = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteAppointment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const appointmentId = req.params.id;
     const deletedAppointment = await db.Appointment.destroy({
@@ -91,7 +126,11 @@ export const deleteAppointment = async (req: Request, res: Response, next: NextF
     });
 
     if (!deletedAppointment) {
-      throw new ErrorHandler(404, 'ERROR', 'Appointment not found, invalid appointment id.');
+      throw new ErrorHandler(
+        404,
+        'ERROR',
+        'Appointment not found, invalid appointment id.'
+      );
     }
 
     res.status(200).json({
@@ -103,27 +142,41 @@ export const deleteAppointment = async (req: Request, res: Response, next: NextF
     if (err instanceof ErrorHandler) {
       next(err);
     } else {
-      next(new ErrorHandler(400, 'ERROR', `Error deleting appointment record: ${err}`));
+      next(
+        new ErrorHandler(
+          400,
+          'ERROR',
+          `Error deleting appointment record: ${err}`
+        )
+      );
     }
   }
 };
 
-export const updateAppointments = async (req: Request, res: Response, next: NextFunction) => {
+export const updateAppointments = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const appointmentId = req.params.id;
     const { appointmentWith, reason, date, time, notes } = req.body;
 
     const updatedAppointment = await db.Appointment.update(
-        { appointmentWith, reason, date, time, notes },
-        {
-          where: {
-            id: appointmentId,
-          },
-        }
+      { appointmentWith, reason, date, time, notes },
+      {
+        where: {
+          id: appointmentId,
+        },
+      }
     );
 
     if (!updatedAppointment) {
-      throw new ErrorHandler(404, 'ERROR', 'Appointment not found, invalid appointment id.');
+      throw new ErrorHandler(
+        404,
+        'ERROR',
+        'Appointment not found, invalid appointment id.'
+      );
     }
 
     const latestAppointment = await db.Appointment.findOne({
@@ -142,7 +195,9 @@ export const updateAppointments = async (req: Request, res: Response, next: Next
     if (error instanceof ErrorHandler) {
       next(error);
     } else {
-      next(new ErrorHandler(400, 'ERROR', `Error updating appointment: ${error}`));
+      next(
+        new ErrorHandler(400, 'ERROR', `Error updating appointment: ${error}`)
+      );
     }
   }
 };

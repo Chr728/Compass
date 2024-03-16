@@ -20,6 +20,8 @@ import userRoutes from './routes/userRoutes';
 import weightJournalRoutes from './routes/weightJournalRoutes';
 import { sendUserReminders } from './tasks/reminderTask';
 import o2SaturationJournalRoutes from './routes/o2SaturationJournalRoutes';
+import locationRoutes from "./routes/locationRoutes";
+import { sendMoodReminder } from './tasks/moodReminderTask';
 import snoringResultRoutes from './routes/snoringResultRoutes';
 import bloodPressureRoutes from './routes/bloodPressureRoutes';
 import emergencyRoomRoutes from './routes/emergencyRoomRoutes';
@@ -53,6 +55,7 @@ app.use('/api/journals/foodIntake', foodIntakeJournalRoutes);
 app.use('/api/subscription', subscriptionRoutes);
 app.use('/api/medication', medicationRoutes);
 app.use('/api/journals/o2Saturation', o2SaturationJournalRoutes);
+app.use('/api/locations', locationRoutes);
 app.use('/api/snoringAI', snoringResultRoutes);
 app.use('/api/journals/bloodPressure', bloodPressureRoutes);
 app.use('/api/emergencyRoomData', emergencyRoomRoutes);
@@ -64,8 +67,14 @@ cron.schedule('*/10 * * * *', () => {
   sendUserReminders();
 });
 
+
+// Schedule the mood journal reminder
+cron.schedule("*/30 * * * *", () => {
+  sendMoodReminder();
+})
+
 // Schedule scraper task
-cron.schedule('0 0 0 * * *', () => {
+cron.schedule('0 0 */2 * * *', () => {
   Logger.info('Running the scheduled emergency room scraper task...');
   scraper()
     .then(() => {
@@ -75,6 +84,7 @@ cron.schedule('0 0 0 * * *', () => {
       Logger.error('Error scraping ER data: ', err);
     });
 });
+
 
 app.get('/', (req, res) => {
   res.send('Hello World!');

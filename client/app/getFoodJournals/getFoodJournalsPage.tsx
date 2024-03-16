@@ -1,4 +1,5 @@
 "use client";
+import Chart from "chart.js/auto";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
@@ -28,6 +29,7 @@ export default function GetFoodJournalsPage() {
 	const { userInfo } = useUser();
 	const [food, setfood] = useState<any>(null);
 	const { handlePopUp } = useProp();
+	let chartInstance: Chart<"line", any, unknown> | null = null;
 
 	useEffect(() => {
 		if (!userInfo) {
@@ -51,7 +53,65 @@ export default function GetFoodJournalsPage() {
 			fetchFoodJournals();
 		}, 500);
 	}, [user]);
+	useEffect(() => {
+		renderGraph();
+	}, [food]);
 
+	const renderGraph = () => {
+		try {
+			const canvas = document.getElementById(
+				"foodChart"
+			) as HTMLCanvasElement | null;
+			if (canvas) {
+				const ctx = canvas.getContext("2d");
+				if (ctx) {
+					const calories = food.map(
+						(item: { calorie: number }) => item.calorie
+					);
+
+					if (chartInstance) {
+						chartInstance.destroy();
+					}
+
+					setTimeout(() => {
+						chartInstance = new Chart(ctx, {
+							type: "line",
+							data: {
+								labels: food.map(
+									(item: any, index: number) => index + 1
+								),
+								datasets: [
+									{
+										label: "Calorie",
+										data: calories,
+										borderColor: "rgba(75, 192, 192, 1)",
+										tension: 0.1,
+									},
+								],
+							},
+							options: {
+								scales: {
+									y: {
+										beginAtZero: true,
+									},
+								},
+							},
+						});
+					}, 100);
+				} else {
+					console.error(
+						"Could not get 2D context for canvas element."
+					);
+				}
+			} else {
+				console.error(
+					"Could not find canvas element with id 'foodChart'."
+				);
+			}
+		} catch (error) {
+			console.error("Error rendering graph:", error);
+		}
+	};
 	async function deleteFoodJournals(foodJournalId: string) {
 		Swal.fire({
 			text: "Are you sure you want to delete this food journal entry?",
@@ -152,6 +212,9 @@ export default function GetFoodJournalsPage() {
 						</div>
 					</div>
 					<br></br>
+					<div style={{ marginBottom: "5px", padding: "3px" }}>
+						<canvas id="foodChart"></canvas>
+					</div>
 					<div
 						id={'filter'}
 						className="flex"

@@ -1,4 +1,4 @@
-import {  Model } from 'sequelize';
+import { Model } from 'sequelize';
 
 export interface BloodPressureJournalAttributes {
   id: number;
@@ -68,8 +68,8 @@ module.exports = (sequelize: any, DataTypes: any) => {
     {
       sequelize,
       modelName: 'BloodPressureJournal',
+      timestamps: false,
     }
   );
   return BloodPressureJournal;
 };
-
