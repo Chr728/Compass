@@ -8,6 +8,7 @@ type ButtonProps = {
   style?: CSSProperties;
   onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   disabled?: boolean;
+  hidden?: boolean;
   isSubmitting?: boolean;
   id?: string;
 };
@@ -18,6 +19,7 @@ export default function Button({
   style,
   onClick,
   disabled,
+  hidden,
   isSubmitting,
   id,
 }: ButtonProps) {
@@ -32,6 +34,7 @@ export default function Button({
       style={submittedButtonStyle}
       onClick={onClick}
       disabled={isSubmitting}
+      hidden={hidden}
       id={id}
     >
       {isSubmitting ? (

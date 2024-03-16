@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import appointments from '../../public/appointments.svg';
 import medications from '../../public/medications.svg';
 import medVault from '../../public/documents.svg';
+import locator from '../../public/locator.png';
 import snore from '../../public/snore.svg';
 import Header from '../components/Header';
 import Custom403 from '../pages/403';
@@ -107,6 +108,29 @@ export default function Health() {
                   width={88}
                   height={106}
                   className="absolute inset-y-0 right-1 shrink-0"
+                />
+              </div>
+            </div>
+          </Link>
+          <br></br>
+
+          <Link href="/clinicLocator">
+            <div
+              className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 "
+              style={{ backgroundColor: '#FF7171' }}
+            >
+              <div>
+                <p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
+                  Clinic Locator
+                </p>
+                <p className="text-[14px] text-white pr-20 font-IBM Plex Sans  text-start">
+                  Locate clinics near you.
+                </p>
+                <NextImage
+                  src={locator}
+                  alt="locator"
+                  height={120}
+                  className="absolute inset-y-0 right-0 shrink-0"
                 />
               </div>
             </div>

@@ -10,6 +10,14 @@ from transformers import AutoImageProcessor, ViTForImageClassification, ViTModel
 from PIL import Image
 import io
 from sklearn.preprocessing import LabelEncoder
+import librosa
+import tensorflow as tf 
+from huggingface_hub import from_pretrained_keras
+from itertools import groupby
+from pydub import AudioSegment
+# import subprocess
+# import tempfile
+# import json
 
 load_dotenv()
 
@@ -28,6 +36,57 @@ encoder = LabelEncoder()
 encoder.classes_ = np.load('encoder/encoder.npy', allow_pickle=True)
 
 # Load the pre-trained model and feature extractor
+snoringModel = from_pretrained_keras("CXDJY/snore_ai")
+
+def load_audio_to_tensor(file, type2):
+    # Convert mp3 to wav since librosa soundfile doesn't support mp3
+    if type2 == "mp3":
+        try:
+            seg=AudioSegment.from_mp3(io.BytesIO(file))
+        # Some mp3 files are actually in acc format which should be handled specifically
+        except:
+            seg = AudioSegment.from_file(io.BytesIO(file), format="aac")
+        wavIO=io.BytesIO()
+        seg.export(wavIO, format="wav")
+        audio, sampling_rate = librosa.load(io.BytesIO(wavIO.getvalue()), sr=None, mono=True)
+    else:
+        # print(1)
+        # with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+        #     print(2)
+        #     temp_file.write(file)
+        #     print(3)
+        #     temp_file_path = temp_file.name
+
+        # command = ['ffprobe', '-v', 'error', '-show_format', '-show_streams', temp_file_path]
+        # result = subprocess.run(command, capture_output=True, text=True)
+        # print(result.stdout)
+        # temp_file.close()
+        # raise Exception("Sorry, no numbers below zero")
+        try:
+            audio, sampling_rate = librosa.load(io.BytesIO(file), sr=None, mono=True)  # load audio and convert to mono
+        except:
+            sound = AudioSegment.from_file(io.BytesIO(file), codec="opus")
+            wavIO=io.BytesIO()
+            sound.export(wavIO, format="wav")
+
+            #audio, sampling_rate = librosa.load(io.BytesIO(file), sr=None, mono=True)  # load audio and convert to mono
+            audio, sampling_rate = librosa.load(io.BytesIO(wavIO.getvalue()), sr=None, mono=True)
+    wave = librosa.resample(audio, orig_sr=sampling_rate, target_sr=16000)  # resample to 16KHz
+    rms = librosa.feature.rms(y=audio)[0]                           # get root mean square of audio
+    volume = np.mean(rms)                                             # get volume of audio
+    return wave, volume
+
+def preprocess_mp3(sample, index):
+    sample = sample[0]
+    sample = tf.cast(sample, tf.float32)
+    zero_padding = tf.zeros([16000] - tf.shape(sample), dtype=tf.float32)
+    wave = tf.concat([zero_padding, sample], 0)
+    spectrogram = tf.signal.stft(wave, frame_length=320, frame_step=32)
+    spectrogram = tf.abs(spectrogram)
+    spectrogram = tf.expand_dims(spectrogram, axis=2)
+    return spectrogram
+
+
 pretrained_model = ViTModel.from_pretrained('pillIdentifierAI/pillIdentifier')
 feature_extractor = ViTImageProcessor(
     image_size=224,
@@ -113,6 +172,45 @@ async def pill_predict(file: UploadFile = File(...), top_k: int = 5):
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: HTTPException")
+    
+
+@app.post("/SnoringAI")
+async def snoring_predict(file: UploadFile = File(...)):
+    try:
+        extension = file.filename.split(".")[-1] in ("mp3", "wav")
+        
+        if not extension:
+            item = {"message": "Audio format must be mp3, wav!"}
+            return JSONResponse(status_code=400, content=item)
+        
+        if file.filename.split(".")[-1] == "mp3":
+            file = await file.read()
+            wave, volume = load_audio_to_tensor(file, "mp3")
+        else:
+            file = await file.read()
+            wave, volume = load_audio_to_tensor(file, "wav") 
+        
+        if len(wave) > 16000:
+            sequence_stride = 16000
+        else:
+            sequence_stride = 16000-1
+
+        # create audio slices
+        audio_slices = tf.keras.utils.timeseries_dataset_from_array(wave, wave, sequence_length=16000, sequence_stride=sequence_stride, batch_size=1)
+
+    
+        audio_slices = audio_slices.map(preprocess_mp3)
+        audio_slices = audio_slices.batch(64)   
+
+        yhat = snoringModel.predict(audio_slices)
+        yhat = [1 if prediction > 0.99 else 0 for prediction in yhat]
+        yhat1 = [key for key, group in groupby(yhat)]
+        result = {"results": yhat1}
+        return JSONResponse(status_code=200, content=result)
+        
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500, detail=f"Error: HTTPException")
 
 # CORS middleware setup
 origins = ["*"]    
@@ -127,3 +225,5 @@ app.add_middleware(
 
 if __name__ == "__main__":
     uvicorn.run(app, host=PYTHON_HOST, port=PYTHON_PORT)
+
+

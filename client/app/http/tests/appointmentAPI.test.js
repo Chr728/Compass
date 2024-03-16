@@ -1,5 +1,13 @@
 import { auth } from '../../config/firebase';
-import { getAppointments, getAppointment, createAppointment, updateAppointment, deleteAppointment } from '../appointmentAPI';
+import {
+  getAppointments,
+  getAppointment,
+  createAppointment,
+  updateAppointment,
+  deleteAppointment,
+} from '../appointmentAPI';
+
+import { getFrequencyInMilliseconds } from '../appointmentAPI';
 
 //test the getAppointments function
 describe('getAppointments', () => {
@@ -18,27 +26,30 @@ describe('getAppointments', () => {
       uid: mockUserId,
       getIdToken: jest.fn().mockResolvedValue(mockToken),
     };
-  
+
     Object.defineProperty(auth, 'currentUser', {
       get: jest.fn().mockReturnValue(mockCurrentUser),
     });
-  
+
     const mockResponse = {
       ok: true,
       json: jest.fn().mockResolvedValue({}),
     };
     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch = mockFetch;
-    
+
     const result = await getAppointments(mockUserId);
 
-    expect(mockFetch).toHaveBeenCalledWith(`${process.env.NEXT_PUBLIC_API_URL}/api/appointments/${mockUserId}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${mockToken}`,
-      },
-    });
+    expect(mockFetch).toHaveBeenCalledWith(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/appointments/${mockUserId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${mockToken}`,
+        },
+      }
+    );
     expect(mockResponse.json).toHaveBeenCalled();
     expect(result).toEqual({});
   });
@@ -47,7 +58,7 @@ describe('getAppointments', () => {
     Object.defineProperty(auth, 'currentUser', {
       get: jest.fn().mockReturnValue(null),
     });
-  
+
     const mockResponse = {
       ok: true,
       json: jest.fn().mockResolvedValue({}),
@@ -55,7 +66,9 @@ describe('getAppointments', () => {
     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch = mockFetch;
 
-    await expect(getAppointments()).rejects.toThrow('No user is currently signed in.');
+    await expect(getAppointments()).rejects.toThrow(
+      'No user is currently signed in.'
+    );
   });
 
   it('should throw an error if the fetch request fails', async () => {
@@ -65,7 +78,7 @@ describe('getAppointments', () => {
       uid: mockUserId,
       getIdToken: jest.fn().mockResolvedValue(mockToken),
     };
-  
+
     Object.defineProperty(auth, 'currentUser', {
       get: jest.fn().mockReturnValue(mockCurrentUser),
     });
@@ -76,7 +89,9 @@ describe('getAppointments', () => {
     const mockErrorFetch = jest.fn().mockResolvedValue(mockErrorResponse);
     global.fetch = mockErrorFetch;
 
-    await expect(getAppointments()).rejects.toThrow('Failed to retrieve appointment. HTTP Status: undefined');
+    await expect(getAppointments()).rejects.toThrow(
+      'Failed to retrieve appointment. HTTP Status: undefined'
+    );
   });
 });
 
@@ -121,14 +136,14 @@ describe('getAppointment', () => {
         },
         method: 'GET',
       }
-      );
+    );
   });
 
   it('should throw an error if the user is not signed in', async () => {
     Object.defineProperty(auth, 'currentUser', {
       get: jest.fn().mockReturnValue(null),
     });
-  
+
     const mockResponse = {
       ok: true,
       json: jest.fn().mockResolvedValue({}),
@@ -136,7 +151,9 @@ describe('getAppointment', () => {
     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch = mockFetch;
 
-    await expect(getAppointment()).rejects.toThrow('No user is currently signed in.');
+    await expect(getAppointment()).rejects.toThrow(
+      'No user is currently signed in.'
+    );
   });
 
   it('should throw an error if the request fails', async () => {
@@ -146,7 +163,7 @@ describe('getAppointment', () => {
       uid: mockUserId,
       getIdToken: jest.fn().mockResolvedValue(mockToken),
     };
-  
+
     Object.defineProperty(auth, 'currentUser', {
       get: jest.fn().mockReturnValue(mockCurrentUser),
     });
@@ -168,7 +185,8 @@ describe('getAppointment', () => {
           Authorization: `Bearer ${mockToken}`,
         },
         method: 'GET',
-      });
+      }
+    );
   });
 });
 
@@ -185,11 +203,11 @@ describe('createAppointment', () => {
   it('should create an appointment entry for the user', async () => {
     const mockUserId = '123';
     const mockAppointmentData = {
-      date: '2022-01-01',
       time: '12:00:00',
       appointmentWith: 'test doctor',
       reason: 'test reason',
       notes: 'Test appointment entry',
+      date: '2022-01-01',
     };
 
     const mockToken = 'mockToken';
@@ -211,6 +229,12 @@ describe('createAppointment', () => {
 
     const result = await createAppointment(mockUserId, mockAppointmentData);
 
+    // Modify mockAppointmentData to match the expected format with ISO date
+    const expectedData = {
+      ...mockAppointmentData,
+      date: new Date(mockAppointmentData.date).toISOString(),
+    };
+
     expect(mockFetch).toHaveBeenCalledWith(
       `${process.env.NEXT_PUBLIC_API_URL}/api/appointments/${mockUserId}`,
       {
@@ -219,10 +243,10 @@ describe('createAppointment', () => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${mockToken}`,
         },
-        body: JSON.stringify(mockAppointmentData),
+        body: JSON.stringify(expectedData), // Use expectedData here
       }
     );
-    expect(result).toEqual(mockAppointmentData);
+    expect(result).toEqual([mockAppointmentData]); // Ensure the result is as expected
   });
 
   it('should throw an error if the appointment  entry creation fails', async () => {
@@ -239,7 +263,7 @@ describe('createAppointment', () => {
       uid: mockUserId,
       getIdToken: jest.fn().mockResolvedValue(mockToken),
     };
-  
+
     Object.defineProperty(auth, 'currentUser', {
       get: jest.fn().mockReturnValue(mockCurrentUser),
     });
@@ -251,9 +275,80 @@ describe('createAppointment', () => {
     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
     global.fetch = mockFetch;
 
-    await expect(createAppointment(mockUserId, mockAppointmentData)).rejects.toThrow(
+    await expect(
+      createAppointment(mockUserId, mockAppointmentData)
+    ).rejects.toThrow(
       `Failed to create appointment for user ${mockUserId}. HTTP Status: ${mockResponse.status}`
     );
+  });
+});
+
+describe('getFrequencyInMilliseconds', () => {
+  it('should return correct milliseconds for daily frequency', () => {
+    expect(getFrequencyInMilliseconds('daily')).toBe(24 * 60 * 60 * 1000); // 1 day
+  });
+
+  it('should return correct milliseconds for weekly frequency', () => {
+    expect(getFrequencyInMilliseconds('weekly')).toBe(7 * 24 * 60 * 60 * 1000); // 1 week
+  });
+
+  it('should return correct milliseconds for bi-weekly frequency', () => {
+    expect(getFrequencyInMilliseconds('bi-weekly')).toBe(
+      14 * 24 * 60 * 60 * 1000
+    );
+  });
+
+  it('should throw an error for invalid frequency', () => {
+    expect(() => getFrequencyInMilliseconds('invalid')).toThrowError(
+      'Invalid frequency'
+    );
+  });
+});
+
+describe('createAppointment', () => {
+  const mockUserId = '123';
+  const mockToken = 'mockToken';
+  const mockDate = '2022-01-01T00:00:00.000Z'; // Any valid date
+  const mockAppointmentData = {
+    date: mockDate,
+    time: '12:00:00',
+    appointmentWith: 'test doctor',
+    reason: 'test reason',
+    notes: 'Test appointment entry',
+    frequency: 'daily',
+    quantity: 3,
+  };
+  const mockCurrentUser = {
+    uid: mockUserId,
+    getIdToken: jest.fn().mockResolvedValue(mockToken),
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks(); // Clear all mocks before each test
+    Object.defineProperty(auth, 'currentUser', {
+      get: jest.fn().mockReturnValue(mockCurrentUser),
+    });
+  });
+
+  it('should throw an error when no user is signed in', async () => {
+    Object.defineProperty(auth, 'currentUser', {
+      get: jest.fn().mockReturnValue(null),
+    });
+
+    await expect(
+      createAppointment(mockUserId, mockAppointmentData)
+    ).rejects.toThrowError('No user is currently signed in.');
+  });
+
+  it('should handle API call failure', async () => {
+    // Mock the fetch function to return a failed response
+    const mockError = new Error('API Error');
+    const mockFetch = jest.fn().mockRejectedValue(mockError);
+    global.fetch = mockFetch;
+
+    await expect(
+      createAppointment(mockUserId, mockAppointmentData)
+    ).rejects.toThrowError('API Error');
   });
 });
 
@@ -282,7 +377,7 @@ describe('updateAppointment', () => {
       uid: mockUserId,
       getIdToken: jest.fn().mockResolvedValue(mockToken),
     };
-  
+
     Object.defineProperty(auth, 'currentUser', {
       get: jest.fn().mockReturnValue(mockCurrentUser),
     });
@@ -308,7 +403,7 @@ describe('updateAppointment', () => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${mockToken}`,
         },
-        body: "\"456\"",
+        body: '"456"',
       }
     );
     expect(result).toEqual(mockUpdatedAppointmentData);
@@ -329,7 +424,7 @@ describe('updateAppointment', () => {
       uid: mockUserId,
       getIdToken: jest.fn().mockResolvedValue(mockToken),
     };
-  
+
     Object.defineProperty(auth, 'currentUser', {
       get: jest.fn().mockReturnValue(mockCurrentUser),
     });
@@ -382,32 +477,39 @@ describe('deleteAppointment', () => {
 
     const result = await deleteAppointment(mockAppointmentId);
 
-    expect(mockFetch).toHaveBeenCalledWith(`${process.env.NEXT_PUBLIC_API_URL}/api/appointments/single/${mockAppointmentId}`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${mockToken}`,
-      },
+    expect(mockFetch).toHaveBeenCalledWith(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/appointments/single/${mockAppointmentId}`,
+      {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${mockToken}`,
+        },
+      }
+    );
+    expect(result).toEqual({
+      message: 'Appointment entry deleted successfully',
     });
-    expect(result).toEqual({ message: 'Appointment entry deleted successfully' });
   });
 
   it('should throw an error if the appointment entry deletion fails', async () => {
     const mockUserId = '123';
     const mockToken = 'mockToken';
     const mockAppointmentId = '1';
-  
+
     const mockCurrentUser = {
       uid: mockUserId,
       getIdToken: jest.fn().mockResolvedValue(mockToken),
     };
-  
+
     const mockResponse = {
       ok: false,
       status: 204,
     };
     const mockFetch = jest.fn().mockResolvedValue(mockResponse);
-    global.fetch = jest.fn().mockImplementation(() => Promise.resolve(mockResponse));
-  
+    global.fetch = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve(mockResponse));
+
     Object.defineProperty(auth, 'currentUser', {
       get: jest.fn().mockReturnValue(mockCurrentUser),
     });
@@ -418,7 +520,7 @@ describe('deleteAppointment', () => {
     };
     const mockErrorFetch = jest.fn().mockResolvedValue(mockErrorResponse);
     global.fetch = mockErrorFetch;
-  
+
     await expect(deleteAppointment(mockAppointmentId)).rejects.toThrow(
       `Failed to delete the appointment. HTTP Status: ${mockErrorResponse.status}`
     );

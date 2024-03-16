@@ -1,4 +1,5 @@
 "use client";
+import Chart from "chart.js/auto";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
@@ -28,7 +29,7 @@ export default function GetWeightJournalsPage() {
 	const { userInfo } = useUser();
 	const [weight, setweight] = useState<any>(null);
 	const { handlePopUp } = useProp();
-
+	let chartInstance: Chart<"line", any, unknown> | null = null;
 	useEffect(() => {
 		if (!userInfo) {
 			logger.warn("User not found.");
@@ -50,6 +51,65 @@ export default function GetWeightJournalsPage() {
 			fetchWeightJournals();
 		}, 500);
 	}, [user]);
+	useEffect(() => {
+		renderGraph();
+	}, [weight]);
+
+	const renderGraph = () => {
+		try {
+			const canvas = document.getElementById(
+				"weightChart"
+			) as HTMLCanvasElement | null;
+			if (canvas) {
+				const ctx = canvas.getContext("2d");
+				if (ctx) {
+					const weights = weight.map(
+						(item: { weight: number }) => item.weight
+					);
+
+					if (chartInstance) {
+						chartInstance.destroy();
+					}
+
+					setTimeout(() => {
+						chartInstance = new Chart(ctx, {
+							type: "line",
+							data: {
+								labels: weight.map(
+									(item: any, index: number) => index + 1
+								),
+								datasets: [
+									{
+										label: "Weight",
+										data: weights,
+										borderColor: "rgba(75, 192, 192, 1)",
+										tension: 0.1,
+									},
+								],
+							},
+							options: {
+								scales: {
+									y: {
+										beginAtZero: true,
+									},
+								},
+							},
+						});
+					}, 100);
+				} else {
+					console.error(
+						"Could not get 2D context for canvas element."
+					);
+				}
+			} else {
+				console.error(
+					"Could not find canvas element with id 'weightChart'."
+				);
+			}
+		} catch (error) {
+			console.error("Error rendering graph:", error);
+		}
+	};
 
 	async function deleteWeightJournals(weightJournalId: string) {
 		Swal.fire({
@@ -75,6 +135,7 @@ export default function GetWeightJournalsPage() {
 				});
 			}
 		});
+		window.location.reload();
 	}
 
 	const [orderdate, setOrderdate] = useState(false);
@@ -182,6 +243,9 @@ export default function GetWeightJournalsPage() {
 						</div>
 					</div>
 					<br></br>
+					<div style={{ marginBottom: "5px", padding: "3px" }}>
+						<canvas id="weightChart"></canvas>
+					</div>
 					<div
 						className="flex"
 						style={{ justifyContent: "space-between" }}>

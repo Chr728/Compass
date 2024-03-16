@@ -1,0 +1,7 @@
+torch
+transformers
+tensorflow
+numpy
+scikit-learn
+pillow
+python-multipart
