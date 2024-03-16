@@ -18,10 +18,26 @@ export default function CreateMedVaultPage() {
     component: <ChildCognition />,
   });
 
+  let errors: {
+    folderName?: string;
+    specialization?: string;
+  } = {};
+
   const formik = useFormik({
     initialValues: {
       folderName: '',
       specialization: '',
+    },
+    validate: (values) => {
+      if (!values.folderName.trim()) {
+        errors.folderName = "Doctor's Name is required";
+      }
+
+      if (!values.specialization.trim()) {
+        errors.specialization = "Doctor's Specialization is required";
+      }
+
+      return errors;
     },
     onSubmit: async (values) => {
       // Save data to IndexedDB along with the selected icon
@@ -102,6 +118,11 @@ export default function CreateMedVaultPage() {
             onBlur={formik.handleBlur}
           />
         </div>
+        {formik.touched.folderName && formik.errors.folderName ? (
+          <p className="text-[16px] text-red font-sans">
+            {formik.errors.folderName}
+          </p>
+        ) : null}
         <div className="mt-3">
           <FormLabel
             htmlFor={'specialization'}
@@ -117,6 +138,11 @@ export default function CreateMedVaultPage() {
             onBlur={formik.handleBlur}
           />
         </div>
+        {formik.touched.specialization && formik.errors.specialization ? (
+          <p className="text-[16px] text-red font-sans">
+            {formik.errors.specialization}
+          </p>
+        ) : null}
 
         <div className="mt-10 pb-4 self-center">
           <div className="mt-5 mb-5 space-x-2">
