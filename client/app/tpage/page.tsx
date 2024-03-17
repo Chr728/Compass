@@ -1,24 +1,21 @@
 "use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, {useEffect} from "react";
+import { MdCalendarMonth, MdEditNote } from "react-icons/md";
 import { useAuth } from "../contexts/AuthContext";
+import introJs from "intro.js";
+import {Steps} from "intro.js-react";
+import {introductionSteps} from "../lib/IntroJs/IntroJs";
 
 export default function MainMenu() {
 	const { user } = useAuth();
 	const router = useRouter();
 
-	// React.useEffect(() => {
-	// 	if (!user) router.push("/login");
-	// }, [user]);
-
-	// if (!user) {
-	//   return <div><Custom403/></div>
-	// }
 
 	return (
 		<div className="bg-eggshell min-h-screen flex flex-col pb-32">
-			<div className="grid grid-cols-2 gap-3 p-4 my-auto text-center">
+			<div id="sections" className="grid grid-cols-2 gap-3 p-4 my-auto text-center">
 				<div className="text-darkgrey font-bold col-span-2 text-[24px]">
 					Welcome to Compass
 				</div>
@@ -27,59 +24,51 @@ export default function MainMenu() {
 				</div>
 
 				<div
-					className="bg-red rounded-xl h-36 py-2 bg-opacity-90 hover:-translate-y-1.5"
+					id="appointments-section"
+					className="bg-red rounded-xl h-36 py-14 bg-opacity-90 hover:-translate-y-1.5"
 					onClick={() => router.push("/viewappointments")}>
-					<div className="flex justify-center">
-						<Image
-							src="/appointments.svg"
-							alt="Appointments icon"
-							width={50}
-							height={50}
-							/>
-					</div>
 					Appointments
-				</div>
-
-				<div
-					className="bg-darkgrey rounded-xl h-36 py-2 bg-opacity-90 hover:-translate-y-1.5"
-					onClick={() => router.push("/getMedications")}>
-					<div className="flex justify-center">
-						<Image
-							src="/medications.svg"
-							alt="Medicine icon"
-							width={85}
-							height={85}
-							/>
+					<div className="flex text-2xl justify-center">
+						<MdCalendarMonth/>
 					</div>
-					Medications
 				</div>
 
 				<div
-					className="bg-yellow rounded-xl h-36 py-2 bg-opacity-90 hover:translate-y-1.5"
-					onClick={() => router.push("/journals")}>
+					className="bg-darkgrey rounded-xl h-36 py-14 bg-opacity-90 hover:-translate-y-1.5"
+					onClick={() => router.push("/getMedications")}>
+					Medications
 					<div className="flex justify-center">
 						<Image
-							src="/icons/journals.svg"
-							alt="Journal icon"
-							width={105}
-							height={105}
+							src="/icons/medication.svg"
+							alt="Medicine icon"
+							width={20}
+							height={20}
 						/>
 					</div>
-					Journals
 				</div>
 
 				<div
-					className="bg-green rounded-xl h-36 py-2 bg-opacity-90 hover:translate-y-1.5"
+					id="journals-section"
+					className="bg-yellow rounded-xl h-36 py-14 bg-opacity-90 hover:translate-y-1.5"
+					onClick={() => router.push("/journals")}>
+					Journals
+					<div className="flex text-3xl justify-center">
+						<MdEditNote/>
+					</div>
+				</div>
+
+				<div
+					className="bg-green rounded-xl h-36 py-14 bg-opacity-90 hover:translate-y-1.5"
 					onClick={() => router.push("/profile")}>
+					Profile
 					<div className="flex justify-center">
 						<Image
-							src="/icons/profile.svg"
+							src="/icons/whiteMask.svg"
 							alt="Profile icon"
-							width={100}
-							height={100}
-							/>
+							width={18}
+							height={18}
+						/>
 					</div>
-					Profile
 				</div>
 			</div>
 		</div>

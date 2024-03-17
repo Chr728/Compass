@@ -36,7 +36,7 @@ const Navbar = () => {
             }
           }
         `}
-    </style><nav className="border-t-[0.1px]  menu-hidden border-grey bg-white fixed bottom-0 w-full  pb-4">
+    </style><nav id="nav-bar" className="border-t-[0.1px]  menu-hidden border-grey bg-white fixed bottom-0 w-full  pb-4">
 
         <div className="text-darkgrey text-[14px] md:text-[16px]  md:font-sans  text-center py-3">
           <ul className="flex justify-around md:flex-col md:justify-start md:items-start px-8">

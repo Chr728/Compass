@@ -4,7 +4,6 @@ import userEvent from "@testing-library/user-event";
 import { auth } from "../config/firebase";
 import { createFoodIntakeJournal } from "../http/foodJournalAPI";
 import CreateFoodJournalPage from "./createFoodJournalPage";
-
 const fakeUser = {
 	uid: "1",
 };
@@ -17,8 +16,8 @@ jest.mock("../contexts/AuthContext", () => {
 		},
 	};
 });
-
 const mockRouter = jest.fn();
+const mockSearchParams = jest.fn();
 
 jest.mock("next/navigation", () => ({
 	useRouter: () => {
@@ -26,10 +25,15 @@ jest.mock("next/navigation", () => ({
 			push: mockRouter,
 		};
 	},
+	useSearchParams: () => {
+		return {
+			get: mockSearchParams
+		}
+	},
 }));
-
 describe("Food journal tests", () => {
 	beforeEach(() => {
+		// Setup fetch mock
 		global.fetch = jest.fn();
 	});
 

@@ -1,5 +1,4 @@
 import {ReactNode, useContext, useState, createContext} from 'react';
-import LoadingScreen from '@/app/components/AppWrapper/LoadingScreen';
 
 const logger = require('../../logger');
 
@@ -12,6 +11,8 @@ type PropContextType = {
     handlePopUp: (type: 'error' | 'success', text: string) => void,
     loading: boolean,
     handleLoading: (loading: boolean,timeout?:number) => void,
+    introJsActive: boolean,
+    handleIntroJsActive: (active: boolean) => void,
 }
 const PropContext = createContext<PropContextType>({} as PropContextType);
 export const useProp = () => {
@@ -35,6 +36,7 @@ type popUpState = {
 export const PropProvider = ({children}: PropProviderProps) => {
     const [popUp, setPopUp] = useState<popUpState>({show: false,type:'error', text: ''});
     const [loading, setLoading] = useState(false)
+     const [introJsActive, setIntroJsActive] = useState(false);
    type popUpType = 'error' | 'success';
     const handlePopUp = (type: popUpType, text:string) => {
         setPopUp({show: true, type, text});
@@ -53,11 +55,17 @@ export const PropProvider = ({children}: PropProviderProps) => {
         }
     }
 
+    const handleIntroJsActive = (active: boolean) => {
+        setIntroJsActive(active);
+    }
+
     const values: PropContextType = {
         popUp,
         handlePopUp,
         loading,
         handleLoading,
+        introJsActive,
+        handleIntroJsActive,
     }
     return (
         <PropContext.Provider value={values}>
