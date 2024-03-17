@@ -31,13 +31,6 @@ export default function EmergencySituation() {
 	const [emergency, setemergency] = useState<any>(null);
 
 	useEffect(() => {
-		if (!userInfo) {
-			logger.warn("User not found.");
-			alert("User not found.");
-		}
-	}, [userInfo, router]);
-
-	useEffect(() => {
 		async function fetchEmergencyInfo() {
 			try {
 				const userId = user?.uid || "";
@@ -215,42 +208,38 @@ export default function EmergencySituation() {
 																)}
 															</div>
 														</div>
-														<div>
-															<p className="font-sans font-bold text-darkgrey text-[14px] text-start">
-																Est. Wait Time:{" "}
-															</p>
-															<p className="font-sans font-medium text-darkgrey text-[14px] ">
-																{
-																	item.waiting_time
-																}
-															</p>
-														</div>
+													</div>
 
-														<div>
-															<p className="font-sans font-bold text-darkgrey text-[14px] text-start">
-																No. of People
-																Waiting to See a
-																Doctor:
-															</p>
-															<p className="font-sans font-medium text-darkgrey text-[14px]">
-																{
-																	item.waiting_people
-																}
-															</p>
-														</div>
+													<div className="font-sans font-bold text-darkgrey text-[14px] text-start">
+														<label className="font-sans font-bold text-darkgrey text-[14px]  ">
+															Est. Wait Time:
+														</label>
+														<span className="font-sans font-medium text-darkgrey text-[14px]">
+															{item.waiting_time}
+														</span>
+													</div>
 
-														<div>
-															<p className="font-sans font-bold text-darkgrey text-[14px] text-start">
-																No. of People in
-																the Emergency
-																Room:
-															</p>
-															<p className="font-sans font-medium text-darkgrey text-[14px]">
-																{
-																	item.total_people
-																}
-															</p>
-														</div>
+													<div className="font-sans font-bold text-darkgrey text-[14px] text-start">
+														<label className="font-sans font-bold text-darkgrey text-[14px] ">
+															No. of People
+															Waiting to See a
+															Doctor:
+														</label>{" "}
+														<span className="font-sans font-medium text-darkgrey text-[14px]">
+															{
+																item.waiting_people
+															}
+														</span>
+													</div>
+
+													<div className="font-sans font-bold text-darkgrey text-[14px] text-start">
+														<label className="font-sans font-bold text-darkgrey text-[14px] ">
+															No. of People in the
+															Emergency Room:
+														</label>
+														<span className="font-sans font-medium text-darkgrey text-[14px]">
+															{item.total_people}
+														</span>
 													</div>
 												</div>
 											)

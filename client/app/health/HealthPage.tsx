@@ -134,10 +134,13 @@ export default function Health() {
 							</div>
 						</div>
 					</Link>
+					<br></br>
 					<Link href="/emergencySituation">
 						<div
 							className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 "
-							style={{ backgroundColor: "#FF7171" }}>
+							style={{
+								backgroundColor: "var(--Green, #4caf50)",
+							}}>
 							<div>
 								<p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
 									Emergency Room Situation
