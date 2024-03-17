@@ -1,5 +1,5 @@
-"use strict";
-import { Model } from "sequelize";
+'use strict';
+import { Model } from 'sequelize';
 
 export type AppointmentAttributes = {
   id: number;
@@ -8,9 +8,9 @@ export type AppointmentAttributes = {
   reason: string;
   date: Date;
   time: Date;
+  frequency: string;
+  quantity: number;
   notes: string;
-
-  // other attributes...
 };
 
 module.exports = (sequelize: any, DataTypes: any) => {
@@ -29,51 +29,64 @@ module.exports = (sequelize: any, DataTypes: any) => {
     reason!: string;
     date!: Date;
     time!: Date;
+    frequency!: string;
+    quantity!: number;
     notes!: string;
 
-    static associate(models:any) {
-      Appointment.belongsTo(models.User,{
-        foreignKey: "uid",
-        targetKey: 'uid',}
-      )
+    static associate(models: any) {
+      Appointment.belongsTo(models.User, {
+        foreignKey: 'uid',
+        targetKey: 'uid',
+      });
       // define association here
     }
   }
 
-  Appointment.init({
-    id: {
-      type:DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
+  Appointment.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      uid: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      appointmentWith: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      reason: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      date: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      time: {
+        type: DataTypes.TIME,
+        allowNull: false,
+      },
+      frequency: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      quantity: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
+      notes: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
     },
-    uid: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    appointmentWith: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    }, 
-    reason: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    date: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-    time: {
-      type: DataTypes.TIME,
-      allowNull: false,
-    },
-    notes: {
-      type: DataTypes.TEXT,
-      allowNull: true,
+    {
+      sequelize,
+      modelName: 'Appointment',
+      timestamps: false,
     }
-  },{
-    sequelize,
-    modelName: 'Appointment',
-    timestamps: false
-  });
+  );
   return Appointment;
 };

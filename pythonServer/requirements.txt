@@ -4,8 +4,14 @@ pytest
 python-dotenv
 torch
 transformers
-tensorflow
+tensorflow==2.12.0
 numpy
 scikit-learn
 pillow
 python-multipart
+librosa
+huggingface_hub
+tensorflow_intel
+ffmpeg
+pydub
+ffmpeg-python
