@@ -53,6 +53,7 @@ export default function GetFoodJournalsPage() {
 			fetchFoodJournals();
 		}, 500);
 	}, [user]);
+
 	useEffect(() => {
 		renderGraph();
 	}, [food]);
