@@ -4,7 +4,6 @@ import '@testing-library/jest-dom';
 import CreateGlucoseJournalPage from './createGlucoseJournalPage';
 import { createGlucoseJournal } from '../http/diabeticJournalAPI';
 import { useProp } from '../contexts/PropContext';
-import { use } from 'react';
 
 jest.mock("../contexts/PropContext", () => ({
     __esModule: true,
@@ -143,7 +142,7 @@ test("Submit button calls createGlucosejournal function", async () => {
     })
 })
 
-test("Cancel button redirects to getGlucoseJournals page", async () => {
+test("Cancel button redirects to getDiabeticJournals page", async () => {
     render(<CreateGlucoseJournalPage/>);
     const cancelButton = screen.getAllByRole('button')[1];
     await userEvent.click(cancelButton);
@@ -151,7 +150,7 @@ test("Cancel button redirects to getGlucoseJournals page", async () => {
     expect(mockRouter).toHaveBeenCalledWith('/getDiabeticJournals');
 })
 
-test("Back button redirects to getGlucoseJournals page", async () => {
+test("Back button redirects to getDiabeticJournals page", async () => {
     render(<CreateGlucoseJournalPage/>);
     const backButton = screen.getAllByRole('button')[0];
     await userEvent.click(backButton);
