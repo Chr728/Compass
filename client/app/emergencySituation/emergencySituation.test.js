@@ -23,7 +23,7 @@ jest.mock("../../contexts/AuthContext", () => {
 	};
 });
 
-jest.mock("../../http/activityJournalAPI", () => {
+jest.mock("../../http/emergencySituationAPI", () => {
 	return {
 		scrape: jest.fn().mockResolvedValue({
 			success: "SUCCESS",
@@ -39,7 +39,7 @@ jest.mock("../../http/activityJournalAPI", () => {
 		}),
 	};
 });
-describe("Getting an activity journal", () => {
+describe("Getting ER info ", () => {
 	beforeEach(() => {
 		useAuth.mockImplementation(() => {
 			return {
@@ -48,7 +48,7 @@ describe("Getting an activity journal", () => {
 		});
 	});
 
-	it("Fetches activity journal correctly", async () => {
+	it("Fetches er info correctly", async () => {
 		render(<EmergencySituation />);
 		await act(async () => {
 			jest.advanceTimersByTime(2000);
@@ -59,13 +59,16 @@ describe("Getting an activity journal", () => {
 	});
 
 	it("All fields are is displayed correctly", async () => {
-		render(<EmergencySituation params={{ activityJournal: "1" }} />);
+		render(<EmergencySituation />);
 		setTimeout(() => {
 			expect(screen.getByText(/Date:/i)).toBeInTheDocument();
-			expect(screen.getByText("Time:")).toBeInTheDocument();
-			expect(screen.getByText("Activity:")).toBeInTheDocument();
-			expect(screen.getByText("Duration(min):")).toBeInTheDocument();
-			expect(screen.getByText("Notes:")).toBeInTheDocument();
+			expect(screen.getByText("Est. Wait Time:")).toBeInTheDocument();
+			expect(
+				screen.getByText("No. of People Waiting to See a Doctor:")
+			).toBeInTheDocument();
+			expect(
+				screen.getByText("No. of People in the Emergency Room:")
+			).toBeInTheDocument();
 			expect(screen.getByText("00:05")).toBeInTheDocument();
 			expect(screen.getByText("Cite de la sante")).toBeInTheDocument();
 			expect(screen.getByText("2:45")).toBeInTheDocument();
@@ -76,32 +79,10 @@ describe("Getting an activity journal", () => {
 		}, 1000);
 	});
 
-	it("Cancel button functions correctly", async () => {
-		render(<EmergencySituation params={{ activityJournal: "1" }} />);
-		setTimeout(() => {
-			const cancelButton = screen.getAllByRole("button")[2];
-			userEvent.click(cancelButton);
-			expect(mockRouter).toHaveBeenCalledWith("/getActivityJournals");
-		}, 1000);
-	});
-
-	it("Back button redirects to main journals view", async () => {
-		render(<EmergencySituation params={{ activityJournal: "1" }} />);
+	it("Back button redirects to main health menu view", async () => {
+		render(<EmergencySituation />);
 		const button = screen.getAllByRole("button")[0];
 		await userEvent.click(button);
-		expect(mockRouter).toHaveBeenCalledWith("/getActivityJournals");
-	});
-
-	it("Edit button functions correctly", async () => {
-		render(<GetActivityJournal params={{ activityJournal: "1" }} />);
-		setTimeout(async () => {
-			const editButton = screen.getAllByRole("button")[1];
-			userEvent.click(editButton);
-			await waitFor(() => {
-				expect(mockRouter).toHaveBeenCalledWith(
-					"/getActivityJournals/1/1"
-				);
-			});
-		}, 1000);
+		expect(mockRouter).toHaveBeenCalledWith("/health");
 	});
 });

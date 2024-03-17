@@ -17,11 +17,19 @@ export default function EmergencySituation() {
 	const logger = require("../../logger");
 	const router = useRouter();
 	const { user } = useAuth();
+	const { userInfo } = useUser();
+	const [activity, setactivity] = useState<any>(null);
+	const { handlePopUp } = useProp();
+
+	useEffect(() => {
+		if (!userInfo) {
+			logger.warn("User not found.");
+			alert("User not found.");
+		}
+	}, [userInfo, router]);
 	SwiperCore.use([Navigation, Pagination]);
 
-	const { userInfo } = useUser();
 	const [emergency, setemergency] = useState<any>(null);
-	const { handlePopUp } = useProp();
 
 	useEffect(() => {
 		if (!userInfo) {
