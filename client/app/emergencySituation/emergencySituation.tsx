@@ -18,7 +18,6 @@ export default function EmergencySituation() {
 	const router = useRouter();
 	const { user } = useAuth();
 	const { userInfo } = useUser();
-	const [activity, setactivity] = useState<any>(null);
 	const { handlePopUp } = useProp();
 
 	useEffect(() => {
