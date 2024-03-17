@@ -11,12 +11,18 @@ import { render, screen } from "@testing-library/react";
 
 const mockRouter = jest.fn();
 const mockUsePathname = jest.fn();
+const mockSearchParams = jest.fn();
 
 jest.mock("next/navigation", () => ({
     useRouter: () => {
         return {
             push: mockRouter,
         };
+    },
+    useSearchParams: () => {
+        return {
+            get: mockSearchParams
+        }
     },
     usePathname: () => mockUsePathname(),
 }));
@@ -31,6 +37,7 @@ jest.mock("../../contexts/PropContext", () => ({
         useProp: jest.fn(),
         loading: false,
         popUp: {show: false, message: ""},
+        introJsActive: false,
 
 }));
 
@@ -66,6 +73,8 @@ describe("AppWrapper", () => {
                 loading: false,
                 handlePopUp: jest.fn(),
                 popUp: {show: false, message: ""},
+                introJsActive: false,
+                handleIntroJsActive: jest.fn(),
             };
         });
 

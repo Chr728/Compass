@@ -33,6 +33,8 @@
     "formik": "^2.4.3",
     "healthicons": "^1.0.1",
     "healthicons-react": "^1.4.0",
+    "intro.js": "^7.2.0",
+    "intro.js-react": "^1.0.0",
     "next": "^14.0.1",
     "node-fetch": "^3.3.2",
     "pino": "^8.16.1",

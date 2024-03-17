@@ -9,9 +9,11 @@ import mood from '../../public/mood.svg';
 import weight from '../../public/weight.svg';
 import bloodPressure from '../../public/bloodPressure.svg';
 import Header from '../components/Header';
+import introJs from 'intro.js';
 
 export default function Journal() {
 	const router = useRouter();
+
 
 	return (
 		<div className="bg-eggshell p-1 pb-32 flex flex-col">
@@ -88,7 +90,7 @@ export default function Journal() {
 				</Link>
 				<br></br>
 
-				<Link href="/getFoodJournals">
+				<Link href="/getFoodJournals" id={'food-journal'}>
 					<div
 						className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 "
 						style={{ backgroundColor: "var(--Red, #F2AC57)" }}>
