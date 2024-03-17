@@ -215,32 +215,37 @@ export default function EmergencySituation() {
 																)}
 															</div>
 														</div>
-														<br />
 														<div>
-															<p className="font-sans font-medium text-darkgrey text-[14px] text-start">
+															<p className="font-sans font-bold text-darkgrey text-[14px] text-start">
 																Est. Wait Time:{" "}
+															</p>
+															<p className="font-sans font-medium text-darkgrey text-[14px] ">
 																{
 																	item.waiting_time
 																}
 															</p>
 														</div>
-														<br />
+
 														<div>
-															<p className="font-sans font-medium text-darkgrey text-[14px] text-start">
+															<p className="font-sans font-bold text-darkgrey text-[14px] text-start">
 																No. of People
 																Waiting to See a
 																Doctor:
+															</p>
+															<p className="font-sans font-medium text-darkgrey text-[14px]">
 																{
 																	item.waiting_people
 																}
 															</p>
 														</div>
-														<br />
+
 														<div>
-															<p className="font-sans font-medium text-darkgrey text-[14px] text-start">
+															<p className="font-sans font-bold text-darkgrey text-[14px] text-start">
 																No. of People in
 																the Emergency
 																Room:
+															</p>
+															<p className="font-sans font-medium text-darkgrey text-[14px]">
 																{
 																	item.total_people
 																}
