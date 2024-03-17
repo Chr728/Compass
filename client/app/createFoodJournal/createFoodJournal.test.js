@@ -192,3 +192,11 @@ describe("Food journal tests", () => {
 		expect(mockRouter).toHaveBeenCalledWith("/getFoodJournals");
 	});
 });
+
+test("Back button redirects to getFoodJournals page", async () => {
+	render(<CreateFoodJournalPage/>);
+	const backButton = screen.getAllByRole('button')[0];
+	await userEvent.click(backButton);
+	await mockRouter;
+	expect(mockRouter).toHaveBeenCalledWith('/getFoodJournals');
+})
