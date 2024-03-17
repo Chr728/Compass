@@ -7,8 +7,6 @@ import "swiper/css/navigation";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "./styles.css";
 
-import SwiperClass from "swiper";
-
 import { Navigation, Pagination } from "swiper/modules";
 import Header from "../components/Header";
 import { useAuth } from "../contexts/AuthContext";
@@ -31,20 +29,7 @@ export default function EmergencySituation() {
 			alert("User not found.");
 		}
 	}, [userInfo, router]);
-	useEffect(() => {
-		const swiper = new SwiperClass(".mySwiper", {
-			slidesPerView: 1,
-			spaceBetween: 10,
-			navigation: {
-				nextEl: "[data-carousel-next]",
-				prevEl: "[data-carousel-prev]",
-			},
-			pagination: {
-				el: ".swiper-pagination",
-				clickable: true,
-			},
-		});
-	}, []);
+
 	useEffect(() => {
 		async function fetchEmergencyInfo() {
 			try {
