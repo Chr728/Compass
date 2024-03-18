@@ -7,6 +7,7 @@ import Renders from "../Renders";
 
 const mockRouter = jest.fn();
 const mockUsePathname = jest.fn();
+const useSearchParams = jest.fn();
 
 jest.mock("next/navigation", () => ({
     useRouter: () => {
@@ -15,6 +16,11 @@ jest.mock("next/navigation", () => ({
         };
     },
     usePathname: () => mockUsePathname(),
+    useSearchParams: () =>{
+        return {
+            get: useSearchParams
+        }
+    }
 }));
 
 jest.mock("../../../contexts/AuthContext", () => {
@@ -53,6 +59,8 @@ describe("About us page shown only to logged in users", () => {
             return {
                 handleLoading: jest.fn(),
                 loading: false,
+                introJsActive: false,
+                handleIntroJsActive: jest.fn(),
             };
         })
 

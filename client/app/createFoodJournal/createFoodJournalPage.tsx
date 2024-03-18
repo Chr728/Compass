@@ -7,9 +7,12 @@ import Header from "../components/Header";
 import Input from "../components/Input";
 import { useProp } from "../contexts/PropContext";
 import { createFoodIntakeJournal } from "../http/foodJournalAPI";
+import {useSearchParams} from "next/navigation";
 
 export default function CreateFoodJournalPage() {
 	const logger = require("../../logger");
+	const searchParams = useSearchParams();
+	const intro = searchParams.get('intro');
 	const router = useRouter();
 	const { handlePopUp } = useProp();
 
@@ -54,184 +57,190 @@ export default function CreateFoodJournalPage() {
 				</button>
 			</span>
 			<form
+				id={'fields'}
 				className="rounded-3xl bg-white flex flex-col mb-8 w-full md:max-w-[800px] md:min-h-[550px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
 				onSubmit={formik.handleSubmit}>
-				<div className="mt-3 mb-3">
-					<FormLabel htmlFor={"date"} label={"Date"}></FormLabel>
-					<Input
-						name="date"
-						id="date"
-						type="date"
-						style={{ width: "100%" }}
-						onChange={formik.handleChange}
-						value={formik.values.date}
-						onBlur={formik.handleBlur}
-						required={true}
-					/>
-					{formik.touched.date && !formik.values.date && (
-						<p className="text-red text-[14px]">
-							This field can't be left empty.
-						</p>
-					)}{" "}
-				</div>
-
-				<div className="mt-3">
-					<FormLabel htmlFor={"time"} label={"Time"}></FormLabel>
-					<Input
-						name="time"
-						id="time"
-						type="time"
-						style={{ width: "100%" }}
-						onChange={formik.handleChange}
-						value={formik.values.time}
-						onBlur={formik.handleBlur}
-					/>
-					{formik.touched.time && !formik.values.time && (
-						<p className="text-red text-[14px]">
-							This field can't be left empty.
-						</p>
-					)}
-				</div>
-
-				<div className="mt-3">
-					<FormLabel
-						htmlFor={"foodName"}
-						label={"Name of Food"}></FormLabel>
-					<Input
-						name="foodName"
-						id="foodName"
-						type="text"
-						style={{ width: "100%" }}
-						onChange={formik.handleChange}
-						value={formik.values.foodName}
-						onBlur={formik.handleBlur}
-					/>
-					{/* Check if the field is touched */}
-					{formik.touched.foodName &&
-						// Check if the field is empty
-						!formik.values.foodName && (
+				<div id={'required-fields'}>
+					<div className="mt-3 mb-3" id={'date-input'}>
+						<FormLabel htmlFor={"date"} label={"Date"}></FormLabel>
+						<Input
+							name="date"
+							id="date"
+							type="date"
+							style={{width: "100%"}}
+							onChange={formik.handleChange}
+							value={formik.values.date}
+							onBlur={formik.handleBlur}
+							required={true}
+						/>
+						{formik.touched.date && !formik.values.date && (
 							<p className="text-red text-[14px]">
-								This field can't be left empty or zero.
+								This field can't be left empty.
+							</p>
+						)}{" "}
+					</div>
+
+					<div className="mt-3" id={'time-input'}>
+						<FormLabel htmlFor={"time"} label={"Time"}></FormLabel>
+						<Input
+							name="time"
+							id="time"
+							type="time"
+							style={{width: "100%"}}
+							onChange={formik.handleChange}
+							value={formik.values.time}
+							onBlur={formik.handleBlur}
+						/>
+						{formik.touched.time && !formik.values.time && (
+							<p className="text-red text-[14px]">
+								This field can't be left empty.
 							</p>
 						)}
-				</div>
+					</div>
 
-				<div className="mt-3">
-					<FormLabel
-						htmlFor={"mealType"}
-						label={"Meal Type"}></FormLabel>
-					<select
-						className="text-darkgrey"
-						name="mealType"
-						id="mealType"
-						style={{
-							width: "100%",
-							height: "50px",
-							border: "1px solid #DBE2EA", // Border style
-							borderRadius: "5px",
-							marginTop: "5px",
-						}}
-						onChange={formik.handleChange}
-						onBlur={formik.handleBlur}
-						value={formik.values.mealType}>
-						<option className="text-darkgrey" value="">
-							Choose one
-						</option>
-						<option className="text-darkgrey" value="Breakfast">
-							Breakfast
-						</option>
-						<option className="text-darkgrey" value="Morning snack">
-							Morning snack
-						</option>
-						<option className="text-darkgrey" value="Lunch">
-							Lunch
-						</option>
-						<option
-							className="text-darkgrey"
-							value="Afternoon Snack">
-							Afternoon Snack
-						</option>
-						<option className="text-darkgrey" value="Dinner">
-							Dinner
-						</option>
-						<option className="text-darkgrey" value="Bedtime Snack">
-							Bedtime Snack
-						</option>
-						<option className="text-darkgrey" value="Other">
-							Other
-						</option>
-					</select>
-					{formik.touched.mealType && !formik.values.mealType && (
-						<p className="text-red text-[14px]">
-							This field can't be left empty.
-						</p>
-					)}
-				</div>
-				<div className="mt-3">
-					<FormLabel
-						htmlFor={"servingNumber"}
-						label={"Number of Servings"}></FormLabel>
-					<Input
-						name="servingNumber"
-						id="servingNumber"
-						type="number"
-						style={{ width: "100%" }}
-						onChange={formik.handleChange}
-						value={formik.values.servingNumber.toString()}
-						onBlur={formik.handleBlur}
-					/>
-
-					{/* Check if the field is touched */}
-					{formik.touched.servingNumber &&
-						// Check if the field is empty
-						((!formik.values.servingNumber && (
-							<p className="text-red text-[14px]">
-								This field can't be left empty or zero.
-							</p>
-						)) ||
-							// Check if the field is less than or equal to zero
-							(formik.values.servingNumber <= 0 && (
+					<div className="mt-3">
+						<FormLabel
+							htmlFor={"foodName"}
+							label={"Name of Food"}></FormLabel>
+						<Input
+							name="foodName"
+							id="foodName"
+							type="text"
+							style={{width: "100%"}}
+							onChange={formik.handleChange}
+							value={formik.values.foodName}
+							onBlur={formik.handleBlur}
+						/>
+						{/* Check if the field is touched */}
+						{formik.touched.foodName &&
+							// Check if the field is empty
+							!formik.values.foodName && (
 								<p className="text-red text-[14px]">
-									You can't enter a negative servings number
-									or a number of zero.
+									This field can't be left empty or zero.
 								</p>
-							)))}
+							)}
+					</div>
+
+					<div className="mt-3">
+						<FormLabel
+							htmlFor={"mealType"}
+							label={"Meal Type"}></FormLabel>
+						<select
+							className="text-darkgrey"
+							name="mealType"
+							id="mealType"
+							style={{
+								width: "100%",
+								height: "50px",
+								border: "1px solid #DBE2EA", // Border style
+								borderRadius: "5px",
+								marginTop: "5px",
+							}}
+							onChange={formik.handleChange}
+							onBlur={formik.handleBlur}
+							value={formik.values.mealType}>
+							<option className="text-darkgrey" value="">
+								Choose one
+							</option>
+							<option className="text-darkgrey" value="Breakfast">
+								Breakfast
+							</option>
+							<option className="text-darkgrey" value="Morning snack">
+								Morning snack
+							</option>
+							<option className="text-darkgrey" value="Lunch">
+								Lunch
+							</option>
+							<option
+								className="text-darkgrey"
+								value="Afternoon Snack">
+								Afternoon Snack
+							</option>
+							<option className="text-darkgrey" value="Dinner">
+								Dinner
+							</option>
+							<option className="text-darkgrey" value="Bedtime Snack">
+								Bedtime Snack
+							</option>
+							<option className="text-darkgrey" value="Other">
+								Other
+							</option>
+						</select>
+						{formik.touched.mealType && !formik.values.mealType && (
+							<p className="text-red text-[14px]">
+								This field can't be left empty.
+							</p>
+						)}
+					</div>
+				</div>
+				<div id={'optional-fields'}>
+					<div className="mt-3">
+						<FormLabel
+							htmlFor={"servingNumber"}
+							label={"Number of Servings"}></FormLabel>
+						<Input
+							name="servingNumber"
+							id="servingNumber"
+							type="number"
+							style={{width: "100%"}}
+							onChange={formik.handleChange}
+							value={formik.values.servingNumber.toString()}
+							onBlur={formik.handleBlur}
+						/>
+
+						{/* Check if the field is touched */}
+						{formik.touched.servingNumber &&
+							// Check if the field is empty
+							((!formik.values.servingNumber && (
+									<p className="text-red text-[14px]">
+										This field can't be left empty or zero.
+									</p>
+								)) ||
+								// Check if the field is less than or equal to zero
+								(formik.values.servingNumber <= 0 && (
+									<p className="text-red text-[14px]">
+										You can't enter a negative servings number
+										or a number of zero.
+									</p>
+								)))}
+					</div>
+
+					<div className="mt-3">
+						<label
+							htmlFor="calorie"
+							className="font-sans font-medium text-grey text-[16px]">
+							Calories
+						</label>
+						<br/>
+						<Input
+							name="calorie"
+							id="calorie"
+							type="number"
+							style={{width: "100%"}}
+							onChange={formik.handleChange}
+							value={formik.values.calorie.toString()}
+							onBlur={formik.handleBlur}
+						/>
+					</div>
+					<div className="mt-3">
+						<label
+							htmlFor="notes"
+							className="font-sans font-medium text-grey text-[16px]">
+							Notes
+						</label>
+						<br/>
+						<textarea
+							name="notes"
+							id="notes"
+							className="w-full border border-solid border-lightgrey text-darkgrey rounded-md shadow-[0_4px_8px_0_rgba(44,39,56,0.04)]"
+							rows={4}
+							onChange={formik.handleChange}
+							value={formik.values.notes}
+							onBlur={formik.handleBlur}
+						/>
+					</div>
 				</div>
 
-				<div className="mt-3">
-					<label
-						htmlFor="calorie"
-						className="font-sans font-medium text-grey text-[16px]">
-						Calories
-					</label>
-					<br />
-					<Input
-						name="calorie"
-						id="calorie"
-						type="number"
-						style={{ width: "100%" }}
-						onChange={formik.handleChange}
-						value={formik.values.calorie.toString()}
-						onBlur={formik.handleBlur}
-					/>
-				</div>
-				<div className="mt-3">
-					<label
-						htmlFor="notes"
-						className="font-sans font-medium text-grey text-[16px]">
-						Notes
-					</label>
-					<br />
-					<textarea
-						name="notes"
-						id="notes"
-						className="w-full border border-solid border-lightgrey text-darkgrey rounded-md shadow-[0_4px_8px_0_rgba(44,39,56,0.04)]"
-						rows={4}
-						onChange={formik.handleChange}
-						value={formik.values.notes}
-						onBlur={formik.handleBlur}
-					/>
-				</div>
 				<div className="mt-10 pb-4 self-center">
 					<div className="mt-5 mb-5 space-x-2">
 						<Button
@@ -245,6 +254,7 @@ export default function CreateFoodJournalPage() {
 						/>
 
 						<Button
+							id={'save-meal'}
 							type="submit"
 							text="Submit"
 							disabled={
@@ -257,8 +267,8 @@ export default function CreateFoodJournalPage() {
 								!formik.values.foodName || // Check if foodName is missing or empty
 								!formik.values.servingNumber // Check if Number of Servings is missing or empty
 							}
-							style={{ width: "140px", textAlign: "center" }}
-							onClick={() => router.push("/getFoodJournals")}
+							style={{width: "140px", textAlign: "center"}}
+							onClick={() => router.push(`/getFoodJournals${intro == 'true' ? '/?intro=true' : ''}`)}
 						/>
 					</div>
 				</div>

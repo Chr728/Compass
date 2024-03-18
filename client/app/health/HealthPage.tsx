@@ -1,15 +1,16 @@
-"use client";
-import { useAuth } from "@/app/contexts/AuthContext";
-import NextImage from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import appointments from "../../public/appointments.svg";
-import locator from "../../public/locator.png";
-import medications from "../../public/medications.svg";
-import snore from "../../public/snore.svg";
-import Header from "../components/Header";
-import Custom403 from "../pages/403";
+'use client';
+import { useAuth } from '@/app/contexts/AuthContext';
+import NextImage from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import appointments from '../../public/appointments.svg';
+import medications from '../../public/medications.svg';
+import medVault from '../../public/documents.svg';
+import locator from '../../public/locator.png';
+import snore from '../../public/snore.svg';
+import Header from '../components/Header';
+import Custom403 from '../pages/403';
 
 export default function Health() {
 	const router = useRouter();
@@ -90,7 +91,31 @@ export default function Health() {
 							</div>
 						</div>
 					</Link>
+          
 					<br></br>
+          <Link href="/getMedVault">
+            <div
+              className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 "
+              style={{ backgroundColor: 'var(--Black, #7F5FA5)' }}
+            >
+              <div>
+                <p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
+                  MedVault
+                </p>
+                <p className="text-[14px] text-white font-IBM Plex Sans  text-start">
+                  Store your medical documents.
+                </p>
+                <NextImage
+                  src={medVault}
+                  alt="documents"
+                  width={88}
+                  height={106}
+                  className="absolute inset-y-0 right-1 shrink-0"
+                />
+              </div>
+            </div>
+          </Link>
+          <br></br>
 
 					<Link href="/clinicLocator">
 						<div

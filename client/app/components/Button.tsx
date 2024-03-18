@@ -1,9 +1,9 @@
-"use client";
-import Image from "next/image";
-import React, { CSSProperties } from "react";
+'use client';
+import Image from 'next/image';
+import React, { CSSProperties } from 'react';
 
 type ButtonProps = {
-  type: "button" | "submit" | "reset" | undefined;
+  type: 'button' | 'submit' | 'reset' | undefined;
   text: string;
   style?: CSSProperties;
   onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
@@ -45,12 +45,12 @@ export default function Button({
             width={10}
             height={10}
             style={{
-              width: "auto",
-              height: "auto",
-              margin: "0 12px",
+              width: 'auto',
+              height: 'auto',
+              margin: '0 12px',
             }}
           />
-          <span style={{ verticalAlign: "middle" }}>Submitting</span>
+          <span style={{ verticalAlign: 'middle' }}>Submitting</span>
         </div>
       ) : (
         text
