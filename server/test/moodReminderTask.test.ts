@@ -119,9 +119,6 @@ beforeEach(() => {
   // Mock the moment module
   jest.mock("moment-timezone");
 
-  //Mock fs and csv-parser
-  jest.mock('fs');
-  jest.mock('csv-parser');
 
   // Mock the logger module
   jest.mock("../middlewares/logger", () => {
@@ -135,6 +132,8 @@ beforeEach(() => {
       },
     };
   });
+
+  
 });
 
 afterEach(() => {
@@ -162,8 +161,6 @@ describe("Testing mood journal reminders ", () => {
     expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
     expect(db.HealthTips.findOne).toHaveBeenCalledTimes(1);
     expect(db.HealthTips.update).toHaveBeenCalledTimes(1)
-    
-
     
 
     // //Check if function was sucesfully called

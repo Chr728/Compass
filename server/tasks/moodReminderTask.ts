@@ -96,15 +96,11 @@ export const sendMoodReminder = async () => {
 
 
               //Fetch sleep tips
-              const results: string | any[] = []
+              const results: string | any[] = ["Be consistent. Go to bed at the same time each night and get up at the same time each morning, including on the weekends", "Make sure your bedroom is quiet, dark, relaxing, and at a comfortable temperature", "Remove electronic devices, such as TVs, computers, and smart phones, from the bedroom", "Avoid large meals, caffeine, and alcohol before bedtime", "Get some exercise. Being physically active during the day can help you fall asleep more easily at night.", "Establish a relaxing bedtime routine.", "If you don’t fall asleep after 20 minutes, get out of bed. Go do a quiet activity without a lot of light exposure. It is especially important to not get on electronics.", "Set a bedtime that is early enough for you to get at least 7-8 hours of sleep."]
               const stressSignalsParsed = JSON.parse(moodJournal.stressSignals)
               if (stressSignalsParsed.sleep == "always" || stressSignalsParsed.sleep == "often"){
-                fs.createReadStream('./healthTips/sleepTips.csv')
-                .pipe(csv())
-                .on('data', (data: string) => results.push(data))
-                .on('end', async () => {
                   let getFirstRandomTip = Math.floor(Math.random() * ((results.length - 1) - 0 + 1) + 0)
-                  let firstTip = results[getFirstRandomTip].TIPS
+                  let firstTip = results[getFirstRandomTip]
                   let secondTip = false
                   let getSecondRandomTip = 0
                   while(!secondTip){
@@ -113,7 +109,7 @@ export const sendMoodReminder = async () => {
                       secondTip = true
                     }
                   }
-                  secondTip = results[getSecondRandomTip].TIPS
+                  secondTip = results[getSecondRandomTip]
                   const JSONsleepTips = {
                     "tip1":firstTip,
                     "tip2":secondTip,
@@ -131,19 +127,15 @@ export const sendMoodReminder = async () => {
                       }
                     })
                   }
-                });
+                ;
               }
 
             
               //Fetch depression tips
-              const depressionResults: string | any[] = []
+              const depressionResults: string | any[] = ["Consider a walk around the block", "Set attainable goals", "Do something you enjoy", "Listen to music", "Spend time with loved ones", "Express your feelings (Journaling)", "Practice gratitude", "Incorporate meditation"]
                 if (stressSignalsParsed.depressed == "always" || stressSignalsParsed.depressed == "often"){
-                  fs.createReadStream('./healthTips/depressionTips.csv')
-                  .pipe(csv())
-                  .on('data', (data: string) => depressionResults.push(data))
-                  .on('end', async () => {
                     let getFirstRandomTip = Math.floor(Math.random() * ((depressionResults.length - 1) - 0 + 1) + 0)
-                    let firstTip = depressionResults[getFirstRandomTip].TIPS
+                    let firstTip = depressionResults[getFirstRandomTip]
                     let secondTip = false
                     let getSecondRandomTip = 0
                     while(!secondTip){
@@ -152,7 +144,7 @@ export const sendMoodReminder = async () => {
                         secondTip = true
                       }
                     }
-                    secondTip = depressionResults[getSecondRandomTip].TIPS
+                    secondTip = depressionResults[getSecondRandomTip]
 
                     const JSONdepressionTips = {
                       "tip1":firstTip,
@@ -173,18 +165,14 @@ export const sendMoodReminder = async () => {
                         }
                     })
                     }
-                  });
+                  ;
                 }
 
                 //Fetch tired tips
-                const tiredResults: string | any[] = []
+                const tiredResults: string | any[] = ["Drink plenty of water", "Regularly Eat breakfast", "Don't skip meals", "Eat a healthy diet (fruit, vegetables, wholegrain foods, low fat dairy products and lean meats)", "Eat iron rich foods", "Increase physical activity", "Aerobic Exercises every week (cycling, fast walking)", "Go for frequent 15-minute walks"]
                 if (stressSignalsParsed.tired == "always" || stressSignalsParsed.tired == "often"){
-                  fs.createReadStream('./healthTips/tiredTips.csv')
-                  .pipe(csv())
-                  .on('data', (data: string) => tiredResults.push(data))
-                  .on('end', async () => {
                     let getFirstRandomTip = Math.floor(Math.random() * ((tiredResults.length - 1) - 0 + 1) + 0)
-                    let firstTip = tiredResults[getFirstRandomTip].TIPS
+                    let firstTip = tiredResults[getFirstRandomTip]
                     let secondTip = false
                     let getSecondRandomTip = 0
                     while(!secondTip){
@@ -193,7 +181,7 @@ export const sendMoodReminder = async () => {
                         secondTip = true
                       }
                     }
-                    secondTip = tiredResults[getSecondRandomTip].TIPS
+                    secondTip = tiredResults[getSecondRandomTip]
 
                     const JSONtiredTips = {
                       "tip1":firstTip,
@@ -213,18 +201,14 @@ export const sendMoodReminder = async () => {
                         }
                     })
                     }
-                  });
+                  ;
                 }
 
                 //Fetch attention tips
-                const attentionResults: string | any[] = []
+                const attentionResults: string | any[] = ["Avoid multitasking. Focus on one task at a time", "Get enough sleep (atleast 7 hours)", "Practice mindfulness (deep breaths, taking a walk)", "Take regular short breaks when doing a task", "Spend time in nature", "Avoid food with high refined sugars and saturated fats", "Practice coordinated bilateral exercise"]
                 if(stressSignalsParsed.attention == "always" || stressSignalsParsed.attention == "often"){
-                  fs.createReadStream('./healthTips/attentionTips.csv')
-                  .pipe(csv())
-                  .on('data', (data: string) => attentionResults.push(data))
-                  .on('end', async () => {
                     let getFirstRandomTip = Math.floor(Math.random() * ((attentionResults.length - 1) - 0 + 1) + 0)
-                    let firstTip = attentionResults[getFirstRandomTip].TIPS
+                    let firstTip = attentionResults[getFirstRandomTip]
                     let secondTip = false
                     let getSecondRandomTip = 0
                     while(!secondTip){
@@ -233,7 +217,7 @@ export const sendMoodReminder = async () => {
                         secondTip = true
                       }
                     }
-                    secondTip = attentionResults[getSecondRandomTip].TIPS
+                    secondTip = attentionResults[getSecondRandomTip]
 
                     const JSONattentionTips = {
                       "tip1":firstTip,
@@ -254,18 +238,14 @@ export const sendMoodReminder = async () => {
                         }
                     })
                     }
-                  });
+                  ;
                 }
 
                 //Fetch anger tips
-                const angerResults: string | any[] = []
+                const angerResults: string | any[] = ["Take a few moments to collect your thoughts before saying anything", "Once you're calm, express your concerns", "Take some timeout during the day", "Use humor to release tension", "Pay attention to what triggers your anger. Knowing when you may get angry can help you plan ahead to manage your reaction"]
                 if(stressSignalsParsed.anger == "always" || stressSignalsParsed.anger == "often"){
-                  fs.createReadStream('./healthTips/angerTips.csv')
-                  .pipe(csv())
-                  .on('data', (data: string) => angerResults.push(data))
-                  .on('end', async () => {
                     let getFirstRandomTip = Math.floor(Math.random() * ((angerResults.length - 1) - 0 + 1) + 0)
-                    let firstTip = angerResults[getFirstRandomTip].TIPS
+                    let firstTip = angerResults[getFirstRandomTip]
                     let secondTip = false
                     let getSecondRandomTip = 0
                     while(!secondTip){
@@ -274,7 +254,7 @@ export const sendMoodReminder = async () => {
                         secondTip = true
                       }
                     }
-                    secondTip = angerResults[getSecondRandomTip].TIPS
+                    secondTip = angerResults[getSecondRandomTip]
 
                     const JSONangerTips = {
                       "tip1":firstTip,
@@ -295,18 +275,14 @@ export const sendMoodReminder = async () => {
                         }
                     })
                     }
-                  });
+                  ;
                 }
                 
                 //Fetch anxiety tips
-                const anxietyResults: string | any[] = []
+                const anxietyResults: string | any[] = ["Slow breathing (Count to three as you breathe in slowly. Count to three as you breathe out slowly)", "Progressive muscle relaxation (Find a quiet location. Close your eyes and slowly tense and then relax each of your muscle groups from your toes to your head. Hold the tension for three seconds and then release quickly.)", "Staying active (regular exercise)", "Redirect your mind to a positive thought or activity", "Hand on Heart Anxiety Reduction Technique : https://www.youtube.com/watch?v=2-WMJpoi8Qo"]
                 if(stressSignalsParsed.anxiety == "always" || stressSignalsParsed.anxiety == "often"){
-                  fs.createReadStream('./healthTips/anxietyTips.csv')
-                  .pipe(csv())
-                  .on('data', (data: string) => anxietyResults.push(data))
-                  .on('end', async () => {
                     let getFirstRandomTip = Math.floor(Math.random() * ((anxietyResults.length - 1) - 0 + 1) + 0)
-                    let firstTip = anxietyResults[getFirstRandomTip].TIPS
+                    let firstTip = anxietyResults[getFirstRandomTip]
                     let secondTip = false
                     let getSecondRandomTip = 0
                     while(!secondTip){
@@ -315,7 +291,7 @@ export const sendMoodReminder = async () => {
                         secondTip = true
                       }
                     }
-                    secondTip = anxietyResults[getSecondRandomTip].TIPS
+                    secondTip = anxietyResults[getSecondRandomTip]
 
                     const JSONanxietyTips = {
                       "tip1":firstTip,
@@ -336,18 +312,14 @@ export const sendMoodReminder = async () => {
                         }
                     })
                     }
-                  });
+                  ;
                 }
 
                 //Fetch pressure tips
-                const pressureResults: string | any[] = []
+                const pressureResults: string | any[] = ["Ask yourself: What’s causing you to feel stressed right now?", "Break tasks into manageable chunks: Instead of viewing everything as one colossal mountain, break tasks or challenges into smaller, more manageable steps.", "Prioritize Your Tasks", "Do something you enjoy (listening to music, cooking dinner, spending time with loved ones etc)", "Take a break from digital devices. Constant notifications can amplify feelings of overwhelm."]
                 if(stressSignalsParsed.pressure == "always" || stressSignalsParsed.pressure == "often"){
-                  fs.createReadStream('./healthTips/overwhelmedTips.csv')
-                  .pipe(csv())
-                  .on('data', (data: string) => pressureResults.push(data))
-                  .on('end', async () => {
                     let getFirstRandomTip = Math.floor(Math.random() * ((pressureResults.length - 1) - 0 + 1) + 0)
-                    let firstTip = pressureResults[getFirstRandomTip].TIPS
+                    let firstTip = pressureResults[getFirstRandomTip]
                     let secondTip = false
                     let getSecondRandomTip = 0
                     while(!secondTip){
@@ -356,7 +328,7 @@ export const sendMoodReminder = async () => {
                         secondTip = true
                       }
                     }
-                    secondTip = pressureResults[getSecondRandomTip].TIPS
+                    secondTip = pressureResults[getSecondRandomTip]
 
                   const JSONpressureTips = {
                       "tip1":firstTip,
@@ -375,8 +347,7 @@ export const sendMoodReminder = async () => {
                           uid: moodJournal.uid
                       }
                   })
-                  }
-                  })    
+                  }  
                 }
               
               const payload = JSON.stringify({
