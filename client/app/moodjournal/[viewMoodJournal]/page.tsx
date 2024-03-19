@@ -79,37 +79,37 @@ export default function GetMoodJournal({
 						<b>I feel tired:</b> {mood.stressSignals.tired}
 					</Typography>
 					<Typography variant="body1" ml={4} color="black">
-						<b>I'm not sleeping well:</b> {mood.stressSignals.tired}
+						<b>I'm not sleeping well:</b> {mood.stressSignals.sleep}
 					</Typography>
 					<Typography variant="body1" ml={4} color="black">
-						<b>I'm not hungry:</b> {mood.stressSignals.tired}
+						<b>I'm not hungry:</b> {mood.stressSignals.hunger}
 					</Typography>
 					<Typography variant="body1" ml={4} color="black">
-						<b>I ate too much:</b> {mood.stressSignals.tired}
+						<b>I ate too much:</b> {mood.stressSignals.overeating}
 					</Typography>
 					<Typography variant="body1" ml={4} color="black">
 						<b>I feel sad or depressed:</b>{" "}
-						{mood.stressSignals.tired}
+						{mood.stressSignals.depressed}
 					</Typography>
 					<Typography variant="body1" ml={4} color="black">
 						<b>I feel like things are just too much:</b>{" "}
-						{mood.stressSignals.tired}
+						{mood.stressSignals.anxiety}
 					</Typography>
 					<Typography variant="body1" ml={4} color="black">
 						<b>I have trouble paying attention:</b>{" "}
-						{mood.stressSignals.tired}
+						{mood.stressSignals.attention}
 					</Typography>
 					<Typography variant="body1" ml={4} color="black">
 						<b>I feel nervous or anxious:</b>{" "}
-						{mood.stressSignals.tired}
+						{mood.stressSignals.anxiety}
 					</Typography>
 					<Typography variant="body1" ml={4} color="black">
 						<b>I feel angry or irritated:</b>{" "}
-						{mood.stressSignals.tired}
+						{mood.stressSignals.angry}
 					</Typography>
 					<Typography variant="body1" ml={4} color="black">
 						<b>I get headaches and/or colds:</b>{" "}
-						{mood.stressSignals.tired}
+						{mood.stressSignals.headache}
 					</Typography>
 					<Typography variant="body1" ml={4} color="black">
 						<b>Notes:</b> {mood.notes}
