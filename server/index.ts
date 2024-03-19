@@ -71,7 +71,7 @@ cron.schedule('*/10 * * * *', () => {
 
 
 // Schedule the mood journal reminder
-cron.schedule("* * * * *", () => {
+cron.schedule("*/30 * * * *", () => {
   sendMoodReminder();
 })
 
