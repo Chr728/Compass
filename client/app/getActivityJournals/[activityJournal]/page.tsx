@@ -43,9 +43,6 @@ export default function GetActivityJournal({params: { activityJournal } } : { pa
     }
   }, []);  
 
-  // if (!user) {
-  //   return <div><Custom403/></div>
-  // }
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
@@ -83,5 +80,4 @@ export default function GetActivityJournal({params: { activityJournal } } : { pa
       </div>
     </div>
   );
-// }
 }
