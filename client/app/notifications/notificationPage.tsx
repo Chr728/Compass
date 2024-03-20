@@ -39,6 +39,8 @@ export default function NotificationPage() {
   const [checkedInsulinInjectionReminders, setInsulinInjectionReminders] =
     React.useState(false);
 
+  const [moodJournalReminders, setMoodJournalReminders] = React.useState(false);
+
   const [checkedSubscriptionReminders, setSubscriptionReminders] =
     React.useState(false);
 
@@ -78,6 +80,12 @@ export default function NotificationPage() {
     setInsulinInjectionReminders(event.target.checked);
   };
 
+  const handleMoodJournalReminders = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setMoodJournalReminders(event.target.checked);
+  };
+
   const handleSubcriptionReminders = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -96,6 +104,7 @@ export default function NotificationPage() {
         foodIntakeReminders: false,
         glucoseMeasurementReminders: false,
         insulinDosageReminders: false,
+        moodReminders: false,
       };
       // Get current notification permissions
       if ("Notification" in window) {

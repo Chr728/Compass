@@ -201,6 +201,7 @@ const validInput = {
   foodIntakeReminders: true,
   insulinDosageReminders: true,
   glucoseMeasurementReminders: true,
+  moodReminders: false,
 };
 
 describe("Testing the update notificationPreference controller", () => {
