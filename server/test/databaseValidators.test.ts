@@ -11,7 +11,7 @@ import {
   diabeticInsulinJournalValidator,
   foodIntakeJournalValidator,
   o2SaturationJournalValidator,
-    bloodPressureJournalValidator
+  bloodPressureJournalValidator,
 } from "../utils/databaseValidators";
 
 type ValidatorFunction = (data: any) => void;
@@ -151,6 +151,7 @@ runTests({
     foodIntakeReminders: false,
     insulinDosageReminders: true,
     glucoseMeasurementReminders: false,
+    moodReminders: false,
   },
   invalidData: [
     {
@@ -161,6 +162,7 @@ runTests({
       foodIntakeReminders: false,
       insulinDosageReminders: true,
       glucoseMeasurementReminders: false,
+      moodReminders: false,
       incorrectData: "permissionGranted",
     },
     {
@@ -171,6 +173,7 @@ runTests({
       foodIntakeReminders: false,
       insulinDosageReminders: true,
       glucoseMeasurementReminders: false,
+      moodReminders: false,
       incorrectData: "activityReminders",
     },
     {
@@ -181,6 +184,7 @@ runTests({
       foodIntakeReminders: false,
       insulinDosageReminders: true,
       glucoseMeasurementReminders: false,
+      moodReminders: false,
       incorrectData: "medicationReminders",
     },
     {
@@ -191,6 +195,7 @@ runTests({
       foodIntakeReminders: false,
       insulinDosageReminders: true,
       glucoseMeasurementReminders: false,
+      moodReminders: false,
       incorrectData: "appointmentReminders",
     },
     {
@@ -201,6 +206,7 @@ runTests({
       foodIntakeReminders: "false",
       insulinDosageReminders: true,
       glucoseMeasurementReminders: false,
+      moodReminders: false,
       incorrectData: "foodIntakeReminders",
     },
     {
@@ -211,6 +217,7 @@ runTests({
       foodIntakeReminders: false,
       insulinDosageReminders: "true",
       glucoseMeasurementReminders: false,
+      moodReminders: false,
       incorrectData: "insulinDosageReminders",
     },
     {
@@ -221,7 +228,19 @@ runTests({
       foodIntakeReminders: false,
       insulinDosageReminders: true,
       glucoseMeasurementReminders: "false",
+      moodReminders: false,
       incorrectData: "glucoseMeasurementReminders",
+    },
+    {
+      permissionGranted: false,
+      activityReminders: true,
+      medicationReminders: true,
+      appointmentReminders: true,
+      foodIntakeReminders: false,
+      insulinDosageReminders: true,
+      glucoseMeasurementReminders: false,
+      moodReminders: "false",
+      incorrectData: "moodReminders",
     },
   ],
 });
@@ -853,7 +872,7 @@ runTests({
       date: 123,
       time: "14:30",
       systolic: 120,
-      diastolic: 'some string',
+      diastolic: "some string",
       pulse: 70,
       notes: "Feeling good after walking.",
       incorrectData: "date",

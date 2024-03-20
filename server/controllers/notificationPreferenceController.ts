@@ -24,17 +24,20 @@ export const createNotificationPreference = async (
       foodIntakeReminders,
       insulinDosageReminders,
       glucoseMeasurementReminders,
+      moodReminders,
     } = req.body;
     notificationPreferenceValidator(req.body);
     const createNotificationPreference = await db.NotificationPreference.create(
       {
         uid,
+        permissionGranted,
         activityReminders,
         medicationReminders,
         appointmentReminders,
         foodIntakeReminders,
         insulinDosageReminders,
         glucoseMeasurementReminders,
+        moodReminders,
       }
     );
 
@@ -115,6 +118,7 @@ export const updateNotificationPreference = async (
       foodIntakeReminders,
       insulinDosageReminders,
       glucoseMeasurementReminders,
+      moodReminders,
     } = req.body;
     notificationPreferenceValidator(req.body);
     const updatedNotificationPreference =
@@ -127,6 +131,7 @@ export const updateNotificationPreference = async (
           foodIntakeReminders,
           insulinDosageReminders,
           glucoseMeasurementReminders,
+          moodReminders,
         },
         { where: { uid } }
       );
