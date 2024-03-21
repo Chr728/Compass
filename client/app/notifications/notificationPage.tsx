@@ -125,6 +125,7 @@ export default function NotificationPage() {
                 setFoodIntakeReminders(false);
                 setBloodGlucoseReminders(false);
                 setInsulinInjectionReminders(false);
+                setMoodReminders(false);
                 const updatedData = {
                   permissionGranted: false,
                   activityReminders: checkedActivityReminders,

@@ -547,7 +547,7 @@ describe("Notification Page useEffect", () => {
         foodIntakeReminders: true,
         glucoseMeasurementReminders: true,
         insulinDosageReminders: true,
-        moodReminders: false,
+        moodReminders: true,
       },
     };
 
