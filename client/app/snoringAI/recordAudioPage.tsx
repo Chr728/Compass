@@ -196,6 +196,7 @@ export default function RecordAudioPage() {
     }
     
     
+    console.log(entries)
   return (
     <div className="bg-eggshell min-h-screen flex flex-col w-full overflow-y-auto">
         <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-2">
@@ -284,7 +285,7 @@ export default function RecordAudioPage() {
                     </p>
                 </div>
                 <div className='alternatingRowColor h-[440px]'>
-                    <TableContainer sx={{ maxHeight: 440 }}>
+                    <TableContainer sx={{ maxHeight: 300 }}>
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead>
                                 <TableRow>
