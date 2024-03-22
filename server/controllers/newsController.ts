@@ -1,8 +1,8 @@
-import { Response, NextFunction } from "express";
+import { Request, Response, NextFunction } from "express";
 import { Logger } from "../middlewares/logger";
 import { ErrorHandler } from "../middlewares/errorMiddleware";
 
-const getNews = async (res: Response, next: NextFunction) => {
+export const getNews = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const apiKey = process.env.NEWS_API_KEY;
         const response = await fetch(`https://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=${apiKey}`);
@@ -24,5 +24,3 @@ const getNews = async (res: Response, next: NextFunction) => {
         next(err);
     }
 };
-
-export default getNews;
