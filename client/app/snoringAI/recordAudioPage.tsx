@@ -7,6 +7,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { default as Image, default as NextImage } from "next/image";
 import { useRouter } from "next/navigation";
+import Peaks, { PeaksOptions } from "peaks.js";
 import { useEffect, useRef, useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import Swal from "sweetalert2";
@@ -25,7 +26,6 @@ import {
 	getAudioEntry,
 	sendAudio,
 } from "../http/snoreAPI";
-
 declare global {
 	interface Window {
 		webkitAudioContext: typeof AudioContext;
@@ -196,39 +196,84 @@ export default function RecordAudioPage() {
 		setRecordedAudioBlob(null);
 		setRecording(false);
 	};
-	const handlePlayClick = (audioBlobURL: string) => {
-		setSelectedAudioBlobURL(audioBlobURL);
-		Swal.fire({
-			html: `<audio controls><source src="${audioBlobURL}" type="audio/wav">Your browser does not support the audio element.</audio>`,
-			showConfirmButton: false,
-			showCloseButton: true,
-			customClass: {
-				popup: "my-custom-popup-class",
-				closeButton: "my-custom-close-button-class",
-			},
-		});
+	// const handlePlayClick = (audioBlobURL: string) => {
+	// 	setSelectedAudioBlobURL(audioBlobURL);
+	// 	Swal.fire({
+	// 		html: `<audio controls><source src="${audioBlobURL}" type="audio/wav">Your browser does not support the audio element.</audio>`,
+	// 		showConfirmButton: false,
+	// 		showCloseButton: true,
+	// 		customClass: {
+	// 			popup: "my-custom-popup-class",
+	// 			closeButton: "my-custom-close-button-class",
+	// 		},
+	// 	});
+	// };
+
+	// // Function to close modal and reset selected audio
+	// const handleCloseModal = () => {
+	// 	setSelectedAudioBlobURL(null);
+	// 	setIsModalOpen(false);
+	// };
+
+	// const renderAudioPlayer = () => {
+	// 	if (selectedAudioBlobURL) {
+	// 		return (
+	// 			<div className="audio-player">
+	// 				<audio controls>
+	// 					<source src={selectedAudioBlobURL} type="audio/wav" />
+	// 					Your browser does not support the audio element.
+	// 				</audio>
+	// 				<button onClick={handleCloseModal}>Close</button>
+	// 			</div>
+	// 		);
+	// 	}
+	// 	return null;
+	// };
+
+	const handlePlayClick = (audioBlobURL: string, binaryResult: string[]) => {
+		loadAudioAndRenderWaveform(audioBlobURL, binaryResult);
 	};
 
-	// Function to close modal and reset selected audio
-	const handleCloseModal = () => {
-		setSelectedAudioBlobURL(null);
-		setIsModalOpen(false);
-	};
+	const loadAudioAndRenderWaveform = (
+		audioBlobURL: string,
+		binaryResult: string[]
+	) => {
+		const zoomviewContainer = document.getElementById("zoomview-container");
+		const overviewContainer = document.getElementById("overview-container");
 
-	const renderAudioPlayer = () => {
-		if (selectedAudioBlobURL) {
-			return (
-				<div className="audio-player">
-					<audio controls>
-						<source src={selectedAudioBlobURL} type="audio/wav" />
-						Your browser does not support the audio element.
-					</audio>
-					<button onClick={handleCloseModal}>Close</button>
-				</div>
-			);
+		if (!zoomviewContainer || !overviewContainer) {
+			console.error("Error: Zoomview or Overview container not found.");
+			return;
 		}
-		return null;
+
+		const options: PeaksOptions = {
+			// Add other Peaks.js configuration options as needed
+		};
+
+		Peaks.init(options, (error: any, peaksInstance: any) => {
+			if (error) {
+				console.error("Error initializing Peaks.js:", error);
+			} else {
+				console.log("Peaks.js initialized successfully");
+				peaksInstance.load([audioBlobURL]);
+				const hasSnoringDetected = binaryResult.some(
+					(value) => parseInt(value) === 1
+				);
+				if (hasSnoringDetected) {
+					peaksInstance.zoomview.setWaveformColor("green");
+				} else {
+					peaksInstance.zoomview.setWaveformColor("red");
+				}
+			}
+		});
+
+		// // Set containers after initialization
+		// if (Peaks.options && Peaks.options.containers) {
+		// 	Peaks.options.containers.zoomview = zoomviewContainer;
+		// 	Peaks.options.containers.overview = overviewContainer;
+		// }
 	};
+
 	const handleSubmit = async () => {
 		const existingAudioData = JSON.parse(
 			localStorage.getItem("savedAudio") || "[]"
@@ -251,9 +296,7 @@ export default function RecordAudioPage() {
 				const data = {
 					date: currentRecordingDate,
 					filename: blobURL,
-					result: snoringDetected
-						? "Snoring detected"
-						: "No Snoring Detected",
+					result: JSON.stringify(resultsArray),
 				};
 				const result = await createAudioEntry(data);
 
@@ -397,8 +440,13 @@ export default function RecordAudioPage() {
 														scope="row">
 														{formatDate(row.date)}
 													</TableCell>
+
 													<TableCell>
-														{row.result}
+														{JSON.parse(
+															row.result
+														).includes(1)
+															? "Snoring Detected"
+															: "No Snoring Detected"}
 													</TableCell>
 													<TableCell>
 														<div className="flex items-center">
@@ -415,10 +463,17 @@ export default function RecordAudioPage() {
 																}}
 																onClick={() =>
 																	handlePlayClick(
-																		row.filename
+																		row.filename,
+																		JSON.parse(
+																			row.binaryResult
+																		)
 																	)
 																}
 															/>
+															<div id="waveform-container">
+																<div id="zoomview-container"></div>
+																<div id="overview-container"></div>
+															</div>
 															<Image
 																src="/icons/trash.svg"
 																alt="Trash icon"
