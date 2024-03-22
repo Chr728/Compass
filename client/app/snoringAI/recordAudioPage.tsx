@@ -178,12 +178,11 @@ export default function RecordAudioPage() {
                 const response = await sendAudio(recordedAudioBlob);
                 const results = await response.json();
                 const resultsArray = results.results;
-                const snoringDetected = resultsArray.includes(1);
-
+                
                 const data = {
                     date: currentRecordingDate,
                     filename: blobURL,
-                    result: snoringDetected ? 'Snoring detected':'No Snoring Detected'
+                    result: JSON.stringify(resultsArray)
                   };
                 const result = await createAudioEntry(data);
                
@@ -195,6 +194,7 @@ export default function RecordAudioPage() {
               }
         }
     }
+    
     
   return (
     <div className="bg-eggshell min-h-screen flex flex-col w-full overflow-y-auto">
@@ -313,7 +313,7 @@ export default function RecordAudioPage() {
                                         <TableCell component="th" scope="row">
                                             {formatDate(row.date)}
                                         </TableCell>
-                                        <TableCell >{row.result}</TableCell>
+                                        <TableCell >{JSON.parse(row.result).includes(1) ? 'Snoring Detected' : 'No Snoring Detected'}</TableCell>
                                         <TableCell >
                                             <div className="flex items-center">
                                             <Image 
