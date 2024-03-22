@@ -87,6 +87,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
         foreignKey: "uid",
         sourceKey: "uid",
       });
+
+      User.hasOne(models.HealthTips, {
+        foreignKey: "uid",
+        sourceKey: "uid",
+      });
     
     }
   }
