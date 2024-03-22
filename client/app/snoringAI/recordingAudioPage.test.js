@@ -63,7 +63,7 @@ describe ("Logged in user", () => {
             uid: 1,
             date: "2024-01-01T00:00:00.000Z",
             filename: "Dummy file name",
-            result: "Snoring Detected",
+            result: "[0,1]",
           }
         ]
       });
@@ -83,7 +83,7 @@ describe ("Logged in user", () => {
             uid: 1,
             date: "2024-01-01T00:00:00.000Z",
             filename: "Dummy file name",
-            result: "Snoring Detected",
+            result: "[1]",
           }
         ]
       });
