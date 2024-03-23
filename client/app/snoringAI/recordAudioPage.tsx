@@ -7,6 +7,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { default as Image, default as NextImage } from "next/image";
 import { useRouter } from "next/navigation";
+import Peaks from "peaks.js";
 import { useEffect, useRef, useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import Swal from "sweetalert2";
@@ -25,8 +26,21 @@ import {
 	getAudioEntry,
 	sendAudio,
 } from "../http/snoreAPI";
-
+declare global {
+	interface Window {
+		webkitAudioContext: typeof AudioContext;
+	}
+}
 export default function RecordAudioPage() {
+	const peaksRef = useRef(null);
+	const [audio, setaudio] = useState<any>(null);
+	const waveformContainerRef = useRef(null);
+	const [selectedAudioBlobURL, setSelectedAudioBlobURL] = useState<
+		string | null
+	>(null);
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const audioRef = useRef(null); // Create a ref for the audio element
+
 	const logger = require("../../logger");
 	const { user } = useAuth();
 	const { handlePopUp } = useProp();
@@ -115,6 +129,12 @@ export default function RecordAudioPage() {
 				const entryData = await getAudioEntries();
 				logger.info("All entries retrieved:", entryData.data);
 				setEntries(entryData.data);
+				console.log("Adir", entryData.data);
+				const audioURL = entryData.data.filename;
+				const binaryResult = entryData.data.result;
+
+				loadAudioAndRenderWaveform(audioURL, binaryResult);
+				setaudio(URL.createObjectURL(entryData.data));
 			} catch (error) {
 				logger.error("Error fetching journal", error);
 			}
@@ -182,6 +202,51 @@ export default function RecordAudioPage() {
 		setRecording(false);
 	};
 
+	const handlePlayClick = (audioBlobURL: string, binaryResult: string[]) => {
+		loadAudioAndRenderWaveform(audioBlobURL, binaryResult);
+	};
+
+	const loadAudioAndRenderWaveform = (
+		audioBlobURL: string,
+		binaryResult: string[]
+	) => {
+		const overviewContainer = document.getElementById("overview-container");
+
+		if (!overviewContainer) {
+			console.error("Error: Overview container not found.");
+			return;
+		}
+
+		const audioElement = new Audio(audioBlobURL);
+
+		audioElement.addEventListener("loadedmetadata", () => {
+			Peaks.init({}, (error: any, peaksInstance: any) => {
+				if (error) {
+					console.error("Error initializing Peaks.js:", error);
+				} else {
+					console.log("Peaks.js initialized successfully");
+					peaksInstance.load([audioBlobURL]);
+					const hasSnoringDetected = binaryResult.some(
+						(value) => parseInt(value) === 1
+					);
+					if (hasSnoringDetected) {
+						peaksInstance.zoomview.setWaveformColor("green");
+					} else {
+						peaksInstance.zoomview.setWaveformColor("red");
+					}
+				}
+			});
+		});
+
+		audioElement.load();
+	};
+
+	console.log("HEEEEEEEEEE", entries);
+	// loadAudioAndRenderWaveform(
+	// 	URL.createObjectURL(entryData.data.filename),
+	// 	entryData.data.result
+	// );
+
 	const handleSubmit = async () => {
 		const existingAudioData = JSON.parse(
 			localStorage.getItem("savedAudio") || "[]"
@@ -199,7 +264,8 @@ export default function RecordAudioPage() {
 				const response = await sendAudio(recordedAudioBlob);
 				const results = await response.json();
 				const resultsArray = results.results;
-
+				const snoringDetected = resultsArray.includes(1);
+				console.log("JIAYI ", results);
 				const data = {
 					date: currentRecordingDate,
 					filename: blobURL,
@@ -333,12 +399,9 @@ export default function RecordAudioPage() {
 														{formatDate(row.date)}
 													</TableCell>
 													<TableCell>
-														{JSON.parse(
-															row.result
-														).includes(1)
-															? "Snoring Detected"
-															: "No Snoring Detected"}
+														{row.result}
 													</TableCell>
+
 													<TableCell>
 														<div className="flex items-center">
 															<Image
@@ -350,8 +413,21 @@ export default function RecordAudioPage() {
 																style={{
 																	width: "auto",
 																	height: "auto",
+																	cursor: "pointer",
 																}}
+																onClick={() =>
+																	handlePlayClick(
+																		row.filename,
+																		JSON.parse(
+																			row.result
+																		)
+																	)
+																}
 															/>
+															<div id="waveform-container">
+																<div id="overview-container"></div>
+															</div>
+
 															<Image
 																src="/icons/trash.svg"
 																alt="Trash icon"
@@ -374,7 +450,7 @@ export default function RecordAudioPage() {
 														</div>
 													</TableCell>
 												</TableRow>
-											))}
+											))}{" "}
 									</TableBody>
 								</Table>
 							</TableContainer>
@@ -385,6 +461,7 @@ export default function RecordAudioPage() {
 		</div>
 	);
 }
+
 // "use client";
 // import Table from "@mui/material/Table";
 // import TableBody from "@mui/material/TableBody";
@@ -394,7 +471,7 @@ export default function RecordAudioPage() {
 // import TableRow from "@mui/material/TableRow";
 // import { default as Image, default as NextImage } from "next/image";
 // import { useRouter } from "next/navigation";
-// import Peaks, { PeaksOptions } from "peaks.js";
+// import Peaks from "peaks.js";
 // import { useEffect, useRef, useState } from "react";
 // import { MdKeyboardArrowDown } from "react-icons/md";
 // import Swal from "sweetalert2";
@@ -426,6 +503,7 @@ export default function RecordAudioPage() {
 // 		string | null
 // 	>(null);
 // 	const [isModalOpen, setIsModalOpen] = useState(false);
+// 	const audioRef = useRef(null); // Create a ref for the audio element
 
 // 	const logger = require("../../logger");
 // 	const { user } = useAuth();
@@ -616,6 +694,38 @@ export default function RecordAudioPage() {
 // 	// 	}
 // 	// 	return null;
 // 	// };
+// 	useEffect(() => {
+// 		if (audio) {
+// 			const audioContext = new (window.AudioContext ||
+// 				window.webkitAudioContext)();
+// 			fetch(audio)
+// 				.then((response) => response.arrayBuffer())
+// 				.then((arrayBuffer) =>
+// 					audioContext.decodeAudioData(arrayBuffer)
+// 				)
+// 				.then((audioBuffer) => {
+// 					const audioElement = document.querySelector("#my-audio");
+// 					if (audioElement) {
+// 						Peaks.init(
+// 							{
+// 								container: waveformContainerRef.current,
+// 								mediaElement: audioElement,
+// 								audioBuffer: audioBuffer,
+// 							} as any,
+// 							function (err, peaks) {
+// 								if (err) {
+// 									logger.error(
+// 										"Failed to initialize Peaks:",
+// 										err
+// 									);
+// 									return;
+// 								}
+// 							}
+// 						);
+// 					}
+// 				});
+// 		}
+// 	}, [audio]);
 
 // 	const handlePlayClick = (audioBlobURL: string, binaryResult: string[]) => {
 // 		loadAudioAndRenderWaveform(audioBlobURL, binaryResult);
@@ -625,24 +735,19 @@ export default function RecordAudioPage() {
 // 		audioBlobURL: string,
 // 		binaryResult: string[]
 // 	) => {
-// 		const zoomviewContainer = document.getElementById("zoomview-container");
 // 		const overviewContainer = document.getElementById("overview-container");
 
-// 		if (!zoomviewContainer || !overviewContainer) {
-// 			console.error("Error: Zoomview or Overview container not found.");
-// 			return;
+// 		if (!overviewContainer) {
+// 			console.error("Error: Overview container not found.");
+// 			return null;
 // 		}
 
-// 		const options: PeaksOptions = {
-// 			// Add other Peaks.js configuration options as needed
-// 		};
-
-// 		Peaks.init(options, (error: any, peaksInstance: any) => {
+// 		Peaks.init({}, (error: any, peaksInstance: any) => {
 // 			if (error) {
 // 				console.error("Error initializing Peaks.js:", error);
 // 			} else {
 // 				console.log("Peaks.js initialized successfully");
-// 				peaksInstance.load([audioBlobURL]);
+// 				peaksInstance.load(audioBlobURL);
 // 				const hasSnoringDetected = binaryResult.some(
 // 					(value) => parseInt(value) === 1
 // 				);
@@ -654,11 +759,8 @@ export default function RecordAudioPage() {
 // 			}
 // 		});
 
-// 		// // Set containers after initialization
-// 		// if (Peaks.options && Peaks.options.containers) {
-// 		// 	Peaks.options.containers.zoomview = zoomviewContainer;
-// 		// 	Peaks.options.containers.overview = overviewContainer;
-// 		// }
+// 		// Return null temporarily, as the Peaks waveform will be initialized asynchronously
+// 		return null;
 // 	};
 
 // 	const handleSubmit = async () => {
@@ -703,7 +805,7 @@ export default function RecordAudioPage() {
 // 				</button>
 // 			</span>
 
-// 			<div id="my-audio">
+// 			{/* <div id="my-audio">
 // 				{audio && (
 // 					<div ref={waveformContainerRef}>
 // 						<p>Recorded Audio:</p>
@@ -716,7 +818,7 @@ export default function RecordAudioPage() {
 // 						</audio>
 // 					</div>
 // 				)}{" "}
-// 			</div>
+// 			</div> */}
 
 // 			<div className="flex flex-col justify-center">
 // 				{(recording || itemRecorded) && (
@@ -827,14 +929,10 @@ export default function RecordAudioPage() {
 // 														scope="row">
 // 														{formatDate(row.date)}
 // 													</TableCell>
-
 // 													<TableCell>
-// 														{JSON.parse(
-// 															row.result
-// 														).includes(1)
-// 															? "Snoring Detected"
-// 															: "No Snoring Detected"}
+// 														{row.result}
 // 													</TableCell>
+
 // 													<TableCell>
 // 														<div className="flex items-center">
 // 															<Image
@@ -852,15 +950,21 @@ export default function RecordAudioPage() {
 // 																	handlePlayClick(
 // 																		row.filename,
 // 																		JSON.parse(
-// 																			row.binaryResult
+// 																			row.result
 // 																		)
 // 																	)
 // 																}
 // 															/>
 // 															<div id="waveform-container">
-// 																<div id="zoomview-container"></div>
 // 																<div id="overview-container"></div>
+// 																{loadAudioAndRenderWaveform(
+// 																	row.filename,
+// 																	JSON.parse(
+// 																		row.result
+// 																	)
+// 																)}
 // 															</div>
+
 // 															<Image
 // 																src="/icons/trash.svg"
 // 																alt="Trash icon"

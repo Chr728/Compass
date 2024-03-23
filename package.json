@@ -1,5 +1,7 @@
 {
   "dependencies": {
-    "peaks.js": "^3.3.0"
+    "konva": "^9.3.6",
+    "peaks.js": "^3.3.0",
+    "waveform-data": "^4.5.0"
   }
 }
