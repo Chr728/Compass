@@ -77,7 +77,7 @@ describe("User is logged in", () => {
 		});
 	});
 
-	test("Add an entry button  functions correctly", async () => {
+	test("Add an entry button functions correctly", async () => {
 		setTimeout(() => {
 			const addButton = screen.getAllByRole("button")[1];
 			userEvent.click(addButton);
