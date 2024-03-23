@@ -94,7 +94,7 @@ export default function HealthNews() {
                   <img
                     src={item.urlToImage}
                     alt={item.title}
-                    className="w-full max-w-[400px] mb-2 rounded-lg cursor-pointer"
+                    className="w-full max-w-[400px] mb-2 ml-2 rounded-lg cursor-pointer"
                   />
                 </a>
                 <div className="text-center">
