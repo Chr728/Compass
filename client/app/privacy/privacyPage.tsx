@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import Header from "../components/Header";
 import { useUser } from "../contexts/UserContext";
 
-export default function AboutUsPage() {
+export default function PrivacyPage() {
 	const logger = require("../../logger");
 	const router = useRouter();
 	const { userInfo } = useUser();

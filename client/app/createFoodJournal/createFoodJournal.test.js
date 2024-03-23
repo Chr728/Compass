@@ -8,6 +8,15 @@ import CreateFoodJournalPage from "./createFoodJournalPage";
 const fakeUser = {
 	uid: "1",
 };
+
+jest.mock('next/navigation', () => ({
+  useSearchParams: () =>{
+    return {
+        get: useSearchParams
+    }
+  }
+}));
+
 jest.mock("../contexts/AuthContext", () => {
 	return {
 		useAuth: () => {
@@ -17,8 +26,8 @@ jest.mock("../contexts/AuthContext", () => {
 		},
 	};
 });
-
 const mockRouter = jest.fn();
+const mockSearchParams = jest.fn();
 
 jest.mock("next/navigation", () => ({
 	useRouter: () => {
@@ -26,10 +35,15 @@ jest.mock("next/navigation", () => ({
 			push: mockRouter,
 		};
 	},
+	useSearchParams: () => {
+		return {
+			get: mockSearchParams
+		}
+	},
 }));
-
 describe("Food journal tests", () => {
 	beforeEach(() => {
+		// Setup fetch mock
 		global.fetch = jest.fn();
 	});
 
@@ -192,3 +206,11 @@ describe("Food journal tests", () => {
 		expect(mockRouter).toHaveBeenCalledWith("/getFoodJournals");
 	});
 });
+
+test("Back button redirects to getFoodJournals page", async () => {
+	render(<CreateFoodJournalPage/>);
+	const backButton = screen.getAllByRole('button')[0];
+	await userEvent.click(backButton);
+	await mockRouter;
+	expect(mockRouter).toHaveBeenCalledWith('/getFoodJournals');
+})

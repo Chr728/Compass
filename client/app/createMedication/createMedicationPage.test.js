@@ -229,3 +229,11 @@ describe("Medication tests for logged in user", () => {
     expect(mockRouter).toHaveBeenCalledWith("/getMedications");
   });
 });
+
+test("Back button redirects to getMedications page", async () => {
+  render(<CreateMedicationPage/>);
+  const backButton = screen.getAllByRole('button')[0];
+  await userEvent.click(backButton);
+  await mockRouter;
+  expect(mockRouter).toHaveBeenCalledWith('/getMedications');
+})
