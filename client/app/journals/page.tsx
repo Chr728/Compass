@@ -9,7 +9,6 @@ import mood from "../../public/mood.svg";
 import weight from "../../public/weight.svg";
 import bloodPressure from "../../public/bloodPressure.svg";
 import Header from "../components/Header";
-import healthtip from "../../public/healthtip-icon.jpg";
 import introJs from "intro.js";
 
 export default function Journal() {
@@ -169,28 +168,6 @@ export default function Journal() {
               <NextImage
                 src={bloodPressure}
                 alt="blood pressure journal"
-                width={113}
-                height={80}
-                className="absolute top-0 right-0 ml-16 transform -scale-x-100 shrink-0"
-              />
-            </div>
-          </div>
-        </Link>
-        <Link href="/healthtips">
-          <div
-            className="rounded-3xl relative flex flex-col w-full md:max-w-[800px] md:h-[600px] p-5 "
-            style={{ backgroundColor: "#EA9292" }}
-          >
-            <div>
-              <p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
-                Health Tips
-              </p>
-              <p className="text-[14px] text-white pr-20 font-IBM Plex Sans  text-start">
-                Check your tips to improve your day.
-              </p>
-              <NextImage
-                src={healthtip}
-                alt="health tips"
                 width={113}
                 height={80}
                 className="absolute top-0 right-0 ml-16 transform -scale-x-100 shrink-0"

@@ -69,14 +69,6 @@ describe("Proper displayment of all journals", () => {
     expect(message1).toBeInTheDocument();
   });
 
-  test("Health tips Message displayed", async () => {
-    render(<Journals />);
-    const message = screen.getByText(/Health Tips/i);
-    expect(message).toBeInTheDocument();
-    const message1 = screen.getByText(/Check your tips to improve your day./i);
-    expect(message1).toBeInTheDocument();
-  });
-
   test("link redirects to weight journals page", async () => {
     render(<Journals />);
     const linkElement = screen.getAllByRole("link")[2];
@@ -117,11 +109,5 @@ describe("Proper displayment of all journals", () => {
     render(<Journals />);
     const linkElement = screen.getAllByRole("link")[6];
     expect(linkElement).toHaveAttribute("href", "/getBloodPressureJournals");
-  });
-
-  test("link redirects to health tips page", async () => {
-    render(<Journals />);
-    const linkElement = screen.getAllByRole("link")[7];
-    expect(linkElement).toHaveAttribute("href", "/healthtips");
   });
 });
