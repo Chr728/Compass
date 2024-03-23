@@ -9,6 +9,7 @@ import medications from '../../public/medications.svg';
 import medVault from '../../public/documents.svg';
 import locator from '../../public/locator.png';
 import snore from '../../public/snore.svg';
+import ambulance from '../../public/ambulance.svg';
 import Header from '../components/Header';
 import Custom403 from '../pages/403';
 
@@ -168,8 +169,18 @@ export default function Health() {
 							}}>
 							<div>
 								<p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
-									Emergency Room Situation
+									Emergency Rooms
 								</p>
+								<p className="text-[14px] text-white pr-20 font-IBM Plex Sans  text-start">
+									The situation at ERs near you.
+								</p>
+								<NextImage
+									src={ambulance}
+									alt="ambulance"
+									height={60}
+									className="absolute inset-y-0 right-4 shrink-0"
+									style={{ top: "18px" }}
+								/>
 							</div>
 						</div>
 					</Link>

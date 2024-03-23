@@ -1,8 +1,55 @@
 import "@testing-library/jest-dom";
+import userEvent from '@testing-library/user-event';
+import { useRouter } from 'next/router';
+import { useAuth } from '../contexts/AuthContext';
 import { render, screen } from "@testing-library/react";
+import PrivacyPage from "./privacyPage";
+
+jest.mock("../contexts/PropContext", () => ({
+  __esModule: true,
+  useProp: jest.fn(() => ({
+    handlePopUp: jest.fn(),
+  })),
+}));
+
+const fakeUser = {
+  uid: "1"
+}
+
+jest.mock('../contexts/AuthContext', () => {
+  return {
+      useAuth: () => {
+          return {
+              user : fakeUser
+          }
+      }
+  }
+});
+
+const mockRouter= jest.fn();
+
+jest.mock("next/navigation", () => ({
+  useRouter: () => {
+      return {
+          push: mockRouter
+      }
+  }
+}));
+
+jest.mock("../contexts/UserContext", () => {
+  return {
+    useUser: () =>{
+      return {
+          userInfo: {
+              uid: '1',
+          }
+      }
+    }
+  };
+});
 
 test("data is displayed correctly", async () => {
-	render(<privacyPage />);
+	render(<PrivacyPage />);
 	setTimeout(() => {
 		expect(
 			screen.getByText(
@@ -13,7 +60,7 @@ test("data is displayed correctly", async () => {
 });
 
 test("data is displayed correctly", async () => {
-	render(<privacyPage />);
+	render(<PrivacyPage />);
 	setTimeout(() => {
 		expect(
 			screen.getByText(
@@ -22,3 +69,11 @@ test("data is displayed correctly", async () => {
 		).toBeInTheDocument();
 	}, 1000);
 });
+
+test("Back button redirects to settings page", async () => {
+	render(<PrivacyPage/>);
+	const backButton = screen.getAllByRole('button')[0];
+	await userEvent.click(backButton);
+	await mockRouter;
+	expect(mockRouter).toHaveBeenCalledWith('/settings');
+})

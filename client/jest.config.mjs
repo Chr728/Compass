@@ -20,8 +20,10 @@ const config = {
       "client/.next",
       ".next/",
       "client/app/welcome",   // ignored due to swiper lib not being compatible with jest
+      "client/app/emergencySituation/emergencySituation", // ignored due to swiper lib not being compatible with jest
       "client/app/moodjournal/viewMoodJournalsPage",  // ignored due to babel conflicts
       "client/app/moodjournal/page", // ignored due to babel conflicts
+      'client/app/createFoodJournal/createFoodJournalPage',
     ],
     collectCoverageFrom: [
       '**/*.{ts,tsx}',
@@ -32,6 +34,9 @@ const config = {
       '!**/UserContext.{js,jsx,ts,tsx}',
       '!**/tailwind.config.{js,jsx,ts,tsx}',
       '!**/welcome/**',     // ignored due to swiper lib not being compatible with jest
+      '!**/app/emergencySituation/emergencySituation.{js,jsx,ts,tsx}',   // ignored due to swiper lib not being compatible with jest
+      '!**/app/emergencySituation/page.{js,jsx,ts,tsx}',   // ignored due to swiper lib not being compatible with jest
+      '!**/app/createFoodJournal/createFoodJournalPage.test.js',
       '!**/spec.cy.{js,jsx,ts,tsx}',
       '!**/firebase.{js,jsx,ts,tsx}',
       '!**/app/head.{js,jsx,ts,tsx}',

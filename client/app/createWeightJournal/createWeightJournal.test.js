@@ -223,3 +223,11 @@ describe("weight journal tests", () => {
 		expect(mockRouter).toHaveBeenCalledWith("/getWeightJournals");
 	});
 });
+
+test("Back button redirects to getWeightJournals page", async () => {
+	render(<CreateWeightJournalPage/>);
+	const backButton = screen.getAllByRole('button')[0];
+	await userEvent.click(backButton);
+	await mockRouter;
+	expect(mockRouter).toHaveBeenCalledWith('/getWeightJournals');
+})

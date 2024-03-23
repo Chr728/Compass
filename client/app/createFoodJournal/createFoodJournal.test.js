@@ -4,9 +4,19 @@ import userEvent from "@testing-library/user-event";
 import { auth } from "../config/firebase";
 import { createFoodIntakeJournal } from "../http/foodJournalAPI";
 import CreateFoodJournalPage from "./createFoodJournalPage";
+
 const fakeUser = {
 	uid: "1",
 };
+
+jest.mock('next/navigation', () => ({
+  useSearchParams: () =>{
+    return {
+        get: useSearchParams
+    }
+  }
+}));
+
 jest.mock("../contexts/AuthContext", () => {
 	return {
 		useAuth: () => {
@@ -196,3 +206,11 @@ describe("Food journal tests", () => {
 		expect(mockRouter).toHaveBeenCalledWith("/getFoodJournals");
 	});
 });
+
+test("Back button redirects to getFoodJournals page", async () => {
+	render(<CreateFoodJournalPage/>);
+	const backButton = screen.getAllByRole('button')[0];
+	await userEvent.click(backButton);
+	await mockRouter;
+	expect(mockRouter).toHaveBeenCalledWith('/getFoodJournals');
+})
