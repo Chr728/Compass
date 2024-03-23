@@ -4,15 +4,17 @@ import userEvent from "@testing-library/user-event";
 import { auth } from "../config/firebase";
 import { createFoodIntakeJournal } from "../http/foodJournalAPI";
 import CreateFoodJournalPage from "./createFoodJournalPage";
-import { useSearchParams } from "next/navigation";
 
 const fakeUser = {
 	uid: "1",
 };
 
 jest.mock('next/navigation', () => ({
-  ...jest.requireActual('next/navigation'),
-  useSearchParams: jest.fn(),
+  useSearchParams: () =>{
+    return {
+        get: useSearchParams
+    }
+  }
 }));
 
 jest.mock("../contexts/AuthContext", () => {

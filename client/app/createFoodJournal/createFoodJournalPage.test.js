@@ -4,6 +4,16 @@ import { useAuth } from '../contexts/AuthContext';
 import { createFoodIntakeJournal } from '../http/foodJournalAPI.ts';
 import CreateFoodJournal from './page.tsx';
 
+const useSearchParams = jest.fn();
+
+jest.mock('next/navigation', () => ({
+  useSearchParams: () =>{
+    return {
+        get: useSearchParams
+    }
+  }
+}));
+
 jest.mock("../contexts/PropContext", () => ({
   __esModule: true,
   useProp: jest.fn(() => ({
