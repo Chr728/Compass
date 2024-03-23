@@ -17,16 +17,6 @@ export default function DisplayResults() {
         }
     }, [user, router]);
 
-    const lineStyle: React.CSSProperties = {
-        width: '300px',
-        borderTop: '1px solid #756F85',
-        borderLeft: '1px solid #756F85',
-        borderBottom: '1px solid #756F85',
-        top: '249px',
-        left: '38px',
-        position: 'absolute',
-        color: '#756F85'
-      };
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col relative">
