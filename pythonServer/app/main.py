@@ -242,7 +242,6 @@ async def snoring_predict(file: UploadFile = File(...)):
         return JSONResponse(status_code=200, content=result)
         
     except Exception as e:
-        print(e)
         raise HTTPException(status_code=500, detail=f"Error: HTTPException")
     
 @app.post("/SymptomChecker")
@@ -254,7 +253,6 @@ async def symptom_predict(item: Item):
         return JSONResponse(status_code=200, content=result)
 
     except Exception as e:
-        print(e)
         raise HTTPException(status_code=500, detail=f"Error: HTTPException")
 
 # CORS middleware setup
