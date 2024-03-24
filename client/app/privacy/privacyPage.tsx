@@ -447,7 +447,7 @@ export default function PrivacyPage() {
 					soen4901medicalapp@gmail.com
 				</div>
 				<p className={"w-full h-full text-grey text-center mt-32"}>
-					&copy; Compass 2023
+					&copy; Compass 2024
 				</p>
 			</div>
 		</div>
