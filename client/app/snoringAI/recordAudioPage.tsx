@@ -1,11 +1,11 @@
 "use client";
-import localforage from 'localforage';
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import localforage from "localforage";
 import { default as Image, default as NextImage } from "next/image";
 import { useRouter } from "next/navigation";
 import Peaks from "peaks.js";
@@ -27,11 +27,15 @@ import {
 	getAudioEntry,
 	sendAudio,
 } from "../http/snoreAPI";
+import "./WaveformView.css";
+
+<script src="https://unpkg.com/peaks.js/dist/peaks.js"></script>;
 declare global {
 	interface Window {
 		webkitAudioContext: typeof AudioContext;
 	}
 }
+
 export default function RecordAudioPage() {
 	const peaksRef = useRef(null);
 	const [audio, setaudio] = useState<any>(null);
@@ -134,7 +138,7 @@ export default function RecordAudioPage() {
 				console.log("Adir", entryData.data);
 				const audioURL = entryData.data.filename;
 				const binaryResult = entryData.data.result;
-				console.log(audioURL, binaryResult)
+				console.log(audioURL, binaryResult);
 
 				// loadAudioAndRenderWaveform(audioURL, binaryResult);
 				setaudio(URL.createObjectURL(entryData.data));
@@ -176,7 +180,7 @@ export default function RecordAudioPage() {
 					// Save the Blob in IndexedDB with the timestamp as the key
 					await localforage.setItem(timestamp, audioBlob);
 					setRecordedAudioBlob(audioBlob);
-					setTimestamp(timestamp);				// save the timestamp to be used later in submission if it happens
+					setTimestamp(timestamp); // save the timestamp to be used later in submission if it happens
 				}
 			};
 
@@ -203,19 +207,27 @@ export default function RecordAudioPage() {
 			}
 		}
 	};
-
 	const handleCancelClick = () => {
 		setItemRecorded(false);
 		setRecordedAudioBlob(null);
 		setRecording(false);
 	};
 
-	const handlePlayClick = async (audioTimestamp: string, binaryResult: string[]) => {
+	console.log("HEEEEEEEEEE", entries);
+	// loadAudioAndRenderWaveform(
+	// 	URL.createObjectURL(entryData.data.filename),
+	// 	entryData.data.result
+	// );
+
+	const handlePlayClick = async (
+		audioTimestamp: string,
+		binaryResult: string[]
+	) => {
 		console.log("Filename: ", audioTimestamp);
 		console.log("Result: ", binaryResult);
 		// Retrieve the audio blob from IndexedDB
-		const audioBlob = await localforage.getItem(audioTimestamp) as Blob;
-		console.log("AudioBlob: ", audioBlob)
+		const audioBlob = (await localforage.getItem(audioTimestamp)) as Blob;
+		console.log("AudioBlob: ", audioBlob);
 
 		// Create a URL for the blob
 		const blobURL = URL.createObjectURL(audioBlob);
@@ -225,53 +237,47 @@ export default function RecordAudioPage() {
 
 		// Play the audio
 		audioElement.play();
-		// loadAudioAndRenderWaveform(audioTimestamp, binaryResult);
+		loadAudioAndRenderWaveform(audioTimestamp, binaryResult);
 	};
 
-	// const loadAudioAndRenderWaveform = async (
-	// 	audioTimestamp: string,
-	// 	binaryResult: string[]
-	// ) => {
-	// 	const overviewContainer = document.getElementById("overview-container");
-	// 	console.log("audioTimestamp", audioTimestamp);
-	// 	const audioBlob = await localforage.getItem(audioTimestamp) as Blob;
-	// 	if (!overviewContainer) {
-	// 		console.error("Error: Overview container not found.");
-	// 		return;
-	// 	}
+	const loadAudioAndRenderWaveform = async (
+		audioTimestamp: string,
+		binaryResult: string[]
+	) => {
+		const overviewContainer = document.getElementById("overview-container");
+		console.log("audioTimestamp", audioTimestamp);
+		const audioBlob = (await localforage.getItem(audioTimestamp)) as Blob;
+		if (!overviewContainer) {
+			console.error("Error: Overview container not found.");
+			return;
+		}
 
-	// 	// Create an audio element and load the audio blob
-	// 	console.log(audioBlob);
-	// 	const blobURL = URL.createObjectURL(audioBlob);
-	// 	const audioElement = new Audio(blobURL);
+		// Create an audio element and load the audio blob
+		console.log(audioBlob);
+		const blobURL = URL.createObjectURL(audioBlob);
+		const audioElement = new Audio(blobURL);
 
-	// 	audioElement.addEventListener("loadedmetadata", () => {
-	// 		Peaks.init({}, (error: any, peaksInstance: any) => {
-	// 			if (error) {
-	// 				console.error("Error initializing Peaks.js:", error);
-	// 			} else {
-	// 				console.log("Peaks.js initialized successfully");
-	// 				peaksInstance.load([audioTimestamp]);
-	// 				const hasSnoringDetected = binaryResult.some(
-	// 					(value) => parseInt(value) === 1
-	// 				);
-	// 				if (hasSnoringDetected) {
-	// 					peaksInstance.zoomview.setWaveformColor("green");
-	// 				} else {
-	// 					peaksInstance.zoomview.setWaveformColor("red");
-	// 				}
-	// 			}
-	// 		});
-	// 	});
+		audioElement.addEventListener("loadedmetadata", () => {
+			Peaks.init({}, (error: any, peaksInstance: any) => {
+				if (error) {
+					console.error("Error initializing Peaks.js:", error);
+				} else {
+					console.log("Peaks.js initialized successfully");
+					peaksInstance.load([audioTimestamp]);
+					const hasSnoringDetected = binaryResult.some(
+						(value) => parseInt(value) === 1
+					);
+					if (hasSnoringDetected) {
+						peaksInstance.zoomview.setWaveformColor("green");
+					} else {
+						peaksInstance.zoomview.setWaveformColor("red");
+					}
+				}
+			});
+		});
 
-	// 	audioElement.load();
-	// };
-
-	console.log("HEEEEEEEEEE", entries);
-	// loadAudioAndRenderWaveform(
-	// 	URL.createObjectURL(entryData.data.filename),
-	// 	entryData.data.result
-	// );
+		audioElement.load();
+	};
 
 	const handleSubmit = async () => {
 		const existingAudioData = JSON.parse(
@@ -294,7 +300,7 @@ export default function RecordAudioPage() {
 				console.log("JIAYI ", results);
 				const data = {
 					date: currentRecordingDate,
-					filename: timestamp,	// save the timestamp as the filename	
+					filename: timestamp, // save the timestamp as the filename
 					result: JSON.stringify(resultsArray),
 				};
 				const result = await createAudioEntry(data);
@@ -311,10 +317,20 @@ export default function RecordAudioPage() {
 		<div className="bg-eggshell min-h-screen flex flex-col w-full overflow-y-auto">
 			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-2">
 				<button onClick={() => router.push("/health")}>
-					<Header headerText="Snoring AI"></Header>
+					<Header headerText="Snoringdddddddddd AI"></Header>
 				</button>
 			</span>
-
+			{/* <canvas id="waveformCanvas" width="500" height="500"></canvas>{" "} */}
+			<div
+				id="zoomview-container"
+				style={{ width: "100%", height: "auto" }}></div>
+			<div
+				id="overview-container"
+				style={{ width: "100%", height: "auto" }}></div>
+			<audio id="audio">
+				<source src="sample.mp3" type="audio/wav" />
+				<source src="sample.ogg" type='audio/ogg codecs="vorbis"' />
+			</audio>
 			<div className="flex flex-col justify-center">
 				{(recording || itemRecorded) && (
 					<>
@@ -441,9 +457,7 @@ export default function RecordAudioPage() {
 																	height: "auto",
 																	cursor: "pointer",
 																}}
-																onClick={(
-																	
-																) =>
+																onClick={() =>
 																	handlePlayClick(
 																		row.filename,
 																		JSON.parse(
@@ -452,10 +466,12 @@ export default function RecordAudioPage() {
 																	)
 																}
 															/>
-															<div id="waveform-container">
-																<div id="overview-container"></div>
-															</div>
 
+															{/* Adjust width and height as needed */}
+															{/* Container for Peaks.js waveform */}
+															{/* <div id="waveform-container">
+																<div id="overview-container"></div>
+															</div> */}
 															<Image
 																src="/icons/trash.svg"
 																alt="Trash icon"
@@ -489,3 +505,96 @@ export default function RecordAudioPage() {
 		</div>
 	);
 }
+
+// const handlePlayClick = async (audioTimestamp: string, binaryResult: string[]) => {
+// 	console.log("Filename: ", audioTimestamp);
+// 	console.log("Result: ", binaryResult);
+// 	// Retrieve the audio blob from IndexedDB
+// 	const audioBlob = await localforage.getItem(audioTimestamp) as Blob;
+// 	console.log("AudioBlob: ", audioBlob)
+
+// 	// Create a URL for the blob
+// 	const blobURL = URL.createObjectURL(audioBlob);
+
+// 	// Create a new audio element and set its source to the blob URL
+// 	const audioElement = new Audio(blobURL);
+
+// 	// Play the audio
+// 	audioElement.play();
+// 	// loadAudioAndRenderWaveform(audioTimestamp, binaryResult);
+// };
+
+// const loadAudioAndRenderWaveform = async (
+// 	audioTimestamp: string,
+// 	binaryResult: string[]
+// ) => {
+// 	const overviewContainer = document.getElementById("overview-container");
+// 	console.log("audioTimestamp", audioTimestamp);
+// 	const audioBlob = await localforage.getItem(audioTimestamp) as Blob;
+// 	if (!overviewContainer) {
+// 		console.error("Error: Overview container not found.");
+// 		return;
+// 	}
+
+// 	// Create an audio element and load the audio blob
+// 	console.log(audioBlob);
+// 	const blobURL = URL.createObjectURL(audioBlob);
+// 	const audioElement = new Audio(blobURL);
+
+// 	audioElement.addEventListener("loadedmetadata", () => {
+// 		Peaks.init({}, (error: any, peaksInstance: any) => {
+// 			if (error) {
+// 				console.error("Error initializing Peaks.js:", error);
+// 			} else {
+// 				console.log("Peaks.js initialized successfully");
+// 				peaksInstance.load([audioTimestamp]);
+// 				const hasSnoringDetected = binaryResult.some(
+// 					(value) => parseInt(value) === 1
+// 				);
+// 				if (hasSnoringDetected) {
+// 					peaksInstance.zoomview.setWaveformColor("green");
+// 				} else {
+// 					peaksInstance.zoomview.setWaveformColor("red");
+// 				}
+// 			}
+// 		});
+// 	});
+
+// 	audioElement.load();
+// };
+
+// // Function to render waveform
+// 	const renderWaveform = (audioURL: string) => {
+// 		const canvas = document.getElementById(
+// 			"waveformCanvas"
+// 		) as HTMLCanvasElement;
+// 		const ctx = canvas.getContext("2d");
+// 		const audio = new Audio(audioURL);
+
+// 		audio.addEventListener("loadedmetadata", () => {
+// 			const duration = audio.duration;
+// 			const width = canvas.width;
+// 			const height = canvas.height;
+// 			if (ctx === null) {
+// 				return;
+// 			}
+// 			ctx.clearRect(0, 0, width, height);
+
+// 			audio.addEventListener("play", () => {
+// 				const draw = () => {
+// 					const currentTime = audio.currentTime;
+// 					const x = (currentTime / duration) * width;
+
+// 					ctx.clearRect(0, 0, width, height);
+// 					ctx.fillStyle = "#ccc"; // Default color
+// 					ctx.fillRect(0, 0, x, height);
+
+// 					requestAnimationFrame(draw);
+// 				};
+
+// 				draw();
+// 			});
+
+// 			audio.play();
+// 		});
+// 	};
