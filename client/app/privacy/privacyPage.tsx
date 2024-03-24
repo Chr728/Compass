@@ -29,7 +29,7 @@ export default function PrivacyPage() {
 					PRIVACY POLICY
 				</div>
 				<div className="font-bold text-start text-blue p-3 text-[16px]">
-					Last updated: January 2024
+					Last updated: March 2024
 				</div>
 				<br></br>
 				<div className="font-sans text-start text-darkgrey p-4 text-[14px]">
@@ -148,6 +148,8 @@ export default function PrivacyPage() {
 					collect information that Your browser sends whenever You
 					visit our Service or when You access the Service by or
 					through a mobile device.
+					<br></br>
+					Usage Data is also being collected by Google Analytics and Vercel Web Analytics. For more details, visit the "Retention of Your Personal Data" section
 				</div>
 				<div className="font-bold text-start  text-blue p-3 text-[16px]">
 					Information Collected while Using the Application
@@ -272,6 +274,33 @@ export default function PrivacyPage() {
 					to improve the functionality of Our Service, or We are
 					legally obligated to retain this data for longer time
 					periods.
+					<br></br>
+					<br></br>
+					In addition, Our app uses Google Analytics and Vercel Web Analytics
+					to anonymously collect user interaction data to improve the app's experience.
+					The data will not be disclosed to the public and will only be used for the purpose to improve the user experience.
+					<br></br>
+					The following metrics are being collected and analyzed by Compass: 
+					<ul className="list-disc">
+						<li>Average Engagement Time</li>
+						<li>
+							Number of Views Per Page
+						</li>
+						<li>
+							Number of times a Form Start has occured
+						</li>
+						<li>
+							Number of times a Session Start has occured
+						</li>
+					</ul>
+					<br></br>
+					Other metrics are being collected but will not be retained or analyzed by Compass.
+					<br></br>
+					For more details on the metrics, visit 
+					<ul className="list-disc">
+						<li>https://developers.google.com/analytics</li>
+						<li>https://vercel.com/docs/analytics</li>
+					</ul>
 				</div>
 				<div className="font-bold text-start  text-blue p-3 text-[20px]">
 					Transfer of Your Personal Data
