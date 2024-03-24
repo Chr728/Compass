@@ -1,7 +1,10 @@
 {
   "dependencies": {
     "konva": "^9.3.6",
+    "localforage": "^1.10.0",
     "peaks.js": "^3.3.0",
-    "waveform-data": "^4.5.0"
+    "waveform-data": "^4.5.0",
+    "waveform.js": "^1.0.0",
+    "wavesurfer.js": "^7.7.5"
   }
 }
