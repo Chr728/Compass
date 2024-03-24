@@ -92,6 +92,21 @@ export const sendMoodReminder = async () => {
                 })
               }
               
+              //Send Notification
+              const payload = JSON.stringify({
+                    title: `Your latest mood journal entry has been assesed. New tips have arrived!`,
+                    body:`It appears you have been feeling ${moodJournal.howAreYou} lately. Compass has found new tips for you to make you feel better!`
+                  });
+                  webPush
+                    .sendNotification(userSubscription.subscription, payload)
+                    .catch((error: any) => Logger.error(error));
+                  Logger.info(
+                    "Notification for moodJournal sent to user: ",
+                    moodJournal.uid
+                );
+
+              sentAlready.push(moodJournal.uid)
+            
               
 
 
@@ -350,19 +365,7 @@ export const sendMoodReminder = async () => {
                   }  
                 }
               
-              const payload = JSON.stringify({
-                    title: `Your latest mood journal entry has been assesed. New tips have arrived!`,
-                    body:`It appears you have been feeling ${moodJournal.howAreYou} lately. Compass has found new tips for you to make you feel better!`
-                  });
-                  webPush
-                    .sendNotification(userSubscription.subscription, payload)
-                    .catch((error: any) => Logger.error(error));
-                  Logger.info(
-                    "Notification for moodJournal sent to user: ",
-                    moodJournal.uid
-                );
-
-                sentAlready.push(moodJournal.uid)
+              
             }
         }
         sentAlready = []
