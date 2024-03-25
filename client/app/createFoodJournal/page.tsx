@@ -8,17 +8,5 @@ export default function CreateFoodJournal() {
 	const router = useRouter();
 	const { user } = useAuth();
 
-	// React.useEffect(() => {
-	// 	if (!user) router.push("/login");
-	// }, [user]);
-
-	// if (!user) {
-	//   return (
-	//     <div>
-	//       <Custom403 />
-	//     </div>
-	//   );
-	// }
-
 	return <CreateFoodJournalPage />;
 }

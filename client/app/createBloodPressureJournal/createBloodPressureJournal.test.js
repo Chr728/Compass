@@ -171,3 +171,10 @@ describe("Blood Pressure Journal tests", () => {
 	});
 });
 
+test("Back button redirects to getBloodPressureJournals page", async () => {
+	render(<CreateBloodPressureJournalPage/>);
+	const backButton = screen.getAllByRole('button')[0];
+	await userEvent.click(backButton);
+	await mockRouter;
+	expect(mockRouter).toHaveBeenCalledWith('/getBloodPressureJournals');
+})

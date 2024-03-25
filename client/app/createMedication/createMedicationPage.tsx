@@ -49,14 +49,6 @@ export default function CreateMedicationPage() {
     }
   }, [user]);
 
-  // if (!user) {
-  // 	return (
-  // 		<div>
-  // 			<Custom403 />
-  // 		</div>
-  // 	);
-  // }
-
   const formik = useFormik({
     initialValues: {
       name: "",
