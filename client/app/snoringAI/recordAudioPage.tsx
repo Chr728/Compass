@@ -29,14 +29,8 @@ import {
 	sendAudio,
 } from "../http/snoreAPI";
 
-declare global {
-	interface Window {
-		webkitAudioContext: typeof AudioContext;
-	}
-}
 export default function RecordAudioPage() {
 	const [audio, setaudio] = useState<any>(null);
-	const waveformContainerRef = useRef(null);
 	const [selectedAudioBlobURL, setSelectedAudioBlobURL] = useState<
 		string | null
 	>(null);
