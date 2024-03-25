@@ -14,9 +14,5 @@ export default function GetGlucoseJournals() {
       router.push("/login")
   }, [user])
 
-  // if (!user) {
-  //   return <div><Custom403/></div>
-  // }
-
   return <GetGlucoseJournalsPage />  
 }

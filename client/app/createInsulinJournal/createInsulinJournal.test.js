@@ -2,7 +2,16 @@ import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import CreateInsulinJournalPage from './createInsulinJournalPage';
+import { createInsulinJournal } from '../http/diabeticJournalAPI';
+import { useProp } from '../contexts/PropContext';
 
+
+jest.mock("../contexts/PropContext", () => ({
+    __esModule: true,
+    useProp: jest.fn(() => ({
+      handlePopUp: jest.fn(),
+    })),
+  }));
 
 const fakeUser = {
     uid: "1"
@@ -45,9 +54,6 @@ jest.mock("../contexts/UserContext", () => {
     };
   });
 
-
-
-const { createInsulinJournal} = require('../http/diabeticJournalAPI');
  
     test("All fields are displayed to the user", () => {
         render(<CreateInsulinJournalPage/>);
@@ -138,13 +144,45 @@ const { createInsulinJournal} = require('../http/diabeticJournalAPI');
         await userEvent.click(submitButton);
         await waitFor(() => {
             expect(createInsulinJournal).toHaveBeenCalled();
+            expect(mockRouter).toHaveBeenCalledWith('/getDiabeticJournals');
         })
     })
 
-    test("Cancel button redirects to getInsulinJournals page", async () => {
+    test("Cancel button redirects to getDiabeticJournals page", async () => {
         render(<CreateInsulinJournalPage/>);
         const cancelButton = screen.getAllByRole('button')[1];
         await userEvent.click(cancelButton);
         await mockRouter;
         expect(mockRouter).toHaveBeenCalledWith('/getDiabeticJournals');
     })
+
+    test("Back button redirects to getDiabeticJournals page", async () => {
+        render(<CreateInsulinJournalPage/>);
+        const backButton = screen.getAllByRole('button')[0];
+        await userEvent.click(backButton);
+        await mockRouter;
+        expect(mockRouter).toHaveBeenCalledWith('/getDiabeticJournals');
+    })
+
+    describe("handlePopUp tests", () => {
+        const mockHandlePopUp = jest.fn();
+        useProp.mockReturnValue({ handlePopUp: mockHandlePopUp });
+    
+        afterEach(() => {
+            jest.resetAllMocks();
+          });
+    
+        test("handlePopUp is called when an error occurs", async () => {
+            createInsulinJournal.mockImplementation(() => Promise.reject(new Error()));
+        
+            render(<CreateInsulinJournalPage />);
+        
+            const submitButton = screen.getAllByRole('button')[2];
+        
+            await userEvent.click(submitButton);
+        
+            await waitFor(() => {
+                expect(mockHandlePopUp).toHaveBeenCalled();
+            });
+        });
+    });
