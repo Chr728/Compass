@@ -298,8 +298,8 @@ export default function PrivacyPage() {
 					<br></br>
 					For more details on the metrics, visit 
 					<ul className="list-disc">
-						<li>https://developers.google.com/analytics</li>
-						<li>https://vercel.com/docs/analytics</li>
+						<li><a href="https://developers.google.com/analytics">https://developers.google.com/analytics</a></li>
+						<li><a href="https://vercel.com/docs/analytics">https://vercel.com/docs/analytics</a></li>
 					</ul>
 				</div>
 				<div className="font-bold text-start  text-blue p-3 text-[20px]">
