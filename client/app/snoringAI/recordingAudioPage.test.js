@@ -100,6 +100,18 @@ describe("Logged in user", () => {
 		});
 	});
 
+	it("Graph  displayed correctly", async () => {
+		setTimeout(async () => {
+			render(<RecordAudioPage showGraph={true} />);
+
+			fireEvent.click(screen.getByTestId("play-icon"));
+
+			const canvasElement = await screen.findByTestId("parabolic-graph");
+
+			expect(canvasElement).toBeInTheDocument();
+		}, 1000);
+	});
+
 	it("Deletes audio entry", async () => {
 		setTimeout(async () => {
 			deleteAudioEntry.mockResolvedValue({

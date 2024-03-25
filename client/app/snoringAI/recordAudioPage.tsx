@@ -5,13 +5,14 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import Chart from "chart.js/auto";
 import localforage from "localforage";
 import { default as Image, default as NextImage } from "next/image";
 import { useRouter } from "next/navigation";
-import Peaks from "peaks.js";
 import { useEffect, useRef, useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import Swal from "sweetalert2";
+import Button from "../components/Button";
 import Header from "../components/Header";
 import RedButton from "../components/RedButton";
 import { useAuth } from "../contexts/AuthContext";
@@ -27,24 +28,18 @@ import {
 	getAudioEntry,
 	sendAudio,
 } from "../http/snoreAPI";
-import "./WaveformView.css";
 
-<script src="https://unpkg.com/peaks.js/dist/peaks.js"></script>;
 declare global {
 	interface Window {
 		webkitAudioContext: typeof AudioContext;
 	}
 }
-
 export default function RecordAudioPage() {
-	const peaksRef = useRef(null);
 	const [audio, setaudio] = useState<any>(null);
 	const waveformContainerRef = useRef(null);
 	const [selectedAudioBlobURL, setSelectedAudioBlobURL] = useState<
 		string | null
 	>(null);
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const audioRef = useRef(null); // Create a ref for the audio element
 
 	const logger = require("../../logger");
 	const { user } = useAuth();
@@ -135,12 +130,10 @@ export default function RecordAudioPage() {
 				const entryData = await getAudioEntries();
 				logger.info("All entries retrieved:", entryData.data);
 				setEntries(entryData.data);
-				console.log("Adir", entryData.data);
+
 				const audioURL = entryData.data.filename;
 				const binaryResult = entryData.data.result;
-				console.log(audioURL, binaryResult);
 
-				// loadAudioAndRenderWaveform(audioURL, binaryResult);
 				setaudio(URL.createObjectURL(entryData.data));
 			} catch (error) {
 				logger.error("Error fetching journal", error);
@@ -213,72 +206,127 @@ export default function RecordAudioPage() {
 		setRecording(false);
 	};
 
-	console.log("HEEEEEEEEEE", entries);
-	// loadAudioAndRenderWaveform(
-	// 	URL.createObjectURL(entryData.data.filename),
-	// 	entryData.data.result
-	// );
+	const [chartInstance, setChartInstance] = useState<Chart | null>(null);
+	const [showGraph, setShowGraph] = useState(false);
 
 	const handlePlayClick = async (
 		audioTimestamp: string,
 		binaryResult: string[]
 	) => {
-		console.log("Filename: ", audioTimestamp);
-		console.log("Result: ", binaryResult);
-		// Retrieve the audio blob from IndexedDB
 		const audioBlob = (await localforage.getItem(audioTimestamp)) as Blob;
-		console.log("AudioBlob: ", audioBlob);
 
-		// Create a URL for the blob
 		const blobURL = URL.createObjectURL(audioBlob);
 
-		// Create a new audio element and set its source to the blob URL
 		const audioElement = new Audio(blobURL);
 
-		// Play the audio
-		audioElement.play();
-		loadAudioAndRenderWaveform(audioTimestamp, binaryResult);
+		clearChart();
+
+		plotParabolicGraph(binaryResult);
 	};
 
-	const loadAudioAndRenderWaveform = async (
-		audioTimestamp: string,
-		binaryResult: string[]
-	) => {
-		const overviewContainer = document.getElementById("overview-container");
-		console.log("audioTimestamp", audioTimestamp);
-		const audioBlob = (await localforage.getItem(audioTimestamp)) as Blob;
-		if (!overviewContainer) {
-			console.error("Error: Overview container not found.");
+	const plotParabolicGraph = (binaryResult: string[]) => {
+		const canvas = document.getElementById(
+			"parabolic-graph"
+		) as HTMLCanvasElement;
+		if (!canvas) {
+			console.error("Canvas element not found");
 			return;
 		}
 
-		// Create an audio element and load the audio blob
-		console.log(audioBlob);
-		const blobURL = URL.createObjectURL(audioBlob);
-		const audioElement = new Audio(blobURL);
+		const ctx = canvas.getContext("2d");
+		if (!ctx) {
+			console.error("Canvas context not available");
+			return;
+		}
 
-		audioElement.addEventListener("loadedmetadata", () => {
-			Peaks.init({}, (error: any, peaksInstance: any) => {
-				if (error) {
-					console.error("Error initializing Peaks.js:", error);
-				} else {
-					console.log("Peaks.js initialized successfully");
-					peaksInstance.load([audioTimestamp]);
-					const hasSnoringDetected = binaryResult.some(
-						(value) => parseInt(value) === 1
-					);
-					if (hasSnoringDetected) {
-						peaksInstance.zoomview.setWaveformColor("green");
-					} else {
-						peaksInstance.zoomview.setWaveformColor("red");
-					}
-				}
-			});
+		const duration = binaryResult.length * 16;
+
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+		const timeAxis: number[] = [];
+		const amplitude: number[] = [];
+
+		for (let t = 0; t < duration; t += 16) {
+			timeAxis.push(t);
+			const index = Math.floor(t / 16);
+			if (index >= binaryResult.length) {
+				console.log("Reached end of binary result data");
+				break;
+			}
+			const binaryValue = binaryResult[index];
+			const numericValue = parseInt(binaryValue, 10);
+			amplitude.push(numericValue);
+		}
+
+		const newChartInstance = new Chart(ctx, {
+			type: "line",
+			data: {
+				labels: timeAxis,
+				datasets: [
+					{
+						label: "Graph",
+						data: amplitude,
+						borderColor: "red",
+						borderWidth: 2,
+						tension: 0.3,
+					},
+					{
+						label: "Snoring Detected",
+						data: amplitude.map((value) =>
+							value === 1 ? 1 : null
+						),
+						backgroundColor: "#00FF00",
+						borderColor: "#00FF00",
+						borderWidth: 0.01,
+						type: "bar",
+					},
+				],
+			},
+			options: {
+				scales: {
+					x: {
+						title: {
+							display: true,
+							text: "Time (s)",
+						},
+						ticks: {
+							stepSize: 16, // Each tick represents 16 seconds
+						},
+					},
+					y: {
+						title: {
+							display: true,
+							text: "Amplitude",
+						},
+						min: 0,
+						max: 1,
+						ticks: {
+							stepSize: 1,
+						},
+					},
+				},
+			},
 		});
 
-		audioElement.load();
+		setChartInstance(newChartInstance);
 	};
 
+	const clearChart = () => {
+		if (chartInstance) {
+			chartInstance.destroy();
+		}
+	};
+
+	const handleBackButtonClick = () => {
+		setShowGraph(false);
+	};
+	useEffect(() => {
+		return () => {
+			if (chartInstance) {
+				chartInstance.destroy();
+			}
+		};
+	}, []);
 	const handleSubmit = async () => {
 		const existingAudioData = JSON.parse(
 			localStorage.getItem("savedAudio") || "[]"
@@ -297,10 +345,9 @@ export default function RecordAudioPage() {
 				const results = await response.json();
 				const resultsArray = results.results;
 				const snoringDetected = resultsArray.includes(1);
-				console.log("JIAYI ", results);
 				const data = {
 					date: currentRecordingDate,
-					filename: timestamp, // save the timestamp as the filename
+					filename: timestamp,
 					result: JSON.stringify(resultsArray),
 				};
 				const result = await createAudioEntry(data);
@@ -317,284 +364,214 @@ export default function RecordAudioPage() {
 		<div className="bg-eggshell min-h-screen flex flex-col w-full overflow-y-auto">
 			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-2">
 				<button onClick={() => router.push("/health")}>
-					<Header headerText="Snoringdddddddddd AI"></Header>
+					<Header headerText="Snoring AI"></Header>
 				</button>
 			</span>
-			{/* <canvas id="waveformCanvas" width="500" height="500"></canvas>{" "} */}
-			<div
-				id="zoomview-container"
-				style={{ width: "100%", height: "auto" }}></div>
-			<div
-				id="overview-container"
-				style={{ width: "100%", height: "auto" }}></div>
-			<audio id="audio">
-				<source src="sample.mp3" type="audio/wav" />
-				<source src="sample.ogg" type='audio/ogg codecs="vorbis"' />
-			</audio>
-			<div className="flex flex-col justify-center">
-				{(recording || itemRecorded) && (
-					<>
-						{currentRecordingDate && (
-							<p className="text-sm text-darkgrey mt-1 mx-auto">
-								Recording Date: {currentRecordingDate}
-							</p>
-						)}
-						<div className="flex flex-col p-4">
-							<NextImage
-								src="/icons/microphone.svg"
-								alt="Microphone Icon"
-								width={100}
-								height={100}
-								className={
-									!itemRecorded ? "animate-pulse" : " "
-								}
-								style={{ width: "100%", height: "auto" }}
-							/>
-							{isPlaying && (
-								<p className="text-sm text-darkgrey mt-1">
-									Playing
+
+			{!showGraph ? (
+				<div className="flex flex-col justify-center">
+					{(recording || itemRecorded) && (
+						<>
+							{currentRecordingDate && (
+								<p className="text-sm text-darkgrey mt-1 mx-auto">
+									Recording Date: {currentRecordingDate}
 								</p>
 							)}
-							{!isPlaying && (
-								<div className="mt-2 text-center text-red mb-4">
-									{formatTimer(timer)}
-								</div>
-							)}
-
-							<div className="flex flex-col space-y-2 mt-auto mb-24 items-center">
-								{!itemRecorded && (
-									<RedButton
-										type="button"
-										text="Stop"
-										onClick={handleStopClick}
-									/>
+							<div className="flex flex-col p-4">
+								<NextImage
+									src="/icons/microphone.svg"
+									alt="Microphone Icon"
+									width={100}
+									height={100}
+									className={
+										!itemRecorded ? "animate-pulse" : " "
+									}
+									style={{ width: "100%", height: "auto" }}
+								/>
+								{isPlaying && (
+									<p className="text-sm text-darkgrey mt-1">
+										Playing
+									</p>
 								)}
-								{itemRecorded && (
-									<>
-										{/* Submit button should save and submit the audio both */}
+								{!isPlaying && (
+									<div className="mt-2 text-center text-red mb-4">
+										{formatTimer(timer)}
+									</div>
+								)}
+
+								<div className="flex flex-col space-y-2 mt-auto mb-24 items-center">
+									{!itemRecorded && (
 										<RedButton
 											type="button"
-											text="Submit"
-											onClick={handleSubmit}
+											text="Stop"
+											onClick={handleStopClick}
 										/>
-									</>
-								)}
+									)}
+									{itemRecorded && (
+										<>
+											<RedButton
+												type="button"
+												text="Submit"
+												onClick={handleSubmit}
+											/>
+										</>
+									)}
 
-								<RedButton
-									type="button"
-									text="Cancel"
-									onClick={handleCancelClick}
-								/>
+									<RedButton
+										type="button"
+										text="Cancel"
+										onClick={handleCancelClick}
+									/>
+								</div>
 							</div>
-						</div>
-					</>
-				)}
+						</>
+					)}
 
-				{!recording && !itemRecorded && (
-					<>
-						<div
-							className="relative self-center"
-							onClick={handleRecordClick}>
-							<NextImage
-								src="/icons/record.svg"
-								alt="Record Audio Icon"
-								width={250}
-								height={250}
-								style={{ width: "auto", height: "auto" }}
-							/>
-							<p className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-[24px] text-white font-bold">
-								Record
-							</p>
-						</div>
-						<div className="alternatingRowColor h-[440px]">
-							<TableContainer sx={{ maxHeight: 440 }}>
-								<Table stickyHeader aria-label="sticky table">
-									<TableHead>
-										<TableRow>
-											<TableCell>
-												<div className="font-bold">
-													Date
-													<button aria-label="recordingDate">
-														<MdKeyboardArrowDown className="inline-block text-2xl text-darkgrey" />
-													</button>
-												</div>
-											</TableCell>
-											<TableCell>
-												<div className="font-bold">
-													Result
-													<button aria-label="recordingResult">
-														<MdKeyboardArrowDown className="inline-block text-2xl text-darkgrey" />
-													</button>
-												</div>
-											</TableCell>
-											<TableCell></TableCell>
-										</TableRow>
-									</TableHead>
-									<TableBody>
-										{entries &&
-											Array.isArray(entries) &&
-											entries.map((row, index) => (
-												<TableRow key={index}>
-													<TableCell
-														component="th"
-														scope="row">
-														{formatDate(row.date)}
-													</TableCell>
-													<TableCell>
-														{row.result}
-													</TableCell>
+					{!recording && !itemRecorded && (
+						<>
+							<div
+								className="relative self-center"
+								onClick={handleRecordClick}>
+								<NextImage
+									src="/icons/record.svg"
+									alt="Record Audio Icon"
+									width={250}
+									height={250}
+									style={{ width: "auto", height: "auto" }}
+								/>
+								<p className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-[24px] text-white font-bold">
+									Record
+								</p>
+							</div>
+							<div className="alternatingRowColor h-[440px]">
+								<TableContainer sx={{ maxHeight: 440 }}>
+									<Table
+										stickyHeader
+										aria-label="sticky table">
+										<TableHead>
+											<TableRow>
+												<TableCell>
+													<div className="font-bold">
+														Date
+														<button aria-label="recordingDate">
+															<MdKeyboardArrowDown className="inline-block text-2xl text-darkgrey" />
+														</button>
+													</div>
+												</TableCell>
+												<TableCell>
+													<div className="font-bold">
+														Result
+														<button aria-label="recordingResult">
+															<MdKeyboardArrowDown className="inline-block text-2xl text-darkgrey" />
+														</button>
+													</div>
+												</TableCell>
+												<TableCell></TableCell>
+											</TableRow>
+										</TableHead>
+										<TableBody>
+											{entries &&
+												Array.isArray(entries) &&
+												entries.map((row, index) => (
+													<TableRow key={index}>
+														<TableCell
+															component="th"
+															scope="row">
+															{formatDate(
+																row.date
+															)}
+														</TableCell>
+														<TableCell>
+															{JSON.parse(
+																row.result
+															).includes(1)
+																? "Snoring Detected"
+																: "No Snoring Detected"}
+														</TableCell>
 
-													<TableCell>
-														<div className="flex items-center">
-															<Image
-																src="/icons/resultDisplay.svg"
-																alt="Play icon to display results"
-																width={10}
-																height={10}
-																className="mr-4 md:hidden"
-																style={{
-																	width: "auto",
-																	height: "auto",
-																	cursor: "pointer",
-																}}
-																onClick={() =>
-																	handlePlayClick(
-																		row.filename,
-																		JSON.parse(
-																			row.result
-																		)
-																	)
-																}
-															/>
+														<TableCell>
+															<div className="flex items-center">
+																<div>
+																	<Image
+																		src="/icons/resultDisplay.svg"
+																		alt="Play icon to display results"
+																		width={
+																			10
+																		}
+																		height={
+																			10
+																		}
+																		className="mr-4 md:hidden"
+																		style={{
+																			width: "auto",
+																			height: "auto",
+																			cursor: "pointer",
+																		}}
+																		onClick={() => {
+																			setShowGraph(
+																				true
+																			);
+																			handlePlayClick(
+																				row.filename,
+																				JSON.parse(
+																					row.result
+																				)
+																			);
+																		}}
+																		data-testid="play-icon"
+																	/>
+																</div>
 
-															{/* Adjust width and height as needed */}
-															{/* Container for Peaks.js waveform */}
-															{/* <div id="waveform-container">
-																<div id="overview-container"></div>
-															</div> */}
-															<Image
-																src="/icons/trash.svg"
-																alt="Trash icon"
-																width={10}
-																height={10}
-																className="mr-4 md:hidden"
-																style={{
-																	width: "auto",
-																	height: "auto",
-																}}
-																onClick={(
-																	event
-																) => {
-																	event.stopPropagation();
-																	deleteAudioEntryFunction(
-																		row.id
-																	);
-																}}
-															/>
-														</div>
-													</TableCell>
-												</TableRow>
-											))}{" "}
-									</TableBody>
-								</Table>
-							</TableContainer>
-						</div>
-					</>
-				)}
-			</div>
+																<Image
+																	src="/icons/trash.svg"
+																	alt="Trash icon"
+																	width={10}
+																	height={10}
+																	className="mr-4 md:hidden"
+																	style={{
+																		width: "auto",
+																		height: "auto",
+																	}}
+																	onClick={(
+																		event
+																	) => {
+																		event.stopPropagation();
+																		deleteAudioEntryFunction(
+																			row.id
+																		);
+																	}}
+																/>
+															</div>
+														</TableCell>
+													</TableRow>
+												))}{" "}
+										</TableBody>
+									</Table>
+								</TableContainer>
+							</div>
+						</>
+					)}
+				</div>
+			) : (
+				<div>
+					<canvas
+						id="parabolic-graph"
+						width="500"
+						height="350"
+						data-testid="parabolic-graph"></canvas>
+
+					<div className="items-center">
+						<Button
+							type="button"
+							text="Go Back"
+							onClick={handleBackButtonClick}
+							style={{
+								width: "140px",
+							}}
+						/>
+					</div>
+				</div>
+			)}
 		</div>
 	);
 }
-
-// const handlePlayClick = async (audioTimestamp: string, binaryResult: string[]) => {
-// 	console.log("Filename: ", audioTimestamp);
-// 	console.log("Result: ", binaryResult);
-// 	// Retrieve the audio blob from IndexedDB
-// 	const audioBlob = await localforage.getItem(audioTimestamp) as Blob;
-// 	console.log("AudioBlob: ", audioBlob)
-
-// 	// Create a URL for the blob
-// 	const blobURL = URL.createObjectURL(audioBlob);
-
-// 	// Create a new audio element and set its source to the blob URL
-// 	const audioElement = new Audio(blobURL);
-
-// 	// Play the audio
-// 	audioElement.play();
-// 	// loadAudioAndRenderWaveform(audioTimestamp, binaryResult);
-// };
-
-// const loadAudioAndRenderWaveform = async (
-// 	audioTimestamp: string,
-// 	binaryResult: string[]
-// ) => {
-// 	const overviewContainer = document.getElementById("overview-container");
-// 	console.log("audioTimestamp", audioTimestamp);
-// 	const audioBlob = await localforage.getItem(audioTimestamp) as Blob;
-// 	if (!overviewContainer) {
-// 		console.error("Error: Overview container not found.");
-// 		return;
-// 	}
-
-// 	// Create an audio element and load the audio blob
-// 	console.log(audioBlob);
-// 	const blobURL = URL.createObjectURL(audioBlob);
-// 	const audioElement = new Audio(blobURL);
-
-// 	audioElement.addEventListener("loadedmetadata", () => {
-// 		Peaks.init({}, (error: any, peaksInstance: any) => {
-// 			if (error) {
-// 				console.error("Error initializing Peaks.js:", error);
-// 			} else {
-// 				console.log("Peaks.js initialized successfully");
-// 				peaksInstance.load([audioTimestamp]);
-// 				const hasSnoringDetected = binaryResult.some(
-// 					(value) => parseInt(value) === 1
-// 				);
-// 				if (hasSnoringDetected) {
-// 					peaksInstance.zoomview.setWaveformColor("green");
-// 				} else {
-// 					peaksInstance.zoomview.setWaveformColor("red");
-// 				}
-// 			}
-// 		});
-// 	});
-
-// 	audioElement.load();
-// };
-
-// // Function to render waveform
-// 	const renderWaveform = (audioURL: string) => {
-// 		const canvas = document.getElementById(
-// 			"waveformCanvas"
-// 		) as HTMLCanvasElement;
-// 		const ctx = canvas.getContext("2d");
-// 		const audio = new Audio(audioURL);
-
-// 		audio.addEventListener("loadedmetadata", () => {
-// 			const duration = audio.duration;
-// 			const width = canvas.width;
-// 			const height = canvas.height;
-// 			if (ctx === null) {
-// 				return;
-// 			}
-// 			ctx.clearRect(0, 0, width, height);
-
-// 			audio.addEventListener("play", () => {
-// 				const draw = () => {
-// 					const currentTime = audio.currentTime;
-// 					const x = (currentTime / duration) * width;
-
-// 					ctx.clearRect(0, 0, width, height);
-// 					ctx.fillStyle = "#ccc"; // Default color
-// 					ctx.fillRect(0, 0, x, height);
-
-// 					requestAnimationFrame(draw);
-// 				};
-
-// 				draw();
-// 			});
-
-// 			audio.play();
-// 		});
-// 	};
