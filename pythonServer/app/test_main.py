@@ -17,6 +17,11 @@ def fake_load_audio_to_tensor(file, type):
 
 original_load_audio_to_tensor= main.load_audio_to_tensor
 
+def fake_get_symptoms_df(item):
+    raise Exception("new Exception")
+
+original_get_symptoms_df= main.get_symptoms_df
+
 def test_read_main():
     response = client.get("/")
     assert response.status_code == 200
@@ -74,3 +79,16 @@ def test_snoring_AI_wrong_file_format():
     response = client.post('/SnoringAI', files=files)
     assert response.status_code == 400
     assert response.json() == {"message": "Audio format must be mp3, wav!"}
+
+def test_symptom_predict_wrong_json_format():
+    symptoms = {"symptoms": ["itching", "skin rash", "nodal skin eruptions", "dischromic  patches"]}
+    response = client.post('/SymptomChecker', json=symptoms)
+    assert response.status_code == 200
+
+
+def test_symptom_predict():
+    main.get_symptoms_df=fake_get_symptoms_df
+    symptoms = {"symptoms": ["itching", "skin rash", "nodal skin eruptions", "dischromic  patches"]}
+    response = client.post('/SymptomChecker', json=symptoms)
+    assert response.status_code == 500
+    main.get_symptoms_df=original_get_symptoms_df
