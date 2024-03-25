@@ -5,11 +5,15 @@ import { useAuth } from "../../contexts/AuthContext";
 import Button from "../../components/Button";
 import Header from "../../components/Header";
 import Image from "next/image";
+import { useProp } from "../../contexts/PropContext";
+import { sendSymptoms } from "@/app/http/symptomAPI";
+import DisplayResult from "./[displayResult]/page";
 
 export default function ChooseSymptoms() {
     const logger = require("../../../logger");
     const router = useRouter();
     const { user } = useAuth();
+    const { handlePopUp} = useProp();
 
     useEffect(() => {
 		if (!user) {
@@ -19,7 +23,7 @@ export default function ChooseSymptoms() {
 	}, [user, router]);
 
   const symptoms = [
-    'itching',
+  'itching',
   'skin rash',
   'nodal skin eruptions',
   'dischromic  patches',
@@ -165,10 +169,28 @@ export default function ChooseSymptoms() {
 		
 	}
 
+  const handleSubmit = async() => {
+
+    try{
+      const response = await sendSymptoms(selectedWords);
+      const results = await response.json();
+      const result = results.result;
+      const encodedSelectedWords = selectedWords.map((word: string) => encodeURIComponent(word));
+      const encodedResult = encodeURIComponent(result);
+      const displayResult = JSON.stringify([encodedSelectedWords, encodedResult]);
+      router.push(`/symptomAI/chooseSymptom/${displayResult}`);
+
+    }catch (error) {
+        handlePopUp("error", "Error sending symptom list.");
+      }
+
+  }
+
   const handleDelete = (deletedWord: any) => {
     const updatedWords = selectedWords.filter((item: any) => item !== deletedWord);
     setSelectedWords(updatedWords);
   }
+
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
@@ -213,13 +235,13 @@ export default function ChooseSymptoms() {
           type="button"
           text="Reset"
           style={{ width: '140px', height: '48px', backgroundColor: 'var(--Red, #FF7171)' }}
-          onClick={() => router.push("/")} //add redirection link
+          onClick={() => router.push("/health")} 
         />
         <Button
           type="submit"
           text="Submit"
           style={{ width: '140px', height: '48px', textAlign: 'center' }}
-          onClick={() => router.push("/")} //add redirection link
+          onClick={handleSubmit} 
         />
       </div>
 
