@@ -15,6 +15,11 @@ import tensorflow as tf
 from huggingface_hub import from_pretrained_keras
 from itertools import groupby
 from pydub import AudioSegment
+#For symptom checker
+from pydantic import BaseModel
+import pandas as pd
+from joblib import load
+#Saved for debug snoring AI
 # import subprocess
 # import tempfile
 # import json
@@ -29,6 +34,34 @@ else:
     PYTHON_PORT = int(os.getenv("PORT"))
 PYTHON_HOST = os.getenv("PYTHON_HOST")
 
+#Initialization for symptom checker
+class Item(BaseModel):
+    symptoms: list = []
+
+symptoms_names = []
+
+with open('symptomChecker/symptoms.txt', 'r') as fp:
+    for line in fp:
+        x = line[:-1]
+        symptoms_names.append(x)
+
+loaded_rf_classifier = load('symptomChecker/random_forest_model.joblib')
+
+def get_symptoms_df(item):
+    list_names = []
+    for nm in item.symptoms:
+        list_names.append(nm)
+    df = pd.DataFrame(columns=symptoms_names)
+    new_row = []
+    for item in symptoms_names:
+        if any(item in items for items in list_names):
+            new_row.append(1) 
+        else:
+            new_row.append(0) 
+    df.loc[len(df)] = new_row
+    return df
+
+#Initialization for the server
 app = FastAPI()
 
 # Load the label encoder
@@ -209,7 +242,17 @@ async def snoring_predict(file: UploadFile = File(...)):
         return JSONResponse(status_code=200, content=result)
         
     except Exception as e:
-        print(e)
+        raise HTTPException(status_code=500, detail=f"Error: HTTPException")
+    
+@app.post("/SymptomChecker")
+async def symptom_predict(item: Item):
+    try:
+        df = get_symptoms_df(item)
+        predictions = loaded_rf_classifier.predict(df)
+        result = {"result": predictions[0]}
+        return JSONResponse(status_code=200, content=result)
+
+    except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: HTTPException")
 
 # CORS middleware setup
