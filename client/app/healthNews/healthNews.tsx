@@ -33,7 +33,7 @@ export default function HealthNews() {
     }
 
     fetchHealthNews();
-  }, [user, handlePopUp]);
+  }, []);
 
   function formatDate(timeString: string) {
     const months = [
