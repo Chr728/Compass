@@ -36,6 +36,7 @@ describe("Health Menu Test", () => {
 			const medicationBox = screen.getAllByRole("link")[1];
 			const snoreDetectionBox = screen.getAllByRole("link")[2];
 			const emergencySituation = screen.getAllByRole("link")[3];
+			const symptomChecker = screen.getAllByRole("link")[4];
 
 			expect(heading).toBeInTheDocument();
 			expect(subheading).toBeInTheDocument();
@@ -43,6 +44,7 @@ describe("Health Menu Test", () => {
 			expect(medicationBox).toBeInTheDocument();
 			expect(snoreDetectionBox).toBeInTheDocument();
 			expect(emergencySituation).toBeInTheDocument();
+			expect(symptomChecker).toBeInTheDocument();
 		});
 	});
 
