@@ -7,7 +7,6 @@ import Header from "../../components/Header";
 import Image from "next/image";
 import { useProp } from "../../contexts/PropContext";
 import { sendSymptoms } from "@/app/http/symptomAPI";
-import DisplayResult from "./[displayResult]/page";
 
 export default function ChooseSymptoms() {
     const logger = require("../../../logger");
