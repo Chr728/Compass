@@ -57,7 +57,7 @@ describe("Logged in user", () => {
 
     it("Back button redirects to health menu", async() => {
         const backButton = screen.getAllByRole("button")[0];
-        userEvent.click(backButton);
+        await userEvent.click(backButton);
         await waitFor ( () => {
             expect(mockRouter).toHaveBeenCalledWith("/health");
         })
@@ -66,7 +66,7 @@ describe("Logged in user", () => {
 
     it("Reset button redirects to health menu", async() => {
         const resetButton = screen.getAllByRole("button")[1];
-        userEvent.click(resetButton);
+        await userEvent.click(resetButton);
         await waitFor ( () => {
             expect(mockRouter).toHaveBeenCalledWith("/health");
         })
