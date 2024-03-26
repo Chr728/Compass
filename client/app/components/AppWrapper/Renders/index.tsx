@@ -25,6 +25,7 @@ const Renders = ({ children }: { children: ReactNode }) => {
             pathname === "/register" ||
             pathname === "/logout" ||
             pathname === "/forgotpassword" ||
+            pathname === "/installinstructions" ||
             pathname === "/"
         );
     }
