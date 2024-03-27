@@ -423,6 +423,12 @@ export default function PrivacyPage() {
 					<br></br> We have no control over and assume no
 					responsibility for the content, privacy policies or
 					practices of any third party sites or services.
+					<br></br>
+					<br></br>
+					The health news section of our app aggregates articles from various sources for informational purposes only. 
+					We want to clarify that we are not affiliated with any of the publishers or authors of the syndicated content, and we do not create or endorse any of the articles. 
+					The views, opinions, and information presented in the health news section are solely those of the respective authors and publishers, and do not necessarily reflect our own views or opinions. Users are encouraged to exercise discretion and consult with qualified healthcare professionals regarding any medical concerns or decisions based on the content provided. 
+					We strive to provide accurate and up-to-date information, but we cannot guarantee the completeness or accuracy of the content presented. By accessing and using the health news section of our app, users acknowledge and accept these terms and conditions.
 				</div>
 				<div className="font-bold text-start  text-blue p-3 text-[28px]">
 					Changes to this Privacy Policy
