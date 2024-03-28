@@ -82,7 +82,7 @@ export default function Onboarding() {
           />
           <div className="bg-blue/75 h-2/3 flex flex-col justify-center items-center absolute bottom-0 left-0 w-full -z-1">
             <h1 className="text-5xl font-bold my-4">AI Pill Identifier</h1>
-            <h3 className="my-8">Identify your medicaitons <br/> with a click of a button!</h3>
+            <h3 className="my-8">Identify your medications <br/> with a click of a button!</h3>
             <Link href="/login">
               <Button type="button" text="Get Started" style={{ padding: '0rem 2rem' }}/>
             </Link>
@@ -114,7 +114,7 @@ export default function Onboarding() {
           />
           <div className="bg-blue/75 h-2/3 flex flex-col justify-center items-center absolute bottom-0 left-0 w-full -z-1">
             <h1 className="text-5xl font-bold my-4">Symptom Checker AI</h1>
-            <h3 className="my-8">Assess your health using our <br/> our AI symptom checker!</h3>
+            <h3 className="my-8">Assess your health using our <br/> AI symptom checker!</h3>
             <Link href="/login">
               <Button type="button" text="Get Started" style={{ padding: '0rem 2rem' }}/>
             </Link>
