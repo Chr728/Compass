@@ -62,7 +62,7 @@ export default function Onboarding() {
           <NextImage
             src={onboard3}
             alt="onboard 3"
-            className="h-full w-full object-cover my-8 mt-24 z-50 relative"
+            className="h-full w-full object-cover my-8 mt-22 z-50 relative"
           />
           <div className="bg-blue/75 h-2/3 flex flex-col justify-center items-center absolute bottom-0 left-0 w-full -z-1">
             <h1 className="text-5xl font-bold my-4">Contact</h1>
@@ -110,7 +110,7 @@ export default function Onboarding() {
           <NextImage
             src={onboard6}
             alt="onboard 5"
-            className="h-full w-full object-cover my-8 mt-24 z-50 relative"
+            className="h-full w-full object-cover my-8 mt-22 z-50 relative"
           />
           <div className="bg-blue/75 h-2/3 flex flex-col justify-center items-center absolute bottom-0 left-0 w-full -z-1">
             <h1 className="text-5xl font-bold my-4">Symptom Checker AI</h1>
