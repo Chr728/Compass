@@ -7,7 +7,7 @@ import Header from '../components/Header';
 import Input from '../components/Input';
 import { useProp } from '../contexts/PropContext';
 import { createBloodPressureJournal } from '../http/bloodPressureJournalAPI';
-import { auth } from "../config/firebase";
+
 
 
 export default function CreateBloodPressureJournalPage() {
@@ -28,11 +28,9 @@ export default function CreateBloodPressureJournalPage() {
       onSubmit: async (values) => {
         
         try {
-          const currentUser = auth.currentUser;
           const [systolic, diastolic] = values.bloodPressure.split('/');
 
           const data = {
-            uid: currentUser?.uid,
             date: values.date,
             time: values.time,
             systolic: parseInt(systolic, 10),
