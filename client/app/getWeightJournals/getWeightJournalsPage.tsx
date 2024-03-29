@@ -111,38 +111,44 @@ export default function GetWeightJournalsPage() {
 		}
 	};
 
-	// const [selectedRows, setSelectedRows] = useState<string[]>([]);
+	const [selectedRows, setSelectedRows] = useState<string[]>([]);
 
 	// Function to handle deletion of selected rows
-	// const deleteSelectedRows = async () => {
-	// 	// Your delete logic for multiple rows goes here
-	// 	for (const id of selectedRows) {
-	// 		await deleteWeightJournal(id);
-	// 	}
+	const deleteSelectedRows = async () => {
+		Swal.fire({
+			text: "Are you sure you want to delete this weight journal entry?",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Delete",
+		}).then(async (result: { isConfirmed: any }) => {
+			if (result.isConfirmed) {
+				for (const id of selectedRows) {
+					const deleteresult = await deleteWeightJournal(id);
+				}
 
-	// 	// Filter out deleted rows
-	// 	const newData = weight.filter(
-	// 		(item: { id: string }) => !selectedRows.includes(item.id)
-	// 	);
-	// 	setweight(newData);
+				const newData = weight.filter(
+					(item: { id: string }) => !selectedRows.includes(item.id)
+				);
+				setweight(newData);
+				setSelectedRows([]);
 
-	// 	// Clear selected rows
-	// 	setSelectedRows([]);
-	// 	// router.push("/getWeightJournals");
-	// 	// Show success message
-	// 	Swal.fire({
-	// 		title: "Deleted!",
-	// 		text: "Selected weight journal entries have been deleted.",
-	// 		icon: "success",
-	// 	});
-	// };
-	// const handleCheckboxChange = (id: string) => {
-	// 	if (selectedRows.includes(id)) {
-	// 		setSelectedRows(selectedRows.filter((rowId) => rowId !== id));
-	// 	} else {
-	// 		setSelectedRows([...selectedRows, id]);
-	// 	}
-	// };
+				router.push("/getWeightJournals");
+				Swal.fire({
+					title: "Deleted!",
+					text: "Your weight journal entry has been deleted.",
+					icon: "success",
+				});
+			}
+		});
+	};
+	const handleCheckboxChange = (id: string) => {
+		if (selectedRows.includes(id)) {
+			setSelectedRows(selectedRows.filter((rowId) => rowId !== id));
+		} else {
+			setSelectedRows([...selectedRows, id]);
+		}
+	};
 	async function deleteWeightJournals(weightJournalId: string) {
 		Swal.fire({
 			text: "Are you sure you want to delete this weight journal entry?",
@@ -167,7 +173,7 @@ export default function GetWeightJournalsPage() {
 				});
 			}
 		});
-		window.location.reload();
+		// window.location.reload();
 	}
 
 	const [orderdate, setOrderdate] = useState(false);
@@ -407,7 +413,7 @@ export default function GetWeightJournalsPage() {
 										}}
 									/>
 								</div>
-								{/* <div className="flex-1">
+								<div className="flex-1">
 									<input
 										type="checkbox"
 										checked={selectedRows.includes(item.id)}
@@ -416,11 +422,11 @@ export default function GetWeightJournalsPage() {
 											handleCheckboxChange(item.id);
 										}}
 									/>
-								</div> */}
+								</div>
 							</div>
 						</div>
 					))}
-					{/* {selectedRows.length > 0 && (
+					{selectedRows.length > 0 && (
 						<Button
 							type="button"
 							text="Delete Selected Rows"
@@ -431,7 +437,7 @@ export default function GetWeightJournalsPage() {
 							}}
 							onClick={deleteSelectedRows}
 						/>
-					)} */}
+					)}
 				</div>
 			)}
 		</div>
