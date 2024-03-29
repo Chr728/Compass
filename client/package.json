@@ -36,6 +36,7 @@
     "healthicons-react": "^1.4.0",
     "intro.js": "^7.2.0",
     "intro.js-react": "^1.0.0",
+    "localforage": "^1.10.0",
     "jsdom": "^24.0.0",
     "next": "^14.0.1",
     "node-fetch": "^3.3.2",
