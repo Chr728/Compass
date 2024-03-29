@@ -355,6 +355,7 @@ export default function GetWeightJournalsPage() {
 								backgroundColor:
 									index % 2 === 0 ? "white" : "#DBE2EA",
 							}}
+							data-testid="weight-entry"
 							onClick={() =>
 								router.push(`/getWeightJournals/${item.id}`)
 							}>
