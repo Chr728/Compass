@@ -29,7 +29,7 @@ export default function PrivacyPage() {
 					PRIVACY POLICY
 				</div>
 				<div className="font-bold text-start text-blue p-3 text-[16px]">
-					Last updated: January 2024
+					Last updated: March 2024
 				</div>
 				<br></br>
 				<div className="font-sans text-start text-darkgrey p-4 text-[14px]">
@@ -148,6 +148,8 @@ export default function PrivacyPage() {
 					collect information that Your browser sends whenever You
 					visit our Service or when You access the Service by or
 					through a mobile device.
+					<br></br>
+					Usage Data is also being collected by Google Analytics and Vercel Web Analytics. For more details, visit the "Retention of Your Personal Data" section
 				</div>
 				<div className="font-bold text-start  text-blue p-3 text-[16px]">
 					Information Collected while Using the Application
@@ -272,6 +274,33 @@ export default function PrivacyPage() {
 					to improve the functionality of Our Service, or We are
 					legally obligated to retain this data for longer time
 					periods.
+					<br></br>
+					<br></br>
+					In addition, Our app uses Google Analytics and Vercel Web Analytics
+					to anonymously collect user interaction data to improve the app's experience.
+					The data will not be disclosed to the public and will only be used for the purpose to improve the user experience.
+					<br></br>
+					The following metrics are being collected and analyzed by Compass: 
+					<ul className="list-disc">
+						<li>Average Engagement Time</li>
+						<li>
+							Number of Views Per Page
+						</li>
+						<li>
+							Number of times a Form Start has occured
+						</li>
+						<li>
+							Number of times a Session Start has occured
+						</li>
+					</ul>
+					<br></br>
+					Other metrics are being collected but will not be retained or analyzed by Compass.
+					<br></br>
+					For more details on the metrics, visit 
+					<ul className="list-disc">
+						<li><a href="https://developers.google.com/analytics">https://developers.google.com/analytics</a></li>
+						<li><a href="https://vercel.com/docs/analytics">https://vercel.com/docs/analytics</a></li>
+					</ul>
 				</div>
 				<div className="font-bold text-start  text-blue p-3 text-[20px]">
 					Transfer of Your Personal Data
@@ -394,6 +423,12 @@ export default function PrivacyPage() {
 					<br></br> We have no control over and assume no
 					responsibility for the content, privacy policies or
 					practices of any third party sites or services.
+					<br></br>
+					<br></br>
+					The health news section of our app aggregates articles from various sources for informational purposes only. 
+					We want to clarify that we are not affiliated with any of the publishers or authors of the syndicated content, and we do not create or endorse any of the articles. 
+					The views, opinions, and information presented in the health news section are solely those of the respective authors and publishers, and do not necessarily reflect our own views or opinions. Users are encouraged to exercise discretion and consult with qualified healthcare professionals regarding any medical concerns or decisions based on the content provided. 
+					We strive to provide accurate and up-to-date information, but we cannot guarantee the completeness or accuracy of the content presented. By accessing and using the health news section of our app, users acknowledge and accept these terms and conditions.
 				</div>
 				<div className="font-bold text-start  text-blue p-3 text-[28px]">
 					Changes to this Privacy Policy
@@ -418,7 +453,7 @@ export default function PrivacyPage() {
 					soen4901medicalapp@gmail.com
 				</div>
 				<p className={"w-full h-full text-grey text-center mt-32"}>
-					&copy; Compass 2023
+					&copy; Compass 2024
 				</p>
 			</div>
 		</div>

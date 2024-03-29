@@ -144,6 +144,7 @@ export default function Health() {
           </Link>
           <br></br>
 
+
           <Link href="/clinicLocator">
             <div
               className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 "
@@ -167,6 +168,7 @@ export default function Health() {
             </div>
           </Link>
           <br></br>
+          
           <Link href="/snoringAI">
             <div
               className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 m-1"
@@ -190,6 +192,7 @@ export default function Health() {
             </div>
           </Link>
           <br></br>
+          
           <Link href="/emergencySituation">
             <div
               className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 "
@@ -215,6 +218,23 @@ export default function Health() {
             </div>
           </Link>
           <br></br>
+          
+          <Link href="/symptomAI">
+						<div
+							className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 "
+							style={{
+								backgroundColor: "#F2AC57",
+							}}>
+							<div>
+								<p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
+									Symptom Checker AI
+								</p>
+								<p className="text-[14px] text-white pr-20 font-IBM Plex Sans  text-start">
+									Describe your symptoms to our AI.
+								</p>
+							</div>
+						</div>
+					</Link>
         </div>
 
         <br></br>
