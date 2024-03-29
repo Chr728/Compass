@@ -29,6 +29,8 @@ export default function GetWeightJournalsPage() {
 	const { userInfo } = useUser();
 	const [weight, setweight] = useState<any>(null);
 	const { handlePopUp } = useProp();
+	const [selectAll, setSelectAll] = useState(false);
+	const [selectedRows, setSelectedRows] = useState<string[]>([]);
 	let chartInstance: Chart<"line", any, unknown> | null = null;
 	useEffect(() => {
 		if (!userInfo) {
@@ -111,9 +113,6 @@ export default function GetWeightJournalsPage() {
 		}
 	};
 
-	const [selectedRows, setSelectedRows] = useState<string[]>([]);
-
-	// Function to handle deletion of selected rows
 	const deleteSelectedRows = async () => {
 		Swal.fire({
 			text: "Are you sure you want to delete this weight journal entry?",
@@ -142,6 +141,17 @@ export default function GetWeightJournalsPage() {
 			}
 		});
 	};
+
+	const handleSelectAll = () => {
+		if (selectAll) {
+			setSelectedRows([]);
+		} else {
+			const allIds = weight.map((item: { id: string }) => item.id);
+			setSelectedRows(allIds);
+		}
+		setSelectAll(!selectAll);
+	};
+
 	const handleCheckboxChange = (id: string) => {
 		if (selectedRows.includes(id)) {
 			setSelectedRows(selectedRows.filter((rowId) => rowId !== id));
@@ -173,7 +183,6 @@ export default function GetWeightJournalsPage() {
 				});
 			}
 		});
-		// window.location.reload();
 	}
 
 	const [orderdate, setOrderdate] = useState(false);
@@ -330,6 +339,13 @@ export default function GetWeightJournalsPage() {
 								</button>
 							</div>
 						</div>
+						<div className="flex-2">
+							<input
+								type="checkbox"
+								checked={selectAll}
+								onChange={handleSelectAll}
+							/>
+						</div>
 					</div>
 					{weight.map((item: any, index: number) => (
 						<div
@@ -342,37 +358,6 @@ export default function GetWeightJournalsPage() {
 							onClick={() =>
 								router.push(`/getWeightJournals/${item.id}`)
 							}>
-							{/* <div className="flex-1">
-								<input
-									type="checkbox"
-									checked={selectedRows.includes(item.id)}
-									onChange={handleCheckboxChange}
-								/>
-
-								<WeightJournalRow
-									key={item.id}
-									item={item}
-									onDelete={(id) => {
-										const updatedSelectedRows =
-											selectedRows.includes(id)
-												? selectedRows.filter(
-														(rowId) => rowId !== id
-												  )
-												: [...selectedRows, id];
-										setSelectedRows(updatedSelectedRows);
-									}}
-								/>
-							</div> */}
-
-							{/* <div className="flex-1">
-								<input
-									type="checkbox"
-									checked={selectedRows.includes(item.id)}
-									onChange={() =>
-										handleCheckboxChange(item.id)
-									}
-								/>
-							</div> */}
 							<div className="flex-2">
 								<p className="font-sans font-medium text-darkgrey text-[14px] text-center">
 									{`${formatDate(
@@ -413,12 +398,12 @@ export default function GetWeightJournalsPage() {
 										}}
 									/>
 								</div>
-								<div className="flex-1">
+								<div className="flex-1 mt-1">
 									<input
 										type="checkbox"
 										checked={selectedRows.includes(item.id)}
 										onClick={(event) => {
-											event.stopPropagation(); // Prevent propagation
+											event.stopPropagation();
 											handleCheckboxChange(item.id);
 										}}
 									/>
@@ -427,16 +412,18 @@ export default function GetWeightJournalsPage() {
 						</div>
 					))}
 					{selectedRows.length > 0 && (
-						<Button
-							type="button"
-							text="Delete Selected Rows"
-							style={{
-								width: "120px",
-								fontSize: "14px",
-								padding: "1px 10px",
-							}}
-							onClick={deleteSelectedRows}
-						/>
+						<div className="mt-5 pb-4 self-center">
+							<Button
+								type="button"
+								text="Delete Selected Rows"
+								style={{
+									width: "120px",
+									fontSize: "14px",
+									padding: "1px 10px",
+								}}
+								onClick={deleteSelectedRows}
+							/>
+						</div>
 					)}
 				</div>
 			)}
