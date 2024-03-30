@@ -1,4 +1,5 @@
 "use client";
+import FormInput from "@/app/components/FormInput";
 import FormLabel from "@/app/components/FormLabel";
 import Header from "@/app/components/Header";
 import { formatDateYearMonthDate } from "@/app/helpers/utils/datetimeformat";
@@ -274,23 +275,11 @@ export default function EditFoodJournal({
 						onBlur={formik.handleBlur}
 					/>
 				</div>
-				<div className="mt-3">
-					<label
-						htmlFor="notes"
-						className="font-sans font-medium text-grey text-[16px]">
-						Notes
-					</label>
-					<br />
-					<textarea
-						name="notes"
-						id="notes"
-						className="w-full border border-solid border-lightgrey text-darkgrey rounded-md shadow-[0_4px_8px_0_rgba(44,39,56,0.04)]"
-						rows={4}
-						onChange={formik.handleChange}
-						value={formik.values.notes}
-						onBlur={formik.handleBlur}
-					/>
-				</div>
+				<FormInput
+					label="Notes"
+					onChange={formik.handleChange}
+					value={formik.values.notes}
+					onBlur={formik.handleBlur}></FormInput>
 				<div className="mt-10 pb-4 self-center">
 					<div className="mt-5 mb-5 space-x-2">
 						<Button

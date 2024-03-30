@@ -2,6 +2,7 @@
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
 import Button from "../components/Button";
+import FormInput from "../components/FormInput";
 import FormLabel from "../components/FormLabel";
 import Header from "../components/Header";
 import Input from "../components/Input";
@@ -181,23 +182,11 @@ export default function CreateOxygenJournalPage() {
 							</p>
 						)}
 				</div>
-				<div className="mt-3">
-					<label
-						htmlFor="notes"
-						className="font-sans font-medium text-grey text-[16px]">
-						Notes
-					</label>
-					<br />
-					<textarea
-						name="notes"
-						id="notes"
-						className="w-full border border-solid border-lightgrey text-darkgrey rounded-md shadow-[0_4px_8px_0_rgba(44,39,56,0.04)]"
-						rows={4}
-						onChange={formik.handleChange}
-						value={formik.values.notes}
-						onBlur={formik.handleBlur}
-					/>
-				</div>
+				<FormInput
+					label="Notes"
+					onChange={formik.handleChange}
+					value={formik.values.notes}
+					onBlur={formik.handleBlur}></FormInput>
 				<div className="mt-10 pb-4 self-center">
 					<div className="mt-5 mb-5 space-x-2">
 						<Button
