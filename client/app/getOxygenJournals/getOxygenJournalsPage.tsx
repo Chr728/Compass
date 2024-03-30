@@ -9,7 +9,7 @@ import {
 import Swal from "sweetalert2";
 import Button from "../components/Button";
 import GeneralEntry from "../components/GeneralEntry";
-import Header from "../components/Header";
+import SpanHeader from "../components/SpanHeader";
 import { useAuth } from "../contexts/AuthContext";
 import { useProp } from "../contexts/PropContext";
 import { useUser } from "../contexts/UserContext";
@@ -136,11 +136,9 @@ export default function GetOxygenJournalsPage() {
 
 	return (
 		<div className="bg-eggshell min-h-screen flex flex-col">
-			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-				<button onClick={() => router.push("/journals")}>
-					<Header headerText="Oxygen Journals "></Header>
-				</button>
-			</span>
+			<SpanHeader
+				onClick={() => router.push("/journals")}
+				headerText="Oxygen Journals"></SpanHeader>
 			<p className="font-sans text-darkgrey ml-5 text-[14px]">
 				With your pulse oximeter, log your observations here in one go!
 			</p>

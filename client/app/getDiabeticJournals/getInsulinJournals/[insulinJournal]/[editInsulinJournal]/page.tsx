@@ -1,7 +1,7 @@
 "use client";
 import FormInput from "@/app/components/FormInput";
 import FormLabel from "@/app/components/FormLabel";
-import Header from "@/app/components/Header";
+import SpanHeader from "@/app/components/SpanHeader";
 import { formatDateYearMonthDate } from "@/app/helpers/utils/datetimeformat";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
@@ -105,16 +105,13 @@ export default function EditInsulinJournal({
 
 	return (
 		<div className="bg-eggshell min-h-screen flex flex-col">
-			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-				<button
-					onClick={() =>
-						router.push(
-							`getDiabeticJournals/getInsulinJournals/${insulinJournal}`
-						)
-					}>
-					<Header headerText="Edit The Insulin Dosage"></Header>
-				</button>
-			</span>
+			<SpanHeader
+				onClick={() =>
+					router.push(
+						`getDiabeticJournals/getInsulinJournals/${insulinJournal}`
+					)
+				}
+				headerText="Edit The Insulin Dosage "></SpanHeader>
 			<form
 				className="rounded-3xl bg-white flex flex-col mb-8 w-full md:max-w-[800px] md:min-h-[550px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
 				onSubmit={formik.handleSubmit}>

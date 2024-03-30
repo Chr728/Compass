@@ -1,5 +1,6 @@
 "use client";
 import FormInput from "@/app/components/FormInput";
+import SpanHeader from "@/app/components/SpanHeader";
 import { formatDateYearMonthDate } from "@/app/helpers/utils/datetimeformat";
 import {
 	getO2SaturationJournal,
@@ -10,7 +11,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Button from "../../../components/Button";
 import FormLabel from "../../../components/FormLabel";
-import Header from "../../../components/Header";
 import Input from "../../../components/Input";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useProp } from "../../../contexts/PropContext";
@@ -128,15 +128,11 @@ export default function EditOxygenJournal({
 
 	return (
 		<div className="bg-eggshell min-h-screen flex flex-col">
-			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-				{/* link to be added */}
-				<button
-					onClick={() =>
-						router.push(`/getOxygenJournals/${oxygenJournal}`)
-					}>
-					<Header headerText="Add an Entry - O2 Saturation"></Header>
-				</button>
-			</span>
+			<SpanHeader
+				onClick={() =>
+					router.push(`/getOxygenJournals/${oxygenJournal}`)
+				}
+				headerText="Add an Entry - O2 Saturation"></SpanHeader>
 			<form
 				className="rounded-3xl bg-white flex flex-col mb-8 w-full md:max-w-[800px] md:min-h-[550px] px-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
 				onSubmit={formik.handleSubmit}>

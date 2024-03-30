@@ -4,8 +4,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Button from "../components/Button";
 import FormInput from "../components/FormInput";
-import Header from "../components/Header";
 import Input from "../components/Input";
+import SpanHeader from "../components/SpanHeader";
 import { useAuth } from "../contexts/AuthContext";
 import { createMedication, uploadMedicationImage } from "../http/medicationAPI";
 
@@ -167,11 +167,9 @@ export default function CreateMedicationPage() {
 
 	return (
 		<div className="bg-eggshell min-h-screen flex flex-col">
-			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4">
-				<button onClick={() => router.push("/getMedications")}>
-					<Header headerText="Add Other Medications"></Header>
-				</button>
-			</span>
+			<SpanHeader
+				onClick={() => router.push("/getMedications")}
+				headerText="Add Other Medications"></SpanHeader>
 
 			<form
 				className="rounded-3xl bg-white flex flex-col mb-8 w-full md:max-w-[800px] md:min-h-[550px] p-4 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"

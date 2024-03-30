@@ -2,8 +2,8 @@
 import Button from "@/app/components/Button";
 import FormInput from "@/app/components/FormInput";
 import FormLabel from "@/app/components/FormLabel";
-import Header from "@/app/components/Header";
 import Input from "@/app/components/Input";
+import SpanHeader from "@/app/components/SpanHeader";
 import { useAuth } from "@/app/contexts/AuthContext";
 import { formatDateYearMonthDate } from "@/app/helpers/utils/datetimeformat";
 import { getMedication, updateMedication } from "@/app/http/medicationAPI";
@@ -152,12 +152,9 @@ export default function EditMedication({
 
 	return (
 		<div className="bg-eggshell min-h-screen flex flex-col">
-			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-				<button onClick={() => router.push("/getDiabeticJournals")}>
-					<Header headerText="Edit Medication"></Header>
-				</button>
-			</span>
-
+			<SpanHeader
+				onClick={() => router.push("/getDiabeticJournals")}
+				headerText="Edit Medication"></SpanHeader>
 			<form
 				className="rounded-3xl bg-white flex flex-col mb-8 w-full md:max-w-[800px] md:min-h-[550px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
 				onSubmit={formik.handleSubmit}>

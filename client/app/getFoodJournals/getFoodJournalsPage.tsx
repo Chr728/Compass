@@ -9,7 +9,7 @@ import {
 } from "react-icons/md";
 import Swal from "sweetalert2";
 import Button from "../components/Button";
-import Header from "../components/Header";
+import SpanHeader from "../components/SpanHeader";
 import { useAuth } from "../contexts/AuthContext";
 import { useProp } from "../contexts/PropContext";
 import { useUser } from "../contexts/UserContext";
@@ -181,11 +181,9 @@ export default function GetFoodJournalsPage() {
 
 	return (
 		<div className="bg-eggshell min-h-screen flex flex-col">
-			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-				<button onClick={() => router.push("/journals")}>
-					<Header headerText="Food Journals "></Header>
-				</button>
-			</span>
+			<SpanHeader
+				onClick={() => router.push("/journals")}
+				headerText="Food Journals"></SpanHeader>
 			<p className="font-sans text-darkgrey ml-5 text-[14px]">
 				Keep track of what you eat each day.
 			</p>
@@ -194,62 +192,61 @@ export default function GetFoodJournalsPage() {
 				Remember, eating healthy is all about eating the right foods in
 				the right amounts.
 			</p>
-				<div className="rounded-3xl bg-white flex flex-col mt-4 mb-44 w-full md:max-w-[800px] md:min-h-[550px] p-4 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]">
-					<div className="flex justify-between items-center">
-						<div>
-							<Button
-								id={'add-meal'}
-								type="button"
-								text="Add an Entry"
-								style={{
-									width: "120px",
-									fontSize: "14px",
-									padding: "1px 10px",
-								}}
-								onClick={() =>
-									router.push(`/createFoodJournal`)
-								}
-							/>
+			<div className="rounded-3xl bg-white flex flex-col mt-4 mb-44 w-full md:max-w-[800px] md:min-h-[550px] p-4 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]">
+				<div className="flex justify-between items-center">
+					<div>
+						<Button
+							id={"add-meal"}
+							type="button"
+							text="Add an Entry"
+							style={{
+								width: "120px",
+								fontSize: "14px",
+								padding: "1px 10px",
+							}}
+							onClick={() => router.push(`/createFoodJournal`)}
+						/>
+					</div>
+				</div>
+				<br></br>
+				<div style={{ marginBottom: "5px", padding: "3px" }}>
+					<canvas id="foodChart"></canvas>
+				</div>
+				<div
+					id={"filter"}
+					className="flex"
+					style={{ justifyContent: "space-between" }}>
+					<div className="flex-2" style={{ marginRight: "14%" }}>
+						<div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
+							Date/Time
+							<button
+								onClick={handleOrderDate}
+								aria-label="orderDate">
+								{orderdate ? (
+									<MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" />
+								) : (
+									<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+								)}
+							</button>
 						</div>
 					</div>
-					<br></br>
-					<div style={{ marginBottom: "5px", padding: "3px" }}>
-						<canvas id="foodChart"></canvas>
-					</div>
-					<div
-						id={'filter'}
-						className="flex"
-						style={{ justifyContent: "space-between" }}>
-						<div className="flex-2" style={{ marginRight: "14%" }}>
-							<div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
-								Date/Time
-								<button
-									onClick={handleOrderDate}
-									aria-label="orderDate">
-									{orderdate ? (
-										<MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" />
-									) : (
-										<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
-									)}
-								</button>
-							</div>
-						</div>
-						<div className="flex-2" style={{ marginRight: "20%" }}>
-							<div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
-								Food Item
-								<button
-									onClick={handleOrderName}
-									aria-label="orderName">
-									{ordername ? (
-										<MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" />
-									) : (
-										<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
-									)}
-								</button>
-							</div>
+					<div className="flex-2" style={{ marginRight: "20%" }}>
+						<div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
+							Food Item
+							<button
+								onClick={handleOrderName}
+								aria-label="orderName">
+								{ordername ? (
+									<MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" />
+								) : (
+									<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+								)}
+							</button>
 						</div>
 					</div>
-					{food && food.map((item: any, index: number) => (
+				</div>
+				{food &&
+					food.map((item: any, index: number) => (
 						<div
 							key={item.foodJournalId}
 							className={`flex justify-between items-center mt-3`}
@@ -295,7 +292,7 @@ export default function GetFoodJournalsPage() {
 							</div>
 						</div>
 					))}
-				</div>
+			</div>
 		</div>
 	);
 }

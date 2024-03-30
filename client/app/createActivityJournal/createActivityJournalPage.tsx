@@ -4,8 +4,8 @@ import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
 import Button from "../components/Button";
 import FormInput from "../components/FormInput";
-import Header from "../components/Header";
 import Input from "../components/Input";
+import SpanHeader from "../components/SpanHeader";
 import { useProp } from "../contexts/PropContext";
 import { createActivityJournal } from "../http/activityJournalAPI";
 
@@ -45,11 +45,10 @@ export default function CreateActivityJournalPage() {
 
 	return (
 		<div className="bg-eggshell min-h-screen flex flex-col">
-			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-				<button onClick={() => router.push("/getActivityJournals")}>
-					<Header headerText="Create Activity Journal"></Header>
-				</button>
-			</span>
+			<SpanHeader
+				onClick={() => router.push("/getActivityJournals")}
+				headerText="Create Activity Journal"></SpanHeader>
+
 			<form
 				className="rounded-3xl bg-white flex flex-col mb-8 w-full md:max-w-[800px] md:min-h-[550px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
 				onSubmit={formik.handleSubmit}>

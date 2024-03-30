@@ -13,8 +13,8 @@ import { useEffect, useRef, useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import Swal from "sweetalert2";
 import Button from "../components/Button";
-import Header from "../components/Header";
 import RedButton from "../components/RedButton";
+import SpanHeader from "../components/SpanHeader";
 import { useAuth } from "../contexts/AuthContext";
 import { useProp } from "../contexts/PropContext";
 import {
@@ -356,12 +356,9 @@ export default function RecordAudioPage() {
 
 	return (
 		<div className="bg-eggshell min-h-screen flex flex-col w-full overflow-y-auto">
-			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-2">
-				<button onClick={() => router.push("/health")}>
-					<Header headerText="Snoring AI"></Header>
-				</button>
-			</span>
-
+			<SpanHeader
+				onClick={() => router.push("/health")}
+				headerText="Snoring AI"></SpanHeader>
 			{!showGraph ? (
 				<div className="flex flex-col justify-center">
 					{(recording || itemRecorded) && (

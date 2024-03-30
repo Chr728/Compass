@@ -5,8 +5,8 @@ import { useEffect } from "react";
 import Button from "../components/Button";
 import FormInput from "../components/FormInput";
 import FormLabel from "../components/FormLabel";
-import Header from "../components/Header";
 import Input from "../components/Input";
+import SpanHeader from "../components/SpanHeader";
 import { useProp } from "../contexts/PropContext";
 import { useUser } from "../contexts/UserContext";
 import { createGlucoseJournal } from "../http/diabeticJournalAPI";
@@ -55,11 +55,9 @@ export default function CreateGlucoseJournalPage() {
 
 	return (
 		<div className="bg-eggshell min-h-screen flex flex-col">
-			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-				<button onClick={() => router.push("/getDiabeticJournals")}>
-					<Header headerText="Create Glucose Measurement"></Header>
-				</button>
-			</span>
+			<SpanHeader
+				onClick={() => router.push("/getDiabeticJournals")}
+				headerText="Create Glucose Measurement"></SpanHeader>
 			<form
 				className="rounded-3xl bg-white flex flex-col mb-8 w-full md:max-w-[800px] md:min-h-[550px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
 				onSubmit={formik.handleSubmit}>
