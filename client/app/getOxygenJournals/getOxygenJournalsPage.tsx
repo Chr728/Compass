@@ -8,6 +8,7 @@ import {
 } from "react-icons/md";
 import Swal from "sweetalert2";
 import Button from "../components/Button";
+import GeneralEntry from "../components/GeneralEntry";
 import Header from "../components/Header";
 import { useAuth } from "../contexts/AuthContext";
 import { useProp } from "../contexts/PropContext";
@@ -218,24 +219,12 @@ export default function GetOxygenJournalsPage() {
 							onClick={() =>
 								router.push(`/getOxygenJournals/${item.id}`)
 							}>
-							<div className="flex-2">
-								<p className="font-sans font-medium text-darkgrey text-[14px] text-center">
-									{`${formatDate(
-										item.date
-									)} ${formatMilitaryTime(item.time)}`}
-								</p>
-							</div>
-							<div className="flex-2">
-								<p className="mr-2 font-sans font-medium text-darkgrey text-[14px] text-center">
-									{item.o2sat}
-								</p>
-							</div>
-							<div className="flex-2">
-								<p className="ml-3 font-sans font-medium text-darkgrey text-[14px] text-center">
-									{item.pulse}
-								</p>
-							</div>
-
+							<GeneralEntry
+								value1={`${formatDate(
+									item.date
+								)} ${formatMilitaryTime(item.time)}`}
+								value2={item.o2sat}
+								value3={item.pulse}></GeneralEntry>
 							<div
 								className="flex icons"
 								style={{

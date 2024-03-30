@@ -1,18 +1,17 @@
 "use client";
 import { useFormik } from "formik";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Button from "../components/Button";
 import FormLabel from "../components/FormLabel";
 import Header from "../components/Header";
 import Input from "../components/Input";
 import { useProp } from "../contexts/PropContext";
 import { createFoodIntakeJournal } from "../http/foodJournalAPI";
-import {useSearchParams} from "next/navigation";
 
 export default function CreateFoodJournalPage() {
 	const logger = require("../../logger");
 	const searchParams = useSearchParams();
-	const intro = searchParams.get('intro');
+	const intro = searchParams.get("intro");
 	const router = useRouter();
 	const { handlePopUp } = useProp();
 
@@ -57,17 +56,17 @@ export default function CreateFoodJournalPage() {
 				</button>
 			</span>
 			<form
-				id={'fields'}
+				id={"fields"}
 				className="rounded-3xl bg-white flex flex-col mb-8 w-full md:max-w-[800px] md:min-h-[550px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
 				onSubmit={formik.handleSubmit}>
-				<div id={'required-fields'}>
-					<div className="mt-3 mb-3" id={'date-input'}>
+				<div id={"required-fields"}>
+					<div className="mt-3 mb-3" id={"date-input"}>
 						<FormLabel htmlFor={"date"} label={"Date"}></FormLabel>
 						<Input
 							name="date"
 							id="date"
 							type="date"
-							style={{width: "100%"}}
+							style={{ width: "100%" }}
 							onChange={formik.handleChange}
 							value={formik.values.date}
 							onBlur={formik.handleBlur}
@@ -80,13 +79,13 @@ export default function CreateFoodJournalPage() {
 						)}{" "}
 					</div>
 
-					<div className="mt-3" id={'time-input'}>
+					<div className="mt-3" id={"time-input"}>
 						<FormLabel htmlFor={"time"} label={"Time"}></FormLabel>
 						<Input
 							name="time"
 							id="time"
 							type="time"
-							style={{width: "100%"}}
+							style={{ width: "100%" }}
 							onChange={formik.handleChange}
 							value={formik.values.time}
 							onBlur={formik.handleBlur}
@@ -106,7 +105,7 @@ export default function CreateFoodJournalPage() {
 							name="foodName"
 							id="foodName"
 							type="text"
-							style={{width: "100%"}}
+							style={{ width: "100%" }}
 							onChange={formik.handleChange}
 							value={formik.values.foodName}
 							onBlur={formik.handleBlur}
@@ -145,7 +144,9 @@ export default function CreateFoodJournalPage() {
 							<option className="text-darkgrey" value="Breakfast">
 								Breakfast
 							</option>
-							<option className="text-darkgrey" value="Morning snack">
+							<option
+								className="text-darkgrey"
+								value="Morning snack">
 								Morning snack
 							</option>
 							<option className="text-darkgrey" value="Lunch">
@@ -159,7 +160,9 @@ export default function CreateFoodJournalPage() {
 							<option className="text-darkgrey" value="Dinner">
 								Dinner
 							</option>
-							<option className="text-darkgrey" value="Bedtime Snack">
+							<option
+								className="text-darkgrey"
+								value="Bedtime Snack">
 								Bedtime Snack
 							</option>
 							<option className="text-darkgrey" value="Other">
@@ -173,7 +176,7 @@ export default function CreateFoodJournalPage() {
 						)}
 					</div>
 				</div>
-				<div id={'optional-fields'}>
+				<div id={"optional-fields"}>
 					<div className="mt-3">
 						<FormLabel
 							htmlFor={"servingNumber"}
@@ -182,7 +185,7 @@ export default function CreateFoodJournalPage() {
 							name="servingNumber"
 							id="servingNumber"
 							type="number"
-							style={{width: "100%"}}
+							style={{ width: "100%" }}
 							onChange={formik.handleChange}
 							value={formik.values.servingNumber.toString()}
 							onBlur={formik.handleBlur}
@@ -192,15 +195,15 @@ export default function CreateFoodJournalPage() {
 						{formik.touched.servingNumber &&
 							// Check if the field is empty
 							((!formik.values.servingNumber && (
-									<p className="text-red text-[14px]">
-										This field can't be left empty or zero.
-									</p>
-								)) ||
+								<p className="text-red text-[14px]">
+									This field can't be left empty or zero.
+								</p>
+							)) ||
 								// Check if the field is less than or equal to zero
 								(formik.values.servingNumber <= 0 && (
 									<p className="text-red text-[14px]">
-										You can't enter a negative servings number
-										or a number of zero.
+										You can't enter a negative servings
+										number or a number of zero.
 									</p>
 								)))}
 					</div>
@@ -211,12 +214,12 @@ export default function CreateFoodJournalPage() {
 							className="font-sans font-medium text-grey text-[16px]">
 							Calories
 						</label>
-						<br/>
+						<br />
 						<Input
 							name="calorie"
 							id="calorie"
 							type="number"
-							style={{width: "100%"}}
+							style={{ width: "100%" }}
 							onChange={formik.handleChange}
 							value={formik.values.calorie.toString()}
 							onBlur={formik.handleBlur}
@@ -228,7 +231,7 @@ export default function CreateFoodJournalPage() {
 							className="font-sans font-medium text-grey text-[16px]">
 							Notes
 						</label>
-						<br/>
+						<br />
 						<textarea
 							name="notes"
 							id="notes"
@@ -254,7 +257,7 @@ export default function CreateFoodJournalPage() {
 						/>
 
 						<Button
-							id={'save-meal'}
+							id={"save-meal"}
 							type="submit"
 							text="Submit"
 							disabled={
@@ -267,8 +270,14 @@ export default function CreateFoodJournalPage() {
 								!formik.values.foodName || // Check if foodName is missing or empty
 								!formik.values.servingNumber // Check if Number of Servings is missing or empty
 							}
-							style={{width: "140px", textAlign: "center"}}
-							onClick={() => router.push(`/getFoodJournals${intro == 'true' ? '/?intro=true' : ''}`)}
+							style={{ width: "140px", textAlign: "center" }}
+							onClick={() =>
+								router.push(
+									`/getFoodJournals${
+										intro == "true" ? "/?intro=true" : ""
+									}`
+								)
+							}
 						/>
 					</div>
 				</div>
