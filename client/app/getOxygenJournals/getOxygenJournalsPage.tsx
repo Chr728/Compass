@@ -164,7 +164,7 @@ export default function GetOxygenJournalsPage() {
 					<div
 						className="flex"
 						style={{ justifyContent: "space-between" }}>
-						<div className="flex-2" style={{ marginRight: "12%" }}>
+						<div className="flex-2" style={{ marginRight: "8%" }}>
 							<div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
 								Date/Time
 								<button
@@ -179,7 +179,7 @@ export default function GetOxygenJournalsPage() {
 							</div>
 						</div>
 
-						<div className="flex-2" style={{ marginRight: "2%" }}>
+						<div className="flex-2" style={{ marginRight: "5%" }}>
 							<div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
 								O<sub>2</sub>
 								<button
