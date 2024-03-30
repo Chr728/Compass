@@ -100,13 +100,15 @@ test("Cancel button works correctly", async () => {
 
 test("Back button redirects to home page", async () => {
   useAuth.mockImplementation(() => {
-      return {
-        user: { uid: "AKSODN#KLAD12nkvs" },
-      };
-    });
-  render(<Contacts />);
+    return {
+    user: userData,
+    };
+  });
+  render(<UpdateContactPage params={{ updateContacts:'1'}}/>);
+  await getSpeedDial();
   const backButton = screen.getAllByRole('button')[0];
-  userEvent.click(backButton);
+  await userEvent.click(backButton);
+  await mockRouter;
   await waitFor(() => {
       expect(mockRouter).toHaveBeenCalledWith('/contacts');
   });
