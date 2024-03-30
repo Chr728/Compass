@@ -66,7 +66,7 @@ app = FastAPI()
 
 # Load the label encoder
 encoder = LabelEncoder()
-encoder.classes_ = np.load('encoder/encoder.npy', allow_pickle=True)
+encoder.classes_ = np.load('encoder/new/encoder.npy', allow_pickle=True)
 
 # Load the pre-trained model and feature extractor
 snoringModel = from_pretrained_keras("CXDJY/snore_ai")
@@ -132,7 +132,7 @@ feature_extractor = ViTImageProcessor(
 
 # Load the model weights
 config = pretrained_model.config
-config.num_labels = 2112  # Change this to the appropriate number of classes
+config.num_labels = 20  # Change this to the appropriate number of classes
 model = ViTForImageClassification(config)
 model.vit = pretrained_model
 

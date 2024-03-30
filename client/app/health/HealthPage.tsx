@@ -145,76 +145,97 @@ export default function Health() {
 					</Link>
 					<br></br>
 
-					<Link href="/clinicLocator">
-						<div
-							className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 "
-							style={{ backgroundColor: "#FF7171" }}>
-							<div>
-								<p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
-									Clinic Locator
-								</p>
-								<p className="text-[14px] text-white pr-20 font-IBM Plex Sans  text-start">
-									Locate clinics near you.
-								</p>
-								<NextImage
-									src={locator}
-									alt="locator"
-									width={98}
-									height={106}
-									className="absolute inset-y-0 right-0 shrink-0"
-								/>
-							</div>
-						</div>
-					</Link>
-					<br></br>
-					<Link href="/snoringAI">
-						<div
-							className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 m-1"
-							style={{ backgroundColor: "#7C9CBF" }}>
-							<div>
-								<p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
-									Snore AI
-								</p>
-								<p className="text-[14px] text-white pr-20 font-IBM Plex Sans  text-start">
-									Doubting if you're snoring?
-								</p>
-								<NextImage
-									src={snore}
-									alt="snoring"
-									height={100}
-									className="absolute inset-y-0 right-4 shrink-0"
-									style={{ top: "-12px" }}
-								/>
-							</div>
-						</div>
-					</Link>
-					<br></br>
-					<Link href="/emergencySituation">
-						<div
-							className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 "
-							style={{
-								backgroundColor: "var(--Green, #4caf50)",
-							}}>
-							<div>
-								<p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
-									Emergency Rooms
-								</p>
-								<p className="text-[14px] text-white pr-20 font-IBM Plex Sans  text-start">
-									The situation at ERs near you.
-								</p>
-								<NextImage
+          <Link href="/clinicLocator">
+            <div
+              className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 "
+              style={{ backgroundColor: '#FF7171' }}
+            >
+              <div>
+                <p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
+                  Clinic Locator
+                </p>
+                <p className="text-[14px] text-white pr-20 font-IBM Plex Sans  text-start">
+                  Locate clinics near you.
+                </p>
+                <NextImage
+                  src={locator}
+                  alt="locator"
+                  width={98}
+                  height={106}
+                  className="absolute inset-y-0 right-0 shrink-0"
+                />
+              </div>
+            </div>
+          </Link>
+          <br></br>
+          
+          <Link href="/snoringAI">
+            <div
+              className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 m-1"
+              style={{ backgroundColor: '#7C9CBF' }}
+            >
+              <div>
+                <p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
+                  Snore AI
+                </p>
+                <p className="text-[14px] text-white pr-20 font-IBM Plex Sans  text-start">
+                  Doubting if you're snoring?
+                </p>
+                <NextImage
+                  src={snore}
+                  alt="snoring"
+                  height={100}
+                  className="absolute inset-y-0 right-4 shrink-0"
+                  style={{ top: '-12px' }}
+                />
+              </div>
+            </div>
+          </Link>
+          <br></br>
+          
+          <Link href="/emergencySituation">
+            <div
+              className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 "
+              style={{
+                backgroundColor: 'var(--Green, #4caf50)',
+              }}
+            >
+              <div>
+                <p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
+                  Emergency Rooms
+                </p>
+                <p className="text-[14px] text-white pr-20 font-IBM Plex Sans  text-start">
+                  The situation at ERs near you.
+                </p>
+                <NextImage
 									src={ambulance}
 									alt="ambulance"
 									height={55}
 									className="absolute inset-y-0 right-2 shrink-0"
 									style={{ top: "18px" }}
 								/>
+              </div>
+            </div>
+          </Link>
+          <br></br>
+          
+          <Link href="/symptomAI">
+						<div
+							className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 "
+							style={{
+								backgroundColor: "#F2AC57",
+							}}>
+							<div>
+								<p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
+									Symptom Checker AI
+								</p>
+								<p className="text-[14px] text-white pr-20 font-IBM Plex Sans  text-start">
+									Describe your symptoms to our AI.
+								</p>
 							</div>
 						</div>
 					</Link>
-					<br></br>
-				</div>
-
+        </div>
 				<br></br>
 
 				{/* link for snoring detection page to be added */}
