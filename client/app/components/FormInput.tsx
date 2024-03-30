@@ -25,6 +25,7 @@ const notes = (props: entryprops): JSX.Element => {
 					value={props.value}
 					onChange={props.onChange}
 					onBlur={props.onBlur}
+					data-testid="notes-textarea"
 				/>
 			</div>
 		</>

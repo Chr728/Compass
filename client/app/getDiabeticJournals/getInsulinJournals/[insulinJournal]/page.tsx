@@ -1,4 +1,5 @@
 "use client";
+import Menu from "@/app/components/Menu";
 import SingleEntry from "@/app/components/SingleEntry";
 import SpanHeader from "@/app/components/SpanHeader";
 import {
@@ -104,11 +105,11 @@ export default function GetInsulinJournal({
 					</div>
 				</span>
 			)}
-			{/* <div className="mt-8">
+			<div className="mt-8">
 				<div className={`xl:max-w-[1280px] w-full  menu-container`}>
 					<Menu />
 				</div>
-			</div> */}
+			</div>
 		</div>
 	);
 	// }
