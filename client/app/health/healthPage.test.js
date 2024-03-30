@@ -19,6 +19,7 @@ jest.mock('../contexts/AuthContext', () => {
   };
 });
 
+
 describe('Health Menu Test', () => {
   it('All elements are displayed to the user', async () => {
     useAuth.mockImplementation(() => {
@@ -34,10 +35,12 @@ describe('Health Menu Test', () => {
       );
       const appointmentBox = screen.getAllByRole('link')[0];
       const medicationBox = screen.getAllByRole('link')[1];
-      const snoreDetectionBox = screen.getAllByRole('link')[2];
-      const emergencySituation = screen.getAllByRole('link')[3];
-      const healthNews = screen.getAllByRole('link')[4];
-      const medVault = screen.getAllByRole('link')[5];
+      const healthNews = screen.getAllByRole('link')[2];
+      const medVault = screen.getAllByRole('link')[3];
+      const clinicLocator = screen.getAllByRole('link')[4];
+      const snoreDetectionBox = screen.getAllByRole('link')[5];
+      const emergencySituation = screen.getAllByRole('link')[6];
+      const symptomChecker = screen.getAllByRole("link")[7];
 
       expect(heading).toBeInTheDocument();
       expect(subheading).toBeInTheDocument();
@@ -47,6 +50,8 @@ describe('Health Menu Test', () => {
       expect(emergencySituation).toBeInTheDocument();
       expect(healthNews).toBeInTheDocument();
       expect(medVault).toBeInTheDocument();
+      expect(clinicLocator).toBeInTheDocument();
+      expect(symptomChecker).toBeInTheDocument();
     });
   });
 
