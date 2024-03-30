@@ -14,10 +14,6 @@ export default function AddAppointments() {
       router.push("/login")
   }, [user])
 
-  // if (!user) {
-  //   return <div><Custom403/></div>
-  // }
-
   return (
     <AddAppointmentPage/>  );
 }

@@ -51,3 +51,34 @@ describe("Contacts Menu Test", () => {
         });
     })
 });
+
+const formatPhoneNumber = (phoneNumberString) => {
+    const match = phoneNumberString.match(/^(\d{3})(\d{3})(\d{4})$/);
+    if (match) {
+      return '(' + match[1] + ') ' + match[2] + '-' + match[3];
+    }
+    return null;
+  }
+
+describe('formatPhoneNumber', () => {
+    it('formats a 10-digit number correctly', () => {
+      const input = '1234567890';
+      const expectedOutput = '(123) 456-7890';
+      expect(formatPhoneNumber(input)).toBe(expectedOutput);
+    });
+  
+    it('returns null for a number with less than 10 digits', () => {
+      const input = '123456789';
+      expect(formatPhoneNumber(input)).toBeNull();
+    });
+  
+    it('returns null for a number with more than 10 digits', () => {
+      const input = '12345678901';
+      expect(formatPhoneNumber(input)).toBeNull();
+    });
+  
+    it('returns null for a non-numeric string', () => {
+      const input = 'abcdefghij';
+      expect(formatPhoneNumber(input)).toBeNull();
+    });
+  });

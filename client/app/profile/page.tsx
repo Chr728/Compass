@@ -7,7 +7,7 @@ import ProfilePage from "./profilePage";
 
 export default function Profile() {
 	const router = useRouter();
-	const { user } = useAuth();
+	const { logout, user } = useAuth();
 	const { userInfo } = useUser();
 
 	const [profile, setProfile] = useState<any>(null);
@@ -15,14 +15,6 @@ export default function Profile() {
 	useEffect(() => {
 		setProfile(userInfo);
 	}, [userInfo]);
-
-	// React.useEffect(() => {
-	// 	if (!user) router.push("/login");
-	// }, [user]);
-
-	// if (!user) {
-	//   return <div><Custom403/></div>
-	// }
 
 	return (
 		<div>

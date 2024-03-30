@@ -10,6 +10,7 @@ import medVault from '../../public/documents.svg';
 import locator from '../../public/locator.png';
 import snore from '../../public/snore.svg';
 import ambulance from '../../public/ambulance.svg';
+import symptom from '../../public/onboard6.png';
 import Header from '../components/Header';
 import Custom403 from '../pages/403';
 import news from '../../public/news.svg';
@@ -60,7 +61,7 @@ export default function Health() {
                 <NextImage
                   src={appointments}
                   alt="appointments"
-                  height={100}
+                  height={90}
                   className="absolute inset-y-0 right-4 shrink-0"
                 />
               </div>
@@ -85,7 +86,7 @@ export default function Health() {
                 <NextImage
                   src={medications}
                   alt="medications"
-                  width={88}
+                  width={80}
                   height={106}
                   className="absolute inset-y-0 right-4 shrink-0"
                 />
@@ -113,7 +114,7 @@ export default function Health() {
                   alt="news"
                   width={70}
                   height={100}
-                  className="absolute inset-y-0 right-1 shrink-0"
+                  className="absolute inset-y-0 right-2 shrink-0"
                 />
               </div>
             </div>
@@ -137,7 +138,7 @@ export default function Health() {
                   alt="documents"
                   width={88}
                   height={106}
-                  className="absolute inset-y-0 right-1 shrink-0"
+                  className="absolute inset-y-0 right-2 shrink-0"
                 />
               </div>
             </div>
@@ -210,8 +211,8 @@ export default function Health() {
                 <NextImage
                   src={ambulance}
                   alt="ambulance"
-                  height={60}
-                  className="absolute inset-y-0 right-4 shrink-0"
+                  height={55}
+                  className="absolute inset-y-0 right-2 shrink-0"
                   style={{ top: '18px' }}
                 />
               </div>
@@ -232,14 +233,19 @@ export default function Health() {
 								<p className="text-[14px] text-white pr-20 font-IBM Plex Sans  text-start">
 									Describe your symptoms to our AI.
 								</p>
+                <NextImage
+                  src={symptom}
+                  alt="symptoms"
+                  height={100}
+                  className="absolute inset-y-0 right-2 shrink-0"
+                  style={{ top: '-12px' }}
+                />
 							</div>
 						</div>
 					</Link>
         </div>
 
         <br></br>
-
-        {/* link for snoring detection page to be added */}
 
         <br></br>
       </div>
