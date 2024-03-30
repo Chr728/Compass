@@ -9,6 +9,7 @@ import { useProp } from '../contexts/PropContext';
 import { createBloodPressureJournal } from '../http/bloodPressureJournalAPI';
 
 
+
 export default function CreateBloodPressureJournalPage() {
     const logger = require('../../logger');
     const router = useRouter();
