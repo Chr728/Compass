@@ -25,7 +25,8 @@ export default function GetActivityJournalsPage() {
 	const { userInfo } = useUser();
 	const [activity, setactivity] = useState<any>(null);
 	const { handlePopUp } = useProp();
-
+	const [selectAll, setSelectAll] = useState(false);
+	const [selectedRows, setSelectedRows] = useState<string[]>([]);
 	useEffect(() => {
 		if (!userInfo) {
 			logger.warn("User not found.");
@@ -51,6 +52,52 @@ export default function GetActivityJournalsPage() {
 		}, 1000);
 	}, [user]);
 
+	const deleteSelectedRows = async () => {
+		Swal.fire({
+			text: "Are you sure you want to delete this activity journal entry?",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Delete",
+		}).then(async (result: { isConfirmed: any }) => {
+			if (result.isConfirmed) {
+				for (const id of selectedRows) {
+					const deleteresult = await deleteActivityJournal(id);
+				}
+
+				const newData = activity.filter(
+					(item: { id: string }) => !selectedRows.includes(item.id)
+				);
+				setactivity(newData);
+				setSelectedRows([]);
+
+				router.push("/getActivityJournals");
+				Swal.fire({
+					title: "Deleted!",
+					text: "Your activity journal entry has been deleted.",
+					icon: "success",
+				});
+			}
+		});
+	};
+
+	const handleSelectAll = () => {
+		if (selectAll) {
+			setSelectedRows([]);
+		} else {
+			const allIds = activity.map((item: { id: string }) => item.id);
+			setSelectedRows(allIds);
+		}
+		setSelectAll(!selectAll);
+	};
+
+	const handleCheckboxChange = (id: string) => {
+		if (selectedRows.includes(id)) {
+			setSelectedRows(selectedRows.filter((rowId) => rowId !== id));
+		} else {
+			setSelectedRows([...selectedRows, id]);
+		}
+	};
 	async function deleteActivityJournals(activityJournalId: string) {
 		Swal.fire({
 			text: "Are you sure you want to delete this activity journal entry?",
@@ -177,7 +224,7 @@ export default function GetActivityJournalsPage() {
 								</button>
 							</div>
 						</div>
-						<div className="flex-2" style={{ marginRight: "3%" }}>
+						<div className="flex-2">
 							<div className="font-sans  font-bold  text-darkgrey text-[18px] ml-14 text-center">
 								Activity
 								<button
@@ -191,7 +238,7 @@ export default function GetActivityJournalsPage() {
 								</button>
 							</div>
 						</div>
-						<div className="flex-2" style={{ marginRight: "10%" }}>
+						<div className="flex-2">
 							<div className="font-sans font-bold text-darkgrey text-[18px] ml-2 text-center">
 								Duration
 								<button
@@ -205,6 +252,17 @@ export default function GetActivityJournalsPage() {
 								</button>
 							</div>
 						</div>
+						<div
+							className="flex-2 mt-2 mr-2"
+							style={{ display: "flex", alignItems: "center" }}>
+							<div style={{ marginLeft: "auto" }}>
+								<input
+									type="checkbox"
+									checked={selectAll}
+									onChange={handleSelectAll}
+								/>
+							</div>
+						</div>
 					</div>
 
 					{activity.map((item: any, index: number) => (
@@ -215,6 +273,7 @@ export default function GetActivityJournalsPage() {
 								backgroundColor:
 									index % 2 === 0 ? "white" : "#DBE2EA",
 							}}
+							data-testid="activity-entry"
 							onClick={() =>
 								router.push(`/getActivityJournals/${item.id}`)
 							}>
@@ -261,9 +320,33 @@ export default function GetActivityJournalsPage() {
 										}}
 									/>
 								</div>
+								<div className="flex-1 mt-1">
+									<input
+										type="checkbox"
+										checked={selectedRows.includes(item.id)}
+										onClick={(event) => {
+											event.stopPropagation();
+											handleCheckboxChange(item.id);
+										}}
+									/>
+								</div>
 							</div>
 						</div>
 					))}
+					{selectedRows.length > 0 && (
+						<div className="mt-5 pb-4 self-center">
+							<Button
+								type="button"
+								text="Delete Selected Rows"
+								style={{
+									width: "120px",
+									fontSize: "14px",
+									padding: "1px 10px",
+								}}
+								onClick={deleteSelectedRows}
+							/>
+						</div>
+					)}
 				</div>
 			)}
 		</div>

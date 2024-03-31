@@ -340,7 +340,7 @@ export default function GetWeightJournalsPage() {
 						</div>
 						<div
 							className="flex-2 mt-2"
-							style={{ marginRight: "5%" }}>
+							style={{ marginRight: "2%" }}>
 							<input
 								type="checkbox"
 								checked={selectAll}

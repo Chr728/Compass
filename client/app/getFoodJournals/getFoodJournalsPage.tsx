@@ -29,6 +29,8 @@ export default function GetFoodJournalsPage() {
 	const { userInfo } = useUser();
 	const [food, setfood] = useState<any>(null);
 	const { handlePopUp } = useProp();
+	const [selectAll, setSelectAll] = useState(false);
+	const [selectedRows, setSelectedRows] = useState<string[]>([]);
 	let chartInstance: Chart<"line", any, unknown> | null = null;
 
 	useEffect(() => {
@@ -111,6 +113,52 @@ export default function GetFoodJournalsPage() {
 			}
 		} catch (error) {
 			console.error("Error rendering graph:", error);
+		}
+	};
+	const deleteSelectedRows = async () => {
+		Swal.fire({
+			text: "Are you sure you want to delete this food journal entry?",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Delete",
+		}).then(async (result: { isConfirmed: any }) => {
+			if (result.isConfirmed) {
+				for (const id of selectedRows) {
+					const deleteresult = await deleteFoodIntakeJournal(id);
+				}
+
+				const newData = food.filter(
+					(item: { id: string }) => !selectedRows.includes(item.id)
+				);
+				setfood(newData);
+				setSelectedRows([]);
+
+				router.push("/getFoodJournals");
+				Swal.fire({
+					title: "Deleted!",
+					text: "Your food journal entry has been deleted.",
+					icon: "success",
+				});
+			}
+		});
+	};
+
+	const handleSelectAll = () => {
+		if (selectAll) {
+			setSelectedRows([]);
+		} else {
+			const allIds = food.map((item: { id: string }) => item.id);
+			setSelectedRows(allIds);
+		}
+		setSelectAll(!selectAll);
+	};
+
+	const handleCheckboxChange = (id: string) => {
+		if (selectedRows.includes(id)) {
+			setSelectedRows(selectedRows.filter((rowId) => rowId !== id));
+		} else {
+			setSelectedRows([...selectedRows, id]);
 		}
 	};
 	async function deleteFoodJournals(foodJournalId: string) {
@@ -244,6 +292,17 @@ export default function GetFoodJournalsPage() {
 							</button>
 						</div>
 					</div>
+					<div
+						className="flex-2 mt-2 mr-2"
+						style={{ display: "flex", alignItems: "center" }}>
+						<div style={{ marginLeft: "auto" }}>
+							<input
+								type="checkbox"
+								checked={selectAll}
+								onChange={handleSelectAll}
+							/>
+						</div>
+					</div>
 				</div>
 				{food &&
 					food.map((item: any, index: number) => (
@@ -254,6 +313,7 @@ export default function GetFoodJournalsPage() {
 								backgroundColor:
 									index % 2 === 0 ? "white" : "#DBE2EA",
 							}}
+							data-testid="food-entry"
 							onClick={() =>
 								router.push(`/getFoodJournals/${item.id}`)
 							}>
@@ -289,9 +349,33 @@ export default function GetFoodJournalsPage() {
 										}}
 									/>
 								</div>
+								<div className="flex-1 mt-1">
+									<input
+										type="checkbox"
+										checked={selectedRows.includes(item.id)}
+										onClick={(event) => {
+											event.stopPropagation();
+											handleCheckboxChange(item.id);
+										}}
+									/>
+								</div>
 							</div>
 						</div>
 					))}
+				{selectedRows.length > 0 && (
+					<div className="mt-5 pb-4 self-center">
+						<Button
+							type="button"
+							text="Delete Selected Rows"
+							style={{
+								width: "120px",
+								fontSize: "14px",
+								padding: "1px 10px",
+							}}
+							onClick={deleteSelectedRows}
+						/>
+					</div>
+				)}
 			</div>
 		</div>
 	);
