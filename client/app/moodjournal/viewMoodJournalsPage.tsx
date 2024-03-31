@@ -168,7 +168,7 @@ export default function ViewMoodJournalsPage() {
 
 	const deleteSelectedRows = async () => {
 		Swal.fire({
-			text: "Are you sure you want to delete this weight journal entry?",
+			text: "Are you sure you want to delete this mood journal entry?",
 			showCancelButton: true,
 			confirmButtonColor: "#3085d6",
 			cancelButtonColor: "#d33",
@@ -327,11 +327,6 @@ export default function ViewMoodJournalsPage() {
 
 	return (
 		<div className="bg-eggshell min-h-screen flex flex-col w-full">
-			{/* <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4">
-				<button onClick={() => router.push("/journals")}>
-					<Header headerText="Mood Journal "></Header>
-				</button>
-			</span> */}
 			<SpanHeader
 				onClick={() => router.push("/journals")}
 				headerText="Mood Journal">
