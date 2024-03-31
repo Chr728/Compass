@@ -118,9 +118,9 @@ export default function Healthtips() {
               className="relative"
               style={{
                 marginTop: "",
-                marginLeft: "10px auto",
-                marginRight: "10px auto",
-                maxWidth: "calc(100% - 40px)",
+                marginLeft: "2px auto",
+                marginRight: "2px auto",
+                maxWidth: "100%",
                 height: "450px",
               }}
             >
@@ -139,7 +139,7 @@ export default function Healthtips() {
                 </p>
                 <ul className="list-disc text-sm text-center font-bold text-darkgrey">
                   {Object.entries(randomizedTips).map(([category, tip]) => (
-                    <ul key={category} style={{ fontSize: "small" }}>
+                    <ul key={category} style={{ fontSize: "0.8rem" }}>
                       <strong>Tips:</strong> {tip}
                     </ul>
                   ))}
@@ -155,13 +155,14 @@ export default function Healthtips() {
                   height: "120px",
                 }}
               />
+              <div
+                className="md:hidden"
+                style={{ paddingBottom: "80px" }}
+              ></div>
             </div>
           </div>
         )}
       </div>
-      <br></br>
-      <br></br>
-      <br></br>
     </div>
   );
 }
