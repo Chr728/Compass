@@ -443,13 +443,12 @@ export default function ViewMoodJournalsPage() {
 													data.howAreYou
 												),
 										}}>
-											<div>
+											<div className="flex items-center absolute top-2 right-2">
 												<Image
 													src="/icons/greyTrash.svg"
 													alt="Grey-colored Trash icon"
 													width={10}
 													height={10}
-													className="absolute top-2 right-2"
 													style={{
 														width: "auto",
 														height: "auto",
@@ -469,6 +468,7 @@ export default function ViewMoodJournalsPage() {
 															event.stopPropagation();
 															handleCheckboxChange(data.id);
 														}}
+														style={{ width: '15px', height: '15px' }} 
 													/>
 												</div>
 											</div>
