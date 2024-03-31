@@ -78,4 +78,14 @@ describe('Health Tips Tests', () => {
       expect(res.body.data).toEqual(healthTip);
     });
 
+    it("should sent a error if health tip is not found", async () => {
+        mockFindOne(db.HealthTips, null);
+
+        const res = await request(app)
+        .get(`/api/healthtips/${user.uid}`)
+        .set({ Authorization: 'Bearer token' });
+        expect(res.status).toBe(404);
+    })
+
+
 })

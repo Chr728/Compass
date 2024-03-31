@@ -15,7 +15,7 @@ export const getHealthTip = async (req: Request, res: Response, next: NextFuncti
             }
         });
 
-        if (!getHealthTip) {
+        if (!healthTip) {
             throw new ErrorHandler(404, 'NOT_FOUND', 'Health Tip model not found for user');
         }
 
