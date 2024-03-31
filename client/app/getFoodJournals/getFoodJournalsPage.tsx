@@ -278,7 +278,7 @@ export default function GetFoodJournalsPage() {
 							</button>
 						</div>
 					</div>
-					<div className="flex-2" style={{ marginRight: "20%" }}>
+					<div className="flex-2" style={{ marginRight: "19%" }}>
 						<div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
 							Food Item
 							<button
@@ -293,7 +293,7 @@ export default function GetFoodJournalsPage() {
 						</div>
 					</div>
 					<div
-						className="flex-2 mt-2 mr-2"
+						className="flex-2 mt-2 mr-1"
 						style={{ display: "flex", alignItems: "center" }}>
 						<div style={{ marginLeft: "auto" }}>
 							<input
