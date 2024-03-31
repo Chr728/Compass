@@ -98,3 +98,29 @@ test("Click on the filters", async () => {
 	await userEvent.click(orderDate);
 	await userEvent.click(orderDate);
 });
+
+test("Selecting all rows and deleting selected rows", async () => {
+	setTimeout(async () => {
+		const selectAllCheckbox = screen.getAllByRole("checkbox")[0];
+		userEvent.click(selectAllCheckbox);
+
+		const checkboxes = screen.getAllByRole("checkbox");
+		checkboxes.forEach((checkbox) => {
+			expect(checkbox).toBeChecked();
+		});
+
+		const deleteButton = screen.getByRole("button", {
+			name: "Delete Selected Rows",
+		});
+		userEvent.click(deleteButton);
+
+		const confirmButton = await screen.findByText("Delete");
+		userEvent.click(confirmButton);
+
+		await waitFor(() => {
+			const moodEntriesAfterDeletion =
+				screen.queryAllByTestId("mood-entry");
+			expect(moodEntriesAfterDeletion.length).toBe(0);
+		});
+	}, 1000);
+})
