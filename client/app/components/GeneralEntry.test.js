@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import React from "react";
-import Result from "../components/GeneralEntry"; // Assuming the component name is Result
+import Result from "../components/GeneralEntry";
 
 describe("Result Component", () => {
 	test("renders label and value 1", () => {

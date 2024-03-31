@@ -43,14 +43,6 @@ export default function EditMedication({
 		}
 	}, [user]);
 
-	// if (!user) {
-	//   return (
-	//     <div>
-	//       <Custom403 />
-	//     </div>
-	//   );
-	// }
-
 	const formik = useFormik({
 		initialValues: {
 			name: "",
