@@ -342,16 +342,16 @@ export default function ViewAppointmentsPage() {
                                                 />                              
                                             </TableCell>
                                             <TableCell>
-                                            <div className="flex-1 mt-1">
-                                              <input
-                                                type="checkbox"
-                                                checked={selectedRows.includes(row.id)}
-                                                onClick={(event) => {
-                                                  event.stopPropagation();
-                                                  handleCheckboxChange(row.id);
-                                                }}
-                                              />
-                                            </div>
+                                              <div className="flex-1 mt-1">
+                                                <input
+                                                  type="checkbox"
+                                                  checked={selectedRows.includes(row.id)}
+                                                  onClick={(event) => {
+                                                    event.stopPropagation();
+                                                    handleCheckboxChange(row.id);
+                                                  }}
+                                                />
+                                              </div>
                                             </TableCell>
                                         </TableRow>
                                 ))}

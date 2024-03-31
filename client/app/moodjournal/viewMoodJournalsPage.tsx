@@ -188,7 +188,7 @@ export default function ViewMoodJournalsPage() {
 				router.push("/moodjournal");
 				Swal.fire({
 					title: "Deleted!",
-					text: "Your mood journal entries has been deleted.",
+					text: "Your mood journal entries have been deleted.",
 					icon: "success",
 				});
 			}
