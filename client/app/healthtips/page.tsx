@@ -1,15 +1,10 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import Button from "../components/Button";
 import Header from "../components/Header";
 import { useAuth } from "../contexts/AuthContext";
 import { useProp } from "../contexts/PropContext";
 import { useUser } from "../contexts/UserContext";
-import {
-  formatDate,
-  formatMilitaryTime,
-} from "../helpers/utils/datetimeformat";
 import { getHealthTips } from "../http/healthTipsAPI";
 
 export default function Healthtips() {
@@ -17,7 +12,10 @@ export default function Healthtips() {
   const router = useRouter();
   const { user } = useAuth();
   const { userInfo } = useUser();
-  const [oxygen, setoxygen] = useState<any>(null);
+  const [healthTips, setHealthTips] = useState<any>(null);
+  const [randomizedTips, setRandomizedTips] = useState<{
+    [category: string]: string;
+  }>({});
   const { handlePopUp } = useProp();
 
   useEffect(() => {
@@ -32,7 +30,7 @@ export default function Healthtips() {
       try {
         const result = await getHealthTips();
         logger.info("All health tips entry retrieved:", result);
-        setoxygen(result.data);
+        setHealthTips(result.data);
       } catch (error) {
         handlePopUp("error", "Error retrieving health tip entry:");
       }
@@ -42,122 +40,128 @@ export default function Healthtips() {
     }, 1000);
   }, [user]);
 
+  const displayRandomTips = () => {
+    if (!healthTips) return;
+
+    const selectedCategories = [
+      { name: "angertips", data: healthTips.angertips },
+      { name: "anxietytips", data: healthTips.anxietytips },
+      { name: "attentiontips", data: healthTips.attentiontips },
+      { name: "depressiontips", data: healthTips.depressiontips },
+      { name: "overwhelmedtips", data: healthTips.overwhelmedtips },
+      { name: "sleeptips", data: healthTips.sleeptips },
+      { name: "tiredtips", data: healthTips.tiredtips },
+    ];
+
+    // Filter out categories with null or empty data
+    const nonEmptyCategories = selectedCategories.filter(
+      (category) => category.data
+    );
+
+    // Extract category names
+    const categoryNames = nonEmptyCategories.map((category) => category.name);
+
+    const shuffledCategories = categoryNames
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 3);
+
+    const randomTips: { [category: string]: string } = {};
+
+    shuffledCategories.forEach((category) => {
+      const tipsJSON = healthTips[category];
+      const tipsObject = JSON.parse(tipsJSON);
+
+      const tipKeys = Object.keys(tipsObject);
+      const randomTipKey = tipKeys[Math.floor(Math.random() * tipKeys.length)];
+      const randomTip = tipsObject[randomTipKey];
+
+      randomTips[category] = randomTip;
+    });
+
+    setRandomizedTips(randomTips);
+  };
+
+  // Use effect to randomize tips everytime page is reloaded
+  useEffect(() => {
+    if (healthTips) {
+      displayRandomTips();
+      window.addEventListener("beforeunload", displayRandomTips);
+      return () => {
+        window.removeEventListener("beforeunload", displayRandomTips);
+      };
+    }
+  }, [healthTips]);
+
   return (
-    <div className="bg-eggshell min-h-screen flex flex-col">
-      <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
+    <div className="bg-eggshell p-2 min-h-screen flex flex-col">
+      <span
+        data-testid="health-tips-title"
+        className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4"
+      >
         <button onClick={() => router.push("/health")}>
           <Header headerText="Health Tips"></Header>
         </button>
       </span>
-      <p className="font-sans text-darkgrey ml-5 text-[14px]">
-        With your pulse oximeter, log your observations here in one go!
+      <p
+        data-testid="health-tips-body"
+        className="font-sans text-darkgrey ml-5 text-[14px]"
+      >
+        Your health tips based on your current mood. New tips are created for
+        you when you add an item in your mood journal.
       </p>
       <br></br>
 
-      {oxygen && (
-        <div className="rounded-3xl bg-white flex flex-col mt-4 mb-44 w-full md:max-w-[800px] md:min-h-[550px] p-4 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]">
-          <div className="flex justify-between items-center">
-            <Button
-              type="button"
-              text="Add an Entry"
-              style={{
-                width: "120px",
-                fontSize: "14px",
-                padding: "1px 10px",
-              }}
-              onClick={() => router.push(`/createOxygenJournal`)}
-            />
-          </div>
-          <br></br>
-          <div className="flex" style={{ justifyContent: "space-between" }}>
-            <div className="flex-2" style={{ marginRight: "12%" }}>
-              <div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
-                Date/Time
-                <button onClick={handleOrderDate} aria-label="orderDate">
-                  {orderdate ? (
-                    <MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" />
-                  ) : (
-                    <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
-                  )}
-                </button>
-              </div>
-            </div>
-
-            <div className="flex-2" style={{ marginRight: "2%" }}>
-              <div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
-                O<sub>2</sub>
-                <button onClick={handleOrderO2} aria-label="orderO2">
-                  {orderO2 ? (
-                    <MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" />
-                  ) : (
-                    <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
-                  )}
-                </button>
-              </div>
-            </div>
-            <div className="flex-2" style={{ marginRight: "10%" }}>
-              <div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
-                Pulse
-                <button onClick={handleOrderPulse} aria-label="orderOxygen">
-                  {orderPulse ? (
-                    <MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" />
-                  ) : (
-                    <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-          {oxygen.map((item: any, index: number) => (
+      <div className="flex-grow flex justify-center relative">
+        {healthTips && (
+          <div className="flex justify-center">
             <div
-              key={item.oxygenJournalId}
-              className={`flex justify-between items-center mt-3`}
+              className="relative"
               style={{
-                backgroundColor: index % 2 === 0 ? "white" : "#DBE2EA",
+                marginTop: "",
+                marginLeft: "10px auto",
+                marginRight: "10px auto",
+                maxWidth: "calc(100% - 40px)",
+                height: "450px",
               }}
-              onClick={() => router.push(`/getOxygenJournals/${item.id}`)}
             >
-              <div className="flex-2">
-                <p className="font-sans font-medium text-darkgrey text-[14px] text-center">
-                  {`${formatDate(item.date)} ${formatMilitaryTime(item.time)}`}
+              <img
+                src="/healthTipBubble.png"
+                alt="Speech bubble"
+                className="w-full h-full"
+                style={{ height: "550px" }}
+              />
+              <div className="absolute top-[43%] left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                <p
+                  data-testid="health-tips-subtitle"
+                  className="font-bold text-darkgrey mb-4 text-center"
+                >
+                  Health Tips:
                 </p>
+                <ul className="list-disc text-sm text-center font-bold text-darkgrey">
+                  {Object.entries(randomizedTips).map(([category, tip]) => (
+                    <ul key={category} style={{ fontSize: "small" }}>
+                      <strong>Tips:</strong> {tip}
+                    </ul>
+                  ))}
+                </ul>
               </div>
-              <div className="flex-2">
-                <p className="mr-2 font-sans font-medium text-darkgrey text-[14px] text-center">
-                  {item.o2sat}
-                </p>
-              </div>
-              <div className="flex-2">
-                <p className="ml-3 font-sans font-medium text-darkgrey text-[14px] text-center">
-                  {item.pulse}
-                </p>
-              </div>
-
-              <div
-                className="flex icons"
+              <img
+                src="/healthTipHuman.jpg"
+                alt="Human pointing upward"
+                className="bottom-0 left-0 ml-4 mb-4 w-24"
                 style={{
                   marginLeft: "5px",
-                  marginRight: "5px",
+                  width: "120px",
+                  height: "120px",
                 }}
-              >
-                <div className="icon" id="Trash Icon">
-                  <MdDeleteForever
-                    style={{
-                      color: "var(--Red, #FF7171)",
-                      width: "25px",
-                      height: "30px",
-                    }}
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      deleteOxygenJournals(item.id);
-                    }}
-                  />
-                </div>
-              </div>
+              />
             </div>
-          ))}
-        </div>
-      )}
+          </div>
+        )}
+      </div>
+      <br></br>
+      <br></br>
+      <br></br>
     </div>
   );
 }
