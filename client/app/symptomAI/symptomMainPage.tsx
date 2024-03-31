@@ -4,8 +4,8 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import Button from "../components/Button";
-import Header from "../components/Header";
 import { useFormik } from 'formik';
+import SpanHeader from "../components/SpanHeader";
 
 export default function SymptomMainPage() {
     const logger = require("../../logger");
@@ -52,11 +52,10 @@ export default function SymptomMainPage() {
     );
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
-        <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-            <button onClick={() => router.push("/health")}>
-                <Header headerText="Symptom Checker AI "></Header>
-            </button>
-        </span>
+        <SpanHeader
+            onClick={() => router.push("/health")}
+            headerText="Symptom Checker AI">
+        </SpanHeader>
         <div className="overflow-y-auto">
             <div className="px-4">
                 <p className="font-sans text-darkgrey text-[14px] mb-2">
