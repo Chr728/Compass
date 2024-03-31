@@ -168,7 +168,7 @@ export default function ViewMoodJournalsPage() {
 
 	const deleteSelectedRows = async () => {
 		Swal.fire({
-			text: "Are you sure you want to delete this mood journal entry?",
+			text: "Are you sure you want to delete these mood journal entries?",
 			showCancelButton: true,
 			confirmButtonColor: "#3085d6",
 			cancelButtonColor: "#d33",
@@ -382,20 +382,32 @@ export default function ViewMoodJournalsPage() {
 							fontSize: "14px",
 						}}
 					/>
+					
 				</div>
 				{!showCalendar && (
 					<div
 						className="flex flex-col space-y-2 p-4 text-darkgrey"
 						style={{ overflowY: "auto", maxHeight: "380px" }}>
-						<button
-							onClick={handleOrderDate}
-							aria-label="orderDate">
-							{orderdate ? (
-								<MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" />
-							) : (
-								<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
-							)}
-						</button>
+						<div className="flex space-x-4 justify-center">
+							<button
+								onClick={handleOrderDate}
+								aria-label="orderDate">
+								{orderdate ? (
+									<MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" />
+								) : (
+									<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+								)}
+							</button>
+							<div
+								className="flex-2 mt-2 mx-4"
+								style={{ marginRight: "2%" }}>
+								<input
+									type="checkbox"
+									checked={selectAll}
+									onChange={handleSelectAll}
+								/>
+							</div>
+						</div>
 						{moodJournal &&
 							moodJournal.map((data: any, index: number) => (
 								<div key={data.id} className="flex space-x-2 mb-8">
