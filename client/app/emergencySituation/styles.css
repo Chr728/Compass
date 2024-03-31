@@ -19,6 +19,7 @@ body {
 .swiper {
 	width: 100%;
 	height: 80%;
+	z-index: 0;
 }
 
 .swiper-slide {

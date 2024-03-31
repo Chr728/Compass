@@ -8,7 +8,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "./styles.css";
 
 import { Navigation, Pagination } from "swiper/modules";
-import Header from "../components/Header";
+import SpanHeader from "../components/SpanHeader";
 import { useAuth } from "../contexts/AuthContext";
 import { useProp } from "../contexts/PropContext";
 import { useUser } from "../contexts/UserContext";
@@ -62,11 +62,9 @@ export default function EmergencySituation() {
 	return (
 		<>
 			<div className="relative bg-eggshell min-h-screen flex flex-col">
-				<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-					<button onClick={() => router.push("/health")}>
-						<Header headerText="Emergency Rooms"></Header>
-					</button>
-				</span>
+				<SpanHeader
+					onClick={() => router.push("/health")}
+					headerText="Emergency Rooms"></SpanHeader>
 				<div className="font-bold text-start text-darkgrey p-3 text-[20px]">
 					Last Updated:{" "}
 					{emergency?.at(0)

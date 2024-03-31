@@ -128,3 +128,29 @@ test("Back button functions correctly", async () => {
 		expect(mockRouter).toHaveBeenCalledWith("/journals");
 	});
 });
+
+test("Selecting all rows and deleting selected rows", async () => {
+	setTimeout(async () => {
+		const selectAllCheckbox = screen.getAllByRole("checkbox")[0];
+		userEvent.click(selectAllCheckbox);
+
+		const checkboxes = screen.getAllByRole("checkbox");
+		checkboxes.forEach((checkbox) => {
+			expect(checkbox).toBeChecked();
+		});
+
+		const deleteButton = screen.getByRole("button", {
+			name: "Delete Selected Rows",
+		});
+		userEvent.click(deleteButton);
+
+		const confirmButton = await screen.findByText("Delete");
+		userEvent.click(confirmButton);
+
+		await waitFor(() => {
+			const weightEntriesAfterDeletion =
+				screen.queryAllByTestId("food-entry");
+			expect(weightEntriesAfterDeletion.length).toBe(0);
+		});
+	}, 1000);
+});
