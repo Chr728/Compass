@@ -182,3 +182,11 @@ describe("Activity Journal tests", () => {
 		expect(mockRouter).toHaveBeenCalledWith("/getActivityJournals");
 	});
 });
+
+test("Back button redirects to getActivityJournals page", async () => {
+	render(<CreateActivityJournalPage/>);
+	const backButton = screen.getAllByRole('button')[0];
+	await userEvent.click(backButton);
+	await mockRouter;
+	expect(mockRouter).toHaveBeenCalledWith('/getActivityJournals');
+});

@@ -95,7 +95,7 @@ export const createBloodPressureJournal = async (
   try {
     const user = await db.User.findOne({
       where: {
-        uid: req.body.uid,
+        uid: req.params.uid,
       },
     });
 
@@ -105,7 +105,7 @@ export const createBloodPressureJournal = async (
     const {  date, time, systolic, diastolic, pulse, notes } = req.body;
    bloodPressureJournalValidator(req.body);
     const bloodPressureJournal = await db.BloodPressureJournal.create({
-      uid: req.body.uid,
+      uid: req.params.uid,
       date,
       time,
       systolic,

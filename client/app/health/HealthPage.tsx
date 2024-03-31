@@ -9,9 +9,12 @@ import medications from "../../public/medications.svg";
 import medVault from "../../public/documents.svg";
 import locator from "../../public/locator.png";
 import snore from "../../public/snore.svg";
-import healthtips from "../../public/healthtips-icon.png";
+import ambulance from "../../public/ambulance.svg";
+import symptom from "../../public/onboard6.png";
 import Header from "../components/Header";
 import Custom403 from "../pages/403";
+import news from "../../public/news.svg";
+import healthtips from "../../public/healthtips-icon.png";
 
 export default function Health() {
   const router = useRouter();
@@ -59,7 +62,7 @@ export default function Health() {
                 <NextImage
                   src={appointments}
                   alt="appointments"
-                  height={100}
+                  height={90}
                   className="absolute inset-y-0 right-4 shrink-0"
                 />
               </div>
@@ -84,9 +87,35 @@ export default function Health() {
                 <NextImage
                   src={medications}
                   alt="medications"
-                  width={88}
+                  width={80}
                   height={106}
                   className="absolute inset-y-0 right-4 shrink-0"
+                />
+              </div>
+            </div>
+          </Link>
+          <br></br>
+
+          <Link href="/healthNews">
+            <div
+              className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5"
+              style={{
+                backgroundColor: "var(--Black, #CDAB1D)",
+              }}
+            >
+              <div>
+                <p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
+                  Health News
+                </p>
+                <p className="text-[14px] text-white font-IBM Plex Sans  text-start">
+                  Your Daily Dose of Health News!
+                </p>
+                <NextImage
+                  src={news}
+                  alt="news"
+                  width={70}
+                  height={100}
+                  className="absolute inset-y-0 right-2 shrink-0"
                 />
               </div>
             </div>
@@ -110,7 +139,7 @@ export default function Health() {
                   alt="documents"
                   width={88}
                   height={106}
-                  className="absolute inset-y-0 right-1 shrink-0"
+                  className="absolute inset-y-0 right-2 shrink-0"
                 />
               </div>
             </div>
@@ -132,13 +161,15 @@ export default function Health() {
                 <NextImage
                   src={locator}
                   alt="locator"
-                  height={120}
+                  width={98}
+                  height={106}
                   className="absolute inset-y-0 right-0 shrink-0"
                 />
               </div>
             </div>
           </Link>
           <br></br>
+
           <Link href="/snoringAI">
             <div
               className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 m-1"
@@ -162,6 +193,7 @@ export default function Health() {
             </div>
           </Link>
           <br></br>
+
           <Link href="/emergencySituation">
             <div
               className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 "
@@ -171,12 +203,47 @@ export default function Health() {
             >
               <div>
                 <p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
-                  Emergency Room Situation
+                  Emergency Rooms
                 </p>
+                <p className="text-[14px] text-white pr-20 font-IBM Plex Sans  text-start">
+                  The situation at ERs near you.
+                </p>
+                <NextImage
+                  src={ambulance}
+                  alt="ambulance"
+                  height={55}
+                  className="absolute inset-y-0 right-2 shrink-0"
+                  style={{ top: "18px" }}
+                />
               </div>
             </div>
           </Link>
           <br></br>
+
+          <Link href="/symptomAI">
+            <div
+              className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 "
+              style={{
+                backgroundColor: "#F2AC57",
+              }}
+            >
+              <div>
+                <p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
+                  Symptom Checker AI
+                </p>
+                <p className="text-[14px] text-white pr-20 font-IBM Plex Sans  text-start">
+                  Describe your symptoms to our AI.
+                </p>
+                <NextImage
+                  src={symptom}
+                  alt="symptoms"
+                  height={100}
+                  className="absolute inset-y-0 right-2 shrink-0"
+                  style={{ top: "-12px" }}
+                />
+              </div>
+            </div>
+          </Link>
           <Link href="/healthtips">
             <div
               className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 "
@@ -201,12 +268,10 @@ export default function Health() {
               </div>
             </div>
           </Link>
-          <br></br>
         </div>
-
         <br></br>
 
-        {/* link for snoring detection page to be added */}
+        <br></br>
 
         <br></br>
       </div>

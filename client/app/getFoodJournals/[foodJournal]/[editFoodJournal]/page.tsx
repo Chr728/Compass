@@ -1,6 +1,7 @@
 "use client";
+import FormInput from "@/app/components/FormInput";
 import FormLabel from "@/app/components/FormLabel";
-import Header from "@/app/components/Header";
+import SpanHeader from "@/app/components/SpanHeader";
 import { formatDateYearMonthDate } from "@/app/helpers/utils/datetimeformat";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
@@ -104,14 +105,9 @@ export default function EditFoodJournal({
 
 	return (
 		<div className="bg-eggshell min-h-screen flex flex-col">
-			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-				<button
-					onClick={() =>
-						router.push(`/getFoodJournals/${foodJournal}`)
-					}>
-					<Header headerText="Edit The Food Journal"></Header>
-				</button>
-			</span>
+			<SpanHeader
+				onClick={() => router.push(`/getFoodJournals/${foodJournal}`)}
+				headerText="Edit The Food Journal"></SpanHeader>
 			<form
 				className="rounded-3xl bg-white flex flex-col mb-8 w-full md:max-w-[800px] md:min-h-[550px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
 				onSubmit={formik.handleSubmit}>
@@ -274,23 +270,11 @@ export default function EditFoodJournal({
 						onBlur={formik.handleBlur}
 					/>
 				</div>
-				<div className="mt-3">
-					<label
-						htmlFor="notes"
-						className="font-sans font-medium text-grey text-[16px]">
-						Notes
-					</label>
-					<br />
-					<textarea
-						name="notes"
-						id="notes"
-						className="w-full border border-solid border-lightgrey text-darkgrey rounded-md shadow-[0_4px_8px_0_rgba(44,39,56,0.04)]"
-						rows={4}
-						onChange={formik.handleChange}
-						value={formik.values.notes}
-						onBlur={formik.handleBlur}
-					/>
-				</div>
+				<FormInput
+					label="Notes"
+					onChange={formik.handleChange}
+					value={formik.values.notes}
+					onBlur={formik.handleBlur}></FormInput>
 				<div className="mt-10 pb-4 self-center">
 					<div className="mt-5 mb-5 space-x-2">
 						<Button

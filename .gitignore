@@ -25,3 +25,4 @@ pillIdentifierAI/*.jpg
 */training20_set
 */testing20_set
 snoringAI/saved_models/snore_detector.onnx
+*node_modules/

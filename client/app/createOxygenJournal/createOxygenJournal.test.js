@@ -222,3 +222,11 @@ describe("oxygen journal tests", () => {
 		expect(mockRouter).toHaveBeenCalledWith("/getOxygenJournals");
 	});
 });
+
+test("Back button redirects to getOxygenJournals page", async () => {
+	render(<CreateOxygenJournalPage/>);
+	const backButton = screen.getAllByRole('button')[0];
+	await userEvent.click(backButton);
+	await mockRouter;
+	expect(mockRouter).toHaveBeenCalledWith('/getOxygenJournals');
+})

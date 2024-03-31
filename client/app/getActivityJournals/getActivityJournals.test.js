@@ -77,7 +77,7 @@ describe("User is logged in", () => {
 		});
 	});
 
-	test("Add an entry button  functions correctly", async () => {
+	test("Add an entry button functions correctly", async () => {
 		setTimeout(() => {
 			const addButton = screen.getAllByRole("button")[1];
 			userEvent.click(addButton);
@@ -134,5 +134,31 @@ test("Get Activity order Journals list is displayed correctly", async () => {
 		const orderDuration = screen.getByLabelText("orderDuration");
 		await userEvent.click(orderDuration);
 		await userEvent.click(orderDuration);
+	}, 1000);
+});
+
+test("Selecting all rows and deleting selected rows", async () => {
+	setTimeout(async () => {
+		const selectAllCheckbox = screen.getAllByRole("checkbox")[0];
+		userEvent.click(selectAllCheckbox);
+
+		const checkboxes = screen.getAllByRole("checkbox");
+		checkboxes.forEach((checkbox) => {
+			expect(checkbox).toBeChecked();
+		});
+
+		const deleteButton = screen.getByRole("button", {
+			name: "Delete Selected Rows",
+		});
+		userEvent.click(deleteButton);
+
+		const confirmButton = await screen.findByText("Delete");
+		userEvent.click(confirmButton);
+
+		await waitFor(() => {
+			const weightEntriesAfterDeletion =
+				screen.queryAllByTestId("activity-entry");
+			expect(weightEntriesAfterDeletion.length).toBe(0);
+		});
 	}, 1000);
 });

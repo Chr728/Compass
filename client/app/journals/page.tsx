@@ -3,13 +3,13 @@ import NextImage from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import activity from "../../public/activity.svg";
+import bloodPressure from "../../public/bloodPressure.svg";
 import diabetes from "../../public/diabetes.svg";
 import food from "../../public/food.svg";
 import mood from "../../public/mood.svg";
+import oxygen from "../../public/oxygen.svg";
 import weight from "../../public/weight.svg";
-import bloodPressure from "../../public/bloodPressure.svg";
 import Header from "../components/Header";
-import introJs from "intro.js";
 
 export default function Journal() {
   const router = useRouter();
@@ -149,6 +149,13 @@ export default function Journal() {
               <p className="text-[14px] text-white font-IBM Plex Sans  text-start">
                 Record your blood oxygen levels.
               </p>
+              <NextImage
+                src={oxygen}
+                alt="oxygen journal"
+                width={113}
+                height={80}
+                className="absolute top-0 right-0 ml-16 transform -scale-x-100 shrink-0"
+              />
             </div>
           </div>
         </Link>
