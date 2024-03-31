@@ -321,8 +321,9 @@ export default function ViewAppointmentsPage() {
                                         <TableRow 
                                             onClick={() => handleClick(row.id)} 
                                             style={rowStyles}
-                                        key={index}
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                            key={index}
+                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                            data-testid="appointment"
                                         >
                                             <TableCell component="th" scope="row">
                                                 {formatDate(row.date)},

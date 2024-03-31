@@ -410,7 +410,7 @@ export default function ViewMoodJournalsPage() {
 						</div>
 						{moodJournal &&
 							moodJournal.map((data: any, index: number) => (
-								<div key={data.id} className="flex space-x-2 mb-8">
+								<div key={data.id} className="flex space-x-2 mb-8" data-testid="mood-entry">
 									<div className="self-center border border-grey p-2 rounded-lg w-[75px] h-[75px] text-center font-bold text-darkgrey text-[20px]">
 										<p>
 											{formatDate(data.date)
