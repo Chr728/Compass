@@ -69,18 +69,6 @@ beforeAll(() => {
 // });
 
 describe("Healthtips success", () => {
-  beforeAll(() => {
-    // Mock the window.location object
-    Object.defineProperty(window, "location", {
-      value: {
-        href: "",
-        assign: jest.fn(),
-        reload: jest.fn(),
-      },
-      writable: true,
-    });
-  });
-
   test("renders content properly", async () => {
     const fakeData = {
       data: {
