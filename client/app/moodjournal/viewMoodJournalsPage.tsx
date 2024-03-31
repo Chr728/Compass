@@ -347,7 +347,7 @@ export default function ViewMoodJournalsPage() {
 				}}>
 				<canvas id="moodChart"></canvas>
 			</div>
-			<div className="w-11/12 rounded-3xl flex flex-col space-y-4 mt-2 self-center mb-4">
+			<div className="w-11/12 rounded-3xl flex flex-col space-y-4 mt-2 self-center overflow-y-auto" style={{ marginBottom: '90.5px' }}>
 				<div
 					className="flex space-x-2"
 					style={{ padding: "24px 16px 0 16px" }}>
@@ -403,7 +403,7 @@ export default function ViewMoodJournalsPage() {
 						</button>
 						{moodJournal &&
 							moodJournal.map((data: any, index: number) => (
-								<div key={data.id} className="flex space-x-2">
+								<div key={data.id} className="flex space-x-2 mb-8">
 									<div className="self-center border border-grey p-2 rounded-lg w-[75px] h-[75px] text-center font-bold text-darkgrey text-[20px]">
 										<p>
 											{formatDate(data.date)
@@ -435,7 +435,7 @@ export default function ViewMoodJournalsPage() {
 												background: setColor(
 													data.howAreYou
 												),
-											}}>
+										}}>
 											<div>
 												<Image
 													src="/icons/greyTrash.svg"
@@ -454,7 +454,7 @@ export default function ViewMoodJournalsPage() {
 														);
 													}}
 												/>
-												<div>
+												<div className="flex-1 mt-1">
 													<input
 														type="checkbox"
 														checked={selectedRows.includes(data.id)}
@@ -515,7 +515,7 @@ export default function ViewMoodJournalsPage() {
 				)}
 
 				{selectedRows.length > 0 && (
-					<div className="mt-5 pb-4 self-center">
+					<div className="mt-2 pb-4 self-center">
 						<Button
 							type="button"
 							text="Delete Selected Rows"
