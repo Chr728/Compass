@@ -49,10 +49,6 @@ export default function EditGlucoseJournal({
 		}
 	}, []);
 
-	// if (!user) {
-	//   return <div><Custom403/></div>
-	// }
-
 	const formik = useFormik({
 		initialValues: {
 			date: "",

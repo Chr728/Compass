@@ -46,10 +46,6 @@ export default function GetWeightJournal({
 		}
 	}, []);
 
-	// if (!user) {
-	//   return <div><Custom403/></div>
-	// }
-
 	return (
 		<div className="bg-eggshell min-h-screen flex flex-col">
 			<SpanHeader

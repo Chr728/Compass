@@ -35,11 +35,6 @@ export default function Profile() {
 					backgroundRepeat: "no-repeat",
 				}}
 				data-testid="profile-background-image">
-				{/* <button onClick={() => router.push("/settings")}>
-					<div>
-						<Header headerText="View Profile"></Header>
-					</div>
-				</button> */}
 				<SpanHeader
 					onClick={() => router.push("/settings")}
 					headerText="View Profile"></SpanHeader>
