@@ -1,19 +1,9 @@
 import { render } from '@testing-library/react';
 import { useRouter } from 'next/router';
-import { useAuth } from '../contexts/AuthContext';
-import CreateFoodJournal from './page.tsx';
+import { useAuth } from '../../contexts/AuthContext';
+import AddAppointments from './page.tsx';
 
-const useSearchParams = jest.fn();
-
-jest.mock('next/navigation', () => ({
-  useSearchParams: () =>{
-    return {
-        get: useSearchParams
-    }
-  }
-}));
-
-jest.mock("../contexts/PropContext", () => ({
+jest.mock("../../contexts/PropContext", () => ({
   __esModule: true,
   useProp: jest.fn(() => ({
     handlePopUp: jest.fn(),
@@ -24,7 +14,7 @@ const fakeUser = {
   uid: "1"
 }
 
-jest.mock('../contexts/AuthContext', () => {
+jest.mock('../../contexts/AuthContext', () => {
   return {
       useAuth: () => {
           return {
@@ -33,7 +23,6 @@ jest.mock('../contexts/AuthContext', () => {
       }
   }
 });
-
 
 const mockRouter= jest.fn();
 
@@ -45,7 +34,7 @@ jest.mock("next/navigation", () => ({
   }
 }));
 
-jest.mock("../contexts/UserContext", () => {
+jest.mock("../../contexts/UserContext", () => {
   return {
     useUser: () =>{
       return {
@@ -57,10 +46,10 @@ jest.mock("../contexts/UserContext", () => {
   };
 });
 
-describe('CreateFoodJournal', () => {
-  it('returns CreateFoodJournalPage component', () => {
-    const { container } = render(<CreateFoodJournal />);
+describe('AddAppointments', () => {
+  it('returns AddAppointments component', () => {
+    const { container } = render(<AddAppointments />);
 
-    expect(container.textContent).toContain('Create Food Journal');
+    expect(container.textContent).toContain('Add an Appointment');
   });
 });

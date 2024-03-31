@@ -1,17 +1,7 @@
 import { render } from '@testing-library/react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../contexts/AuthContext';
-import CreateFoodJournal from './page.tsx';
-
-const useSearchParams = jest.fn();
-
-jest.mock('next/navigation', () => ({
-  useSearchParams: () =>{
-    return {
-        get: useSearchParams
-    }
-  }
-}));
+import ContactsView from './page.tsx';
 
 jest.mock("../contexts/PropContext", () => ({
   __esModule: true,
@@ -33,7 +23,6 @@ jest.mock('../contexts/AuthContext', () => {
       }
   }
 });
-
 
 const mockRouter= jest.fn();
 
@@ -57,10 +46,10 @@ jest.mock("../contexts/UserContext", () => {
   };
 });
 
-describe('CreateFoodJournal', () => {
-  it('returns CreateFoodJournalPage component', () => {
-    const { container } = render(<CreateFoodJournal />);
+describe('ContactsView', () => {
+  it('returns ContactsViewPage component', () => {
+    const { container } = render(<ContactsView />);
 
-    expect(container.textContent).toContain('Create Food Journal');
+    expect(container.textContent).toContain('Your Contacts');
   });
 });

@@ -7,7 +7,7 @@ import ProfilePage from "./profilePage";
 
 export default function Profile() {
 	const router = useRouter();
-	const { user } = useAuth();
+	const { logout, user } = useAuth();
 	const { userInfo } = useUser();
 
 	const [profile, setProfile] = useState<any>(null);
