@@ -3,8 +3,9 @@ import FormLabel from "@/app/components/FormLabel";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
 import Button from "../components/Button";
-import Header from "../components/Header";
+import FormInput from "../components/FormInput";
 import Input from "../components/Input";
+import SpanHeader from "../components/SpanHeader";
 import { useProp } from "../contexts/PropContext";
 import { createActivityJournal } from "../http/activityJournalAPI";
 
@@ -44,11 +45,10 @@ export default function CreateActivityJournalPage() {
 
 	return (
 		<div className="bg-eggshell min-h-screen flex flex-col">
-			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-				<button onClick={() => router.push("/getActivityJournals")}>
-					<Header headerText="Create Activity Journal"></Header>
-				</button>
-			</span>
+			<SpanHeader
+				onClick={() => router.push("/getActivityJournals")}
+				headerText="Create Activity Journal"></SpanHeader>
+
 			<form
 				className="rounded-3xl bg-white flex flex-col mb-8 w-full md:max-w-[800px] md:min-h-[550px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]"
 				onSubmit={formik.handleSubmit}>
@@ -141,24 +141,12 @@ export default function CreateActivityJournalPage() {
 								</p>
 							)))}
 				</div>
-				<div className="mt-3">
-					<label
-						htmlFor="notes"
-						className="font-sans font-medium text-grey text-[16px]">
-						Notes
-					</label>
-					<br />
-					<textarea
-						name="notes"
-						id="notes"
-						className="w-full border border-solid border-lightgrey text-darkgrey rounded-md shadow-[0_4px_8px_0_rgba(44,39,56,0.04)]"
-						rows={4}
-						onChange={formik.handleChange}
-						value={formik.values.notes}
-						onBlur={formik.handleBlur}
-					/>
-				</div>
 
+				<FormInput
+					label="Notes"
+					onChange={formik.handleChange}
+					value={formik.values.notes}
+					onBlur={formik.handleBlur}></FormInput>
 				<div className="mt-10 pb-4 self-center">
 					<div className="mt-5 mb-5 space-x-2">
 						<Button

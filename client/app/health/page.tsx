@@ -1,6 +1,5 @@
 "use client";
 import { useRouter } from "next/navigation";
-import React from "react";
 import { useAuth } from "../contexts/AuthContext";
 import Health from "./HealthPage";
 

@@ -1,7 +1,7 @@
 "use client";
 import { useUser } from "@/app/contexts/UserContext";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import ProfilePage from "./profilePage";
 

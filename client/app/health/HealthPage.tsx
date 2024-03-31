@@ -16,35 +16,38 @@ import Custom403 from '../pages/403';
 import news from '../../public/news.svg';
 
 export default function Health() {
-  const router = useRouter();
-  const { user } = useAuth();
+	const router = useRouter();
+	const { user } = useAuth();
 
-  useEffect(() => {
-    if (!user) {
-      router.push('/login');
-    }
-  }, [user]);
+	useEffect(() => {
+		if (!user) {
+			router.push("/login");
+		}
+	}, [user]);
 
-  if (!user) {
-    return (
-      <div>
-        <Custom403 />
-      </div>
-    );
-  }
+	if (!user) {
+		return (
+			<div>
+				<Custom403 />
+			</div>
+		);
+	}
 
-  return (
-    <div className="bg-eggshell p-2 min-h-screen flex flex-col">
-      <div className="mb-10 flex flex-col w-full p-2">
-        <div style={{ marginTop: '-5%' }}>
-          <button className="mt-3 mb-4" onClick={() => router.push('/tpage')}>
-            <Header headerText="Your Health"></Header>
-          </button>
+	return (
+		<div className="bg-eggshell p-2 min-h-screen flex flex-col">
+			<div className="mb-10 flex flex-col w-full p-2">
+				<div style={{ marginTop: "-5%" }}>
+					<button
+						className="mt-3 mb-4"
+						onClick={() => router.push("/tpage")}>
+						<Header headerText="Your Health"></Header>
+					</button>
 
-          <p className="text-darkgrey mb-4">
-            Let Compass remove the hassle of recalling when to take your
-            medications and when you have important medical appointments.
-          </p>
+					<p className="text-darkgrey mb-4">
+						Let Compass remove the hassle of recalling when to take
+						your medications and when you have important medical
+						appointments.
+					</p>
 
           <Link href="/viewappointments">
             <div
@@ -145,6 +148,28 @@ export default function Health() {
           </Link>
           <br></br>
 
+					<Link href="/clinicLocator">
+						<div
+							className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 "
+							style={{ backgroundColor: "#FF7171" }}>
+							<div>
+								<p className="text-[18px] text-white font-IBM Plex Sans font-bold text-start">
+									Clinic Locator
+								</p>
+								<p className="text-[14px] text-white pr-20 font-IBM Plex Sans  text-start">
+									Locate clinics near you.
+								</p>
+								<NextImage
+									src={locator}
+									alt="locator"
+									width={98}
+									height={106}
+									className="absolute inset-y-0 right-0 shrink-0"
+								/>
+							</div>
+						</div>
+					</Link>
+					<br></br>
 
           <Link href="/clinicLocator">
             <div
@@ -243,7 +268,8 @@ export default function Health() {
 							</div>
 						</div>
 					</Link>
-        </div>
+				</div>
+				<br></br>
 
         <br></br>
 

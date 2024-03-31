@@ -3,10 +3,10 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import Button from "../../components/Button";
-import Header from "../../components/Header";
 import Image from "next/image";
 import { useProp } from "../../contexts/PropContext";
 import { sendSymptoms } from "@/app/http/symptomAPI";
+import SpanHeader from "../../components/SpanHeader";
 
 export default function ChooseSymptoms() {
     const logger = require("../../../logger");
@@ -193,11 +193,10 @@ export default function ChooseSymptoms() {
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col">
-        <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-            <button onClick={() => router.push("/health")}>
-                <Header headerText="Choose Your Symptoms"></Header>
-            </button>
-        </span>
+        <SpanHeader
+            onClick={() => router.push("/health")}
+            headerText="Choose Your Symptoms">
+        </SpanHeader>
         
         <div className="bg-eggshell max-w-[356px] max-h-[300px] flex flex-col m-4 p-8 border border-grey rounded-2xl font-sans text-darkgrey overflow-y-scroll shadow-lg">
             <ul>
