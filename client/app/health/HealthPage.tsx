@@ -244,6 +244,8 @@ export default function Health() {
               </div>
             </div>
           </Link>
+          <br></br>
+
           <Link href="/healthtips">
             <div
               className="rounded-3xl  relative flex flex-col  w-full md:max-w-[800px] md:h-[600px] p-5 "
