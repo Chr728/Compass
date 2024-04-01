@@ -84,6 +84,7 @@ describe("Notification Settings Page", () => {
     const InsulinInjectionReminders = screen.getByText(
       /Insulin Injection Reminders/
     );
+    const MoodReminders = screen.getByText(/Mood Reminders/);
     const BackButton = screen.getAllByRole("button")[0];
     const Save = screen.getAllByRole("button")[1];
 
@@ -95,6 +96,7 @@ describe("Notification Settings Page", () => {
     expect(FoodIntakeReminders).toBeInTheDocument();
     expect(BloodGlucoseReminders).toBeInTheDocument();
     expect(InsulinInjectionReminders).toBeInTheDocument();
+    expect(MoodReminders).toBeInTheDocument();
 
     expect(BackButton).toBeInTheDocument();
     await mockRouter();
@@ -118,6 +120,7 @@ describe("Notification Settings Page", () => {
     const toggleButtonInsulinDosage = screen.getByLabelText(
       "InsulinInjectionSwitch"
     );
+    const toggleButtonMood = screen.getByLabelText("MoodSwitch");
     expect(toggleButtonSubscription).not.toBeChecked();
     expect(toggleButtonActvity).not.toBeChecked();
     expect(toggleButtonMedication).not.toBeChecked();
@@ -125,6 +128,7 @@ describe("Notification Settings Page", () => {
     expect(toggleButtonFoodIntake).not.toBeChecked();
     expect(toggleButtonBloodGlucose).not.toBeChecked();
     expect(toggleButtonInsulinDosage).not.toBeChecked();
+    expect(toggleButtonMood).not.toBeChecked();
     fireEvent.click(toggleButtonSubscription);
     fireEvent.click(toggleButtonActvity);
     fireEvent.click(toggleButtonMedication);
@@ -132,6 +136,7 @@ describe("Notification Settings Page", () => {
     fireEvent.click(toggleButtonFoodIntake);
     fireEvent.click(toggleButtonBloodGlucose);
     fireEvent.click(toggleButtonInsulinDosage);
+    fireEvent.click(toggleButtonMood);
     expect(toggleButtonSubscription).toBeChecked();
     expect(toggleButtonActvity).toBeChecked();
     expect(toggleButtonMedication).toBeChecked();
@@ -139,6 +144,7 @@ describe("Notification Settings Page", () => {
     expect(toggleButtonFoodIntake).toBeChecked();
     expect(toggleButtonBloodGlucose).toBeChecked();
     expect(toggleButtonInsulinDosage).toBeChecked();
+    expect(toggleButtonMood).toBeChecked();
   });
 
   test("Display's error message if notification permissions is not granted in browser when trying to save preferences for user", () => {
@@ -294,6 +300,7 @@ describe("Notification Page useEffect", () => {
         foodIntakeReminders: false,
         glucoseMeasurementReminders: false,
         insulinDosageReminders: false,
+        moodReminders: false,
       },
     };
     getNotificationPreference.mockResolvedValue(fakeData);
@@ -318,6 +325,7 @@ describe("Notification Page useEffect", () => {
     const toggleButtonInsulinDosage = screen.getByLabelText(
       "InsulinInjectionSwitch"
     );
+    const toggleButtonMood = screen.getByLabelText("MoodSwitch");
     expect(toggleButtonSubscription).not.toBeChecked();
     expect(toggleButtonActvity).not.toBeChecked();
     expect(toggleButtonMedication).not.toBeChecked();
@@ -325,6 +333,7 @@ describe("Notification Page useEffect", () => {
     expect(toggleButtonFoodIntake).not.toBeChecked();
     expect(toggleButtonBloodGlucose).not.toBeChecked();
     expect(toggleButtonInsulinDosage).not.toBeChecked();
+    expect(toggleButtonMood).not.toBeChecked();
 
     // Assert that updateNotificationPreference was called
     await waitFor(() => {
@@ -353,6 +362,7 @@ describe("Notification Page useEffect", () => {
         foodIntakeReminders: false,
         glucoseMeasurementReminders: false,
         insulinDosageReminders: false,
+        moodReminders: false,
       },
     };
 
@@ -402,6 +412,7 @@ describe("Notification Page useEffect", () => {
         foodIntakeReminders: false,
         glucoseMeasurementReminders: false,
         insulinDosageReminders: false,
+        moodReminders: false,
       },
     };
 
@@ -466,6 +477,7 @@ describe("Notification Page useEffect", () => {
         foodIntakeReminders: false,
         glucoseMeasurementReminders: false,
         insulinDosageReminders: false,
+        moodReminders: false,
       },
     };
     getNotificationPreference.mockResolvedValue(fakeData);
@@ -535,6 +547,7 @@ describe("Notification Page useEffect", () => {
         foodIntakeReminders: true,
         glucoseMeasurementReminders: true,
         insulinDosageReminders: true,
+        moodReminders: true,
       },
     };
 
@@ -573,6 +586,7 @@ describe("Notification Page useEffect", () => {
       const toggleButtonInsulinDosage = screen.getByLabelText(
         "InsulinInjectionSwitch"
       );
+      const toggleButtonMood = screen.getByLabelText("MoodSwitch");
       expect(toggleButtonSubscription).toBeChecked();
       expect(toggleButtonActvity).toBeChecked();
       expect(toggleButtonMedication).toBeChecked();
@@ -580,6 +594,7 @@ describe("Notification Page useEffect", () => {
       expect(toggleButtonFoodIntake).toBeChecked();
       expect(toggleButtonBloodGlucose).toBeChecked();
       expect(toggleButtonInsulinDosage).toBeChecked();
+      expect(toggleButtonMood).toBeChecked();
     });
   });
 
@@ -615,6 +630,7 @@ describe("Notification Page useEffect", () => {
         foodIntakeReminders: true,
         glucoseMeasurementReminders: true,
         insulinDosageReminders: true,
+        moodReminders: false,
       },
     };
 

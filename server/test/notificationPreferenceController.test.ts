@@ -28,6 +28,7 @@ const notificationPreference = {
   foodIntakeReminders: false,
   insulinDosageReminders: false,
   glucoseMeasurementReminders: false,
+  moodReminders: false,
 };
 
 const updatedNotificationPreference = {
@@ -40,6 +41,7 @@ const updatedNotificationPreference = {
   foodIntakeReminders: false,
   insulinDosageReminders: false,
   glucoseMeasurementReminders: false,
+  moodReminders: false,
 };
 
 const mockedDecodedToken = {
@@ -199,6 +201,7 @@ const validInput = {
   foodIntakeReminders: true,
   insulinDosageReminders: true,
   glucoseMeasurementReminders: true,
+  moodReminders: false,
 };
 
 describe("Testing the update notificationPreference controller", () => {
