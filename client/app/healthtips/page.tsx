@@ -129,7 +129,7 @@ export default function Healthtips() {
         console.log("HEIGHT OF CONTAINER: ", healthTipsDivHeight);
       }
     }
-  });
+  }, []);
 
   return (
     <div
