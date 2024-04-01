@@ -228,7 +228,7 @@ export default function GetBloodPressureJournalsPage() {
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead>
                             <TableRow>
-                                <TableCell>
+                                <TableCell sx={{ paddingRight: '4px'}}>
                                     <div className="font-bold">
                                         Date/Time
                                         {/* <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />   */}
@@ -243,7 +243,7 @@ export default function GetBloodPressureJournalsPage() {
 								        </button>
                                     </div>
                                 </TableCell>
-                                <TableCell>
+                                <TableCell >
                                     <div className="font-bold">
                                         BP
                                         <button
@@ -257,7 +257,7 @@ export default function GetBloodPressureJournalsPage() {
 								        </button> 
                                     </div>
                                 </TableCell>
-                                <TableCell>
+                                <TableCell style={{ width: '25%'}}>
                                     <div className="font-bold">
                                         Pulse
                                         <button
@@ -275,7 +275,8 @@ export default function GetBloodPressureJournalsPage() {
                                 <TableCell>
                                     <div
                                     className="flex-2 mt-2"
-                                    style={{ marginRight: "2%" }}>
+                                    // style={{ marginRight: "2%" }}
+                                    >
                                     <input
                                         type="checkbox"
                                         checked={selectAll}
