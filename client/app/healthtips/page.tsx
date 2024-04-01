@@ -149,7 +149,7 @@ export default function Healthtips() {
                 data-testid="health-tips-subtitle"
                 className="font-bold text-darkgrey mb-4 text-center"
               >
-                Health Tips
+                Health Tips:
               </p>
               {healthTips ? (
                 <div>
