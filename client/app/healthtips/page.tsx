@@ -96,38 +96,17 @@ export default function Healthtips() {
   // Use effect to randomize tips everytime page is reloaded
   useEffect(() => {
     if (healthTips) {
-      const formattedDate = moment(healthTips.date)
-        .tz("America/Toronto")
-        .format("YYYY-MM-DD");
+      console.log(healthTips);
+      const formattedDate = healthTips.date.slice(0, 10);
       setFormattedDate(formattedDate);
       displayRandomTips();
+
       window.addEventListener("beforeunload", displayRandomTips);
       return () => {
         window.removeEventListener("beforeunload", displayRandomTips);
       };
     }
   }, [healthTips]);
-
-  // useEffect to calculate the necessary height for the tips container
-  useEffect(() => {
-    // Get a reference to the <div> element containing health tips
-    const healthTipsDiv = document.getElementById("healthTipsDiv");
-
-    // Check if healthTipsDiv exists before proceeding
-    if (healthTipsDiv) {
-      // Get the height of the <div> element
-      const healthTipsDivHeight = healthTipsDiv.clientHeight;
-
-      // Get a reference to the <img> element
-      const imgElement = document.getElementById("tipContainer");
-
-      // Check if imgElement exists before setting its height
-      if (imgElement) {
-        // Set the height of the <img> element
-        imgElement.style.height = `${healthTipsDivHeight * 1.6}px`;
-      }
-    }
-  }, []);
 
   return (
     <div
@@ -158,7 +137,7 @@ export default function Healthtips() {
           <div
             className="relative"
             style={{
-              marginTop: "",
+              marginTop: "10px",
               marginLeft: "2px auto",
               marginRight: "2px auto",
               maxWidth: "100%",
@@ -170,11 +149,11 @@ export default function Healthtips() {
               alt="Rectangle"
               className="w-full h-full"
               id="tipContainer"
-              style={{ minHeight: "400px" }}
+              style={{ height: "550px" }}
             />
             <div
               id="healthTipsDiv"
-              className="absolute top-[43%] left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+              className="absolute top-[50%] left-1/2 transform -translate-x-1/2 -translate-y-1/2"
             >
               <p
                 data-testid="health-tips-subtitle"
@@ -195,7 +174,7 @@ export default function Healthtips() {
                   <ul className="list-disc text-sm text-center font-bold text-darkgrey">
                     {Object.entries(randomizedTips).map(([category, tip]) => (
                       <ul key={category} style={{ fontSize: "0.8rem" }}>
-                        <strong>Tips:</strong> {tip}
+                        <strong>Tip:</strong> {tip}
                       </ul>
                     ))}
                   </ul>
