@@ -106,9 +106,9 @@ describe("Healthtips success", () => {
     });
 
     const subtitleText = screen.getByTestId("health-tips-subtitle");
-    const speechBubbleImage = screen.getByAltText("Speech bubble");
+    const rectangleImage = screen.getByAltText("Rectangle");
     const humanImage = screen.getByAltText("Human pointing upward");
-    expect(speechBubbleImage).toBeInTheDocument();
+    expect(rectangleImage).toBeInTheDocument();
     expect(humanImage).toBeInTheDocument();
     expect(subtitleText).toBeInTheDocument();
 

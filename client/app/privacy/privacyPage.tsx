@@ -422,43 +422,188 @@ export default function PrivacyPage() {
           as a suggestion to improve your daily lives. Compass is not liable for
           any damages caused by these health tips. Discretion is advised.
           Compass has no affiliation with any of the following sources:
-          <li>
-            https://www.mayoclinic.org/healthy-lifestyle/adult-health/in-depth/anger-management/art-20045434
-          </li>
-          <li>
-            https://www.beyondblue.org.au/mental-health/anxiety/treatments-for-anxiety/anxiety-management-strategies
-          </li>
-          <li>
-            https://www.healthline.com/health/natural-ways-to-reduce-anxiety#natural-strategies
-          </li>
-          <li>
-            https://mentalhealthcommission.ca/resource/quick-tips-to-reduce-anxiety/
-          </li>
-          <li>https://www.youtube.com/watch?v=2-WMJpoi8Qo</li>
-          <li>
-            https://www.medicalnewstoday.com/articles/how-to-improve-concentration#exercise
-          </li>
-          <li>
-            https://www.healthline.com/health/depression/how-to-fight-depression#clinical-treatment
-          </li>
-          <li>
-            https://psychcentral.com/stress/how-to-deal-with-feeling-overwhelmed#mindfulness
-          </li>
-          <li>https://www.calm.com/blog/feeling-overwhelmed</li>
-          <li>https://www.choosingtherapy.com/feeling-overwhelmed/</li>
-          <li>
-            https://psychcentral.com/stress/how-to-deal-with-feeling-overwhelmed#things-you-love
-          </li>
-          <li>https://www.cdc.gov/sleep/about_sleep/sleep_hygiene.html</li>
-          <li>
-            https://sleepeducation.org/healthy-sleep/healthy-sleep-habits/
-          </li>
-          <li>
-            https://www.betterhealth.vic.gov.au/health/conditionsandtreatments/fatigue-fighting-tips
-          </li>
-          <li>
-            https://www.nhs.uk/live-well/sleep-and-tiredness/self-help-tips-to-fight-fatigue/
-          </li>
+          <ul style={{ listStyleType: "disc" }}>
+            <li>
+              <a
+                style={{
+                  color: "blue",
+                  textDecoration: "underline",
+                  cursor: "pointer",
+                }}
+                href="https://www.mayoclinic.org/healthy-lifestyle/adult-health/in-depth/anger-management/art-20045434"
+              >
+                https://www.mayoclinic.org
+              </a>
+            </li>
+            <li>
+              <a
+                style={{
+                  color: "blue",
+                  textDecoration: "underline",
+                  cursor: "pointer",
+                }}
+                href="https://www.beyondblue.org.au/mental-health/anxiety/treatments-for-anxiety/anxiety-management-strategies"
+              >
+                https://www.beyondblue.org.au
+              </a>
+            </li>
+            <li>
+              <a
+                style={{
+                  color: "blue",
+                  textDecoration: "underline",
+                  cursor: "pointer",
+                }}
+                href="https://www.healthline.com/health/natural-ways-to-reduce-anxiety#natural-strategies"
+              >
+                https://www.healthline.com
+              </a>
+            </li>
+            <li>
+              <a
+                style={{
+                  color: "blue",
+                  textDecoration: "underline",
+                  cursor: "pointer",
+                }}
+                href="https://mentalhealthcommission.ca/resource/quick-tips-to-reduce-anxiety/"
+              >
+                https://mentalhealthcommission.ca
+              </a>
+            </li>
+            <li>
+              <a
+                style={{
+                  color: "blue",
+                  textDecoration: "underline",
+                  cursor: "pointer",
+                }}
+                href="https://www.youtube.com/watch?v=2-WMJpoi8Qo"
+              >
+                https://www.youtube.com/watch?v=2-WMJpoi8Qo
+              </a>
+            </li>
+            <li>
+              <a
+                style={{
+                  color: "blue",
+                  textDecoration: "underline",
+                  cursor: "pointer",
+                }}
+                href="https://www.medicalnewstoday.com/articles/how-to-improve-concentration#exercise"
+              >
+                https://www.medicalnewstoday.com
+              </a>
+            </li>
+            <li>
+              <a
+                style={{
+                  color: "blue",
+                  textDecoration: "underline",
+                  cursor: "pointer",
+                }}
+                href="https://www.healthline.com/health/depression/how-to-fight-depression#clinical-treatment"
+              >
+                https://www.healthline.com
+              </a>
+            </li>
+            <li>
+              <a
+                style={{
+                  color: "blue",
+                  textDecoration: "underline",
+                  cursor: "pointer",
+                }}
+                href="https://psychcentral.com/stress/how-to-deal-with-feeling-overwhelmed#mindfulness"
+              >
+                https://psychcentral.com
+              </a>
+            </li>
+            <li>
+              <a
+                style={{
+                  color: "blue",
+                  textDecoration: "underline",
+                  cursor: "pointer",
+                }}
+                href="https://www.calm.com/blog/feeling-overwhelmed"
+              >
+                https://www.calm.com
+              </a>
+            </li>
+            <li>
+              <a
+                style={{
+                  color: "blue",
+                  textDecoration: "underline",
+                  cursor: "pointer",
+                }}
+                href="https://www.choosingtherapy.com/feeling-overwhelmed/"
+              >
+                https://www.choosingtherapy.com
+              </a>
+            </li>
+            <li>
+              <a
+                style={{
+                  color: "blue",
+                  textDecoration: "underline",
+                  cursor: "pointer",
+                }}
+                href="https://psychcentral.com/stress/how-to-deal-with-feeling-overwhelmed#things-you-love"
+              >
+                https://psychcentral.com
+              </a>
+            </li>
+            <li>
+              <a
+                style={{
+                  color: "blue",
+                  textDecoration: "underline",
+                  cursor: "pointer",
+                }}
+                href="https://www.cdc.gov/sleep/about_sleep/sleep_hygiene.html"
+              >
+                https://www.cdc.gov/
+              </a>
+            </li>
+            <li>
+              <a
+                style={{
+                  color: "blue",
+                  textDecoration: "underline",
+                  cursor: "pointer",
+                }}
+                href="https://sleepeducation.org/healthy-sleep/healthy-sleep-habits/"
+              >
+                https://sleepeducation.org
+              </a>
+            </li>
+            <li>
+              <a
+                style={{
+                  color: "blue",
+                  textDecoration: "underline",
+                  cursor: "pointer",
+                }}
+                href="https://www.betterhealth.vic.gov.au/health/conditionsandtreatments/fatigue-fighting-tips"
+              >
+                https://www.betterhealth.vic.gov.au
+              </a>
+            </li>
+            <li>
+              <a
+                style={{
+                  color: "blue",
+                  textDecoration: "underline",
+                  cursor: "pointer",
+                }}
+                href="https://www.nhs.uk/live-well/sleep-and-tiredness/self-help-tips-to-fight-fatigue/"
+              >
+                https://www.nhs.uk
+              </a>
+            </li>
+          </ul>
         </div>
         <div className="font-bold text-start  text-blue p-3 text-[28px]">
           Changes to this Privacy Policy

@@ -8,6 +8,7 @@ import { useUser } from "../contexts/UserContext";
 import { getHealthTips } from "../http/healthTipsAPI";
 
 export default function Healthtips() {
+  const moment = require("moment-timezone");
   const logger = require("../../logger");
   const router = useRouter();
   const { user } = useAuth();
@@ -95,7 +96,9 @@ export default function Healthtips() {
   // Use effect to randomize tips everytime page is reloaded
   useEffect(() => {
     if (healthTips) {
-      const formattedDate = new Date(healthTips.date).toLocaleDateString();
+      const formattedDate = moment(healthTips.date)
+        .tz("America/Toronto")
+        .format("YYYY-MM-DD");
       setFormattedDate(formattedDate);
       displayRandomTips();
       window.addEventListener("beforeunload", displayRandomTips);
@@ -105,8 +108,34 @@ export default function Healthtips() {
     }
   }, [healthTips]);
 
+  // useEffect to calculate the necessary height for the tips container
+  useEffect(() => {
+    // Get a reference to the <div> element containing health tips
+    const healthTipsDiv = document.getElementById("healthTipsDiv");
+
+    // Check if healthTipsDiv exists before proceeding
+    if (healthTipsDiv) {
+      // Get the height of the <div> element
+      const healthTipsDivHeight = healthTipsDiv.clientHeight;
+
+      // Get a reference to the <img> element
+      const imgElement = document.getElementById("tipContainer");
+
+      // Check if imgElement exists before setting its height
+      if (imgElement) {
+        // Set the height of the <img> element
+        imgElement.style.height = `${healthTipsDivHeight * 1.6}px`;
+
+        console.log("HEIGHT OF CONTAINER: ", healthTipsDivHeight);
+      }
+    }
+  });
+
   return (
-    <div className="bg-eggshell p-2 min-h-screen flex flex-col">
+    <div
+      className="bg-eggshell p-2 min-h-screen flex flex-col"
+      style={{ minHeight: "100vh", overflow: "auto" }}
+    >
       <span
         data-testid="health-tips-title"
         className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4"
@@ -139,12 +168,15 @@ export default function Healthtips() {
             }}
           >
             <img
-              src="/healthTipBubble.png"
-              alt="Speech bubble"
+              src="/healthTipRectangle.png"
+              alt="Rectangle"
               className="w-full h-full"
-              style={{ height: "550px" }}
+              id="tipContainer"
             />
-            <div className="absolute top-[43%] left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <div
+              id="healthTipsDiv"
+              className="absolute top-[43%] left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+            >
               <p
                 data-testid="health-tips-subtitle"
                 className="font-bold text-darkgrey mb-4 text-center"
