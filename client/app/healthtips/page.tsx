@@ -125,8 +125,6 @@ export default function Healthtips() {
       if (imgElement) {
         // Set the height of the <img> element
         imgElement.style.height = `${healthTipsDivHeight * 1.6}px`;
-
-        console.log("HEIGHT OF CONTAINER: ", healthTipsDivHeight);
       }
     }
   }, []);
@@ -172,6 +170,7 @@ export default function Healthtips() {
               alt="Rectangle"
               className="w-full h-full"
               id="tipContainer"
+              style={{ minHeight: "400px" }}
             />
             <div
               id="healthTipsDiv"
