@@ -294,7 +294,7 @@ export default function GetBloodPressureJournalsPage() {
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                         data-testid="bp-entry"
                                     >
-                                     <TableCell component="th" scope="row">
+                                     <TableCell component="th" scope="row" sx={{ paddingRight: '4px', paddingLeft: '8px'}}>
                                          {formatDate(row.date)},
                                              <span className="font-bold"> {formatMilitaryTime(row.time)}</span>
                                      </TableCell>
