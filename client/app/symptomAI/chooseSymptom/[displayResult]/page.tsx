@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
 import Button from "../../../components/Button";
-import Header from "../../../components/Header";
+import SpanHeader from "../../../components/SpanHeader";
 
 export default function DisplayResult({params: { displayResult } } : { params: { displayResult: string } }) {
     const logger = require("../../../../logger");
@@ -23,12 +23,11 @@ export default function DisplayResult({params: { displayResult } } : { params: {
 
   return (
     <div className="bg-eggshell min-h-screen flex flex-col relative overflow-y-scroll"  style={{ paddingBottom: '100px' }}>
-        <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-            <button onClick={() => router.push("/health")}>
-                <Header headerText="Your Results"></Header>
-            </button>
-        </span>
-
+         <SpanHeader
+            onClick={() => router.push("/health")}
+            headerText="Your Result">
+        </SpanHeader>
+        
         <div className="flex flex-col mx-4 mb-4">
             <p 
             className="px-4 text-[color:var(--Dark-Grey,#2C2738)] text-2xl not-italic font-bold leading-[normal] font-family: IBM Plex Sans ">

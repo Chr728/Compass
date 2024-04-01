@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import Button from "../components/Button";
 import Header from "../components/Header";
+import SpanHeader from "../components/SpanHeader";
 import { sendImage } from "../http/pillIdentifierAPI";
 export default function PillIdentifierPage() {
 	const router = useRouter();
@@ -222,11 +223,9 @@ export default function PillIdentifierPage() {
 
 	return !apiResults ? (
 		<div className="bg-eggshell min-h-screen flex flex-col">
-			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-				<button onClick={() => router.push("/getMedications")}>
-					<Header headerText="Pill Identifier" />
-				</button>
-			</span>
+			<SpanHeader
+				onClick={() => router.push("/getMedications")}
+				headerText="Pill Identifier"></SpanHeader>
 			<p className="font-bold  text-darkgrey ml-5 p-1 text-[16px]">
 				Use our advanced AI to identify any pills or tablets you may
 				have in hand.

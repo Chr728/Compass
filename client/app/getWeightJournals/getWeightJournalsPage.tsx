@@ -9,7 +9,8 @@ import {
 } from "react-icons/md";
 import Swal from "sweetalert2";
 import Button from "../components/Button";
-import Header from "../components/Header";
+import GeneralEntry from "../components/GeneralEntry";
+import SpanHeader from "../components/SpanHeader";
 import { useAuth } from "../contexts/AuthContext";
 import { useProp } from "../contexts/PropContext";
 import { useUser } from "../contexts/UserContext";
@@ -29,6 +30,8 @@ export default function GetWeightJournalsPage() {
 	const { userInfo } = useUser();
 	const [weight, setweight] = useState<any>(null);
 	const { handlePopUp } = useProp();
+	const [selectAll, setSelectAll] = useState(false);
+	const [selectedRows, setSelectedRows] = useState<string[]>([]);
 	let chartInstance: Chart<"line", any, unknown> | null = null;
 	useEffect(() => {
 		if (!userInfo) {
@@ -111,6 +114,52 @@ export default function GetWeightJournalsPage() {
 		}
 	};
 
+	const deleteSelectedRows = async () => {
+		Swal.fire({
+			text: "Are you sure you want to delete this weight journal entry?",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Delete",
+		}).then(async (result: { isConfirmed: any }) => {
+			if (result.isConfirmed) {
+				for (const id of selectedRows) {
+					const deleteresult = await deleteWeightJournal(id);
+				}
+
+				const newData = weight.filter(
+					(item: { id: string }) => !selectedRows.includes(item.id)
+				);
+				setweight(newData);
+				setSelectedRows([]);
+
+				router.push("/getWeightJournals");
+				Swal.fire({
+					title: "Deleted!",
+					text: "Your weight journal entry has been deleted.",
+					icon: "success",
+				});
+			}
+		});
+	};
+
+	const handleSelectAll = () => {
+		if (selectAll) {
+			setSelectedRows([]);
+		} else {
+			const allIds = weight.map((item: { id: string }) => item.id);
+			setSelectedRows(allIds);
+		}
+		setSelectAll(!selectAll);
+	};
+
+	const handleCheckboxChange = (id: string) => {
+		if (selectedRows.includes(id)) {
+			setSelectedRows(selectedRows.filter((rowId) => rowId !== id));
+		} else {
+			setSelectedRows([...selectedRows, id]);
+		}
+	};
 	async function deleteWeightJournals(weightJournalId: string) {
 		Swal.fire({
 			text: "Are you sure you want to delete this weight journal entry?",
@@ -135,7 +184,6 @@ export default function GetWeightJournalsPage() {
 				});
 			}
 		});
-		window.location.reload();
 	}
 
 	const [orderdate, setOrderdate] = useState(false);
@@ -200,11 +248,9 @@ export default function GetWeightJournalsPage() {
 
 	return (
 		<div className="bg-eggshell min-h-screen flex flex-col">
-			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-				<button onClick={() => router.push("/journals")}>
-					<Header headerText="Weight Journals "></Header>
-				</button>
-			</span>
+			<SpanHeader
+				onClick={() => router.push("/journals")}
+				headerText="Weight Journals"></SpanHeader>
 			<p className="font-sans text-darkgrey ml-5 text-[14px]">
 				Managing your weight helps you stay healthy.
 			</p>
@@ -292,6 +338,15 @@ export default function GetWeightJournalsPage() {
 								</button>
 							</div>
 						</div>
+						<div
+							className="flex-2 mt-2"
+							style={{ marginRight: "2%" }}>
+							<input
+								type="checkbox"
+								checked={selectAll}
+								onChange={handleSelectAll}
+							/>
+						</div>
 					</div>
 					{weight.map((item: any, index: number) => (
 						<div
@@ -301,29 +356,19 @@ export default function GetWeightJournalsPage() {
 								backgroundColor:
 									index % 2 === 0 ? "white" : "#DBE2EA",
 							}}
+							data-testid="weight-entry"
 							onClick={() =>
 								router.push(`/getWeightJournals/${item.id}`)
 							}>
-							<div className="flex-2">
-								<p className="font-sans font-medium text-darkgrey text-[14px] text-center">
-									{`${formatDate(
-										item.date
-									)} ${formatMilitaryTime(item.time)}`}
-								</p>
-							</div>
-							<div className="flex-2">
-								<p className="mr-2 font-sans font-medium text-darkgrey text-[14px] text-center">
-									{(
-										item.weight /
-										(item.height / 100) ** 2
-									).toFixed(2)}
-								</p>
-							</div>
-							<div className="flex-2">
-								<p className="ml-3 font-sans font-medium text-darkgrey text-[14px] text-center">
-									{item.weight}
-								</p>
-							</div>
+							<GeneralEntry
+								value1={`${formatDate(
+									item.date
+								)} ${formatMilitaryTime(item.time)}`}
+								value2={(
+									item.weight /
+									(item.height / 100) ** 2
+								).toFixed(2)}
+								value3={item.weight}></GeneralEntry>
 
 							<div
 								className="flex icons"
@@ -344,9 +389,33 @@ export default function GetWeightJournalsPage() {
 										}}
 									/>
 								</div>
+								<div className="flex-1 mt-1">
+									<input
+										type="checkbox"
+										checked={selectedRows.includes(item.id)}
+										onClick={(event) => {
+											event.stopPropagation();
+											handleCheckboxChange(item.id);
+										}}
+									/>
+								</div>
 							</div>
 						</div>
 					))}
+					{selectedRows.length > 0 && (
+						<div className="mt-5 pb-4 self-center">
+							<Button
+								type="button"
+								text="Delete Selected Rows"
+								style={{
+									width: "120px",
+									fontSize: "14px",
+									padding: "1px 10px",
+								}}
+								onClick={deleteSelectedRows}
+							/>
+						</div>
+					)}
 				</div>
 			)}
 		</div>

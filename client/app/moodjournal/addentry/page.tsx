@@ -127,7 +127,7 @@ export default function AddMoodEntry() {
 
   return (
     <div 
-    className="bg-eggshell min-h-screen flex flex-col min-w-full">
+    className="bg-eggshell min-h-screen flex flex-col min-w-full overflow-y-auto" style={{ marginBottom: '20px' }}>
       <span 
         className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4">
       <Link 

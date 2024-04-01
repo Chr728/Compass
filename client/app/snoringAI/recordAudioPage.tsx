@@ -13,8 +13,8 @@ import { useEffect, useRef, useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import Swal from "sweetalert2";
 import Button from "../components/Button";
-import Header from "../components/Header";
 import RedButton from "../components/RedButton";
+import SpanHeader from "../components/SpanHeader";
 import { useAuth } from "../contexts/AuthContext";
 import { useProp } from "../contexts/PropContext";
 import {
@@ -53,7 +53,54 @@ export default function RecordAudioPage() {
 	);
 	const [entries, setEntries] = useState<any>();
 	const [timestamp, setTimestamp] = useState<string>("");
+	const [selectAll, setSelectAll] = useState(false);
+	const [selectedRows, setSelectedRows] = useState<string[]>([]);
+	const deleteSelectedRows = async () => {
+		Swal.fire({
+			text: "Are you sure you want to delete this entries journal entry?",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Delete",
+		}).then(async (result: { isConfirmed: any }) => {
+			if (result.isConfirmed) {
+				for (const id of selectedRows) {
+					const deleteresult = await deleteAudioEntry(id);
+				}
 
+				const newData = entries.filter(
+					(item: { id: string }) => !selectedRows.includes(item.id)
+				);
+				setEntries(newData);
+				setSelectedRows([]);
+
+				router.push("/getWeightJournals");
+				Swal.fire({
+					title: "Deleted!",
+					text: "Your entries journal entry has been deleted.",
+					icon: "success",
+				});
+			}
+		});
+	};
+
+	const handleSelectAll = () => {
+		if (selectAll) {
+			setSelectedRows([]);
+		} else {
+			const allIds = entries.map((item: { id: string }) => item.id);
+			setSelectedRows(allIds);
+		}
+		setSelectAll(!selectAll);
+	};
+
+	const handleCheckboxChange = (id: string) => {
+		if (selectedRows.includes(id)) {
+			setSelectedRows(selectedRows.filter((rowId) => rowId !== id));
+		} else {
+			setSelectedRows([...selectedRows, id]);
+		}
+	};
 	async function deleteAudioEntryFunction(audioEntryID: string) {
 		Swal.fire({
 			text: "Are you sure you want to delete this audio entry?",
@@ -356,12 +403,9 @@ export default function RecordAudioPage() {
 
 	return (
 		<div className="bg-eggshell min-h-screen flex flex-col w-full overflow-y-auto">
-			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-2">
-				<button onClick={() => router.push("/health")}>
-					<Header headerText="Snoring AI"></Header>
-				</button>
-			</span>
-
+			<SpanHeader
+				onClick={() => router.push("/health")}
+				headerText="Snoring AI"></SpanHeader>
 			{!showGraph ? (
 				<div className="flex flex-col justify-center">
 					{(recording || itemRecorded) && (
@@ -461,13 +505,30 @@ export default function RecordAudioPage() {
 													</div>
 												</TableCell>
 												<TableCell></TableCell>
+												<TableCell>
+													<div
+														className="flex-2 mt-2"
+														style={{
+															float: "right",
+														}}>
+														<input
+															type="checkbox"
+															checked={selectAll}
+															onChange={
+																handleSelectAll
+															}
+														/>
+													</div>
+												</TableCell>
 											</TableRow>
 										</TableHead>
 										<TableBody>
 											{entries &&
 												Array.isArray(entries) &&
 												entries.map((row, index) => (
-													<TableRow key={index}>
+													<TableRow
+														key={index}
+														data-testid="snoring-entry">
 														<TableCell
 															component="th"
 															scope="row">
@@ -537,8 +598,42 @@ export default function RecordAudioPage() {
 																/>
 															</div>
 														</TableCell>
+														<TableCell>
+															<div className="flex-1 mt-1">
+																<input
+																	type="checkbox"
+																	checked={selectedRows.includes(
+																		row.id
+																	)}
+																	onClick={(
+																		event
+																	) => {
+																		event.stopPropagation();
+																		handleCheckboxChange(
+																			row.id
+																		);
+																	}}
+																/>
+															</div>
+														</TableCell>
 													</TableRow>
 												))}{" "}
+											{selectedRows.length > 0 && (
+												<div className="mt-5 pb-4 self-center">
+													<Button
+														type="button"
+														text="Delete Selected Rows"
+														style={{
+															width: "120px",
+															fontSize: "14px",
+															padding: "1px 10px",
+														}}
+														onClick={
+															deleteSelectedRows
+														}
+													/>
+												</div>
+											)}
 										</TableBody>
 									</Table>
 								</TableContainer>
