@@ -275,7 +275,6 @@ export default function GetBloodPressureJournalsPage() {
                                 <TableCell>
                                     <div
                                     className="flex-2 mt-2"
-                                    // style={{ marginRight: "2%" }}
                                     >
                                     <input
                                         type="checkbox"
