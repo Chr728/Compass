@@ -228,7 +228,7 @@ export default function GetBloodPressureJournalsPage() {
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead>
                             <TableRow>
-                                <TableCell sx={{ paddingRight: '4px'}}>
+                                <TableCell sx={{ paddingRight: '4px', paddingLeft: '8px'}}>
                                     <div className="font-bold">
                                         Date/Time
                                         {/* <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />   */}
