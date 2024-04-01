@@ -72,6 +72,7 @@ describe("Healthtips success", () => {
   test("renders content properly", async () => {
     const fakeData = {
       data: {
+        date: "2024-03-28T00:00:00.000Z",
         angertips:
           '{"tip1":"Take some timeout during the day","tip2":"Take your time"}',
         anxietytips:
