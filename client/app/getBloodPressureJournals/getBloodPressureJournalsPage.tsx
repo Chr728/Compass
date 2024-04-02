@@ -228,7 +228,7 @@ export default function GetBloodPressureJournalsPage() {
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead>
                             <TableRow>
-                                <TableCell>
+                                <TableCell sx={{ paddingRight: '4px', paddingLeft: '4px'}}>
                                     <div className="font-bold">
                                         Date/Time
                                         {/* <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />   */}
@@ -243,7 +243,7 @@ export default function GetBloodPressureJournalsPage() {
 								        </button>
                                     </div>
                                 </TableCell>
-                                <TableCell>
+                                <TableCell sx={{ paddingRight: '4px', paddingLeft: '4px'}} >
                                     <div className="font-bold">
                                         BP
                                         <button
@@ -257,7 +257,7 @@ export default function GetBloodPressureJournalsPage() {
 								        </button> 
                                     </div>
                                 </TableCell>
-                                <TableCell>
+                                <TableCell style={{ width: '25%'}} sx={{ paddingRight: '4px', paddingLeft: '4px'}}>
                                     <div className="font-bold">
                                         Pulse
                                         <button
@@ -271,11 +271,11 @@ export default function GetBloodPressureJournalsPage() {
 								        </button>
                                     </div>
                                 </TableCell>
-                                <TableCell></TableCell>
-                                <TableCell>
+                                <TableCell sx={{ paddingRight: '4px', paddingLeft: '4px'}}></TableCell>
+                                <TableCell sx={{ paddingRight: '4px', paddingLeft: '4px'}}>
                                     <div
                                     className="flex-2 mt-2"
-                                    style={{ marginRight: "2%" }}>
+                                    >
                                     <input
                                         type="checkbox"
                                         checked={selectAll}
@@ -294,13 +294,13 @@ export default function GetBloodPressureJournalsPage() {
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                         data-testid="bp-entry"
                                     >
-                                     <TableCell component="th" scope="row">
+                                     <TableCell component="th" scope="row"  sx={{ paddingRight: '4px', paddingLeft: '4px'}}>
                                          {formatDate(row.date)},
                                              <span className="font-bold"> {formatMilitaryTime(row.time)}</span>
                                      </TableCell>
-                                     <TableCell >{row.systolic}/{row.diastolic}</TableCell>
-                                     <TableCell >{row.pulse}</TableCell>
-                                     <TableCell>
+                                     <TableCell  sx={{ paddingRight: '4px', paddingLeft: '4px'}}>{row.systolic}/{row.diastolic}</TableCell>
+                                     <TableCell sx={{ paddingRight: '4px', paddingLeft: '4px'}} >{row.pulse}</TableCell>
+                                     <TableCell  sx={{ paddingRight: '4px', paddingLeft: '4px'}}>
                                          <Image 
                                              src="/icons/trash.svg"
                                              alt="Trash icon"
@@ -314,7 +314,7 @@ export default function GetBloodPressureJournalsPage() {
                                             }}
                                          />                        
                                      </TableCell>
-                                     <TableCell>
+                                     <TableCell  sx={{ paddingRight: '4px', paddingLeft: '4px'}}>
                                         <div className="flex-1 mt-1">
                                             <input
                                                 type="checkbox"
