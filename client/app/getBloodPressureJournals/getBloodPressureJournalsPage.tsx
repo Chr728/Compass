@@ -243,7 +243,7 @@ export default function GetBloodPressureJournalsPage() {
 								        </button>
                                     </div>
                                 </TableCell>
-                                <TableCell >
+                                <TableCell sx={{ paddingRight: '4px', paddingLeft: '8px'}} >
                                     <div className="font-bold">
                                         BP
                                         <button
@@ -257,7 +257,7 @@ export default function GetBloodPressureJournalsPage() {
 								        </button> 
                                     </div>
                                 </TableCell>
-                                <TableCell style={{ width: '25%'}}>
+                                <TableCell style={{ width: '25%'}} sx={{ paddingRight: '4px', paddingLeft: '8px'}}>
                                     <div className="font-bold">
                                         Pulse
                                         <button
@@ -271,8 +271,8 @@ export default function GetBloodPressureJournalsPage() {
 								        </button>
                                     </div>
                                 </TableCell>
-                                <TableCell></TableCell>
-                                <TableCell>
+                                <TableCell sx={{ paddingRight: '4px', paddingLeft: '8px'}}></TableCell>
+                                <TableCell sx={{ paddingRight: '4px', paddingLeft: '8px'}}>
                                     <div
                                     className="flex-2 mt-2"
                                     >
