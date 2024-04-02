@@ -397,7 +397,7 @@ export default function PillIdentifierPage() {
 						<p>
 							Score:&nbsp;
 							<span className="font-normal">
-							{parseFloat(apiResults[selectedLabel].probability.toFixed(2))}
+							{parseFloat(apiResults[selectedLabel].probability.toFixed(2)) * 100}
 								% match
 							</span>
 						</p>
