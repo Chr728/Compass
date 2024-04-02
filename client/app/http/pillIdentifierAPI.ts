@@ -19,7 +19,7 @@ export async function sendImage(selectedImage: any, isBinary = false): Promise<a
             formData.append('file', selectedImage);
         }
         
-        const response = await fetch(`http://127.0.0.1:8080/PillAI`, {
+        const response = await fetch(`http://${process.env.DEMO_HOST}:8080/PillAI`, {
             method: "POST",
             body:  formData
         });

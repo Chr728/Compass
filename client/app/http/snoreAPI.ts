@@ -17,7 +17,7 @@ export async function sendAudio(audioBlob:any): Promise<any>{
 		const formData = new FormData();
 		formData.append('file', audioBlob, 'recording.wav');
 		
-		const response = await fetch('http://127.0.0.1:8080/SnoringAI', {
+		const response = await fetch('http://${process.env.DEMO_HOST}:8080/SnoringAI', {
 			method: 'POST',
 			body: formData,
 		});

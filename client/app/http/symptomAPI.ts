@@ -17,7 +17,7 @@ export async function sendSymptoms(symptoms:any): Promise<any>{
           }; 
         const payloadString = JSON.stringify(payload);
 		
-		const response = await fetch('http://127.0.0.1:8080/SymptomChecker', {
+		const response = await fetch('http://${process.env.DEMO_HOST}:8080/SymptomChecker', {
 			method: 'POST',
             body: payloadString,
             headers: {

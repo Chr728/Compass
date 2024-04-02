@@ -32,7 +32,8 @@ if IS_LOCAL == 'true':
     PYTHON_PORT = int(os.getenv("PYTHON_PORT"))
 else:
     PYTHON_PORT = int(os.getenv("PORT"))
-PYTHON_HOST = os.getenv("PYTHON_HOST")
+# PYTHON_HOST = os.getenv("PYTHON_HOST")
+PYTHON_HOST = os.getenv("DEMO_HOST")
 
 #Initialization for symptom checker
 class Item(BaseModel):
