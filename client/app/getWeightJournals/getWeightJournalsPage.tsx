@@ -295,7 +295,7 @@ export default function GetWeightJournalsPage() {
 					<div
 						className="flex"
 						style={{ justifyContent: "space-between" }}>
-						<div className="flex-2" style={{ marginRight: "12%" }}>
+						<div className="flex-2">
 							<div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
 								Date/Time
 								<button
@@ -310,7 +310,7 @@ export default function GetWeightJournalsPage() {
 							</div>
 						</div>
 
-						<div className="flex-2" style={{ marginRight: "2%" }}>
+						<div className="flex-2" >
 							<div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
 								BMI
 								<button
@@ -324,7 +324,7 @@ export default function GetWeightJournalsPage() {
 								</button>
 							</div>
 						</div>
-						<div className="flex-2" style={{ marginRight: "10%" }}>
+						<div className="flex-2">
 							<div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
 								Weight
 								<button
@@ -339,8 +339,8 @@ export default function GetWeightJournalsPage() {
 							</div>
 						</div>
 						<div
-							className="flex-2 mt-2"
-							style={{ marginRight: "2%" }}>
+							className="flex-2 mt-2" >
+							
 							<input
 								type="checkbox"
 								checked={selectAll}

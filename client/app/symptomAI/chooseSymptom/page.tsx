@@ -214,7 +214,7 @@ export default function ChooseSymptoms() {
           <ul className="max-w-[356px] flex flex-col h-[90px] overflow-y-scroll space-y-2 items-center">
             {
               selectedWords.map((item: any, index: any) => {
-                return <li key={index} className="rounded-2xl bg-blue flex items-center space-x-2 font-sans px-2 h-[34px]">{item}
+                return <li key={index} className="rounded-2xl bg-blue text-white flex items-center space-x-2 font-sans px-2 h-[34px]">{item}
                 <Image
                   src='/icons/cross.svg'
                   alt="Cross icon"
