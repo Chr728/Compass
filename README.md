@@ -146,10 +146,14 @@ The following link directs to a read-only version of the application's UI mockup
 - Registration, Authentication and Security
 - View and Add Appointments
 - View and Add Medications
-- Personal Diabetes, Food intake, Activity, Weight and Mood Journals
+- Personal Diabetes, Food intake, Activity, Weight, Oxygen, Blood pressure and Mood Journals
 - Push Notifications for Reminders
 - Predicting pill names based on pill pictures
 - Speed dial to family, caregivers and emergency
+- Record and visualize snoring patterns
+- Predict disease based on symptoms
+- Check the capacity of an Emergency Room in Quebec
+- Get health tips and news
 
 ## License
 
