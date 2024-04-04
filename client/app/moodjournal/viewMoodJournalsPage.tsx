@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import Swal from "sweetalert2";
 import Button from "../components/Button";
-import Header from "../components/Header";
+import SpanHeader from "../components/SpanHeader";
 import { useAuth } from "../contexts/AuthContext";
 import {
 	formatDate,
@@ -19,7 +19,6 @@ import {
 	formatMilitaryTime,
 } from "../helpers/utils/datetimeformat";
 import { deleteMoodJournal, getMoodJournals } from "../http/moodJournalAPI";
-import SpanHeader from "../components/SpanHeader";
 
 export default function ViewMoodJournalsPage() {
 	const logger = require("../../logger");
@@ -79,6 +78,20 @@ export default function ViewMoodJournalsPage() {
 								case "awful":
 									return 1;
 							}
+							// switch (item.howAreYou) {
+							// 	case "awesome":
+							// 		return "Awesome";
+							// 	case "good":
+							// 		return "Good";
+							// 	case "sad":
+							// 		return "Sad";
+							// 	case "bad":
+							// 		return "Bad";
+							// 	case "awful":
+							// 		return "Awful";
+							// 	default:
+							// 		return ""; // Handle default case if necessary
+							// }
 						});
 
 					if (chartInstance) {
@@ -92,20 +105,93 @@ export default function ViewMoodJournalsPage() {
 								labels: moodJournal.map(
 									(item: any, index: number) => index + 1
 								),
+								// labels: moodValues.map((mood: number) => {
+								// 	switch (mood) {
+								// 		case 5:
+								// 			return "Awesome";
+								// 		case 4:
+								// 			return "Good";
+								// 		case 3:
+								// 			return "Sad";
+								// 		case 2:
+								// 			return "Bad";
+								// 		case 1:
+								// 			return "Awful";
+								// 		default:
+								// 			return ""; // Handle default case if necessary
+								// 	}
+								// }),
 								datasets: [
 									{
 										label: "Mood",
 										data: moodValues || [],
+										// data: moodValues.map((mood: number) => {
+										// 	switch (mood) {
+										// 		case 5:
+										// 			return "Awesome";
+										// 		case 4:
+										// 			return "Good";
+										// 		case 3:
+										// 			return "Sad";
+										// 		case 2:
+										// 			return "Bad";
+										// 		case 1:
+										// 			return "Awful";
+										// 		default:
+										// 			return 0; // Handle default case if necessary
+										// 	}
+										// }),
 										borderColor: "rgba(75, 192, 192, 1)",
 										tension: 0.1,
 									},
 								],
 							},
+							// options: {
+							// 	scales: {
+							// 		y: {
+							// 			beginAtZero: true,
+							// 			suggestedMax: 5,
+							// 		},
+							// 	},
+							// },
 							options: {
 								scales: {
 									y: {
 										beginAtZero: true,
-										suggestedMax: 5,
+										title: {
+											display: true,
+											// text: "Mood",
+										},
+										ticks: {
+											callback: function (
+												value: string | number
+											) {
+												if (typeof value === "number") {
+													switch (value) {
+														case 5:
+															return "Awesome";
+														case 4:
+															return "Good";
+														case 3:
+															return "Sad";
+														case 2:
+															return "Bad";
+														case 1:
+															return "Awful";
+														default:
+															return value.toString();
+													}
+												} else {
+													return value;
+												}
+											},
+										},
+									},
+									x: {
+										title: {
+											display: true,
+											text: "Index",
+										},
 									},
 								},
 							},
@@ -206,7 +292,6 @@ export default function ViewMoodJournalsPage() {
 	const handleDailyClick = () => {
 		setShowCalendar(false);
 	};
-
 
 	const handleSelectAll = () => {
 		if (selectAll) {
@@ -329,8 +414,7 @@ export default function ViewMoodJournalsPage() {
 		<div className="bg-eggshell min-h-screen flex flex-col w-full">
 			<SpanHeader
 				onClick={() => router.push("/journals")}
-				headerText="Mood Journal">
-			</SpanHeader>
+				headerText="Mood Journal"></SpanHeader>
 			<p className="text-grey font-sans text-[16px] ml-4 mt-2 w-11/12">
 				Tracking your mood helps you understand when and what caused
 				your mood to change.
@@ -338,11 +422,13 @@ export default function ViewMoodJournalsPage() {
 			<div
 				style={{
 					marginBottom: "10px",
-					padding: "3px",
+					padding: "2px",
 				}}>
 				<canvas id="moodChart"></canvas>
 			</div>
-			<div className="w-11/12 rounded-3xl flex flex-col space-y-4 mt-2 self-center overflow-y-auto" style={{ marginBottom: '90.5px' }}>
+			<div
+				className="w-11/12 rounded-3xl flex flex-col space-y-4 mt-2 self-center overflow-y-auto"
+				style={{ marginBottom: "90.5px" }}>
 				<div
 					className="flex space-x-2"
 					style={{ padding: "24px 16px 0 16px" }}>
@@ -382,7 +468,6 @@ export default function ViewMoodJournalsPage() {
 							fontSize: "14px",
 						}}
 					/>
-					
 				</div>
 				{!showCalendar && (
 					<div
@@ -410,7 +495,10 @@ export default function ViewMoodJournalsPage() {
 						</div>
 						{moodJournal &&
 							moodJournal.map((data: any, index: number) => (
-								<div key={data.id} className="flex space-x-2 mb-8" data-testid="mood-entry">
+								<div
+									key={data.id}
+									className="flex space-x-2 mb-8"
+									data-testid="mood-entry">
 									<div className="self-center border border-grey p-2 rounded-lg w-[100px] h-[75px] text-center font-bold text-darkgrey text-[20px]">
 										<p>
 											{formatDate(data.date)
@@ -442,7 +530,7 @@ export default function ViewMoodJournalsPage() {
 												background: setColor(
 													data.howAreYou
 												),
-										}}>
+											}}>
 											<div className="flex items-center absolute top-2 right-2">
 												<Image
 													src="/icons/greyTrash.svg"
@@ -463,12 +551,19 @@ export default function ViewMoodJournalsPage() {
 												<div className="flex-1 mt-1">
 													<input
 														type="checkbox"
-														checked={selectedRows.includes(data.id)}
+														checked={selectedRows.includes(
+															data.id
+														)}
 														onClick={(event) => {
 															event.stopPropagation();
-															handleCheckboxChange(data.id);
+															handleCheckboxChange(
+																data.id
+															);
 														}}
-														style={{ width: '15px', height: '15px' }} 
+														style={{
+															width: "15px",
+															height: "15px",
+														}}
 													/>
 												</div>
 											</div>
