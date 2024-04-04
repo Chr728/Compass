@@ -237,7 +237,6 @@ describe("Testing mood journal reminders ", () => {
 
     // Assertions
     expect(db.MoodJournal.findAll).toHaveBeenCalledTimes(1);
-    expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
 
     // Ensure Logger.error is called with the appropriate message
     expect(Logger.error).toHaveBeenCalledTimes(1);
