@@ -19,12 +19,14 @@ import {
 	formatMilitaryTime,
 } from "../helpers/utils/datetimeformat";
 import { deleteMoodJournal, getMoodJournals } from "../http/moodJournalAPI";
+import SpanHeader from "../components/SpanHeader";
 
 export default function ViewMoodJournalsPage() {
 	const logger = require("../../logger");
 	const { user } = useAuth();
 	const [moodJournal, setMoodJournal] = useState<any>(null);
-	const [moodColor, setMoodColor] = useState<any>();
+	const [selectAll, setSelectAll] = useState(false);
+	const [selectedRows, setSelectedRows] = useState<string[]>([]);
 	const router = useRouter();
 	const [showCalendar, setShowCalendar] = useState<boolean>(false);
 	const [highlightedDays, setHighlightedDays] = useState<string[]>([]);
@@ -164,6 +166,35 @@ export default function ViewMoodJournalsPage() {
 		});
 	}
 
+	const deleteSelectedRows = async () => {
+		Swal.fire({
+			text: "Are you sure you want to delete these mood journal entries?",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Delete",
+		}).then(async (result: { isConfirmed: any }) => {
+			if (result.isConfirmed) {
+				for (const id of selectedRows) {
+					const deleteresult = await deleteMoodJournal(id);
+				}
+
+				const newData = moodJournal.filter(
+					(item: { id: string }) => !selectedRows.includes(item.id)
+				);
+				setMoodJournal(newData);
+				setSelectedRows([]);
+
+				router.push("/moodjournal");
+				Swal.fire({
+					title: "Deleted!",
+					text: "Your mood journal entries have been deleted.",
+					icon: "success",
+				});
+			}
+		});
+	};
+
 	const handleClick = (moodJournalID: string) => {
 		router.push(`/moodjournal/${moodJournalID}`);
 	};
@@ -174,6 +205,25 @@ export default function ViewMoodJournalsPage() {
 
 	const handleDailyClick = () => {
 		setShowCalendar(false);
+	};
+
+
+	const handleSelectAll = () => {
+		if (selectAll) {
+			setSelectedRows([]);
+		} else {
+			const allIds = moodJournal.map((item: { id: string }) => item.id);
+			setSelectedRows(allIds);
+		}
+		setSelectAll(!selectAll);
+	};
+
+	const handleCheckboxChange = (id: string) => {
+		if (selectedRows.includes(id)) {
+			setSelectedRows(selectedRows.filter((rowId) => rowId !== id));
+		} else {
+			setSelectedRows([...selectedRows, id]);
+		}
 	};
 
 	useEffect(() => {
@@ -277,11 +327,10 @@ export default function ViewMoodJournalsPage() {
 
 	return (
 		<div className="bg-eggshell min-h-screen flex flex-col w-full">
-			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4">
-				<button onClick={() => router.push("/journals")}>
-					<Header headerText="Mood Journal "></Header>
-				</button>
-			</span>
+			<SpanHeader
+				onClick={() => router.push("/journals")}
+				headerText="Mood Journal">
+			</SpanHeader>
 			<p className="text-grey font-sans text-[16px] ml-4 mt-2 w-11/12">
 				Tracking your mood helps you understand when and what caused
 				your mood to change.
@@ -293,7 +342,7 @@ export default function ViewMoodJournalsPage() {
 				}}>
 				<canvas id="moodChart"></canvas>
 			</div>
-			<div className="w-11/12 rounded-3xl flex flex-col space-y-4 mt-2 self-center mb-4">
+			<div className="w-11/12 rounded-3xl flex flex-col space-y-4 mt-2 self-center overflow-y-auto" style={{ marginBottom: '90.5px' }}>
 				<div
 					className="flex space-x-2"
 					style={{ padding: "24px 16px 0 16px" }}>
@@ -333,24 +382,36 @@ export default function ViewMoodJournalsPage() {
 							fontSize: "14px",
 						}}
 					/>
+					
 				</div>
 				{!showCalendar && (
 					<div
 						className="flex flex-col space-y-2 p-4 text-darkgrey"
 						style={{ overflowY: "auto", maxHeight: "380px" }}>
-						<button
-							onClick={handleOrderDate}
-							aria-label="orderDate">
-							{orderdate ? (
-								<MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" />
-							) : (
-								<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
-							)}
-						</button>
+						<div className="flex space-x-4 justify-center">
+							<button
+								onClick={handleOrderDate}
+								aria-label="orderDate">
+								{orderdate ? (
+									<MdKeyboardArrowUp className="inline-block text-lg text-darkgrey" />
+								) : (
+									<MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />
+								)}
+							</button>
+							<div
+								className="flex-2 mt-2 mx-4"
+								style={{ marginRight: "2%" }}>
+								<input
+									type="checkbox"
+									checked={selectAll}
+									onChange={handleSelectAll}
+								/>
+							</div>
+						</div>
 						{moodJournal &&
 							moodJournal.map((data: any, index: number) => (
-								<div key={data.id} className="flex space-x-2">
-									<div className="self-center border border-grey p-2 rounded-lg w-[75px] h-[75px] text-center font-bold text-darkgrey text-[20px]">
+								<div key={data.id} className="flex space-x-2 mb-8" data-testid="mood-entry">
+									<div className="self-center border border-grey p-2 rounded-lg w-[100px] h-[75px] text-center font-bold text-darkgrey text-[20px]">
 										<p>
 											{formatDate(data.date)
 												.substring(0, 3)
@@ -381,14 +442,13 @@ export default function ViewMoodJournalsPage() {
 												background: setColor(
 													data.howAreYou
 												),
-											}}>
-											<div>
+										}}>
+											<div className="flex items-center absolute top-2 right-2">
 												<Image
 													src="/icons/greyTrash.svg"
 													alt="Grey-colored Trash icon"
 													width={10}
 													height={10}
-													className="absolute top-2 right-2"
 													style={{
 														width: "auto",
 														height: "auto",
@@ -400,6 +460,17 @@ export default function ViewMoodJournalsPage() {
 														);
 													}}
 												/>
+												<div className="flex-1 mt-1">
+													<input
+														type="checkbox"
+														checked={selectedRows.includes(data.id)}
+														onClick={(event) => {
+															event.stopPropagation();
+															handleCheckboxChange(data.id);
+														}}
+														style={{ width: '15px', height: '15px' }} 
+													/>
+												</div>
 											</div>
 											<p className="font-medium">
 												Felt {data.howAreYou}! at{" "}
@@ -450,6 +521,20 @@ export default function ViewMoodJournalsPage() {
 					</LocalizationProvider>
 				)}
 
+				{selectedRows.length > 0 && (
+					<div className="mt-2 pb-4 self-center">
+						<Button
+							type="button"
+							text="Delete Selected Rows"
+							style={{
+								width: "120px",
+								fontSize: "14px",
+								padding: "1px 10px",
+							}}
+							onClick={deleteSelectedRows}
+						/>
+					</div>
+				)}
 				<div className="mb-2">&nbsp;</div>
 			</div>
 		</div>

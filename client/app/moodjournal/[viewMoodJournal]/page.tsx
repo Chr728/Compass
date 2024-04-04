@@ -93,7 +93,7 @@ export default function GetMoodJournal({
 					</Typography>
 					<Typography variant="body1" ml={4} color="black">
 						<b>I feel like things are just too much:</b>{" "}
-						{mood.stressSignals.anxiety}
+						{mood.stressSignals.pressure}
 					</Typography>
 					<Typography variant="body1" ml={4} color="black">
 						<b>I have trouble paying attention:</b>{" "}
@@ -105,7 +105,7 @@ export default function GetMoodJournal({
 					</Typography>
 					<Typography variant="body1" ml={4} color="black">
 						<b>I feel angry or irritated:</b>{" "}
-						{mood.stressSignals.angry}
+						{mood.stressSignals.anger}
 					</Typography>
 					<Typography variant="body1" ml={4} color="black">
 						<b>I get headaches and/or colds:</b>{" "}

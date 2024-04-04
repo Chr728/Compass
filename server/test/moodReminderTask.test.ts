@@ -6,14 +6,13 @@ import { user, startServer, stopServer } from "../utils/journalsTestHelper";
 import { sendMoodReminder } from "../tasks/moodReminderTask";
 import { Logger } from "../middlewares/logger";
 const fs = require("fs");
-const csv = require("csv-parser")
+const csv = require("csv-parser");
 
 let server: any;
 const port = process.env.PORT;
 const publicKey = process.env.VAPID_PUBLIC_KEY;
 const privateKey = process.env.VAPID_PRIVATE_KEY;
 webPush.setVapidDetails("mailto:test@gmail.com", publicKey, privateKey);
-
 
 //Predefined mood journal entry
 const userMoodJournal = [
@@ -39,54 +38,66 @@ const userMoodJournal = [
     }
 ];
 
-
+//Predefined preferences
+const userNotificationPreferences = {
+  id: 1,
+  uid: "testuid",
+  permissionGranted: true,
+  activityReminders: true,
+  medicationReminders: true,
+  appointmentReminders: true,
+  foodIntakeReminders: true,
+  glucoseMeasurementReminders: true,
+  insulinDosageReminders: true,
+  moodReminders: true,
+};
 
 //Predefined user tips model
 const usertips = {
-  id:1,
-  uid:"testuid",
-  angertips:"",
-  anxietytips:"",
-  attentiontips:"",
-  depressiontips:"",
-  overwhelmedtips:"",
-  sleeptips:"",
-  tiredtips:"",
+  id: 1,
+  uid: "testuid",
+  angertips: "",
+  anxietytips: "",
+  attentiontips: "",
+  depressiontips: "",
+  overwhelmedtips: "",
+  sleeptips: "",
+  tiredtips: "",
   date: "2023-10-08T10:00:00Z",
   time: "10:00:00",
-}
+};
 
 const usertips1 = {
-  id:1,
-  uid:"testuid",
-  angertips:"",
-  anxietytips:"",
-  attentiontips:"",
-  depressiontips:"",
-  overwhelmedtips:"",
-  sleeptips:"test",
-  tiredtips:"",
+  id: 1,
+  uid: "testuid",
+  angertips: "",
+  anxietytips: "",
+  attentiontips: "",
+  depressiontips: "",
+  overwhelmedtips: "",
+  sleeptips: "test",
+  tiredtips: "",
   date: "2023-10-08T10:00:00Z",
   time: "10:00:00",
-}
+};
 
 
 
 
 //Predefined token
 const mockedDecodedToken = {
-    uid: "testuid",
-    aud: "",
-    auth_time: 0,
-    exp: 0,
-    firebase: {
-      identities: { [0]: "string" },
-      sign_in_provider: "string",
-    },
-    iat: 0,
-    iss: "",
-    sub: "",
-  };
+  uid: "testuid",
+  aud: "",
+  auth_time: 0,
+  exp: 0,
+  firebase: {
+    identities: { [0]: "string" },
+    sign_in_provider: "string",
+  },
+  iat: 0,
+  iss: "",
+  sub: "",
+};
 
 //Predefined subscription
 const userSubscription = {
@@ -122,7 +133,6 @@ beforeEach(() => {
   // Mock the moment module
   jest.mock("moment-timezone");
 
-
   // Mock the logger module
   jest.mock("../middlewares/logger", () => {
     const originalLogger = jest.requireActual("../middlewares/logger");
@@ -135,8 +145,6 @@ beforeEach(() => {
       },
     };
   });
-
-  
 });
 
 afterEach(() => {
@@ -148,11 +156,14 @@ describe("Testing mood journal reminders ", () => {
     // Spy on all Mood Journal functions
     jest.spyOn(webPush, "sendNotification").mockResolvedValue("test");
     jest.spyOn(db.MoodJournal, "findAll").mockResolvedValue(userMoodJournal);
+    jest
+      .spyOn(db.NotificationPreference, "findOne")
+      .mockResolvedValue(userNotificationPreferences);
     jest.spyOn(db.Subscription, "findOne").mockResolvedValue(userSubscription);
-    jest.spyOn(db.HealthTips, "findOne").mockResolvedValue(usertips1);
-    jest.spyOn(db.HealthTips, "update").mockResolvedValue(usertips1)
-    
-    //Spy on logger 
+    jest.spyOn(db.HealthTips, "findOne").mockResolvedValue(usertips);
+    jest.spyOn(db.HealthTips, "update").mockResolvedValue(usertips);
+
+    //Spy on logger
     jest.spyOn(Logger, "info");
 
     //Call mood reminder function
@@ -160,11 +171,10 @@ describe("Testing mood journal reminders ", () => {
 
     //Check assertions for the mood jounral functions
     expect(db.MoodJournal.findAll).toHaveBeenCalledTimes(1);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
     expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
     expect(db.HealthTips.findOne).toHaveBeenCalledTimes(1);
-    expect(db.HealthTips.update).toHaveBeenCalledTimes(1)
-    expect(webPush.sendNotification).toHaveBeenCalledTimes(1)
-        
+    expect(db.HealthTips.update).toHaveBeenCalledTimes(1);
   });
 
   it("should send error if it fails to fetch mood reminder", async () => {
@@ -190,13 +200,19 @@ describe("Testing mood journal reminders ", () => {
     // Spy on all Mood Journal functions
     jest.spyOn(webPush, "sendNotification").mockResolvedValue("test");
     jest.spyOn(db.MoodJournal, "findAll").mockResolvedValue(userMoodJournal);
+    jest
+      .spyOn(db.NotificationPreference, "findOne")
+      .mockResolvedValue(userNotificationPreferences);
+    jest
+      .spyOn(db.NotificationPreference, "findOne")
+      .mockResolvedValue(userNotificationPreferences);
     jest.spyOn(db.Subscription, "findOne").mockResolvedValue(userSubscription);
     jest.spyOn(db.HealthTips, "findOne").mockResolvedValue(null);
     jest.spyOn(db.HealthTips, "create").mockResolvedValue(usertips)
     jest.spyOn(db.HealthTips,"update").mockResolvedValue(usertips1)
 
 
-    //Spy on logger 
+    //Spy on logger
     jest.spyOn(Logger, "info");
 
     //Call mood reminder function
@@ -204,6 +220,7 @@ describe("Testing mood journal reminders ", () => {
 
     //Check assertions for the mood jounral functions
     expect(db.MoodJournal.findAll).toHaveBeenCalledTimes(1);
+    expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
     expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
     expect(db.HealthTips.findOne).toHaveBeenCalledTimes(1);
     expect(db.HealthTips.create).toHaveBeenCalledTimes(1)

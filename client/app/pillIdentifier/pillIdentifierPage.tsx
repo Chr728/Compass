@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import Button from "../components/Button";
 import Header from "../components/Header";
+import SpanHeader from "../components/SpanHeader";
 import { sendImage } from "../http/pillIdentifierAPI";
 export default function PillIdentifierPage() {
 	const router = useRouter();
@@ -222,11 +223,9 @@ export default function PillIdentifierPage() {
 
 	return !apiResults ? (
 		<div className="bg-eggshell min-h-screen flex flex-col">
-			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-				<button onClick={() => router.push("/getMedications")}>
-					<Header headerText="Pill Identifier" />
-				</button>
-			</span>
+			<SpanHeader
+				onClick={() => router.push("/getMedications")}
+				headerText="Pill Identifier"></SpanHeader>
 			<p className="font-bold  text-darkgrey ml-5 p-1 text-[16px]">
 				Use our advanced AI to identify any pills or tablets you may
 				have in hand.
@@ -385,24 +384,26 @@ export default function PillIdentifierPage() {
 
 				<div className="w-full">
 					<p className="font-bold text-darkgrey p-4 text-[24px] text-center leading-tight -mt-2">
-						{apiResults[selectedLabel].label
+						{apiResults[selectedLabel].label}
+						{/* {apiResults[selectedLabel].label
 							.slice(
 								0,
 								apiResults[selectedLabel].label.search(/\d/)
 							)
-							.trim()}
+							.trim()} */}
 					</p>
 
 					<div className="font-bold text-darkgrey text-[18px] px-4 -mt-2">
 						<p>
 							Score:&nbsp;
 							<span className="font-normal">
-								{Math.round(
-									apiResults[selectedLabel].probability
-								)}{" "}
+							{parseFloat(apiResults[selectedLabel].probability.toFixed(2)) * 100}
 								% match
 							</span>
 						</p>
+						
+						
+						{ /* strength no longer provided by API
 						<p>
 							Strength:&nbsp;
 							<span className="font-normal">
@@ -414,7 +415,7 @@ export default function PillIdentifierPage() {
 									)
 									.trim()}
 							</span>
-						</p>
+						</p> */}
 					</div>
 				</div>
 

@@ -1,6 +1,6 @@
 "use client";
-import Header from "@/app/components/Header";
 import SingleEntry from "@/app/components/SingleEntry";
+import SpanHeader from "@/app/components/SpanHeader";
 import {
 	formatDate,
 	formatMilitaryTime,
@@ -46,17 +46,11 @@ export default function GetFoodJournal({
 		}
 	}, []);
 
-	// if (!user) {
-	//   return <div><Custom403/></div>
-	// }
-
 	return (
 		<div className="bg-eggshell min-h-screen flex flex-col">
-			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-				<button onClick={() => router.push("/getFoodJournals")}>
-					<Header headerText="View the Food Journal"></Header>
-				</button>
-			</span>
+			<SpanHeader
+				onClick={() => router.push("/getFoodJournals")}
+				headerText="View the Food Journal"></SpanHeader>
 
 			{food && (
 				<span className="rounded-2xl  mt-6 mb-10 mr-28 bg-white flex flex-col m-auto w-full md:max-w-[800px] md:min-h-[600px] p-8 shadow-[0_32px_64px_0_rgba(44,39,56,0.08),0_16px_32px_0_rgba(44,39,56,0.04)]">

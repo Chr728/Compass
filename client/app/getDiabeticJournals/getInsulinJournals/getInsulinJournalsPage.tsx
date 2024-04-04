@@ -27,7 +27,8 @@ export default function GetInsulinJournalsPage() {
 	const { userInfo } = useUser();
 	const [insulin, setinsulin] = useState<any>(null);
 	const { handlePopUp } = useProp();
-
+	const [selectAll, setSelectAll] = useState(false);
+	const [selectedRows, setSelectedRows] = useState<string[]>([]);
 	useEffect(() => {
 		if (!userInfo) {
 			logger.warn("User not found.");
@@ -49,7 +50,52 @@ export default function GetInsulinJournalsPage() {
 			fetchInsulinJournals();
 		}, 500);
 	}, [user]);
+	const deleteSelectedRows = async () => {
+		Swal.fire({
+			text: "Are you sure you want to delete this insulin journal entry?",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Delete",
+		}).then(async (result: { isConfirmed: any }) => {
+			if (result.isConfirmed) {
+				for (const id of selectedRows) {
+					const deleteresult = await deleteInsulinJournal(id);
+				}
 
+				const newData = insulin.filter(
+					(item: { id: string }) => !selectedRows.includes(item.id)
+				);
+				setinsulin(newData);
+				setSelectedRows([]);
+
+				router.push("/getInsulinJournals");
+				Swal.fire({
+					title: "Deleted!",
+					text: "Your insulin journal entry has been deleted.",
+					icon: "success",
+				});
+			}
+		});
+	};
+
+	const handleSelectAll = () => {
+		if (selectAll) {
+			setSelectedRows([]);
+		} else {
+			const allIds = insulin.map((item: { id: string }) => item.id);
+			setSelectedRows(allIds);
+		}
+		setSelectAll(!selectAll);
+	};
+
+	const handleCheckboxChange = (id: string) => {
+		if (selectedRows.includes(id)) {
+			setSelectedRows(selectedRows.filter((rowId) => rowId !== id));
+		} else {
+			setSelectedRows([...selectedRows, id]);
+		}
+	};
 	async function deleteInsulinJournals(insulinJournalId: string) {
 		Swal.fire({
 			text: "Are you sure you want to delete this insulin journal entry?",
@@ -191,7 +237,7 @@ export default function GetInsulinJournalsPage() {
 								</button>
 							</div>
 						</div>
-						<div className="flex-2" style={{ marginRight: "25%" }}>
+						<div className="flex-2" style={{ marginRight: "20%" }}>
 							<div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
 								Site
 								<button
@@ -205,6 +251,17 @@ export default function GetInsulinJournalsPage() {
 								</button>
 							</div>
 						</div>
+						<div
+							className="flex-2 mt-2 mr-2"
+							style={{ display: "flex", alignItems: "center" }}>
+							<div style={{ marginLeft: "auto" }}>
+								<input
+									type="checkbox"
+									checked={selectAll}
+									onChange={handleSelectAll}
+								/>
+							</div>
+						</div>
 					</div>
 
 					{insulin.map((item: any, index: number) => (
@@ -215,6 +272,7 @@ export default function GetInsulinJournalsPage() {
 								backgroundColor:
 									index % 2 === 0 ? "white" : "#DBE2EA",
 							}}
+							data-testid="insulin-entry"
 							onClick={() =>
 								router.push(
 									`/getDiabeticJournals/getInsulinJournals/${item.id}`
@@ -258,9 +316,33 @@ export default function GetInsulinJournalsPage() {
 										}}
 									/>
 								</div>
+								<div className="flex-1 mt-1">
+									<input
+										type="checkbox"
+										checked={selectedRows.includes(item.id)}
+										onClick={(event) => {
+											event.stopPropagation();
+											handleCheckboxChange(item.id);
+										}}
+									/>
+								</div>
 							</div>
 						</div>
 					))}
+					{selectedRows.length > 0 && (
+						<div className="mt-5 pb-4 self-center">
+							<Button
+								type="button"
+								text="Delete Selected Rows"
+								style={{
+									width: "120px",
+									fontSize: "14px",
+									padding: "1px 10px",
+								}}
+								onClick={deleteSelectedRows}
+							/>
+						</div>
+					)}
 				</div>
 			)}
 		</div>

@@ -39,6 +39,8 @@ export default function NotificationPage() {
   const [checkedInsulinInjectionReminders, setInsulinInjectionReminders] =
     React.useState(false);
 
+  const [checkedMoodReminders, setMoodReminders] = React.useState(false);
+
   const [checkedSubscriptionReminders, setSubscriptionReminders] =
     React.useState(false);
 
@@ -78,6 +80,12 @@ export default function NotificationPage() {
     setInsulinInjectionReminders(event.target.checked);
   };
 
+  const handleMoodReminders = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setMoodReminders(event.target.checked);
+  };
+
   const handleSubcriptionReminders = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -96,6 +104,7 @@ export default function NotificationPage() {
         foodIntakeReminders: false,
         glucoseMeasurementReminders: false,
         insulinDosageReminders: false,
+        moodReminders: false,
       };
       // Get current notification permissions
       if ("Notification" in window) {
@@ -116,6 +125,7 @@ export default function NotificationPage() {
                 setFoodIntakeReminders(false);
                 setBloodGlucoseReminders(false);
                 setInsulinInjectionReminders(false);
+                setMoodReminders(false);
                 const updatedData = {
                   permissionGranted: false,
                   activityReminders: checkedActivityReminders,
@@ -124,6 +134,7 @@ export default function NotificationPage() {
                   foodIntakeReminders: checkedFoodIntakeReminders,
                   glucoseMeasurementReminders: checkedBloodGlucoseReminders,
                   insulinDosageReminders: checkedInsulinInjectionReminders,
+                  moodReminders: checkedMoodReminders,
                 };
 
                 const result = await updateNotificationPreference(updatedData);
@@ -160,6 +171,7 @@ export default function NotificationPage() {
               setFoodIntakeReminders(result.data.foodIntakeReminders);
               setBloodGlucoseReminders(result.data.glucoseMeasurementReminders);
               setInsulinInjectionReminders(result.data.insulinDosageReminders);
+              setMoodReminders(result.data.moodReminders);
               logger.info("Notification preference information all set!");
 
               // Check if previous permission was not granted
@@ -217,6 +229,7 @@ export default function NotificationPage() {
         setFoodIntakeReminders(false);
         setBloodGlucoseReminders(false);
         setInsulinInjectionReminders(false);
+        setMoodReminders(false);
         handlePopUp(
           "error",
           "Please enable browser notifications before changing any of the preference settings"
@@ -230,6 +243,7 @@ export default function NotificationPage() {
           foodIntakeReminders: checkedFoodIntakeReminders,
           glucoseMeasurementReminders: checkedBloodGlucoseReminders,
           insulinDosageReminders: checkedInsulinInjectionReminders,
+          moodReminders: checkedMoodReminders,
         };
         const result = await updateNotificationPreference(data);
         setSuccessAlert(true);
@@ -343,6 +357,16 @@ export default function NotificationPage() {
           />
           <span className="text-darkgrey text-base not-italic font-medium font-IBM Plex Sans text-lg ">
             Insulin Injection Reminders
+          </span>
+        </div>
+        <div className="m-4">
+          <Switch
+            checked={checkedMoodReminders}
+            onChange={handleMoodReminders}
+            inputProps={{ "aria-label": "MoodSwitch" }}
+          />
+          <span className="text-darkgrey text-base not-italic font-medium font-IBM Plex Sans text-lg ">
+            Mood Reminders
           </span>
         </div>
         <div className="text-center">

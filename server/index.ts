@@ -26,6 +26,7 @@ import snoringResultRoutes from './routes/snoringResultRoutes';
 import bloodPressureRoutes from './routes/bloodPressureRoutes';
 import emergencyRoomRoutes from './routes/emergencyRoomRoutes';
 import healthTipRoutes from "./routes/healthTipsRoutes"
+import newsRoutes  from "./routes/newsRoutes";
 import scraper from './utils/scraper';
 
 require('dotenv').config({
@@ -42,7 +43,7 @@ app.use(cors());
 app.use(express.json());
 app.use(Morgan);
 app.use('/medicationImages', express.static('./medicationImages'));
-app.use(decodeToken);
+// app.use(decodeToken);
 app.use('/api/journals/weight', weightJournalRoutes);
 app.use('/api/journals/mood', moodJournalRoutes);
 app.use('/api/journals/diabetic/glucose', diabeticGlucoseJournalRoutes);
@@ -61,6 +62,7 @@ app.use('/api/snoringAI', snoringResultRoutes);
 app.use('/api/journals/bloodPressure', bloodPressureRoutes);
 app.use('/api/emergencyRoomData', emergencyRoomRoutes);
 app.use("/api/healthtips", healthTipRoutes)
+app.use("/api/news", newsRoutes)
 app.use(handleError);
 
 // Schedule the task within the main process
@@ -76,7 +78,7 @@ cron.schedule("*/30 * * * *", () => {
 })
 
 // Schedule scraper task
-cron.schedule('0 0 */2 * * *', () => {
+cron.schedule('0 */15 * * * *', () => {
   Logger.info('Running the scheduled emergency room scraper task...');
   scraper()
     .then(() => {

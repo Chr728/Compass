@@ -8,7 +8,7 @@ import {
 } from "react-icons/md";
 import Swal from "sweetalert2";
 import Button from "../components/Button";
-import Header from "../components/Header";
+import SpanHeader from "../components/SpanHeader";
 import { useAuth } from "../contexts/AuthContext";
 import { useProp } from "../contexts/PropContext";
 import { useUser } from "../contexts/UserContext";
@@ -21,7 +21,8 @@ export default function GetMedicationsPage() {
 	const { userInfo } = useUser();
 	const [medication, setmedication] = useState<any>(null);
 	const { handlePopUp } = useProp();
-
+	const [selectAll, setSelectAll] = useState(false);
+	const [selectedRows, setSelectedRows] = useState<string[]>([]);
 	useEffect(() => {
 		if (!userInfo) {
 			logger.warn("User not found.");
@@ -46,7 +47,52 @@ export default function GetMedicationsPage() {
 			fetchMedications();
 		}, 500);
 	}, [user]);
+	const deleteSelectedRows = async () => {
+		Swal.fire({
+			text: "Are you sure you want to delete this medication journal entry?",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Delete",
+		}).then(async (result: { isConfirmed: any }) => {
+			if (result.isConfirmed) {
+				for (const id of selectedRows) {
+					const deleteresult = await deleteMedication(id);
+				}
 
+				const newData = medication.filter(
+					(item: { id: string }) => !selectedRows.includes(item.id)
+				);
+				setmedication(newData);
+				setSelectedRows([]);
+
+				router.push("/getMedicationJournals");
+				Swal.fire({
+					title: "Deleted!",
+					text: "Your medication journal entry has been deleted.",
+					icon: "success",
+				});
+			}
+		});
+	};
+
+	const handleSelectAll = () => {
+		if (selectAll) {
+			setSelectedRows([]);
+		} else {
+			const allIds = medication.map((item: { id: string }) => item.id);
+			setSelectedRows(allIds);
+		}
+		setSelectAll(!selectAll);
+	};
+
+	const handleCheckboxChange = (id: string) => {
+		if (selectedRows.includes(id)) {
+			setSelectedRows(selectedRows.filter((rowId) => rowId !== id));
+		} else {
+			setSelectedRows([...selectedRows, id]);
+		}
+	};
 	async function deleteMedications(medicationId: string) {
 		Swal.fire({
 			text: "Are you sure you want to delete this medication entry?",
@@ -129,11 +175,9 @@ export default function GetMedicationsPage() {
 	};
 	return (
 		<div className="bg-eggshell min-h-screen flex flex-col">
-			<span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-				<button onClick={() => router.push("/health")}>
-					<Header headerText="Medications"></Header>
-				</button>
-			</span>
+			<SpanHeader
+				onClick={() => router.push("/health")}
+				headerText="Medications"></SpanHeader>
 			<p className="font-sans  text-darkgrey ml-5 p-5  text-[14px]">
 				Keep track of all medications you take and follow the progress
 				through the time.
@@ -210,6 +254,15 @@ export default function GetMedicationsPage() {
 								</button>
 							</div>
 						</div>
+						<div
+							className="flex-2 mt-2"
+							style={{ marginRight: "2%" }}>
+							<input
+								type="checkbox"
+								checked={selectAll}
+								onChange={handleSelectAll}
+							/>
+						</div>
 					</div>
 
 					{medication.map((item: any, index: number) => (
@@ -220,6 +273,7 @@ export default function GetMedicationsPage() {
 								backgroundColor:
 									index % 2 === 0 ? "white" : "#DBE2EA",
 							}}
+							data-testid="medication-entry"
 							onClick={() =>
 								router.push(`/getMedications/${item.id}`)
 							}>
@@ -266,9 +320,33 @@ export default function GetMedicationsPage() {
 										}}
 									/>
 								</div>
+								<div className="flex-1 mt-1">
+									<input
+										type="checkbox"
+										checked={selectedRows.includes(item.id)}
+										onClick={(event) => {
+											event.stopPropagation();
+											handleCheckboxChange(item.id);
+										}}
+									/>
+								</div>
 							</div>
 						</div>
 					))}
+					{selectedRows.length > 0 && (
+						<div className="mt-5 pb-4 self-center">
+							<Button
+								type="button"
+								text="Delete Selected Rows"
+								style={{
+									width: "120px",
+									fontSize: "14px",
+									padding: "1px 10px",
+								}}
+								onClick={deleteSelectedRows}
+							/>
+						</div>
+					)}
 				</div>
 			)}
 		</div>

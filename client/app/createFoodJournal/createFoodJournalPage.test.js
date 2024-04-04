@@ -1,7 +1,6 @@
 import { render } from '@testing-library/react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../contexts/AuthContext';
-import { createFoodIntakeJournal } from '../http/foodJournalAPI.ts';
 import CreateFoodJournal from './page.tsx';
 
 const useSearchParams = jest.fn();
@@ -35,11 +34,6 @@ jest.mock('../contexts/AuthContext', () => {
   }
 });
 
-jest.mock('../http/foodJournalAPI.ts', () => {
-  return {
-    createFoodIntakeJournal: jest.fn(),
-  }
-});
 
 const mockRouter= jest.fn();
 

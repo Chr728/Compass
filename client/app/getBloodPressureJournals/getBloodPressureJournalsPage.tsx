@@ -18,6 +18,7 @@ import {
 	formatMilitaryTime,
 } from "../helpers/utils/datetimeformat";
 import { getBloodPressureJournals, deleteBloodPressureJournalEntry } from '../http/bloodPressureJournalAPI';
+import SpanHeader from "../components/SpanHeader";
 
 export default function GetBloodPressureJournalsPage() {
 
@@ -26,6 +27,8 @@ export default function GetBloodPressureJournalsPage() {
     const { user } = useAuth();
     // const { userInfo } = useUser();
     const [data, setData] = useState<any>();
+    const [selectAll, setSelectAll] = useState(false);
+	const [selectedRows, setSelectedRows] = useState<string[]>([]);
 
 	useEffect(() => {
 		if (!user) {
@@ -81,6 +84,54 @@ export default function GetBloodPressureJournalsPage() {
 			}
 		});
 	}
+
+    const deleteSelectedRows = async () => {
+		Swal.fire({
+			text: "Are you sure you want to delete these blood pressure journal entries?",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Delete",
+		}).then(async (result: { isConfirmed: any }) => {
+			if (result.isConfirmed) {
+				for (const id of selectedRows) {
+					const deleteresult = await deleteBloodPressureJournalEntry(id);
+				}
+
+				const newData = data.filter(
+					(item: { id: string }) => !selectedRows.includes(item.id)
+				);
+				setData(newData);
+				setSelectedRows([]);
+
+				router.push("/getBloodPressureJournals");
+				Swal.fire({
+					title: "Deleted!",
+					text: "Your blood pressure journal entries have been deleted.",
+					icon: "success",
+				});
+			}
+		});
+	};
+
+	const handleSelectAll = () => {
+		if (selectAll) {
+			setSelectedRows([]);
+		} else {
+			const allIds = data.map((item: { id: string }) => item.id);
+			setSelectedRows(allIds);
+		}
+		setSelectAll(!selectAll);
+	};
+
+	const handleCheckboxChange = (id: string) => {
+		if (selectedRows.includes(id)) {
+			setSelectedRows(selectedRows.filter((rowId) => rowId !== id));
+		} else {
+			setSelectedRows([...selectedRows, id]);
+		}
+	};
+
 
     const [orderdate, setOrderDate] = useState(false);
 
@@ -144,11 +195,10 @@ export default function GetBloodPressureJournalsPage() {
 
     return (
     <div className="bg-eggshell min-h-screen flex flex-col">
-        <span className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4">
-            <button onClick={() => router.push("/journals")}>
-                <Header headerText="Blood Pressure Journal"></Header>
-            </button>
-        </span>
+        <SpanHeader
+            onClick={() => router.push("/journals")}
+            headerText="Blood Pressure Journal">
+        </SpanHeader>
         <p className="font-sans text-darkgrey ml-5 text-[14px]">
 			Maintain your blood pressure at a healthy level at all times and keep track of your results here.
 		</p>
@@ -178,7 +228,7 @@ export default function GetBloodPressureJournalsPage() {
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead>
                             <TableRow>
-                                <TableCell>
+                                <TableCell sx={{ paddingRight: '4px', paddingLeft: '4px'}}>
                                     <div className="font-bold">
                                         Date/Time
                                         {/* <MdKeyboardArrowDown className="inline-block text-lg text-darkgrey" />   */}
@@ -193,7 +243,7 @@ export default function GetBloodPressureJournalsPage() {
 								        </button>
                                     </div>
                                 </TableCell>
-                                <TableCell>
+                                <TableCell sx={{ paddingRight: '4px', paddingLeft: '4px'}} >
                                     <div className="font-bold">
                                         BP
                                         <button
@@ -207,7 +257,7 @@ export default function GetBloodPressureJournalsPage() {
 								        </button> 
                                     </div>
                                 </TableCell>
-                                <TableCell>
+                                <TableCell style={{ width: '25%'}} sx={{ paddingRight: '4px', paddingLeft: '4px'}}>
                                     <div className="font-bold">
                                         Pulse
                                         <button
@@ -221,7 +271,18 @@ export default function GetBloodPressureJournalsPage() {
 								        </button>
                                     </div>
                                 </TableCell>
-                                <TableCell></TableCell>
+                                <TableCell sx={{ paddingRight: '4px', paddingLeft: '4px'}}></TableCell>
+                                <TableCell sx={{ paddingRight: '4px', paddingLeft: '4px'}}>
+                                    <div
+                                    className="flex-2 mt-2"
+                                    >
+                                    <input
+                                        type="checkbox"
+                                        checked={selectAll}
+                                        onChange={handleSelectAll}
+                                    />
+                                    </div>
+                                </TableCell>
                             </TableRow>
                             </TableHead>
                             <TableBody>
@@ -231,14 +292,15 @@ export default function GetBloodPressureJournalsPage() {
                                         style={ { backgroundColor: index % 2 === 0 ? '#DBE2EA':'white',  cursor: 'pointer'  }}
                                         key={index}
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                        data-testid="bp-entry"
                                     >
-                                     <TableCell component="th" scope="row">
+                                     <TableCell component="th" scope="row"  sx={{ paddingRight: '4px', paddingLeft: '4px'}}>
                                          {formatDate(row.date)},
                                              <span className="font-bold"> {formatMilitaryTime(row.time)}</span>
                                      </TableCell>
-                                     <TableCell >{row.systolic}/{row.diastolic}</TableCell>
-                                     <TableCell >{row.pulse}</TableCell>
-                                     <TableCell>
+                                     <TableCell  sx={{ paddingRight: '4px', paddingLeft: '4px'}}>{row.systolic}/{row.diastolic}</TableCell>
+                                     <TableCell sx={{ paddingRight: '4px', paddingLeft: '4px'}} >{row.pulse}</TableCell>
+                                     <TableCell  sx={{ paddingRight: '4px', paddingLeft: '4px'}}>
                                          <Image 
                                              src="/icons/trash.svg"
                                              alt="Trash icon"
@@ -250,16 +312,42 @@ export default function GetBloodPressureJournalsPage() {
                                                 event.stopPropagation();
                                                 deleteBloodPressureJournal(row.id);
                                             }}
-                                         />  
-                                                                   
+                                         />                        
                                      </TableCell>
+                                     <TableCell  sx={{ paddingRight: '4px', paddingLeft: '4px'}}>
+                                        <div className="flex-1 mt-1">
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedRows.includes(row.id)}
+                                                onClick={(event) => {
+                                                event.stopPropagation();
+                                                handleCheckboxChange(row.id);
+                                                }}
+                                            />
+                                        </div>
+                                    </TableCell>
                                  </TableRow>
 
                                 ))}
                             </TableBody>
                         </Table>
+                        {selectedRows.length > 0 && (
+                            <div className="flex justify-center mt-2 pb-4">
+                                <Button
+                                    type="button"
+                                    text="Delete Selected Rows"
+                                    style={{
+                                        width: "120px",
+                                        fontSize: "14px",
+                                        padding: "1px 10px",
+                                    }}
+                                    onClick={deleteSelectedRows}
+                                />
+                            </div>
+                        )}
             </TableContainer>
-                    </div>
+        </div>
+            
     </div>
     )
 }

@@ -100,6 +100,18 @@ describe("Logged in user", () => {
 		});
 	});
 
+	it("Graph  displayed correctly", async () => {
+		setTimeout(async () => {
+			render(<RecordAudioPage showGraph={true} />);
+
+			fireEvent.click(screen.getByTestId("play-icon"));
+
+			const canvasElement = await screen.findByTestId("parabolic-graph");
+
+			expect(canvasElement).toBeInTheDocument();
+		}, 1000);
+	});
+
 	it("Deletes audio entry", async () => {
 		setTimeout(async () => {
 			deleteAudioEntry.mockResolvedValue({
@@ -197,4 +209,30 @@ describe("User not logged in", () => {
 		render(<RecordAudioPage />);
 		expect(mockRouter).toBeCalledWith("/login");
 	});
+});
+
+test("Selecting all rows and deleting selected rows", async () => {
+	setTimeout(async () => {
+		const selectAllCheckbox = screen.getAllByRole("checkbox")[0];
+		userEvent.click(selectAllCheckbox);
+
+		const checkboxes = screen.getAllByRole("checkbox");
+		checkboxes.forEach((checkbox) => {
+			expect(checkbox).toBeChecked();
+		});
+
+		const deleteButton = screen.getByRole("button", {
+			name: "Delete Selected Rows",
+		});
+		userEvent.click(deleteButton);
+
+		const confirmButton = await screen.findByText("Delete");
+		userEvent.click(confirmButton);
+
+		await waitFor(() => {
+			const weightEntriesAfterDeletion =
+				screen.queryAllByTestId("snoring-entry");
+			expect(weightEntriesAfterDeletion.length).toBe(0);
+		});
+	}, 1000);
 });
