@@ -78,20 +78,6 @@ export default function ViewMoodJournalsPage() {
 								case "awful":
 									return 1;
 							}
-							// switch (item.howAreYou) {
-							// 	case "awesome":
-							// 		return "Awesome";
-							// 	case "good":
-							// 		return "Good";
-							// 	case "sad":
-							// 		return "Sad";
-							// 	case "bad":
-							// 		return "Bad";
-							// 	case "awful":
-							// 		return "Awful";
-							// 	default:
-							// 		return ""; // Handle default case if necessary
-							// }
 						});
 
 					if (chartInstance) {
@@ -105,62 +91,24 @@ export default function ViewMoodJournalsPage() {
 								labels: moodJournal.map(
 									(item: any, index: number) => index + 1
 								),
-								// labels: moodValues.map((mood: number) => {
-								// 	switch (mood) {
-								// 		case 5:
-								// 			return "Awesome";
-								// 		case 4:
-								// 			return "Good";
-								// 		case 3:
-								// 			return "Sad";
-								// 		case 2:
-								// 			return "Bad";
-								// 		case 1:
-								// 			return "Awful";
-								// 		default:
-								// 			return ""; // Handle default case if necessary
-								// 	}
-								// }),
+
 								datasets: [
 									{
 										label: "Mood",
 										data: moodValues || [],
-										// data: moodValues.map((mood: number) => {
-										// 	switch (mood) {
-										// 		case 5:
-										// 			return "Awesome";
-										// 		case 4:
-										// 			return "Good";
-										// 		case 3:
-										// 			return "Sad";
-										// 		case 2:
-										// 			return "Bad";
-										// 		case 1:
-										// 			return "Awful";
-										// 		default:
-										// 			return 0; // Handle default case if necessary
-										// 	}
-										// }),
+
 										borderColor: "rgba(75, 192, 192, 1)",
 										tension: 0.1,
 									},
 								],
 							},
-							// options: {
-							// 	scales: {
-							// 		y: {
-							// 			beginAtZero: true,
-							// 			suggestedMax: 5,
-							// 		},
-							// 	},
-							// },
+
 							options: {
 								scales: {
 									y: {
 										beginAtZero: true,
 										title: {
 											display: true,
-											// text: "Mood",
 										},
 										ticks: {
 											callback: function (
