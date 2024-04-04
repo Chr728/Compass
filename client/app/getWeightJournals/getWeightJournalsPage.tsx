@@ -94,6 +94,16 @@ export default function GetWeightJournalsPage() {
 								scales: {
 									y: {
 										beginAtZero: true,
+										title: {
+											display: true,
+											text: "Weight",
+										},
+									},
+									x: {
+										title: {
+											display: true,
+											text: "Row Index",
+										},
 									},
 								},
 							},
@@ -310,7 +320,7 @@ export default function GetWeightJournalsPage() {
 							</div>
 						</div>
 
-						<div className="flex-2" >
+						<div className="flex-2">
 							<div className="font-sans  text-darkgrey font-bold text-[18px] text-center">
 								BMI
 								<button
@@ -338,9 +348,7 @@ export default function GetWeightJournalsPage() {
 								</button>
 							</div>
 						</div>
-						<div
-							className="flex-2 mt-2" >
-							
+						<div className="flex-2 mt-2">
 							<input
 								type="checkbox"
 								checked={selectAll}
