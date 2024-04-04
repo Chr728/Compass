@@ -148,11 +148,11 @@ The following link directs to a read-only version of the application's UI mockup
 - View and Add Medications
 - Personal Diabetes, Food intake, Activity, Weight, Oxygen, Blood pressure and Mood Journals
 - Push Notifications for Reminders
-- Predicting pill names based on pill pictures
+- AI pill name prediction based on pill pictures 
 - Speed dial to family, caregivers and emergency
-- Record and visualize snoring patterns
-- Predict disease based on symptoms
-- Check the capacity of an Emergency Room in Quebec
+- Record the snoring audio, AI snoring pattern detection, and visualize the detected snoring patterns
+- AI diagnosis prediction based on symptoms
+- Check the capacity of Hospital Emergency Rooms in Quebec
 - Get health tips and news
 
 ## License
