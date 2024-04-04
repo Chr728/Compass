@@ -98,6 +98,9 @@ export default function GetWeightJournalsPage() {
 											display: true,
 											text: "Weight",
 										},
+										ticks: {
+											stepSize: 25,
+										},
 									},
 									x: {
 										title: {
@@ -348,7 +351,7 @@ export default function GetWeightJournalsPage() {
 								</button>
 							</div>
 						</div>
-						<div className="flex-2 mt-2">
+						<div className="flex-2 mt-2 mr-2">
 							<input
 								type="checkbox"
 								checked={selectAll}
