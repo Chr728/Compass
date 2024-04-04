@@ -211,7 +211,7 @@ export default function Health() {
                 <NextImage
                   src={ambulance}
                   alt="ambulance"
-                  height={55}
+                  height={50}
                   className="absolute inset-y-0 right-2 shrink-0"
                   style={{ top: "18px" }}
                 />
@@ -238,8 +238,8 @@ export default function Health() {
                   src={symptom}
                   alt="symptoms"
                   height={100}
-                  className="absolute inset-y-0 right-2 shrink-0"
-                  style={{ top: "-12px" }}
+                  className="absolute inset-y-0 right-1 shrink-0"
+                  style={{ top: "-6px" }}
                 />
               </div>
             </div>

@@ -384,24 +384,26 @@ export default function PillIdentifierPage() {
 
 				<div className="w-full">
 					<p className="font-bold text-darkgrey p-4 text-[24px] text-center leading-tight -mt-2">
-						{apiResults[selectedLabel].label
+						{apiResults[selectedLabel].label}
+						{/* {apiResults[selectedLabel].label
 							.slice(
 								0,
 								apiResults[selectedLabel].label.search(/\d/)
 							)
-							.trim()}
+							.trim()} */}
 					</p>
 
 					<div className="font-bold text-darkgrey text-[18px] px-4 -mt-2">
 						<p>
 							Score:&nbsp;
 							<span className="font-normal">
-								{Math.round(
-									apiResults[selectedLabel].probability
-								)}{" "}
+							{parseFloat(apiResults[selectedLabel].probability.toFixed(2)) * 100}
 								% match
 							</span>
 						</p>
+						
+						
+						{ /* strength no longer provided by API
 						<p>
 							Strength:&nbsp;
 							<span className="font-normal">
@@ -413,7 +415,7 @@ export default function PillIdentifierPage() {
 									)
 									.trim()}
 							</span>
-						</p>
+						</p> */}
 					</div>
 				</div>
 

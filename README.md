@@ -80,6 +80,16 @@ Please rebuild the docker images. To do that you may need to delete the containe
 
 Compass is a medical wellness app that targets specifically people above 40 years old who might  be interested in having  some  type of assistance to keep their healthy habits and lifestyles. Compass offers features of managing medical  reminders, booking appointments, finding pill names, tracking user’s medications and treatments  all in one consolidated application. In addition, having features of medical journals such as diabetic journals allows some patients to easily note their daily doses and treatment details making them able to follow the history of their treatments and use it as a reference for themselves or to show to their medical professional. Users can also send pictures of their unrecognized pills to get the five most possible pill names. Additionally, with the speed dial fast option to contact relatives during some emergency situations patients would be able to contact their relatives in a faster and easier way. With many features compass aims for users to be healthier and function hassle free. 
 
+## Diversity
+
+At Compass, we believe in embracing the diverse needs and experiences of every individual using our platform. We recognize that health and wellness are deeply personal journeys, influenced by a variety of factors including age, background, and individual health conditions. Our commitment to diversity is reflected in our user-centric design, ensuring that adults aged 40 and above from all walks of life feel empowered to manage their health with ease.
+
+Whether you're tracking vital health metrics, managing medications, or seeking support for mental well-being, our app is here to support you every step of the way. We strive to provide an inclusive space where everyone feels valued and respected, regardless of their unique circumstances or challenges they may face.
+
+From AI-driven features to identify symptoms and unknown pills, to providing real-time information on emergency room occupancy rates and nearby health facilities, we are dedicated to promoting accessibility and inclusivity in healthcare technology.
+
+At Compass, diversity isn't just a statement—it's a fundamental part of our mission to improve health outcomes for all. Together, let's embrace our differences and work towards a healthier, more inclusive future.
+
 ## Mockups
 
 The following link directs to a read-only version of the application's UI mockups:
@@ -91,7 +101,6 @@ The following link directs to a read-only version of the application's UI mockup
 | ---------------------- | ---------- | ----------------------------------------------- |
 | Christina Darstbanian  | 40097340   | [Chr728](https://github.com/Chr728)             |
 | Imran Ahmed            | 40172931   | [imran1289-ah](https://github.com/imran1289-ah) |
-| Xavier Morgan-Tracy    | 40129775   | [XavierKMT](https://github.com/XavierKMT)       |
 | Jiayi Chen             | 40110997   | [JIAYI615](https://github.com/JIAYI615)         |
 | Divleen Kaur Ahluwalia | 40116121   | [Divleen12](https://github.com/Divleen12)       |
 | Jan Mikhail Alexei Ong | 40154849   | [janong24](https://github.com/janong24)         |
@@ -137,10 +146,14 @@ The following link directs to a read-only version of the application's UI mockup
 - Registration, Authentication and Security
 - View and Add Appointments
 - View and Add Medications
-- Personal Diabetes, Food intake, Activity, Weight and Mood Journals
+- Personal Diabetes, Food intake, Activity, Weight, Oxygen, Blood pressure and Mood Journals
 - Push Notifications for Reminders
-- Predicting pill names based on pill pictures
+- AI pill name prediction based on pill pictures 
 - Speed dial to family, caregivers and emergency
+- Record the snoring audio, AI snoring pattern detection, and visualize the detected snoring patterns
+- AI diagnosis prediction based on symptoms
+- Check the capacity of Hospital Emergency Rooms in Quebec
+- Get health tips and news
 
 ## License
 

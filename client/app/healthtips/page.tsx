@@ -8,6 +8,7 @@ import { useUser } from "../contexts/UserContext";
 import { getHealthTips } from "../http/healthTipsAPI";
 
 export default function Healthtips() {
+  const moment = require("moment-timezone");
   const logger = require("../../logger");
   const router = useRouter();
   const { user } = useAuth();
@@ -95,9 +96,11 @@ export default function Healthtips() {
   // Use effect to randomize tips everytime page is reloaded
   useEffect(() => {
     if (healthTips) {
-      const formattedDate = new Date(healthTips.date).toLocaleDateString();
+      console.log(healthTips);
+      const formattedDate = healthTips.date.slice(0, 10);
       setFormattedDate(formattedDate);
       displayRandomTips();
+
       window.addEventListener("beforeunload", displayRandomTips);
       return () => {
         window.removeEventListener("beforeunload", displayRandomTips);
@@ -106,7 +109,10 @@ export default function Healthtips() {
   }, [healthTips]);
 
   return (
-    <div className="bg-eggshell p-2 min-h-screen flex flex-col">
+    <div
+      className="bg-eggshell p-2 min-h-screen flex flex-col"
+      style={{ minHeight: "100vh", overflow: "auto" }}
+    >
       <span
         data-testid="health-tips-title"
         className="flex items-baseline font-bold text-darkgrey text-[24px] mx-4 mt-4 mb-4"
@@ -131,7 +137,7 @@ export default function Healthtips() {
           <div
             className="relative"
             style={{
-              marginTop: "",
+              marginTop: "10px",
               marginLeft: "2px auto",
               marginRight: "2px auto",
               maxWidth: "100%",
@@ -139,12 +145,16 @@ export default function Healthtips() {
             }}
           >
             <img
-              src="/healthTipBubble.png"
-              alt="Speech bubble"
+              src="/healthTipRectangle.png"
+              alt="Rectangle"
               className="w-full h-full"
+              id="tipContainer"
               style={{ height: "550px" }}
             />
-            <div className="absolute top-[43%] left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <div
+              id="healthTipsDiv"
+              className="absolute top-[50%] left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+            >
               <p
                 data-testid="health-tips-subtitle"
                 className="font-bold text-darkgrey mb-4 text-center"
@@ -164,7 +174,7 @@ export default function Healthtips() {
                   <ul className="list-disc text-sm text-center font-bold text-darkgrey">
                     {Object.entries(randomizedTips).map(([category, tip]) => (
                       <ul key={category} style={{ fontSize: "0.8rem" }}>
-                        <strong>Tips:</strong> {tip}
+                        <strong>Tip:</strong> {tip}
                       </ul>
                     ))}
                   </ul>

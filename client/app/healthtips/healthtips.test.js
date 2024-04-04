@@ -72,6 +72,7 @@ describe("Healthtips success", () => {
   test("renders content properly", async () => {
     const fakeData = {
       data: {
+        date: "2024-03-28T00:00:00.000Z",
         angertips:
           '{"tip1":"Take some timeout during the day","tip2":"Take your time"}',
         anxietytips:
@@ -106,9 +107,9 @@ describe("Healthtips success", () => {
     });
 
     const subtitleText = screen.getByTestId("health-tips-subtitle");
-    const speechBubbleImage = screen.getByAltText("Speech bubble");
+    const rectangleImage = screen.getByAltText("Rectangle");
     const humanImage = screen.getByAltText("Human pointing upward");
-    expect(speechBubbleImage).toBeInTheDocument();
+    expect(rectangleImage).toBeInTheDocument();
     expect(humanImage).toBeInTheDocument();
     expect(subtitleText).toBeInTheDocument();
 
