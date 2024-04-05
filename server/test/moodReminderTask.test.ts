@@ -16,26 +16,26 @@ webPush.setVapidDetails("mailto:test@gmail.com", publicKey, privateKey);
 
 //Predefined mood journal entry
 const userMoodJournal = [
-  {
-    id: 1,
-    uid: "testuid",
-    howAreYou: "sad",
-    stressSignals: {
-      tired: "often",
-      sleep: "often",
-      hunger: "often",
-      overeating: "often",
-      depressed: "often",
-      pressure: "often",
-      anxiety: "often",
-      attention: "often",
-      anger: "often",
-      headache: "often",
-    },
-    date: "2023-10-08T10:00:00Z",
-    notes: "Sample mood entry",
-    time: "10:00:00",
-  },
+    {
+        id: 1,
+        uid: 'testuid',
+        howAreYou: 'sad',
+        stressSignals: {
+        tired: 'always',
+        sleep: 'always',
+        hunger: 'always',
+        overeating: 'always',
+        depressed: 'always',
+        pressure: 'always',
+        anxiety: 'always',
+        attention: 'always',
+        anger: 'always',
+        headache: 'always',
+        },
+        date: '2023-10-08T10:00:00Z',
+        notes: 'Sample mood entry',
+        time:"10:00:00",
+    }
 ];
 
 //Predefined preferences
@@ -80,6 +80,9 @@ const usertips1 = {
   date: "2023-10-08T10:00:00Z",
   time: "10:00:00",
 };
+
+
+
 
 //Predefined token
 const mockedDecodedToken = {
@@ -172,12 +175,6 @@ describe("Testing mood journal reminders ", () => {
     expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
     expect(db.HealthTips.findOne).toHaveBeenCalledTimes(1);
     expect(db.HealthTips.update).toHaveBeenCalledTimes(1);
-
-    // //Check if function was sucesfully called
-    // expect(Logger.info).toHaveBeenCalledWith(
-    //     "Notification for moodJournal sent to user: ",
-    //     userMoodJournal[0].uid
-    // );
   });
 
   it("should send error if it fails to fetch mood reminder", async () => {
@@ -211,7 +208,9 @@ describe("Testing mood journal reminders ", () => {
       .mockResolvedValue(userNotificationPreferences);
     jest.spyOn(db.Subscription, "findOne").mockResolvedValue(userSubscription);
     jest.spyOn(db.HealthTips, "findOne").mockResolvedValue(null);
-    jest.spyOn(db.HealthTips, "create").mockResolvedValue(usertips);
+    jest.spyOn(db.HealthTips, "create").mockResolvedValue(usertips)
+    jest.spyOn(db.HealthTips,"update").mockResolvedValue(usertips1)
+
 
     //Spy on logger
     jest.spyOn(Logger, "info");
@@ -224,6 +223,24 @@ describe("Testing mood journal reminders ", () => {
     expect(db.NotificationPreference.findOne).toHaveBeenCalledTimes(1);
     expect(db.Subscription.findOne).toHaveBeenCalledTimes(1);
     expect(db.HealthTips.findOne).toHaveBeenCalledTimes(1);
-    expect(db.HealthTips.create).toHaveBeenCalledTimes(1);
-  });
+    expect(db.HealthTips.create).toHaveBeenCalledTimes(1)
+    
+  })
+
+  it("should not send reminder if not subscription found", async () => {
+    jest.spyOn(webPush, "sendNotification").mockResolvedValue("test");
+    jest.spyOn(db.MoodJournal, "findAll").mockResolvedValue(userMoodJournal);
+    jest.spyOn(db.Subscription, "findOne").mockResolvedValue(null);
+    jest.spyOn(Logger, "error");
+
+    await sendMoodReminder();
+
+    // Assertions
+    expect(db.MoodJournal.findAll).toHaveBeenCalledTimes(1);
+
+    // Ensure Logger.error is called with the appropriate message
+    expect(Logger.error).toHaveBeenCalledTimes(1);
+  })
 });
+
+

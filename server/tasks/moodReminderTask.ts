@@ -190,6 +190,7 @@ export const sendMoodReminder = async () => {
                   secondTip = true;
                 }
               }
+
               secondTip = depressionResults[getSecondRandomTip];
 
               const JSONdepressionTips = {
