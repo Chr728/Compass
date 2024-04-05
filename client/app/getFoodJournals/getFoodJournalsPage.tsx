@@ -96,6 +96,19 @@ export default function GetFoodJournalsPage() {
 								scales: {
 									y: {
 										beginAtZero: true,
+										title: {
+											display: true,
+											text: "Calories",
+										},
+										ticks: {
+											stepSize: 100,
+										},
+									},
+									x: {
+										title: {
+											display: true,
+											text: "Row Index",
+										},
 									},
 								},
 							},
